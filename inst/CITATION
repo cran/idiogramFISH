@@ -1,0 +1,16 @@
+citHeader("To cite idiogramFISH in publications, please use:")
+
+year <- sub("-.*", "", meta$Date)
+note <- sprintf("R package version %s", meta$Version)
+
+citEntry(entry = "manual",
+    title = "{idiogramFISH}: {I}diograms with Marks and Karyotype Indices",
+    author = c(person("Fernando", "Roa"),
+               person("Mariana", c("PC","Telles") ) ),
+    organization = "Universidade Federal de Goiás",
+    address = "UFG, Goiânia",
+    note = note,
+    year = year,
+    url = "https://ferroao.gitlab.io/manualidiogramfish/",
+    textVersion  = paste("Roa F, Telles MPC. 2019. idiogramFISH: Idiograms with Marks and Karyotype Indices, Universidade Federal de Goiás. Brazil. R-package. https://ferroao.gitlab.io/manualidiogramfish/" )
+)

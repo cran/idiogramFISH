@@ -1,0 +1,205 @@
+---
+title: "Plotting holocentric chromosomes"
+author: "Fernando Roa"
+date: "18 08 2019"
+output: rmarkdown::html_vignette
+
+vignette: >
+  %\VignetteIndexEntry{Plotting holocentric chromosomes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This guide shows the files to plot idiograms of karyotypes of holocentrics and optionally marks. 
+
+## 0. Load package
+
+visit gitlab for installation instructions https://gitlab.com/ferroao/idiogramFISH
+
+```{r, results="hide", message=FALSE, warning=FALSE, eval=TRUE}
+
+#load package
+library(idiogramFISH) 
+```
+
+## 1. Get your chromosome size data
+
+Initially you have to open your chromosome data as a dataframe. 
+
+### From scratch:
+
+```{r}
+# Example dataframe written in R, use: (column OTU is optional if only 1 OTU)
+mydfChrSizeHolo<-read.table(text=
+"            OTU chrName chrSize  
+1 \"Species one\"   1     6.5      
+2 \"Species one\"   2     5.0      
+3 \"Species one\"   3     4.0    
+4 \"Species one\"   X     3.0    "  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
+
+# just to show it here
+knitr::kable(mydfChrSizeHolo) 
+```
+
+### or loading saved data:
+
+Initially, if you use RStudio, use menu "Session", "Set working directory" for choosing your desired folder or:
+```
+setwd("~/folder/subfolder")
+```
+
+Open your chromosome data dataframe importing it from a .csv (read.csv) or .xls file (readxl). 
+```
+mydfChrSize<-read.csv("somefile.csv")
+```
+
+For fixing column names use:
+```
+colnames(mydfChrSize)<-c("OTU", "chrName","chrSize")
+```
+
+## 2. Get marks general data
+
+Open or make your mark data as a dataframe. This dataframe has the marks present in all karyotypes with color and style, without position info.
+
+```{r}
+# From scratch:
+mydfMarkColor<-read.table(text=
+"  markName markColor  style
+1       5S       red   dots
+2      45S     green square
+3     DAPI      blue square
+4      CMA    yellow square"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
+
+knitr::kable(mydfMarkColor) 
+```
+
+For fixing column names use:
+
+```
+colnames(mydfMarkColor)<-c("markName", "markColor","style") # if style column not present it will be filled with "square"
+```
+
+## 3. Get marks positions data
+
+Open or write your mark positions as a dataframe. This dataframe has the marks present in all karyotypes with position info.
+
+```{r}
+# We will use column OTU if dataframe because chromosome size df has it
+mydfMarkPosHolo<-read.table(text=
+"             OTU  chrName markName markPos markSize
+1 \"Species one\"       3       5S     1.0      0.5
+2 \"Species one\"       3     DAPI     2.0      0.5
+3 \"Species one\"       1      45S     2.0      0.5
+4 \"Species one\"       2     DAPI     2.0      0.5
+5 \"Species one\"       4      CMA     2.0      0.5
+6 \"Species one\"       4       5S     0.5      0.5"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
+
+knitr::kable(mydfMarkPosHolo) 
+```
+
+For fixing column names use something like:
+```
+colnames(mydfMarkColor)<-c("OTU", "chrName","markName","markPos","markSize") 
+```
+
+## 4. Plotting
+
+You can plot without marks (passing only 1st dataframe), but we will use all 4 dataframes created:
+```{r parinit, echo=FALSE}
+opar <- par(no.readonly = TRUE)      # make a copy of current settings
+on.exit(suppressWarnings(par(opar)) )
+```
+
+```{r example, echo=TRUE, results="hide", fig.width=6, fig.height=3.5, message=FALSE}
+# library(idiogramFISH)
+par(mar=c(1,4,1,1)) # bottom left top right
+plotIdiogramsHolo(mydfChrSizeHolo, mydfMarkColor, mydfMarkPosHolo, 
+                        dotRoundCorr=2,
+                        chrWidth = 2, chrSpacing = 2,
+                        indexIdTextSize=1, OTUTextSize=1, karHeight = 1.4,
+                        legend="aside" ,markLabelSize=1,
+                        addOTUName=FALSE,
+                        rulerNumberSize=1, rulerPos=-2.2,ruler.tck=-0.03,rulerNumberPos=.9,
+                        xlimLeftMod=2.2,  xlimRightMod=10, ylimBotMod=.1
+                        )
+```
+
+
+## 5. Example with several species (OTUs)
+
+### To illustrate this, we will load some dataframes from the package
+
+```{r}
+data(bigdfChrSizeHolo, dfMarkColor, bigdfMarkPosHolo)
+
+# Chromosome sizes
+knitr::kable(bigdfChrSizeHolo)
+
+# Mark characteristics, does not require OTU
+knitr::kable(dfMarkColor)
+
+# Mark position
+knitr::kable(bigdfMarkPosHolo)
+```
+
+### Plotting
+
+```{r example3, echo=TRUE, results="hide", fig.width=6, fig.height=6, message=FALSE}
+library(idiogramFISH)
+par(mar=c(1,1,1,1))
+plotIdiogramsHolo(bigdfChrSizeHolo, dfMarkColor, bigdfMarkPosHolo, MarkDistanceType="cen", 
+                  roundness=6, dotRoundCorr=1, karHeight = 1, karSpacing = 1.7,
+                  chrWidth = 2, chrSpacing = 2,
+                  indexIdTextSize=.9,
+                  markLabelSize=.9,
+                  rulerNumberSize=.9,
+                  OTUTextSize=1.2,
+                  reduDistKar=FALSE,
+                  chrId="simple", xlimRightMod=2,
+                  ylimBotMod=.4)
+```
+
+
+## 6. Using Mb instead of micrometers
+
+Create some data in millions:
+
+```{r}
+# using previous dataframes
+bigdfChrSizeHolo$chrSize<-bigdfChrSizeHolo$chrSize*980000
+bigdfMarkPosHolo$markPos<-bigdfMarkPosHolo$markPos*980000
+bigdfMarkPosHolo$markSize<-bigdfMarkPosHolo$markSize*980000
+```
+
+### Plotting
+
+```{r example4, echo=TRUE, results="hide", fig.width=6, fig.height=6, message=FALSE}
+library(idiogramFISH)
+par(mar=c(1,1,1,1))
+plotIdiogramsHolo(bigdfChrSizeHolo, dfMarkColor, bigdfMarkPosHolo, MarkDistanceType="cen", 
+                  Mb=TRUE, # <- THIS IS NEW
+                  roundness=6, dotRoundCorr=1, karHeight = 1, karSpacing = 1.7,
+                  chrWidth = 2, chrSpacing = 2,
+                  karIndex = FALSE,
+                  markLabelSize=.9,
+                  rulerNumberSize=.9, rulerPos = 0,
+                  OTUTextSize=1.2,
+                  reduDistKar=FALSE,
+                  chrId="simple", xlimRightMod=2,
+                  xlimLeftMod = 3,
+                  ylimBotMod=.4)
+```
+
+
+```{r returntooldpar, echo=FALSE}
+suppressWarnings(par(opar) )
+```
+
+For another example see:
+https://stackoverflow.com/questions/33727432/how-to-plot-positions-along-a-chromosome-graphic/57153497#57153497
+
+### More details
+
+Check the help to see all possible arguments ?idiogramFISH (click Index below)
+
