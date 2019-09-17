@@ -20,8 +20,8 @@ returns a list with the A2 values for the OTUs
 If several species present, use column "OTU".
 }
 \examples{
-data(dfOfChrSize)
-armRatioCI(dfOfChrSize)
+asymmetryA2(dfOfChrSize)
+asymmetryA2(dfChrSizeHolo)
 }
 \references{
 Romero-Zarco. 1986. A New Method for Estimating Karyotype

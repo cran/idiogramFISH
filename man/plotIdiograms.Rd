@@ -4,7 +4,7 @@
 \alias{plotIdiograms}
 \title{Function to plot idiograms of karyotypes with centromere}
 \usage{
-plotIdiograms(dfChrSize, dfMarkColor, dfMarkPos, dfCenMarks,
+plotIdiograms(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   MarkDistanceType = "beg", orderBySize = TRUE, centromereSize = 1,
   chrWidth = 1.5, chrSpacing = 1.5, chrColor = "gray",
   cenColor = "gray", roundness = 4, dotRoundCorr = 1.5,
@@ -16,14 +16,12 @@ plotIdiograms(dfChrSize, dfMarkColor, dfMarkPos, dfCenMarks,
   morpho = TRUE, addOTUName = TRUE, revOTUs = FALSE, ruler = TRUE,
   rulerPos = -0.5, rulerPosMod = 0, ruler.tck = -0.004,
   rulerNumberPos = 0.2, rulerNumberSize = 0.4, xlimLeftMod = 1,
-  xlimRightMod = 10, ylimBotMod = 0.02, ...)
+  xlimRightMod = 10, ylimBotMod = 0.2, ylimTopMod = 0.2,
+  lwd.chr = 2, pattern = "", ...)
 }
 \arguments{
-\item{dfChrSize}{dataframe with columns: OTU (optional), chrName,
+\item{dfChrSize}{mandatory dataframe, with columns: OTU (optional), chrName,
 shortArmSize, longArmSize}
-
-\item{dfMarkColor}{dataframe specifying colors and style for marks (sites);
-cols: markName, markColor, style: square or dots (default=square)}
 
 \item{dfMarkPos}{dataframe of marks (sites): cols: OTU (opt) chrName,
 markName (name of site), markArm, markDistCen, markSize; column markArm:
@@ -33,11 +31,17 @@ centromere to mark}
 \item{dfCenMarks}{dataframe, specific for centromeric marks. cols: chrName
 and markName}
 
-\item{MarkDistanceType}{character, if cen = the distance you provided is to
-the center of the mark, if beg = the distance you provided is to the
+\item{dfMarkColor}{dataframe, optional, specifying colors and style for marks (sites);
+cols: \code{markName}, \code{markColor}, \code{style}: \code{square} or \code{dots}. (if \code{style} missing: all \code{square})}
+
+\item{mycolors}{character vector, optional, i.e. \code{c("blue","red","green")} for specifying color of marks in order of appearance. if diverges with number of marks will be recycled if \code{dfMarkColor} present, mycolors will be ignored. To know the
+order of your marks use something like: \code{unique(c(dfMarkPos$markName,dfCenMarks$markName) ) }}
+
+\item{MarkDistanceType}{character, if \code{cen} = the distance you provided is to
+the center of the mark, if \code{beg} = the distance you provided is to the
 beginning of the mark}
 
-\item{orderBySize}{logical value, when TRUE, sorts chromosomes by total
+\item{orderBySize}{logical value, when \code{TRUE}, sorts chromosomes by total
 length from the largest to the smallest}
 
 \item{centromereSize}{numeric, this establishes the apparent size of cen in
@@ -69,8 +73,8 @@ sized karyotypes or TRUE= equally spaced karyotypes}
 karyotypes will have no distance among them, use 1 to 11, if overlap,
 increase this and karSpacing}
 
-\item{chrId}{character, print name of chromosme, "original" uses the original
-name in OTU column of dfChrSize, "simple" (just 1 to ...) or "" (none).}
+\item{chrId}{character, print name of chromosme, \code{"original"} uses the original
+name in OTU column of dfChrSize, \code{"simple"} (just 1 to ...) or \code{""} (none).}
 
 \item{distTextChr}{numeric, distance from name of chromosome to chromosome,
 also affects vertical separation of indices}
@@ -105,7 +109,7 @@ position. see ?armRatioCI}
 \item{addOTUName}{boolean, if TRUE adds OTU (species) name to karyotype}
 
 \item{revOTUs}{boolean, The order of species is the one in the main
-dataframe, use TRUE to reverse}
+dataframe, use \code{TRUE} to reverse}
 
 \item{ruler}{boolean, display ruler to the left of karyotype, when FALSE no ruler}
 
@@ -122,14 +126,20 @@ axis R plot}
 
 \item{rulerNumberSize}{numeric, size of number's font in ruler}
 
-\item{xlimLeftMod}{numeric, modifies xlim left parameter of plot}
+\item{xlimLeftMod}{numeric, modifies \code{xlim} left argument of plot}
 
-\item{xlimRightMod}{numeric, xlim modification by adding space to the right
+\item{xlimRightMod}{numeric, \code{xlim} modification by adding space to the right
 of idiograms}
 
-\item{ylimBotMod}{numeric, modify ylim bottom parameter of plot}
+\item{ylimBotMod}{numeric, modify \code{ylim} bottom argument of plot}
 
-\item{...}{accepts other arguments for the plot, such as, asp}
+\item{ylimTopMod}{numeric, modify \code{ylim} top argument of plot}
+
+\item{lwd.chr}{thick of border of chr. and marks.}
+
+\item{pattern}{REGEX pattern to remove from names of marks}
+
+\item{...}{accepts other arguments for the plot, such as, \code{asp}}
 }
 \value{
 plot
@@ -149,11 +159,19 @@ data(dfOfChrSize)
 plotIdiograms(dfOfChrSize)
 }
 \seealso{
-plotIdiogramsHolo
+\code{\link{plotIdiogramsHolo}}
 
-asymmetry
+\code{\link{asymmetry}}
 
-armRatioCI
+\code{\link{armRatioCI}}
+
+\code{\link{chrbasicdatamono}}
+
+\code{\link{markpos}}
+
+\code{\link{cenmarkdata}}
+
+\code{\link{dfMarkColor}}
 }
 \keyword{chromosome}
 \keyword{dataframe}

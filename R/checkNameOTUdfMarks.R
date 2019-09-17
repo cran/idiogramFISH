@@ -13,12 +13,7 @@
 #'   markDistCen, for holoc: markPos
 #'
 #' @keywords dataframe check
-#' @export
-#' @examples
-#' data(dfOfChrSize,dfOfMarks,dfOfCenMarks)
-#' checkNameOTUdfMarks(dfOfChrSize,dfOfMarks)
-#' checkNameOTUdfMarks(dfOfChrSize,dfMarks=dfOfCenMarks)
-#'
+#' @keywords internal
 #' @return logical
 #'
 checkNameOTUdfMarks<- function(dfChrSize,dfMarks){

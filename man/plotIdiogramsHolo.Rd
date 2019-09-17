@@ -4,28 +4,32 @@
 \alias{plotIdiogramsHolo}
 \title{Function to plot idiograms without centromere}
 \usage{
-plotIdiogramsHolo(dfChrSize, dfMarkColor, dfMarkPos,
+plotIdiogramsHolo(dfChrSize, dfMarkPos, dfMarkColor, mycolors,
   MarkDistanceType = "beg", origin = "b", orderBySize = TRUE,
-  Mb = FALSE, chrWidth = 1.5, chrSpacing = 1.5, chrColor = "gray",
-  roundness = 4, dotRoundCorr = 1.5, karHeight = 1.2,
-  karSpacing = 1.6, reduDistKar = TRUE, reduDistKarTol = 9,
-  chrId = "original", distTextChr = 0.3, indexIdTextSize = 0.4,
-  OTUTextSize = 0.6, legend = "inline", markLabelSize = 0.4,
-  markLabelSpacer = 2, karIndex = TRUE, karIndexPos = 0.5,
-  addOTUName = TRUE, revOTUs = FALSE, ruler = TRUE,
-  rulerPos = -0.5, rulerPosMod = 0, ruler.tck = -0.004,
-  rulerNumberPos = 0.2, rulerNumberSize = 0.4, xlimLeftMod = 1,
-  xlimRightMod = 10, ylimBotMod = 0.02, ylimTopMod = 0.2, ...)
+  Mb = FALSE, ylabline = 0, chrWidth = 1.5, chrSpacing = 1.5,
+  chrColor = "gray", roundness = 4, dotRoundCorr = 1.5,
+  karHeight = 1.2, karSpacing = 1.6, reduDistKar = TRUE,
+  reduDistKarTol = 9, chrId = "original", distTextChr = 0.3,
+  indexIdTextSize = 0.4, OTUTextSize = 0.6, legend = "inline",
+  markLabelSize = 0.4, markLabelSpacer = 2, lwd.chr = 1,
+  karIndex = TRUE, karIndexPos = 0.5, addOTUName = TRUE,
+  revOTUs = FALSE, ruler = TRUE, rulerPos = -0.5, rulerPosMod = 0,
+  ruler.tck = -0.004, rulerNumberPos = 0.2, rulerNumberSize = 0.4,
+  xlimLeftMod = 1, xlimRightMod = 10, ylimBotMod = 0.2,
+  ylimTopMod = 0.2, ...)
 }
 \arguments{
 \item{dfChrSize}{dataframe with columns: OTU (optional), chrName, chrSize
 (see Mb)}
 
+\item{dfMarkPos}{dataframe of marks (sites): cols: OTU (opt) chrName,
+markName (name of site), markPos, markSize}
+
 \item{dfMarkColor}{dataframe specifying colors for marks (sites); cols:
 markName, markColor, style: square or dots}
 
-\item{dfMarkPos}{dataframe of marks (sites): cols: OTU (opt) chrName,
-markName (name of site), markPos, markSize}
+\item{mycolors}{character vector, optional, i.e. \code{c("blue","red","green")} for specifying color of marks in order of appearance. if diverges with number of marks will be recycled if \code{dfMarkColor} present, mycolors will be ignored. To know the
+order of your marks use something like: \code{unique(dfMarkPos$markName)}}
 
 \item{MarkDistanceType}{character, if cen = the distance you provided is to
 the center of the mark, if beg = the distance you provided is to the
@@ -37,7 +41,9 @@ measured from bottom, use "t" for distance to mark from top}
 \item{orderBySize}{logical value, when TRUE, sorts chromosomes by total
 length from the largest to the smallest}
 
-\item{Mb}{boolean, if TRUE distance is not micrometers but megabases}
+\item{Mb}{boolean, if TRUE distance in dfs is not micrometers but bases, will be shown as Megabases}
+
+\item{ylabline, }{numeric if \code{Mb=TRUE} modify position of y axis title (Mb)}
 
 \item{chrWidth}{numeric, chromosome width}
 
@@ -80,6 +86,8 @@ of marks (legend)}
 
 \item{markLabelSpacer}{numeric, only if legend !="", space from the rightmost
 chr. to legend}
+
+\item{lwd.chr}{numeric, thick of border of chr. or marks}
 
 \item{karIndex}{logical, add karyotype index A2 (interchromosomal asymmetry,
 variation among chromosome sizes)}
@@ -130,16 +138,22 @@ marks (sites) \code{dfMarkPos}, in that case the description of marks is
 necessary in dataframe \code{dfMarkColor}
 }
 \examples{
-data(dfOfChrSize)
-plotIdiogramsHolo(dfOfChrSize)
+data(dfChrSizeHolo)
+plotIdiogramsHolo(dfChrSizeHolo)
 
 }
 \seealso{
 plotIdiograms
 
-asymmetry
+\code{\link{plotIdiograms}}
 
-armRatioCI
+\code{\link{asymmetryA2}}
+
+\code{\link{chrbasicdataHolo}}
+
+\code{\link{markdataholo}}
+
+\code{\link{dfMarkColor}}
 }
 \keyword{chromosome}
 \keyword{dataframe}

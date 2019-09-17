@@ -12,8 +12,8 @@
 #' @importFrom stats sd
 #' @export
 #' @examples
-#' data(dfOfChrSize)
-#' armRatioCI(dfOfChrSize)
+#' asymmetryA2(dfOfChrSize)
+#' asymmetryA2(dfChrSizeHolo)
 #' @references Romero-Zarco. 1986. A New Method for Estimating Karyotype
 #'   Asymmetry. Taxon Vol. 35, No. 3  pp. 526-530
 #'
@@ -22,6 +22,9 @@
 asymmetryA2<- function(dfChrSize){
   message(crayon::black("\nCalculating karyotype index A2\n") )
   dfChrSize<-as.data.frame(dfChrSize)
+  if(!"chrSize" %in% colnames(dfChrSize) ){
+    dfChrSize$chrSize<-dfChrSize$shortArmSize+dfChrSize$longArmSize
+  }
   if("OTU" %in% colnames(dfChrSize)){
     listOfdfChromSize<-base::split(dfChrSize, dfChrSize$OTU )
     names(listOfdfChromSize)<-unique(dfChrSize$OTU)

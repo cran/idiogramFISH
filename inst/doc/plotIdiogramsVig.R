@@ -4,7 +4,7 @@
 library(idiogramFISH) 
 
 ## ------------------------------------------------------------------------
-# Example dataframe written in R, use: (column OTU is optional if only 1 OTU)
+# Example data.frame written in R, use: (column OTU is optional if only 1 OTU)
 mydfChrSize<-read.table(text=
 "            OTU chrName shortArmSize longArmSize 
 1 \"Species one\"   1     1.5         2.0  
@@ -12,8 +12,10 @@ mydfChrSize<-read.table(text=
 3 \"Species one\"   3     1.0         1.5
 4 \"Species one\"   X     2.0         3.5"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
+## ---- echo=F-------------------------------------------------------------
 # just to show it here
-knitr::kable(mydfChrSize) 
+kableExtra::kable_styling(knitr::kable(mydfChrSize) , full_width = F
+                           , font_size = 10)
 
 ## ------------------------------------------------------------------------
 # From scratch:
@@ -24,10 +26,15 @@ mydfMarkColor<-read.table(text=
 3     DAPI      blue square
 4      CMA    yellow square"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
-knitr::kable(mydfMarkColor) 
+## ---- echo=F-------------------------------------------------------------
+# just to show it here
+kableExtra::kable_styling(knitr::kable(mydfMarkColor) , full_width = F
+                           , font_size = 10
+                          # , bootstrap_options = c("striped", "hover", "condensed") 
+                          )
 
 ## ------------------------------------------------------------------------
-# We will use column OTU if dataframe because chromosome size df has it
+# We will use column OTU if data.frame because chromosome size df has it
 mydfOfMarks<-read.table(text=
 "            OTU chrName markName markArm markSize markDistCen
 1 \"Species one\"      1       5S       p      0.5         0.5
@@ -35,53 +42,153 @@ mydfOfMarks<-read.table(text=
 3 \"Species one\"      X      45S       p        1         1.0
 4 \"Species one\"      3     DAPI       q        1         1.0"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
-knitr::kable(mydfOfMarks) 
+## ---- echo=F-------------------------------------------------------------
+kableExtra::kable_styling(knitr::kable(mydfOfMarks) , full_width = F
+                           , font_size = 10
+                          , bootstrap_options = c("striped", "hover", "condensed")
+                          )
 
 ## ------------------------------------------------------------------------
-# We will use column OTU because dataframe of chromosome size has it
+# We will use column OTU because data.frame of chromosome size has it
 mydfOfCenMarks<-read.table(text=
 "             OTU chrName markName
 1  \"Species one\"     1     DAPI
 2  \"Species one\"     X      CMA"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
-knitr::kable(mydfOfCenMarks)
+## ---- echo=F-------------------------------------------------------------
+kableExtra::kable_styling(knitr::kable(mydfOfCenMarks) , full_width = F
+                           , font_size = 10
+                          , bootstrap_options = c("striped", "hover", "condensed")
+                          )
 
 ## ----example_M1, echo=TRUE, results="hide", fig.width=7, fig.height=4.5, message=FALSE----
-# library(idiogramFISH)
+# fig.width=7, fig.height=4.5
 
-plotIdiograms(mydfChrSize, mydfMarkColor, mydfOfMarks, mydfOfCenMarks,
-              dotRoundCorr=2, chrWidth=4.5, chrSpacing = 4,
-              karSpacing=1.6,
-              indexIdTextSize=.7, OTUTextSize=.7,
-              markLabelSize=.7, 
-              rulerPos=-1.9, ruler.tck=-0.02, rulerNumberPos=.5, rulerNumberSize=.7
+plotIdiograms(dfChrSize=mydfChrSize,      # chr. size data.frame
+              dfMarkPos=mydfOfMarks,      # mark position df (not cen.)
+              dfCenMarks=mydfOfCenMarks,  # cen. marks df
+              dfMarkColor=mydfMarkColor,  # mark style df
+              roundness=3,                # vertices roundness  
+              dotRoundCorr=2,             # correction of roundness of dots 
+              
+              chrWidth=4.5,               # width of chr.
+              chrSpacing = 4,             # space among chr.
+              karSpacing=1.6,             # vertical size of karyotype including spacer
+              
+              indexIdTextSize=.7,         # font size fo chr name and indices
+              OTUTextSize=.7,             # font size of OTUs
+              markLabelSize=.7,           # font size of mark legends
+              
+              rulerPos=-1.9,              # ruler position
+              ruler.tck=-0.02,            # ticks of ruler size and orientation
+              rulerNumberPos=.5,          # position of numbers in ruler
+              rulerNumberSize=.7,         # font size of ruler numbers
+              
+              ylimBotMod = 0.4,           # modify ylim bottom argument
+              ylimTopMod = 0              # modify ylim top argument
+)
+
+## ----example_M1cen0, echo=TRUE, results="hide", fig.width=7, fig.height=4.5, message=FALSE----
+# fig.width=7, fig.height=4.5
+
+plotIdiograms(dfChrSize=mydfChrSize,      # chr. size df
+              dfMarkPos=mydfOfMarks,      # mark position df (not cen.)
+              dfMarkColor=mydfMarkColor,  # mark style df
+
+              # dfCenMarks=mydfOfCenMarks,  # cen. marks df, NOT AVAILABLE FOR centromereSize = 0
+              centromereSize = 0,         # <- HERE
+              
+              roundness=3,                # vertices roundness  
+              dotRoundCorr=2,             # correction of roundness of dots 
+              chrWidth=4.5,               # width of chr.
+              chrSpacing = 4,             # space among chr.
+              karSpacing=1.6,             # vertical size of karyotype including spacer
+              indexIdTextSize=.7,         # font size fo chr name and indices
+              OTUTextSize=.7,             # font size of OTUs
+              markLabelSize=.7,           # font size of mark legends
+              rulerPos=-1.9,              # ruler position
+              ruler.tck=-0.02,            # ticks of ruler size and orientation
+              rulerNumberPos=.5,          # position of numbers in ruler
+              rulerNumberSize=.7,         # font size of ruler numbers
+              ylimBotMod = 0.4,           # modify ylim bottom argument
+              ylimTopMod = 0              # modify ylim top argument
 )
 
 ## ------------------------------------------------------------------------
-data(bigdfOfChrSize, bigdfOfMarks, bigdfDataCen, dfMarkColor)
+data(bigdfOfChrSize)
 
-# Chromosome sizes
-knitr::kable(bigdfOfChrSize)
+## ---- echo=F-------------------------------------------------------------
+# kableExtra::scroll_box(height = "300px", width="400px",
+           # kableExtra::add_header_above(
+                            kableExtra::kable_styling(knitr::kable(bigdfOfChrSize) , full_width = F
+                           , font_size = 10
+                          , bootstrap_options = c("striped", "hover", "condensed"),
+                 
+) 
+# ) 
+# )
 
-# Mark characteristics, does not require OTU
-knitr::kable(dfMarkColor)
+## ------------------------------------------------------------------------
+data(bigdfOfMarks)
 
-# Mark position
-knitr::kable(bigdfOfMarks)
+## ---- echo=F-------------------------------------------------------------
+kableExtra::kable_styling(knitr::kable(dfMarkColor) , full_width = F
+                           , font_size = 10
+                          , bootstrap_options = c("striped", "hover", "condensed")
+                          )
 
-# Centromeric Marks only
-knitr::kable(bigdfDataCen)
+## ------------------------------------------------------------------------
+data("bigdfOfMarks")
+
+## ---- echo=F-------------------------------------------------------------
+kableExtra::kable_styling(knitr::kable(bigdfOfMarks) , full_width = F
+                           , font_size = 10
+                          , bootstrap_options = c("striped", "hover", "condensed")
+                          )
+
+## ------------------------------------------------------------------------
+data("bigdfDataCen")
+
+## ---- echo=F-------------------------------------------------------------
+kableExtra::kable_styling(knitr::kable(bigdfDataCen) , full_width = F
+                           , font_size = 10
+                          , bootstrap_options = c("striped", "hover", "condensed")
+                          )
 
 ## ----example_M3, echo=TRUE, results="hide", fig.width=6, fig.height=13, message=FALSE----
 # library(idiogramFISH)
 
-plotIdiograms(bigdfOfChrSize, dfMarkColor, bigdfOfMarks, bigdfDataCen,
-                        karHeight=1.2,karSpacing=2.2,
-                        dotRoundCorr = .5, distTextChr=.5,
-                        indexIdTextSize=.7, OTUTextSize=.9,
-                        legend="aside",markLabelSize=.7, markLabelSpacer=1,
-                        morpho=FALSE, xlimRightMod=2,
-                        ruler=TRUE,rulerPos=-.9, rulerPosMod=3, ruler.tck=-0.004, 
-                        rulerNumberPos=.4, rulerNumberSize=.4,
-                        )
+plotIdiograms(dfChrSize=bigdfOfChrSize,  # chr sizes
+              dfMarkColor=dfMarkColor,   # mark characteristics, optional in dev version. see above. 
+              dfMarkPos=bigdfOfMarks,    # mark positions (no cen. marks)
+              dfCenMarks=bigdfDataCen,   # cen. marks df
+              karHeight=1.2,             # karyotype rel. height
+              karSpacing=2.2,            # karyotype vertical size with spacing
+              
+              dotRoundCorr = .5,         # correction factor for dot marks
+              distTextChr=.5,            # distance of chr. to text
+              indexIdTextSize=.7,        # font size of indices and chr. name
+              OTUTextSize=.9,            # font size of OTU names
+              legend="aside",            # position of legend not "inline"
+              markLabelSize=.7,          # font size of legend
+              markLabelSpacer=1,         # distance from chr. to legend
+              morpho=FALSE,              # add chr. morphology
+              
+              ruler=TRUE,                # add ruler
+              rulerPos=-.9,              # position of ruler
+              rulerPosMod=3,             # modify position of ruler
+              ruler.tck=-0.004,          # size and orient. of ticks in ruler
+              rulerNumberPos=.4,         # position of numbers of ruler
+              rulerNumberSize=.4,        # font size of ruler
+              
+              xlimRightMod=2,            # modify xlim right argument
+              ylimBotMod = 0,            # modify ylim bottom argument
+              ylimTopMod = -.3           # modify ylim top argument
+              )
+
+## ----include=FALSE-------------------------------------------------------
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools"
+), 'packages.bib')
 

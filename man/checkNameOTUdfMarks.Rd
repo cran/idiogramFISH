@@ -24,11 +24,6 @@ column \code{chrName} and if several species, \code{OTU}. The functions
 returns \code{TRUE} if names of OTUs in dataframe of marks are included in
 dataframe of chr. size.
 }
-\examples{
-data(dfOfChrSize,dfOfMarks,dfOfCenMarks)
-checkNameOTUdfMarks(dfOfChrSize,dfOfMarks)
-checkNameOTUdfMarks(dfOfChrSize,dfMarks=dfOfCenMarks)
-
-}
 \keyword{check}
 \keyword{dataframe}
+\keyword{internal}

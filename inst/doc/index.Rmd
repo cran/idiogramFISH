@@ -1,0 +1,303 @@
+---
+title: "idiogramFISH: Installation and minimal examples"
+author: "Fernando Roa"
+date: "23 08 2019"
+output:
+  prettydoc::html_pretty:
+    theme: leonids
+    highlight: github
+    toc: true
+    # toc_float: true
+    toc_depth: 1
+    number_sections: true
+bibliography: [allrefs.bib, packages.bib]
+link-citations: yes
+csl: climaMod.csl
+vignette: >
+  %\VignetteIndexEntry{idiogramFISH: Installation and minimal examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style type="text/css">
+.aright {
+text-align: right}
+
+#post {
+width:75%;
+}
+
+</style>
+
+<div class="aright">
+Go to [monocentrics Vignette](plotIdiogramsVig.html)  
+Go to [holocentrics Vignette](plotIdiogramsHoloVig.html)  
+Go to [groups Vignette](groupsVig.html)  
+Go to [human Vignette](humanVig.html)  
+<!-- # there are 2 spaces at the end of those lines -->
+</div>
+
+<style type="text/css">
+
+.verysmall td {line-height: 14px; vertical-align: bottom;
+    font-size:10pt;
+    padding-top:2px;
+    padding-bottom:2px;
+    horizontal-align: center;
+    }
+
+h1 { /* Header 1 */
+    font-size: 22px;
+}
+h2 { /* Header 2 */
+    font-size: 17px;
+}
+h3 { /* Header 3 */
+    font-size: 14px;
+}
+</style>
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+<!-- # ```{r, include = FALSE} -->
+<!-- # knitr::opts_chunk$set( -->
+<!-- #   collapse = TRUE, -->
+<!-- #   comment = "#>", -->
+<!-- #   fig.path = "man/figures/README-", -->
+<!-- #   out.width = "70%" -->
+<!-- # ) -->
+<!-- # ``` -->
+
+# idiogramFISH
+<style type="text/css">
+.right {
+  float: right;
+  margin: 60px;
+}
+</style>
+
+```{r, echo=F,  results="asis"}
+img1_path <- "../man/figures/logo.png"
+if(file.exists(img1_path)) {
+cat(paste0("<img src=",img1_path," class=\"right\" width=\"20%\">") )
+}
+```
+
+
+<!-- <img src='man/figures/logo.png' align="right" height="120" /> -->
+
+<!-- badges: start -->
+<!-- badges: start -->
+`r library("badger")`
+```{r, include = FALSE}
+ badge_devel_gitlab<-function(pkg, color){
+    v <- rvcheck:::check_github_gitlab(pkg, "gitlab")$latest_version
+    url <- paste0("https://gitlab.com/", pkg)
+    badger::badge_custom("devel version", v, color, url)
+}
+```
+
+The goal of idiogramFISH is to plot idiograms of several karyotypes having a set of dataframes for chromosome data
+    and optionally marks' data. Includes also a function to plot holocentrics and its marks getting 
+    sizes in micrometers or Mb (`plotIdiogramsHolo`) [@Roa2019].<br>
+    <br>Marks can have square or dot form, its legend (label) can be drawn inline 
+    or to the right of karyotypes. It is possible to calculate
+    also chromosome and karyotype indexes and classify chromosomes by morphology [@Watanabe1999;@Zarco1986new;@Guerra1986d; @Levan1964].
+    
+IdiogramFISH was written in R[@R-base] and also uses crayon package [@Csardi2017]. Manuals were written with R-packages 
+bookdown, knitr, badger, pkgdown and Rmarkdown [@R-bookdown; @R-knitr; @R-badger; @R-rmarkdown; @R-pkgdown]
+
+# Installation
+
+## You can install the idiogramFISH from [CRAN](https://cran.r-project.org/package=idiogramFISH) with: {-}
+
+``` {r, echo=F, results="asis"}
+library(badger)
+cat(paste(badger::badge_cran_release("idiogramFISH", "orange"),"&nbsp;" ))
+cat(paste(badger::badge_cran_download("idiogramFISH", type="grand-total", color="orange") ))
+```
+``` r
+install.packages("idiogramFISH")
+```
+ 
+## Or the dev version {-}
+
+``` {r, echo=F, results="asis", message="hide", warning=F, include=F}
+gitbadge<- badge_devel_gitlab("ferroao/idiogramFISH", color="green") 
+```
+
+``` {r, echo=F, results="asis", message="hide", warning=F, include=T}
+cat(gitbadge)
+``` 
+
+From gitlab with devtools [@R-devtools] :
+
+Attention windows users, please install [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
+
+``` r
+# This installs package devtools, necessary for installing the dev version
+install.packages("devtools")
+url <- "https://gitlab.com/ferroao/idiogramFISH"
+
+# Linux with vignettes
+devtools::install_git(url = url,build_vignettes = TRUE, force=T)
+
+# Windows with vignettes
+devtools::install_git(url = url, build_opts=c("--no-resave-data","--no-manual") )
+```
+
+## Or install it in terminal: {-}
+
+``` r
+# clone repository:
+git clone "https://gitlab.com/ferroao/idiogramFISH"
+R CMD build idiogramFISH
+R CMD INSTALL idiogramFISH_1.0.0.tar.gz
+```
+
+# What's new in gitlab? 
+
+[ver. > 1.0.0](https://gitlab.com/ferroao/idiogramFISH/blob/master/NEWS.md)
+
+## Releases: {-}
+
+[Gitlab releases](https://gitlab.com/ferroao/idiogramFISH/-/releases) 
+
+# Need help?
+
+## Manual {-}
+
+[online Manual](https://ferroao.gitlab.io/manualidiogramfish/)
+
+## Documentation {-}
+
+[pkgdown style](https://ferroao.gitlab.io/idiogramFISH)
+
+## vignettes: {-}
+
+Online:
+
+[Monocentrics](https://ferroao.gitlab.io/idiogramfishhelppages/plotIdiogramsVig.html)  
+[Holocentrics](https://ferroao.gitlab.io/idiogramfishhelppages/plotIdiogramsHoloVig.html)  
+[Groups of chromosomes](https://ferroao.gitlab.io/idiogramfishhelppages/groupsVig.html)   
+[Human karyotype](https://ferroao.gitlab.io/idiogramfishhelppages/humanVig.html)  
+
+
+Launch vignettes from R:
+
+``` r
+browseVignettes("idiogramFISH") 
+```
+
+# Minimal examples
+
+## How to plot a karyotype: {-}
+
+```{r example, echo=T, results="hide", fig.width=10, fig.height=6, message=FALSE}
+# fig.width=10, fig.height=6
+
+library(idiogramFISH)
+# load some package dataframes
+data(dfOfChrSize) # chromsome data
+data(dfMarkColor) # mark general data
+data(dfOfMarks)   # mark position data (not cen.)
+data(dfOfCenMarks)# centromeric mark data
+
+plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
+              dfMarkColor=dfMarkColor,  # d.f of mark style
+              dfMarkPos=dfOfMarks,      # df of mark positions (not centromeric)
+              dfCenMarks=dfOfCenMarks,  # df of centromeric marks
+              dotRoundCorr=2,           # correction of dots when non-circular
+              
+              chrWidth=2.5,             # width of chromosome
+              chrSpacing = 2.5,         # horizontal space among chromosomes
+              karSpacing=1.6,           # vertical size of karyotype including space
+              
+              indexIdTextSize=1,        # font size of chr names and indices
+              markLabelSize=1,          # font size of legends
+              
+              rulerPos=-1.9,            # position of rulers
+              ruler.tck=-0.02,          # size and orientation of ruler ticks
+              rulerNumberPos=.5,        # position of numbers of rulers
+              rulerNumberSize=1         # font size of rulers
+)
+```
+
+
+##  Let's explore the dataframes for monocentrics: {-}
+
+```{r monocentrics, comment=NA}
+
+# chromsome data, if only 1 species, column OTU is optional
+dfOfChrSize
+# mark general data
+dfMarkColor 
+# mark position data (not cen.), if only 1 species, column OTU is optional
+dfOfMarks
+#centromeric mark data, if only 1 species, column OTU is optional
+dfOfCenMarks
+```
+
+## How to plot a karyotype of holocentrics: {-}
+
+```{r example2, echo=T, results="hide", fig.width=10, fig.height=6, message=FALSE}
+library(idiogramFISH)
+# load some saved dataframes
+data(dfChrSizeHolo, dfMarkColor, dfMarkPosHolo)
+
+plotIdiogramsHolo(dfChrSize=dfChrSizeHolo, # data.frame of chr. size
+                  dfMarkColor=dfMarkColor, # df of mark style
+                  dfMarkPos=dfMarkPosHolo, # df of mark positions
+                  addOTUName=FALSE,        # do not add OTU names
+                  
+                  dotRoundCorr=2.5,        # correction of roundness of dots (marks)  
+                  chrWidth=2.5,            # chr. width
+                  indexIdTextSize=1,       # font size of chr. name and indices
+                  legend="aside" ,         # legend of marks to the right of plot
+                  markLabelSize=1,         # font size of mark labels (legend)
+                  
+                  rulerNumberSize=1,       # font size of ruler
+                  rulerPos=-.7,            # position of ruler
+                  ruler.tck=-0.04,         # size and orientation of ruler ticks
+                  rulerNumberPos=.9,       # position of numbers of rulers
+                  
+                  xlimLeftMod=1,           # modify xlim left argument of plot
+                  xlimRightMod=10,         # modify xlim right argument of plot
+                  ylimBotMod=.2)           # modify ylim bottom argument of plot
+```
+
+
+## Let's explore the dataframes for holocentrics: {-}
+
+```{r holocentrics, comment=NA}
+# chromsome data, if only 1 species, column OTU is optional
+dfChrSizeHolo
+# mark general data
+dfMarkColor 
+# mark position data (not cen.), if only 1 species, column OTU is optional
+dfMarkPosHolo
+```
+
+# Citation
+
+```{r citation, results='asis', echo=FALSE}
+# chromsome data, if only 1 species, column OTU is optional
+print(citation("idiogramFISH"),bibtex=FALSE)
+```
+
+# Authors
+
+[Fernando Roa](https://ferroao.gitlab.io/curriculumpu/)<a href="https://liberapay.com/ferroao/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a> <img src="http://img.shields.io/liberapay/receives/ferroao.svg?logo=liberapay">
+
+[Mariana Telles](http://lattes.cnpq.br/4648436798023532)  
+
+```{r include=FALSE}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","badger","pkgdown"
+), 'packages.bib')
+```
+
+`r if (knitr:::is_html_output()) '
+# References {-}
+'`

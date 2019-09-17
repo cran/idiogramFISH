@@ -23,10 +23,4 @@ with data of marks (sites) both have to have the column \code{chrName} and if
 several species, \code{OTU}. The functions returns \code{TRUE} if names of
 chromosomes in dataframe of marks are included in dataframe of chr. size.
 }
-\examples{
-data(dfOfChrSize,dfOfMarks,dfOfCenMarks)
-checkNameChrDfMarks(dfOfChrSize,dfOfMarks)
-checkNameChrDfMarks(dfOfChrSize,dfMarks=dfOfCenMarks)
-}
-\keyword{check}
-\keyword{dataframe}
+\keyword{internal}

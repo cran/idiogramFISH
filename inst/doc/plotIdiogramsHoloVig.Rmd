@@ -1,18 +1,77 @@
 ---
 title: "Plotting holocentric chromosomes"
 author: "Fernando Roa"
-date: "18 08 2019"
-output: rmarkdown::html_vignette
-
+date: "23 08 2019"
+output:
+  prettydoc::html_pretty:
+    theme: leonids
+    highlight: github
+    toc: true
+    # toc_float: true
+    toc_depth: 1
+    number_sections: true
+bibliography: [allrefs.bib, packages.bib]
+csl: climaMod.csl
+link-citations: yes
 vignette: >
   %\VignetteIndexEntry{Plotting holocentric chromosomes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
+<!-- --- -->
+<!-- title: "Plotting holocentric chromosomes" -->
+<!-- author: "Fernando Roa" -->
+<!-- date: "23 08 2019" -->
+<!-- output: rmarkdown::html_vignette -->
+
+<!-- vignette: > -->
+<!--   %\VignetteIndexEntry{Plotting holocentric chromosomes} -->
+<!--   %\VignetteEngine{knitr::rmarkdown} -->
+<!--   %\VignetteEncoding{UTF-8} -->
+<!-- --- -->
+
+<style type="text/css">
+
+.aright {
+text-align: right}
+#post {
+width:75%;
+}
+
+</style>
+
+<div class="aright">
+Go to [home](index.html)  
+Go to [monocentrics Vignette](plotIdiogramsVig.html)  
+Go to [groups Vignette](groupsVig.html)  
+Go to [human Vignette](humanVig.html)  
+<!-- # there are 2 spaces at the end of those lines -->
+</div>
+
+<style type="text/css">
+
+.verysmall td {line-height: 14px; vertical-align: bottom;
+    font-size:10pt;
+    padding-top:2px;
+    padding-bottom:2px;
+    horizontal-align: center;
+    }
+
+h1 { /* Header 1 */
+    font-size: 22px;
+}
+h2 { /* Header 2 */
+    font-size: 17px;
+}
+h3 { /* Header 3 */
+    font-size: 14px;
+}
+</style>
+
 This guide shows the files to plot idiograms of karyotypes of holocentrics and optionally marks. 
 
-## 0. Load package
+# Load package
 
 visit gitlab for installation instructions https://gitlab.com/ferroao/idiogramFISH
 
@@ -22,33 +81,38 @@ visit gitlab for installation instructions https://gitlab.com/ferroao/idiogramFI
 library(idiogramFISH) 
 ```
 
-## 1. Get your chromosome size data
+# Get your chromosome size data
 
-Initially you have to open your chromosome data as a dataframe. 
+Initially you have to open your chromosome data as a data.frame. 
 
-### From scratch:
+## From scratch: {-}
 
 ```{r}
-# Example dataframe written in R, use: (column OTU is optional if only 1 OTU)
+# Example data.frame written in R, use: (column OTU is optional if only 1 OTU)
 mydfChrSizeHolo<-read.table(text=
 "            OTU chrName chrSize  
 1 \"Species one\"   1     6.5      
 2 \"Species one\"   2     5.0      
 3 \"Species one\"   3     4.0    
 4 \"Species one\"   X     3.0    "  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
-
-# just to show it here
-knitr::kable(mydfChrSizeHolo) 
 ```
 
-### or loading saved data:
+<div class="verysmall">
+```{r, echo=F}
+# just to show it here
+kableExtra::kable_styling(knitr::kable(mydfChrSizeHolo) , full_width = F
+                           , font_size = 10)
+```
+</div>
+
+## or loading saved data: {-}
 
 Initially, if you use RStudio, use menu "Session", "Set working directory" for choosing your desired folder or:
 ```
 setwd("~/folder/subfolder")
 ```
 
-Open your chromosome data dataframe importing it from a .csv (read.csv) or .xls file (readxl). 
+Open your chromosome data data.frame importing it from a .csv (read.csv) or .xls file (readxl). 
 ```
 mydfChrSize<-read.csv("somefile.csv")
 ```
@@ -58,9 +122,18 @@ For fixing column names use:
 colnames(mydfChrSize)<-c("OTU", "chrName","chrSize")
 ```
 
-## 2. Get marks general data
+# Get marks general data
 
-Open or make your mark data as a dataframe. This dataframe has the marks present in all karyotypes with color and style, without position info.
+This data.frame is optional for ver. > 1.0.0
+
+``` r
+packageVersion("idiogramFISH")
+```
+
+Open or make your mark data as a data.frame. This data.frame has the marks present in all karyotypes with color and style, 
+without position info.
+If `style` column is not present it will be filled with `square` during plotting.
+
 
 ```{r}
 # From scratch:
@@ -70,9 +143,14 @@ mydfMarkColor<-read.table(text=
 2      45S     green square
 3     DAPI      blue square
 4      CMA    yellow square"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
-
-knitr::kable(mydfMarkColor) 
 ```
+<div class="verysmall">
+```{r, echo=F}
+# just to show it here
+kableExtra::kable_styling(knitr::kable(mydfMarkColor) , full_width = F
+                           , font_size = 10)
+```
+</div>
 
 For fixing column names use:
 
@@ -80,12 +158,12 @@ For fixing column names use:
 colnames(mydfMarkColor)<-c("markName", "markColor","style") # if style column not present it will be filled with "square"
 ```
 
-## 3. Get marks positions data
+# Get marks positions data
 
-Open or write your mark positions as a dataframe. This dataframe has the marks present in all karyotypes with position info.
+Open or write your mark positions as a data.frame. This data.frame has the marks present in all karyotypes with position info.
 
 ```{r}
-# We will use column OTU if dataframe because chromosome size df has it
+# We will use column OTU if data.frame because chromosome size df has it
 mydfMarkPosHolo<-read.table(text=
 "             OTU  chrName markName markPos markSize
 1 \"Species one\"       3       5S     1.0      0.5
@@ -94,18 +172,22 @@ mydfMarkPosHolo<-read.table(text=
 4 \"Species one\"       2     DAPI     2.0      0.5
 5 \"Species one\"       4      CMA     2.0      0.5
 6 \"Species one\"       4       5S     0.5      0.5"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
-
-knitr::kable(mydfMarkPosHolo) 
 ```
-
+<div class="verysmall">
+```{r, echo=F}
+# just to show it here
+kableExtra::kable_styling(knitr::kable(mydfMarkPosHolo) , full_width = F
+                           , font_size = 10)
+```
+</div>
 For fixing column names use something like:
 ```
 colnames(mydfMarkColor)<-c("OTU", "chrName","markName","markPos","markSize") 
 ```
 
-## 4. Plotting
+# Plotting
 
-You can plot without marks (passing only 1st dataframe), but we will use all 4 dataframes created:
+You can plot without marks (passing only 1st data.frame), but we will use all 4 data.frames created:
 ```{r parinit, echo=FALSE}
 opar <- par(no.readonly = TRUE)      # make a copy of current settings
 on.exit(suppressWarnings(par(opar)) )
@@ -114,81 +196,178 @@ on.exit(suppressWarnings(par(opar)) )
 ```{r example, echo=TRUE, results="hide", fig.width=6, fig.height=3.5, message=FALSE}
 # library(idiogramFISH)
 par(mar=c(1,4,1,1)) # bottom left top right
-plotIdiogramsHolo(mydfChrSizeHolo, mydfMarkColor, mydfMarkPosHolo, 
-                        dotRoundCorr=2,
-                        chrWidth = 2, chrSpacing = 2,
-                        indexIdTextSize=1, OTUTextSize=1, karHeight = 1.4,
-                        legend="aside" ,markLabelSize=1,
-                        addOTUName=FALSE,
-                        rulerNumberSize=1, rulerPos=-2.2,ruler.tck=-0.03,rulerNumberPos=.9,
-                        xlimLeftMod=2.2,  xlimRightMod=10, ylimBotMod=.1
-                        )
+
+plotIdiogramsHolo(dfChrSize=mydfChrSizeHolo,  # data.frame of chr. sizes
+                  dfMarkColor=mydfMarkColor,  # df of mark style
+                  dfMarkPos=mydfMarkPosHolo,  # df of mark positions
+                  karHeight = 1.4,            # vertical size of karyotype plus spacing
+                  addOTUName=FALSE,           # add OTU names
+                  
+                  chrWidth = 2,               # width of chromosomes
+                  chrSpacing = 2,             # space among chromosomes
+                  indexIdTextSize=1,          # font size of chr. name and indices 
+                  
+                  dotRoundCorr=2,             # correction factor for roundness of dots
+                  legend="aside" ,            # position of legend, not "inline"
+                  markLabelSize=1,            # font size of legend
+                  
+                  rulerNumberSize=1,          # font size of ruler
+                  rulerPos=-2.2,              # position of ruler
+                  ruler.tck=-0.03,            # size and orient. of tick of ruler
+                  rulerNumberPos=.9,          # ruler's number position
+
+                  xlimLeftMod=2.2,            # modify xlim left argument
+                  xlimRightMod=10,            # modify xlim right argument
+                  ylimBotMod=.1               # modify ylim bottom argument
+                  )
 ```
 
+For ver. > 1.0.0 there is no need to add `dfMarkColor` and you can also use the parameter
+`mycolors` (optional too), to establish marks' colors. When using `mycolors`, colors are assigned depending on the order of marks, i.e.:
 
-## 5. Example with several species (OTUs)
+`unique(dfMarkPosHolo$markName)`
 
-### To illustrate this, we will load some dataframes from the package
+```
+par(mar=c(1,4,1,1)) 
+plotIdiogramsHolo(dfChrSize=dfChrSizeHolo, 
+                  dfMarkPos=dfMarkPosHolo,
+                  mycolors = c("green","yellow","blue","red"),  # optional
+                  dotRoundCorr=2.5, chrWidth=2.5,
+                  indexIdTextSize=1, 
+                  legend="aside" ,markLabelSize=1, 
+                  addOTUName=F,
+                  rulerNumberSize=1, rulerPos=-.7,ruler.tck=-0.04,rulerNumberPos=.9, 
+                  xlimLeftMod=1,  xlimRightMod=10, ylimBotMod=.2
+)
+```
+
+# Example with several species (OTUs)
+
+## To illustrate this, we will load some data.frames from the package {-}
+
+Chromosome sizes
 
 ```{r}
-data(bigdfChrSizeHolo, dfMarkColor, bigdfMarkPosHolo)
-
-# Chromosome sizes
-knitr::kable(bigdfChrSizeHolo)
-
-# Mark characteristics, does not require OTU
-knitr::kable(dfMarkColor)
-
-# Mark position
-knitr::kable(bigdfMarkPosHolo)
+data(bigdfChrSizeHolo)
 ```
 
-### Plotting
+<div class="verysmall">
+```{r, echo=F}
+# just to show it here
+kableExtra::kable_styling(knitr::kable(bigdfChrSizeHolo) , full_width = F
+                           , font_size = 10)
+```
+</div>
+
+Mark characteristics, does not require OTU, df optional for ver. > 1.0.0
+
+```{r}
+data(dfMarkColor) 
+```
+
+<div class="verysmall">
+
+```{r, echo=F}
+# just to show it here
+kableExtra::kable_styling(knitr::kable(dfMarkColor) , full_width = F
+                           , font_size = 10)
+```
+</div>
+
+Mark position
+
+```{r}
+data(bigdfMarkPosHolo)
+```
+
+<div class="verysmall">
+
+```{r, echo=F}
+# just to show it here
+kableExtra::kable_styling(knitr::kable(bigdfMarkPosHolo) , full_width = F
+                           , font_size = 10)
+```
+</div>
+
+## Plotting
 
 ```{r example3, echo=TRUE, results="hide", fig.width=6, fig.height=6, message=FALSE}
 library(idiogramFISH)
 par(mar=c(1,1,1,1))
-plotIdiogramsHolo(bigdfChrSizeHolo, dfMarkColor, bigdfMarkPosHolo, MarkDistanceType="cen", 
-                  roundness=6, dotRoundCorr=1, karHeight = 1, karSpacing = 1.7,
-                  chrWidth = 2, chrSpacing = 2,
-                  indexIdTextSize=.9,
-                  markLabelSize=.9,
-                  rulerNumberSize=.9,
-                  OTUTextSize=1.2,
-                  reduDistKar=FALSE,
-                  chrId="simple", xlimRightMod=2,
-                  ylimBotMod=.4)
+
+plotIdiogramsHolo(dfChrSize=bigdfChrSizeHolo, # df of chr. sizes
+                  dfMarkColor=dfMarkColor,    # df of mark style
+                  dfMarkPos=bigdfMarkPosHolo, # df of marks' position
+                  
+                  MarkDistanceType="cen",     # distance to mark (center of mark)
+                  roundness=6,                # vertices roundness of chr. and marks 
+                  dotRoundCorr=1,             # correction of dots roundness
+                  
+                  karHeight = 1,              # rel. karyotype height
+                  karSpacing = 1.7,           # karyotype height including spacing
+                  reduDistKar=FALSE,          # reduce vertical space among karyotypes of karSpacing
+                  
+                  chrId="simple",             # numbering of chr., not using "original" name
+                  chrWidth = 2,               # chr. width
+                  chrSpacing = 2,             # space among chr.
+                  
+                  indexIdTextSize=.9,         # font size of chr names and indices
+                  markLabelSize=.9,           # font size of legends
+                  rulerNumberSize=.9,         # font size of ruler
+                  OTUTextSize=1.2,            # font size of OTUs' names
+                  
+                  xlimRightMod=2,             # modify xlim right argument
+                  ylimBotMod=.4)              # modify ylim bottom argument
 ```
 
 
-## 6. Using Mb instead of micrometers
+# Using bases instead of micrometers
 
-Create some data in millions:
+Create some data in millions of bases:
 
 ```{r}
-# using previous dataframes
+# using previous data.frames
 bigdfChrSizeHolo$chrSize<-bigdfChrSizeHolo$chrSize*980000
 bigdfMarkPosHolo$markPos<-bigdfMarkPosHolo$markPos*980000
 bigdfMarkPosHolo$markSize<-bigdfMarkPosHolo$markSize*980000
 ```
 
-### Plotting
+## Plotting {-}
+
+In the plot length is shown in Mb
 
 ```{r example4, echo=TRUE, results="hide", fig.width=6, fig.height=6, message=FALSE}
-library(idiogramFISH)
+
 par(mar=c(1,1,1,1))
-plotIdiogramsHolo(bigdfChrSizeHolo, dfMarkColor, bigdfMarkPosHolo, MarkDistanceType="cen", 
-                  Mb=TRUE, # <- THIS IS NEW
-                  roundness=6, dotRoundCorr=1, karHeight = 1, karSpacing = 1.7,
-                  chrWidth = 2, chrSpacing = 2,
-                  karIndex = FALSE,
-                  markLabelSize=.9,
-                  rulerNumberSize=.9, rulerPos = 0,
-                  OTUTextSize=1.2,
-                  reduDistKar=FALSE,
-                  chrId="simple", xlimRightMod=2,
-                  xlimLeftMod = 3,
-                  ylimBotMod=.4)
+
+plotIdiogramsHolo(dfChrSize=bigdfChrSizeHolo,    # df of chr. sizes
+                  dfMarkColor=dfMarkColor,       # df of mark style
+                  dfMarkPos=bigdfMarkPosHolo,    # df of mark positions
+                  
+                  MarkDistanceType="cen",        # distance to mark is to its center
+                  Mb=TRUE, # <- THIS IS NEW      # distances provided are in Mbs
+                  ylabline = -1, # <-THIS IS NEW # if Mb=TRUE modifies position of y axis title (Mb)
+                  roundness=6,                   # vertices roundness of chr. and marks 
+                  dotRoundCorr=1,                # correction of dots roundness
+                  
+                  karHeight = 1,                 # rel. karyotype height
+                  karSpacing = 1.7,              # karyotype height including spacing
+                  reduDistKar=FALSE,             # reduce spacing in karSpacing
+                  
+                  chrId="simple",                # chr. names not "original"
+                  chrWidth = 2,                  # chr. width
+                  chrSpacing = 2,                # space among chr.
+                  indexIdTextSize=.9,            # font size of chr names and indices
+                  karIndex = FALSE,              # add karyotype asymmetry index
+                  
+                  markLabelSize=.9,              # font size of legend
+                  rulerNumberSize=.9,            # font size of ruler
+                  rulerPos = 0,                  # position of ruler
+                  OTUTextSize=1.2,               # font size of OTU names
+
+                  xlimRightMod=2,                # modify right argument of xlim
+                  xlimLeftMod = 3,               # modify left argument of xlim
+                  ylimBotMod=.4)                 # modify bottom argument of ylim
 ```
 
 
@@ -198,8 +377,4 @@ suppressWarnings(par(opar) )
 
 For another example see:
 https://stackoverflow.com/questions/33727432/how-to-plot-positions-along-a-chromosome-graphic/57153497#57153497
-
-### More details
-
-Check the help to see all possible arguments ?idiogramFISH (click Index below)
 

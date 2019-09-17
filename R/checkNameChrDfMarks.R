@@ -11,13 +11,8 @@
 #'   dfChrSize), chrName markName markSize, for chr. with cen.:  markArm (p,q)
 #'   markDistCen, for holoc: markPos
 #'
-#' @keywords dataframe check
-#' @export
+#' @keywords internal
 #'
-#' @examples
-#' data(dfOfChrSize,dfOfMarks,dfOfCenMarks)
-#' checkNameChrDfMarks(dfOfChrSize,dfOfMarks)
-#' checkNameChrDfMarks(dfOfChrSize,dfMarks=dfOfCenMarks)
 #' @return logical
 #'
 checkNameChrDfMarks<- function(dfChrSize,dfMarks){
@@ -44,10 +39,18 @@ checkNameChrDfMarks<- function(dfChrSize,dfMarks){
 
   for (s in 1:length(listOfdfChromSize)) {
       name<-names(listOfdfChromSize)[[s]]
-      if (length(which(names(listOfdfMarks)==name) )==0){} else {
-        message(crayon::black(paste(c("\nComparing OTU named: ", name,"of main dataframe with correspondent dataframe ",pars[2]," "), sep=" ", collapse = " ")
+      if (length(which(names(listOfdfMarks)==name) )!=0) {
+        if(length(listOfdfChromSize[[s]]$chrName)!=length(unique(listOfdfChromSize[[s]]$chrName) )){
+          message(crayon::red(
+            paste("\nERROR Chromosome Names in dataframe",name,"duplicated")
+          )) #m
+          result<-c(result,FALSE)
+        }
+        message(crayon::black(paste(c("\nComparing OTU named: ", name,"of main dataframe with correspondent dataframe ",pars[2]," "),
+                                    sep=" ",
+                                    collapse = " ")
                                )
-        )#m
+        ) #m
         if (length(setdiff(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$chromName,
                            listOfdfChromSize[[which(names(listOfdfChromSize)==name)]]$chromName))>0){
               message(crayon::red(paste(c("\nERROR Divergences Chromosome Name:", setdiff(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$chromName,
@@ -64,7 +67,7 @@ checkNameChrDfMarks<- function(dfChrSize,dfMarks){
             )#m
             result<-c(result,TRUE)
         } # else
-      } # else
+      } # if
   } # for
   message(crayon::black(paste("\nChecks done for ",pars[2]) )
   )# message

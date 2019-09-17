@@ -2,7 +2,7 @@
 % Please edit documentation in R/armRatioCI.R
 \name{armRatioCI}
 \alias{armRatioCI}
-\title{Function to calculate Arm Ratio and C.I. and categorical morphologies}
+\title{Function to calculate Arm Ratio and C.I. and morphological categories}
 \usage{
 armRatioCI(dfOfChrSize)
 }
