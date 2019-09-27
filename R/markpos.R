@@ -28,4 +28,6 @@ NULL
 #' @references Adler 1994. Idiogram Album. URL: \href{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}{Washington U.}
 #' @rdname markpos
 "humMarkPos"
-
+#' @description allMarksSample: Example data for mark position
+#' @rdname markpos
+"allMarksSample"

@@ -1,3 +1,35 @@
+## ---- results="asis", echo=FALSE, message=FALSE--------------------------
+# <!-- pkgdown --> 
+# <!-- jquery --><script src="jquery.min.js" crossorigin="anonymous"></script>
+myfile<-"jquery.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
+}
+# <!-- clipboard.js --><script src="clipboard.min.js"  crossorigin="anonymous"></script>
+myfile<-"clipboard.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'"crossorigin="anonymous"></script>'))
+}
+# <!-- Font Awesome icons --><link rel="stylesheet" href="all.minMod.css"  crossorigin="anonymous">
+myfile<-"all.minMod.css"
+if(file.exists(myfile)){
+cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
+}
+# <!-- Bootstrap --><link rel="stylesheet" href="bootstrap.minO.css" crossorigin="anonymous">
+myfile<-"bootstrap.minO.css"
+if(file.exists(myfile)){
+cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
+}
+# <!-- # <script src="bootstrap.min.js"  crossorigin="anonymous"></script> -->
+myfile<-"bootstrap.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
+}
+myfile<-"pkgdown2.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
+}
+
 ## ---- echo=F,  results="asis"--------------------------------------------
 img1_path <- "../man/figures/logo.png"
 if(file.exists(img1_path)) {
@@ -9,18 +41,76 @@ cat(paste0("<img src=",img1_path," class=\"right\" width=\"20%\">") )
     v <- rvcheck:::check_github_gitlab(pkg, "gitlab")$latest_version
     url <- paste0("https://gitlab.com/", pkg)
     badger::badge_custom("devel version", v, color, url)
+ }
+
+
+## ---- echo=F, fig.show = "hold", fig.align = "default"-------------------
+# library(badger)
+if (requireNamespace("RCurl", quietly = TRUE)  ) {
+cranversion <- "https://www.r-pkg.org/badges/version/idiogramFISH?color=orange"
+cranversion_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(cranversion) ), error=function(e) NA )
+if (!is.na(cranversion_cont)){
+cranversion_contFile <- "cranversion.svg"
+writeLines(cranversion_cont, con = cranversion_contFile)
+cranversion_contFile <- normalizePath(cranversion_contFile)
+knitr::include_graphics(cranversion_contFile)
+}
+}
+# tryCatch(cat(paste(badger::badge_cran_release("idiogramFISH", "orange")  ,"&nbsp;" ) ), error=function(e) return("") )  
+# tryCatch(cat(paste(badger::badge_cran_download("idiogramFISH", type="grand-total", color="orange") ) ), error=function(e) return("") )
+
+## ---- echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"----
+# library(badger)
+if (requireNamespace("RCurl", quietly = TRUE)  ) {
+crandownloads<-"https://cranlogs.r-pkg.org/badges/grand-total/idiogramFISH?color=orange"
+crandownloads_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(crandownloads) ), error=function(e) NA )
+if (!is.na(crandownloads_cont)){
+# crandownloads_contFile <- tempfile(fileext = ".svg")
+crandownloads_contFile <- "crandownload.svg"
+writeLines(crandownloads_cont, con = crandownloads_contFile)
+crandownloads_contFile <- normalizePath(crandownloads_contFile)
+cat(paste0("&nbsp;![''](",knitr::include_graphics(crandownloads_contFile),")" ) )
+}
 }
 
-## ---- echo=F, results="asis"---------------------------------------------
-library(badger)
-cat(paste(badger::badge_cran_release("idiogramFISH", "orange"),"&nbsp;" ))
-cat(paste(badger::badge_cran_download("idiogramFISH", type="grand-total", color="orange") ))
+## ---- echo=F, message=FALSE, warning=F, include=T------------------------
+if (requireNamespace("RCurl", quietly = TRUE)  ) {
+v<-tryCatch(suppressWarnings(rvcheck:::check_github_gitlab("ferroao/idiogramFISH", "gitlab")$latest_version), error=function(e) NA )
+link<-tryCatch(suppressWarnings(badger::badge_custom("devel version", v, "green") ), error=function(e) NA )
+if(!is.na(link)){
+svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
+gitbadge_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svglink) ), error=function(e) NA )
+if (!is.na(gitbadge_cont)){
+# gitbadge_contFile <- tempfile(fileext = ".svg")
+gitbadge_contFile <- "gitbadge.svg"
+writeLines(gitbadge_cont, con = gitbadge_contFile)
+gitbadge_contFile <- normalizePath(gitbadge_contFile)
+knitr::include_graphics(gitbadge_contFile)
+}
+}
+}
 
-## ---- echo=F, results="asis", message="hide", warning=F, include=F-------
-gitbadge<- badge_devel_gitlab("ferroao/idiogramFISH", color="green") 
+## ---- eval=FALSE---------------------------------------------------------
+#  # This installs package devtools, necessary for installing the dev version
+#  install.packages("devtools")
+#  
+#  url <- "https://gitlab.com/ferroao/idiogramFISH"
 
-## ---- echo=F, results="asis", message="hide", warning=F, include=T-------
-cat(gitbadge)
+## ---- eval=FALSE---------------------------------------------------------
+#  # Linux with vignettes and Windows R-32bits
+#  devtools::install_git(url = url,build_vignettes = TRUE, force=T)
+
+## ---- eval=FALSE---------------------------------------------------------
+#  # Windows R-64bits and Mac with vignettes
+#  devtools::install_git(url = url, build_opts=c("--no-resave-data","--no-manual") )
+
+## ---- eval=FALSE---------------------------------------------------------
+#  # clone repository:
+#  git clone "https://gitlab.com/ferroao/idiogramFISH"
+#  
+#  R CMD build idiogramFISH
+#  # install
+#  R CMD INSTALL idiogramFISH_*.tar.gz
 
 ## ----example, echo=T, results="hide", fig.width=10, fig.height=6, message=FALSE----
 # fig.width=10, fig.height=6
@@ -99,9 +189,34 @@ dfMarkPosHolo
 # chromsome data, if only 1 species, column OTU is optional
 print(citation("idiogramFISH"),bibtex=FALSE)
 
+## ---- echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"----
+# library(badger)
+if (requireNamespace("RCurl", quietly = TRUE)  ) {
+donate <- "https://liberapay.com/assets/widgets/donate.svg"
+donate_cont <- tryCatch(RCurl::getURLContent(donate), error=function(e) NA )
+if (!is.na(donate_cont)){
+donate_contFile <- "donate.svg"
+# donate_contFile <- tempfile(fileext = ".svg")
+writeLines(donate_cont, con = donate_contFile)
+cat(paste0("[![donate](",knitr::include_graphics(donate_contFile),")](https://liberapay.com/ferroao/donate)" ) )
+}
+}
+
+## ---- echo=F, message=FALSE, fig.show = "hold", fig.align = "default", warning=FALSE, results="asis"----
+# library(badger)
+if (requireNamespace("RCurl", quietly = TRUE) ) {
+donateweek <- "http://img.shields.io/liberapay/receives/ferroao.svg"
+# donateweek_contFile <- tempfile(fileext = ".svg")
+donateweek_contFile <- "donateweek.svg"
+tryCatch(suppressWarnings(download.file(donateweek, donateweek_contFile) ), error=function(e) "")
+if(file.exists(donateweek_contFile ) ) {
+cat(paste0("[![donate](",knitr::include_graphics(donateweek_contFile),")](https://liberapay.com/ferroao/donate)" ) )
+}
+}
+
 ## ----include=FALSE-------------------------------------------------------
-# automatically create a bib database for R packages
+# automatically create a bib database for R packages, this is currently not used by vignette packages2.bib
 knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","badger","pkgdown"
-), 'packages.bib')
+  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","badger","pkgdown","crayon","ggtree","ggplot2","ggpubr","phytools"
+), 'packages2.bib')
 

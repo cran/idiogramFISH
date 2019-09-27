@@ -22,3 +22,7 @@ NULL
 #'
 #' @rdname cenmarkdata
 "dfOfCenMarks"
+#' @description allCenMarksSample: Example data for centromeric marks
+#'
+#' @rdname cenmarkdata
+"allCenMarksSample"

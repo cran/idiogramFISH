@@ -24,3 +24,6 @@ NULL
 #' @references Adler 1994. Idiogram Album. URL: \url{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}
 #' @rdname dfMarkStyle
 "humMarkColor"
+#' @description mydfMaColor: mark characteristics used in vignette of phylogeny
+#' @rdname dfMarkStyle
+"mydfMaColor"

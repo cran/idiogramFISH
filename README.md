@@ -13,7 +13,7 @@
 
 [![](https://www.r-pkg.org/badges/version/idiogramFISH?color=orange)](https://cran.r-project.org/package=idiogramFISH)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/idiogramFISH?color=orange)](https://cran.r-project.org/package=idiogramFISH)
-[![](https://img.shields.io/badge/devel%20version-1.2.1-green.svg)](https://gitlab.com/ferroao/idiogramFISH)
+[![](https://img.shields.io/badge/devel%20version-1.5.1-green.svg)](https://gitlab.com/ferroao/idiogramFISH)
 <br><br>
 <a href="https://liberapay.com/ferroao/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
 <img src="http://img.shields.io/liberapay/receives/ferroao.svg?logo=liberapay">
@@ -32,7 +32,7 @@ Guerra, [1986](#ref-Guerra1986d); Romero-Zarco,
 [1999](#ref-Watanabe1999)).
 
 IdiogramFISH was written in R(R Core Team, [2019](#ref-R-base)) and also
-uses crayon package (Csárdi, [2017](#ref-Csardi2017)). Manuals were
+uses crayon package (Csárdi, [2017](#ref-R-crayon)). Manuals were
 written with R-packages bookdown, knitr, badger, pkgdown and Rmarkdown
 (Allaire *et al.*, [2019](#ref-R-rmarkdown); Wickham and Hesselberth,
 [2019](#ref-R-pkgdown); Xie,
@@ -40,18 +40,17 @@ written with R-packages bookdown, knitr, badger, pkgdown and Rmarkdown
 [2019](#ref-R-knitr)[b](#ref-R-knitr); Yu,
 [2019](#ref-R-badger))
 
-### Installation
+## Installation
 
-##### You can install the idiogramFISH from [CRAN](https://cran.r-project.org/package=idiogramFISH) with:
+#### You can install idiogramFISH from [CRAN](https://cran.r-project.org/package=idiogramFISH) with:
 
 ``` r
-CRAN version: 1.0.0
 install.packages("idiogramFISH")
 ```
 
-##### Or the dev version of idiogramFISH
+#### Or the devel version of idiogramFISH
 
-from gitlab with devtools (Wickham *et al.*, [2019](#ref-R-devtools))
+##### From gitlab with devtools (Wickham *et al.*, [2019](#ref-R-devtools))
 
 Attention windows users, please install
 [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
@@ -61,11 +60,15 @@ Attention windows users, please install
 install.packages("devtools")
 
 url <- "https://gitlab.com/ferroao/idiogramFISH"
+```
 
-# Linux with vignettes
-devtools::install_git(url = url, build_vignettes = TRUE, force=TRUE)
+``` r
+# Linux with vignettes and Windows R-32bits
+devtools::install_git(url = url,build_vignettes = TRUE, force=T)
+```
 
-# Windows with vignettes
+``` r
+# Windows R-64bits and Mac with vignettes
 devtools::install_git(url = url, build_opts=c("--no-resave-data","--no-manual") )
 ```
 
@@ -74,30 +77,32 @@ devtools::install_git(url = url, build_opts=c("--no-resave-data","--no-manual") 
 ``` r
 # clone repository:
 git clone "https://gitlab.com/ferroao/idiogramFISH"
+
 R CMD build idiogramFISH
+# install
 R CMD INSTALL idiogramFISH_*.tar.gz
 ```
 
-##### What’s new in gitlab?
+#### What’s new in gitlab?
 
 [ver.
 \> 1.0.0](https://gitlab.com/ferroao/idiogramFISH/blob/master/NEWS.md)
 
-##### Releases:
+#### Releases:
 
 <https://gitlab.com/ferroao/idiogramFISH/-/releases>
 
-### Need help?
+## Need help?
 
-##### Manual in Bookdown style
+#### Manual in Bookdown style
 
 <https://ferroao.gitlab.io/manualidiogramfish/>
 
-##### Documentation in Pkgdown style
+#### Documentation in Pkgdown style
 
 <https://ferroao.gitlab.io/idiogramFISH>
 
-##### Vignettes:
+#### Vignettes:
 
 Online:
 
@@ -106,7 +111,8 @@ Online:
 [Groups of
 chromosomes](https://ferroao.gitlab.io/idiogramfishhelppages/groupsVig.html)  
 [Human
-karyotype](https://ferroao.gitlab.io/idiogramfishhelppages/humanVig.html)
+karyotype](https://ferroao.gitlab.io/idiogramfishhelppages/humanVig.html)  
+[Phylogeny](https://ferroao.gitlab.io/idiogramfishhelppages/phylogenyVig.html)
 
 Launch vignettes from R
 
@@ -114,9 +120,11 @@ Launch vignettes from R
 browseVignettes("idiogramFISH") 
 ```
 
-### Basic examples
+## Basic examples
 
-##### 1 how to plot a karyotype:
+#### 1 how to plot a karyotype:
+
+Define your plotting window size with something like `par(pin=c(10,6))`
 
 ``` r
 # fig.width=10, fig.height=6
@@ -150,13 +158,9 @@ plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
 
 <img src="man/figures/README-example-1.png" width="70%" />
 
-##### Let’s explore the dataframes for monocentrics:
+#### Let’s explore the dataframes for monocentrics:
 
-``` r
-
-# chromsome data, if only 1 species, column OTU is optional
-kable(dfOfChrSize)
-```
+    dfOfChrSize
 
 | chrName | shortArmSize | longArmSize |
 | :------ | -----------: | ----------: |
@@ -165,10 +169,7 @@ kable(dfOfChrSize)
 | 3       |            2 |           3 |
 | X       |            1 |           2 |
 
-``` r
-# mark general data
-kable(dfMarkColor) 
-```
+    dfMarkColor
 
 | markName | markColor | style  |
 | :------- | :-------- | :----- |
@@ -177,10 +178,7 @@ kable(dfMarkColor)
 | DAPI     | blue      | square |
 | CMA      | yellow    | square |
 
-``` r
-# mark position data (not cen.), if only 1 species, column OTU is optional
-kable(dfOfMarks)
-```
+    dfOfMarks
 
 | chrName | markName | markArm | markSize | markDistCen |
 | :------ | :------- | :------ | -------: | ----------: |
@@ -189,17 +187,14 @@ kable(dfOfMarks)
 | X       | 45S      | p       |        1 |         1.0 |
 | 3       | DAPI     | q       |        1 |         1.0 |
 
-``` r
-#centromeric mark data, if only 1 species, column OTU is optional
-kable(dfOfCenMarks)
-```
+    dfOfCenMarks
 
 | chrName | markName |
 | :------ | :------- |
 | 1       | DAPI     |
 | X       | CMA      |
 
-##### 2 How to plot a karyotype of holocentrics:
+#### 2 How to plot a karyotype of holocentrics:
 
 ``` r
 library(idiogramFISH)
@@ -229,12 +224,9 @@ plotIdiogramsHolo(dfChrSize=dfChrSizeHolo, # data.frame of chr. size
 
 <img src="man/figures/README-example2-1.png" width="70%" />
 
-##### Let’s explore the dataframes for holocentrics:
+#### Let’s explore the dataframes for holocentrics:
 
-``` r
-# chromsome data, if only 1 species, column OTU is optional
-kable(dfChrSizeHolo)
-```
+    dfChrSizeHolo
 
 | chrName | chrSize |
 | ------: | ------: |
@@ -243,10 +235,7 @@ kable(dfChrSizeHolo)
 |       3 |       2 |
 |       4 |       5 |
 
-``` r
-# mark general data
-kable(dfMarkColor)
-```
+    dfMarkColor
 
 | markName | markColor | style  |
 | :------- | :-------- | :----- |
@@ -255,10 +244,7 @@ kable(dfMarkColor)
 | DAPI     | blue      | square |
 | CMA      | yellow    | square |
 
-``` r
-# mark position data (not cen.), if only 1 species, column OTU is optional
-kable(dfMarkPosHolo)
-```
+    dfMarkPosHolo
 
 | chrName | markName | markPos | markSize |
 | ------: | :------- | ------: | -------: |
@@ -269,7 +255,7 @@ kable(dfMarkPosHolo)
 |       4 | CMA      |     2.0 |      0.5 |
 |       4 | 5S       |     0.5 |      0.5 |
 
-### Citation:
+## Citation
 
 To cite idiogramFISH in publications, please use:
 
@@ -277,12 +263,12 @@ Roa F, Telles MPC. 2019. idiogramFISH: Idiograms with Marks and
 Karyotype Indices, Universidade Federal de Goiás. Brazil. R-package.
 <https://ferroao.gitlab.io/manualidiogramfish/>
 
-### Authors
+## Authors
 
 [Fernando Roa](https://ferroao.gitlab.io/curriculumpu/)  
 [Mariana Telles](http://lattes.cnpq.br/4648436798023532)
 
-### References
+## References
 
 <div id="refs" class="references">
 
@@ -294,7 +280,7 @@ Cheng J, Chang W, Iannone R. 2019. *Rmarkdown: Dynamic documents for r*.
 
 </div>
 
-<div id="ref-Csardi2017">
+<div id="ref-R-crayon">
 
 Csárdi G. 2017. *Crayon: Colored terminal output*.
 <https://CRAN.R-project.org/package=crayon> 

@@ -27,4 +27,6 @@ NULL
 #' @references Adler 1994. Idiogram Album. \url{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}
 #' @rdname chrbasicdatamono
 "humChr"
-
+#' @description allChrSizeSample: Example data for monocentrics for several species, OTU
+#' @rdname chrbasicdatamono
+"allChrSizeSample"

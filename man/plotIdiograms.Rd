@@ -17,7 +17,8 @@ plotIdiograms(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   rulerPos = -0.5, rulerPosMod = 0, ruler.tck = -0.004,
   rulerNumberPos = 0.2, rulerNumberSize = 0.4, xlimLeftMod = 1,
   xlimRightMod = 10, ylimBotMod = 0.2, ylimTopMod = 0.2,
-  lwd.chr = 2, pattern = "", ...)
+  lwd.chr = 2, pattern = "", addMissingOTUAfter = NA,
+  missOTUspacings = 0, legendWidth = 1.7, ...)
 }
 \arguments{
 \item{dfChrSize}{mandatory dataframe, with columns: OTU (optional), chrName,
@@ -58,7 +59,7 @@ the plot in \eqn{\mu}m}
 \item{roundness}{numeric, shape of vertices of chromosomes and square marks,
 higher values more squared}
 
-\item{dotRoundCorr}{numeric, correct roundness of dots. When style of sites =
+\item{dotRoundCorr}{numeric, correct roundness of dots and vertices of chromosomes. When style of sites =
 dots, an increase in this, makes the horizontal radius of the dot smaller}
 
 \item{karHeight}{numeric, vertical size of karyotypes}
@@ -138,6 +139,12 @@ of idiograms}
 \item{lwd.chr}{thick of border of chr. and marks.}
 
 \item{pattern}{REGEX pattern to remove from names of marks}
+
+\item{addMissingOTUAfter}{character, when you want to add space (ghost OTUs) after one or several OTUs, pass the names of OTUs preceding the desired space in a vector i.e. \code{c("species one","species five")}}
+
+\item{missOTUspacings}{numeric, when you use addMissingOTUAfter this numeric vector should have the same length and corresponds to the number of free spaces (ghost OTUs) to add after each OTU respectively}
+
+\item{legendWidth}{factor to increase width of squares and boxes of legend}
 
 \item{...}{accepts other arguments for the plot, such as, \code{asp}}
 }

@@ -16,7 +16,8 @@ plotIdiogramsHolo(dfChrSize, dfMarkPos, dfMarkColor, mycolors,
   revOTUs = FALSE, ruler = TRUE, rulerPos = -0.5, rulerPosMod = 0,
   ruler.tck = -0.004, rulerNumberPos = 0.2, rulerNumberSize = 0.4,
   xlimLeftMod = 1, xlimRightMod = 10, ylimBotMod = 0.2,
-  ylimTopMod = 0.2, ...)
+  ylimTopMod = 0.2, addMissingOTUAfter = NA, missOTUspacings = 0,
+  legendWidth = 1.75, ...)
 }
 \arguments{
 \item{dfChrSize}{dataframe with columns: OTU (optional), chrName, chrSize
@@ -54,7 +55,7 @@ length from the largest to the smallest}
 \item{roundness}{numeric, shape of vertices of chromosomes and square marks,
 higher values more squared}
 
-\item{dotRoundCorr}{numeric, correct roundness of dots. When style of sites =
+\item{dotRoundCorr}{numeric, correct roundness of dots and vertices of chromosomes. When style of sites =
 dots, an increase in this, makes the horizontal radius of the dot smaller}
 
 \item{karHeight}{numeric, vertical size of karyotypes}
@@ -122,6 +123,12 @@ of idiograms}
 \item{ylimBotMod}{numeric, modify ylim bottom parameter of plot}
 
 \item{ylimTopMod}{numeric, modify ylim top parameter of plot}
+
+\item{addMissingOTUAfter}{character, when you want to add space (ghost OTUs) after one or several OTUs, pass the names of OTUs preceding the desired space in a vector i.e. \code{c("species one","species five")}}
+
+\item{missOTUspacings}{numeric, when you use addMissingOTUAfter this numeric vector should have the same length and corresponds to the number of free spaces (ghost OTUs) to add after each OTU respectively}
+
+\item{legendWidth}{factor to increase width of squares and boxes of legend}
 
 \item{...}{accepts other arguments for the plot, such as, asp}
 }

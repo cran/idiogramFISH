@@ -10,7 +10,7 @@ output:
     # toc_float: true
     toc_depth: 1
     number_sections: true
-bibliography: [allrefs.bib, packages.bib]
+bibliography: [allrefs.bib]
 csl: climaMod.csl
 link-citations: yes
 vignette: >
@@ -19,58 +19,49 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-<!-- --- -->
-<!-- title: "Plotting monocentric chromosomes" -->
-<!-- author: "Fernando Roa" -->
-<!-- date: "23 08 2019" -->
-<!-- output:  -->
-<!--   # rmarkdown::html_vignette: -->
-<!--   html_document:   -->
-<!--     toc: true -->
-<!--     toc_float: true -->
-<!--     toc_depth: 1 -->
-<!--     number_sections: true -->
-<!-- vignette: > -->
-<!--   %\VignetteIndexEntry{Plotting monocentric chromosomes} -->
-<!--   %\VignetteEngine{knitr::rmarkdown} -->
-<!--   %\VignetteEncoding{UTF-8} -->
-<!-- --- -->
-
-<style type="text/css">
-.aright {
-text-align: right}
-#post {
-width:75%;
+``` {r, results="asis", echo=FALSE, message=FALSE}
+# <!-- pkgdown --> 
+# <!-- jquery --><script src="jquery.min.js" crossorigin="anonymous"></script>
+myfile<-"jquery.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
 }
-</style>
+# <!-- clipboard.js --><script src="clipboard.min.js"  crossorigin="anonymous"></script>
+myfile<-"clipboard.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'"crossorigin="anonymous"></script>'))
+}
+# <!-- Font Awesome icons --><link rel="stylesheet" href="all.minMod.css"  crossorigin="anonymous">
+myfile<-"all.minMod.css"
+if(file.exists(myfile)){
+cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
+}
+# <!-- Bootstrap --><link rel="stylesheet" href="bootstrap.minO.css" crossorigin="anonymous">
+myfile<-"bootstrap.minO.css"
+if(file.exists(myfile)){
+cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
+}
+# <!-- # <script src="bootstrap.min.js"  crossorigin="anonymous"></script> -->
+myfile<-"bootstrap.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
+}
+myfile<-"pkgdown2.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
+}
+```
+<link rel="stylesheet" href="mystyle.css">
 
 <div class="aright">
 Go to [home](index.html)  
 Go to [holocentrics Vignette](plotIdiogramsHoloVig.html)  
 Go to [groups Vignette](groupsVig.html)  
 Go to [human Vignette](humanVig.html)  
+Go to [phylogeny Vignette](phylogenyVig.html)  
 <!-- # there are 2 spaces at the end of those lines -->
 </div>
 
-<style type="text/css">
-
-.verysmall td {line-height: 14px; vertical-align: bottom;
-    font-size:10pt;
-    padding-top:2px;
-    padding-bottom:2px;
-    horizontal-align: center;
-    }
-
-h1 { /* Header 1 */
-    font-size: 22px;
-}
-h2 { /* Header 2 */
-    font-size: 17px;
-}
-h3 { /* Header 3 */
-    font-size: 14px;
-}
-</style>
 
 This guide shows the files to plot idiograms of measured karyotypes and optionally marks. 
 
@@ -112,17 +103,17 @@ kableExtra::kable_styling(knitr::kable(mydfChrSize) , full_width = F
 ## loading saved data: {-}
 
 Initially, if you use RStudio, use menu "Session", "Set working directory" for choosing your desired folder or:
-```
+``` {r, eval=FALSE}
 setwd("~/folder/subfolder")
 ```
 
 Open your chromosome data data.frame importing it from a .csv (read.csv) or .xls file (readxl). 
-```
+``` {r, eval=FALSE}
 mydfChrSize<-read.csv("somefile.csv")
 ```
 
 For fixing column names use:
-```
+``` {r, eval=FALSE}
 colnames(mydfChrSize)<-c("OTU", "chrName","shortArmSize","longArmSize")
 ```
 
@@ -130,7 +121,7 @@ colnames(mydfChrSize)<-c("OTU", "chrName","shortArmSize","longArmSize")
 
 This data.frame is optional for ver. > 1.0.0
 
-``` r
+``` {r, eval=FALSE}
 packageVersion("idiogramFISH")
 ```
 
@@ -159,7 +150,7 @@ kableExtra::kable_styling(knitr::kable(mydfMarkColor) , full_width = F
 </div>
 
 For fixing column names use:
-```
+``` {r, eval=FALSE}
 colnames(mydfMarkColor)<-c("markName", "markColor","style") 
 ```
 # Get marks positions data
@@ -187,7 +178,7 @@ kableExtra::kable_styling(knitr::kable(mydfOfMarks) , full_width = F
 </div>
 
 For fixing column names use something like:
-```
+``` {r, eval=FALSE}
 colnames(mydfMarkColor)<-c("OTU", "chrName","markName","markArm","markSize","markDistCen") 
 ```
 
@@ -278,9 +269,10 @@ plotIdiograms(dfChrSize=mydfChrSize,      # chr. size df
 For ver. > 1.0.0 there is no need to add `dfMarkColor` and you can also use the parameter
 `mycolors` (optional too), to establish marks' colors. Colors are assigned depending on the order of marks, i.e.:
 
-`unique(c(dfOfMarks$markName,dfOfCenMarks$markName) )`
-
+``` {r, eval=FALSE}
+unique(c(dfOfMarks$markName,dfOfCenMarks$markName) )
 ```
+``` {r, eval=FALSE}
 charVectorCol <- c("tomato3","darkolivegreen4","dfsd","blue","green")
 
 plotIdiograms(dfChrSize=dfOfChrSize, 
@@ -397,13 +389,7 @@ plotIdiograms(dfChrSize=bigdfOfChrSize,  # chr sizes
               )
 ```
 
-```{r include=FALSE}
-# automatically create a bib database for R packages
-knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools"
-), 'packages.bib')
-```
-
 `r if (knitr:::is_html_output()) '
 # References {-}
 '`
+

@@ -18,12 +18,15 @@
 #' @return data.frame
 
 armRatioCI<- function(dfOfChrSize){
-  message(crayon::black("\nCalculating chromosome indexes\n") )
+  # message(crayon::black("\nCalculating chromosome indexes\n") )
   dfOfChrSize$smallest<-pmin(dfOfChrSize$shortArmSize, dfOfChrSize$longArmSize)
   if(!identical(dfOfChrSize$smallest,dfOfChrSize$shortArmSize) ){
-    message(crayon::red("\nERROR in short/long arm classif., It will not be fixed\nWill not calculate cen. ind.\n") )
+    message(crayon::red("\nERROR in short/long arm classif., It will not be fixed\nChr. (cen) indexes will not be calculated\n") )
+    if("OTU" %in% colnames(dfOfChrSize)){message(crayon::red(paste("in",unique(dfOfChrSize$OTU) ))) }
     return(dfOfChrSize)
   }
+  if("OTU" %in% colnames(dfOfChrSize)){message(crayon::black(paste("\nCalculating chromosome indexes in",unique(dfOfChrSize$OTU) ))) }
+
   dfOfChrSize$largest <-pmax(dfOfChrSize$shortArmSize, dfOfChrSize$longArmSize)
   dfOfChrSize$AR<-format(round(dfOfChrSize$largest/dfOfChrSize$smallest,1),nsmall = 1)
   dfOfChrSize$CI<-format(round(dfOfChrSize$smallest*100/(dfOfChrSize$longArmSize+dfOfChrSize$shortArmSize),1),nsmall = 1)

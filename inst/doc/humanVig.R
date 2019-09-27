@@ -1,10 +1,40 @@
 ## ----setup, include=FALSE------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE)
 
-## ----otus, message=FALSE-------------------------------------------------
-library(idiogramFISH)
+## ---- results="asis", echo=FALSE, message=FALSE--------------------------
+# <!-- pkgdown --> 
+# <!-- jquery --><script src="jquery.min.js" crossorigin="anonymous"></script>
+myfile<-"jquery.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
+}
+# <!-- clipboard.js --><script src="clipboard.min.js"  crossorigin="anonymous"></script>
+myfile<-"clipboard.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'"crossorigin="anonymous"></script>'))
+}
+# <!-- Font Awesome icons --><link rel="stylesheet" href="all.minMod.css"  crossorigin="anonymous">
+myfile<-"all.minMod.css"
+if(file.exists(myfile)){
+cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
+}
+# <!-- Bootstrap --><link rel="stylesheet" href="bootstrap.minO.css" crossorigin="anonymous">
+myfile<-"bootstrap.minO.css"
+if(file.exists(myfile)){
+cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
+}
+# <!-- # <script src="bootstrap.min.js"  crossorigin="anonymous"></script> -->
+myfile<-"bootstrap.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
+}
+myfile<-"pkgdown2.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
+}
 
-## ---- results="hide"-----------------------------------------------------
+## ----otus, message=FALSE, results="hide"---------------------------------
+library(idiogramFISH)
 head(humChr)  # Chromosome sizes for human
 
 ## ---- echo=F-------------------------------------------------------------
@@ -32,7 +62,7 @@ humChr$OTU<-OTUdf$OTU
 head(humMarkPos)  # data.frame with marks' position
 
 ## ---- echo=F-------------------------------------------------------------
-kableExtra::kable_styling(knitr::kable(head(humMarkColor) ), full_width = F
+kableExtra::kable_styling(knitr::kable(head(humMarkPos) ), full_width = F
                            , font_size = 10)
 
 ## ---- echo=T-------------------------------------------------------------
@@ -45,7 +75,8 @@ head(humMarkColor)
 kableExtra::kable_styling(knitr::kable(head(humMarkColor )) , full_width = F
                            , font_size = 10)
 
-## ----hkaryo, echo=TRUE, fig.width=10, fig.height=28, message=FALSE, results="hide"----
+## ----hkaryo, echo=TRUE,  message=FALSE, results="hide", fig.width=10, fig.height=28----
+# fig.width=10, fig.height=28
 
 plotIdiograms(humChr,                     # data.frame of chromosome size (in package)
               humMarkPos,                 # df of mark positions  (in package)
@@ -182,7 +213,7 @@ plotIdiograms(dfChrSizeDer,               # data.frame of chromosome size (in pa
               roundness = 7,              # roundness of chr. and marks
               markLabelSize = .5,         # size of legend font
               pattern= "chr[0-9XY]+",     # REGEX pattern to remove from name of marks
-              distTextChr = 1,
+              distTextChr = 1,            # distance from chr. to text.
               indexIdTextSize = 2,        # font size of chr name and indices
               lwd.chr=.5,                 # width of chr and mark borders
 
@@ -191,13 +222,7 @@ plotIdiograms(dfChrSizeDer,               # data.frame of chromosome size (in pa
               
               xlimLeftMod = 4,            # space to the right of karyotype
               xlimRightMod = 5,           # space to the right of karyotype
-              ylimBotMod = .7,            # modify ylim of bottom
-              ylimTopMod =.1
+              ylimBotMod = .7,            # modify bottom ylim 
+              ylimTopMod =.1              # modify top ylim
 )
-
-## ----include=FALSE-------------------------------------------------------
-# automatically create a bib database for R packages
-knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools"
-), 'packages.bib')
 

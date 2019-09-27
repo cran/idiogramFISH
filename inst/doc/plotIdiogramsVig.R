@@ -1,3 +1,35 @@
+## ---- results="asis", echo=FALSE, message=FALSE--------------------------
+# <!-- pkgdown --> 
+# <!-- jquery --><script src="jquery.min.js" crossorigin="anonymous"></script>
+myfile<-"jquery.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
+}
+# <!-- clipboard.js --><script src="clipboard.min.js"  crossorigin="anonymous"></script>
+myfile<-"clipboard.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'"crossorigin="anonymous"></script>'))
+}
+# <!-- Font Awesome icons --><link rel="stylesheet" href="all.minMod.css"  crossorigin="anonymous">
+myfile<-"all.minMod.css"
+if(file.exists(myfile)){
+cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
+}
+# <!-- Bootstrap --><link rel="stylesheet" href="bootstrap.minO.css" crossorigin="anonymous">
+myfile<-"bootstrap.minO.css"
+if(file.exists(myfile)){
+cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
+}
+# <!-- # <script src="bootstrap.min.js"  crossorigin="anonymous"></script> -->
+myfile<-"bootstrap.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
+}
+myfile<-"pkgdown2.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
+}
+
 ## ---- results="hide", message=FALSE, warning=FALSE, eval=TRUE------------
 
 #load package
@@ -17,6 +49,18 @@ mydfChrSize<-read.table(text=
 kableExtra::kable_styling(knitr::kable(mydfChrSize) , full_width = F
                            , font_size = 10)
 
+## ---- eval=FALSE---------------------------------------------------------
+#  setwd("~/folder/subfolder")
+
+## ---- eval=FALSE---------------------------------------------------------
+#  mydfChrSize<-read.csv("somefile.csv")
+
+## ---- eval=FALSE---------------------------------------------------------
+#  colnames(mydfChrSize)<-c("OTU", "chrName","shortArmSize","longArmSize")
+
+## ---- eval=FALSE---------------------------------------------------------
+#  packageVersion("idiogramFISH")
+
 ## ------------------------------------------------------------------------
 # From scratch:
 mydfMarkColor<-read.table(text=
@@ -33,6 +77,9 @@ kableExtra::kable_styling(knitr::kable(mydfMarkColor) , full_width = F
                           # , bootstrap_options = c("striped", "hover", "condensed") 
                           )
 
+## ---- eval=FALSE---------------------------------------------------------
+#  colnames(mydfMarkColor)<-c("markName", "markColor","style")
+
 ## ------------------------------------------------------------------------
 # We will use column OTU if data.frame because chromosome size df has it
 mydfOfMarks<-read.table(text=
@@ -47,6 +94,9 @@ kableExtra::kable_styling(knitr::kable(mydfOfMarks) , full_width = F
                            , font_size = 10
                           , bootstrap_options = c("striped", "hover", "condensed")
                           )
+
+## ---- eval=FALSE---------------------------------------------------------
+#  colnames(mydfMarkColor)<-c("OTU", "chrName","markName","markArm","markSize","markDistCen")
 
 ## ------------------------------------------------------------------------
 # We will use column OTU because data.frame of chromosome size has it
@@ -113,6 +163,27 @@ plotIdiograms(dfChrSize=mydfChrSize,      # chr. size df
               ylimBotMod = 0.4,           # modify ylim bottom argument
               ylimTopMod = 0              # modify ylim top argument
 )
+
+## ---- eval=FALSE---------------------------------------------------------
+#  unique(c(dfOfMarks$markName,dfOfCenMarks$markName) )
+
+## ---- eval=FALSE---------------------------------------------------------
+#  charVectorCol <- c("tomato3","darkolivegreen4","dfsd","blue","green")
+#  
+#  plotIdiograms(dfChrSize=dfOfChrSize,
+#                dfMarkPos=dfOfMarks,
+#                chrColor = "gray",
+#                cenColor = "gray",
+#                dfCenMarks=dfOfCenMarks,
+#  
+#                mycolors = charVectorCol,
+#  
+#                dotRoundCorr=2, chrWidth=2.5, chrSpacing = 2.5,
+#                karSpacing=1.6,
+#                indexIdTextSize=1,
+#                markLabelSize=1,
+#                rulerPos=-1.9, ruler.tck=-0.02, rulerNumberPos=.5, rulerNumberSize=1
+#  )
 
 ## ------------------------------------------------------------------------
 data(bigdfOfChrSize)
@@ -185,10 +256,4 @@ plotIdiograms(dfChrSize=bigdfOfChrSize,  # chr sizes
               ylimBotMod = 0,            # modify ylim bottom argument
               ylimTopMod = -.3           # modify ylim top argument
               )
-
-## ----include=FALSE-------------------------------------------------------
-# automatically create a bib database for R packages
-knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools"
-), 'packages.bib')
 

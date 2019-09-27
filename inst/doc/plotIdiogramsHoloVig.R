@@ -1,3 +1,35 @@
+## ---- results="asis", echo=FALSE, message=FALSE--------------------------
+# <!-- pkgdown --> 
+# <!-- jquery --><script src="jquery.min.js" crossorigin="anonymous"></script>
+myfile<-"jquery.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
+}
+# <!-- clipboard.js --><script src="clipboard.min.js"  crossorigin="anonymous"></script>
+myfile<-"clipboard.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'"crossorigin="anonymous"></script>'))
+}
+# <!-- Font Awesome icons --><link rel="stylesheet" href="all.minMod.css"  crossorigin="anonymous">
+myfile<-"all.minMod.css"
+if(file.exists(myfile)){
+cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
+}
+# <!-- Bootstrap --><link rel="stylesheet" href="bootstrap.minO.css" crossorigin="anonymous">
+myfile<-"bootstrap.minO.css"
+if(file.exists(myfile)){
+cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
+}
+# <!-- # <script src="bootstrap.min.js"  crossorigin="anonymous"></script> -->
+myfile<-"bootstrap.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
+}
+myfile<-"pkgdown2.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
+}
+
 ## ---- results="hide", message=FALSE, warning=FALSE, eval=TRUE------------
 
 #load package
@@ -17,6 +49,18 @@ mydfChrSizeHolo<-read.table(text=
 kableExtra::kable_styling(knitr::kable(mydfChrSizeHolo) , full_width = F
                            , font_size = 10)
 
+## ---- eval=FALSE---------------------------------------------------------
+#  setwd("~/folder/subfolder")
+
+## ---- eval=FALSE---------------------------------------------------------
+#  mydfChrSize<-read.csv("somefile.csv")
+
+## ---- eval=FALSE---------------------------------------------------------
+#  colnames(mydfChrSize)<-c("OTU", "chrName","chrSize")
+
+## ---- eval=FALSE---------------------------------------------------------
+#  packageVersion("idiogramFISH")
+
 ## ------------------------------------------------------------------------
 # From scratch:
 mydfMarkColor<-read.table(text=
@@ -30,6 +74,9 @@ mydfMarkColor<-read.table(text=
 # just to show it here
 kableExtra::kable_styling(knitr::kable(mydfMarkColor) , full_width = F
                            , font_size = 10)
+
+## ---- eval=FALSE---------------------------------------------------------
+#  colnames(mydfMarkColor)<-c("markName", "markColor","style") # if style column not present it will be filled with "square"
 
 ## ------------------------------------------------------------------------
 # We will use column OTU if data.frame because chromosome size df has it
@@ -46,6 +93,9 @@ mydfMarkPosHolo<-read.table(text=
 # just to show it here
 kableExtra::kable_styling(knitr::kable(mydfMarkPosHolo) , full_width = F
                            , font_size = 10)
+
+## ---- eval=FALSE---------------------------------------------------------
+#  colnames(mydfMarkColor)<-c("OTU", "chrName","markName","markPos","markSize")
 
 ## ----parinit, echo=FALSE-------------------------------------------------
 opar <- par(no.readonly = TRUE)      # make a copy of current settings
@@ -78,6 +128,22 @@ plotIdiogramsHolo(dfChrSize=mydfChrSizeHolo,  # data.frame of chr. sizes
                   xlimRightMod=10,            # modify xlim right argument
                   ylimBotMod=.1               # modify ylim bottom argument
                   )
+
+## ---- eval=FALSE---------------------------------------------------------
+#  unique(dfMarkPosHolo$markName)
+
+## ---- eval=FALSE---------------------------------------------------------
+#  par(mar=c(1,4,1,1))
+#  plotIdiogramsHolo(dfChrSize=dfChrSizeHolo,
+#                    dfMarkPos=dfMarkPosHolo,
+#                    mycolors = c("green","yellow","blue","red"),  # optional
+#                    dotRoundCorr=2.5, chrWidth=2.5,
+#                    indexIdTextSize=1,
+#                    legend="aside" ,markLabelSize=1,
+#                    addOTUName=F,
+#                    rulerNumberSize=1, rulerPos=-.7,ruler.tck=-0.04,rulerNumberPos=.9,
+#                    xlimLeftMod=1,  xlimRightMod=10, ylimBotMod=.2
+#  )
 
 ## ------------------------------------------------------------------------
 data(bigdfChrSizeHolo)

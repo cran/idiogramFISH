@@ -10,60 +10,55 @@ output:
     # toc_float: true
     toc_depth: 1
     number_sections: true
-bibliography: [allrefs.bib, packages.bib]
-csl: climaMod.csl
-link-citations: yes
 vignette: >
   %\VignetteIndexEntry{Groups of chromosomes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-<style type="text/css">
-.aright {
-text-align: right}
-#post {
-width:75%;
+``` {r, results="asis", echo=FALSE, message=FALSE}
+# <!-- pkgdown --> 
+# <!-- jquery --><script src="jquery.min.js" crossorigin="anonymous"></script>
+myfile<-"jquery.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
 }
-</style>
+# <!-- clipboard.js --><script src="clipboard.min.js"  crossorigin="anonymous"></script>
+myfile<-"clipboard.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'"crossorigin="anonymous"></script>'))
+}
+# <!-- Font Awesome icons --><link rel="stylesheet" href="all.minMod.css"  crossorigin="anonymous">
+myfile<-"all.minMod.css"
+if(file.exists(myfile)){
+cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
+}
+# <!-- Bootstrap --><link rel="stylesheet" href="bootstrap.minO.css" crossorigin="anonymous">
+myfile<-"bootstrap.minO.css"
+if(file.exists(myfile)){
+cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
+}
+# <!-- # <script src="bootstrap.min.js"  crossorigin="anonymous"></script> -->
+myfile<-"bootstrap.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
+}
+myfile<-"pkgdown2.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
+}
+```
+<link rel="stylesheet" href="mystyle.css">
 
 <div class="aright">
 Go to [home](index.html)  
 Go to [monocentrics Vignette](plotIdiogramsVig.html)  
 Go to [holocentrics Vignette](plotIdiogramsHoloVig.html)  
 Go to [human Vignette](humanVig.html)  
+Go to [phylogeny Vignette](phylogenyVig.html)  
 <!-- # there are 2 spaces at the end of those lines -->
 </div>
 
-<style type="text/css">
-
-.verysmall td {line-height: 14px; vertical-align: bottom;
-    font-size:10pt;
-    padding-top:2px;
-    padding-bottom:2px;
-    horizontal-align: center;
-    }
-
-h1 { /* Header 1 */
-    font-size: 22px;
-}
-h2 { /* Header 2 */
-    font-size: 17px;
-}
-h3 { /* Header 3 */
-    font-size: 14px;
-}
-</style>
-<!-- --- -->
-<!-- title: "Plotting karyotypes with groups of chr." -->
-<!-- author: "Fernando Roa" -->
-<!-- date: "26 08 2019" -->
-<!-- output: rmarkdown::html_vignette -->
-<!-- vignette: > -->
-<!--   %\VignetteIndexEntry{Plotting karyotypes with groups} -->
-<!--   %\VignetteEngine{knitr::rmarkdown} -->
-<!--   %\VignetteEncoding{UTF-8} -->
-<!-- --- -->
 
 This guide shows how to plot groups of chromosomes, this can be used to plot heteromorphic pairs  
 For v. > 1.1.0
@@ -295,11 +290,4 @@ plotIdiogramsHolo(dfChrSize=dfChrSizeHoloGroup, # data.frame of chr sizes
                   xlimRightMod=10,              # modify right argument of xlim
                   ylimBotMod=.3                 # modify bottom argument of ylim
 )
-```
-
-```{r include=FALSE}
-# automatically create a bib database for R packages
-knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools"
-), 'packages.bib')
 ```

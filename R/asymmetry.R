@@ -46,6 +46,7 @@ asymmetry<- function(dfChrSize){
     if(!identical(listOfdfChromSize[[s]]$smallest,listOfdfChromSize[[s]]$shortArmSize) ){
         message(crayon::red("\nERROR in short/long arm classif., It will not be fixed\nWill not calculate kar. ind.")
         )# cat
+        if("OTU" %in% colnames(listOfdfChromSize[[s]]) ){message(crayon::red(paste("in OTU",unique(listOfdfChromSize[[s]]$OTU) )) ) }
         return(NULL)
     } # fi
   } # for

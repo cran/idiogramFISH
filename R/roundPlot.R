@@ -113,7 +113,11 @@ roundPlot<-function(roundness, x, y, col, border, chrWidth, yfactor,n2, lwd.chr)
                               yMod[[s]][[m]][3:4],xy_1[[s]][[m]][,2],topline_y[[s]][[m]],xy_2[[s]][[m]][,2])
       } # for
     } # for
-    lapply(1:length(x), function(w) mapply(function(x,y) graphics::polygon(x=x, y=y,
+
+    newLongy<-newLongy[!is.na(newLongy)]
+    newLongx<-newLongx[!is.na(newLongx)]
+
+    lapply(1:length(newLongx), function(w) mapply(function(x,y) graphics::polygon(x=x, y=y,
                                                                                  col=col,
                                                                                  lwd=.5,
                                                                                  border=border

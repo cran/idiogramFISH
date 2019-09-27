@@ -20,6 +20,8 @@
 #' @param MarkDistanceType character, if cen = the distance you provided is to
 #'   the center of the mark, if beg = the distance you provided is to the
 #'   beginning of the mark
+#' @param addMissingOTUAfter character, when you want to add space (ghost OTUs) after one or several OTUs, pass the names of OTUs preceding the desired space in a vector i.e. \code{c("species one","species five")}
+#' @param missOTUspacings numeric, when you use addMissingOTUAfter this numeric vector should have the same length and corresponds to the number of free spaces (ghost OTUs) to add after each OTU respectively
 #' @param Mb boolean, if TRUE distance in dfs is not micrometers but bases, will be shown as Megabases
 #' @param ylabline, numeric if \code{Mb=TRUE} modify position of y axis title (Mb)
 #' @param orderBySize logical value, when TRUE, sorts chromosomes by total
@@ -29,7 +31,7 @@
 #' @param chrColor character, main color for chromosomes
 #' @param roundness numeric, shape of vertices of chromosomes and square marks,
 #'   higher values more squared
-#' @param dotRoundCorr numeric, correct roundness of dots. When style of sites =
+#' @param dotRoundCorr numeric, correct roundness of dots and vertices of chromosomes. When style of sites =
 #'   dots, an increase in this, makes the horizontal radius of the dot smaller
 #' @param karHeight numeric, vertical size of karyotypes
 #' @param karSpacing numeric, proportional to karHeight for spacing of
@@ -71,6 +73,7 @@
 #'   of idiograms
 #' @param ylimBotMod numeric, modify ylim bottom parameter of plot
 #' @param ylimTopMod numeric, modify ylim top parameter of plot
+#' @param legendWidth factor to increase width of squares and boxes of legend
 #'
 #' @param ... accepts other arguments for the plot, such as, asp
 #' @keywords dataframe chromosome
@@ -100,7 +103,8 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
                             karIndex=TRUE, karIndexPos=.5,
                             addOTUName=TRUE,revOTUs=FALSE,
                             ruler=TRUE,rulerPos=-.5, rulerPosMod=0, ruler.tck=-0.004, rulerNumberPos=.2, rulerNumberSize=.4,
-                            xlimLeftMod=1,  xlimRightMod=10, ylimBotMod=.2, ylimTopMod=.2,
+                            xlimLeftMod=1,  xlimRightMod=10, ylimBotMod=.2, ylimTopMod=.2, addMissingOTUAfter=NA,missOTUspacings=0,
+                            legendWidth=1.75,
                             ...)
 {
   if(!missing(dfChrSize)){
@@ -263,6 +267,7 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
       } # else
     } # else column names ok
   } #fi
+
   ######################################################################################################
   #   for > 1.0.0
   ######################################################################################################
@@ -312,7 +317,7 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
   }
 
   if("OTU" %in% colnames(dfChrSizeInternal)){
-    listOfdfChromSize<-base::split(dfChrSizeInternal, dfChrSizeInternal$OTU )
+    listOfdfChromSize<-base::split(dfChrSizeInternal, factor(dfChrSizeInternal$OTU,levels = unique(dfChrSizeInternal$OTU))  )
     names(listOfdfChromSize)<-unique(dfChrSizeInternal$OTU)
   } else {
     listOfdfChromSize<-list(dfChrSizeInternal)
@@ -320,6 +325,27 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
 
     addOTUName<-FALSE
   }
+
+  ### new
+  #
+  #   add support for missing species
+  #
+
+  suppressWarnings(
+    if(!is.na(addMissingOTUAfter[1]) ){
+      if (length(missOTUspacings) != length(addMissingOTUAfter) ){
+        missOTUspacings<-rep(missOTUspacings, abs(length(addMissingOTUAfter)/length(missOTUspacings)) ) [1:length(addMissingOTUAfter)]
+      }
+      for (i in 1:length(addMissingOTUAfter)){
+        listOfdfChromSize <- append(listOfdfChromSize,
+                                    rep(NA,missOTUspacings[[i]]),
+                                    (which(names(listOfdfChromSize)==addMissingOTUAfter[[i]]) )
+        )
+      }
+    }
+  )
+
+  ###
 
   listOfdfChromSize<-rev(listOfdfChromSize)
 
@@ -338,7 +364,7 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
 
   if (exists("dfMarkPosSq")){
     if("OTU" %in% colnames(dfMarkPosSq)){
-      listOfdfMarkPosSq<-base::split(dfMarkPosSq, dfMarkPosSq$OTU )
+      listOfdfMarkPosSq<-base::split(dfMarkPosSq, factor(dfMarkPosSq$OTU,levels = unique(dfMarkPosSq$OTU))  )
       names(listOfdfMarkPosSq)<-unique(dfMarkPosSq$OTU) #1:(length(listOfdfMarkPosSq))
     } else {
       listOfdfMarkPosSq<-list(dfMarkPosSq)
@@ -352,7 +378,7 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
 
   if (exists("dfMarkPosCr")){
     if("OTU" %in% colnames(dfMarkPosCr)){
-      listOfdfMarkPosCr<-base::split(dfMarkPosCr, dfMarkPosCr$OTU )
+      listOfdfMarkPosCr<-base::split(dfMarkPosCr, factor(dfMarkPosCr$OTU,levels = unique(dfMarkPosCr$OTU))  )
       names(listOfdfMarkPosCr)<-unique(dfMarkPosCr$OTU) #1:(length(listOfdfMarkPosCr))
     } else {
       listOfdfMarkPosCr<-list(dfMarkPosCr)
@@ -374,9 +400,8 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
   ######################
   #   total size of chro and normalize
   ######################
-
   {
-    totalLength<-lapply(listOfdfChromSize, function(x) x$chrSize)
+    totalLength<-lapply(listOfdfChromSize, function(x) tryCatch(x$chrSize, error=function(e) NA)  )
     ifelse(class(totalLength)=="matrix",
            totalLength <- base::split(totalLength, col(totalLength) )
            ,NA)
@@ -390,7 +415,7 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
   if(orderBySize==TRUE) {
     orderlist<-lapply(totalLength, function(x) order(x, decreasing = TRUE) )
   } else { # if not want to order by size, set order by name of chro
-    orderlist<-lapply(listOfdfChromSize, function(x) order(x$chrName) )
+    orderlist<-lapply(listOfdfChromSize, function(x) tryCatch(order(x$chrName), error=function(e) NA ) )
   }
 
   # { # remove
@@ -399,15 +424,18 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
     #
     #   add column of new chro index to dataframes
     #
-    ##############################################
+##############################################
+
+suppressWarnings(
 
     for (s in 1:length(listOfdfChromSize)){
-
+      if(class(listOfdfChromSize[[s]])=="data.frame") {
+      # if(!is.na(listOfdfChromSize[[s]] )  ) {
     listOfdfChromSize[[s]]<-listOfdfChromSize[[s]][orderlist[[s]], ]
     listOfdfChromSize[[s]]$neworder<-1:nrow(listOfdfChromSize[[s]] )
-    #
-    # listOfdfChromSize[[s]]$neworder <- sapply(1:(nrow(listOfdfChromSize[[s]])), function(x) grep(paste0("^",x,"$"), orderlist[[s]]) )
+      }
     }
+)
 
     ###################################################
     #     after 1.1.0
@@ -415,14 +443,16 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
 
     if("group" %in% colnames(dfChrSizeInternal)){
       message("group column present - remove column if not using")
-      grouporderlist<-lapply(listOfdfChromSize, function(x) order(x$group) )
+      grouporderlist<-lapply(listOfdfChromSize, function(x) tryCatch(order(x$group), error=function(e) NA ) )
+      suppressWarnings(
       for (s in 1:length(listOfdfChromSize)){
+        if(class(listOfdfChromSize[[s]])=="data.frame") {
+        # if(!is.na(listOfdfChromSize[[s]] )  ) {
         listOfdfChromSize[[s]]<-listOfdfChromSize[[s]][grouporderlist[[s]], ]
         listOfdfChromSize[[s]]$neworder<-1:nrow(listOfdfChromSize[[s]])
-        #
-        # listOfdfChromSize[[s]]$neworder <- sapply(1:(nrow(listOfdfChromSize[[s]])), function(x) grep(paste0("^",x,"$"), grouporderlist[[s]]) )
-        #
-      } # end for
+        } # if
+      } # for
+      ) # sup
       orderlist<-grouporderlist
     } # if group
     ##
@@ -479,14 +509,13 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
       croxright<-list()
 
       for (i in 1:length(chromRepVector[[s]])){
-        # croytop[i]<-list(c((0+chromSizeOrdered[[s]][i]),
-          croytop[i]<-list(c(   (0+ (listOfdfChromSize[[s]][,"chrSize"]*normalizeToOne)[i]   ),
+         croytop[i]<-tryCatch( list(c(   (0+ (listOfdfChromSize[[s]][,"chrSize"]*normalizeToOne)[i]   ),
           rep(0,2),
           # (0+chromSizeOrdered[[s]][i])
           (0+(listOfdfChromSize[[s]][,"chrSize"]*normalizeToOne)[i]  )
         ) # c
-        ) # list
-      } # for
+        ),error=function(e) NA)  # list
+       } # for
 
       crox<-matrix(rep(NA,length(chromRepVector[[s]])*4),ncol=4, nrow=length(chromRepVector[[s]]) )
 
@@ -509,16 +538,31 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
       reduDistKar=FALSE
     }
 
+    suppressWarnings(
+    if(is.na(addMissingOTUAfter[1])){
     if(reduDistKar){
       for (s in 1:(length(ym)-1)) {
         diffnext<-abs(min(ym[[s+1]] ) - max(ym[[s]]) )
         diffnext<-(diffnext-((distTextChr/3)*reduDistKarTol))
         ym[[s+1]]=ym[[s+1]]-diffnext
+          }
+        }
       }
-    }
+    )
 
     names(ym)<-names(listOfdfChromSize)
     y<-lapply(1:length(ym), function(s) base::split(ym[[s]], row(ym[[s]] )) )
+
+    for (s in 1:length(y)){
+      if(all(is.na(y[[s]][[1]])) ){
+        y[[s]] <-NA
+        x[[s]] <-NA
+        ym[[s]]<-NA
+        xm[[s]]<-NA
+        listOfdfChromSize[[s]]<-NA
+      } #fi
+    } # for species
+    areNA<-which(is.na(y))
 
     #####################
     #   main  plot DO
@@ -533,7 +577,9 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
         #####################################################################################################################
     graphics::plot("",xlim=c( (min(unlist(x), na.rm=TRUE)-leftmodifier),(max(unlist(x), na.rm=TRUE)+xlimRightMod ) ),
                    ylim = c( ylimBotMod*-1 ,( (max(unlist(y), na.rm = TRUE) )+ylimTopMod) ), ylab = "", xaxt='n',
-                   xlab="", yaxt='n',main = NULL, frame.plot = FALSE, ...)
+                   # xlab="", yaxt='n',main = NULL, frame.plot = FALSE, ...)
+    xlab="", yaxt='n',main = NULL, frame.plot = FALSE)
+
     if (Mb){
       opar<-graphics::par(no.readonly = TRUE)
       on.exit(suppressWarnings(par(opar)) )
@@ -543,7 +589,7 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
     #xlab="", yaxt='n',main = NULL, frame.plot = FALSE)
 
     xsizeplot<-(max(unlist(x), na.rm=TRUE)+xlimRightMod )- ( (min(unlist(x), na.rm=TRUE)-(leftmodifier)) )
-    ysizeplot<- max(unlist(y) )
+    ysizeplot<- max(unlist(y) , na.rm=TRUE)
     yfactor<-(ysizeplot/xsizeplot)*dotRoundCorr
 
     ######################################################################################################################
@@ -560,15 +606,16 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
   ################################
 
   if (ruler){
-    maxChrRound<-lapply(1:length(listOfdfChromSize), function(x) ceiling(max(listOfdfChromSize[[x]]$chrSize)) )
-    fromZerotoMaxChr<-lapply(maxChrRound, function(x) seq(0,x, by=1) )
+    maxChrRound<-lapply(1:length(listOfdfChromSize), function(x) tryCatch(ceiling(max(listOfdfChromSize[[x]]$chrSize)), error=function(e) NA ) )
+    fromZerotoMaxChr<-lapply(maxChrRound, function(x) tryCatch(seq(0,x, by=1), error=function(e) NA ) )
     ycoordChrRound  <-lapply(1:length(fromZerotoMaxChr), function(x)
       unlist(
         lapply(1:length(fromZerotoMaxChr[[x]]), function(y)
           (0+(fromZerotoMaxChr[[x]][y]*normalizeToOne))+(1*karSpacing*(x-1)) )
       ) # u
     ) # l
-
+    suppressWarnings(
+      if(is.na(addMissingOTUAfter[1])){
     if(reduDistKar){
       for (s in 1:(length(ymCopy)-1) ) {
         diffnext<-abs(min(ymCopy[[s+1]] ) - max(ymCopy[[s]]) )
@@ -577,7 +624,10 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
         ycoordChrRound[[s+1]]<-ycoordChrRound[[s+1]]-diffnext
       }
     } # redu if
-
+      }
+    )
+    ycoordChrRound<-ycoordChrRound[!is.na(ycoordChrRound)]
+    fromZerotoMaxChr<-fromZerotoMaxChr[!is.na(fromZerotoMaxChr)]
     ####################
     #
     #   add rulers
@@ -603,30 +653,44 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
     ) # l
   }   # end rulers
 
+    xmnoNA<-xm
+    xmnoNA[areNA]<-NA
+    xmnoNA<-xmnoNA[!is.na(xmnoNA)]
+    # length(xmnoNA)
+    ymnoNA<-ym
+    ymnoNA[areNA]<-NA
+    ymnoNA<-ymnoNA[!is.na(ymnoNA)]
+    # names(listOfdfChromSize)
+    listOfdfChromSizenoNA<-listOfdfChromSize
+    listOfdfChromSizenoNA[areNA]<-NA
+    listOfdfChromSizenoNA<-listOfdfChromSizenoNA[!is.na(listOfdfChromSizenoNA)]
+    # names(listOfdfChromSizenoNA)
+
+
     #
     #   groups line > 1.1.0
     #
 
     if("group" %in% colnames(dfChrSizeInternal)){
-      for (s in 1:length(xm)){
-        ngroup<-length(table(listOfdfChromSize[[s]]$group ) )
+      for (s in 1:length(xmnoNA)){
+        ngroup<-length(table(listOfdfChromSizenoNA[[s]]$group ) )
         for (g in 1: ngroup){
-          x0= xm[[s]][,3][ifelse(length(cumsum(table(listOfdfChromSize[[s]]$group))[g-1] )==0,
+          x0= xmnoNA[[s]][,3][ifelse(length(cumsum(table(listOfdfChromSizenoNA[[s]]$group))[g-1] )==0,
                                  1,
-                                 cumsum(table(listOfdfChromSize[[s]]$group) )[g-1]+1
+                                 cumsum(table(listOfdfChromSizenoNA[[s]]$group) )[g-1]+1
           )]
-          x1= xm[[s]][,3][cumsum(table(listOfdfChromSize[[s]]$group) )[g]  ]+chrWidth
+          x1= xmnoNA[[s]][,3][cumsum(table(listOfdfChromSizenoNA[[s]]$group) )[g]  ]+chrWidth
           segments(x0=x0,
-                   y0=(min(ym[[s]])-(distTextChr/3)),
+                   y0=(min(ymnoNA[[s]])-(distTextChr/3)),
                    x1=x1,
-                   y1=(min(ym[[s]])-(distTextChr/3) )
+                   y1=(min(ymnoNA[[s]])-(distTextChr/3) )
           ) # seg
           ########################
           #     group name, after 1.1.0
           ########################3
           text( (x0+x1)/2,
-                (min(ym[[s]])-(distTextChr/3)*2 ),
-                labels = names( table(listOfdfChromSize[[s]]$group)[g] ),
+                (min(ymnoNA[[s]])-(distTextChr/3)*2 ),
+                labels = names( table(listOfdfChromSizenoNA[[s]]$group)[g] ),
                 cex=indexIdTextSize
           )# text end
         } # for group
@@ -639,25 +703,28 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
   # horizontal chromosome names
   #################################
 
+
+
+
   chrNameDistance<-ifelse(exists("grouporderlist"),3,1)
 
   if(chrId=="original"){
     # original names of chromosomes
-    lapply(1:length(xm), function(i)
-      graphics::text(xm[[i]][,3][1:(nrow(xm[[i]]))]+chrWidth/2,
-                     rep( (min(ym[[i]])-(distTextChr/3)*chrNameDistance),(nrow(xm[[i]])) ),
-                     labels = listOfdfChromSize[[i]][,"chrName"],
+    lapply(1:length(xmnoNA), function(i)
+      graphics::text(xmnoNA[[i]][,3][1:(nrow(xmnoNA[[i]]))]+chrWidth/2,
+                     rep( (min(ymnoNA[[i]])-(distTextChr/3)*chrNameDistance),(nrow(xmnoNA[[i]])) ),
+                     labels = listOfdfChromSizenoNA[[i]][,"chrName"],
                      cex=indexIdTextSize
       ) # end graphics::text
     ) # end lapply
   }  else if (chrId=="simple"){
     # i<-1
     # Simple numbering from 1 to ...
-    lapply(1:length(xm), function(i)
-      graphics::text(xm[[i]][,3][1:(nrow(xm[[i]]))]+chrWidth/2,
-                     rep( (min(ym[[i]])-(distTextChr/3)*chrNameDistance ),(nrow(xm[[i]]) ) ),
-                     # rep( (min(ym[[i]])-.1),(nrow(xm[[i]])/2) ),
-                     labels = 1:(nrow(xm[[i]])),
+    lapply(1:length(xmnoNA), function(i)
+      graphics::text(xmnoNA[[i]][,3][1:(nrow(xmnoNA[[i]]))]+chrWidth/2,
+                     rep( (min(ymnoNA[[i]])-(distTextChr/3)*chrNameDistance ),(nrow(xmnoNA[[i]]) ) ),
+                     # rep( (min(ymnoNA[[i]])-.1),(nrow(xmnoNA[[i]])/2) ),
+                     labels = 1:(nrow(xmnoNA[[i]])),
                      cex=indexIdTextSize
       ) # t
     ) # lapply
@@ -671,9 +738,9 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
     ind<-asymmetryA2(dfChrSizeInternal)
     if(!is.null(ind)){
       # generate indexes
-      lapply(1:length(xm), function(s)
-        graphics::text(c( (xm[[s]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),# (xm[[s]][,3][1]-(xlimLeftMod*.66) )+karIndexPos ),#
-                       rep( (min(ym[[s]][,1])-(distTextChr/3) ) , 1 ), # avoid overlap
+      lapply(1:length(xmnoNA), function(s)
+        graphics::text(c( (xmnoNA[[s]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),# (xmnoNA[[s]][,3][1]-(xlimLeftMod*.66) )+karIndexPos ),#
+                       rep( (min(ymnoNA[[s]][,1])-(distTextChr/3) ) , 1 ), # avoid overlap
                        labels = paste("A2",ind$A2[[s]] ),
                        cex=indexIdTextSize,
                        adj=c(1) # 0.5 centered
@@ -689,10 +756,10 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
   distVector<- ifelse(exists("grouporderlist"), ((distTextChr/3)*4 ),((distTextChr/3)*3 ) )
 
   if(addOTUName){
-    lapply(1:length(xm), function(s)
-      graphics::text( c( (xm[[s]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),
-                      ydistance<-min(ym[[s]]) - distVector,
-                      labels = paste("",names(listOfdfChromSize)[[s]] ),
+    lapply(1:length(xmnoNA), function(s)
+      graphics::text( c( (xmnoNA[[s]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),
+                      ydistance<-min(ymnoNA[[s]]) - distVector,
+                      labels = paste("",names(listOfdfChromSizenoNA)[[s]] ),
                       cex=OTUTextSize,
                       adj=c(0) # justif 0 =left
       ) # end graphics::text
@@ -846,10 +913,16 @@ plotIdiogramsHolo<-function(dfChrSize, dfMarkPos, dfMarkColor, mycolors, MarkDis
   #   labels to the right
   #
   ##############################################
+  xNoNA<-x
+  xNoNA[areNA]<-NA
+  xNoNA<-xNoNA[!is.na(xNoNA)]
+  yNoNA<-y
+  yNoNA[areNA]<-NA
+  yNoNA<-yNoNA[!is.na(yNoNA)]
 
     if(legend=="aside" & exists("dfMarkColorInternal") ){
-      plotlabelsright(x,y, markLabelSpacer,chrWidth,dfMarkColorInternal,allMarkMaxSize,normalizeToOne,
-                      markLabelSize,xfactor)
+      plotlabelsright(xNoNA,yNoNA, markLabelSpacer,chrWidth,dfMarkColorInternal,allMarkMaxSize,normalizeToOne,
+                      markLabelSize,xfactor,legendWidth)
     }
 
 

@@ -6,6 +6,7 @@
 \alias{bigdfOfMarks}
 \alias{dfOfMarks}
 \alias{humMarkPos}
+\alias{allMarksSample}
 \title{Mark Positional data - monocentrics}
 \format{bigdfOfMarks a data.frame with cols:
 \describe{
@@ -25,6 +26,8 @@ bigdfOfMarks
 dfOfMarks
 
 humMarkPos
+
+allMarksSample
 }
 \description{
 bigdfOfMarks: Example data for mark position with column OTU
@@ -32,6 +35,8 @@ bigdfOfMarks: Example data for mark position with column OTU
 dfOfMarks: Example data for mark position
 
 humMarkPos: human karyotype mark position
+
+allMarksSample: Example data for mark position
 }
 \references{
 Adler 1994. Idiogram Album. URL: \href{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}{Washington U.}

@@ -6,6 +6,7 @@
 \alias{dfOfChrSize}
 \alias{bigdfOfChrSize}
 \alias{humChr}
+\alias{allChrSizeSample}
 \title{Chr. basic data}
 \format{data.frame with cols:
 \describe{
@@ -24,6 +25,8 @@ dfOfChrSize
 bigdfOfChrSize
 
 humChr
+
+allChrSizeSample
 }
 \description{
 dfOfChrSize: Example data for monocentrics
@@ -31,6 +34,8 @@ dfOfChrSize: Example data for monocentrics
 bigdfOfChrSize: Example data for monocentrics for several species, OTU
 
 humChr: Example data for human karyotype (Adler 1994)
+
+allChrSizeSample: Example data for monocentrics for several species, OTU
 }
 \references{
 Adler 1994. Idiogram Album. \url{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}

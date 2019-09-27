@@ -5,6 +5,7 @@
 \alias{dfMarkStyle}
 \alias{dfMarkColor}
 \alias{humMarkColor}
+\alias{mydfMaColor}
 \title{Mark characteristics}
 \format{dfMarkColor a data.frame with cols:
 \describe{
@@ -19,11 +20,15 @@
 dfMarkColor
 
 humMarkColor
+
+mydfMaColor
 }
 \description{
 dfMarkColor: Example General data for marks NOT position
 
 humMarkColor: human mark characteristics
+
+mydfMaColor: mark characteristics used in vignette of phylogeny
 }
 \references{
 Adler 1994. Idiogram Album. URL: \url{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}

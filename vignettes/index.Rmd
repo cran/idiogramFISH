@@ -13,68 +13,67 @@ output:
 bibliography: [allrefs.bib, packages.bib]
 link-citations: yes
 csl: climaMod.csl
+# self_contained: no
+# mode: selfcontained
+resource_files:
+  - cranversion.svg
+  - crandownload.svg
+  - donate.svg
+  - donateweek.svg
+  - gitbadge.svg
 vignette: >
   %\VignetteIndexEntry{idiogramFISH: Installation and minimal examples}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-<style type="text/css">
-.aright {
-text-align: right}
-
-#post {
-width:75%;
+``` {r, results="asis", echo=FALSE, message=FALSE}
+# <!-- pkgdown --> 
+# <!-- jquery --><script src="jquery.min.js" crossorigin="anonymous"></script>
+myfile<-"jquery.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
 }
+# <!-- clipboard.js --><script src="clipboard.min.js"  crossorigin="anonymous"></script>
+myfile<-"clipboard.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'"crossorigin="anonymous"></script>'))
+}
+# <!-- Font Awesome icons --><link rel="stylesheet" href="all.minMod.css"  crossorigin="anonymous">
+myfile<-"all.minMod.css"
+if(file.exists(myfile)){
+cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
+}
+# <!-- Bootstrap --><link rel="stylesheet" href="bootstrap.minO.css" crossorigin="anonymous">
+myfile<-"bootstrap.minO.css"
+if(file.exists(myfile)){
+cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
+}
+# <!-- # <script src="bootstrap.min.js"  crossorigin="anonymous"></script> -->
+myfile<-"bootstrap.min.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
+}
+myfile<-"pkgdown2.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
+}
+```
+<link rel="stylesheet" href="mystyle.css">
 
-</style>
 
 <div class="aright">
 Go to [monocentrics Vignette](plotIdiogramsVig.html)  
 Go to [holocentrics Vignette](plotIdiogramsHoloVig.html)  
 Go to [groups Vignette](groupsVig.html)  
 Go to [human Vignette](humanVig.html)  
+Go to [phylogeny Vignette](phylogenyVig.html)  
+
 <!-- # there are 2 spaces at the end of those lines -->
 </div>
 
-<style type="text/css">
-
-.verysmall td {line-height: 14px; vertical-align: bottom;
-    font-size:10pt;
-    padding-top:2px;
-    padding-bottom:2px;
-    horizontal-align: center;
-    }
-
-h1 { /* Header 1 */
-    font-size: 22px;
-}
-h2 { /* Header 2 */
-    font-size: 17px;
-}
-h3 { /* Header 3 */
-    font-size: 14px;
-}
-</style>
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-<!-- # ```{r, include = FALSE} -->
-<!-- # knitr::opts_chunk$set( -->
-<!-- #   collapse = TRUE, -->
-<!-- #   comment = "#>", -->
-<!-- #   fig.path = "man/figures/README-", -->
-<!-- #   out.width = "70%" -->
-<!-- # ) -->
-<!-- # ``` -->
 
 # idiogramFISH
-<style type="text/css">
-.right {
-  float: right;
-  margin: 60px;
-}
-</style>
 
 ```{r, echo=F,  results="asis"}
 img1_path <- "../man/figures/logo.png"
@@ -89,12 +88,14 @@ cat(paste0("<img src=",img1_path," class=\"right\" width=\"20%\">") )
 <!-- badges: start -->
 <!-- badges: start -->
 `r library("badger")`
+
 ```{r, include = FALSE}
  badge_devel_gitlab<-function(pkg, color){
     v <- rvcheck:::check_github_gitlab(pkg, "gitlab")$latest_version
     url <- paste0("https://gitlab.com/", pkg)
     badger::badge_custom("devel version", v, color, url)
-}
+ }
+
 ```
 
 The goal of idiogramFISH is to plot idiograms of several karyotypes having a set of dataframes for chromosome data
@@ -104,55 +105,100 @@ The goal of idiogramFISH is to plot idiograms of several karyotypes having a set
     or to the right of karyotypes. It is possible to calculate
     also chromosome and karyotype indexes and classify chromosomes by morphology [@Watanabe1999;@Zarco1986new;@Guerra1986d; @Levan1964].
     
-IdiogramFISH was written in R[@R-base] and also uses crayon package [@Csardi2017]. Manuals were written with R-packages 
+IdiogramFISH was written in R[@R-base] and also uses crayon package [@R-crayon]. Manuals were written with R-packages 
 bookdown, knitr, badger, pkgdown and Rmarkdown [@R-bookdown; @R-knitr; @R-badger; @R-rmarkdown; @R-pkgdown]
 
 # Installation
 
-## You can install the idiogramFISH from [CRAN](https://cran.r-project.org/package=idiogramFISH) with: {-}
+## You can install idiogramFISH from [CRAN](https://cran.r-project.org/package=idiogramFISH) with: {-}
 
-``` {r, echo=F, results="asis"}
-library(badger)
-cat(paste(badger::badge_cran_release("idiogramFISH", "orange"),"&nbsp;" ))
-cat(paste(badger::badge_cran_download("idiogramFISH", type="grand-total", color="orange") ))
+``` {r, echo=F, fig.show = "hold", fig.align = "default"}
+# library(badger)
+if (requireNamespace("RCurl", quietly = TRUE)  ) {
+cranversion <- "https://www.r-pkg.org/badges/version/idiogramFISH?color=orange"
+cranversion_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(cranversion) ), error=function(e) NA )
+if (!is.na(cranversion_cont)){
+cranversion_contFile <- "cranversion.svg"
+writeLines(cranversion_cont, con = cranversion_contFile)
+cranversion_contFile <- normalizePath(cranversion_contFile)
+knitr::include_graphics(cranversion_contFile)
+}
+}
+# tryCatch(cat(paste(badger::badge_cran_release("idiogramFISH", "orange")  ,"&nbsp;" ) ), error=function(e) return("") )  
+# tryCatch(cat(paste(badger::badge_cran_download("idiogramFISH", type="grand-total", color="orange") ) ), error=function(e) return("") )
 ```
+``` {r, echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"}
+# library(badger)
+if (requireNamespace("RCurl", quietly = TRUE)  ) {
+crandownloads<-"https://cranlogs.r-pkg.org/badges/grand-total/idiogramFISH?color=orange"
+crandownloads_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(crandownloads) ), error=function(e) NA )
+if (!is.na(crandownloads_cont)){
+# crandownloads_contFile <- tempfile(fileext = ".svg")
+crandownloads_contFile <- "crandownload.svg"
+writeLines(crandownloads_cont, con = crandownloads_contFile)
+crandownloads_contFile <- normalizePath(crandownloads_contFile)
+cat(paste0("&nbsp;![''](",knitr::include_graphics(crandownloads_contFile),")" ) )
+}
+}
+```
+
 ``` r
 install.packages("idiogramFISH")
 ```
  
-## Or the dev version {-}
+## Or the devel version {-}
 
-``` {r, echo=F, results="asis", message="hide", warning=F, include=F}
-gitbadge<- badge_devel_gitlab("ferroao/idiogramFISH", color="green") 
+``` {r, echo=F, message=FALSE, warning=F, include=T}
+if (requireNamespace("RCurl", quietly = TRUE)  ) {
+v<-tryCatch(suppressWarnings(rvcheck:::check_github_gitlab("ferroao/idiogramFISH", "gitlab")$latest_version), error=function(e) NA )
+link<-tryCatch(suppressWarnings(badger::badge_custom("devel version", v, "green") ), error=function(e) NA )
+if(!is.na(link)){
+svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
+gitbadge_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svglink) ), error=function(e) NA )
+if (!is.na(gitbadge_cont)){
+# gitbadge_contFile <- tempfile(fileext = ".svg")
+gitbadge_contFile <- "gitbadge.svg"
+writeLines(gitbadge_cont, con = gitbadge_contFile)
+gitbadge_contFile <- normalizePath(gitbadge_contFile)
+knitr::include_graphics(gitbadge_contFile)
+}
+}
+}
 ```
 
-``` {r, echo=F, results="asis", message="hide", warning=F, include=T}
-cat(gitbadge)
-``` 
+<!-- # ``` {r, echo=F, results="asis", message=FALSE, warning=F, include=T} -->
+<!-- # cat(gitbadge) -->
+<!-- # ```  -->
 
-From gitlab with devtools [@R-devtools] :
+
+### From gitlab with devtools [@R-devtools] : {-}
 
 Attention windows users, please install [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
 
-``` r
+``` {r, eval=FALSE}
 # This installs package devtools, necessary for installing the dev version
 install.packages("devtools")
+
 url <- "https://gitlab.com/ferroao/idiogramFISH"
-
-# Linux with vignettes
+```
+``` {r, eval=FALSE}
+# Linux with vignettes and Windows R-32bits
 devtools::install_git(url = url,build_vignettes = TRUE, force=T)
-
-# Windows with vignettes
+```
+``` {r, eval=FALSE}
+# Windows R-64bits and Mac with vignettes
 devtools::install_git(url = url, build_opts=c("--no-resave-data","--no-manual") )
 ```
 
-## Or install it in terminal: {-}
+### Or install it in terminal: {-}
 
-``` r
+``` {r, eval=FALSE}
 # clone repository:
 git clone "https://gitlab.com/ferroao/idiogramFISH"
+
 R CMD build idiogramFISH
-R CMD INSTALL idiogramFISH_1.0.0.tar.gz
+# install
+R CMD INSTALL idiogramFISH_*.tar.gz
 ```
 
 # What's new in gitlab? 
@@ -181,7 +227,7 @@ Online:
 [Holocentrics](https://ferroao.gitlab.io/idiogramfishhelppages/plotIdiogramsHoloVig.html)  
 [Groups of chromosomes](https://ferroao.gitlab.io/idiogramfishhelppages/groupsVig.html)   
 [Human karyotype](https://ferroao.gitlab.io/idiogramfishhelppages/humanVig.html)  
-
+[Phylogeny](https://ferroao.gitlab.io/idiogramfishhelppages/phylogenyVig.html)  
 
 Launch vignettes from R:
 
@@ -192,6 +238,8 @@ browseVignettes("idiogramFISH")
 # Minimal examples
 
 ## How to plot a karyotype: {-}
+
+Define your plotting window size with something like `par(pin=c(10,6))`
 
 ```{r example, echo=T, results="hide", fig.width=10, fig.height=6, message=FALSE}
 # fig.width=10, fig.height=6
@@ -287,15 +335,40 @@ print(citation("idiogramFISH"),bibtex=FALSE)
 
 # Authors
 
-[Fernando Roa](https://ferroao.gitlab.io/curriculumpu/)<a href="https://liberapay.com/ferroao/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a> <img src="http://img.shields.io/liberapay/receives/ferroao.svg?logo=liberapay">
-
+[Fernando Roa](https://ferroao.gitlab.io/curriculumpu/)
+``` {r, echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"}
+# library(badger)
+if (requireNamespace("RCurl", quietly = TRUE)  ) {
+donate <- "https://liberapay.com/assets/widgets/donate.svg"
+donate_cont <- tryCatch(RCurl::getURLContent(donate), error=function(e) NA )
+if (!is.na(donate_cont)){
+donate_contFile <- "donate.svg"
+# donate_contFile <- tempfile(fileext = ".svg")
+writeLines(donate_cont, con = donate_contFile)
+cat(paste0("[![donate](",knitr::include_graphics(donate_contFile),")](https://liberapay.com/ferroao/donate)" ) )
+}
+}
+```
+``` {r, echo=F, message=FALSE, fig.show = "hold", fig.align = "default", warning=FALSE, results="asis"}
+# library(badger)
+if (requireNamespace("RCurl", quietly = TRUE) ) {
+donateweek <- "http://img.shields.io/liberapay/receives/ferroao.svg"
+# donateweek_contFile <- tempfile(fileext = ".svg")
+donateweek_contFile <- "donateweek.svg"
+tryCatch(suppressWarnings(download.file(donateweek, donateweek_contFile) ), error=function(e) "")
+if(file.exists(donateweek_contFile ) ) {
+cat(paste0("[![donate](",knitr::include_graphics(donateweek_contFile),")](https://liberapay.com/ferroao/donate)" ) )
+}
+}
+```
+  
 [Mariana Telles](http://lattes.cnpq.br/4648436798023532)  
 
 ```{r include=FALSE}
-# automatically create a bib database for R packages
+# automatically create a bib database for R packages, this is currently not used by vignette packages2.bib
 knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","badger","pkgdown"
-), 'packages.bib')
+  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","badger","pkgdown","crayon","ggtree","ggplot2","ggpubr","phytools"
+), 'packages2.bib')
 ```
 
 `r if (knitr:::is_html_output()) '

@@ -14,6 +14,7 @@
 #' @param normalizeToOne transformation value of karyotype height
 #' @param markLabelSize font size of legends
 #' @param xfactor relative proportion of x vs y axes
+#' @param legendWidth factor to increase width of legend squares and dots
 
 #' @importFrom graphics polygon text
 #'
@@ -21,11 +22,11 @@
 #'
 
 plotlabelsright<-function(x,y, markLabelSpacer,chrWidth,dfMarkColorInternal,allMarkMaxSize,normalizeToOne,
-                          markLabelSize,xfactor) {
+                          markLabelSize,xfactor,legendWidth) {
   maxx<-(max(unlist(x)) )
 
   miny<-(min(unlist(y)) )
-
+  chrWidth<-chrWidth*legendWidth
   labelx<-(maxx+markLabelSpacer)+(c(0, chrWidth, chrWidth,0)+0)
 
   labelx<-t(replicate(nrow(dfMarkColorInternal),labelx) )
@@ -51,14 +52,20 @@ plotlabelsright<-function(x,y, markLabelSpacer,chrWidth,dfMarkColorInternal,allM
          labelxtoplot<-list(t(as.matrix(labelxtoplot) ) )
   )
   # squares of labels
-  mapply(function(x,y,z) graphics::polygon(x=(x),
-                                           y=(y),
+  mapply(function(x,y,z,w) graphics::polygon(x=x,
+                                           y=y,
                                            col=z,
-                                           lwd=.5, border=z
+                                           lwd=.5
+                                           # , border=z
+                                           ,border=w
   ), # polygon
   x=labelxtoplot,
-  y=labelytoplot,
-  z=dfMarkColorInternal$markColor[which(dfMarkColorInternal$style!="dots")]
+  y=labelytoplot
+  ,z=dfMarkColorInternal$markColor[which(dfMarkColorInternal$style!="dots")]
+  ,w=ifelse(dfMarkColorInternal$markColor[which(dfMarkColorInternal$style!="dots")]=="white",
+           "black",
+           dfMarkColorInternal$markColor[which(dfMarkColorInternal$style!="dots")]
+           )#ifelse
   ) # mapply
 
   # text of labels
@@ -90,23 +97,31 @@ plotlabelsright<-function(x,y, markLabelSpacer,chrWidth,dfMarkColorInternal,allM
 
     rad<-min(labelydiffhalf, (diffxQuar) )
 
+
     yfactor<-1
     # xfactor<-(xsizeplot/ysizeplot  )/dotRoundCorr
 
     if(length(listOfxcenters)>0){
       lapply(1:length(listOfxcenters), function(u) {
-        mapply(function(x,y,r,z) {
+        mapply(function(x,y,r,z,w) {
           pts2=seq(0, 2 * pi, length.out = 25)
           xy2 <- cbind(x + (r * sin(pts2)*xfactor) , y + (r * cos(pts2)*yfactor ) )
-          graphics::polygon(xy2[,1],xy2[,2], col=z, border = z)
+          graphics::polygon(xy2[,1],
+                            xy2[,2],
+                            col=z,
+                            border = w)
         },
         x= listOfxcenters[[u]],
         y= listOfycenters[[u]],
         r= rad,
-        z= dfMarkColorInternal$markColor[which(dfMarkColorInternal$style=="dots")][[u]] #rep(listOfdfMarkPosCr[[w]]$markName,2)
-        )# m
+        z= dfMarkColorInternal$markColor[which(dfMarkColorInternal$style=="dots")][[u]]
+        ,w= ifelse(dfMarkColorInternal$markColor[which(dfMarkColorInternal$style=="dots")][[u]]=="white",
+                         "black",
+                         dfMarkColorInternal$markColor[which(dfMarkColorInternal$style=="dots")][[u]]
+        ) # ifelse
+        ) # mapply
       } # fun
-      ) # l
+      ) # lapply
 
       graphics::text(x=t(labelx[which(dfMarkColorInternal$style=="dots"),2]),
                      y=t(

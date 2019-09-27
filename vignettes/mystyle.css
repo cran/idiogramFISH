@@ -1,0 +1,48 @@
+#post {
+width:75%;
+font-size: 1.0em;
+}
+.hasCopyButton {
+  position: relative;
+}
+
+.btn-copy-ex {
+  position: absolute;
+  right: 0;
+  top: 0;
+  visibility: hidden;
+}
+
+.hasCopyButton:hover button.btn-copy-ex {
+  visibility: visible;
+}
+
+
+.verysmall td {line-height: 14px; vertical-align: bottom;
+  font-size:10pt;
+  padding-top:2px;
+  padding-bottom:2px;
+  horizontal-align: center;
+}
+
+h1 { /* Header 1 */
+    font-size: 22px;
+}
+h2 { /* Header 2 */
+    font-size: 20px;
+}
+h3 { /* Header 3 */
+    font-size: 18px;
+}
+h4 { /* Header 3 */
+    font-size: 16px;
+}
+
+.aright {
+  text-align: right}
+
+.right {
+  float: right;
+  margin: 60px;
+}
+

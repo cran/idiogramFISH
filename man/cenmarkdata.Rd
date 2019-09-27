@@ -5,6 +5,7 @@
 \alias{cenmarkdata}
 \alias{bigdfDataCen}
 \alias{dfOfCenMarks}
+\alias{allCenMarksSample}
 \title{Centromeric Mark data}
 \format{bigdfDataCen a data.frame with cols:
 \describe{
@@ -16,11 +17,15 @@
 bigdfDataCen
 
 dfOfCenMarks
+
+allCenMarksSample
 }
 \description{
 bigdfDataCen: Example data for centromeric marks df with column OTU
 
 dfOfCenMarks: Example data for centromeric marks
+
+allCenMarksSample: Example data for centromeric marks
 }
 \seealso{
 \code{\link{plotIdiograms}}

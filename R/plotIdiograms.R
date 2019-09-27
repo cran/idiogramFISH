@@ -23,6 +23,8 @@
 #' @param MarkDistanceType character, if \code{cen} = the distance you provided is to
 #'   the center of the mark, if \code{beg} = the distance you provided is to the
 #'   beginning of the mark
+#' @param addMissingOTUAfter character, when you want to add space (ghost OTUs) after one or several OTUs, pass the names of OTUs preceding the desired space in a vector i.e. \code{c("species one","species five")}
+#' @param missOTUspacings numeric, when you use addMissingOTUAfter this numeric vector should have the same length and corresponds to the number of free spaces (ghost OTUs) to add after each OTU respectively
 #' @param orderBySize logical value, when \code{TRUE}, sorts chromosomes by total
 #'   length from the largest to the smallest
 #' @param centromereSize numeric, this establishes the apparent size of cen in
@@ -33,7 +35,7 @@
 #' @param cenColor character, color for centromeres
 #' @param roundness numeric, shape of vertices of chromosomes and square marks,
 #'   higher values more squared
-#' @param dotRoundCorr numeric, correct roundness of dots. When style of sites =
+#' @param dotRoundCorr numeric, correct roundness of dots and vertices of chromosomes. When style of sites =
 #'   dots, an increase in this, makes the horizontal radius of the dot smaller
 #' @param karHeight numeric, vertical size of karyotypes
 #' @param karSpacing numeric, proportional to karHeight for spacing of
@@ -84,6 +86,7 @@
 #' @param ylimTopMod numeric, modify \code{ylim} top argument of plot
 #' @param ... accepts other arguments for the plot, such as, \code{asp}
 #' @param lwd.chr thick of border of chr. and marks.
+#' @param legendWidth factor to increase width of squares and boxes of legend
 #'
 #' @keywords dataframe chromosome
 #'
@@ -116,12 +119,12 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
                         addOTUName=TRUE,revOTUs=FALSE,
                         ruler=TRUE,rulerPos=-.5, rulerPosMod=0, ruler.tck=-0.004, rulerNumberPos=.2, rulerNumberSize=.4,
                         xlimLeftMod=1,  xlimRightMod=10, ylimBotMod=.2,ylimTopMod=.2,
-                        lwd.chr=2, pattern="",
+                        lwd.chr=2, pattern="", addMissingOTUAfter=NA,missOTUspacings=0,
+                        legendWidth=1.7,
                         ...)
 {
   if(!missing(dfChrSize)){
     dfChrSizeInternal<-makeNumCols(dfChrSize)
-
   } else {
     message(crayon::red("Missing mandatory dfChrSize dataframe"))
     return(NA)
@@ -129,7 +132,6 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   if(!missing(dfMarkPos)){
     dfMarkPosInternal<-makeNumCols(dfMarkPos)
   } # df of marks
-  # str(dfMarkPos)
   if(!missing(dfCenMarks)){
     dfCenMarksInternal<-makeNumCols(dfCenMarks)
   }
@@ -144,7 +146,7 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   #   dfChrSizeInternal
   #
 
-  if(exists("dfChrSizeInternal")){
+if(exists("dfChrSizeInternal")){
     message(crayon::black("\nChecking mandatory columns from dfChrSize: chrName, shortArmSize,longArmSize,\n (column OTU  is necessary if more than one species)\n"
     ) ) # cat
     if(length( setdiff(c("chrName", "shortArmSize","longArmSize"),
@@ -315,6 +317,7 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   ######################################################################################################
   #   after 1.0.0
   ######################################################################################################
+
   else if (missing(mycolors) ) { # if dfMarkColor not exist and missing mycolors
     if(exists("allMarkNames")){
       dfMarkColorInternal<-makedfMarkColor(allMarkNames,c(chrColor,cenColor) )
@@ -353,9 +356,7 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   # generate Chromosome indexes
   #
 
-  if(chrIndex | morpho){
-    dfChrSizeInternal<-armRatioCI(dfChrSizeInternal)
-  }
+
 
   #################################################################### LISTS
   #
@@ -363,7 +364,7 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   #
 
   if("OTU" %in% colnames(dfChrSizeInternal)){
-    listOfdfChromSize<-base::split(dfChrSizeInternal, dfChrSizeInternal$OTU )
+    listOfdfChromSize<-base::split(dfChrSizeInternal, factor(dfChrSizeInternal$OTU,levels = unique(dfChrSizeInternal$OTU)) )
     names(listOfdfChromSize)<-unique(dfChrSizeInternal$OTU)
   } else {
     listOfdfChromSize<-list(dfChrSizeInternal)
@@ -371,6 +372,29 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
     addOTUName<-FALSE
   }
 
+  if(chrIndex | morpho){
+    otunames<-names(listOfdfChromSize)
+    listOfdfChromSize<-lapply(listOfdfChromSize, function(x) armRatioCI(x) )
+    names(listOfdfChromSize)<-otunames
+  }
+
+  #
+  #   add support for missing species
+  #
+
+suppressWarnings(
+  if(!is.na(addMissingOTUAfter[1]) ){
+    if (length(missOTUspacings) != length(addMissingOTUAfter) ){
+      missOTUspacings<-rep(missOTUspacings, abs(length(addMissingOTUAfter)/length(missOTUspacings)) ) [1:length(addMissingOTUAfter)]
+    }
+    for (i in 1:length(addMissingOTUAfter)){
+    listOfdfChromSize <- append(listOfdfChromSize,
+                                rep(NA,missOTUspacings[[i]]),
+                                (which(names(listOfdfChromSize)==addMissingOTUAfter[[i]]) )
+                                ) # append
+    }
+  }
+)
   listOfdfChromSize<-rev(listOfdfChromSize)
 
   if(revOTUs){
@@ -393,7 +417,7 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   if (exists("dfMarkPosSq")){
 
     if("OTU" %in% colnames(dfMarkPosSq)){
-      listOfdfMarkPosSq<-base::split(dfMarkPosSq, dfMarkPosSq$OTU )
+      listOfdfMarkPosSq<-base::split(dfMarkPosSq, factor(dfMarkPosSq$OTU,levels = unique(dfMarkPosSq$OTU)  ) )
       names(listOfdfMarkPosSq)<-unique(dfMarkPosSq$OTU)
     } else {
       listOfdfMarkPosSq<-list(dfMarkPosSq)
@@ -407,7 +431,7 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   if (exists("dfMarkPosCr")){
 
     if("OTU" %in% colnames(dfMarkPosCr)){
-      listOfdfMarkPosCr<-base::split(dfMarkPosCr, dfMarkPosCr$OTU )
+      listOfdfMarkPosCr<-base::split(dfMarkPosCr, factor(dfMarkPosCr$OTU,levels = unique(dfMarkPosCr$OTU)  ) )
       names(listOfdfMarkPosCr)<-unique(dfMarkPosCr$OTU)
     } else {
       listOfdfMarkPosCr<-list(dfMarkPosCr)
@@ -422,7 +446,7 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   if (exists("dfCenMarksInternal")){
 
     if("OTU" %in% colnames(dfCenMarksInternal)){
-      listOfdfDataCen<-base::split(dfCenMarksInternal, dfCenMarksInternal$OTU )
+      listOfdfDataCen<-base::split(dfCenMarksInternal, factor(dfCenMarksInternal$OTU,levels = unique(dfCenMarksInternal$OTU) ) )
     } else {
       listOfdfDataCen<-list(dfCenMarksInternal)
       names(listOfdfDataCen)<-1
@@ -444,9 +468,11 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   #   total size of chr
   #####################
   {
-    shortArmSize<-lapply(listOfdfChromSize, function(x) x$shortArmSize)
-    longArmSize <-lapply(listOfdfChromSize, function(x) x$longArmSize )
+    shortArmSize<-lapply(listOfdfChromSize, function(x) tryCatch(x$shortArmSize, error=function(e) NA) )
+    longArmSize <-lapply(listOfdfChromSize, function(x) tryCatch(x$longArmSize, error=function(e) NA) )
     totalLengh <- mapply(function(x,y) x+y, x=shortArmSize,y=longArmSize)
+    # totalLengh <- mapply(function(x,y) x+y, x=shortArmSize[1:2],y=longArmSize[1:2])
+
     ifelse(class(totalLengh)=="matrix",
            totalLengh <- base::split(totalLengh, col(totalLengh))
            ,NA)
@@ -460,14 +486,14 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   #   add column total to dataframes
   #
 
-  #####################
+  ##############################################################################
   # order by size
-  #####################
+  ##############################################################################
   {
     if(orderBySize==TRUE) {
         orderlist<-lapply(totalLengh, function(x) order(x, decreasing = TRUE) )
     } else { # if not want to order by size, set order by name of chro
-        orderlist<-lapply(listOfdfChromSize, function(x) order(x$chrName) )
+        orderlist<-lapply(listOfdfChromSize, function(x) tryCatch(order(x$chrName), error=function(e) NA ) )
     } #else
 
     ##################################################
@@ -476,13 +502,17 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
     #
     ##################################################
 
+suppressWarnings(
     for (s in 1:length(listOfdfChromSize)){
+      if(class(listOfdfChromSize[[s]])=="data.frame") {
+      # if(!is.na(listOfdfChromSize[[s]] )  ) {
       listOfdfChromSize[[s]]<-listOfdfChromSize[[s]][orderlist[[s]], ]
       listOfdfChromSize[[s]]$neworder<-1:nrow(listOfdfChromSize[[s]])
-      #
-      # listOfdfChromSize[[s]]$neworder <- sapply(1:(nrow(listOfdfChromSize[[s]])), function(x) grep(paste0("^",x,"$"), orderlist[[s]]) )
-      #
+      }
     } # end for
+)
+      # listOfdfChromSize[[s]]$neworder <- sapply(1:(nrow(listOfdfChromSize[[s]])), function(x) grep(paste0("^",x,"$"), orderlist[[s]]))
+      #
 
     ###################################################
     #     after 1.1.0
@@ -490,16 +520,24 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
 
     if("group" %in% colnames(dfChrSizeInternal)){
       message("group column present - remove column if not using")
-      grouporderlist<-lapply(listOfdfChromSize, function(x) order(x$group) )
+      grouporderlist<-lapply(listOfdfChromSize, function(x) tryCatch(order(x$group), error=function(e) NA ) )
+
+      suppressWarnings(
       for (s in 1:length(listOfdfChromSize)){
+        if(class(listOfdfChromSize[[s]])=="data.frame") {
+          # if(!is.na(listOfdfChromSize[[s]] )  ) {
+
         listOfdfChromSize[[s]]<-listOfdfChromSize[[s]][grouporderlist[[s]], ]
         listOfdfChromSize[[s]]$neworder<-1:nrow(listOfdfChromSize[[s]])
         #
         # listOfdfChromSize[[s]]$neworder <- sapply(1:(nrow(listOfdfChromSize[[s]])), function(x) grep(paste0("^",x,"$"), grouporderlist[[s]]) )
         #
-        } # end for
+        } #fi
+      } # end for
+      )
       orderlist<-grouporderlist
     } # if group
+
 
     ##
     # order by group and chromosome
@@ -551,27 +589,6 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
     }  # end presence of dfCenMarksInternal
   } # ordering chunk
 
-  #
-  # ordering and transformation (normalize height)
-  #
-
-  # {
-  #   shortArmSizeOrdered<-mapply(function(x,y) x[y], x=shortArmSize, y=orderlist)
-  #   # if
-  #   # shortArmSizeOrdered<-mapply(function(x,y) x[y], x=shortArmSizeOrdered, y=orderlist)
-  #
-  #   ifelse(class(shortArmSizeOrdered)=="matrix",
-  #          shortArmSizeOrdered <- base::split(shortArmSizeOrdered, col(shortArmSizeOrdered))
-  #          ,NA)
-  #   shortArmSizeOrdered<-lapply(shortArmSizeOrdered, function(x) x*normalizeToOne)
-  #
-  #   longArmSizeOrdered<-mapply(function(x,y) x[y], x=longArmSize , y=orderlist)
-  #   ifelse(class(longArmSizeOrdered)=="matrix",
-  #          longArmSizeOrdered <- base::split(longArmSizeOrdered, col(longArmSizeOrdered))
-  #          ,NA)
-  #   longArmSizeOrdered<-lapply(longArmSizeOrdered, function(x) x*normalizeToOne)
-  # }
-
   #######################
   #
   #      main plot
@@ -598,19 +615,19 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
       croxleft<-list()
       croxright<-list()
       for (i in 1:length(armRepVector[[s]])){
-        croybot[i]<-list(c(karHeight,
+        croybot[i]<-tryCatch(list(c(karHeight,
                            # rep((karHeight-longArmSizeOrdered[[s]][i]),2),
                            rep((karHeight-(listOfdfChromSize[[s]][,"longArmSize"]*normalizeToOne)[i]),2),
                            karHeight
                           )#c
-                        )# list
+                        ), error=function(e) NA ) # list
         # croytop[i]<-list(c((karHeight+(centromereSize*normalizeToOne)+shortArmSizeOrdered[[s]][i]),
-        croytop[i]<-list(c((karHeight+(centromereSize*normalizeToOne)+(listOfdfChromSize[[s]][,"shortArmSize"]*normalizeToOne)[i] ),
+        croytop[i]<-tryCatch( list(c((karHeight+(centromereSize*normalizeToOne)+(listOfdfChromSize[[s]][,"shortArmSize"]*normalizeToOne)[i] ),
                            rep((karHeight+(centromereSize*normalizeToOne)),2),
                            (karHeight+(centromereSize*normalizeToOne)+(listOfdfChromSize[[s]][,"shortArmSize"]*normalizeToOne)[i] )
                            # (karHeight+(centromereSize*normalizeToOne)+shortArmSizeOrdered[[s]][i])
         ) # c
-        ) # list
+        ), error=function(e) NA) # list
       } # for
 
       crox<-matrix(rep(NA,length(armRepVector[[s]])*4),ncol=4, nrow=length(armRepVector[[s]]) )
@@ -627,28 +644,43 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
       # x<-x
       ifelse(any(is.na(x[[s]]) ),x[[s]]<-NA,"")
       ym[[s]] <- t(sapply (c(croybot,croytop ), function (x) {length (x) ; return (x)}) ) + (karSpacing*(s-1)  )
+
     } # for species
 
-    ymCopyC<-ymCopy<-ym
-
-    if (length(ym)==1){
+   if (length(ym)==1){
       reduDistKar=FALSE
     }
 
     #
     #	reducing distance among OTUs
     #
+    ymCopyC<-ymCopy<-ym # important must stay here before modifying ym
 
-    if(reduDistKar){
-      for (s in 1:(length(ym)-1)) {
-        diffnext<-abs(min(ym[[s+1]] ) - max(ym[[s]]) )
-        diffnext<-(diffnext-((distTextChr/3)*reduDistKarTol))
-        ym[[s+1]]=ym[[s+1]]-diffnext
+suppressWarnings(
+    if(is.na(addMissingOTUAfter[1])){
+      if(reduDistKar){
+        for (s in 1:(length(ym)-1)) {
+          diffnext<-abs(min(ym[[s+1]] ) - max(ym[[s]]) )
+          diffnext<-(diffnext-((distTextChr/3)*reduDistKarTol))
+          ym[[s+1]]=ym[[s+1]]-diffnext
+        }
       }
     }
-
+)
     names(ym)<-names(listOfdfChromSize)
     y<-lapply(1:length(ym), function(s) base::split(ym[[s]], row(ym[[s]] )) )
+
+for (s in 1:length(y)){
+    if(all(is.na(y[[s]][[1]])) ){
+      y[[s]] <-NA
+      x[[s]] <-NA
+      ym[[s]]<-NA
+      xm[[s]]<-NA
+      listOfdfChromSize[[s]]<-NA
+    } #fi
+} # for species
+
+  areNA<-which(is.na(y))
 
     #####################3
     #   main  plot DO
@@ -669,14 +701,16 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
 
     ######################################################################################################################
     xsizeplot<-(max(unlist(x), na.rm=TRUE)+xlimRightMod )- ( (min(unlist(x), na.rm=TRUE)-(leftmodifier)) )
-    ysizeplot<- max(unlist(y) )
+    ysizeplot<- max(unlist(y), na.rm=TRUE)
     yfactor<-(ysizeplot/xsizeplot)*dotRoundCorr
 
     { # plot types
-      if(roundness<1){
-        roundness<-1
-      }
-      if(roundness>15){
+
+      # if(roundness<1){
+      #   roundness<-1
+      # }
+
+      if(roundness>20){
         lapply(1:length(y), function(z) mapply(function(x,y) graphics::polygon(x=x, y=y,
                                                                                col=chrColor,
                                                                                lwd=lwd.chr,
@@ -752,11 +786,21 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
             newLongx[[s]][[q]]<-c(x[[s]][[q]][1:2],xy_2[[s]][[q]][,1],topBotline_x[[s]][[q]],xy_1[[s]][[q]][,1],x[[s]][[q]][3:4] )
             # newLongy<-c(yMod[1:2],xy_2[,2],bottomline_y,xy_1[,2], yMod[3:4])
             newLongy[[s]][[q]]<-c(yMod[[s]][[q]][1:2],xy_2[[s]][[q]][,2],bottomline_y[[s]][[q]],xy_1[[s]][[q]][,2],yMod[[s]][[q]][3:4] )
-          } # for
-        } # for
+
+
+            # newLongy[[2]]
+} # for q
+          # if(all(is.na(newLongy[[s]][[1]])) ){
+          #   newLongy[[s]]<-NA
+          #   newLongx[[s]]<-NA
+          # } #fi
+} # for species
+
+        newLongy<-newLongy[!is.na(newLongy)]
+        newLongx<-newLongx[!is.na(newLongx)]
 
         # polygon(newLongx,newLongy, col="red")
-        lapply(1:length(y), function(s) mapply(function(x,y) graphics::polygon(x=x, y=y,
+        lapply(1:length(newLongx), function(s) mapply(function(x,y) graphics::polygon(x=x, y=y,
                                                                                col=chrColor,
                                                                                lwd=lwd.chr,
                                                                                border=chrColor),
@@ -896,9 +940,15 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
             newLongy[[s]][[q]]<-c(yMod[[s]][[q]][1:2],xy_4[[s]][[q]][,2],bottomline_y[[s]][[q]],xy_3[[s]][[q]][,2],
                                   yMod[[s]][[q]][3:4],xy_1[[s]][[q]][,2],topline_y[[s]][[q]],xy_2[[s]][[q]][,2])
 
-          } # for
+          } # for q
 
-        } # for
+      # if(all(is.na(newLongy[[s]][[1]])) ){
+      #     newLongy[[s]]<-NA
+      #     newLongx[[s]]<-NA
+      #   } #fi
+      } # for species
+        newLongy<-newLongy[!is.na(newLongy)]
+        newLongx<-newLongx[!is.na(newLongx)]
 
         # polygon(newLongx,newLongy, col="red")
         lapply(1:length(y), function(s) mapply(function(x,y) graphics::polygon(x=x, y=y,
@@ -924,11 +974,12 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   ################################
 
   if (ruler){
-    maxShortRound<-lapply(1:length(listOfdfChromSize), function(x) ceiling(max(listOfdfChromSize[[x]]$shortArmSize)) )
-    maxLongRound<-lapply(1:length(listOfdfChromSize), function(x) ceiling(max(listOfdfChromSize[[x]]$longArmSize)) )
 
-    fromZerotoMaxShort<-lapply(maxShortRound, function(x) seq(0,x, by=1) )
-    fromZerotoMaxLong<-lapply(maxLongRound, function(x) seq(0,x, by=1) )
+    maxShortRound<-lapply(1:length(listOfdfChromSize), function(x) tryCatch(ceiling(max(listOfdfChromSize[[x]]$shortArmSize)), error=function(e) NA ) )
+    maxLongRound<-lapply(1:length(listOfdfChromSize), function(x) tryCatch(ceiling(max(listOfdfChromSize[[x]]$longArmSize)), error=function(e) NA ) )
+
+    fromZerotoMaxShort<-lapply(maxShortRound, function(x) tryCatch(seq(0,x, by=1), error=function(e) NA ) )
+    fromZerotoMaxLong<-lapply(maxLongRound, function(x) tryCatch(seq(0,x, by=1), error=function(e) NA ) )
 
     ycoordLongRound <-lapply(1:length(fromZerotoMaxLong), function(x)
       unlist(
@@ -944,7 +995,8 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
         )# l
       )# u
     )#l
-
+    suppressWarnings(
+    if(is.na(addMissingOTUAfter[1])){
     if(reduDistKar){
       for (s in 1:(length(ymCopy)-1) ) {
         diffnext<-abs(min(ymCopy[[s+1]] ) - max(ymCopy[[s]]) )
@@ -954,6 +1006,14 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
         ycoordShortRound[[s+1]]<-ycoordShortRound[[s+1]]-diffnext
       }
     }
+    }
+    )
+    # ycoordLongRound[areNA]<-NA
+    # ycoordShortRound[areNA]<-NA
+    ycoordLongRound<-ycoordLongRound[!is.na(ycoordLongRound)]
+    ycoordShortRound<-ycoordShortRound[!is.na(ycoordShortRound)]
+    fromZerotoMaxShort<-fromZerotoMaxShort[!is.na(fromZerotoMaxShort)]
+    fromZerotoMaxLong<-fromZerotoMaxLong[!is.na(fromZerotoMaxLong)]
 
     ####################
     #
@@ -993,30 +1053,43 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
     ) # l
   }   # end rulers if
 
+  xmnoNA<-xm
+  xmnoNA[areNA]<-NA
+  xmnoNA<-xmnoNA[!is.na(xmnoNA)]
+  # length(xmnoNA)
+  ymnoNA<-ym
+  ymnoNA[areNA]<-NA
+  ymnoNA<-ymnoNA[!is.na(ymnoNA)]
+  # names(listOfdfChromSize)
+  listOfdfChromSizenoNA<-listOfdfChromSize
+  listOfdfChromSizenoNA[areNA]<-NA
+  listOfdfChromSizenoNA<-listOfdfChromSizenoNA[!is.na(listOfdfChromSizenoNA)]
+
+
   #
   #   groups line > 1.1.0
   #
 
     if("group" %in% colnames(dfChrSizeInternal)){
-    for (s in 1:length(xm)){
-      ngroup<-length(table(listOfdfChromSize[[s]]$group ) )
+    for (s in 1:length(xmnoNA)){
+      ngroup<-length(table(listOfdfChromSizenoNA[[s]]$group ) )
       for (g in 1: ngroup){
-        x0= xm[[s]][,3][ifelse(length(cumsum(table(listOfdfChromSize[[s]]$group))[g-1] )==0,
+        x0= xmnoNA[[s]][,3][ifelse(length(cumsum(table(listOfdfChromSizenoNA[[s]]$group))[g-1] )==0,
                                1,
-                               cumsum(table(listOfdfChromSize[[s]]$group) )[g-1]+1
+                               cumsum(table(listOfdfChromSizenoNA[[s]]$group) )[g-1]+1
         )]
-        x1= xm[[s]][,3][cumsum(table(listOfdfChromSize[[s]]$group) )[g]  ]+chrWidth
+        x1= xmnoNA[[s]][,3][cumsum(table(listOfdfChromSizenoNA[[s]]$group) )[g]  ]+chrWidth
       segments(x0=x0,
-               y0=(min(ym[[s]])-(distTextChr/3)),
+               y0=(min(ymnoNA[[s]])-(distTextChr/3)),
                x1=x1,
-               y1=(min(ym[[s]])-(distTextChr/3) )
+               y1=(min(ymnoNA[[s]])-(distTextChr/3) )
       ) # seg
       ########################
       #     group name, after 1.1.0
       ########################3
       text( (x0+x1)/2,
-            (min(ym[[s]])-(distTextChr/3)*2 ),
-           labels = names( table(listOfdfChromSize[[s]]$group)[g] ),
+            (min(ymnoNA[[s]])-(distTextChr/3)*2 ),
+           labels = names( table(listOfdfChromSizenoNA[[s]]$group)[g] ),
            cex=indexIdTextSize
       )# text end
       } # for group
@@ -1026,15 +1099,17 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   #################################
   #  chromosome names
   #################################
+  # length(xm)
 
+  # names(listOfdfChromSizenoNA)
   chrNameDistance<-ifelse(exists("grouporderlist"),3,1)
   # original
   if(chrId=="original"){
-    lapply(1:length(xm), function(i)
-      graphics::text(xm[[i]][,3][1:(nrow(xm[[i]])/2)]+chrWidth/2,
-                     rep( (min(ym[[i]])-(distTextChr/3)*chrNameDistance ),(nrow(xm[[i]])/2) ),
+    lapply(1:length(xmnoNA), function(i)
+      graphics::text(xmnoNA[[i]][,3][1:(nrow(xmnoNA[[i]])/2)]+chrWidth/2,
+                     rep( (min(ymnoNA[[i]])-(distTextChr/3) * chrNameDistance ),(nrow(xmnoNA[[i]])/2) ),
                      # labels = listOfdfChromSize[[i]][,"chrName"][orderlist[[i]]],
-                     labels = listOfdfChromSize[[i]][,"chrName"],
+                     labels = listOfdfChromSizenoNA[[i]][,"chrName"],
 
                      cex=indexIdTextSize
       ) # end graphics::text
@@ -1042,11 +1117,11 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   } # fi
   else if (chrId=="simple"){
     # Simple numbering from 1 to ...
-    lapply(1:length(xm), function(i)
-      graphics::text(xm[[i]][,3][1:(nrow(xm[[i]])/2)]+chrWidth/2,
-                     rep( (min(ym[[i]])-(distTextChr/3)*chrNameDistance ),(nrow(xm[[i]])/2) ),
-                     # rep( (min(ym[[i]])-.1),(nrow(xm[[i]])/2) ),
-                     labels = 1:(nrow(xm[[i]])/2),
+    lapply(1:length(xmnoNA), function(i)
+      graphics::text(xmnoNA[[i]][,3][1:(nrow(xmnoNA[[i]])/2)]+chrWidth/2,
+                     rep( (min(ymnoNA[[i]])-(distTextChr/3)*chrNameDistance ),(nrow(xmnoNA[[i]])/2) ),
+                     # rep( (min(ymnoNA[[i]])-.1),(nrow(xmnoNA[[i]])/2) ),
+                     labels = 1:(nrow(xmnoNA[[i]])/2),
                      cex=indexIdTextSize
       ) # t
     ) # lapply
@@ -1058,23 +1133,22 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
 
   chrIndDistance<-ifelse(exists("grouporderlist"),4,2)
 
-  chrIndbool<-(chrIndex & "AR" %in% colnames(listOfdfChromSize[[1]]) )
+  chrIndbool<-(chrIndex & "AR" %in% colnames(listOfdfChromSizenoNA[[1]]) )
   if(chrIndbool){
-    lapply(1:length(xm), function(s)
-      graphics::text(c(xm[[s]][,3][1]-(chrWidth/2)*nameChrIndexPos, xm[[s]][,3][1:(nrow(xm[[s]])/2)]+(chrWidth/2)),
-                     rep( (min(ym[[s]])-( ( (distTextChr/3)*chrIndDistance)) ),(nrow(xm[[s]])/2)+1 ),
-                     # labels = c("CI",listOfdfChromSize[[s]][,"CI"][orderlist[[s]]]),
-                     labels = c("CI",listOfdfChromSize[[s]][,"CI"] ),
-
-                     cex=indexIdTextSize
+    lapply(1:length(xmnoNA), function(s)
+      graphics::text(c(xmnoNA[[s]][,3][1]-(chrWidth/2)*nameChrIndexPos, xmnoNA[[s]][,3][1:(nrow(xmnoNA[[s]])/2)]+(chrWidth/2)),
+                     rep( (min(ymnoNA[[s]])-( ( (distTextChr/3)*chrIndDistance)) ),(nrow(xmnoNA[[s]])/2)+1 ),
+                     # labels = c("CI",listOfdfChromSizenoNA[[s]][,"CI"][orderlist[[s]]]),
+                     labels = tryCatch(c("CI",listOfdfChromSizenoNA[[s]][,"CI"] ),error=function(e){NA})
+                     ,cex=indexIdTextSize
       ) # end graphics::text
     ) # end lapply
-    lapply(1:length(xm), function(s)
-      graphics::text(c(xm[[s]][,3][1]-(chrWidth/2)*nameChrIndexPos, xm[[s]][,3][1:(nrow(xm[[s]])/2)]+chrWidth/2),
-                     rep( (min(ym[[s]])-( ( (distTextChr/3)*(chrIndDistance+1) )) ),(nrow(xm[[s]])/2)+1 ),
-                     # labels = c("r",listOfdfChromSize[[s]][,"AR"][orderlist[[s]]] ),
-                     labels = c("r",listOfdfChromSize[[s]][,"AR"] ),
-                     cex=indexIdTextSize
+    lapply(1:length(xmnoNA), function(s)
+      graphics::text(c(xmnoNA[[s]][,3][1]-(chrWidth/2)*nameChrIndexPos, xmnoNA[[s]][,3][1:(nrow(xmnoNA[[s]])/2)]+chrWidth/2),
+                     rep( (min(ymnoNA[[s]])-( ( (distTextChr/3)*(chrIndDistance+1) )) ),(nrow(xmnoNA[[s]])/2)+1 ),
+                     # labels = c("r",listOfdfChromSizenoNA[[s]][,"AR"][orderlist[[s]]] ),
+                     labels = tryCatch(c("r",listOfdfChromSizenoNA[[s]][,"AR"] ),error=function(e){NA})
+                     ,cex=indexIdTextSize
       ) # end graphics::text
     ) # end lapply
   } # fi
@@ -1106,21 +1180,20 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   #
 
   if(chrIndboolGue){
-    lapply(1:length(xm), function(s)
-      graphics::text(c(xm[[s]][,3][1]-(chrWidth/2)*nameChrIndexPos, xm[[s]][,3][1:(nrow(xm[[s]])/2)]+chrWidth/2),
-                     rep( (min(ym[[s]])-( ( (distTextChr/3)*distVectorGue[decVector])) ),(nrow(xm[[s]])/2)+1 ),
-                     # labels = c("Guerra",listOfdfChromSize[[s]][,"Guerra"][orderlist[[s]]]),
-                     labels = c("Guerra",listOfdfChromSize[[s]][,"Guerra"]),
-
-                     cex=indexIdTextSize
+    lapply(1:length(xmnoNA), function(s)
+      graphics::text(c(xmnoNA[[s]][,3][1]-(chrWidth/2)*nameChrIndexPos, xmnoNA[[s]][,3][1:(nrow(xmnoNA[[s]])/2)]+chrWidth/2),
+                     rep( (min(ymnoNA[[s]])-( ( (distTextChr/3)*distVectorGue[decVector])) ),(nrow(xmnoNA[[s]])/2)+1 ),
+                     # labels = c("Guerra",listOfdfChromSizenoNA[[s]][,"Guerra"][orderlist[[s]]]),
+                     labels = tryCatch(c("Guerra",listOfdfChromSizenoNA[[s]][,"Guerra"]),error=function(e){NA})
+                     ,cex=indexIdTextSize
       ) # end graphics::text
     ) # end lapply
-    lapply(1:length(xm), function(s)
-      graphics::text(c(xm[[s]][,3][1]-(chrWidth/2)*nameChrIndexPos, xm[[s]][,3][1:(nrow(xm[[s]])/2)]+chrWidth/2),
-                     rep( (min(ym[[s]])-( ( (distTextChr/3)*(distVectorGue[decVector]+1))) ),(nrow(xm[[s]])/2)+1 ),
-                     # labels = c("Levan",listOfdfChromSize[[s]][,"Levan"][orderlist[[s]]]),
-                     labels = c("Levan",listOfdfChromSize[[s]][,"Levan"]),
-                     cex=indexIdTextSize
+    lapply(1:length(xmnoNA), function(s)
+      graphics::text(c(xmnoNA[[s]][,3][1]-(chrWidth/2)*nameChrIndexPos, xmnoNA[[s]][,3][1:(nrow(xmnoNA[[s]])/2)]+chrWidth/2),
+                     rep( (min(ymnoNA[[s]])-( ( (distTextChr/3)*(distVectorGue[decVector]+1))) ),(nrow(xmnoNA[[s]])/2)+1 ),
+                     # labels = c("Levan",listOfdfChromSizenoNA[[s]][,"Levan"][orderlist[[s]]]),
+                     labels = tryCatch(c("Levan",listOfdfChromSizenoNA[[s]][,"Levan"]),error=function(e){NA})
+                     ,cex=indexIdTextSize
       ) # end graphics::text
     ) # end lapply
   } # fi
@@ -1132,17 +1205,17 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   if(karIndex){
     ind<-asymmetry(dfChrSizeInternal)
     if(!is.null(ind)){
-      lapply(1:length(xm), function(s)
-        graphics::text( c( (xm[[s]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),
-                        rep( min(ym[[s]][,1]), 1 ), #2
+      lapply(1:length(xmnoNA), function(s)
+        graphics::text( c( (xmnoNA[[s]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),
+                        rep( min(ymnoNA[[s]][,1]), 1 ), #2
                         labels = paste("A ",ind$A[[s]] ),
                         cex=indexIdTextSize,
                         adj=c(1) # justif
         ) # end graphics::text
       ) # end lapply
-      lapply(1:length(xm), function(s)
-        graphics::text(c( (xm[[s]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),
-                       rep( (min(ym[[s]][,1])-(distTextChr/3) ) , 1 ), # avoid overlap
+      lapply(1:length(xmnoNA), function(s)
+        graphics::text(c( (xmnoNA[[s]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),
+                       rep( (min(ymnoNA[[s]][,1])-(distTextChr/3) ) , 1 ), # avoid overlap
                        labels = paste("A2",ind$A2[[s]] ),
                        cex=indexIdTextSize,
                        adj=c(1) # 0.5 centered
@@ -1163,10 +1236,10 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   # distVector<-c((distTextChr/3)*7 ,(distTextChr/3)*5,(distTextChr/3)*5,(distTextChr/3)*3 )
 
   if(addOTUName){
-    lapply(1:length(xm), function(s)
-      graphics::text( c( (xm[[s]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),
-                      ydistance<-min(ym[[s]]) - distVector[decVector],
-                      labels = paste("",names(listOfdfChromSize)[[s]] ),
+    lapply(1:length(xmnoNA), function(s)
+      graphics::text( c( (xmnoNA[[s]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),
+                      ydistance<-min(ymnoNA[[s]]) - distVector[decVector],
+                      labels = paste("",names(listOfdfChromSizenoNA)[[s]] ),
                       cex=OTUTextSize,
                       adj=c(0) # justif 0 =left
       ) # end graphics::text
@@ -1178,6 +1251,7 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   #   painting Marks
   #
   #######################################
+
   if (exists("dfMarkPosSq") & exists("dfMarkColorInternal") ){
     yMark<-list()
     xMark<-list()
@@ -1288,7 +1362,7 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   if(centromereSize>0){
 
   {
-    CentsList<-lapply(1:length(listOfdfChromSize), function(x) rep(0, nrow(listOfdfChromSize[[x]]) ) )
+    CentsList<-lapply(1:length(listOfdfChromSize), function(x) tryCatch(rep(0, nrow(listOfdfChromSize[[x]]) ), error=function(e) NA ) )
 
     ycoordCents <-lapply(1:length(CentsList), function(x)
       t(replicate(length(CentsList[[x]])*2,(c(rep(  karHeight+                                (karSpacing*(x-1)),2  ),
@@ -1298,6 +1372,12 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
       ) # r
       ) #t
     ) #l
+
+    ycoordCents[areNA]<-NA
+
+    # ycoordCents[2]<-NA
+suppressWarnings(
+if(is.na(addMissingOTUAfter[1])){
     if(reduDistKar){
       for (s in 1:(length(ymCopyC)-1) ) {
         diffnext<-abs(min(ymCopyC[[s+1]] ) - max(ymCopyC[[s]]) )
@@ -1306,18 +1386,33 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
         ycoordCents[[s+1]] <-ycoordCents[[s+1]] -diffnext
       }
     } # redu
+}
+)
+    ycoordCentsS<- lapply(1:length(ycoordCents), function(j) tryCatch(base::split(ycoordCents[[j]], row(ycoordCents[[j]]) ), error=function(e) NA ) )
 
-    ycoordCentsS<- lapply(1:length(ycoordCents), function(j) base::split(ycoordCents[[j]], row(ycoordCents[[j]]) ) )
-    xcoordCents<-lapply(1:length(xm), function(x) cbind(xm[[x]][,2:3],xm[[x]][,2:3] ) )
+    xcoordCents<-lapply(1:length(xmnoNA), function(x) cbind(xmnoNA[[x]][,2:3],xmnoNA[[x]][,2:3] ) )
+    # length(xcoordCents)
     xcoordCentsS<- lapply(1:length(xcoordCents), function(j) base::split(xcoordCents[[j]], row(xcoordCents[[j]]) ) )
+    # xcoordCentsS[areNA]<-NA
+
+
+    cenBorder<-cenColor
+    if(chrColor!=cenColor){
+      cenBorder<-chrColor
+    }
+
+    # xcoordCentsS<-xcoordCentsS[!is.na(xcoordCentsS)] not necessary, based on xmnoNA
+    ycoordCentsS<-ycoordCentsS[!is.na(ycoordCentsS)]
+    ycoordCents<-ycoordCents[!is.na(ycoordCents)]
+
 
     lapply(1:length(xcoordCentsS), function(w) mapply(function(x,y,z) graphics::polygon(x=x, y=y,
                                                                                         col=z,
-                                                                                        lwd=1,
+                                                                                        lwd=lwd.chr,
                                                                                         border=z),
                                                       x=xcoordCentsS[[w]],
                                                       y=ycoordCentsS[[w]],
-                                                      z=cenColor
+                                                      z=cenBorder
     ) #m
     ) #l
   } # end centromeres
@@ -1326,9 +1421,8 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   #   centromeric with marks
   ###################
 
-
   if (exists("dfCenMarksInternal") & exists("dfMarkColorInternal") ) {
-    names(xcoordCents)<-names(listOfdfChromSize) #1:length(xcoordCents)
+    names(xcoordCents)<-names(listOfdfChromSizenoNA) #1:length(xcoordCents)
 
     yMarkCen<-list()
     xMarkCen<-list()
@@ -1435,9 +1529,15 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   #   labels to the right
   #
   ##############################################
+  xNoNA<-x
+  xNoNA[areNA]<-NA
+  xNoNA<-xNoNA[!is.na(xNoNA)]
+  yNoNA<-y
+  yNoNA[areNA]<-NA
+  yNoNA<-yNoNA[!is.na(yNoNA)]
 
   if(legend=="aside" & exists("dfMarkColorInternal") ){
-  plotlabelsright(x,y, markLabelSpacer,chrWidth,dfMarkColorInternal,allMarkMaxSize,normalizeToOne,
-                              markLabelSize,xfactor)
+  plotlabelsright(xNoNA,yNoNA, markLabelSpacer,chrWidth,dfMarkColorInternal,allMarkMaxSize,normalizeToOne,
+                              markLabelSize,xfactor,legendWidth)
   }
-}# end of function
+} # end of function
