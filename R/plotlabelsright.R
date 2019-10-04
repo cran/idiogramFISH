@@ -15,6 +15,8 @@
 #' @param markLabelSize font size of legends
 #' @param xfactor relative proportion of x vs y axes
 #' @param legendWidth factor to increase width of legend squares and dots
+#' @param legendHeight factor to increase height of legend squares and dots
+#' @param n numeric, vertices for round parts
 
 #' @importFrom graphics polygon text
 #'
@@ -22,7 +24,7 @@
 #'
 
 plotlabelsright<-function(x,y, markLabelSpacer,chrWidth,dfMarkColorInternal,allMarkMaxSize,normalizeToOne,
-                          markLabelSize,xfactor,legendWidth) {
+                          markLabelSize,xfactor,legendWidth,legendHeight,n) {
   maxx<-(max(unlist(x)) )
 
   miny<-(min(unlist(y)) )
@@ -30,13 +32,17 @@ plotlabelsright<-function(x,y, markLabelSpacer,chrWidth,dfMarkColorInternal,allM
   labelx<-(maxx+markLabelSpacer)+(c(0, chrWidth, chrWidth,0)+0)
 
   labelx<-t(replicate(nrow(dfMarkColorInternal),labelx) )
-  if(exists("allMarkMaxSize")){
-    maxSizeNor<-allMarkMaxSize*normalizeToOne
+  if(is.na(legendHeight)){
+    if(exists("allMarkMaxSize")){
+      legendHeight<-allMarkMaxSize*normalizeToOne
+    } else {
+      legendHeight<-1*normalizeToOne
+    }
   } else {
-    maxSizeNor<-1*normalizeToOne
+    legendHeight<-legendHeight*normalizeToOne
   }
 
-  labely<- sapply(c(0,0,maxSizeNor,maxSizeNor), function(x) x + 1:nrow(dfMarkColorInternal)*(maxSizeNor*2) ) + miny
+  labely<- sapply(c(0,0,legendHeight,legendHeight), function(x) x + 0:(nrow(dfMarkColorInternal)-1)*(legendHeight*2) ) + miny
 
   # remove the dot ones
   labelytoplot<-labely[which(dfMarkColorInternal$style!="dots"),]
@@ -104,7 +110,7 @@ plotlabelsright<-function(x,y, markLabelSpacer,chrWidth,dfMarkColorInternal,allM
     if(length(listOfxcenters)>0){
       lapply(1:length(listOfxcenters), function(u) {
         mapply(function(x,y,r,z,w) {
-          pts2=seq(0, 2 * pi, length.out = 25)
+          pts2=seq(0, 2 * pi, length.out = n)
           xy2 <- cbind(x + (r * sin(pts2)*xfactor) , y + (r * cos(pts2)*yfactor ) )
           graphics::polygon(xy2[,1],
                             xy2[,2],

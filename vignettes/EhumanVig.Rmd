@@ -1,7 +1,9 @@
 ---
-title: "Human karyotype"
+title: "5. Human karyotype"
 author: "Fernando Roa"
 date: "23 08 2019"
+# pkgdown:
+  # as_is: true
 output:
   prettydoc::html_pretty:
     theme: leonids
@@ -14,7 +16,7 @@ bibliography: [allrefs.bib]
 csl: climaMod.csl
 link-citations: yes
 vignette: >
-  %\VignetteIndexEntry{Human karyotype}
+  %\VignetteIndexEntry{5. Human karyotype}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -58,16 +60,14 @@ cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 ```
 <link rel="stylesheet" href="mystyle.css">
 
-<div class="aright">
+<div class="goright">
 Go to [home](index.html)  
-Go to [monocentrics Vignette](plotIdiogramsVig.html)  
-Go to [holocentrics Vignette](plotIdiogramsHoloVig.html)  
-Go to [groups Vignette](groupsVig.html)  
-Go to [phylogeny Vignette](phylogenyVig.html)  
+Go to [1. monocentrics Vignette](AplotIdiogramsVig.html)  
+Go to [2. holocentrics Vignette](BplotIdiogramsHoloVig.html)  
+Go to [3. groups Vignette](CgroupsVig.html)  
+Go to [4. phylogeny Vignette](DphylogenyVig.html)  
 <!-- # there are 2 spaces at the end of those lines -->
 </div>
-
-
 
 # Karyotype of 400 bands
 
@@ -133,7 +133,7 @@ kableExtra::kable_styling(knitr::kable(head(humMarkColor )) , full_width = F
 
 # Plot
 
-``` {r hkaryo, echo=TRUE,  message=FALSE, results="hide", fig.width=10, fig.height=28}
+``` {r hkaryo, echo=TRUE,  message=FALSE, results="hide", fig.width=10, fig.height=28, dev='png'}
 # fig.width=10, fig.height=28
 
 plotIdiograms(humChr,                     # data.frame of chromosome size (in package)
@@ -141,8 +141,8 @@ plotIdiograms(humChr,                     # data.frame of chromosome size (in pa
               dfMarkColor = humMarkColor, # df of mark characteristics (in package)
               
               addOTUName = FALSE,         # do not add name of OTU
-              karSpacing = 1.7,           # vertical spacing among OTU
-              reduDistKarTol = 7,         # reduce distance among OTUs
+              karHeiSpace = 1.7,          # vertical spacing among OTU
+              amoSepar = 7,               # reduce distance among OTUs
               karIndex = FALSE,           # do not add karyotype indices
               
               chrColor = "black",         # chr. color
@@ -162,8 +162,8 @@ plotIdiograms(humChr,                     # data.frame of chromosome size (in pa
               rulerNumberSize = .9,       # font size of ruler
               rulerNumberPos = 2,         # position of ruler
               xlimRightMod = 0,           # space to the right of karyotype
-              ylimBotMod = -.6)           # modify ylim of bottom
-
+              ylimBotMod = -.6            # modify ylim of bottom
+              )
 ```
 
 
@@ -213,7 +213,7 @@ humMarkPos1321Der$OTU<-NULL
 
 ## plot of t(13;21) {-}
 
-```{r hsel, echo=TRUE, fig.width=6, fig.height=6, message=FALSE, results="hide"}
+```{r hsel, echo=TRUE, fig.width=6, fig.height=6, message=FALSE, results="hide",dev='png'}
 
 plotIdiograms(humChr1321der,               # data.frame of size of chr.
               humMarkPos1321Der,           # df of position of marks
@@ -225,7 +225,7 @@ plotIdiograms(humChr1321der,               # data.frame of size of chr.
               chrColor = "black",          # chr. color
               chrWidth = 1,                # width of chr.
               chrSpacing = 1,              # space among chr.
-              karSpacing = 2,              # karyotype height including spacing
+              karHeiSpace = 2,             # karyotype height including spacing
               
               chrIndex = FALSE,            # do not add chr. indices
               karIndex = FALSE,            # do not add karyotype indices
@@ -268,7 +268,7 @@ kableExtra::kable_styling(knitr::kable(head(dfMarkPosDer) ) , full_width = F
 
 ## plot of t(13;14) {-}
 
-```{r hsel2, echo=TRUE, fig.width=6, fig.height=6, message=FALSE, results="hide"}
+```{r hsel2, echo=TRUE, fig.width=6, fig.height=6, message=FALSE, results="hide",dev='png'}
 
 par(mar=c(0,2,.5,0))
 
@@ -277,7 +277,7 @@ plotIdiograms(dfChrSizeDer,               # data.frame of chromosome size (in pa
               dfMarkColor = humMarkColor, # df of mark characteristics (in package)
 
               addOTUName = FALSE,         # do not add name of OTU
-              karSpacing = 1.2,           # vertical spacing among OTU
+              karHeiSpace = 1.2,          # vertical spacing among OTU
               karIndex = FALSE,           # do not add karyotype indices
 
               chrColor = "black",         # chr. color

@@ -75,7 +75,7 @@ head(humMarkColor)
 kableExtra::kable_styling(knitr::kable(head(humMarkColor )) , full_width = F
                            , font_size = 10)
 
-## ----hkaryo, echo=TRUE,  message=FALSE, results="hide", fig.width=10, fig.height=28----
+## ----hkaryo, echo=TRUE,  message=FALSE, results="hide", fig.width=10, fig.height=28, dev='png'----
 # fig.width=10, fig.height=28
 
 plotIdiograms(humChr,                     # data.frame of chromosome size (in package)
@@ -83,8 +83,8 @@ plotIdiograms(humChr,                     # data.frame of chromosome size (in pa
               dfMarkColor = humMarkColor, # df of mark characteristics (in package)
               
               addOTUName = FALSE,         # do not add name of OTU
-              karSpacing = 1.7,           # vertical spacing among OTU
-              reduDistKarTol = 7,         # reduce distance among OTUs
+              karHeiSpace = 1.7,          # vertical spacing among OTU
+              amoSepar = 7,               # reduce distance among OTUs
               karIndex = FALSE,           # do not add karyotype indices
               
               chrColor = "black",         # chr. color
@@ -104,8 +104,8 @@ plotIdiograms(humChr,                     # data.frame of chromosome size (in pa
               rulerNumberSize = .9,       # font size of ruler
               rulerNumberPos = 2,         # position of ruler
               xlimRightMod = 0,           # space to the right of karyotype
-              ylimBotMod = -.6)           # modify ylim of bottom
-
+              ylimBotMod = -.6            # modify ylim of bottom
+              )
 
 ## ----translo-------------------------------------------------------------
 # extract 13 data
@@ -146,7 +146,7 @@ humChr1321der<-humChr1321der[,c("chrName","shortArmSize","longArmSize"),]
 humMarkPos1321Der<-rbind(humMarkPos13, humMarkPos21, humMarkPosDer)
 humMarkPos1321Der$OTU<-NULL
 
-## ----hsel, echo=TRUE, fig.width=6, fig.height=6, message=FALSE, results="hide"----
+## ----hsel, echo=TRUE, fig.width=6, fig.height=6, message=FALSE, results="hide",dev='png'----
 
 plotIdiograms(humChr1321der,               # data.frame of size of chr.
               humMarkPos1321Der,           # df of position of marks
@@ -158,7 +158,7 @@ plotIdiograms(humChr1321der,               # data.frame of size of chr.
               chrColor = "black",          # chr. color
               chrWidth = 1,                # width of chr.
               chrSpacing = 1,              # space among chr.
-              karSpacing = 2,              # karyotype height including spacing
+              karHeiSpace = 2,             # karyotype height including spacing
               
               chrIndex = FALSE,            # do not add chr. indices
               karIndex = FALSE,            # do not add karyotype indices
@@ -190,7 +190,7 @@ head(dfMarkPosDer)
 kableExtra::kable_styling(knitr::kable(head(dfMarkPosDer) ) , full_width = F
                            , font_size = 10)
 
-## ----hsel2, echo=TRUE, fig.width=6, fig.height=6, message=FALSE, results="hide"----
+## ----hsel2, echo=TRUE, fig.width=6, fig.height=6, message=FALSE, results="hide",dev='png'----
 
 par(mar=c(0,2,.5,0))
 
@@ -199,7 +199,7 @@ plotIdiograms(dfChrSizeDer,               # data.frame of chromosome size (in pa
               dfMarkColor = humMarkColor, # df of mark characteristics (in package)
 
               addOTUName = FALSE,         # do not add name of OTU
-              karSpacing = 1.2,           # vertical spacing among OTU
+              karHeiSpace = 1.2,          # vertical spacing among OTU
               karIndex = FALSE,           # do not add karyotype indices
 
               chrColor = "black",         # chr. color

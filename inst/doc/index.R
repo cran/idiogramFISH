@@ -31,7 +31,7 @@ cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 }
 
 ## ---- echo=F,  results="asis"--------------------------------------------
-img1_path <- "../man/figures/logo.png"
+img1_path <- "../man/figures/logo.svg"
 if(file.exists(img1_path)) {
 cat(paste0("<img src=",img1_path," class=\"right\" width=\"20%\">") )
 }
@@ -112,7 +112,7 @@ knitr::include_graphics(gitbadge_contFile)
 #  # install
 #  R CMD INSTALL idiogramFISH_*.tar.gz
 
-## ----example, echo=T, results="hide", fig.width=10, fig.height=6, message=FALSE----
+## ----example, echo=T, results="hide", fig.width=10, fig.height=6, message=FALSE, dev='svg'----
 # fig.width=10, fig.height=6
 
 library(idiogramFISH)
@@ -122,6 +122,8 @@ data(dfMarkColor) # mark general data
 data(dfOfMarks)   # mark position data (not cen.)
 data(dfOfCenMarks)# centromeric mark data
 
+svg("dfOfChrSize.svg",width=12,height=8 )
+# png("dfOfChrSize.png", width=500, height=400)
 plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
               dfMarkColor=dfMarkColor,  # d.f of mark style
               dfMarkPos=dfOfMarks,      # df of mark positions (not centromeric)
@@ -130,7 +132,7 @@ plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
               
               chrWidth=2.5,             # width of chromosome
               chrSpacing = 2.5,         # horizontal space among chromosomes
-              karSpacing=1.6,           # vertical size of karyotype including space
+              karHeiSpace=1.6,          # vertical size of karyotype including space
               
               indexIdTextSize=1,        # font size of chr names and indices
               markLabelSize=1,          # font size of legends
@@ -139,7 +141,14 @@ plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
               ruler.tck=-0.02,          # size and orientation of ruler ticks
               rulerNumberPos=.5,        # position of numbers of rulers
               rulerNumberSize=1         # font size of rulers
+              ,legend="aside"           # try this
+              ,legendWidth=1            # width of legend
 )
+dev.off()
+
+## ---- results="asis", comment=NA, echo=FALSE-----------------------------
+# cat(paste0("![](dfOfChrSize.png)" ) )
+cat(paste0("![](dfOfChrSize.svg)" ) )
 
 ## ----monocentrics, comment=NA--------------------------------------------
 
@@ -157,7 +166,10 @@ library(idiogramFISH)
 # load some saved dataframes
 data(dfChrSizeHolo, dfMarkColor, dfMarkPosHolo)
 
-plotIdiogramsHolo(dfChrSize=dfChrSizeHolo, # data.frame of chr. size
+# plotIdiogramsHolo is deprecated
+
+# svg("testing.svg",width=14,height=8 )
+plotIdiograms(dfChrSize=dfChrSizeHolo, # data.frame of chr. size
                   dfMarkColor=dfMarkColor, # df of mark style
                   dfMarkPos=dfMarkPosHolo, # df of mark positions
                   addOTUName=FALSE,        # do not add OTU names
@@ -175,7 +187,10 @@ plotIdiogramsHolo(dfChrSize=dfChrSizeHolo, # data.frame of chr. size
                   
                   xlimLeftMod=1,           # modify xlim left argument of plot
                   xlimRightMod=10,         # modify xlim right argument of plot
-                  ylimBotMod=.2)           # modify ylim bottom argument of plot
+                  ylimBotMod=.2            # modify ylim bottom argument of plot
+                  ,legendHeight=.5         # height of legend labels
+                  ,legendWidth = 1.2)      # width of legend labels
+# dev.off()
 
 ## ----holocentrics, comment=NA--------------------------------------------
 # chromsome data, if only 1 species, column OTU is optional
@@ -184,6 +199,62 @@ dfChrSizeHolo
 dfMarkColor 
 # mark position data (not cen.), if only 1 species, column OTU is optional
 dfMarkPosHolo
+
+## ---- echo=T,  comment=NA, message=FALSE---------------------------------
+# chromsome data, if only 1 species, column OTU is optional
+require(plyr)
+dfOfChrSize$OTU  <-"Species mono"
+dfChrSizeHolo$OTU<-"Species holo"
+ 
+monoholoCS <- plyr::rbind.fill(dfOfChrSize,dfChrSizeHolo)
+
+dfOfMarks$OTU     <-"Species mono"
+dfMarkPosHolo$OTU <-"Species holo"
+
+monoholoMarks <- plyr::rbind.fill(dfOfMarks,dfMarkPosHolo)
+
+dfOfCenMarks$OTU <-"Species mono"
+
+## ---- echo=T, results="hide", fig.width=10, fig.height=6, message=FALSE, dev='svg'----
+library(idiogramFISH)
+# load some saved dataframes
+
+# function plotIdiogramsHolo deprecated for ver. > 1.5.1
+
+#svg("testing.svg",width=14,height=10 )
+png("monoholoCS.png", width=600, height=500)
+par(mar=rep(0,4))
+plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
+              dfMarkColor= dfMarkColor,  # df of mark style
+              dfMarkPos  = monoholoMarks,# df of mark positions
+              dfCenMarks = dfOfCenMarks, # d.f. of cen. marks  
+              roundness = 8,             # vertices roundness
+              dotRoundCorr=1.5,          # correction of roundness of dots (marks)  
+              
+              addOTUName = TRUE,         # add OTU names
+              OTUTextSize = 1,           # OTU name font size
+              
+              chrWidth=2.5,              # chr. width
+              indexIdTextSize=1,         # font size of chr. name and indices
+              
+              legend="aside" ,           # legend of marks to the right of plot
+              markLabelSize=1,           # font size of mark labels (legend)
+              legendHeight=.5,           # height of legend labels
+              legendWidth = 1,           # width of legend labels
+
+              rulerNumberSize=1,         # font size of ruler
+              rulerPos= -1.8,            # position of ruler
+              ruler.tck=-0.02,           # size and orientation of ruler ticks
+              rulerNumberPos=.9,         # position of numbers of rulers
+              
+              xlimLeftMod=4,             # modify xlim left argument of plot
+              xlimRightMod=10,           # modify xlim right argument of plot
+              ylimBotMod=-.2             # modify ylim bottom argument of plot
+)
+dev.off()
+
+## ---- results="asis", comment=NA, echo=FALSE-----------------------------
+cat(paste0("![](monoholoCS.png)" ) )
 
 ## ----citation, results='asis', echo=FALSE--------------------------------
 # chromsome data, if only 1 species, column OTU is optional
@@ -217,6 +288,6 @@ cat(paste0("[![donate](",knitr::include_graphics(donateweek_contFile),")](https:
 ## ----include=FALSE-------------------------------------------------------
 # automatically create a bib database for R packages, this is currently not used by vignette packages2.bib
 knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","badger","pkgdown","crayon","ggtree","ggplot2","ggpubr","phytools"
+  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","badger","pkgdown","crayon","ggtree","ggplot2","ggpubr","phytools","plyr"
 ), 'packages2.bib')
 

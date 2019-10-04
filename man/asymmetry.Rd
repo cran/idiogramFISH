@@ -21,9 +21,16 @@ column \code{OTU}.
 
 It returns a list with the A and A2 indices
 
-A2 = sCL / xCL (s = std dev, CL= chr. length, x= mean)
+\deqn{A_{2} = \frac{sCL}{xCL}}{%
+     A2 = sCL / xCL}
 
-related to: CVCL= A2 *100 (CV = coeff. var.)
+(s = std dev, CL = chr. length, x = mean)
+
+related to:
+\deqn{CV_{CL} = A_{2} * 100}{%
+      CVCL = A2 * 100}
+
+(CV = coeff. var.)
 
 A: Watanabe et al. (1999) asymmetry of karyotype ranging from 0
 (symmetric) to 1 (asymmetric)

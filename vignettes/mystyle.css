@@ -46,3 +46,13 @@ h4 { /* Header 3 */
   margin: 60px;
 }
 
+.bright {
+  float: right;
+  margin: 60px;
+  clear: both;
+}
+
+.goright{
+    margin-left:60%;
+}
+

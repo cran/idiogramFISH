@@ -45,20 +45,6 @@ roundPlot<-function(roundness, x, y, col, border, chrWidth, yfactor,n2, lwd.chr)
     pts_3 <- seq(pi, pi*1.5, length.out = n2)
     pts_4 <- seq(pi/2, pi, length.out = n2)
 
-    yMod<-y # Y
-    topline_y<-list()
-    bottomline_y<-list()
-    topBotline_x<-list()
-    x2_1<-list()
-    x2_2<-list()
-    y2_1<-list()
-    y2_2<-list()
-    xy_1<-list()
-    xy_2<-list()
-    xy_3<-list()
-    xy_4<-list()
-    newLongx<-list()
-    newLongy<-list()
 
     for (s in 1:length(yMod) ) {
       topline_y[[s]]<-list()

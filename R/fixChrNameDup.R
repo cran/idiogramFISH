@@ -19,7 +19,7 @@ fixChrNameDup<-function(listOfdfChromSize, mybooleanChrName){
   if(mybooleanChrName){
   for (s in 1:length(listOfdfChromSize)) {
     if(length(listOfdfChromSize[[s]]$chrName)!=length(unique(listOfdfChromSize[[s]]$chrName) )){
-      message(crayon::red(
+      message(crayon::yellow(
         paste0("\nWarning: Chromosome names duplicated in dataframe ",names(listOfdfChromSize)[[s]],
                ", will be renamed\n this correction is available when no marks to be plotted, otherwise, is fatal")
       ) ) #m

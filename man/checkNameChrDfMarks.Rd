@@ -4,23 +4,23 @@
 \alias{checkNameChrDfMarks}
 \title{Function to check names of OTUs (species) among dataframes}
 \usage{
-checkNameChrDfMarks(dfChrSize, dfMarks)
+checkNameChrDfMarks(listOfdfChromSize, listOfdfMarks)
 }
 \arguments{
-\item{dfChrSize}{dataframe, with columns: OTU (optional), chrName, for chr.
+\item{listOfdfChromSize}{list of data.frames, with columns: OTU (optional), chrName, for chr.
 with cen.: shortArmSize, longArmSize, for holoc.: chrSize}
 
-\item{dfMarks}{dataframe, of marks (sites): OTU (opt / mandat. if in
+\item{listOfdfMarks}{list of data.frames of marks (sites): OTU (opt / mandat. if in
 dfChrSize), chrName markName markSize, for chr. with cen.:  markArm (p,q)
 markDistCen, for holoc: markPos}
 }
 \value{
-logical
+list
 }
 \description{
 This function reads two dataframes the one with chromosome sizes, and one df
 with data of marks (sites) both have to have the column \code{chrName} and if
-several species, \code{OTU}. The functions returns \code{TRUE} if names of
-chromosomes in dataframe of marks are included in dataframe of chr. size.
+several species, \code{OTU}. The functions returns a filtered list with 1. data.frame of chrSizes,
+2. data.frame of marks, 3. mark names 4. max mark size.
 }
 \keyword{internal}

@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<img src=man/figures/logo.png align="right" width="12%" hspace="50">
+<img src=man/figures/logo.svg align="right" width="12%" hspace="50">
 
 # idiogramFISH<br></br>Idiograms with Marks and Karyotype Indices<br></br><br></br><br></br>
 
@@ -13,7 +13,7 @@
 
 [![](https://www.r-pkg.org/badges/version/idiogramFISH?color=orange)](https://cran.r-project.org/package=idiogramFISH)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/idiogramFISH?color=orange)](https://cran.r-project.org/package=idiogramFISH)
-[![](https://img.shields.io/badge/devel%20version-1.5.1-green.svg)](https://gitlab.com/ferroao/idiogramFISH)
+[![](https://img.shields.io/badge/devel%20version-1.6.1-green.svg)](https://gitlab.com/ferroao/idiogramFISH)
 <br><br>
 <a href="https://liberapay.com/ferroao/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
 <img src="http://img.shields.io/liberapay/receives/ferroao.svg?logo=liberapay">
@@ -21,15 +21,13 @@
 
 The goal of idiogramFISH is to plot idiograms of several karyotypes
 having a set of dataframes for chromosome data and optionally marks’
-data. Includes also a function to plot holocentrics and its marks
-getting sizes in micrometers or Mb (plotIdiogramsHolo) (Roa and Telles,
-[2019](#ref-Roa2019)).<br> <br>Marks can have square or dot form, its
-legend (label) can be drawn inline or to the right of karyotypes. It is
-possible to calculate also chromosome and karyotype indexes and classify
-chromosomes by morphology (Levan *et al.*, [1964](#ref-Levan1964);
-Guerra, [1986](#ref-Guerra1986d); Romero-Zarco,
-[1986](#ref-Zarco1986new); Watanabe *et al.*,
-[1999](#ref-Watanabe1999)).
+data (`plotIdiograms`) (Roa and Telles, [2019](#ref-Roa2019)).<br>
+<br>Marks can have square or dot form, its legend (label) can be drawn
+inline or to the right of karyotypes. It is possible to calculate also
+chromosome and karyotype indexes and classify chromosomes by morphology
+(Levan *et al.*, [1964](#ref-Levan1964); Guerra,
+[1986](#ref-Guerra1986d); Romero-Zarco, [1986](#ref-Zarco1986new);
+Watanabe *et al.*, [1999](#ref-Watanabe1999)).
 
 IdiogramFISH was written in R(R Core Team, [2019](#ref-R-base)) and also
 uses crayon package (Csárdi, [2017](#ref-R-crayon)). Manuals were
@@ -106,13 +104,14 @@ R CMD INSTALL idiogramFISH_*.tar.gz
 
 Online:
 
-[Monocentrics](https://ferroao.gitlab.io/idiogramfishhelppages/plotIdiogramsVig.html)  
-[Holocentrics](https://ferroao.gitlab.io/idiogramfishhelppages/plotIdiogramsHoloVig.html)  
+[Monocentrics](https://ferroao.gitlab.io/idiogramfishhelppages/AplotIdiogramsVig.html)  
+[Holocentrics](https://ferroao.gitlab.io/idiogramfishhelppages/BplotIdiogramsHoloVig.html)  
 [Groups of
-chromosomes](https://ferroao.gitlab.io/idiogramfishhelppages/groupsVig.html)  
+chromosomes](https://ferroao.gitlab.io/idiogramfishhelppages/CgroupsVig.html)  
+[Alongside
+Phylogeny](https://ferroao.gitlab.io/idiogramfishhelppages/DphylogenyVig.html)  
 [Human
-karyotype](https://ferroao.gitlab.io/idiogramfishhelppages/humanVig.html)  
-[Phylogeny](https://ferroao.gitlab.io/idiogramfishhelppages/phylogenyVig.html)
+karyotype](https://ferroao.gitlab.io/idiogramfishhelppages/EhumanVig.html)
 
 Launch vignettes from R
 
@@ -136,15 +135,16 @@ data(dfMarkColor) # mark general data
 data(dfOfMarks)   # mark position data (not cen.)
 data(dfOfCenMarks)# centromeric mark data
 
+# svg("testing.svg",width=14,height=8 )
 plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
               dfMarkColor=dfMarkColor,  # d.f of mark style                 < == Optional for ver. > 1.0.0
               dfMarkPos=dfOfMarks,      # df of mark positions (not centromeric)
               dfCenMarks=dfOfCenMarks,  # df of centromeric marks
-              dotRoundCorr=2,           # correction of dots when non-circular
+              dotRoundCorr=2.5,         # correction of dots when non-circular
               
               chrWidth=2.5,             # width of chromosome
               chrSpacing = 2.5,         # horizontal space among chromosomes
-              karSpacing=1.6,           # vertical size of karyotype including space
+              karHeiSpace=1.6,          # vertical size of karyotype including space
               
               indexIdTextSize=1,        # font size of chr names and indices
               markLabelSize=1,          # font size of legends
@@ -153,10 +153,16 @@ plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
               ruler.tck=-0.02,          # size and orientation of ruler ticks
               rulerNumberPos=.5,        # position of numbers of rulers
               rulerNumberSize=1         # font size of rulers
+              ,legend="aside"           # try this
+              ,legendWidth=1            # width of legend
 )
 ```
 
-<img src="man/figures/README-example-1.png" width="70%" />
+<img src="man/figures/README-example-1.svg" width="70%" />
+
+``` r
+# dev.off()
+```
 
 #### Let’s explore the dataframes for monocentrics:
 
@@ -196,13 +202,18 @@ plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
 
 #### 2 How to plot a karyotype of holocentrics:
 
+function `plotIdiogramsHolo` deprecated after ver. \> 1.5.1
+
 ``` r
 library(idiogramFISH)
 # load some saved dataframes
 data(dfChrSizeHolo, dfMarkColor, dfMarkPosHolo)
 
-plotIdiogramsHolo(dfChrSize=dfChrSizeHolo, # data.frame of chr. size
-                  dfMarkColor=dfMarkColor, # df of mark style            < == Optional for ver. > 1.0.0
+# plotIdiogramsHolo is deprecated
+
+# svg("testing.svg",width=14,height=8 )
+plotIdiograms(dfChrSize=dfChrSizeHolo, # data.frame of chr. size
+                  dfMarkColor=dfMarkColor, # df of mark style
                   dfMarkPos=dfMarkPosHolo, # df of mark positions
                   addOTUName=FALSE,        # do not add OTU names
                   
@@ -219,10 +230,16 @@ plotIdiogramsHolo(dfChrSize=dfChrSizeHolo, # data.frame of chr. size
                   
                   xlimLeftMod=1,           # modify xlim left argument of plot
                   xlimRightMod=10,         # modify xlim right argument of plot
-                  ylimBotMod=.2)           # modify ylim bottom argument of plot
+                  ylimBotMod=.2            # modify ylim bottom argument of plot
+                  ,legendHeight=.5         # height of legend labels
+                  ,legendWidth = 1.2)      # width of legend labels
 ```
 
 <img src="man/figures/README-example2-1.png" width="70%" />
+
+``` r
+# dev.off()
+```
 
 #### Let’s explore the dataframes for holocentrics:
 
@@ -254,6 +271,70 @@ plotIdiogramsHolo(dfChrSize=dfChrSizeHolo, # data.frame of chr. size
 |       2 | DAPI     |     2.0 |      0.5 |
 |       4 | CMA      |     2.0 |      0.5 |
 |       4 | 5S       |     0.5 |      0.5 |
+
+#### 3\. Plotting both mono. and holo.
+
+Available only for ver. \> 1.5.1  
+Merge data.frames with plyr (Wickham, [2016](#ref-R-plyr))
+
+``` r
+# chromsome data, if only 1 species, column OTU is optional
+require(plyr)
+dfOfChrSize$OTU  <-"Species mono"
+dfChrSizeHolo$OTU<-"Species holo"
+ 
+monoholoCS <- plyr::rbind.fill(dfOfChrSize,dfChrSizeHolo)
+
+dfOfMarks$OTU     <-"Species mono"
+dfMarkPosHolo$OTU <-"Species holo"
+
+monoholoMarks <- plyr::rbind.fill(dfOfMarks,dfMarkPosHolo)
+
+dfOfCenMarks$OTU <-"Species mono"
+```
+
+``` r
+library(idiogramFISH)
+# load some saved dataframes
+
+# function plotIdiogramsHolo deprecated for ver. > 1.5.1
+par(mar=rep(0,4))
+
+# svg("testing.svg",width=14,height=10 )
+plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
+              dfMarkColor= dfMarkColor,  # df of mark style
+              dfMarkPos  = monoholoMarks,# df of mark positions
+              dfCenMarks = dfOfCenMarks, # d.f. of cen. marks  
+              roundness = 8,             # vertices roundness
+              dotRoundCorr=1.5,          # correction of roundness of dots (marks)  
+              
+              addOTUName = TRUE,         # add OTU names
+              OTUTextSize = 1,           # OTU name font size
+              
+              chrWidth=2.5,              # chr. width
+              indexIdTextSize=1,         # font size of chr. name and indices
+              
+              legend="aside" ,           # legend of marks to the right of plot
+              markLabelSize=1,           # font size of mark labels (legend)
+              legendHeight=.5,           # height of legend labels
+              legendWidth = 1,           # width of legend labels
+
+              rulerNumberSize=1,         # font size of ruler
+              rulerPos= -1.8,            # position of ruler
+              ruler.tck=-0.02,           # size and orientation of ruler ticks
+              rulerNumberPos=.9,         # position of numbers of rulers
+              
+              xlimLeftMod=4,             # modify xlim left argument of plot
+              xlimRightMod=10,           # modify xlim right argument of plot
+              ylimBotMod=-.2             # modify ylim bottom argument of plot
+)
+```
+
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="70%" />
+
+``` r
+#dev.off()
+```
 
 ## Citation
 
@@ -336,6 +417,13 @@ phylogenetic information *Journal of Plant Research*, 145–161.
 
 </div>
 
+<div id="ref-R-plyr">
+
+Wickham H. 2016. *Plyr: Tools for splitting, applying and combining
+data*. <https://CRAN.R-project.org/package=plyr> 
+
+</div>
+
 <div id="ref-R-pkgdown">
 
 Wickham H, Hesselberth J. 2019. *Pkgdown: Make static html documentation
@@ -353,7 +441,7 @@ r packages easier*. <https://CRAN.R-project.org/package=devtools>
 <div id="ref-R-bookdown">
 
 Xie Y. 2019a. *Bookdown: Authoring books and technical documents with r
-markdown*. <https://CRAN.R-project.org/package=bookdown> 
+markdown*. <https://github.com/rstudio/bookdown> 
 
 </div>
 

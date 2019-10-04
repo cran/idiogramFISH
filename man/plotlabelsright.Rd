@@ -5,7 +5,8 @@
 \title{This is an internal function to plot labels to the right, when "aside" for its position}
 \usage{
 plotlabelsright(x, y, markLabelSpacer, chrWidth, dfMarkColorInternal,
-  allMarkMaxSize, normalizeToOne, markLabelSize, xfactor, legendWidth)
+  allMarkMaxSize, normalizeToOne, markLabelSize, xfactor, legendWidth,
+  legendHeight, n)
 }
 \arguments{
 \item{x}{The x axis coordinates of chromosomes}
@@ -27,6 +28,10 @@ plotlabelsright(x, y, markLabelSpacer, chrWidth, dfMarkColorInternal,
 \item{xfactor}{relative proportion of x vs y axes}
 
 \item{legendWidth}{factor to increase width of legend squares and dots}
+
+\item{legendHeight}{factor to increase height of legend squares and dots}
+
+\item{n}{numeric, vertices for round parts}
 }
 \value{
 Returns a graphics element

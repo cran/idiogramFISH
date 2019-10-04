@@ -5,6 +5,14 @@
 #'   returns a list with the A2 values for the OTUs
 #'
 #' @description If several species present, use column "OTU".
+#' \deqn{A_{2} = \frac{sCL}{xCL}}{%
+#'      A2 = sCL / xCL}
+#' @description (s = std dev, CL = chr. length, x = mean)
+#' @description related to:
+#' \deqn{CV_{CL} = A_{2} * 100}{%
+#'       CVCL = A2 * 100}
+#' @description(CV = coeff. var.)
+#'
 #'
 #' @param dfChrSize name of dataframe
 #'
@@ -20,7 +28,7 @@
 #' @return list
 
 asymmetryA2<- function(dfChrSize){
-  message(crayon::black("\nCalculating karyotype index A2\n") )
+  message(crayon::black("Calculating karyotype index A2\n") )
   dfChrSize<-as.data.frame(dfChrSize)
   if(!"chrSize" %in% colnames(dfChrSize) ){
     dfChrSize$chrSize<-dfChrSize$shortArmSize+dfChrSize$longArmSize

@@ -1,7 +1,7 @@
 Package: idiogramFISH
 Title: Idiograms with Marks and Karyotype Indices
-Version: 1.5.1
-Date: 2019-09-18
+Version: 1.6.1
+Date: 2019-10-02
 Authors@R: c(person("Fernando", "Roa", email = "froao@unal.edu.co", role = c("aut", "cre") ), 
              person(given="Mariana PC Telles", email = "", role = c("ctb")) 
              )
@@ -14,7 +14,7 @@ Description: Plot idiograms of several karyotypes having a set of dataframes for
     Romero-Zarco (1986) <doi:10.2307/1221906> and classify chromosomes by morphology Guerra (1986) and Levan et al. (1964).
 Depends: R (>= 3.0)
 Imports: crayon, knitr, kableExtra, prettydoc, badger, rvcheck,
-        rmarkdown
+        rmarkdown, plyr
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
@@ -25,9 +25,9 @@ URL: https://ferroao.gitlab.io/manualidiogramfish/,
 BugReports: https://gitlab.com/ferroao/idiogramFISH/issues
 RoxygenNote: 6.1.1
 NeedsCompilation: no
-Packaged: 2019-09-27 14:50:27 UTC; fernando
+Packaged: 2019-10-04 18:18:49 UTC; fernando
 Author: Fernando Roa [aut, cre],
   Mariana PC Telles [ctb]
 Maintainer: Fernando Roa <froao@unal.edu.co>
 Repository: CRAN
-Date/Publication: 2019-09-27 15:10:02 UTC
+Date/Publication: 2019-10-04 18:40:02 UTC

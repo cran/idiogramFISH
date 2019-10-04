@@ -6,8 +6,13 @@
 #' column \code{OTU}.
 #' @description It returns a list with the A and A2 indices
 #'
-#' @description A2 = sCL / xCL (s = std dev, CL= chr. length, x= mean)
-#' @description related to: CVCL= A2 *100 (CV = coeff. var.)
+#' \deqn{A_{2} = \frac{sCL}{xCL}}{%
+#'      A2 = sCL / xCL}
+#' @description (s = std dev, CL = chr. length, x = mean)
+#' @description related to:
+#' \deqn{CV_{CL} = A_{2} * 100}{%
+#'       CVCL = A2 * 100}
+#' @description(CV = coeff. var.)
 #'
 #' @param dfChrSize name of dataframe
 #'
@@ -29,7 +34,7 @@
 #' @return list
 
 asymmetry<- function(dfChrSize){
-  message(crayon::black("\nCalculating karyotype indexes\n") )
+  message(crayon::black("Calculating karyotype indexes A and A2\n") )
   dfChrSize<-as.data.frame(dfChrSize)
   if("OTU" %in% colnames(dfChrSize)){
     listOfdfChromSize<-base::split(dfChrSize, dfChrSize$OTU )

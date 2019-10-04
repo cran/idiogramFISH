@@ -18,6 +18,16 @@ This function reads a dataframe  with columns:
 returns a list with the A2 values for the OTUs
 
 If several species present, use column "OTU".
+\deqn{A_{2} = \frac{sCL}{xCL}}{%
+     A2 = sCL / xCL}
+
+(s = std dev, CL = chr. length, x = mean)
+
+related to:
+\deqn{CV_{CL} = A_{2} * 100}{%
+      CVCL = A2 * 100}
+
+(CV = coeff. var.)
 }
 \examples{
 asymmetryA2(dfOfChrSize)

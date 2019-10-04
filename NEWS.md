@@ -1,6 +1,12 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 1.6.1
+
+02 10 2019  
+Added support to plot monocen. and holocen. together  
+Function plotIdiogramsHolo deprecated
+
 # idiogramFISH 1.5.1
 
 Added support to plot alongside phylogenies

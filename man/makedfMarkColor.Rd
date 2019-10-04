@@ -4,9 +4,11 @@
 \alias{makedfMarkColor}
 \title{Function to automatically make a dataframe of Marks' characterisitcs}
 \usage{
-makedfMarkColor(markNames, colorstoremove = NA)
+makedfMarkColor(dfMarkColor, markNames, colorstoremove = NA)
 }
 \arguments{
+\item{dfMarkColor}{d.f of marks to use}
+
 \item{markNames}{names of marks}
 
 \item{colorstoremove}{remove this colors from the result}

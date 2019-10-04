@@ -5,14 +5,14 @@
 #'
 #' @keywords internal
 #'
-#' @param roundness round
-#' @param x x
-#' @param y y
+#' @param roundness roundness of vertices <
+#' @param x x component of polygon
+#' @param y y component of polygon
 #' @param dfMarkColorInternal colors for marks
 #' @param listOfdfMarkPosSq list of df. of mark pos.
 #' @param chrWidth width of chr.
-#' @param yfactor y distortion
-#' @param n2 numeric to define vertices
+#' @param yfactor y distortion based on canvas proportion
+#' @param n2 numeric, to define vertices of rounded portions
 #' @param lwd.chr thick of border line
 #'
 #' @return plot
@@ -20,13 +20,13 @@
 #'
 
 roundPlotMark<-function(roundness, x, y, dfMarkColorInternal,listOfdfMarkPosSq, chrWidth, yfactor,n2,lwd.chr){
-  if(roundness<1){
-    roundness<-1
-  }
+  # if(roundness<1){
+  #   roundness<-1
+  # }
   # if((min(dfMarkPosInternal$markSize)*roundness)<2 ){
   #   roundness<-2/min(dfMarkPosInternal$markSize)
   # }
-  if(roundness>15){
+  if(roundness>20){
     lapply(1:length(x), function(w) mapply(function(x,y,z) graphics::polygon(x=x, y=y,
                                                                                  col=dfMarkColorInternal$markColor[match(     z   ,dfMarkColorInternal$markName)],
                                                                                  lwd=lwd.chr,

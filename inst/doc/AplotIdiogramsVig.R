@@ -79,6 +79,7 @@ kableExtra::kable_styling(knitr::kable(mydfMarkColor) , full_width = F
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  colnames(mydfMarkColor)<-c("markName", "markColor","style")
+#  # if style column is not present it will be filled with "square"
 
 ## ------------------------------------------------------------------------
 # We will use column OTU if data.frame because chromosome size df has it
@@ -111,48 +112,61 @@ kableExtra::kable_styling(knitr::kable(mydfOfCenMarks) , full_width = F
                           , bootstrap_options = c("striped", "hover", "condensed")
                           )
 
-## ----example_M1, echo=TRUE, results="hide", fig.width=7, fig.height=4.5, message=FALSE----
+## ----example_M1, echo=TRUE, results="hide", fig.width=7, fig.height=4.5, message=FALSE,dev='svg'----
 # fig.width=7, fig.height=4.5
 
+svg("mydfChrSize.svg",width=13,height=8 )
+# png("mydfChrSize.png", width=600, height=400)
 plotIdiograms(dfChrSize=mydfChrSize,      # chr. size data.frame
               dfMarkPos=mydfOfMarks,      # mark position df (not cen.)
               dfCenMarks=mydfOfCenMarks,  # cen. marks df
               dfMarkColor=mydfMarkColor,  # mark style df
               roundness=3,                # vertices roundness  
-              dotRoundCorr=2,             # correction of roundness of dots 
+              dotRoundCorr=2.5,           # correction of roundness of dots 
               
               chrWidth=4.5,               # width of chr.
               chrSpacing = 4,             # space among chr.
-              karSpacing=1.6,             # vertical size of karyotype including spacer
+              karHeiSpace=1.6,            # vertical size of karyotype including spacer
               
-              indexIdTextSize=.7,         # font size fo chr name and indices
-              OTUTextSize=.7,             # font size of OTUs
-              markLabelSize=.7,           # font size of mark legends
+              indexIdTextSize=1,         # font size fo chr name and indices
+              OTUTextSize=1.2,             # font size of OTUs
+              markLabelSize=1,           # font size of mark legends
               
               rulerPos=-1.9,              # ruler position
               ruler.tck=-0.02,            # ticks of ruler size and orientation
               rulerNumberPos=.5,          # position of numbers in ruler
-              rulerNumberSize=.7,         # font size of ruler numbers
+              rulerNumberSize=1,         # font size of ruler numbers
               
               ylimBotMod = 0.4,           # modify ylim bottom argument
               ylimTopMod = 0              # modify ylim top argument
+              
+              # ,xlimRightMod = 12
+              # ,legend="aside"           # <- TRY THIS
+              # ,legendWidth = 1.2
+              # ,markLabelSpacer = 4
 )
+dev.off()
 
-## ----example_M1cen0, echo=TRUE, results="hide", fig.width=7, fig.height=4.5, message=FALSE----
+## ---- results="asis", comment=NA, echo=FALSE-----------------------------
+# cat(paste0("![](mydfChrSize.png)" ) )
+cat(paste0("![](mydfChrSize.svg)" ) )
+
+## ----example_M1cen0, echo=TRUE, results="hide", fig.width=7, fig.height=4.5, message=FALSE,dev='svg'----
 # fig.width=7, fig.height=4.5
 
+png("mydfChrSize2.png", width=600, height=400)
 plotIdiograms(dfChrSize=mydfChrSize,      # chr. size df
               dfMarkPos=mydfOfMarks,      # mark position df (not cen.)
               dfMarkColor=mydfMarkColor,  # mark style df
 
-              # dfCenMarks=mydfOfCenMarks,  # cen. marks df, NOT AVAILABLE FOR centromereSize = 0
+              # dfCenMarks=mydfOfCenMarks,# cen. marks df, NOT AVAILABLE FOR centromereSize = 0
               centromereSize = 0,         # <- HERE
               
               roundness=3,                # vertices roundness  
-              dotRoundCorr=2,             # correction of roundness of dots 
+              dotRoundCorr=2.5,           # correction of roundness of dots 
               chrWidth=4.5,               # width of chr.
               chrSpacing = 4,             # space among chr.
-              karSpacing=1.6,             # vertical size of karyotype including spacer
+              karHeiSpace=1.6,            # vertical size of karyotype including spacer
               indexIdTextSize=.7,         # font size fo chr name and indices
               OTUTextSize=.7,             # font size of OTUs
               markLabelSize=.7,           # font size of mark legends
@@ -162,28 +176,47 @@ plotIdiograms(dfChrSize=mydfChrSize,      # chr. size df
               rulerNumberSize=.7,         # font size of ruler numbers
               ylimBotMod = 0.4,           # modify ylim bottom argument
               ylimTopMod = 0              # modify ylim top argument
+              
+              # ,markLabelSpacer=5
+              # ,xlimRightMod = 16        #   TRY THIS
+              # ,legend="aside"
+              # ,legendWidth = 1.5
 )
+dev.off()
+
+## ---- results="asis", comment=NA, echo=FALSE-----------------------------
+cat(paste0("![](mydfChrSize2.png)" ) )
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  unique(c(dfOfMarks$markName,dfOfCenMarks$markName) )
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE,dev='svg'-----------------------------------------------
+#  
 #  charVectorCol <- c("tomato3","darkolivegreen4","dfsd","blue","green")
+#  png("dfOfChrSize.png", width=600, height=400)
+#  par(mar=rep(0,4))
+#  plotIdiograms(dfChrSize = dfOfChrSize,     # d.f. of chr. sizes
+#                dfMarkPos = dfOfMarks,       # d.f. of marks' positions
+#                chrColor  = "gray",          # chr. color
+#                cenColor  = "gray",          # cen. color
+#                dfCenMarks= dfOfCenMarks,    # marks in centromeres
 #  
-#  plotIdiograms(dfChrSize=dfOfChrSize,
-#                dfMarkPos=dfOfMarks,
-#                chrColor = "gray",
-#                cenColor = "gray",
-#                dfCenMarks=dfOfCenMarks,
+#                mycolors = charVectorCol,    # colors to use
 #  
-#                mycolors = charVectorCol,
+#                OTUTextSize = 1,             # font size for OTU names
+#                dotRoundCorr=2,              # correction of roundness of vert. and dots
+#                chrWidth=2.5,                # rel. chr. width
+#                chrSpacing = 2.5,            # rel. horizontal chr. spacing
+#                karHeiSpace=1.6,             # karyotype height including spacing
+#                indexIdTextSize=1,           # font size for chr. indexes and chr. name
+#                markLabelSize=1,             # font size for labels (legend)
 #  
-#                dotRoundCorr=2, chrWidth=2.5, chrSpacing = 2.5,
-#                karSpacing=1.6,
-#                indexIdTextSize=1,
-#                markLabelSize=1,
-#                rulerPos=-1.9, ruler.tck=-0.02, rulerNumberPos=.5, rulerNumberSize=1
+#                rulerPos=-1.9,               # ruler position
+#                ruler.tck=-0.02,             # ruler tick orientation and length
+#                rulerNumberPos=.5,           # rulers' numbers position
+#                rulerNumberSize=1            # ruler font size
 #  )
+#  dev.off()
 
 ## ------------------------------------------------------------------------
 data(bigdfOfChrSize)
@@ -226,15 +259,17 @@ kableExtra::kable_styling(knitr::kable(bigdfDataCen) , full_width = F
                           , bootstrap_options = c("striped", "hover", "condensed")
                           )
 
-## ----example_M3, echo=TRUE, results="hide", fig.width=6, fig.height=13, message=FALSE----
-# library(idiogramFISH)
-
-plotIdiograms(dfChrSize=bigdfOfChrSize,  # chr sizes
+## ----example_M3, echo=TRUE, results="hide", fig.width=6, fig.height=13, message=FALSE,dev='svg'----
+# fig.width=6, fig.height=13
+png("bigdfOfChrSize.png", width=450, height=900)
+plotIdiograms(dfChrSize  =bigdfOfChrSize,# chr sizes
               dfMarkColor=dfMarkColor,   # mark characteristics, optional in dev version. see above. 
-              dfMarkPos=bigdfOfMarks,    # mark positions (no cen. marks)
-              dfCenMarks=bigdfDataCen,   # cen. marks df
+              dfMarkPos  =bigdfOfMarks,  # mark positions (no cen. marks)
+              dfCenMarks =bigdfDataCen,  # cen. marks df
               karHeight=1.2,             # karyotype rel. height
-              karSpacing=2.2,            # karyotype vertical size with spacing
+              karHeiSpace=2.2,           # karyotype vertical size with spacing
+              karSepar = TRUE,           # modify vertical separation of kar.
+              amoSepar = 1.2,            # Vertical separation of kar. when karSpear = TRUE
               
               dotRoundCorr = .5,         # correction factor for dot marks
               distTextChr=.5,            # distance of chr. to text
@@ -254,6 +289,10 @@ plotIdiograms(dfChrSize=bigdfOfChrSize,  # chr sizes
               
               xlimRightMod=2,            # modify xlim right argument
               ylimBotMod = 0,            # modify ylim bottom argument
-              ylimTopMod = -.3           # modify ylim top argument
+              ylimTopMod = -.3,          # modify ylim top argument
               )
+dev.off()
+
+## ---- results="asis", comment=NA, echo=FALSE-----------------------------
+cat(paste0("![](bigdfOfChrSize.png)" ) )
 

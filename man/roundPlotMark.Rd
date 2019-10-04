@@ -8,11 +8,11 @@ roundPlotMark(roundness, x, y, dfMarkColorInternal, listOfdfMarkPosSq,
   chrWidth, yfactor, n2, lwd.chr)
 }
 \arguments{
-\item{roundness}{round}
+\item{roundness}{roundness of vertices <}
 
-\item{x}{x}
+\item{x}{x component of polygon}
 
-\item{y}{y}
+\item{y}{y component of polygon}
 
 \item{dfMarkColorInternal}{colors for marks}
 
@@ -20,9 +20,9 @@ roundPlotMark(roundness, x, y, dfMarkColorInternal, listOfdfMarkPosSq,
 
 \item{chrWidth}{width of chr.}
 
-\item{yfactor}{y distortion}
+\item{yfactor}{y distortion based on canvas proportion}
 
-\item{n2}{numeric to define vertices}
+\item{n2}{numeric, to define vertices of rounded portions}
 
 \item{lwd.chr}{thick of border line}
 }

@@ -4,6 +4,7 @@
 #' @description It returns a dataframe with color and style for each mark
 #'
 #' @param markNames names of marks
+#' @param dfMarkColor d.f of marks to use
 #' @param colorstoremove remove this colors from the result
 #'
 #' @keywords mark
@@ -11,8 +12,8 @@
 #' @return data.frame
 #' @importFrom grDevices col2rgb
 
-makedfMarkColor<- function(markNames,colorstoremove=NA){
-  dfMarkColor<-idiogramFISH::dfMarkColor
+makedfMarkColor<- function(dfMarkColor,markNames,colorstoremove=NA){
+  # dfMarkColor<-idiogramFISH::dfMarkColor
   manualcolors<-c('black','forestgreen', 'orange', 'cornflowerblue',
                     'magenta', 'darkolivegreen4',
                     'indianred1', 'tan4', 'darkblue', 'red2',
