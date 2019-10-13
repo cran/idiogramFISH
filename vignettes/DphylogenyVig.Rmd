@@ -16,6 +16,13 @@ bibliography: [allrefs.bib, packages.bib, iqtree.bib,revbayes.bib]
 csl: climaMod.csl
 link-citations: yes
 resource_files:
+  - firstplot2.png
+  - secondplot2.png
+  - thirdplot2.png
+  - firstplot.png
+  - secondplot.png
+  - thirdplot.png
+  
 # params:
   # packageCheck: FALSE
 vignette: >
@@ -451,8 +458,8 @@ png(file=paste0("thirdplot.png" ),width=962,height=1000)
 plotIdiograms(mixChrSize,                         # chr. size data.frame
               mixMarks,                           # data.frame of marks' positions
               dfMarkColor =  mydfMaColor,         # d.f. of mark characteristics
-              origin="b",
-              karHeiSpace=2.2,
+              origin="b",                         # position measured from bottom of chr.
+              karHeiSpace=2.2,                    # karyotype height with spacing included
               
               roundness = 10.5,                   # vertices roundness
               dotRoundCorr = 1.0,                 # correction of roundness of dots and vertices

@@ -1,6 +1,15 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 1.6.3
+
+Documentation changes.  
+More tolerance when allowing duplicated chr. names when no marks.
+
+# idiogramFISH 1.6.2
+
+Documentation changes, new examples.
+
 # idiogramFISH 1.6.1
 
 02 10 2019  

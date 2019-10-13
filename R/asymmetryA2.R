@@ -1,4 +1,4 @@
-#' Function to calculate karyotype asymmetry
+#' FUNCTION to calculate karyotype asymmetry
 #'
 #' @description This function reads a dataframe  with columns:
 #'   \code{shortArmSize} and \code{longArmSize} and optionally \code{OTU} and
@@ -21,7 +21,11 @@
 #' @export
 #' @examples
 #' asymmetryA2(dfOfChrSize)
+#' as.data.frame(asymmetryA2(bigdfOfChrSize))
 #' asymmetryA2(dfChrSizeHolo)
+#' as.data.frame(asymmetryA2(bigdfChrSizeHolo))
+#' @seealso \code{\link{chrbasicdatamono}}
+#' @seealso \code{\link{chrbasicdataHolo}}
 #' @references Romero-Zarco. 1986. A New Method for Estimating Karyotype
 #'   Asymmetry. Taxon Vol. 35, No. 3  pp. 526-530
 #'

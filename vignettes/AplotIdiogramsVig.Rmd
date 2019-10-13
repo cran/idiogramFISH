@@ -243,14 +243,14 @@ plotIdiograms(dfChrSize=mydfChrSize,      # chr. size data.frame
               chrSpacing = 4,             # space among chr.
               karHeiSpace=1.6,            # vertical size of karyotype including spacer
               
-              indexIdTextSize=1,         # font size fo chr name and indices
-              OTUTextSize=1.2,             # font size of OTUs
-              markLabelSize=1,           # font size of mark legends
+              indexIdTextSize=1,          # font size fo chr name and indices
+              OTUTextSize=1.2,            # font size of OTUs
+              markLabelSize=1,            # font size of mark legends
               
               rulerPos=-1.9,              # ruler position
               ruler.tck=-0.02,            # ticks of ruler size and orientation
               rulerNumberPos=.5,          # position of numbers in ruler
-              rulerNumberSize=1,         # font size of ruler numbers
+              rulerNumberSize=1,          # font size of ruler numbers
               
               ylimBotMod = 0.4,           # modify ylim bottom argument
               ylimTopMod = 0              # modify ylim top argument
@@ -350,15 +350,15 @@ dev.off()
 ## To illustrate this, we will load some data.frames from the package {-}
 
 ``` Chromosome sizes```
-```{r}
-data(bigdfOfChrSize)
+```{r, eval=F}
+head(bigdfOfChrSize,30)
 ```
 
 <div class="verysmall">
 ```{r, echo=F}
 # kableExtra::scroll_box(height = "300px", width="400px",
            # kableExtra::add_header_above(
-                            kableExtra::kable_styling(knitr::kable(bigdfOfChrSize) , full_width = F
+                            kableExtra::kable_styling(knitr::kable(head(bigdfOfChrSize,30)) , full_width = F
                            , font_size = 10
                           , bootstrap_options = c("striped", "hover", "condensed"),
                  
@@ -410,9 +410,9 @@ kableExtra::kable_styling(knitr::kable(bigdfDataCen) , full_width = F
 
 ## Plotting {-}
 
-```{r example_M3, echo=TRUE, results="hide", fig.width=6, fig.height=13, message=FALSE,dev='svg'}
+```{r example_M3, echo=TRUE, results="hide", fig.width=6, fig.height=13, message=FALSE, dev='png'}
 # fig.width=6, fig.height=13
-png("bigdfOfChrSize.png", width=450, height=900)
+# png("bigdfOfChrSize.png", width=650, height=1300)
 plotIdiograms(dfChrSize  =bigdfOfChrSize,# chr sizes
               dfMarkColor=dfMarkColor,   # mark characteristics, optional in dev version. see above. 
               dfMarkPos  =bigdfOfMarks,  # mark positions (no cen. marks)
@@ -424,12 +424,14 @@ plotIdiograms(dfChrSize  =bigdfOfChrSize,# chr sizes
               
               dotRoundCorr = .5,         # correction factor for dot marks
               distTextChr=.5,            # distance of chr. to text
-              indexIdTextSize=.7,        # font size of indices and chr. name
+              morpho=FALSE,              # add chr. morphology
+              indexIdTextSize=.6,        # font size of indices and chr. name
               OTUTextSize=.9,            # font size of OTU names
+              
               legend="aside",            # position of legend not "inline"
               markLabelSize=.7,          # font size of legend
               markLabelSpacer=1,         # distance from chr. to legend
-              morpho=FALSE,              # add chr. morphology
+              legendHeight = 2,          # height of labels
               
               ruler=TRUE,                # add ruler
               rulerPos=-.9,              # position of ruler
@@ -440,11 +442,11 @@ plotIdiograms(dfChrSize  =bigdfOfChrSize,# chr sizes
               
               xlimRightMod=2,            # modify xlim right argument
               ylimBotMod = 0,            # modify ylim bottom argument
-              ylimTopMod = -.3,          # modify ylim top argument
+              ylimTopMod = -.3           # modify ylim top argument
               )
-dev.off()
+# dev.off()
 ```
-```{r, results="asis", comment=NA, echo=FALSE}
+```{r, results="asis", comment=NA, echo=FALSE, eval=FALSE}
 cat(paste0("![](bigdfOfChrSize.png)" ) )
 ```
 `r if (knitr:::is_html_output()) '

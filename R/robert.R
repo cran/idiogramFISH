@@ -1,4 +1,4 @@
-#' Function to produce a Robertsonian translocation
+#' FUNCTION to produce a Robertsonian translocation
 #'
 #' @description This function reads a dataframe with chr. sizes \code{\link{chrbasicdatamono}} and another with marks' positions,
 #' \code{\link{markpos}} and gets as arguments two chr. names and two arms, respectively.

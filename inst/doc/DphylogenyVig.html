@@ -318,6 +318,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 width:75%;
 font-size: 1.0em;
 }
+@media only screen and (max-width: 70em) {
+#post {
+width:100%;
+font-size: 1.0em;
+}
+}
 .hasCopyButton {
 position: relative;
 }
@@ -660,8 +666,8 @@ Go to <a href="EhumanVig.html">5. human Vignette</a></p>
 <a class="sourceLine" id="cb17-10" data-line-number="10"><span class="kw">plotIdiograms</span>(mixChrSize,                         <span class="co"># chr. size data.frame</span></a>
 <a class="sourceLine" id="cb17-11" data-line-number="11">              mixMarks,                           <span class="co"># data.frame of marks' positions</span></a>
 <a class="sourceLine" id="cb17-12" data-line-number="12">              <span class="dt">dfMarkColor =</span>  mydfMaColor,         <span class="co"># d.f. of mark characteristics</span></a>
-<a class="sourceLine" id="cb17-13" data-line-number="13">              <span class="dt">origin=</span><span class="st">&quot;b&quot;</span>,</a>
-<a class="sourceLine" id="cb17-14" data-line-number="14">              <span class="dt">karHeiSpace=</span><span class="fl">2.2</span>,</a>
+<a class="sourceLine" id="cb17-13" data-line-number="13">              <span class="dt">origin=</span><span class="st">&quot;b&quot;</span>,                         <span class="co"># position measured from bottom of chr.</span></a>
+<a class="sourceLine" id="cb17-14" data-line-number="14">              <span class="dt">karHeiSpace=</span><span class="fl">2.2</span>,                    <span class="co"># karyotype height with spacing included</span></a>
 <a class="sourceLine" id="cb17-15" data-line-number="15">              </a>
 <a class="sourceLine" id="cb17-16" data-line-number="16">              <span class="dt">roundness =</span> <span class="fl">10.5</span>,                   <span class="co"># vertices roundness</span></a>
 <a class="sourceLine" id="cb17-17" data-line-number="17">              <span class="dt">dotRoundCorr =</span> <span class="fl">1.0</span>,                 <span class="co"># correction of roundness of dots and vertices</span></a>

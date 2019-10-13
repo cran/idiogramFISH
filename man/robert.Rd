@@ -2,7 +2,7 @@
 % Please edit documentation in R/robert.R
 \name{robert}
 \alias{robert}
-\title{Function to produce a Robertsonian translocation}
+\title{FUNCTION to produce a Robertsonian translocation}
 \usage{
 robert(dfChrSize, dfMarkPos, chr1, chr2, arm1, arm2)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/armRatioCI.R
 \name{armRatioCI}
 \alias{armRatioCI}
-\title{Function to calculate Arm Ratio and C.I. and morphological categories}
+\title{FUNCTION to calculate Arm Ratio and C.I. and morphological categories}
 \usage{
 armRatioCI(dfOfChrSize)
 }
@@ -17,8 +17,8 @@ This function reads a dataframe and produces AR (r), CI, Guerra and Levan
 classifications
 }
 \examples{
-data(dfOfChrSize)
 armRatioCI(dfOfChrSize)
+armRatioCI(bigdfOfChrSize)
 }
 \references{
 LEVAN A, FREDGA K, SANDBERG AA (1964) NOMENCLATURE FOR
@@ -26,6 +26,9 @@ CENTROMERIC POSITION ON CHROMOSOMES. Hereditas 52:201–220.
 
 Guerra. 1986. Reviewing the chromosome nomenclature of Levan et
 al. Braz. Jour. Gen. Vol IX, 4, 741-743
+}
+\seealso{
+\code{\link{chrbasicdatamono}}
 }
 \keyword{arm}
 \keyword{dataframe}

@@ -1,4 +1,4 @@
-#' Function to calculate Arm Ratio and C.I. and morphological categories
+#' FUNCTION to calculate Arm Ratio and C.I. and morphological categories
 #'
 #' This function reads a dataframe and produces AR (r), CI, Guerra and Levan
 #' classifications
@@ -8,8 +8,9 @@
 #' @keywords dataframe size arm
 #' @export
 #' @examples
-#' data(dfOfChrSize)
 #' armRatioCI(dfOfChrSize)
+#' armRatioCI(bigdfOfChrSize)
+#' @seealso \code{\link{chrbasicdatamono}}
 #' @references LEVAN A, FREDGA K, SANDBERG AA (1964) NOMENCLATURE FOR
 #' CENTROMERIC POSITION ON CHROMOSOMES. Hereditas 52:201–220.
 #' @references Guerra. 1986. Reviewing the chromosome nomenclature of Levan et

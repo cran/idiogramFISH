@@ -28,13 +28,13 @@ checkNameChrDfMarks<- function(listOfdfChromSize,listOfdfMarks){
   for (s in 1:length(listOfdfChromSize)) {
     name<-names(listOfdfChromSize)[[s]]
     if(length(listOfdfChromSize[[s]]$chrName)!=length(unique(listOfdfChromSize[[s]]$chrName) ) ) {
-      message(crayon::red(
-        paste("\nERROR Chromosome Names in dataframe",name,"duplicated - Fatal when d.f. of marks present")
+      message(crayon::yellow(
+        paste("\nWARNING Chromosome Names in dataframe",name,"duplicated - Error when d.f. of marks present")
       )) #m
-      message(crayon::red(
-        paste("\ndata of OTU",name,"removed")
-      ) ) #m
-      listOfdfChromSize[s]<-NA
+      # message(crayon::red(
+      #   paste("\ndata of OTU",name,"removed")
+      # ) ) #m
+      # listOfdfChromSize[s]<-NA
     } # duplicated chr. names fi
 
       if (length(which(names(listOfdfMarks)==name) )!=0 ) {

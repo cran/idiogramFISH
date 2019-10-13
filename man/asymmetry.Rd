@@ -2,7 +2,7 @@
 % Please edit documentation in R/asymmetry.R
 \name{asymmetry}
 \alias{asymmetry}
-\title{Function to calculate karyotype asymmetry A and A2}
+\title{FUNCTION to calculate karyotype asymmetry A and A2}
 \usage{
 asymmetry(dfChrSize)
 }
@@ -21,6 +21,11 @@ column \code{OTU}.
 
 It returns a list with the A and A2 indices
 
+\deqn{A = \frac{\sum_{i=1}^{n} \frac{longArm_{i} - shortArm_{i}}{CL_{i}} }{n} }{%
+     A = Sum (longArm - shortArm / CL) / n }
+
+A: Watanabe et al. (1999) asymmetry of karyotype ranging from 0
+(symmetric) to 1 (asymmetric)
 \deqn{A_{2} = \frac{sCL}{xCL}}{%
      A2 = sCL / xCL}
 
@@ -31,13 +36,11 @@ related to:
       CVCL = A2 * 100}
 
 (CV = coeff. var.)
-
-A: Watanabe et al. (1999) asymmetry of karyotype ranging from 0
-(symmetric) to 1 (asymmetric)
 }
 \examples{
-data(dfOfChrSize)
 asymmetry(dfOfChrSize)
+myAlist<-asymmetry(bigdfOfChrSize)
+as.data.frame(myAlist)
 }
 \references{
 Watanabe K, Yahara T, Denda T, Kosuge K. (1999) Chromosomal
@@ -48,6 +51,9 @@ phylogenetic information. Journal of Plant Research 112: 145-161.
 
 A2: Romero-Zarco. 1986. A New Method for Estimating Karyotype
 Asymmetry. Taxon Vol. 35, No. 3  pp. 526-530
+}
+\seealso{
+\code{\link{chrbasicdatamono}}
 }
 \keyword{arm}
 \keyword{dataframe}

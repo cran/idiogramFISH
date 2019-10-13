@@ -1,4 +1,4 @@
-#' Function to plot idiograms of karyotypes with and without centromere
+#' FUNCTION to plot idiograms of karyotypes with and without centromere
 #' @description This function reads a data.frame  with columns: \code{chrName} and
 #' \code{shortArmSize} and \code{longArmSize} for monocentrics or a column \code{chrSize} for holocentrics and produces a plot of idiograms. If more
 #' than one species, a column named \code{OTU} is needed.
@@ -806,9 +806,34 @@ else if (missing(mycolors) ) { # if dfMarkColor not exist and missing mycolors
   #
   #######################################################
 
-  mybooleanChrName <- !exists("listOfdfMarkPosHolocen") & !exists("listOfdfMarkPosMonocen") & !exists("listOfdfDataCen")
+  # mybooleanChrName <- !exists("listOfdfMarkPosHolocen") & !exists("listOfdfMarkPosMonocen") & !exists("listOfdfDataCen")
 
-  listOfdfChromSize<-fixChrNameDup(listOfdfChromSize, mybooleanChrName)
+  # listOfdfChromSize<-fixChrNameDup(listOfdfChromSize, mybooleanChrName)
+
+  for (s in 1:length(listOfdfChromSize) ){
+    OTUname<-names(listOfdfChromSize[s])
+    if (exists("listOfdfMarkPosHolocen") ){
+      OTUlistOfdfMarkPosHolocen<-listOfdfMarkPosHolocen[which(names(listOfdfMarkPosHolocen) %in% OTUname)]
+      if(length(OTUlistOfdfMarkPosHolocen)==0){
+        remove(OTUlistOfdfMarkPosHolocen)
+      }
+    }
+    if (exists("listOfdfMarkPosMonocen") ){
+      OTUlistOfdfMarkPosMonocen<-listOfdfMarkPosMonocen[which(names(listOfdfMarkPosMonocen) %in% OTUname)]
+      if(length(OTUlistOfdfMarkPosMonocen)==0){
+        remove(OTUlistOfdfMarkPosMonocen)
+      }
+    }
+    if (exists("listOfdfDataCen") ){
+      OTUlistOfdfDataCen<-listOfdfDataCen[which(names(listOfdfDataCen) %in% OTUname)]
+      if(length(OTUlistOfdfDataCen)==0){
+        remove(OTUlistOfdfDataCen)
+      }
+    }
+    mybooleanChrName <- !exists("OTUlistOfdfMarkPosHolocen") & !exists("OTUlistOfdfMarkPosMonocen") & !exists("OTUlistOfdfDataCen")
+    dfChromSize<-fixChrNameDupDF(listOfdfChromSize[s], mybooleanChrName)
+    listOfdfChromSize[[s]]<-dfChromSize[[1]]
+  }
 
   #####################
   #   total size of chr

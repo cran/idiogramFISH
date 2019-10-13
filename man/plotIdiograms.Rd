@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotIdiograms.R
 \name{plotIdiograms}
 \alias{plotIdiograms}
-\title{Function to plot idiograms of karyotypes with and without centromere}
+\title{FUNCTION to plot idiograms of karyotypes with and without centromere}
 \usage{
 plotIdiograms(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   MarkDistanceType = "beg", orderBySize = TRUE, centromereSize = 1,

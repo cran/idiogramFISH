@@ -206,9 +206,13 @@ plotIdiograms(dfChrSize=bigdfChrSizeHolo,     # df of chr. sizes
                   karHeiSpace = 1.7,          # karyotype height including spacing
                   karSepar=FALSE,             # reduce vertical space among karyotypes 
                   
-                  chrId="simple",             # numbering of chr., not using "original" name
-                  chrWidth = 2,               # chr. width
-                  chrSpacing = 2,             # space among chr.
+                  markLabelSpacer = 1         # distance from chr. (right) to legend
+                  ,legendWidth = 1            # width of legend labels
+                  ,legend="aside"             # type of legend, right side
+              
+                  ,chrId="simple",            # numbering of chr., not using "original" name
+                  chrWidth = 0.5,             # chr. width
+                  chrSpacing = 1,             # space among chr.
                   
                   indexIdTextSize=.9,         # font size of chr names and indices
                   markLabelSize=.9,           # font size of legends
@@ -216,7 +220,8 @@ plotIdiograms(dfChrSize=bigdfChrSizeHolo,     # df of chr. sizes
                   OTUTextSize=1.2,            # font size of OTUs' names
                   
                   xlimRightMod=2,             # modify xlim right argument
-                  ylimBotMod=.4)              # modify ylim bottom argument
+                  ylimBotMod=.4               # modify ylim bottom argument
+)
 dev.off()
 
 ## ---- results="asis", comment=NA, echo=FALSE-----------------------------
@@ -224,22 +229,24 @@ cat(paste0("![](bigdfChrSizeHolo.png)" ) )
 
 ## ------------------------------------------------------------------------
 # transform previous data.frames for simplicity
-bigdfChrSizeHolo$chrSize<-bigdfChrSizeHolo$chrSize*980000
-bigdfMarkPosHolo$markPos<-bigdfMarkPosHolo$markPos*980000
-bigdfMarkPosHolo$markSize<-bigdfMarkPosHolo$markSize*980000
+bigdfChrSizeHoloMb <- bigdfChrSizeHolo
+bigdfChrSizeHoloMb$chrSize <- bigdfChrSizeHoloMb$chrSize * 980000
+bigdfMarkPosHoloMb <- bigdfMarkPosHolo
+bigdfMarkPosHoloMb$markPos <- bigdfMarkPosHoloMb$markPos * 980000
+bigdfMarkPosHoloMb$markSize<- bigdfMarkPosHoloMb$markSize * 980000
 
 ## ----example4, echo=TRUE, results="hide", fig.width=6, fig.height=6, message=FALSE,dev='svg'----
 
 png("bigdfChrSizeHolo2.png", width=700, height=600)
 par(mar=c(1,1,1,1))
 
-plotIdiograms(dfChrSize=bigdfChrSizeHolo,    # df of chr. sizes
+plotIdiograms(dfChrSize=bigdfChrSizeHoloMb,  # df of chr. sizes
               dfMarkColor=dfMarkColor,       # df of mark style
-              dfMarkPos=bigdfMarkPosHolo,    # df of mark positions
+              dfMarkPos=bigdfMarkPosHoloMb,  # df of mark positions
               
               MarkDistanceType="cen",        # distance to mark is to its center
               Mb=TRUE, # <- THIS IS NEW      # distances provided are in Mbs
-              ylabline = -1, # <-THIS IS NEW # if Mb=TRUE modifies position of y axis title (Mb)
+              ylabline = -3.6, # <- NEW      # if Mb=TRUE modifies position of y axis title (Mb)
               roundness=6,                   # vertices roundness of chr. and marks 
               dotRoundCorr=1,                # correction of dots roundness
               
@@ -249,10 +256,10 @@ plotIdiograms(dfChrSize=bigdfChrSizeHolo,    # df of chr. sizes
               amoSepar = 3,                  # depends on karSepar, amount of sep.
               
               chrId="simple",                # chr. names not "original"
-              chrWidth = 2,                  # chr. width
-              chrSpacing = 2,                # space among chr.
+              chrWidth   = 0.5,              # chr. width
+              chrSpacing = 1.0,              # space among chr.
               indexIdTextSize=.9,            # font size of chr names and indices
-              karIndex = FALSE,              # add karyotype asymmetry index
+              karIndex = FALSE,              # do not add karyotype asymmetry index
               
               markLabelSize=.9,              # font size of legend
               rulerNumberSize=.9,            # font size of ruler

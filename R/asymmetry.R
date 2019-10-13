@@ -1,4 +1,4 @@
-#' Function to calculate karyotype asymmetry A and A2
+#' FUNCTION to calculate karyotype asymmetry A and A2
 #'
 #' @description This function reads a dataframe  with columns:
 #' \code{shortArmSize} and \code{longArmSize}
@@ -6,9 +6,14 @@
 #' column \code{OTU}.
 #' @description It returns a list with the A and A2 indices
 #'
+#' \deqn{A = \frac{\sum_{i=1}^{n} \frac{longArm_{i} - shortArm_{i}}{CL_{i}} }{n} }{%
+#'      A = Sum (longArm - shortArm / CL) / n }
+#' @description A: Watanabe et al. (1999) asymmetry of karyotype ranging from 0
+#' (symmetric) to 1 (asymmetric)
 #' \deqn{A_{2} = \frac{sCL}{xCL}}{%
 #'      A2 = sCL / xCL}
 #' @description (s = std dev, CL = chr. length, x = mean)
+#'
 #' @description related to:
 #' \deqn{CV_{CL} = A_{2} * 100}{%
 #'       CVCL = A2 * 100}
@@ -19,10 +24,10 @@
 #' @keywords dataframe size arm
 #' @export
 #' @examples
-#' data(dfOfChrSize)
 #' asymmetry(dfOfChrSize)
-#' @description A: Watanabe et al. (1999) asymmetry of karyotype ranging from 0
-#' (symmetric) to 1 (asymmetric)
+#' myAlist<-asymmetry(bigdfOfChrSize)
+#' as.data.frame(myAlist)
+#' @seealso \code{\link{chrbasicdatamono}}
 #'
 #' @references Watanabe K, Yahara T, Denda T, Kosuge K. (1999) Chromosomal
 #' evolution in the genus Brachyscome (Asteraceae, Astereae): Statistical tests

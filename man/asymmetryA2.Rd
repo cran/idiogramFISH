@@ -2,7 +2,7 @@
 % Please edit documentation in R/asymmetryA2.R
 \name{asymmetryA2}
 \alias{asymmetryA2}
-\title{Function to calculate karyotype asymmetry}
+\title{FUNCTION to calculate karyotype asymmetry}
 \usage{
 asymmetryA2(dfChrSize)
 }
@@ -31,11 +31,18 @@ related to:
 }
 \examples{
 asymmetryA2(dfOfChrSize)
+as.data.frame(asymmetryA2(bigdfOfChrSize))
 asymmetryA2(dfChrSizeHolo)
+as.data.frame(asymmetryA2(bigdfChrSizeHolo))
 }
 \references{
 Romero-Zarco. 1986. A New Method for Estimating Karyotype
 Asymmetry. Taxon Vol. 35, No. 3  pp. 526-530
+}
+\seealso{
+\code{\link{chrbasicdatamono}}
+
+\code{\link{chrbasicdataHolo}}
 }
 \keyword{arm}
 \keyword{dataframe}

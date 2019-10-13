@@ -1,7 +1,7 @@
 Package: idiogramFISH
 Title: Idiograms with Marks and Karyotype Indices
-Version: 1.6.1
-Date: 2019-10-02
+Version: 1.6.3
+Date: 2019-10-13
 Authors@R: c(person("Fernando", "Roa", email = "froao@unal.edu.co", role = c("aut", "cre") ), 
              person(given="Mariana PC Telles", email = "", role = c("ctb")) 
              )
@@ -25,9 +25,9 @@ URL: https://ferroao.gitlab.io/manualidiogramfish/,
 BugReports: https://gitlab.com/ferroao/idiogramFISH/issues
 RoxygenNote: 6.1.1
 NeedsCompilation: no
-Packaged: 2019-10-04 18:18:49 UTC; fernando
+Packaged: 2019-10-13 19:02:48 UTC; fernando
 Author: Fernando Roa [aut, cre],
   Mariana PC Telles [ctb]
 Maintainer: Fernando Roa <froao@unal.edu.co>
 Repository: CRAN
-Date/Publication: 2019-10-04 18:40:02 UTC
+Date/Publication: 2019-10-13 20:00:02 UTC
