@@ -119,15 +119,14 @@ library(idiogramFISH)
 # load some package dataframes
 data(dfOfChrSize) # chromsome data
 data(dfMarkColor) # mark general data
-data(dfOfMarks)   # mark position data (not cen.)
-data(dfOfCenMarks)# centromeric mark data
+data(dfOfMarks2)   # mark position data, inc. cen.
 
 svg("dfOfChrSize.svg",width=12,height=8 )
 # png("dfOfChrSize.png", width=500, height=400)
 plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
-              dfMarkColor=dfMarkColor,  # d.f of mark style
-              dfMarkPos=dfOfMarks,      # df of mark positions (not centromeric)
-              dfCenMarks=dfOfCenMarks,  # df of centromeric marks
+              dfMarkColor=dfMarkColor,  # d.f of mark style                 < == Optional for ver. > 1.0.0
+              dfMarkPos=dfOfMarks2,     # df of mark positions (includes cen. marks also)
+
               dotRoundCorr=2,           # correction of dots when non-circular
               
               chrWidth=2.5,             # width of chromosome
@@ -156,10 +155,8 @@ cat(paste0("![](dfOfChrSize.svg)" ) )
 dfOfChrSize
 # mark general data
 dfMarkColor 
-# mark position data (not cen.), if only 1 species, column OTU is optional
-dfOfMarks
-#centromeric mark data, if only 1 species, column OTU is optional
-dfOfCenMarks
+# mark position data, if only 1 species, column OTU is optional
+dfOfMarks2
 
 ## ----example2, echo=T, results="hide", fig.width=10, fig.height=6, message=FALSE----
 library(idiogramFISH)
@@ -175,7 +172,7 @@ plotIdiograms(dfChrSize=dfChrSizeHolo, # data.frame of chr. size
                   addOTUName=FALSE,        # do not add OTU names
                   
                   dotRoundCorr=2.5,        # correction of roundness of dots (marks)  
-                  chrWidth=2.5,            # chr. width
+                  chrWidth=1.5,            # chr. width
                   indexIdTextSize=1,       # font size of chr. name and indices
                   legend="aside" ,         # legend of marks to the right of plot
                   markLabelSize=1,         # font size of mark labels (legend)
@@ -190,30 +187,29 @@ plotIdiograms(dfChrSize=dfChrSizeHolo, # data.frame of chr. size
                   ylimBotMod=.2            # modify ylim bottom argument of plot
                   ,legendHeight=.5         # height of legend labels
                   ,legendWidth = 1.2)      # width of legend labels
-# dev.off()
+# dev.off() # close svg()
 
 ## ----holocentrics, comment=NA--------------------------------------------
 # chromsome data, if only 1 species, column OTU is optional
 dfChrSizeHolo
 # mark general data
 dfMarkColor 
-# mark position data (not cen.), if only 1 species, column OTU is optional
+# mark position, if only 1 species, column OTU is optional
 dfMarkPosHolo
 
 ## ---- echo=T,  comment=NA, message=FALSE---------------------------------
 # chromsome data, if only 1 species, column OTU is optional
 require(plyr)
-dfOfChrSize$OTU  <-"Species mono"
-dfChrSizeHolo$OTU<-"Species holo"
+dfOfChrSize$OTU   <- "Species mono"
+dfChrSizeHolo$OTU <- "Species holo"
  
 monoholoCS <- plyr::rbind.fill(dfOfChrSize,dfChrSizeHolo)
 
-dfOfMarks$OTU     <-"Species mono"
+dfOfMarks2$OTU     <-"Species mono"
+dfOfMarks2[which(dfOfMarks2$markName=="5S"),]$markSize<-.7
 dfMarkPosHolo$OTU <-"Species holo"
 
-monoholoMarks <- plyr::rbind.fill(dfOfMarks,dfMarkPosHolo)
-
-dfOfCenMarks$OTU <-"Species mono"
+monoholoMarks <- plyr::rbind.fill(dfOfMarks2,dfMarkPosHolo)
 
 ## ---- echo=T, results="hide", fig.width=10, fig.height=6, message=FALSE, dev='svg'----
 library(idiogramFISH)
@@ -222,19 +218,19 @@ library(idiogramFISH)
 # function plotIdiogramsHolo deprecated for ver. > 1.5.1
 
 #svg("testing.svg",width=14,height=10 )
-png("monoholoCS.png", width=600, height=500)
+png("monoholoCS.png", width=700, height=500)
 par(mar=rep(0,4))
 plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               dfMarkColor= dfMarkColor,  # df of mark style
-              dfMarkPos  = monoholoMarks,# df of mark positions
-              dfCenMarks = dfOfCenMarks, # d.f. of cen. marks  
+              dfMarkPos  = monoholoMarks,# df of mark positions, includes cen. marks
+ 
               roundness = 8,             # vertices roundness
               dotRoundCorr=1.5,          # correction of roundness of dots (marks)  
               
               addOTUName = TRUE,         # add OTU names
               OTUTextSize = 1,           # OTU name font size
               
-              chrWidth=2.5,              # chr. width
+              chrWidth=1.5,              # chr. width
               indexIdTextSize=1,         # font size of chr. name and indices
               
               legend="aside" ,           # legend of marks to the right of plot

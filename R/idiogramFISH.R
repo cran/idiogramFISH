@@ -1,6 +1,5 @@
 #' Please see the help pages with ?nameoffunction
 #'
-#' The main functions are:
+#' The main function is:
 #' plotIdiograms
-#' plotIdiogramsHolo
 #'

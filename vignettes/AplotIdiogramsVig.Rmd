@@ -155,7 +155,6 @@ mydfMarkColor<-read.table(text=
 4      CMA    yellow square"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 ```
 
-
 <div class="verysmall">
 ```{r, echo=F}
 # just to show it here
@@ -174,6 +173,7 @@ colnames(mydfMarkColor)<-c("markName", "markColor","style")
 # Get marks positions data
 
 Open or write your mark positions as a data.frame. This data.frame has the marks present in all karyotypes with position info.
+This data.frame has also the centromeric marks present in all karyotypes.
 
 ```{r}
 # We will use column OTU if data.frame because chromosome size df has it
@@ -182,9 +182,10 @@ mydfOfMarks<-read.table(text=
 1 \"Species one\"      1       5S       p      0.5         0.5
 2 \"Species one\"      1      45S       q        1         0.5
 3 \"Species one\"      X      45S       p        1         1.0
-4 \"Species one\"      3     DAPI       q        1         1.0"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
+4 \"Species one\"      3     DAPI       q        1         1.0
+5 \"Species one\"      1     DAPI      cen
+6 \"Species one\"      X      CMA      cen", header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 ```
-
 
 <div class="verysmall">
 ```{r, echo=F}
@@ -200,27 +201,6 @@ For fixing column names use something like:
 colnames(mydfMarkColor)<-c("OTU", "chrName","markName","markArm","markSize","markDistCen") 
 ```
 
-# Special data.frame for centromeric marks' data
-
-Open or make your mark data as a data.frame. This data.frame has the centromeric marks present in all karyotypes.
-Only for `centromereSize >0`.
-
-```{r}
-# We will use column OTU because data.frame of chromosome size has it
-mydfOfCenMarks<-read.table(text=
-"             OTU chrName markName
-1  \"Species one\"     1     DAPI
-2  \"Species one\"     X      CMA"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
-```
-
-<div class="verysmall">
-```{r, echo=F}
-kableExtra::kable_styling(knitr::kable(mydfOfCenMarks) , full_width = F
-                           , font_size = 10
-                          , bootstrap_options = c("striped", "hover", "condensed")
-                          )
-```
-</div>
 # Plotting
 
 You can plot without marks (use only 1st data.frame), but we will use all 4 data.frames created.
@@ -233,8 +213,8 @@ Use parameters of the function to modify that. See ?plotIdiograms
 svg("mydfChrSize.svg",width=13,height=8 )
 # png("mydfChrSize.png", width=600, height=400)
 plotIdiograms(dfChrSize=mydfChrSize,      # chr. size data.frame
-              dfMarkPos=mydfOfMarks,      # mark position df (not cen.)
-              dfCenMarks=mydfOfCenMarks,  # cen. marks df
+              dfMarkPos=mydfOfMarks,      # mark position df (inc. cen.)
+
               dfMarkColor=mydfMarkColor,  # mark style df
               roundness=3,                # vertices roundness  
               dotRoundCorr=2.5,           # correction of roundness of dots 
@@ -274,11 +254,11 @@ After v. 1.1.0, vertices when `centromereSize=0` are rounded:
 # fig.width=7, fig.height=4.5
 
 png("mydfChrSize2.png", width=600, height=400)
-plotIdiograms(dfChrSize=mydfChrSize,      # chr. size df
-              dfMarkPos=mydfOfMarks,      # mark position df (not cen.)
-              dfMarkColor=mydfMarkColor,  # mark style df
-
-              # dfCenMarks=mydfOfCenMarks,# cen. marks df, NOT AVAILABLE FOR centromereSize = 0
+plotIdiograms(dfChrSize   = mydfChrSize,  # chr. size df
+              dfMarkColor = mydfMarkColor,# mark style df
+              dfMarkPos   = mydfOfMarks,  # mark position df
+              
+              # cen. marks NOT AVAILABLE for centromereSize = 0
               centromereSize = 0,         # <- HERE
               
               roundness=3,                # vertices roundness  
@@ -315,16 +295,16 @@ For ver. > 1.0.0 there is no need to add `dfMarkColor` and you can also use the 
 unique(c(dfOfMarks$markName,dfOfCenMarks$markName) )
 ```
 
-``` {r, eval=FALSE,dev='svg'}
+``` {r, eval=FALSE, dev='svg'}
 
 charVectorCol <- c("tomato3","darkolivegreen4","dfsd","blue","green")
 png("dfOfChrSize.png", width=600, height=400)
 par(mar=rep(0,4))
+
 plotIdiograms(dfChrSize = dfOfChrSize,     # d.f. of chr. sizes
-              dfMarkPos = dfOfMarks,       # d.f. of marks' positions
+              dfMarkPos = dfOfMarks2,      # d.f. of marks' positions
               chrColor  = "gray",          # chr. color
               cenColor  = "gray",          # cen. color
-              dfCenMarks= dfOfCenMarks,    # marks in centromeres
               
               mycolors = charVectorCol,    # colors to use
               
@@ -347,12 +327,15 @@ dev.off()
 
 # Example with several species (OTUs)
 
-## To illustrate this, we will load some data.frames from the package {-}
+To illustrate this, we will load some data.frames from the package 
 
-``` Chromosome sizes```
+* Chromosome sizes 
+
+<div class="pre-scrollx">
 ```{r, eval=F}
 head(bigdfOfChrSize,30)
 ```
+</div>
 
 <div class="verysmall">
 ```{r, echo=F}
@@ -368,10 +351,18 @@ head(bigdfOfChrSize,30)
 ```
 </div>
 
-``` Mark characteristics, optional for ver. > 1.0.0, does not require OTU  ```
-```{r}
-data(bigdfOfMarks)
+* Mark characteristics, does not require OTU 
+
+<div class="nobullet">
+* optional for ver. > 1.0.0
+</div>
+
+<div class="pre-scrollx">
+```{r, width=45 }
+data("dfMarkColor")
 ```
+</div>
+
 <div class="verysmall">
 ```{r, echo=F}
 kableExtra::kable_styling(knitr::kable(dfMarkColor) , full_width = F
@@ -381,27 +372,17 @@ kableExtra::kable_styling(knitr::kable(dfMarkColor) , full_width = F
 ```
 </div>
 
-```Mark position```
+* Mark position
+
+<div class="pre-scrollx">
 ```{r}
 data("bigdfOfMarks")
 ```
+</div>
+
 <div class="verysmall">
 ```{r, echo=F}
 kableExtra::kable_styling(knitr::kable(bigdfOfMarks) , full_width = F
-                           , font_size = 10
-                          , bootstrap_options = c("striped", "hover", "condensed")
-                          )
-```
-</div>
-
-
-```Centromeric Marks only```
-```{r}
-data("bigdfDataCen")
-```
-<div class="verysmall">
-```{r, echo=F}
-kableExtra::kable_styling(knitr::kable(bigdfDataCen) , full_width = F
                            , font_size = 10
                           , bootstrap_options = c("striped", "hover", "condensed")
                           )
@@ -415,8 +396,8 @@ kableExtra::kable_styling(knitr::kable(bigdfDataCen) , full_width = F
 # png("bigdfOfChrSize.png", width=650, height=1300)
 plotIdiograms(dfChrSize  =bigdfOfChrSize,# chr sizes
               dfMarkColor=dfMarkColor,   # mark characteristics, optional in dev version. see above. 
-              dfMarkPos  =bigdfOfMarks,  # mark positions (no cen. marks)
-              dfCenMarks =bigdfDataCen,  # cen. marks df
+              dfMarkPos  =bigdfOfMarks,  # mark positions (inc. cen. marks)
+                                         # cen. marks in bigdfOfMarks
               karHeight=1.2,             # karyotype rel. height
               karHeiSpace=2.2,           # karyotype vertical size with spacing
               karSepar = TRUE,           # modify vertical separation of kar.
@@ -444,8 +425,9 @@ plotIdiograms(dfChrSize  =bigdfOfChrSize,# chr sizes
               ylimBotMod = 0,            # modify ylim bottom argument
               ylimTopMod = -.3           # modify ylim top argument
               )
-# dev.off()
+# dev.off() # for png()
 ```
+    
 ```{r, results="asis", comment=NA, echo=FALSE, eval=FALSE}
 cat(paste0("![](bigdfOfChrSize.png)" ) )
 ```

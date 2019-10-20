@@ -75,10 +75,14 @@ Organize chr. in rows using column OTU. [@Adler1994]
 
 <!-- tidy = TRUE, tidy.opts = list(comment = FALSE) -->
 
+<div class="pre-scrollx">
 ``` {r otus, message=FALSE, results="hide"}
 library(idiogramFISH)
-head(humChr)  # Chromosome sizes for human
+# Chromosome sizes for human
+head(humChr)  
 ```
+</div>
+
 <div class="verysmall">
 ```{r, echo=F}
 kableExtra::kable_styling(knitr::kable(head(humChr) ), full_width = F
@@ -106,23 +110,34 @@ humChr$OTU<-OTUdf$OTU
 
 Add OTU info. to data.frame of marks' position
 
+<div class="pre-scrollx">
 ``` {r chunk2, results="hide"}
-head(humMarkPos)  # data.frame with marks' position
+# data.frame with marks' position
+head(humMarkPos)  
 ```
+</div>
+
 <div class="verysmall">
 ```{r, echo=F}
 kableExtra::kable_styling(knitr::kable(head(humMarkPos) ), full_width = F
                            , font_size = 10)
 ```
 </div>
+
+<!-- <div class="pre-scrollx"> -->
 ```{r, echo=T}
 humMarkPos$OTU<-OTUdf$OTU[match(humMarkPos$chrName, OTUdf$chrName)]
 ```
+<!-- </div> -->
 
 This is the data.frame of mark characteristics
+
+<div class="pre-scrollx">
 ``` {r, results="hide"}
 head(humMarkColor)
 ```
+</div>
+
 <div class="verysmall">
 ```{r, echo=F}
 kableExtra::kable_styling(knitr::kable(head(humMarkColor )) , full_width = F

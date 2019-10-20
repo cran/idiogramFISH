@@ -13,7 +13,7 @@
 
 [![](https://www.r-pkg.org/badges/version/idiogramFISH?color=orange)](https://cran.r-project.org/package=idiogramFISH)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/idiogramFISH?color=orange)](https://cran.r-project.org/package=idiogramFISH)
-[![](https://img.shields.io/badge/devel%20version-1.6.3-green.svg)](https://gitlab.com/ferroao/idiogramFISH)
+[![](https://img.shields.io/badge/devel%20version-1.7.1-green.svg)](https://gitlab.com/ferroao/idiogramFISH)
 <br><br>
 <a href="https://liberapay.com/ferroao/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
 <img src="http://img.shields.io/liberapay/receives/ferroao.svg?logo=liberapay">
@@ -126,21 +126,20 @@ browseVignettes("idiogramFISH")
 Define your plotting window size with something like `par(pin=c(10,6))`
 
 ``` r
-# fig.width=10, fig.height=6
+# fig.width=8, fig.height=6
 
 library(idiogramFISH)
 # load some package dataframes
 data(dfOfChrSize) # chromsome data
 data(dfMarkColor) # mark general data
-data(dfOfMarks)   # mark position data (not cen.)
-data(dfOfCenMarks)# centromeric mark data
+data(dfOfMarks2)  # mark position data (inc. cen.)
 
 # svg("testing.svg",width=14,height=8 )
 plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
               dfMarkColor=dfMarkColor,  # d.f of mark style                 < == Optional for ver. > 1.0.0
-              dfMarkPos=dfOfMarks,      # df of mark positions (not centromeric)
-              dfCenMarks=dfOfCenMarks,  # df of centromeric marks
-              dotRoundCorr=2.5,         # correction of dots when non-circular
+              dfMarkPos=dfOfMarks2,     # df of mark positions (includes cen. marks)
+              
+              dotRoundCorr=2,           # correction of dots when non-circular
               
               chrWidth=2.5,             # width of chromosome
               chrSpacing = 2.5,         # horizontal space among chromosomes
@@ -161,7 +160,7 @@ plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
 <img src="man/figures/README-example-1.svg" width="70%" />
 
 ``` r
-# dev.off()
+# dev.off() # close svg()
 ```
 
 #### Let’s explore the dataframes for monocentrics:
@@ -184,7 +183,7 @@ plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
 | DAPI     | blue      | square |
 | CMA      | yellow    | square |
 
-    dfOfMarks
+    dfOfMarks2
 
 | chrName | markName | markArm | markSize | markDistCen |
 | :------ | :------- | :------ | -------: | ----------: |
@@ -192,13 +191,8 @@ plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
 | 1       | 45S      | q       |        1 |         0.5 |
 | X       | 45S      | p       |        1 |         1.0 |
 | 3       | DAPI     | q       |        1 |         1.0 |
-
-    dfOfCenMarks
-
-| chrName | markName |
-| :------ | :------- |
-| 1       | DAPI     |
-| X       | CMA      |
+| 1       | DAPI     | cen     |       NA |          NA |
+| X       | CMA      | cen     |       NA |          NA |
 
 #### 2 How to plot a karyotype of holocentrics:
 
@@ -218,7 +212,7 @@ plotIdiograms(dfChrSize=dfChrSizeHolo, # data.frame of chr. size
                   addOTUName=FALSE,        # do not add OTU names
                   
                   dotRoundCorr=2.5,        # correction of roundness of dots (marks)  
-                  chrWidth=2.5,            # chr. width
+                  chrWidth=1.5,            # chr. width
                   indexIdTextSize=1,       # font size of chr. name and indices
                   legend="aside" ,         # legend of marks to the right of plot
                   markLabelSize=1,         # font size of mark labels (legend)
@@ -238,7 +232,7 @@ plotIdiograms(dfChrSize=dfChrSizeHolo, # data.frame of chr. size
 <img src="man/figures/README-example2-1.png" width="70%" />
 
 ``` r
-# dev.off()
+# dev.off() # close svg()
 ```
 
 #### Let’s explore the dataframes for holocentrics:
@@ -274,23 +268,23 @@ plotIdiograms(dfChrSize=dfChrSizeHolo, # data.frame of chr. size
 
 #### 3\. Plotting both mono. and holo.
 
-Available only for ver. \> 1.5.1  
+Available only for ver. \> 1.5.1
+
 Merge data.frames with plyr (Wickham, [2016](#ref-R-plyr))
 
 ``` r
 # chromsome data, if only 1 species, column OTU is optional
 require(plyr)
-dfOfChrSize$OTU  <-"Species mono"
-dfChrSizeHolo$OTU<-"Species holo"
+dfOfChrSize$OTU   <- "Species mono"
+dfChrSizeHolo$OTU <- "Species holo"
  
 monoholoCS <- plyr::rbind.fill(dfOfChrSize,dfChrSizeHolo)
 
-dfOfMarks$OTU     <-"Species mono"
+dfOfMarks2$OTU     <-"Species mono"
+dfOfMarks2[which(dfOfMarks2$markName=="5S"),]$markSize<-.7
 dfMarkPosHolo$OTU <-"Species holo"
 
-monoholoMarks <- plyr::rbind.fill(dfOfMarks,dfMarkPosHolo)
-
-dfOfCenMarks$OTU <-"Species mono"
+monoholoMarks <- plyr::rbind.fill(dfOfMarks2,dfMarkPosHolo)
 ```
 
 ``` r
@@ -303,15 +297,15 @@ par(mar=rep(0,4))
 # svg("testing.svg",width=14,height=10 )
 plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               dfMarkColor= dfMarkColor,  # df of mark style
-              dfMarkPos  = monoholoMarks,# df of mark positions
-              dfCenMarks = dfOfCenMarks, # d.f. of cen. marks  
+              dfMarkPos  = monoholoMarks,# df of mark positions, includes cen. marks
+ 
               roundness = 8,             # vertices roundness
               dotRoundCorr=1.5,          # correction of roundness of dots (marks)  
               
               addOTUName = TRUE,         # add OTU names
               OTUTextSize = 1,           # OTU name font size
               
-              chrWidth=2.5,              # chr. width
+              chrWidth=1.5,              # chr. width
               indexIdTextSize=1,         # font size of chr. name and indices
               
               legend="aside" ,           # legend of marks to the right of plot
@@ -333,7 +327,7 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
 <img src="man/figures/README-unnamed-chunk-9-1.png" width="70%" />
 
 ``` r
-#dev.off()
+#dev.off() # close svg()
 ```
 
 ## Citation

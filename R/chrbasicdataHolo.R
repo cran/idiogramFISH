@@ -13,7 +13,7 @@ NULL
 #'   \item{group}{chromosome group, optional}
 #' }
 #' @seealso \code{\link{asymmetryA2}}
-#' @seealso \code{\link{plotIdiogramsHolo}}
+#' @seealso \code{\link{plotIdiograms}}
 #' @seealso \code{\link{markdataholo}}
 #'
 #' @rdname chrbasicdataHolo

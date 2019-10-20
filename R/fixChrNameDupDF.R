@@ -27,16 +27,18 @@ fixChrNameDupDF<-function(list1dfChromSize, mybooleanChrName){
                ", will be renamed\n this correction is available when no marks to be plotted, otherwise, is fatal")
       ) ) #m
       string<-dfChromSize$chrName
-      mstring <- make.unique(as.character(string) )
-      mstring<-sub("(.*)(\\.)([0-9]+)","\\1_\\3",mstring)
-      y <- rle(string)
-      tmp <- !duplicated(string) & (string %in% y$values[y$lengths>1])
-      mstring[tmp]<-gsub("(.*)","\\1_0", mstring[tmp])
+      mstring <- make.unique(as.character(string), sep="_" )
+      tmp <- !duplicated(string)
+      for (i in 1:length(mstring[tmp])){
+        mstring[tmp][i]<-ifelse(string[tmp][i] %in% string[duplicated(string)], gsub("(.*)","\\1_0", mstring[tmp][i]),
+                                mstring[tmp][i]
+        )
+      }
       end <- sub(".*_([0-9]+)","\\1",grep("_([0-9]*)$",mstring,value=T) )
       beg <- sub("(.*_)[0-9]+","\\1",grep("_([0-9]*)$",mstring,value=T) )
       newend <- as.numeric(end)+1
-      mstring[grep("_([0-9]*)$",mstring)]<-paste0(beg,newend)
-      dfChromSize$chrName<-mstring
+      mstring[grep("_([0-9]*)$",mstring)] <- paste0(beg,newend)
+      dfChromSize$chrName <- mstring
     } # if
   # } # SPS
     list1dfChromSize<-list(dfChromSize)

@@ -1,4 +1,5 @@
 #' @title Mark characteristics
+#' @description style column does not apply to cen. marks, only color.
 #'
 #' @docType data
 #' @name dfMarkStyle
@@ -12,10 +13,8 @@ NULL
 #'   \item{style}{character, use square or dots, optional}
 #' }
 #' @seealso \code{\link{plotIdiograms}}
-#' @seealso \code{\link{plotIdiogramsHolo}}
 #' @seealso \code{\link{markpos}}
 #' @seealso \code{\link{markdataholo}}
-#' @seealso \code{\link{cenmarkdata}}
 #'
 #' @rdname dfMarkStyle
 "dfMarkColor"

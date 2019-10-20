@@ -28,11 +28,11 @@ plotIdiograms(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
 \item{dfMarkPos}{data.frame of marks (sites): cols: \code{OTU} (opt) \code{chrName},
 \code{markName} (name of site), \code{markArm} (for monocen), \code{markDistCen} (for monocen.),
 \code{markPos} (for holocen.), \code{markSize}; column \code{markArm}:
-use \code{p} for short and \code{q} for long; col. \code{markDistCen}: use distance from
-centromere to mark. See param. \code{MarkDistanceType}}
+use \code{p} for short arm, \code{q} for long arm and \code{cen} for centromeric mark; col. \code{markDistCen}: use distance from
+centromere to mark, not necessary for cen. marks. See param. \code{MarkDistanceType}}
 
 \item{dfCenMarks}{data.frame, specific for centromeric marks. cols: \code{chrName}
-and \code{markName}}
+and \code{markName}. See also \code{dfMarkPos} for another option to pass cen. marks}
 
 \item{dfMarkColor}{data.frame, optional, specifying colors and style for marks (sites);
 cols: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: \code{square} or \code{dots}.
@@ -169,12 +169,13 @@ This function reads a data.frame  with columns: \code{chrName} and
 than one species, a column named \code{OTU} is needed.
 
 Optionally, it reads another data.frame with the position of
-marks (sites) \code{dfMarkPos} \code{\link{markpos}}, in which case a data.frame for mark characteristics is
+marks (sites) \code{dfMarkPos} \code{\link{markpos}}, in which case a data.frame for mark characteristics
 can be used \code{\link{dfMarkColor}} or a vector for \code{mycolors}
 }
 \examples{
 data(dfOfChrSize)
 plotIdiograms(dfOfChrSize)
+plotIdiograms(dfChrSizeHolo)
 }
 \seealso{
 \code{\link{asymmetry}}
@@ -183,9 +184,11 @@ plotIdiograms(dfOfChrSize)
 
 \code{\link{chrbasicdatamono}}
 
+\code{\link{chrbasicdataHolo}}
+
 \code{\link{markpos}}
 
-\code{\link{cenmarkdata}}
+\code{\link{markdataholo}}
 
 \code{\link{dfMarkColor}}
 }

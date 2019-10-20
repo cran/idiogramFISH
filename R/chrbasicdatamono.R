@@ -1,4 +1,4 @@
-#' @title Chr. basic data
+#' @title Chr. basic data Monocen.
 #'
 #' @docType data
 #' @name chrbasicdatamono
@@ -16,7 +16,6 @@ NULL
 #' @seealso \code{\link{armRatioCI}}
 #' @seealso \code{\link{asymmetry}}
 #' @seealso \code{\link{markpos}}
-#' @seealso \code{\link{cenmarkdata}}
 #' @rdname chrbasicdatamono
 "dfOfChrSize"
 #' @description bigdfOfChrSize: Example data for monocentrics for several species, OTU

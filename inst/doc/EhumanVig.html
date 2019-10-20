@@ -351,6 +351,7 @@ font-size:10pt;
 padding-top:2px;
 padding-bottom:2px;
 horizontal-align: center;
+text-align: center;
 }
 h1 { 
 font-size: 22px;
@@ -378,6 +379,14 @@ clear: both;
 .goright{
 margin-left:60%;
 }
+.nobullet li {
+list-style-type: none;
+}
+.pre-scrollx {
+max-width: 350px;
+overflow-x: auto;
+margin-left:30%;
+}
 </style></p>
 <div class="goright">
 <p>Go to <a href="index.html">home</a><br />
@@ -391,8 +400,11 @@ Go to <a href="DphylogenyVig.html">4. phylogeny Vignette</a><br />
 <h1><span class="header-section-number">1</span> Karyotype of 400 bands</h1>
 <p>Organize chr. in rows using column OTU. <span class="citation">(Adler, <a href="#ref-Adler1994">1994</a>)</span></p>
 <!-- tidy = TRUE, tidy.opts = list(comment = FALSE) -->
+<div class="pre-scrollx">
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(idiogramFISH)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">head</span>(humChr)  <span class="co"># Chromosome sizes for human</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co"># Chromosome sizes for human</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">head</span>(humChr)  </a></code></pre></div>
+</div>
 <div class="verysmall">
 <table class="table" style="font-size: 10px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -515,7 +527,10 @@ C
 <a class="sourceLine" id="cb2-14" data-line-number="14"></a>
 <a class="sourceLine" id="cb2-15" data-line-number="15">humChr<span class="op">$</span>OTU&lt;-OTUdf<span class="op">$</span>OTU</a></code></pre></div>
 <p>Add OTU info. to data.frame of marks’ position</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">head</span>(humMarkPos)  <span class="co"># data.frame with marks' position</span></a></code></pre></div>
+<div class="pre-scrollx">
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># data.frame with marks' position</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">head</span>(humMarkPos)  </a></code></pre></div>
+</div>
 <div class="verysmall">
 <table class="table" style="font-size: 10px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -663,9 +678,13 @@ p
 </tbody>
 </table>
 </div>
+<!-- <div class="pre-scrollx"> -->
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">humMarkPos<span class="op">$</span>OTU&lt;-OTUdf<span class="op">$</span>OTU[<span class="kw">match</span>(humMarkPos<span class="op">$</span>chrName, OTUdf<span class="op">$</span>chrName)]</a></code></pre></div>
+<!-- </div> -->
 <p>This is the data.frame of mark characteristics</p>
+<div class="pre-scrollx">
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">head</span>(humMarkColor)</a></code></pre></div>
+</div>
 <div class="verysmall">
 <table class="table" style="font-size: 10px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>

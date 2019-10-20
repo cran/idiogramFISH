@@ -31,6 +31,7 @@ font-size: 1.0em;
   padding-top:2px;
   padding-bottom:2px;
   horizontal-align: center;
+  text-align: center;
 }
 
 h1 { /* Header 1 */
@@ -64,3 +65,12 @@ h4 { /* Header 3 */
     margin-left:60%;
 }
 
+.nobullet li {
+  list-style-type: none;
+}
+
+.pre-scrollx {
+  max-width: 350px;
+  overflow-x: auto;
+  margin-left:30%;
+}

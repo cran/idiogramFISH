@@ -26,7 +26,7 @@ bigdfChrSizeHolo: Example data for holocentrics for several species, OTU
 \seealso{
 \code{\link{asymmetryA2}}
 
-\code{\link{plotIdiogramsHolo}}
+\code{\link{plotIdiograms}}
 
 \code{\link{markdataholo}}
 }

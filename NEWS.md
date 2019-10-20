@@ -1,6 +1,14 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 1.7.1
+
+Cen. marks don’t need another data.frame.
+
+# idiogramFISH 1.6.4
+
+Fix for dup. names for not ordered chr. names
+
 # idiogramFISH 1.6.3
 
 Documentation changes.  

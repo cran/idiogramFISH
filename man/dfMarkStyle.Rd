@@ -24,6 +24,8 @@ humMarkColor
 mydfMaColor
 }
 \description{
+style column does not apply to cen. marks, only color.
+
 dfMarkColor: Example General data for marks NOT position
 
 humMarkColor: human mark characteristics
@@ -36,12 +38,8 @@ Adler 1994. Idiogram Album. URL: \url{http://www.pathology.washington.edu/resear
 \seealso{
 \code{\link{plotIdiograms}}
 
-\code{\link{plotIdiogramsHolo}}
-
 \code{\link{markpos}}
 
 \code{\link{markdataholo}}
-
-\code{\link{cenmarkdata}}
 }
 \keyword{datasets}

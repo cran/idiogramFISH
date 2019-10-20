@@ -4,7 +4,7 @@
 #' than one species, a column named \code{OTU} is needed.
 #'
 #' @description Optionally, it reads another data.frame with the position of
-#' marks (sites) \code{dfMarkPos} \code{\link{markpos}}, in which case a data.frame for mark characteristics is
+#' marks (sites) \code{dfMarkPos} \code{\link{markpos}}, in which case a data.frame for mark characteristics
 #' can be used \code{\link{dfMarkColor}} or a vector for \code{mycolors}
 #'
 #' @param dfChrSize mandatory data.frame, with columns: \code{OTU} (optional), \code{chrName} (mandatory),
@@ -12,10 +12,10 @@
 #' @param dfMarkPos data.frame of marks (sites): cols: \code{OTU} (opt) \code{chrName},
 #'   \code{markName} (name of site), \code{markArm} (for monocen), \code{markDistCen} (for monocen.),
 #'   \code{markPos} (for holocen.), \code{markSize}; column \code{markArm}:
-#'   use \code{p} for short and \code{q} for long; col. \code{markDistCen}: use distance from
-#'   centromere to mark. See param. \code{MarkDistanceType}
+#'   use \code{p} for short arm, \code{q} for long arm and \code{cen} for centromeric mark; col. \code{markDistCen}: use distance from
+#'   centromere to mark, not necessary for cen. marks. See param. \code{MarkDistanceType}
 #' @param dfCenMarks data.frame, specific for centromeric marks. cols: \code{chrName}
-#'   and \code{markName}
+#'   and \code{markName}. See also \code{dfMarkPos} for another option to pass cen. marks
 #' @param dfMarkColor data.frame, optional, specifying colors and style for marks (sites);
 #'   cols: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: \code{square} or \code{dots}.
 #'   (if \code{style} missing all are plotted as \code{square})
@@ -102,11 +102,13 @@
 #' @examples
 #' data(dfOfChrSize)
 #' plotIdiograms(dfOfChrSize)
+#' plotIdiograms(dfChrSizeHolo)
 #' @seealso \code{\link{asymmetry}}
 #' @seealso \code{\link{armRatioCI}}
 #' @seealso \code{\link{chrbasicdatamono}}
+#' @seealso \code{\link{chrbasicdataHolo}}
 #' @seealso \code{\link{markpos}}
-#' @seealso \code{\link{cenmarkdata}}
+#' @seealso \code{\link{markdataholo}}
 #' @seealso \code{\link{dfMarkColor}}
 #'
 #' @return plot
@@ -137,10 +139,24 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
     return(NA)
   }
   if(!missing(dfMarkPos)){
-    dfMarkPosInternal<-makeNumCols(dfMarkPos)
+    dfMarkPosInternal1 <- dfMarkPosInternal <- makeNumCols(dfMarkPos)
+    # dfMarkPosInternal  <- dfMarkPosInternal[which(dfMarkPosInternal$markArm!="cen"),]
+    # if(nrow(dfMarkPosInternal)==0 ){
+      # remove(dfMarkPosInternal)
+    # }
+    dfCenMarksInternal <- dfMarkPosInternal1[which(dfMarkPosInternal1$markArm=="cen"),]
+    if(nrow(dfCenMarksInternal)==0 ){
+      remove(dfCenMarksInternal)
+    }
   } # df of marks
-  if(!missing(dfCenMarks)){
-    dfCenMarksInternal<-makeNumCols(dfCenMarks)
+  if(!missing(dfCenMarks)  ){
+    dfCenMarksInternal2<-makeNumCols(dfCenMarks)
+  }
+  if(exists("dfCenMarksInternal") & exists("dfCenMarksInternal2") ) {
+    dfCenMarksInternal<-plyr::rbind.fill(dfCenMarksInternal,dfCenMarksInternal2)
+  }
+  if(!exists("dfCenMarksInternal") & exists("dfCenMarksInternal2") ) {
+    dfCenMarksInternal<-dfCenMarksInternal2
   }
   if(!missing(dfMarkColor)){
     dfMarkColorInternal<-makeNumCols(dfMarkColor)
@@ -173,6 +189,7 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   #
 
 for (i in 1:length(listOfdfChromSize)) {
+
     #
     # remove columns without info. per karyotype
     #
@@ -333,7 +350,14 @@ for (i in 1:length(listOfdfChromSize)) {
     # names(listOfdfMarkPosMonocen)
     if(length(listOfdfMarkPosMonocen)==0){
       remove(listOfdfMarkPosMonocen)
-    }
+    } else {
+      for (i in 1:length(listOfdfMarkPosMonocen)){
+      listOfdfMarkPosMonocen[[i]]  <- listOfdfMarkPosMonocen[[i]][which(listOfdfMarkPosMonocen[[i]]$markArm!="cen"),]
+      } # for
+      # row0 <- which(sapply(listOfdfMarkPosMonocen, nrow) < 1)
+      # listOfdfMarkPosMonocen<-listOfdfMarkPosMonocen[-row0]
+      listOfdfMarkPosMonocen<-Filter(function(x) {nrow(x) >= 1}, listOfdfMarkPosMonocen)
+    }# else
 
     listOfdfMarkPosHolocen<-listOfdfMarkPosInternal[which(names(listOfdfMarkPosInternal) %in% holocenNames)]
     if(length(listOfdfMarkPosHolocen)==0){
@@ -355,7 +379,15 @@ for (i in 1:length(listOfdfChromSize)) {
     listOfdfDataCen<-listOfdfDataCen[which(names(listOfdfDataCen) %in% monocenNames)]
     if(length(listOfdfDataCen)==0){
       remove(listOfdfDataCen)
-    }
+    } else {
+      #
+      #   remove columns without info.
+      #
+      for (i in 1:length(listOfdfDataCen)){
+        listOfdfDataCen[[i]][listOfdfDataCen[[i]]==""]<-NA
+        listOfdfDataCen[[i]]<-  listOfdfDataCen[[i]][, !apply(is.na(listOfdfDataCen[[i]]), 2, all)]
+      } # for
+    } # else
   } # end missing dfCenMarksInternal
 
   #

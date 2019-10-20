@@ -166,12 +166,12 @@ cat(paste0("![](mydfChrSizeHolo.svg)" ) )
 #  )
 
 ## ------------------------------------------------------------------------
-data(bigdfChrSizeHolo, dfMarkColor, bigdfMarkPosHolo)
+data(bigdfChrSizeHolo)
 
 ## ---- echo=F-------------------------------------------------------------
 # just to show it here
 kableExtra::kable_styling(knitr::kable(bigdfChrSizeHolo) , full_width = F
-                           , font_size = 10)
+                           , font_size = 10, position = "center")
 
 ## ------------------------------------------------------------------------
 data(dfMarkColor) 
@@ -192,8 +192,10 @@ kableExtra::kable_styling(knitr::kable(bigdfMarkPosHolo) , full_width = F
 ## ----example3, echo=TRUE, results="hide", fig.width=6, fig.height=6, message=FALSE,dev='svg'----
 library(idiogramFISH)
 
+# fig.width=6, fig.height=6
 png("bigdfChrSizeHolo.png", width=600, height=600)
 par(mar=c(1,1,1,1))
+
 plotIdiograms(dfChrSize=bigdfChrSizeHolo,     # df of chr. sizes
                   dfMarkColor=dfMarkColor,    # df of mark style
                   dfMarkPos=bigdfMarkPosHolo, # df of marks' position

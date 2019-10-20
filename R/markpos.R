@@ -1,4 +1,6 @@
 #' @title Mark Positional data - monocentrics
+#' @description When several OTUs, some can be monocen. and others holocen. Marks distance for monocen. are measured from cen. and for
+#' holocen. from top or bottom depending on \code{param} \code{origin}. See vignettes.
 #'
 #' @docType data
 #' @name markpos
@@ -10,24 +12,28 @@ NULL
 #'   \item{OTU}{OTU, species, mandatory if in dfChrSize}
 #'   \item{chrName}{name of chromosome}
 #'   \item{markName}{name of mark}
-#'   \item{markArm}{use p for short and q for long}
-#'   \item{markDistCen}{distance of mark to centromere}
-#'   \item{markSize}{size of mark}
+#'   \item{markArm}{use p for short arm, q for long arm, and cen for centromeric}
+#'   \item{markDistCen}{distance of mark to centromere (not for cen)}
+#'   \item{markSize}{size of mark (not for cen)}
 #' }
+#' @seealso \code{\link{markdataholo}}
 #' @seealso \code{\link{plotIdiograms}}
 #' @seealso \code{\link{chrbasicdatamono}}
 #' @seealso \code{\link{dfMarkColor}}
 #'
 #' @rdname markpos
 "bigdfOfMarks"
-#' @description dfOfMarks: Example data for mark position
+#' @description dfOfMarks: Example data for marks' position
 #' @rdname markpos
 "dfOfMarks"
-#' @description humMarkPos: human karyotype mark position
+#' @description dfOfMarks2: Marks' position including cen. marks
+#' @rdname markpos
+"dfOfMarks2"
+#' @description humMarkPos: human karyotype marks' position
 #' @source \href{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}{Washington U}
 #' @references Adler 1994. Idiogram Album. URL: \href{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}{Washington U.}
 #' @rdname markpos
 "humMarkPos"
-#' @description allMarksSample: Example data for mark position
+#' @description allMarksSample: Example data for marks' position
 #' @rdname markpos
 "allMarksSample"

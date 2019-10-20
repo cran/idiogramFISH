@@ -35,7 +35,8 @@ cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 
 ## ----otus, message=FALSE, results="hide"---------------------------------
 library(idiogramFISH)
-head(humChr)  # Chromosome sizes for human
+# Chromosome sizes for human
+head(humChr)  
 
 ## ---- echo=F-------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(head(humChr) ), full_width = F
@@ -59,7 +60,8 @@ OTUdf$chrName<-humChr$chrName
 humChr$OTU<-OTUdf$OTU
 
 ## ----chunk2, results="hide"----------------------------------------------
-head(humMarkPos)  # data.frame with marks' position
+# data.frame with marks' position
+head(humMarkPos)  
 
 ## ---- echo=F-------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(head(humMarkPos) ), full_width = F

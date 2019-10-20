@@ -7,7 +7,7 @@
 \alias{bigdfOfChrSize}
 \alias{humChr}
 \alias{allChrSizeSample}
-\title{Chr. basic data}
+\title{Chr. basic data Monocen.}
 \format{data.frame with cols:
 \describe{
 \item{OTU}{OTU, species, optional if only one OTU (species)}
@@ -48,7 +48,5 @@ Adler 1994. Idiogram Album. \url{http://www.pathology.washington.edu/research/cy
 \code{\link{asymmetry}}
 
 \code{\link{markpos}}
-
-\code{\link{cenmarkdata}}
 }
 \keyword{datasets}

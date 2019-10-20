@@ -5,15 +5,14 @@
 \alias{markdataholo}
 \alias{bigdfMarkPosHolo}
 \alias{dfMarkPosHolo}
-\title{Mark data Holo.}
+\title{Mark Positional data - Holocen.}
 \format{data.frame with cols:
 \describe{
 \item{OTU}{OTU, species, optional}
 \item{chrName}{name of chromosome}
 \item{markName}{name of mark}
-\item{markPos}{position from bottom or top (see parameter origin in plotIdiogramsHolo)}
+\item{markPos}{position from bottom or top (see parameter \code{origin} in plotIdiograms)}
 \item{markSize}{size of mark in micrometers or Mb}
-\item{group}{chr. group, optional}
 }}
 \usage{
 bigdfMarkPosHolo
@@ -21,12 +20,17 @@ bigdfMarkPosHolo
 dfMarkPosHolo
 }
 \description{
+When several OTUs, some can be monocen. and others holocen. Marks distance for monocen. are measured from cen. and for
+holocen. from top or bottom depending on \code{param} \code{origin}. See vignettes.
+
 bigdfMarkPosHolo: Example data for mark position of holocentrics with column OTU
 
 dfMarkPosHolo: Example data for mark position of holocentrics
 }
 \seealso{
-\code{\link{plotIdiogramsHolo}}
+\code{\link{markpos}}
+
+\code{\link{plotIdiograms}}
 
 \code{\link{chrbasicdataHolo}}
 }

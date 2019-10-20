@@ -140,6 +140,8 @@ mydfMarkColor<-read.table(text=
 3     DAPI      blue square
 4      CMA    yellow square"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 ```
+
+
 <div class="verysmall">
 ```{r, echo=F}
 # just to show it here
@@ -264,30 +266,37 @@ plotIdiograms(dfChrSize = dfChrSizeHolo, # d.f. of chr. size
 
 # Example with several species (OTUs)
 
-## To illustrate this, we will load some data.frames from the package {-}
+To illustrate this, we will load some data.frames from the package 
 
-Chromosome sizes
+* Chromosome sizes
 
+<div class="pre-scrollx">
 ```{r}
-data(bigdfChrSizeHolo, dfMarkColor, bigdfMarkPosHolo)
+data(bigdfChrSizeHolo)
 ```
+</div>
 
 <div class="verysmall">
 ```{r, echo=F}
 # just to show it here
 kableExtra::kable_styling(knitr::kable(bigdfChrSizeHolo) , full_width = F
-                           , font_size = 10)
+                           , font_size = 10, position = "center")
 ```
 </div>
 
-Mark characteristics, does not require OTU, df optional for ver. > 1.0.0
+* Mark characteristics, does not require OTU
 
+<div class="nobullet">
+* d.f optional for ver. > 1.0.0
+</div>
+
+<div class="pre-scrollx">
 ```{r}
 data(dfMarkColor) 
 ```
+</div>
 
 <div class="verysmall">
-
 ```{r, echo=F}
 # just to show it here
 kableExtra::kable_styling(knitr::kable(dfMarkColor) , full_width = F
@@ -295,14 +304,15 @@ kableExtra::kable_styling(knitr::kable(dfMarkColor) , full_width = F
 ```
 </div>
 
-Mark position
+* Mark position
 
+<div class="pre-scrollx">
 ```{r}
 data(bigdfMarkPosHolo)
 ```
+</div>
 
 <div class="verysmall">
-
 ```{r, echo=F}
 # just to show it here
 kableExtra::kable_styling(knitr::kable(bigdfMarkPosHolo) , full_width = F
@@ -315,8 +325,10 @@ kableExtra::kable_styling(knitr::kable(bigdfMarkPosHolo) , full_width = F
 ```{r example3, echo=TRUE, results="hide", fig.width=6, fig.height=6, message=FALSE,dev='svg'}
 library(idiogramFISH)
 
+# fig.width=6, fig.height=6
 png("bigdfChrSizeHolo.png", width=600, height=600)
 par(mar=c(1,1,1,1))
+
 plotIdiograms(dfChrSize=bigdfChrSizeHolo,     # df of chr. sizes
                   dfMarkColor=dfMarkColor,    # df of mark style
                   dfMarkPos=bigdfMarkPosHolo, # df of marks' position

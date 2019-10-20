@@ -5,6 +5,7 @@
 \alias{markpos}
 \alias{bigdfOfMarks}
 \alias{dfOfMarks}
+\alias{dfOfMarks2}
 \alias{humMarkPos}
 \alias{allMarksSample}
 \title{Mark Positional data - monocentrics}
@@ -13,9 +14,9 @@
 \item{OTU}{OTU, species, mandatory if in dfChrSize}
 \item{chrName}{name of chromosome}
 \item{markName}{name of mark}
-\item{markArm}{use p for short and q for long}
-\item{markDistCen}{distance of mark to centromere}
-\item{markSize}{size of mark}
+\item{markArm}{use p for short arm, q for long arm, and cen for centromeric}
+\item{markDistCen}{distance of mark to centromere (not for cen)}
+\item{markSize}{size of mark (not for cen)}
 }}
 \source{
 \href{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}{Washington U}
@@ -25,23 +26,32 @@ bigdfOfMarks
 
 dfOfMarks
 
+dfOfMarks2
+
 humMarkPos
 
 allMarksSample
 }
 \description{
+When several OTUs, some can be monocen. and others holocen. Marks distance for monocen. are measured from cen. and for
+holocen. from top or bottom depending on \code{param} \code{origin}. See vignettes.
+
 bigdfOfMarks: Example data for mark position with column OTU
 
-dfOfMarks: Example data for mark position
+dfOfMarks: Example data for marks' position
 
-humMarkPos: human karyotype mark position
+dfOfMarks2: Marks' position including cen. marks
 
-allMarksSample: Example data for mark position
+humMarkPos: human karyotype marks' position
+
+allMarksSample: Example data for marks' position
 }
 \references{
 Adler 1994. Idiogram Album. URL: \href{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}{Washington U.}
 }
 \seealso{
+\code{\link{markdataholo}}
+
 \code{\link{plotIdiograms}}
 
 \code{\link{chrbasicdatamono}}

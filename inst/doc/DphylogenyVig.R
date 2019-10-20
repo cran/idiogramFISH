@@ -106,8 +106,8 @@ plot.new()           # ghost plot to the left
 par(fig=c(.3,1,0,1)) # location of right plot
 
 plotIdiograms(allChrSizeSample,                # data.frame of Chr. Sizes
-              allMarksSample,                  # d.f. of Marks (not cen.) 
-              dfCenMarks = allCenMarksSample,  # d.f. of centromeric marks
+              allMarksSample,                  # d.f. of Marks (inc. cen. marks) 
+
               dfMarkColor =  mydfMaColor,      # d.f. of mark characteristics
 
               roundness = 10.5,                # roundness of vertices
@@ -190,8 +190,9 @@ allChrSizeSampleHolo <- allChrSizeSample
 allChrSizeSampleHolo <- allChrSizeSampleHolo[,c("OTU","chrName","longArmSize")]
 colnames(allChrSizeSampleHolo)[which(names(allChrSizeSampleHolo)=="longArmSize")]<-"chrSize"
 
-allMarksSampleHolo   <-allMarksSample
-allMarksSampleHolo   <-allMarksSampleHolo[c("OTU","chrName","markName","markDistCen","markSize")]
+allMarksSampleHolo   <- allMarksSample
+allMarksSampleHolo   <- allMarksSampleHolo[which(allMarksSampleHolo$markArm!="cen"),]
+allMarksSampleHolo   <- allMarksSampleHolo[c("OTU","chrName","markName","markDistCen","markSize")]
 colnames(allMarksSampleHolo)[which(names(allMarksSampleHolo)=="markDistCen")] <- "markPos"
 allMarksSampleHolo[which(allMarksSampleHolo$markName=="5S"),]$markSize <- .5
 
@@ -282,16 +283,24 @@ cat(paste0("![](secondplot2.png)" ) )
 
 ## ---- message=FALSE,eval=packageCheck------------------------------------
 
+# Select this OTU from the monocen.
 monosel<-c("Species_F","Species_C","Species_A")
-allChrSizeSampleSel <- allChrSizeSample[which(allChrSizeSample$OTU %in% monosel  ),]
-allMarksSampleSel   <- allMarksSample[which(allMarksSample$OTU %in% monosel),]
+# chr.
+allChrSizeSampleSel  <- allChrSizeSample [which(allChrSizeSample$OTU  %in% monosel  ),]
+# marks
+allMarksSampleSel    <- allMarksSample   [which(allMarksSample$OTU    %in% monosel  ),]
 
+# Select the others from the holocen.
 holosel    <- setdiff(unique(allChrSizeSampleHolo$OTU),monosel)
+# chr.
 allChrSizeSampleHoloSel <- allChrSizeSampleHolo[which(allChrSizeSampleHolo$OTU %in% holosel  ),]
-allMarksSampleHoloSel   <- allMarksSampleHolo[which(allMarksSampleHolo$OTU %in% holosel),]
+# marks
+allMarksSampleHoloSel   <- allMarksSampleHolo  [which(allMarksSampleHolo$OTU   %in% holosel  ),]
 
+# merge chr d.fs
 mixChrSize <- plyr::rbind.fill(allChrSizeSampleSel,allChrSizeSampleHoloSel)
 
+# merge marks' d.fs
 mixMarks   <- plyr::rbind.fill(allMarksSampleSel,allMarksSampleHoloSel)
 
 ## ---- message=FALSE,eval=packageCheck------------------------------------
@@ -327,8 +336,9 @@ png(file=paste0("thirdplot.png" ),width=962,height=1000)
   par(mar=c(3,0,0,0))
   
 plotIdiograms(mixChrSize,                         # chr. size data.frame
-              mixMarks,                           # data.frame of marks' positions
-              dfMarkColor =  mydfMaColor,         # d.f. of mark characteristics
+              mixMarks,                           # data.frame of marks' positions (inc. cen. marks)
+              dfMarkColor = mydfMaColor,          # d.f. of mark characteristics
+              
               origin="b",                         # position measured from bottom of chr.
               karHeiSpace=2.2,                    # karyotype height with spacing included
               

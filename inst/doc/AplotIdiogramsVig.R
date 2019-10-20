@@ -88,7 +88,9 @@ mydfOfMarks<-read.table(text=
 1 \"Species one\"      1       5S       p      0.5         0.5
 2 \"Species one\"      1      45S       q        1         0.5
 3 \"Species one\"      X      45S       p        1         1.0
-4 \"Species one\"      3     DAPI       q        1         1.0"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
+4 \"Species one\"      3     DAPI       q        1         1.0
+5 \"Species one\"      1     DAPI      cen
+6 \"Species one\"      X      CMA      cen", header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
 ## ---- echo=F-------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(mydfOfMarks) , full_width = F
@@ -99,27 +101,14 @@ kableExtra::kable_styling(knitr::kable(mydfOfMarks) , full_width = F
 ## ---- eval=FALSE---------------------------------------------------------
 #  colnames(mydfMarkColor)<-c("OTU", "chrName","markName","markArm","markSize","markDistCen")
 
-## ------------------------------------------------------------------------
-# We will use column OTU because data.frame of chromosome size has it
-mydfOfCenMarks<-read.table(text=
-"             OTU chrName markName
-1  \"Species one\"     1     DAPI
-2  \"Species one\"     X      CMA"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
-
-## ---- echo=F-------------------------------------------------------------
-kableExtra::kable_styling(knitr::kable(mydfOfCenMarks) , full_width = F
-                           , font_size = 10
-                          , bootstrap_options = c("striped", "hover", "condensed")
-                          )
-
 ## ----example_M1, echo=TRUE, results="hide", fig.width=7, fig.height=4.5, message=FALSE,dev='svg'----
 # fig.width=7, fig.height=4.5
 
 svg("mydfChrSize.svg",width=13,height=8 )
 # png("mydfChrSize.png", width=600, height=400)
 plotIdiograms(dfChrSize=mydfChrSize,      # chr. size data.frame
-              dfMarkPos=mydfOfMarks,      # mark position df (not cen.)
-              dfCenMarks=mydfOfCenMarks,  # cen. marks df
+              dfMarkPos=mydfOfMarks,      # mark position df (inc. cen.)
+
               dfMarkColor=mydfMarkColor,  # mark style df
               roundness=3,                # vertices roundness  
               dotRoundCorr=2.5,           # correction of roundness of dots 
@@ -155,11 +144,11 @@ cat(paste0("![](mydfChrSize.svg)" ) )
 # fig.width=7, fig.height=4.5
 
 png("mydfChrSize2.png", width=600, height=400)
-plotIdiograms(dfChrSize=mydfChrSize,      # chr. size df
-              dfMarkPos=mydfOfMarks,      # mark position df (not cen.)
-              dfMarkColor=mydfMarkColor,  # mark style df
-
-              # dfCenMarks=mydfOfCenMarks,# cen. marks df, NOT AVAILABLE FOR centromereSize = 0
+plotIdiograms(dfChrSize   = mydfChrSize,  # chr. size df
+              dfMarkColor = mydfMarkColor,# mark style df
+              dfMarkPos   = mydfOfMarks,  # mark position df
+              
+              # cen. marks NOT AVAILABLE for centromereSize = 0
               centromereSize = 0,         # <- HERE
               
               roundness=3,                # vertices roundness  
@@ -190,16 +179,16 @@ cat(paste0("![](mydfChrSize2.png)" ) )
 ## ---- eval=FALSE---------------------------------------------------------
 #  unique(c(dfOfMarks$markName,dfOfCenMarks$markName) )
 
-## ---- eval=FALSE,dev='svg'-----------------------------------------------
+## ---- eval=FALSE, dev='svg'----------------------------------------------
 #  
 #  charVectorCol <- c("tomato3","darkolivegreen4","dfsd","blue","green")
 #  png("dfOfChrSize.png", width=600, height=400)
 #  par(mar=rep(0,4))
+#  
 #  plotIdiograms(dfChrSize = dfOfChrSize,     # d.f. of chr. sizes
-#                dfMarkPos = dfOfMarks,       # d.f. of marks' positions
+#                dfMarkPos = dfOfMarks2,      # d.f. of marks' positions
 #                chrColor  = "gray",          # chr. color
 #                cenColor  = "gray",          # cen. color
-#                dfCenMarks= dfOfCenMarks,    # marks in centromeres
 #  
 #                mycolors = charVectorCol,    # colors to use
 #  
@@ -232,8 +221,8 @@ cat(paste0("![](mydfChrSize2.png)" ) )
 # ) 
 # )
 
-## ------------------------------------------------------------------------
-data(bigdfOfMarks)
+## ---- width=45-----------------------------------------------------------
+data("dfMarkColor")
 
 ## ---- echo=F-------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(dfMarkColor) , full_width = F
@@ -250,22 +239,13 @@ kableExtra::kable_styling(knitr::kable(bigdfOfMarks) , full_width = F
                           , bootstrap_options = c("striped", "hover", "condensed")
                           )
 
-## ------------------------------------------------------------------------
-data("bigdfDataCen")
-
-## ---- echo=F-------------------------------------------------------------
-kableExtra::kable_styling(knitr::kable(bigdfDataCen) , full_width = F
-                           , font_size = 10
-                          , bootstrap_options = c("striped", "hover", "condensed")
-                          )
-
 ## ----example_M3, echo=TRUE, results="hide", fig.width=6, fig.height=13, message=FALSE, dev='png'----
 # fig.width=6, fig.height=13
 # png("bigdfOfChrSize.png", width=650, height=1300)
 plotIdiograms(dfChrSize  =bigdfOfChrSize,# chr sizes
               dfMarkColor=dfMarkColor,   # mark characteristics, optional in dev version. see above. 
-              dfMarkPos  =bigdfOfMarks,  # mark positions (no cen. marks)
-              dfCenMarks =bigdfDataCen,  # cen. marks df
+              dfMarkPos  =bigdfOfMarks,  # mark positions (inc. cen. marks)
+                                         # cen. marks in bigdfOfMarks
               karHeight=1.2,             # karyotype rel. height
               karHeiSpace=2.2,           # karyotype vertical size with spacing
               karSepar = TRUE,           # modify vertical separation of kar.
@@ -293,7 +273,7 @@ plotIdiograms(dfChrSize  =bigdfOfChrSize,# chr sizes
               ylimBotMod = 0,            # modify ylim bottom argument
               ylimTopMod = -.3           # modify ylim top argument
               )
-# dev.off()
+# dev.off() # for png()
 
 ## ---- results="asis", comment=NA, echo=FALSE, eval=FALSE-----------------
 #  cat(paste0("![](bigdfOfChrSize.png)" ) )
