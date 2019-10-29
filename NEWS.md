@@ -1,6 +1,14 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 1.8.1
+
+Added parameter for notes to the right of karyotype, see vignettes.
+
+# idiogramFISH 1.7.2
+
+Improvement in messages when plotting.
+
 # idiogramFISH 1.7.1
 
 Cen. marks don’t need another data.frame.

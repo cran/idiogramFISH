@@ -63,14 +63,12 @@ ggtreeOf8 <- ggtree(iqtreephyloUM) + geom_tiplab(size=6)
 gbuil2      <-  ggplot_build(ggtreeOf8)       # get ggplot_built
 gtgbuild    <-  ggplot_gtable(gbuil2)         # get gtable from ggplot_built
 gtgbuild$layout$clip[gtgbuild$layout$name == "panel"] <- "off"                # modify gtable
-ggtreeOf8   <- as_ggplot(gtgbuild)            # back to ggplot
-gtgbuildgg2 <- ggtreeOf8 +  theme(plot.margin = unit(c(1,9.5,3,1.5), "cm") ) # top right bottom left - modify margins
+ggtreeOf8b   <- as_ggplot(gtgbuild)            # back to ggplot
+gtgbuildgg2 <- ggtreeOf8b +  theme(plot.margin = unit(c(1,9.5,3,1.5), "cm") ) # top right bottom left - modify margins
 
 ## ---- message=FALSE,eval=packageCheck------------------------------------
-iqtreephyloUM <- ladderize(iqtreephyloUM, right = FALSE)
-is_tip <- iqtreephyloUM$edge[,2] <= length(iqtreephyloUM$tip.label)
-ordered_tips  <- iqtreephyloUM$edge[is_tip, 2]
-desiredOrder  <- rev(iqtreephyloUM$tip.label[ordered_tips])
+ggtreeOf8TIPS<-ggtreeOf8$data[which(ggtreeOf8$data$isTip),]
+desiredOrder  <- rev(ggtreeOf8TIPS[order(ggtreeOf8TIPS$y),]$label)
 
 ## ---- message=FALSE,eval=packageCheck------------------------------------
 # make a vector without missing OTUs

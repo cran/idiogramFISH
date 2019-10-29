@@ -10,16 +10,17 @@ plotIdiograms(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   cenColor = "gray", roundness = 4, dotRoundCorr = 1.5,
   karHeight = 1.2, karHeiSpace = 1.6, karSepar = TRUE,
   amoSepar = 9, chrId = "original", distTextChr = 0.3,
-  indexIdTextSize = 0.4, OTUTextSize = 0.6, legend = "inline",
-  markLabelSize = 0.4, markLabelSpacer = 2, chrIndex = TRUE,
-  nameChrIndexPos = 2, karIndex = TRUE, karIndexPos = 0.5,
-  morpho = TRUE, addOTUName = TRUE, revOTUs = FALSE, ruler = TRUE,
+  indexIdTextSize = 0.4, notesTextSize = 0.4, OTUTextSize = 0.6,
+  legend = "inline", markLabelSize = 0.4, markLabelSpacer = 2,
+  chrIndex = TRUE, nameChrIndexPos = 2, karIndex = TRUE,
+  karIndexPos = 0.5, notesPos = 0.5, morpho = TRUE,
+  addOTUName = TRUE, revOTUs = FALSE, ruler = TRUE,
   rulerPos = -0.5, rulerPosMod = 0, ruler.tck = -0.004,
   rulerNumberPos = 0.2, rulerNumberSize = 0.4, xlimLeftMod = 1,
   xlimRightMod = 10, ylimBotMod = 0.2, ylimTopMod = 0.2,
   lwd.chr = 2, pattern = "", addMissingOTUAfter = NA,
   missOTUspacings = 0, legendWidth = 1.7, legendHeight = NA,
-  Mb = FALSE, ylabline = 0, origin = "b", n = 50, ...)
+  Mb = FALSE, ylabline = 0, origin = "b", n = 50, notes, ...)
 }
 \arguments{
 \item{dfChrSize}{mandatory data.frame, with columns: \code{OTU} (optional), \code{chrName} (mandatory),
@@ -85,6 +86,8 @@ also affects vertical separation of indices}
 \item{indexIdTextSize}{numeric, font size of chr. and kar. indices and
 chromosome name}
 
+\item{notesTextSize}{numeric, font size of notes, see \code{notes}}
+
 \item{OTUTextSize}{numeric, font size of OTU name (species)}
 
 \item{legend}{character, \code{""} for no legend; \code{"inline"} prints labels near
@@ -105,6 +108,8 @@ centromere pos.) and A2 (interchromosomal asymmetry, variation among
 chromosome sizes)}
 
 \item{karIndexPos}{numeric, move karyotype index}
+
+\item{notesPos}{numeric, move notes to the right}
 
 \item{morpho}{boolean, if \code{TRUE} prints the Guerra and Levan classif of cen.
 position. see \code{?armRatioCI}}
@@ -157,6 +162,8 @@ of idiograms}
 \item{origin, }{For non-monocentric chr. (for holocentrics only) Use \code{"b"} if distance to mark in (\code{"markPos"} col. in \code{"dfMarkPos"}) data.frame measured from bottom of chromosome, use \code{"t"} for distance to mark from top}
 
 \item{n, }{numeric vertices number for round corners}
+
+\item{notes, }{data.frame with cols \code{OTU} and \code{note} for adding notes to each OTU, they appear to the right of chromosomes}
 
 \item{...}{accepts other arguments for the plot, such as, \code{asp}}
 }

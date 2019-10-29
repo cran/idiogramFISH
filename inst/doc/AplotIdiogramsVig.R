@@ -101,6 +101,12 @@ kableExtra::kable_styling(knitr::kable(mydfOfMarks) , full_width = F
 ## ---- eval=FALSE---------------------------------------------------------
 #  colnames(mydfMarkColor)<-c("OTU", "chrName","markName","markArm","markSize","markDistCen")
 
+## ------------------------------------------------------------------------
+# We will use column OTU to add a note to the right
+notesdf<-read.table(text=
+"            OTU    note
+1 \"Species one\"   \"Author notes\"  ", header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
+
 ## ----example_M1, echo=TRUE, results="hide", fig.width=7, fig.height=4.5, message=FALSE,dev='svg'----
 # fig.width=7, fig.height=4.5
 
@@ -128,6 +134,10 @@ plotIdiograms(dfChrSize=mydfChrSize,      # chr. size data.frame
               
               ylimBotMod = 0.4,           # modify ylim bottom argument
               ylimTopMod = 0              # modify ylim top argument
+              
+              ,notes=notesdf              # data.frame with notes NEW
+              ,notesTextSize = 1.3        # font size of notes
+              ,notesPos = 1.5             # space from chr. (right) to note
               
               # ,xlimRightMod = 12
               # ,legend="aside"           # <- TRY THIS

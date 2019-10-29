@@ -13,7 +13,7 @@
 
 [![](https://www.r-pkg.org/badges/version/idiogramFISH?color=orange)](https://cran.r-project.org/package=idiogramFISH)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/idiogramFISH?color=orange)](https://cran.r-project.org/package=idiogramFISH)
-[![](https://img.shields.io/badge/devel%20version-1.7.1-green.svg)](https://gitlab.com/ferroao/idiogramFISH)
+[![](https://img.shields.io/badge/devel%20version-1.7.2-green.svg)](https://gitlab.com/ferroao/idiogramFISH)
 <br><br>
 <a href="https://liberapay.com/ferroao/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
 <img src="http://img.shields.io/liberapay/receives/ferroao.svg?logo=liberapay">

@@ -127,7 +127,7 @@ plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
               dfMarkColor=dfMarkColor,  # d.f of mark style                 < == Optional for ver. > 1.0.0
               dfMarkPos=dfOfMarks2,     # df of mark positions (includes cen. marks also)
 
-              dotRoundCorr=2,           # correction of dots when non-circular
+              dotRoundCorr=2,           # correction of dots when non-circular and vertices
               
               chrWidth=2.5,             # width of chromosome
               chrSpacing = 2.5,         # horizontal space among chromosomes
@@ -171,7 +171,7 @@ plotIdiograms(dfChrSize=dfChrSizeHolo, # data.frame of chr. size
                   dfMarkPos=dfMarkPosHolo, # df of mark positions
                   addOTUName=FALSE,        # do not add OTU names
                   
-                  dotRoundCorr=2.5,        # correction of roundness of dots (marks)  
+                  dotRoundCorr=2.5,        # correction of roundness of dots (marks)  and vertices
                   chrWidth=1.5,            # chr. width
                   indexIdTextSize=1,       # font size of chr. name and indices
                   legend="aside" ,         # legend of marks to the right of plot
@@ -225,7 +225,7 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               dfMarkPos  = monoholoMarks,# df of mark positions, includes cen. marks
  
               roundness = 8,             # vertices roundness
-              dotRoundCorr=1.5,          # correction of roundness of dots (marks)  
+              dotRoundCorr=1.5,          # correction of roundness of dots (marks) and vertices
               
               addOTUName = TRUE,         # add OTU names
               OTUTextSize = 1,           # OTU name font size

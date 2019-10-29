@@ -66,6 +66,7 @@
 #'   centromere pos.) and A2 (interchromosomal asymmetry, variation among
 #'   chromosome sizes)
 #' @param karIndexPos numeric, move karyotype index
+#' @param notesPos numeric, move notes to the right
 #' @param morpho boolean, if \code{TRUE} prints the Guerra and Levan classif of cen.
 #'   position. see \code{?armRatioCI}
 #' @param addOTUName boolean, if \code{TRUE} adds OTU (species) name to karyotype
@@ -92,6 +93,8 @@
 #' @param Mb, boolean, if your measures are in Megabases use \code{TRUE}
 #' @param ylabline, numeric if \code{Mb=TRUE} modify position of y axis title (Mb)
 #' @param n, numeric vertices number for round corners
+#' @param notes, data.frame with cols \code{OTU} and \code{note} for adding notes to each OTU, they appear to the right of chromosomes
+#' @param notesTextSize numeric, font size of notes, see \code{notes}
 #'
 #' @keywords data.frame chromosome
 #'
@@ -121,15 +124,18 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
                         roundness=4, dotRoundCorr=1.5,
                         karHeight=1.2,karHeiSpace=1.6,karSepar=TRUE,amoSepar=9,
                         chrId="original", distTextChr=.3,
-                        indexIdTextSize=.4, OTUTextSize=.6,
+                        indexIdTextSize=.4,
+                        notesTextSize=.4,
+                        OTUTextSize=.6,
                         legend="inline", markLabelSize=.4, markLabelSpacer=2,
                         chrIndex=TRUE, nameChrIndexPos=2, karIndex=TRUE, karIndexPos=.5,
+                        notesPos=.5,
                         morpho=TRUE,
                         addOTUName=TRUE,revOTUs=FALSE,
                         ruler=TRUE,rulerPos=-.5, rulerPosMod=0, ruler.tck=-0.004, rulerNumberPos=.2, rulerNumberSize=.4,
                         xlimLeftMod=1,  xlimRightMod=10, ylimBotMod=.2,ylimTopMod=.2,
                         lwd.chr=2, pattern="", addMissingOTUAfter=NA,missOTUspacings=0,
-                        legendWidth=1.7, legendHeight=NA, Mb=FALSE, ylabline=0, origin="b", n=50,
+                        legendWidth=1.7, legendHeight=NA, Mb=FALSE, ylabline=0, origin="b", n=50, notes,
                         ...)
 {
   if(!missing(dfChrSize)){
@@ -198,7 +204,7 @@ for (i in 1:length(listOfdfChromSize)) {
     listOfdfChromSize[[i]]<-  listOfdfChromSize[[i]][, !apply(is.na(listOfdfChromSize[[i]]), 2, all)]
 
     # Does the data.frame have short and long info?
-    message(crayon::black("\nChecking mandatory columns from dfChrSize for chr. with cen.: \nchrName, shortArmSize,longArmSize,\n (column OTU  is necessary if more than one species)\n"
+    message(crayon::black("\nChecking columns from dfChrSize\n"
     ) ) # mess
 
     #
@@ -207,6 +213,8 @@ for (i in 1:length(listOfdfChromSize)) {
 
     if(length( setdiff(c("chrName", "shortArmSize","longArmSize"),
                        colnames(listOfdfChromSize[[i]]) ) )==0 ){
+      message(crayon::black("\nChecking mandatory columns from dfChrSize for chr. with cen.: \nchrName, shortArmSize,longArmSize,\n (column OTU  is necessary if more than one species)\n"
+      ) ) # mess
       message(crayon::green(paste("\nOTU ",names(listOfdfChromSize)[[i]],"has all columns with info to have monocen. If not, you have to clean your data"))
       )# message
       attr(listOfdfChromSize[[i]],'cenType') <- "monocen"
@@ -237,8 +245,10 @@ for (i in 1:length(listOfdfChromSize)) {
 
     else if(length( setdiff(c("chrName", "chrSize"),
                             colnames(listOfdfChromSize[[i]]) ) )==0 ){
-      message(crayon::green(paste(c("\nOTU ",names(listOfdfChromSize)[[i]]," has all columns with info have holocen. If not, you have to clean your data")))
-      )# message
+      message(crayon::black("\nChecking mandatory columns from dfChrSize for chr. without cen.: \nchrName, chrSize,\n (column OTU  is necessary if more than one species)\n"
+      ) ) # mess
+      message(crayon::green(paste(c("\nOTU ",names(listOfdfChromSize)[[i]]," has all columns with info to have holocen. If not, you have to clean your data")))
+      ) # message
       attr(listOfdfChromSize[[i]], 'cenType') <- "holocen"
 
         if(Mb){
@@ -269,6 +279,8 @@ for (i in 1:length(listOfdfChromSize)) {
 
     else if(length( setdiff(c("chrName", "shortArmSize","longArmSize"),
                        colnames(listOfdfChromSize[[i]]) ) )>0 ){
+      message(crayon::black("\nChecking mandatory columns from dfChrSize for chr. with cen.: \nchrName, shortArmSize,longArmSize,\n (column OTU  is necessary if more than one species)\n"
+      ) ) # mess
       message(crayon::green(paste(c("\nOTU ",names(listOfdfChromSize)[[i]]," does not have all columns with info to make a monocen.: ",
                                     paste0(c(setdiff(c("chrName", "shortArmSize","longArmSize"),
                                                      colnames(listOfdfChromSize[[i]])
@@ -1748,11 +1760,12 @@ newLongx<-newLongx[!is.na(newLongx)]
     ) # end lapply
   } # fi
 
-  #################################
-  # vertical karyotype index
-  #################################
+#################################
+# vertical karyotype index
+#################################
 
   if(karIndex){
+
     for (i in 1:length(listOfdfChromSizenoNA) ) {
       if(attr(listOfdfChromSizenoNA[[i]],"cenType")=="monocen"){
         if(is.character(names(listOfdfChromSizenoNA)[[i]]  ) ){
@@ -1796,6 +1809,54 @@ newLongx<-newLongx[!is.na(newLongx)]
     } # for
   } # fi
 
+
+  #################################
+  # add notes
+  #################################
+
+  if(!missing(notes)){
+
+    for (i in 1:length(listOfdfChromSizenoNA) ) {
+      if(attr(listOfdfChromSizenoNA[[i]],"cenType")=="monocen"){
+        note<-notes[which(notes$OTU %in% names(listOfdfChromSizenoNA)[i] ), ]$note
+        if(!is.null(note) & length(note)>0 ){
+          graphics::text(
+            # c( (
+                          # xmnoNA[[i]][1,3]-(xlimLeftMod*(karIndexPos/2) )
+                          max(xmnoNA[[i]]) + (xlimLeftMod*(notesPos/2) )
+                          # ) ),
+                          # ,rep(
+                          ,min(ymnoNA[[i]][,1])
+                          # , 1 ), #2
+                          ,labels = paste(note ),
+                          cex=notesTextSize,
+                          adj=0 # justif
+          ) # end graphics::text
+        } # null
+
+      } # if monocen
+      else if(attr(listOfdfChromSizenoNA[[i]],"cenType")=="holocen"){
+        note<-notes[which(notes$OTU %in% names(listOfdfChromSizenoNA)[i] ), ]$note
+
+        # ind<-asymmetryA2(listOfdfChromSizenoNA[[i]])
+        if(!is.null(note)  & length(note)>0 ){
+          graphics::text(
+            # c( (
+              # xmnoNA[[i]][1,3]-(xlimLeftMod*(karIndexPos/2) )
+              max(xmnoNA[[i]]) + ( xlimLeftMod*(notesPos/2) )
+              # ) ),
+                         ,(max(ymnoNA[[i]]) + min(ymnoNA[[i]]) ) /2 #(distTextChr/3)   #[,1]  was /3
+                         ,labels = paste(note ),
+                         cex=notesTextSize,
+                         adj= 0 # 0.5 centered
+          ) # end graphics::text
+        } # null
+      } # holocen
+    } # for
+  } # fi notes
+
+
+
   #########################################################################
   # add species names
   #########################################################################
@@ -1810,7 +1871,8 @@ newLongx<-newLongx[!is.na(newLongx)]
     lapply(1:length(xmnoNA), function(s) {
       if(attr(xmnoNA[[s]],"cenType")=="holocen") {
         decVector<-5
-        }
+      }
+
       graphics::text( c( (xmnoNA[[s]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),
                       ydistance <- (min(ymnoNA[[s]]) - distVector[decVector] ),
                       labels = paste("",names(listOfdfChromSizenoNA)[[s]] ),
