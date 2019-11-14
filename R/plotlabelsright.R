@@ -30,8 +30,11 @@ plotlabelsright<-function(x,y, markLabelSpacer,chrWidth,dfMarkColorInternal,allM
   miny<-(min(unlist(y)) )
   chrWidth<-chrWidth*legendWidth
   labelx<-(maxx+markLabelSpacer)+(c(0, chrWidth, chrWidth,0)+0)
+  # labelxdot<-(maxx+markLabelSpacer)+(c(0, legendWidth, legendWidth,0)+0)
 
   labelx<-t(replicate(nrow(dfMarkColorInternal),labelx) )
+  # labelxdot<-t(replicate(nrow(dfMarkColorInternal),labelxdot) )
+
   if(is.na(legendHeight)){
     if(exists("allMarkMaxSize")){
       legendHeight<-allMarkMaxSize*normalizeToOne
@@ -89,7 +92,7 @@ plotlabelsright<-function(x,y, markLabelSpacer,chrWidth,dfMarkColorInternal,allM
   ##################
 
   {
-    labelxdiff<-(max(labelx) - min(labelx) )
+    labelxdiff<- (max(labelx) - min(labelx) )
     diffxQuar<-labelxdiff/4
     xcenters<- c((min(labelx)+diffxQuar),(min(labelx)+3*diffxQuar) )
 
@@ -101,8 +104,9 @@ plotlabelsright<-function(x,y, markLabelSpacer,chrWidth,dfMarkColorInternal,allM
     ycenters<-labely[which(dfMarkColorInternal$style=="dots"),2]+labelydiffhalf
     listOfycenters<-lapply(ycenters, function(x) rep(x,2) )
 
-    rad<-min(labelydiffhalf, (diffxQuar) )
-
+    # rad<-min(labelydiffhalf, (diffxQuar) )
+    rad<-labelydiffhalf
+    # rad <- min(labelydiffs[1], (diffxQuar) )
 
     yfactor<-1
     # xfactor<-(xsizeplot/ysizeplot  )/dotRoundCorr

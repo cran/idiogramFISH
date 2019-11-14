@@ -169,7 +169,6 @@ cat(paste0("![](mydfChrSizeHolo.svg)" ) )
 data(bigdfChrSizeHolo)
 
 ## ---- echo=F-------------------------------------------------------------
-# just to show it here
 kableExtra::kable_styling(knitr::kable(bigdfChrSizeHolo) , full_width = F
                            , font_size = 10, position = "center")
 
@@ -177,7 +176,6 @@ kableExtra::kable_styling(knitr::kable(bigdfChrSizeHolo) , full_width = F
 data(dfMarkColor) 
 
 ## ---- echo=F-------------------------------------------------------------
-# just to show it here
 kableExtra::kable_styling(knitr::kable(dfMarkColor) , full_width = F
                            , font_size = 10)
 

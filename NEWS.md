@@ -1,9 +1,18 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 1.8.3
+
+Fixed dependencies
+
+# idiogramFISH 1.8.2
+
+Fixed size of dots of legend
+
 # idiogramFISH 1.8.1
 
-Added parameter for notes to the right of karyotype, see vignettes.
+Added parameter for adding notes to the right of karyotype, see
+vignettes.
 
 # idiogramFISH 1.7.2
 

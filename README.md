@@ -1,22 +1,19 @@
+idiogramFISH
+================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 <img src=man/figures/logo.svg align="right" width="12%" hspace="50">
 
-# idiogramFISH<br></br>Idiograms with Marks and Karyotype Indices<br></br><br></br><br></br>
+# Idiograms with Marks and Karyotype Indices<br></br><br></br><br></br>
 
 <!-- <img src='' align="right" width=20% margin=150px /> -->
 
 <!-- height="120" -->
 
-<!-- badges: start -->
-
-[![](https://www.r-pkg.org/badges/version/idiogramFISH?color=orange)](https://cran.r-project.org/package=idiogramFISH)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/idiogramFISH?color=orange)](https://cran.r-project.org/package=idiogramFISH)
-[![](https://img.shields.io/badge/devel%20version-1.7.2-green.svg)](https://gitlab.com/ferroao/idiogramFISH)
-<br><br>
-<a href="https://liberapay.com/ferroao/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
-<img src="http://img.shields.io/liberapay/receives/ferroao.svg?logo=liberapay">
+ ![’’](man/figures/cranversion.svg) ![’’](man/figures/crandownload.svg)
+ ![’’](man/figures/gitbadge.svg) <br></br>
+[![donate](man/figures/donate.svg)](https://liberapay.com/ferroao/donate)[![donate](man/figures/donateweek.svg)](https://liberapay.com/ferroao/donate)
 <!-- badges: end -->
 
 The goal of idiogramFISH is to plot idiograms of several karyotypes
@@ -31,12 +28,13 @@ Watanabe *et al.*, [1999](#ref-Watanabe1999)).
 
 IdiogramFISH was written in R(R Core Team, [2019](#ref-R-base)) and also
 uses crayon package (Csárdi, [2017](#ref-R-crayon)). Manuals were
-written with R-packages bookdown, knitr, badger, pkgdown and Rmarkdown
-(Allaire *et al.*, [2019](#ref-R-rmarkdown); Wickham and Hesselberth,
+written with R-packages bookdown, knitr, pkgdown and Rmarkdown (Allaire
+*et al.*, [2019](#ref-R-rmarkdown); Wickham and Hesselberth,
 [2019](#ref-R-pkgdown); Xie,
 [2019](#ref-R-bookdown)[a](#ref-R-bookdown),
-[2019](#ref-R-knitr)[b](#ref-R-knitr); Yu,
-[2019](#ref-R-badger))
+[2019](#ref-R-knitr)[b](#ref-R-knitr))
+
+<!-- badger -->
 
 ## Installation
 
@@ -56,8 +54,21 @@ Attention windows users, please install
 ``` r
 # This installs package devtools, necessary for installing the dev version
 install.packages("devtools")
-
 url <- "https://gitlab.com/ferroao/idiogramFISH"
+```
+
+``` r
+# Necessary packages for vignettes:
+list.of.packages <- c(
+    "knitr",
+    "kableExtra",
+    "prettydoc",
+    "rmarkdown",
+    "RCurl",
+    "rvcheck"
+    )
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
 ```
 
 ``` r
@@ -139,7 +150,7 @@ plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
               dfMarkColor=dfMarkColor,  # d.f of mark style                 < == Optional for ver. > 1.0.0
               dfMarkPos=dfOfMarks2,     # df of mark positions (includes cen. marks)
               
-              dotRoundCorr=2,           # correction of dots when non-circular
+              dotRoundCorr=2,           # correction of dots when non-circular and vertices
               
               chrWidth=2.5,             # width of chromosome
               chrSpacing = 2.5,         # horizontal space among chromosomes
@@ -211,7 +222,7 @@ plotIdiograms(dfChrSize=dfChrSizeHolo, # data.frame of chr. size
                   dfMarkPos=dfMarkPosHolo, # df of mark positions
                   addOTUName=FALSE,        # do not add OTU names
                   
-                  dotRoundCorr=2.5,        # correction of roundness of dots (marks)  
+                  dotRoundCorr=2.5,        # correction of roundness of dots (marks) and chr. vertices
                   chrWidth=1.5,            # chr. width
                   indexIdTextSize=1,       # font size of chr. name and indices
                   legend="aside" ,         # legend of marks to the right of plot
@@ -300,7 +311,7 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               dfMarkPos  = monoholoMarks,# df of mark positions, includes cen. marks
  
               roundness = 8,             # vertices roundness
-              dotRoundCorr=1.5,          # correction of roundness of dots (marks)  
+              dotRoundCorr=1.5,          # correction of roundness of dots (marks) and vertices
               
               addOTUName = TRUE,         # add OTU names
               OTUTextSize = 1,           # OTU name font size
@@ -324,7 +335,7 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-13-1.png" width="70%" />
 
 ``` r
 #dev.off() # close svg()
@@ -443,13 +454,6 @@ markdown*. <https://github.com/rstudio/bookdown>
 
 Xie Y. 2019b. *Knitr: A general-purpose package for dynamic report
 generation in r*. <https://CRAN.R-project.org/package=knitr> 
-
-</div>
-
-<div id="ref-R-badger">
-
-Yu G. 2019. *Badger: Badge for r package*.
-<https://CRAN.R-project.org/package=badger> 
 
 </div>
 

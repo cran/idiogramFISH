@@ -36,7 +36,7 @@ cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 library(idiogramFISH) 
 
 ## ------------------------------------------------------------------------
-# Example data.frame written in R, use: (column OTU is optional if only 1 OTU)
+# Example data.frame to write in R, use: (column OTU is optional if only 1 OTU)
 mydfChrSize<-read.table(text=
 "            OTU chrName shortArmSize longArmSize 
 1 \"Species one\"   1     1.5         2.0  
@@ -54,6 +54,9 @@ kableExtra::kable_styling(knitr::kable(mydfChrSize) , full_width = F
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  mydfChrSize<-read.csv("somefile.csv")
+
+## ---- eval=FALSE---------------------------------------------------------
+#  bigdfOfChrSize <- edit(bigdfOfChrSize, edit.row.names = FALSE)
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  colnames(mydfChrSize)<-c("OTU", "chrName","shortArmSize","longArmSize")
@@ -102,7 +105,7 @@ kableExtra::kable_styling(knitr::kable(mydfOfMarks) , full_width = F
 #  colnames(mydfMarkColor)<-c("OTU", "chrName","markName","markArm","markSize","markDistCen")
 
 ## ------------------------------------------------------------------------
-# We will use column OTU to add a note to the right
+# We will use column note to add a note to the right of the karyotype of the OTU in column OTU
 notesdf<-read.table(text=
 "            OTU    note
 1 \"Species one\"   \"Author notes\"  ", header=TRUE, stringsAsFactors=FALSE,fill=TRUE)

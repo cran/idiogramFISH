@@ -325,7 +325,7 @@ valuesOfMissRepsBeforePlot2 <- reps$lengths[which(reps$values=="R")]
 
 ## ---- message=FALSE, comment=NA, results="hide",eval=packageCheck--------
 # plot to png file
-png(file=paste0("thirdplot.png" ),width=962,height=1000)
+png(file=paste0("thirdplot.png" ),width=1100,height=1000)
 {
   par(omi=rep(0,4) , mar=c(0,0,0,0), mfrow=c(1,2))
   par(fig=c(0,.25,0,1)) 
@@ -341,7 +341,7 @@ plotIdiograms(mixChrSize,                         # chr. size data.frame
               karHeiSpace=2.2,                    # karyotype height with spacing included
               
               roundness = 10.5,                   # vertices roundness
-              dotRoundCorr = 1.0,                 # correction of roundness of dots and vertices
+              dotRoundCorr = 0.75,                # correction of roundness of dots and vertices
               
               chrWidth =1.8,                      # width of chr.  
               chrSpacing = 1.5,                   # horizontal spacing among chr.

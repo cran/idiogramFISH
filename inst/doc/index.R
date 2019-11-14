@@ -40,9 +40,8 @@ cat(paste0("<img src=",img1_path," class=\"right\" width=\"20%\">") )
  badge_devel_gitlab<-function(pkg, color){
     v <- rvcheck:::check_github_gitlab(pkg, "gitlab")$latest_version
     url <- paste0("https://gitlab.com/", pkg)
-    badger::badge_custom("devel version", v, color, url)
+    idiogramFISH:::badge_custom("devel version", v, color, url)
  }
-
 
 ## ---- echo=F, fig.show = "hold", fig.align = "default"-------------------
 # library(badger)
@@ -76,7 +75,7 @@ cat(paste0("&nbsp;![''](",knitr::include_graphics(crandownloads_contFile),")" ) 
 ## ---- echo=F, message=FALSE, warning=F, include=T------------------------
 if (requireNamespace("RCurl", quietly = TRUE)  ) {
 v<-tryCatch(suppressWarnings(rvcheck:::check_github_gitlab("ferroao/idiogramFISH", "gitlab")$latest_version), error=function(e) NA )
-link<-tryCatch(suppressWarnings(badger::badge_custom("devel version", v, "green") ), error=function(e) NA )
+link<-tryCatch(suppressWarnings(idiogramFISH:::badge_custom("devel version", v, "green") ), error=function(e) NA )
 if(!is.na(link)){
 svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
 gitbadge_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svglink) ), error=function(e) NA )
@@ -95,6 +94,19 @@ knitr::include_graphics(gitbadge_contFile)
 #  install.packages("devtools")
 #  
 #  url <- "https://gitlab.com/ferroao/idiogramFISH"
+
+## ---- eval=FALSE---------------------------------------------------------
+#  # Necessary packages for vignettes:
+#  list.of.packages <- c(
+#      "knitr",
+#      "kableExtra",
+#      "prettydoc",
+#      "rmarkdown",
+#      "RCurl",
+#      "rvcheck"
+#      )
+#  new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+#  if(length(new.packages)) install.packages(new.packages)
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  # Linux with vignettes and Windows R-32bits
@@ -116,10 +128,11 @@ knitr::include_graphics(gitbadge_contFile)
 # fig.width=10, fig.height=6
 
 library(idiogramFISH)
+
 # load some package dataframes
 data(dfOfChrSize) # chromsome data
 data(dfMarkColor) # mark general data
-data(dfOfMarks2)   # mark position data, inc. cen.
+data(dfOfMarks2)  # mark position data, inc. cen.
 
 svg("dfOfChrSize.svg",width=12,height=8 )
 # png("dfOfChrSize.png", width=500, height=400)
@@ -160,7 +173,8 @@ dfOfMarks2
 
 ## ----example2, echo=T, results="hide", fig.width=10, fig.height=6, message=FALSE----
 library(idiogramFISH)
-# load some saved dataframes
+
+# load some package data.frames
 data(dfChrSizeHolo, dfMarkColor, dfMarkPosHolo)
 
 # plotIdiogramsHolo is deprecated
@@ -197,8 +211,8 @@ dfMarkColor
 # mark position, if only 1 species, column OTU is optional
 dfMarkPosHolo
 
-## ---- echo=T,  comment=NA, message=FALSE---------------------------------
-# chromsome data, if only 1 species, column OTU is optional
+## ---- echo=T,  comment=NA, results="hide", message=FALSE-----------------
+# chromosome data, if only 1 species, column OTU is optional
 require(plyr)
 dfOfChrSize$OTU   <- "Species mono"
 dfChrSizeHolo$OTU <- "Species holo"
@@ -259,12 +273,17 @@ print(citation("idiogramFISH"),bibtex=FALSE)
 ## ---- echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"----
 # library(badger)
 if (requireNamespace("RCurl", quietly = TRUE)  ) {
+# donate_cont <- tryCatch(RCurl::getURLContent(donate), error=function(e) NA )
+# if (!is.na(donate_cont)){
+# donate_contFile <- "donate.svg"
+# # donate_contFile <- tempfile(fileext = ".svg")
+# writeLines(donate_cont, con = donate_contFile)
+# cat(paste0("[![donate](",knitr::include_graphics(donate_contFile),")](https://liberapay.com/ferroao/donate)" ) )
+# }
 donate <- "https://liberapay.com/assets/widgets/donate.svg"
-donate_cont <- tryCatch(RCurl::getURLContent(donate), error=function(e) NA )
-if (!is.na(donate_cont)){
 donate_contFile <- "donate.svg"
-# donate_contFile <- tempfile(fileext = ".svg")
-writeLines(donate_cont, con = donate_contFile)
+tryCatch(suppressWarnings(download.file(donate, donate_contFile) ), error=function(e) "")
+if(file.exists(donate_contFile ) ) {
 cat(paste0("[![donate](",knitr::include_graphics(donate_contFile),")](https://liberapay.com/ferroao/donate)" ) )
 }
 }
@@ -273,7 +292,6 @@ cat(paste0("[![donate](",knitr::include_graphics(donate_contFile),")](https://li
 # library(badger)
 if (requireNamespace("RCurl", quietly = TRUE) ) {
 donateweek <- "http://img.shields.io/liberapay/receives/ferroao.svg"
-# donateweek_contFile <- tempfile(fileext = ".svg")
 donateweek_contFile <- "donateweek.svg"
 tryCatch(suppressWarnings(download.file(donateweek, donateweek_contFile) ), error=function(e) "")
 if(file.exists(donateweek_contFile ) ) {
@@ -284,6 +302,6 @@ cat(paste0("[![donate](",knitr::include_graphics(donateweek_contFile),")](https:
 ## ----include=FALSE-------------------------------------------------------
 # automatically create a bib database for R packages, this is currently not used by vignette packages2.bib
 knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","badger","pkgdown","crayon","ggtree","ggplot2","ggpubr","phytools","plyr"
+  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","pkgdown","crayon","ggtree","ggplot2","ggpubr","phytools","plyr"
 ), 'packages2.bib')
 

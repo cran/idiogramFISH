@@ -98,9 +98,8 @@ Initially you have to open your chromosome data as a data.frame.
 
 ## From scratch: {-}
 
-
 ```{r}
-# Example data.frame written in R, use: (column OTU is optional if only 1 OTU)
+# Example data.frame to write in R, use: (column OTU is optional if only 1 OTU)
 mydfChrSize<-read.table(text=
 "            OTU chrName shortArmSize longArmSize 
 1 \"Species one\"   1     1.5         2.0  
@@ -125,8 +124,15 @@ setwd("~/folder/subfolder")
 ```
 
 Open your chromosome data data.frame importing it from a .csv (read.csv) or .xls file (readxl). 
+
 ``` {r, eval=FALSE}
 mydfChrSize<-read.csv("somefile.csv")
+```
+
+Editing a data.frame:
+
+``` {r, eval=FALSE}
+bigdfOfChrSize <- edit(bigdfOfChrSize, edit.row.names = FALSE)
 ```
 
 For fixing column names use:
@@ -206,7 +212,7 @@ colnames(mydfMarkColor)<-c("OTU", "chrName","markName","markArm","markSize","mar
 For ver. > 1.7
 
 ```{r}
-# We will use column OTU to add a note to the right
+# We will use column note to add a note to the right of the karyotype of the OTU in column OTU
 notesdf<-read.table(text=
 "            OTU    note
 1 \"Species one\"   \"Author notes\"  ", header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
