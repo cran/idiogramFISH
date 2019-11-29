@@ -34,9 +34,9 @@ dfMarkPoschr2<-dfMarkPos[which(dfMarkPos$chrName %in% chr2),]
 
 # Making derivative data.frame of Marks
 # leave one arm for chr2
-dfMarkPoschr2Der<-dfMarkPoschr2[dfMarkPoschr2$markArm==arm2,]
+dfMarkPoschr2Der<-dfMarkPoschr2[dfMarkPoschr2$chrRegion==arm2,]
 # leave one arm for chr2
-dfMarkPoschr1Der<-dfMarkPoschr1[dfMarkPoschr1$markArm==arm1,]
+dfMarkPoschr1Der<-dfMarkPoschr1[dfMarkPoschr1$chrRegion==arm1,]
 # merge fragments of Marks
 dfMarkPosDer<-rbind(dfMarkPoschr2Der,dfMarkPoschr1Der)
 
@@ -77,14 +77,14 @@ if(dfChrSizechr2$ArmSize>dfChrSizechr1$ArmSize){
 if( "longArmSize" %in% colnames(dfChrSizechr1) ){
   dfChrSizeDer<-dfChrSizechr1
   dfChrSizeDer$shortArmSize<-dfChrSizechr2$shortArmSize
-  dfMarkPosDer[which(dfMarkPosDer$chrName %in% chr1),]$markArm<-"q"
-  dfMarkPosDer[which(dfMarkPosDer$chrName %in% chr2),]$markArm<-"p"
+  dfMarkPosDer[which(dfMarkPosDer$chrName %in% chr1),]$chrRegion<-"q"
+  dfMarkPosDer[which(dfMarkPosDer$chrName %in% chr2),]$chrRegion<-"p"
 
 } else if("longArmSize" %in% colnames(dfChrSizechr2)  ){
   dfChrSizeDer<-dfChrSizechr2
   dfChrSizeDer$shortArmSize<-dfChrSizechr1$shortArmSize
-  dfMarkPosDer[which(dfMarkPosDer$chrName %in% chr2),]$markArm<-"q"
-  dfMarkPosDer[which(dfMarkPosDer$chrName %in% chr1),]$markArm<-"p"
+  dfMarkPosDer[which(dfMarkPosDer$chrName %in% chr2),]$chrRegion<-"q"
+  dfMarkPosDer[which(dfMarkPosDer$chrName %in% chr1),]$chrRegion<-"p"
 }
 
 # rename Der. chr.

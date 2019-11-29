@@ -11,7 +11,7 @@ checkNameChrDfMarks(listOfdfChromSize, listOfdfMarks)
 with cen.: shortArmSize, longArmSize, for holoc.: chrSize}
 
 \item{listOfdfMarks}{list of data.frames of marks (sites): OTU (opt / mandat. if in
-dfChrSize), chrName markName markSize, for chr. with cen.:  markArm (p,q)
+dfChrSize), chrName markName markSize, for chr. with cen.:  chrRegion (p,q)
 markDistCen, for holoc: markPos}
 }
 \value{

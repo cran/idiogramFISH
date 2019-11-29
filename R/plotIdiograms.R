@@ -10,8 +10,8 @@
 #' @param dfChrSize mandatory data.frame, with columns: \code{OTU} (optional), \code{chrName} (mandatory),
 #'   \code{shortArmSize}, \code{longArmSize} for monocen. or \code{chrSize} for holocen.
 #' @param dfMarkPos data.frame of marks (sites): cols: \code{OTU} (opt) \code{chrName},
-#'   \code{markName} (name of site), \code{markArm} (for monocen), \code{markDistCen} (for monocen.),
-#'   \code{markPos} (for holocen.), \code{markSize}; column \code{markArm}:
+#'   \code{markName} (name of site), \code{chrRegion} (for monocen), \code{markDistCen} (for monocen.),
+#'   \code{markPos} (for holocen.), \code{markSize}; column \code{chrRegion}:
 #'   use \code{p} for short arm, \code{q} for long arm and \code{cen} for centromeric mark; col. \code{markDistCen}: use distance from
 #'   centromere to mark, not necessary for cen. marks. See param. \code{MarkDistanceType}
 #' @param dfCenMarks data.frame, specific for centromeric marks. cols: \code{chrName}
@@ -34,7 +34,7 @@
 #' @param chrWidth numeric, relative chromosome width
 #' @param chrSpacing numeric, horizontal spacing among chromosomes, see also  \code{chrWidth}
 #' @param chrColor character, main color for chromosomes
-#' @param cenColor character, color for centromeres
+#' @param cenColor character, color for centromeres, if GISH use NULL
 #' @param roundness numeric, shape of vertices of chromosomes and square marks,
 #'   higher values more squared
 #' @param dotRoundCorr numeric, correct roundness of dots and vertices of chromosomes. When  \code{style} of sites =
@@ -95,10 +95,13 @@
 #' @param n, numeric vertices number for round corners
 #' @param notes, data.frame with cols \code{OTU} and \code{note} for adding notes to each OTU, they appear to the right of chromosomes
 #' @param notesTextSize numeric, font size of notes, see \code{notes}
+#' @param fixCenBorder boolean, use chr. color as centromere border color, see \code{cenColor}
 #'
 #' @keywords data.frame chromosome
 #'
 #' @importFrom graphics par plot segments mtext
+#' @importFrom dplyr bind_rows
+#' @importFrom plyr rbind.fill
 #'
 #' @export
 #'
@@ -136,6 +139,7 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
                         xlimLeftMod=1,  xlimRightMod=10, ylimBotMod=.2,ylimTopMod=.2,
                         lwd.chr=2, pattern="", addMissingOTUAfter=NA,missOTUspacings=0,
                         legendWidth=1.7, legendHeight=NA, Mb=FALSE, ylabline=0, origin="b", n=50, notes,
+                        fixCenBorder=TRUE,
                         ...)
 {
   if(!missing(dfChrSize)){
@@ -144,18 +148,83 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
     message(crayon::red("Missing mandatory dfChrSize data.frame"))
     return(NA)
   }
-  if(!missing(dfMarkPos)){
+  if(!missing(dfMarkPos) ) {
+  # if(exists("dfMarkPos") ) {
+
+    #
+    #   rename col markArm if necessary
+    #
+
+    if("markArm" %in% colnames(dfMarkPos)  ){
+      message(crayon::red(paste(c("Column markArm in d.f. of marks renamed to chrRegion")))
+      ) # mess
+      colnames(dfMarkPos)[which(names(dfMarkPos)=="markArm")]<-"chrRegion"
+    }
+
+    dfMarkPos[dfMarkPos==""]<-NA
     dfMarkPosInternal1 <- dfMarkPosInternal <- makeNumCols(dfMarkPos)
-    # dfMarkPosInternal  <- dfMarkPosInternal[which(dfMarkPosInternal$markArm!="cen"),]
+
+    if(is.null(dfMarkPosInternal1$markPos)){
+      dfMarkPosInternal1$markPos<-NA
+    }
+    if(is.null(dfMarkPosInternal1$markSize)){
+      dfMarkPosInternal1$markSize<-NA
+    }
+    if(is.null(dfMarkPosInternal1$markDistCen)){
+      dfMarkPosInternal1$markDistCen<-NA
+    }
+
+    # dfMarkPosInternal  <- dfMarkPosInternal[which(dfMarkPosInternal$chrRegion!="cen"),]
     # if(nrow(dfMarkPosInternal)==0 ){
       # remove(dfMarkPosInternal)
     # }
-    dfCenMarksInternal <- dfMarkPosInternal1[which(dfMarkPosInternal1$markArm=="cen"),]
+    dfCenMarksInternal <- dfMarkPosInternal1[which(dfMarkPosInternal1$chrRegion=="cen"),]
+
     if(nrow(dfCenMarksInternal)==0 ){
       remove(dfCenMarksInternal)
     }
+    dfpGISHInternal <- dfMarkPosInternal1[which(dfMarkPosInternal1$chrRegion %in% "p" &
+                                                  is.na(dfMarkPosInternal1$markSize) &
+                                                  is.na(dfMarkPosInternal1$markDistCen)
+                                                ),]
+    if(nrow(dfpGISHInternal)==0 ){
+      remove(dfpGISHInternal)
+    }
+
+    dfqGISHInternal <- dfMarkPosInternal1[which(dfMarkPosInternal1$chrRegion %in% "q" &
+                                                  is.na(dfMarkPosInternal1$markSize) &
+                                                  is.na(dfMarkPosInternal1$markDistCen)
+    ),]
+    if(nrow(dfqGISHInternal)==0 ){
+      remove(dfqGISHInternal)
+    }
+
+    dfwholeGISHInternal <- dfMarkPosInternal1[which(dfMarkPosInternal1$chrRegion %in% "w" &
+                                                  is.na(dfMarkPosInternal1$markSize) &
+                                                  (is.na(dfMarkPosInternal1$markDistCen) |
+                                                   is.na(dfMarkPosInternal1$markPos) )
+    ),]
+
+    if(nrow(dfwholeGISHInternal)==0 ){
+      remove(dfwholeGISHInternal)
+    }
+
+} # df mark pos
+
+  if (exists("dfMarkPosInternal")){
+
+    if("OTU" %in% colnames(dfMarkPosInternal)){
+      listOfdfMarkPosInternal <- base::split(dfMarkPosInternal, factor(dfMarkPosInternal$OTU,levels = unique(dfMarkPosInternal$OTU)  ) )
+      names(listOfdfMarkPosInternal) <- unique(dfMarkPosInternal$OTU)
+    } else {
+      listOfdfMarkPosInternal <- list(dfMarkPosInternal)
+      names(listOfdfMarkPosInternal)<-1
+    }
+    dfMarkPosInternal <- dplyr::bind_rows(listOfdfMarkPosInternal, .id = "OTU")
+
   } # df of marks
-  if(!missing(dfCenMarks)  ){
+
+  if(!missing(dfCenMarks)  ) {
     dfCenMarksInternal2<-makeNumCols(dfCenMarks)
   }
   if(exists("dfCenMarksInternal") & exists("dfCenMarksInternal2") ) {
@@ -164,6 +233,27 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   if(!exists("dfCenMarksInternal") & exists("dfCenMarksInternal2") ) {
     dfCenMarksInternal<-dfCenMarksInternal2
   }
+
+  if (exists("dfCenMarksInternal")){
+
+    if("OTU" %in% colnames(dfCenMarksInternal)){
+      listOfdfDataCen<-base::split(dfCenMarksInternal, factor(dfCenMarksInternal$OTU,levels = unique(dfCenMarksInternal$OTU) ) )
+      names(listOfdfDataCen)<-unique(dfCenMarksInternal$OTU)
+    } else {
+      listOfdfDataCen<-list(dfCenMarksInternal)
+      names(listOfdfDataCen)<-1
+    }
+
+    dfCenMarksInternal <- dplyr::bind_rows(listOfdfDataCen, .id = "OTU")
+
+  } # cen internal
+
+  #
+  #   mark style
+  #
+
+
+
   if(!missing(dfMarkColor)){
     dfMarkColorInternal<-makeNumCols(dfMarkColor)
   }
@@ -181,14 +271,19 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   # transform dfs to list of df dfChrSizeInternal
   #
 
-  if("OTU" %in% colnames(dfChrSizeInternal)){
+if ("OTU" %in% colnames(dfChrSizeInternal) ) {
     listOfdfChromSize<-base::split(dfChrSizeInternal, factor(dfChrSizeInternal$OTU,levels = unique(dfChrSizeInternal$OTU)) )
     names(listOfdfChromSize)<-unique(dfChrSizeInternal$OTU)
   } else {
     listOfdfChromSize<-list(dfChrSizeInternal)
     names(listOfdfChromSize)<-1
     addOTUName<-FALSE
-  }
+}
+  #
+  #   reconstitute dfChrSizeInternal OTU
+  #
+
+dfChrSizeInternal <- dplyr::bind_rows(listOfdfChromSize, .id = "OTU")
 
   #
   #   Classify data.frames from list as monocen or holocen Add attribute cenType
@@ -309,8 +404,6 @@ for (i in 1:length(listOfdfChromSize)) {
       ) #mess
       listOfdfChromSize[[i]]<-NA
     }
-
-
 } # end for for (i in 1:length(listOfdfChromSize)) {
 
   listOfdfChromSize<-listOfdfChromSize[!is.na(listOfdfChromSize)]
@@ -331,9 +424,9 @@ for (i in 1:length(listOfdfChromSize)) {
     } # for
   } # if chrIndex
 
-   ##############################################################################
+  ##############################################################################
   #
-  #   dfMarkPosInternal to list
+  #   names of holo and mono
   #
 
 {
@@ -349,22 +442,292 @@ for (i in 1:length(listOfdfChromSize)) {
   }
   holocenNames<-names(listOfdfChromSize)[holocenVector]
 }
+
+  ##########################################3
+  #
+  #     gish  p
+  #
+  #########################################
+# message(crayon::green("GISH data loading"))
+  if (exists("dfpGISHInternal")) {
+
+    if("OTU" %in% colnames(dfpGISHInternal)){
+      listOfdfpGISHInternal<-base::split(dfpGISHInternal, factor(dfpGISHInternal$OTU,levels = unique(dfpGISHInternal$OTU)  ) )
+      names(listOfdfpGISHInternal)<-unique(dfpGISHInternal$OTU)
+    } else {
+      listOfdfpGISHInternal<-list(dfpGISHInternal)
+      names(listOfdfpGISHInternal)<-1
+    }
+
+    # monocen
+
+    listOfdfpGISHInternalMonocen<-listOfdfpGISHInternal[which(names(listOfdfpGISHInternal) %in% monocenNames)]
+
+    # names(listOfdfpGISHInternalMonocen)
+    if(length(listOfdfpGISHInternalMonocen)==0){
+      remove(listOfdfpGISHInternalMonocen)
+    } else {
+      listOfdfpGISHInternalMonocen<-Filter(function(x) {nrow(x) >= 1}, listOfdfpGISHInternalMonocen)
+      dfpGISHInternalMonocen <- dplyr::bind_rows(listOfdfpGISHInternalMonocen, .id = "OTU")
+      # dfpGISHInternalMonocen$chrRegion<-"p"
+    } # else
+
+    # P marks of Holocen MUST NOt exist
+
+    listOfdfpGISHInternalHolocen <- listOfdfpGISHInternal[which(names(listOfdfpGISHInternal) %in% holocenNames)]
+
+    if(length(listOfdfpGISHInternalHolocen)==0){
+      remove(listOfdfpGISHInternalHolocen)
+    } else if(length(listOfdfpGISHInternalHolocen)>0) {
+      # remove(listOfdfpGISHInternalHolocen)
+      message(crayon::red("\nERROR: Some mark(s) of an holocentric karyotype as having chromosome p arm REMOVED") )
+    }
+
+  } #   if (exists("dfpGISHInternal")){
+
+  ##########################################3
+  #
+  #     gish  q
+  #
+  #########################################
+
+  if (exists("dfqGISHInternal")){
+
+    if("OTU" %in% colnames(dfqGISHInternal)){
+      listOfdfqGISHInternal<-base::split(dfqGISHInternal, factor(dfqGISHInternal$OTU,levels = unique(dfqGISHInternal$OTU)  ) )
+      names(listOfdfqGISHInternal)<-unique(dfqGISHInternal$OTU)
+    } else {
+      listOfdfqGISHInternal<-list(dfqGISHInternal)
+      names(listOfdfqGISHInternal)<-1
+    }
+
+    # monocen
+
+    listOfdfqGISHInternalMonocen<-listOfdfqGISHInternal[which(names(listOfdfqGISHInternal) %in% monocenNames)]
+
+    # names(listOfdfqGISHInternalMonocen)
+    if(length(listOfdfqGISHInternalMonocen)==0){
+      remove(listOfdfqGISHInternalMonocen)
+    } else {
+      listOfdfqGISHInternalMonocen<-Filter(function(x) {nrow(x) >= 1}, listOfdfqGISHInternalMonocen)
+      dfqGISHInternalMonocen <- dplyr::bind_rows(listOfdfqGISHInternalMonocen, .id = "OTU")
+      # dfqGISHInternalMonocen$chrRegion<-"q"
+    } # else
+
+    # P marks of Holocen MUST NOt exist
+
+    listOfdfqGISHInternalHolocen<-listOfdfqGISHInternal[which(names(listOfdfqGISHInternal) %in% holocenNames)]
+
+    if(length(listOfdfqGISHInternalHolocen)==0){
+      remove(listOfdfqGISHInternalHolocen)
+    } else if(length(listOfdfqGISHInternalHolocen)>0){
+      # remove(listOfdfqGISHInternalHolocen)
+      message(crayon::red("\nERROR: Some mark(s) of an holocentric karyotype as having chromosome q arm REMOVED") )
+    }
+
+  } #   if (exists("dfpGISHInternal")){
+
+  ##########################################3
+  #
+  #     gish whole
+  #
+  #########################################
+
+  if(exists("dfwholeGISHInternal")){
+    # dfwholeGISHInternal
+
+
+    if("OTU" %in% colnames(dfwholeGISHInternal)){
+      listOfdfwholeGISHInternal<-base::split(dfwholeGISHInternal, factor(dfwholeGISHInternal$OTU,levels = unique(dfwholeGISHInternal$OTU)  ) )
+      names(listOfdfwholeGISHInternal)<-unique(dfwholeGISHInternal$OTU)
+    } else {
+      listOfdfwholeGISHInternal<-list(dfwholeGISHInternal)
+      names(listOfdfwholeGISHInternal)<-1
+    }
+
+    #
+    # MONOCEN
+    #
+
+    listOfdfwholeGISHMonocen<-listOfdfwholeGISHInternal[which(names(listOfdfwholeGISHInternal) %in% monocenNames)]
+
+    if(length(listOfdfwholeGISHMonocen)==0){
+      remove(listOfdfwholeGISHMonocen)
+    } else {
+      # for (i in 1:length(listOfdfwholeGISHMonocen)){
+      #   listOfdfwholeGISHMonocen[[i]]  <- listOfdfwholeGISHMonocen[[i]][which(listOfdfwholeGISHMonocen[[i]]$chrRegion!="cen"),]
+      # } # for
+      listOfdfwholeGISHMonocen<-Filter(function(x) {nrow(x) >= 1}, listOfdfwholeGISHMonocen)
+
+      #
+      #   p part
+      #
+
+      listOfdfpGISHInternalMonocen2 <- listOfdfwholeGISHMonocen
+
+      dfpGISHInternalMonocen2 <- dplyr::bind_rows(listOfdfpGISHInternalMonocen2, .id = "OTU")
+      dfpGISHInternalMonocen2$chrRegion<-"p"
+
+      #
+      #   q part
+      #
+
+      listOfdfqGISHInternalMonocen2 <- listOfdfwholeGISHMonocen
+
+      dfqGISHInternalMonocen2 <- dplyr::bind_rows(listOfdfqGISHInternalMonocen2, .id = "OTU")
+      dfqGISHInternalMonocen2$chrRegion<-"q"
+
+      #
+      # cen part
+      #
+
+      listOfdfCenMarksInternal2 <- listOfdfwholeGISHMonocen
+      dfCenMarksInternal2 <- dplyr::bind_rows(listOfdfCenMarksInternal2, .id = "OTU")
+      dfCenMarksInternal2$chrRegion<-"cen"
+
+      if(exists("dfCenMarksInternal") & exists("dfCenMarksInternal2") ) {
+        dfCenMarksInternal <- plyr::rbind.fill(dfCenMarksInternal,dfCenMarksInternal2)
+      }
+      if(!exists("dfCenMarksInternal") & exists("dfCenMarksInternal2") ) {
+        dfCenMarksInternal <- dfCenMarksInternal2
+      }
+
+    } # else
+
+    #
+    # HOLOCEN
+    #
+    ###########################################################################################################
+
+    listOfdfwholeGISHHolocen<-listOfdfwholeGISHInternal[which(names(listOfdfwholeGISHInternal) %in% holocenNames)]
+
+    if(length(listOfdfwholeGISHHolocen)==0){
+      remove(listOfdfwholeGISHHolocen)
+    } else {
+
+    dfwholeGISHHolocen <- dplyr::bind_rows(listOfdfwholeGISHHolocen, .id = "OTU")
+    #
+    # remake chrom sizes df
+    #
+
+    # dfChrSizeInternal <- dplyr::bind_rows(listOfdfChromSize, .id = "OTU")
+
+    dfwholeGISHHolocen$markSize<-dfChrSizeInternal[match(interaction(dfwholeGISHHolocen[c("OTU","chrName")] ),
+                                                                 interaction(dfChrSizeInternal[c("OTU","chrName") ] )
+                                                                 ),]$chrSize
+    dfwholeGISHHolocen$markPos<-0
+    #here
+
+
+    #
+    #   merge dfMarkPosInternal and dfwholeGISHHolocen
+    #
+
+    if(exists("dfMarkPosInternal") & exists("dfwholeGISHHolocen") ) {
+      dfMarkPosInternal <- plyr::rbind.fill(dfMarkPosInternal,dfwholeGISHHolocen)
+    }
+    if(!exists("dfMarkPosInternal") & exists("dfwholeGISHHolocen") ) {
+      dfMarkPosInternal<-dfwholeGISHHolocen
+    }
+    } #     if(length(listOfdfwholeGISHHolocen)==0){
+
+  }  #  end   if(exists("dfwholeGISHInternal")){
+
+  #################################################################################################################3
+  #
+  #   merge p
+  #
+
+  if(exists("dfpGISHInternalMonocen") & exists("dfpGISHInternalMonocen2") ) {
+    dfpGISHInternalMonocen<-plyr::rbind.fill(dfpGISHInternalMonocen,dfpGISHInternalMonocen2)
+  }
+  if(!exists("dfpGISHInternalMonocen") & exists("dfpGISHInternalMonocen2") ) {
+    dfpGISHInternalMonocen<-dfpGISHInternalMonocen2
+  }
+
+  if(exists("dfpGISHInternalMonocen") ) {
+
+  dfpGISHInternalMonocen$markSize<-dfChrSizeInternal[match(interaction(dfpGISHInternalMonocen[c("OTU","chrName")] ),
+                                                           interaction(dfChrSizeInternal[c("OTU","chrName") ] )
+  ),]$shortArmSize
+
+  dfpGISHInternalMonocen$markDistCen<-0
+
+  }
+
+  ############################################################################################
+
+  if(exists("dfqGISHInternalMonocen") & exists("dfqGISHInternalMonocen2") ) {
+    dfqGISHInternalMonocen<-plyr::rbind.fill(dfqGISHInternalMonocen,dfqGISHInternalMonocen2)
+  }
+  if(!exists("dfqGISHInternalMonocen") & exists("dfqGISHInternalMonocen2") ) {
+    dfqGISHInternalMonocen<-dfqGISHInternalMonocen2
+  }
+
+  # dfChrSizeInternal <- dplyr::bind_rows(listOfdfChromSize, .id = "OTU")
+
+  if(exists("dfqGISHInternalMonocen") ) {
+
+  dfqGISHInternalMonocen$markSize<-dfChrSizeInternal[match(interaction(dfqGISHInternalMonocen[c("OTU","chrName")] ),
+                                                           interaction(dfChrSizeInternal[c("OTU","chrName") ] )
+  ),]$longArmSize
+  dfqGISHInternalMonocen$markDistCen<-0
+  }
+
+  ##################################################################################################
+  #
+  #       merging p and q
+  #
+  ##################################################################################################
+
+  if(exists("dfqGISHInternalMonocen") & exists("dfpGISHInternalMonocen") ) {
+    dfMarkPosInternal2 <- plyr::rbind.fill(dfqGISHInternalMonocen,dfpGISHInternalMonocen)
+  }
+  if(!exists("dfqGISHInternalMonocen") & exists("dfpGISHInternalMonocen") ) {
+    dfMarkPosInternal2 <- dfpGISHInternalMonocen
+  }
+  if(exists("dfqGISHInternalMonocen") & !exists("dfpGISHInternalMonocen") ) {
+    dfMarkPosInternal2 <- dfqGISHInternalMonocen
+  }
+
+  #
+  #    merge dfMarkPosInternal2 dfMarkPosInternal
+  #
+
+  if(exists("dfMarkPosInternal") & exists("dfMarkPosInternal2") ) {
+    dfMarkPosInternal <- plyr::rbind.fill(dfMarkPosInternal,dfMarkPosInternal2)
+  }
+  if(!exists("dfMarkPosInternal") & exists("dfMarkPosInternal2") ) {
+    dfMarkPosInternal<-dfMarkPosInternal2
+  }
+
+# message(crayon::green("GISH data loading ended"))
+
+  #
+  #     DF OF marks to list
+  #
+
   if (exists("dfMarkPosInternal")){
 
+    dfMarkPosInternal <- unique(dfMarkPosInternal)
+
     if("OTU" %in% colnames(dfMarkPosInternal)){
-      listOfdfMarkPosInternal<-base::split(dfMarkPosInternal, factor(dfMarkPosInternal$OTU,levels = unique(dfMarkPosInternal$OTU)  ) )
-      names(listOfdfMarkPosInternal)<-unique(dfMarkPosInternal$OTU)
+      listOfdfMarkPosInternal <- base::split(dfMarkPosInternal, factor(dfMarkPosInternal$OTU,levels = unique(dfMarkPosInternal$OTU)  ) )
+      names(listOfdfMarkPosInternal) <- unique(dfMarkPosInternal$OTU)
     } else {
-      listOfdfMarkPosInternal<-list(dfMarkPosInternal)
+      listOfdfMarkPosInternal <- list(dfMarkPosInternal)
       names(listOfdfMarkPosInternal)<-1
     }
+    # monocen
+
     listOfdfMarkPosMonocen<-listOfdfMarkPosInternal[which(names(listOfdfMarkPosInternal) %in% monocenNames)]
+
     # names(listOfdfMarkPosMonocen)
     if(length(listOfdfMarkPosMonocen)==0){
       remove(listOfdfMarkPosMonocen)
     } else {
       for (i in 1:length(listOfdfMarkPosMonocen)){
-      listOfdfMarkPosMonocen[[i]]  <- listOfdfMarkPosMonocen[[i]][which(listOfdfMarkPosMonocen[[i]]$markArm!="cen"),]
+      listOfdfMarkPosMonocen[[i]]  <- listOfdfMarkPosMonocen[[i]][which(listOfdfMarkPosMonocen[[i]]$chrRegion!="cen"),]
       } # for
       # row0 <- which(sapply(listOfdfMarkPosMonocen, nrow) < 1)
       # listOfdfMarkPosMonocen<-listOfdfMarkPosMonocen[-row0]
@@ -377,6 +740,10 @@ for (i in 1:length(listOfdfChromSize)) {
     }
 
   } # end missing dfMarkPosInternal
+
+  #
+  #   df of cen marks to list
+  #
 
   if (exists("dfCenMarksInternal")){
 
@@ -412,13 +779,23 @@ for (i in 1:length(listOfdfChromSize)) {
   #
 
   if(exists("listOfdfMarkPosMonocen")){
-    message(crayon::black("\nChecking mandatory columns from dfMarkPos: chrName, markName, markArm,markDistCen,markSize\n (column OTU  is necessary if more than one species)\n"
+    message(crayon::black("\nChecking mandatory columns from dfMarkPos: chrName, markName, chrRegion,markDistCen,markSize\n (column OTU  is necessary if more than one species)\n"
     ) )# cat
 
     for (i in 1:length(listOfdfMarkPosMonocen ) ) {
 
       listOfdfMarkPosMonocen[[i]][listOfdfMarkPosMonocen[[i]]==""]<-NA
-      listOfdfMarkPosMonocen[[i]]<-  listOfdfMarkPosMonocen[[i]][, !apply(is.na(listOfdfMarkPosMonocen[[i]]), 2, all)]
+      listOfdfMarkPosMonocen[[i]] <- listOfdfMarkPosMonocen[[i]][, !apply(is.na(listOfdfMarkPosMonocen[[i]]), 2, all)]
+
+      # #
+      # #   rename col markArm if necessary
+      # #
+      #
+      # if("markArm" %in% colnames(listOfdfMarkPosMonocen[[i]])  ){
+      #   message(crayon::red(paste(c("Column markArm in d.f. of marks of OTU",names(listOfdfMarkPosMonocen)[[i]] ,"renamed to chrRegion")))
+      #   ) # mess
+      #   colnames(listOfdfMarkPosMonocen[[i]])[which(names(listOfdfMarkPosMonocen[[i]])=="markArm")]<-"chrRegion"
+      # }
 
       #
       #   rename col markpos if necessary
@@ -432,10 +809,10 @@ for (i in 1:length(listOfdfChromSize)) {
       #
       #   column error
       #
-      if(length (setdiff(c("chrName", "markName", "markArm","markDistCen","markSize"),
+      if(length (setdiff(c("chrName", "markName", "chrRegion","markDistCen","markSize"),
                          colnames(listOfdfMarkPosMonocen[[i]]) ) )>0 ) {
         message(crayon::red(paste(c("ERROR Missing columns in d.f. of marks of OTU",names(listOfdfMarkPosMonocen)[[i]] ,":",
-                                setdiff(c("chrName", "markName", "markArm","markDistCen","markSize"),
+                                setdiff(c("chrName", "markName", "chrRegion","markDistCen","markSize"),
                                         colnames(listOfdfMarkPosMonocen[[i]]) ) ) , sep="\n", collapse = " " )
         )
         ) # cat
@@ -449,7 +826,7 @@ for (i in 1:length(listOfdfChromSize)) {
       else { # if no error
         message(crayon::black(paste("\nOK marks of OTU",names(listOfdfMarkPosMonocen)[[i]],"checked \n")
                 ) ) #m
-        if(MarkDistanceType=="cen"){
+        if(MarkDistanceType=="cen"){ # this is from center
           listOfdfMarkPosMonocen[[i]]$markDistCen<-listOfdfMarkPosMonocen[[i]]$markDistCen-(listOfdfMarkPosMonocen[[i]]$markSize/2)
         } # if
 
@@ -482,6 +859,7 @@ for (i in 1:length(listOfdfChromSize)) {
 
       listOfdfMarkPosHolocen[[i]][listOfdfMarkPosHolocen[[i]]==""]<-NA
       listOfdfMarkPosHolocen[[i]]<-  listOfdfMarkPosHolocen[[i]][, !apply(is.na(listOfdfMarkPosHolocen[[i]]), 2, all)]
+
       #
       #   rename col markdistcen if necessary
       #
@@ -524,13 +902,14 @@ for (i in 1:length(listOfdfChromSize)) {
             #
             #
             #
-            dfChrSizeInternal[match(interaction(listOfdfMarkPosHolocen[[i]][c("OTU", "chrName")]),
-                                    interaction(dfChrSizeInternal[c("OTU", "chrName")])),]$chrSize
+            dfChrSizeInternal[match(interaction( listOfdfMarkPosHolocen[[i]][c("OTU", "chrName")]),
+                                    interaction( dfChrSizeInternal[c("OTU", "chrName")] )
+                                    ),]$chrSize
 
           listOfdfMarkPosHolocen[[i]]$markPos<-listOfdfMarkPosHolocen[[i]]$chrSize-listOfdfMarkPosHolocen[[i]]$markPos2
         }
 
-        if(MarkDistanceType=="cen"){
+        if(MarkDistanceType=="cen"){ # center
           listOfdfMarkPosHolocen[[i]]$markPos<-listOfdfMarkPosHolocen[[i]]$markPos-(listOfdfMarkPosHolocen[[i]]$markSize/2)
         } # if
 
@@ -897,7 +1276,10 @@ else if (missing(mycolors) ) { # if dfMarkColor not exist and missing mycolors
 
   {
     totalLength<-lapply(listOfdfChromSize, function(x) tryCatch(x$chrSize, error=function(e) NA)  )
-    ifelse(class(totalLength)=="matrix",
+    ifelse(
+      # class(totalLength)=="matrix",
+           inherits(totalLength, "matrix"),
+
            totalLength <- base::split(totalLength, col(totalLength) )
            ,NA)
     normalizeToOne<-karHeight/max(unlist(totalLength) , na.rm=TRUE)
@@ -1021,7 +1403,7 @@ else if (missing(mycolors) ) { # if dfMarkColor not exist and missing mycolors
  # processing for main plot
 
     # Monocen
-  {
+{
     rownumber<-2
     chromosome_ns<-sapply(listOfdfChromSize, function(x) nrow(x) )
     arms_number<-sapply(chromosome_ns, function(x) x*2)
@@ -1036,7 +1418,8 @@ else if (missing(mycolors) ) { # if dfMarkColor not exist and missing mycolors
     ym<-list()
 }
 ########################################################################################################################################
-    for (s in 1:num_species) {
+for (s in 1:num_species) {
+  # message(crayon::green(paste0("main plot calc section start" ) ) )
 
       if(class(listOfdfChromSize[[s]])=="data.frame"){
         #######################################################################################################
@@ -1112,7 +1495,8 @@ else if (missing(mycolors) ) { # if dfMarkColor not exist and missing mycolors
 
       ym[[s]] <- t(sapply ( croytop, function (x) {length (x) ; return (x)}) ) + (karHeiSpace*(s-1)  )
     } # holocen if
-      } # data.frmae
+  } # data.frame
+  # message(crayon::green(paste0("main plot calc section end" ) ) )
 } # for species
     ###################################################################################################
 
@@ -1187,8 +1571,8 @@ for (s in 1:length(ym)) {
 
     graphics::plot("",xlim=c( (min(unlist(x), na.rm=TRUE)-leftmodifier),(max(unlist(x), na.rm=TRUE)+xlimRightMod ) ),
                    ylim = c( ylimBotMod*-1 ,( (max(unlist(y), na.rm = TRUE) )+ylimTopMod) ) , ylab = "", xaxt='n',
-                   # xlab="", yaxt='n',main = NULL, frame.plot = FALSE, ...)
-    xlab="", yaxt='n',main = NULL, frame.plot = FALSE)
+                   xlab="", yaxt='n',main = NULL, frame.plot = FALSE, ...)
+    # xlab="", yaxt='n',main = NULL, frame.plot = FALSE)
 
     if (Mb){
       opar<-graphics::par(no.readonly = TRUE)
@@ -1198,7 +1582,7 @@ for (s in 1:length(ym)) {
     }
 
     ######################################################################################################################
-    {
+    { # plot types
     xsizeplot<-(max(unlist(x), na.rm=TRUE)+xlimRightMod )- ( (min(unlist(x), na.rm=TRUE)-(leftmodifier)) )
     ysizeplot<- max(unlist(y), na.rm=TRUE)
     yfactor<-(ysizeplot/xsizeplot)*dotRoundCorr
@@ -1216,13 +1600,15 @@ for (s in 1:length(ym)) {
         )#l
 
       } else { # if roundness <20
-
+        # message(crayon::green(paste0("main plot roundness section start" ) ) )
         n2<-n
         pts_1 <- seq(-pi/2, 0, length.out = n2)
         pts_2 <- seq( 0, pi/2, length.out = n2)
         pts_3 <- seq(pi, pi*1.5, length.out = n2)
         pts_4 <- seq(pi/2, pi, length.out = n2)
+
         r2 <- chrWidth/(roundness*2)
+
         yMod<-y
         # str(yMod)
 
@@ -1247,62 +1633,27 @@ for (s in 1:length(ym)) {
         xy_4<-list()
 
         for (s in 1:length(yMod) ) {
+
           if(class(listOfdfChromSizenoNA[[s]])=="data.frame"){
             ########################################################
 
-          if(attr(listOfdfChromSizenoNA[[s]], "cenType")=="monocen" ) {
-
+          if(attr(listOfdfChromSizenoNA[[s]], "cenType")=="monocen" ) { ############################## monocen 1
+            # message(crayon::green(paste0("main plot monocen section start" ) ) )
             ########################################################
+              if (centromereSize>=0) {
 
-            if (centromereSize>0) {
+              # for (s in 1:length(yMod) ) {
 
-          topBotline_x[[s]]<-list()
-          x2_1[[s]]<-list()
-          x2_2[[s]]<-list()
-          for (c in 1 : length(yMod[[s]]) ) {
-            topBotline_x[[s]][[c]]<-c(min(x[[s]][[c]])+r2,max(x[[s]][[c]])-r2 )
-            x2_1[[s]][[c]]<-min(x[[s]][[c]])+r2
-            x2_2[[s]][[c]]<-max(x[[s]][[c]])-r2
-          } # f
-          topline_y[[s]]<-list()
-          y2[[s]]<-list()
-          xy_1[[s]]<-list()
-          xy_2[[s]]<-list()
-          newLongx[[s]]<-list()
-          newLongy[[s]]<-list()
-          bottomline_y[[s]]<-list()
-          for (p in ( (length(yMod[[s]])/2)+1 ): length(yMod[[s]]) ) {
-            topline_y[[s]][[p]]<-rep(max(yMod[[s]][[p]]),2)
-            y2[[s]][[p]]<-max(y[[s]][[p]])-r2*yfactor
-            xy_1[[s]][[p]] <- cbind(x2_1[[s]][[p]] + r2 * sin(pts_1)*1, y2[[s]][[p]] + (r2 * cos(pts_1)*yfactor) )
-            xy_2[[s]][[p]] <- cbind(x2_2[[s]][[p]] + r2 * sin(pts_2)*1, y2[[s]][[p]] + (r2 * cos(pts_2)*yfactor) )
-            yMod[[s]][[p]][which(yMod[[s]][[p]]==max(yMod[[s]][[p]]))]<-yMod[[s]][[p]][which(yMod[[s]][[p]]==max(yMod[[s]][[p]]))]-r2*yfactor
-            newLongx[[s]][[p]]<-c(x[[s]][[p]],xy_1[[s]][[p]][,1],topBotline_x[[s]][[p]],xy_2[[s]][[p]][,1] )
-            newLongy[[s]][[p]]<-c(yMod[[s]][[p]],xy_1[[s]][[p]][,2],topline_y[[s]][[p]],xy_2[[s]][[p]][,2] )
-          } # for
-          for (q in 1: (length(yMod[[s]])/2 ) ) {
-            bottomline_y[[s]][[q]]<-rep(min(yMod[[s]][[q]]),2)
-            y2[[s]][[q]]<-min(y[[s]][[q]])+r2*yfactor
-            xy_1[[s]][[q]] <- cbind(x2_1[[s]][[q]] + r2 * sin(pts_3)*1, y2[[s]][[q]] + (r2 * cos(pts_3)*yfactor) )
-            xy_2[[s]][[q]] <- cbind(x2_2[[s]][[q]] + r2 * sin(pts_4)*1, y2[[s]][[q]] + (r2 * cos(pts_4)*yfactor) )
-            yMod[[s]][[q]][which(yMod[[s]][[q]]==min(yMod[[s]][[q]]))]<-yMod[[s]][[q]][which(yMod[[s]][[q]]==min(yMod[[s]][[q]]))]+r2*yfactor
-            newLongx[[s]][[q]]<-c(x[[s]][[q]][1:2],xy_2[[s]][[q]][,1],topBotline_x[[s]][[q]],xy_1[[s]][[q]][,1],x[[s]][[q]][3:4] )
-            newLongy[[s]][[q]]<-c(yMod[[s]][[q]][1:2],xy_2[[s]][[q]][,2],bottomline_y[[s]][[q]],xy_1[[s]][[q]][,2],yMod[[s]][[q]][3:4] )
+                # yMod<-y
 
-          } # for q
+                # if(attr(listOfdfChromSizenoNA[[s]], "cenType")=="monocen" ) {
 
-          } # else if cen > 0
-
-            else { # cen ==0
-              for (s in 1:length(yMod) ) {
-
-                if(attr(listOfdfChromSizenoNA[[s]], "cenType")=="monocen" ) {
-
-                  topBotline_x[[s]]<-list()
+                  topBotline_x[[s]] <- list()
                   x2_1[[s]]<-list()
                   x2_2[[s]]<-list()
                   for (c in 1 : length(yMod[[s]]) ) {
-                    topBotline_x[[s]][[c]]<-c(min(x[[s]][[c]])+r2,max(x[[s]][[c]])-r2 )
+                    topBotline_x[[s]][[c]]<-c(min(x[[s]][[c]])+r2,
+                                              max(x[[s]][[c]])-r2 )
                     x2_1[[s]][[c]]<-min(x[[s]][[c]])+r2
                     x2_2[[s]][[c]]<-max(x[[s]][[c]])-r2
                   } # f
@@ -1342,8 +1693,11 @@ for (s in 1:length(ym)) {
                     newLongx[[s]][[p]]<-c(x[[s]][[p]][1:2],xy_4[[s]][[p]][,1],topBotline_x[[s]][[p]],xy_3[[s]][[p]][,1],
                                           x[[s]][[p]][3:4],xy_1[[s]][[p]][,1],topBotline_x[[s]][[p]],xy_2[[s]][[p]][,1])
 
+                    # newLongx[[s]][[p]]<-c(x[[s]][[p]][1:2],xy_4[[s]][[p]][,1],topBotline_x[[s]][[p]],xy_3[[s]][[p]][,1],
+                                          # x[[s]][[p]][3:4],xy_1[[s]][[p]][,1],topBotline_x[[s]][[p]],xy_2[[s]][[p]][,1])
+
                     newLongy[[s]][[p]]<-c(yMod[[s]][[p]][1:2],xy_4[[s]][[p]][,2],bottomline_y[[s]][[p]],xy_3[[s]][[p]][,2],
-                                          yMod[[s]][[p]][3:4],xy_1[[s]][[p]][,2],topline_y[[s]][[p]],xy_2[[s]][[p]][,2])
+                                          yMod[[s]][[p]][3:4],xy_1[[s]][[p]][,2],topline_y[[s]][[p]]   ,xy_2[[s]][[p]][,2])
 
                   } # for
                   for (q in 1: (length(yMod[[s]])/2 ) ) {
@@ -1359,24 +1713,34 @@ for (s in 1:length(ym)) {
                     xy_3[[s]][[q]] <- cbind(x2_1[[s]][[q]] + r2 * sin(pts_3), y2_2[[s]][[q]] + (r2 * cos(pts_3) *yfactor) ) # new
                     xy_4[[s]][[q]] <- cbind(x2_2[[s]][[q]] + r2 * sin(pts_4), y2_2[[s]][[q]] + (r2 * cos(pts_4) *yfactor) ) # new
 
-                    yMod[[s]][[q]][which(yMod[[s]][[q]]==min(yMod[[s]][[q]]))]<-yMod[[s]][[q]][which(yMod[[s]][[q]]==min(yMod[[s]][[q]]))]+r2*yfactor
-                    yMod[[s]][[q]][which(yMod[[s]][[q]]==max(yMod[[s]][[q]]))]<-yMod[[s]][[q]][which(yMod[[s]][[q]]==max(yMod[[s]][[q]]))]-r2*yfactor
+                    yMod[[s]][[q]][which(yMod[[s]][[q]]==min(yMod[[s]][[q]]))] <- yMod[[s]][[q]][which(yMod[[s]][[q]]==min(yMod[[s]][[q]]))]+r2*yfactor
+                    yMod[[s]][[q]][which(yMod[[s]][[q]]==max(yMod[[s]][[q]]))] <- yMod[[s]][[q]][which(yMod[[s]][[q]]==max(yMod[[s]][[q]]))]-r2*yfactor
 
                     newLongx[[s]][[q]]<-c(x[[s]][[q]][1:2],xy_4[[s]][[q]][,1],topBotline_x[[s]][[q]],xy_3[[s]][[q]][,1],
                                           x[[s]][[q]][3:4],xy_1[[s]][[q]][,1],topBotline_x[[s]][[q]],xy_2[[s]][[q]][,1])
 
-                    newLongy[[s]][[q]]<-c(yMod[[s]][[q]][1:2],xy_4[[s]][[q]][,2],bottomline_y[[s]][[q]],xy_3[[s]][[q]][,2],
-                                          yMod[[s]][[q]][3:4],xy_1[[s]][[q]][,2],topline_y[[s]][[q]],xy_2[[s]][[q]][,2])
+                    newLongy[[s]][[q]]<-c(yMod[[s]][[q]][1:2], # mal alta
+                                          xy_4[[s]][[q]][,2],
+                                          bottomline_y[[s]][[q]], #mal alta
+                                          xy_3[[s]][[q]][,2],
+                                          yMod[[s]][[q]][3:4], # mal alta baja
+                                          xy_1[[s]][[q]][,2],
+                                          topline_y[[s]][[q]],  # mal baja
+                                          xy_2[[s]][[q]][,2])
 
                   } # for q
-                } # monocen
-              } # for species
-            } # else cen == 0
+
+                # } # monocen 2  ######################################################
+
+              # } # for species
+
+            } # else cen >= 0
+            # message(crayon::green(paste0("main plot monocen section end" ) ) )
     } # if monocen
             ###########################################################
 
           else if(attr(listOfdfChromSizenoNA[[s]], "cenType")=="holocen" ) {
-
+            # message(crayon::green(paste0("main plot holocen section start" ) ) )
             ###########################################################
             topline_y[[s]]<-list()
             bottomline_y[[s]]<-list()
@@ -1414,25 +1778,30 @@ for (s in 1:length(ym)) {
                                     yMod[[s]][[m]][3:4],xy_1[[s]][[m]][,2],topline_y[[s]][[m]],xy_2[[s]][[m]][,2])
             } # for
 
-
+            # message(crayon::green(paste0("main plot holocen section end" ) ) )
           } # holocen
+
       } # d.f.
+
    } # for species
-}  # roundness
 
-newLongy<-newLongy[!is.na(newLongy)]
-newLongx<-newLongx[!is.na(newLongx)]
 
-  lapply(1:length(y), function(s) mapply(function(x,y) graphics::polygon(x=x, y=y,
+
+newLongy<<-newLongy[!is.na(newLongy)]
+newLongx<<-newLongx[!is.na(newLongx)]
+
+lapply(1:length(y), function(s) mapply(function(x,y) graphics::polygon(x=x, y=y,
                                                                          col=chrColor,
                                                                          lwd=lwd.chr,
                                                                          border=chrColor),
                                          x=newLongx[[s]],
                                          y=newLongy[[s]]
                                   )#m
-  )#l
+)#l
 
+}  # roundness if roundness <20
 
+    # message(crayon::green(paste0("main plot roundness section end" ) ) )
 } # plot types
 
   ####################################################################################################
@@ -1765,7 +2134,7 @@ newLongx<-newLongx[!is.na(newLongx)]
 #################################
 
   if(karIndex){
-
+    # message(crayon::green(paste0("karyotype indices section start" ) ) )
     for (i in 1:length(listOfdfChromSizenoNA) ) {
       if(attr(listOfdfChromSizenoNA[[i]],"cenType")=="monocen"){
         if(is.character(names(listOfdfChromSizenoNA)[[i]]  ) ){
@@ -1807,6 +2176,8 @@ newLongx<-newLongx[!is.na(newLongx)]
         } # null
       } # holocen
     } # for
+
+    # message(crayon::green(paste0("karyotype indices section end" ) ) )
   } # fi
 
 
@@ -1815,7 +2186,7 @@ newLongx<-newLongx[!is.na(newLongx)]
   #################################
 
   if(!missing(notes)){
-
+    # message(crayon::green(paste0("notes section start" ) ) )
     for (i in 1:length(listOfdfChromSizenoNA) ) {
       if(attr(listOfdfChromSizenoNA[[i]],"cenType")=="monocen"){
         note<-notes[which(notes$OTU %in% names(listOfdfChromSizenoNA)[i] ), ]$note
@@ -1853,6 +2224,8 @@ newLongx<-newLongx[!is.na(newLongx)]
         } # null
       } # holocen
     } # for
+    # message(crayon::green(paste0("notes section end" ) ) )
+
   } # fi notes
 
 
@@ -1868,6 +2241,8 @@ newLongx<-newLongx[!is.na(newLongx)]
   }
 
   if(addOTUName){
+    # message(crayon::green(paste0("OTU section start" ) ) )
+
     lapply(1:length(xmnoNA), function(s) {
       if(attr(xmnoNA[[s]],"cenType")=="holocen") {
         decVector<-5
@@ -1881,6 +2256,8 @@ newLongx<-newLongx[!is.na(newLongx)]
       ) # end graphics::text
     }
     ) # end lapply
+# message(crayon::green(paste0("OTU section END" ) ) )
+
   } # fi
 
   ##########################################################################################################3
@@ -1890,6 +2267,8 @@ newLongx<-newLongx[!is.na(newLongx)]
   ############################################################################################################
 
   if (exists("listOfdfMarkPosMonocen") & exists("dfMarkColorInternal") ){
+    # message(crayon::green(paste0("monocen. marks section start" ) ) )
+
 
     listOfdfMarkPosSq<-list()
     yMark<-list()
@@ -1910,9 +2289,9 @@ newLongx<-newLongx[!is.na(newLongx)]
       yMark1<-NULL
       xMark1<-NULL
       for (m in 1:nrow(listOfdfMarkPosSq[[sm]]) ){
-        ifelse(listOfdfMarkPosSq[[sm]][m,"markArm"]=="q",longORshort<-0,longORshort<-1)
-        ifelse(listOfdfMarkPosSq[[sm]][m,"markArm"]=="q",column<-1,column<-2)
-        ifelse(listOfdfMarkPosSq[[sm]][m,"markArm"]=="q",mySign<--1,mySign<-1)
+        ifelse(listOfdfMarkPosSq[[sm]][m,"chrRegion"]=="q",longORshort<-0,longORshort<-1)
+        ifelse(listOfdfMarkPosSq[[sm]][m,"chrRegion"]=="q",column<-1,column<-2)
+        ifelse(listOfdfMarkPosSq[[sm]][m,"chrRegion"]=="q",mySign<--1,mySign<-1)
         corr_index<-which(names(ym) %in% names(listOfdfMarkPosSq)[[sm]] )
 
         ysup<-ym[[corr_index]][nrow(listOfdfChromSize[[corr_index]])*longORshort+(listOfdfMarkPosSq[[sm]][,orderingcolumn][m]),column]+
@@ -1943,7 +2322,7 @@ newLongx<-newLongx[!is.na(newLongx)]
     } #     if(length(listOfdfMarkPosSq)>0){
 
     else {remove(listOfdfMarkPosSq)}
-
+    # message(crayon::green(paste0("monocen. marks section end" ) ) )
   } # if presence end painting marks
 
 
@@ -1975,6 +2354,7 @@ newLongx<-newLongx[!is.na(newLongx)]
   ########################################
 
   if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
+    # message(crayon::green(paste0("holocen. marks section start" ) ) )
     listOfdfMarkPosSq<-list()
     yMark<-list()
     xMark<-list()
@@ -2022,8 +2402,12 @@ newLongx<-newLongx[!is.na(newLongx)]
     } #     if(length(listOfdfMarkPosSq)>0){
 
     else {remove(listOfdfMarkPosSq)}
-
+    # message(crayon::green(paste0("holocen. marks section end" ) ) )
   } # painting marks square fi
+
+  #
+  #   inline legend
+  #
 
   if(legend=="inline" & exists("dfMarkColorInternal") & exists("listOfdfMarkPosSq") ) {
     lapply(1:length(xMark), function(s)
@@ -2049,6 +2433,7 @@ newLongx<-newLongx[!is.na(newLongx)]
   ##########################################################################################################################
 
   if (exists("listOfdfMarkPosMonocen") & exists("dfMarkColorInternal") ) {
+    # message(crayon::green(paste0("monocen. dot marks section start" ) ) )
     listOfdfMarkPosCr<-list()
 
     xfactor<-(xsizeplot/ysizeplot  )/dotRoundCorr
@@ -2078,9 +2463,9 @@ newLongx<-newLongx[!is.na(newLongx)]
       colCr1<-NULL
       for (i in 1:nrow(listOfdfMarkPosCr[[k]])){
         # i=1
-        ifelse(listOfdfMarkPosCr[[k]][i,"markArm"]=="q",longORshort<-0,longORshort<-1)
-        ifelse(listOfdfMarkPosCr[[k]][i,"markArm"]=="q",column<-1,column<-2)
-        ifelse(listOfdfMarkPosCr[[k]][i,"markArm"]=="q",mySign<--1,mySign<-1)
+        ifelse(listOfdfMarkPosCr[[k]][i,"chrRegion"]=="q",longORshort<-0,longORshort<-1)
+        ifelse(listOfdfMarkPosCr[[k]][i,"chrRegion"]=="q",column<-1,column<-2)
+        ifelse(listOfdfMarkPosCr[[k]][i,"chrRegion"]=="q",mySign<--1,mySign<-1)
         corr_index<-which(names(ym) %in% names(listOfdfMarkPosCr)[[k]] )
         ysupCr<-ym[[corr_index]][nrow(listOfdfChromSize[[corr_index]])*longORshort+(listOfdfMarkPosCr[[k]][,orderingcolumn][i]),column]+
           (listOfdfMarkPosCr[[k]][i,"markDistCen"]                                      *normalizeToOne*mySign)
@@ -2123,6 +2508,7 @@ newLongx<-newLongx[!is.na(newLongx)]
     } #     if(length(listOfdfMarkPosCr)>0){
 
    else {remove(listOfdfMarkPosCr)}
+    # message(crayon::green(paste0("monocen. dot marks section end" ) ) )
   } # end painting MarkCrs
 
   # dots
@@ -2152,6 +2538,7 @@ newLongx<-newLongx[!is.na(newLongx)]
   ########################################
 
   if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ){
+    # message(crayon::green(paste0("holocen. dot marks section start" ) ) )
     listOfdfMarkPosCr<-list()
     xfactor<-(xsizeplot/ysizeplot  )/dotRoundCorr
 
@@ -2220,7 +2607,7 @@ newLongx<-newLongx[!is.na(newLongx)]
 
   } #     if(length(listOfdfMarkPosCr)>0){
   else {remove(listOfdfMarkPosCr)}
-
+    # message(crayon::green(paste0("holocen. dot marks section end" ) ) )
   } # end painting MarkCrs
 
   # dots
@@ -2249,7 +2636,8 @@ newLongx<-newLongx[!is.na(newLongx)]
   #
   ################################
 
-  if(centromereSize>0){
+  if(centromereSize>0) {
+    # message(crayon::green(paste0("cen. section start" ) ) )
 
     CentsList<-lapply(1:length(listOfdfChromSize), function(x) tryCatch(rep(0, nrow(listOfdfChromSize[[x]]) ), error=function(e) NA ) )
     names(CentsList)<-names(listOfdfChromSize)
@@ -2290,7 +2678,12 @@ if(is.na(addMissingOTUAfter[1])){
     ycoordCentsS<-ycoordCentsS[!is.na(ycoordCentsS)]
     ycoordCents<-ycoordCents[!is.na(ycoordCents)]
 
-    xcoordCents<-lapply(1:length(xmnoNA), function(x) cbind(xmnoNA[[x]][,2:3],xmnoNA[[x]][,2:3] ) )
+    r3 <- chrWidth/(roundness*3)
+
+    xcoordCents <- lapply(1:length(xmnoNA), function(x) cbind(sweep(xmnoNA[[x]][,2:3], 2, c(-r3,r3), "+"),
+                                                              sweep(xmnoNA[[x]][,2:3], 2, c(-r3,r3), "+")
+                                                               ) #bind
+                          ) # l
 
     xcoordCentsS<- lapply(1:length(xcoordCents), function(j) base::split(xcoordCents[[j]], row(xcoordCents[[j]]) ) )
 
@@ -2299,11 +2692,19 @@ if(is.na(addMissingOTUAfter[1])){
     xcoordCentsS<-tryCatch(xcoordCentsS[which(names(xcoordCentsS) %in% monocenNames)], error= function(e) NA )
     xcoordCentsS<-xcoordCentsS[!is.na(xcoordCentsS)]
 
-    cenBorder<-cenColor
-    if(chrColor!=cenColor){
-      cenBorder<-chrColor
-    }
 
+
+    cenBorder<-cenColor
+
+    # this protects for weak colors, adds strong border
+if (fixCenBorder){
+    if(!is.null(cenColor) ){
+      if (chrColor!=cenColor){
+      cenBorder<-chrColor
+      }
+    }#null
+}
+    if(!is.null(cenColor) ){
     if(length(xcoordCentsS)>0){
     lapply(1:length(xcoordCentsS), function(w) mapply(function(x,y,z) graphics::polygon(x=x, y=y,
                                                                                         col=z,
@@ -2315,13 +2716,17 @@ if(is.na(addMissingOTUAfter[1])){
                                                 ) #m
     ) #l
     } # if length xcoordCentsS
-  } # end centromeres 0
+    } # cencolor null for gish
+    # message(crayon::green(paste0("cen. section end" ) ) )
+  } # end centromeres > 0
 
   ###################
   #   centromere with marks
   ###################
 
   if(centromereSize>0){
+    # message(crayon::green(paste0("cen. marks section start" ) ) )
+    r3 <- chrWidth/(roundness*4)
   if (exists("listOfdfDataCen") & exists("dfMarkColorInternal") ) {
     names(xcoordCents)<-names(listOfdfChromSizenoNA) #1:length(xcoordCents)
 
@@ -2338,23 +2743,33 @@ if(is.na(addMissingOTUAfter[1])){
 
         yMarkCen1[[i]]<-c(yinf,yinf,ysup,ysup)
         xMarkCen1[[i]]<-xcoordCents[[corr_index]][listOfdfDataCen[[k]][,orderingcolumn][i],]
-
+        # xMarkCen1[[i]]<-xMarkCen1[[i]]+c(-r3,r3,-r3,r3)
       } # each mark
       yMarkCen[[k]]<-yMarkCen1
       xMarkCen[[k]]<-xMarkCen1
+
     } # each df
 
     #####################
     #   add to plot marks CENTROMERE MARKED
     #####################
-
-    lapply(1:length(xMarkCen), function(w) mapply(function(x,y,z) graphics::polygon(x=x, y=y,
-                                                                                    col=z, lwd=1, border=z),
+    # if(!is.null(cenColor) ){
+    lapply(1:length(xMarkCen), function(w) mapply(function(x,y,z) graphics::polygon(x=x,
+                                                                                    y=y,
+                                                                                    col=z,
+                                                                                    lwd=1,
+                                                                                    border=z),
                                                   x=xMarkCen[[w]],
                                                   y=yMarkCen[[w]],
-                                                  z=dfMarkColorInternal$markColor[match(listOfdfDataCen[[w]]$markName, dfMarkColorInternal$markName)]
+                                                  z=dfMarkColorInternal$markColor[match(listOfdfDataCen[[w]]$markName,
+                                                                                        dfMarkColorInternal$markName)]
     ) # m
     ) #l
+    # }
+    # if(is.null(cenColor) ){
+    # }
+
+
   } # end centromeres with marks
 
 
@@ -2382,6 +2797,7 @@ if(is.na(addMissingOTUAfter[1])){
       )# l
     )# l
   }
+    # message(crayon::green(paste0("cen. marks section end" ) ) )
 } # marks centromere > 0
 
   ##############################################
@@ -2389,7 +2805,7 @@ if(is.na(addMissingOTUAfter[1])){
   #   labels to the right
   #
   ##############################################
-  {
+{
   xNoNA<-x
   xNoNA[areNA]<-NA
   xNoNA<-xNoNA[!is.na(xNoNA)]
@@ -2398,9 +2814,11 @@ if(is.na(addMissingOTUAfter[1])){
   yNoNA<-yNoNA[!is.na(yNoNA)]
 }
   if(legend=="aside" & exists("dfMarkColorInternal") ){
+    # message(crayon::green(paste0("legend aside section start" ) ) )
 
   plotlabelsright(xNoNA,yNoNA, markLabelSpacer,chrWidth,dfMarkColorInternal,allMarkMaxSize,normalizeToOne,
                               markLabelSize,xfactor,legendWidth, legendHeight, n*4)
+  # message(crayon::green(paste0("legend aside section end" ) ) )
   }
 }  # end of function
 

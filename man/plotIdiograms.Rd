@@ -20,15 +20,16 @@ plotIdiograms(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   xlimRightMod = 10, ylimBotMod = 0.2, ylimTopMod = 0.2,
   lwd.chr = 2, pattern = "", addMissingOTUAfter = NA,
   missOTUspacings = 0, legendWidth = 1.7, legendHeight = NA,
-  Mb = FALSE, ylabline = 0, origin = "b", n = 50, notes, ...)
+  Mb = FALSE, ylabline = 0, origin = "b", n = 50, notes,
+  fixCenBorder = TRUE, ...)
 }
 \arguments{
 \item{dfChrSize}{mandatory data.frame, with columns: \code{OTU} (optional), \code{chrName} (mandatory),
 \code{shortArmSize}, \code{longArmSize} for monocen. or \code{chrSize} for holocen.}
 
 \item{dfMarkPos}{data.frame of marks (sites): cols: \code{OTU} (opt) \code{chrName},
-\code{markName} (name of site), \code{markArm} (for monocen), \code{markDistCen} (for monocen.),
-\code{markPos} (for holocen.), \code{markSize}; column \code{markArm}:
+\code{markName} (name of site), \code{chrRegion} (for monocen), \code{markDistCen} (for monocen.),
+\code{markPos} (for holocen.), \code{markSize}; column \code{chrRegion}:
 use \code{p} for short arm, \code{q} for long arm and \code{cen} for centromeric mark; col. \code{markDistCen}: use distance from
 centromere to mark, not necessary for cen. marks. See param. \code{MarkDistanceType}}
 
@@ -58,7 +59,7 @@ the plot in \eqn{\mu}m}
 
 \item{chrColor}{character, main color for chromosomes}
 
-\item{cenColor}{character, color for centromeres}
+\item{cenColor}{character, color for centromeres, if GISH use NULL}
 
 \item{roundness}{numeric, shape of vertices of chromosomes and square marks,
 higher values more squared}
@@ -164,6 +165,8 @@ of idiograms}
 \item{n, }{numeric vertices number for round corners}
 
 \item{notes, }{data.frame with cols \code{OTU} and \code{note} for adding notes to each OTU, they appear to the right of chromosomes}
+
+\item{fixCenBorder}{boolean, use chr. color as centromere border color, see \code{cenColor}}
 
 \item{...}{accepts other arguments for the plot, such as, \code{asp}}
 }

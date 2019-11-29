@@ -21,4 +21,6 @@ NULL
 #' @description bigdfChrSizeHolo: Example data for holocentrics for several species, OTU
 #' @rdname chrbasicdataHolo
 "bigdfChrSizeHolo"
-
+#' @description parentalAndHybHoloChrSize: Example data for holocentrics for several species, OTU
+#' @rdname chrbasicdataHolo
+"parentalAndHybHoloChrSize"

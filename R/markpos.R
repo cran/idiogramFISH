@@ -12,7 +12,7 @@ NULL
 #'   \item{OTU}{OTU, species, mandatory if in dfChrSize}
 #'   \item{chrName}{name of chromosome}
 #'   \item{markName}{name of mark}
-#'   \item{markArm}{use p for short arm, q for long arm, and cen for centromeric}
+#'   \item{chrRegion}{use p for short arm, q for long arm, and cen for centromeric}
 #'   \item{markDistCen}{distance of mark to centromere (not for cen)}
 #'   \item{markSize}{size of mark (not for cen)}
 #' }
@@ -37,3 +37,6 @@ NULL
 #' @description allMarksSample: Example data for marks' position
 #' @rdname markpos
 "allMarksSample"
+#' @description dfAlloParentMarks: Example data for mark position of GISH of monocen.
+#' @rdname markpos
+"dfAlloParentMarks"

@@ -25,5 +25,9 @@ NULL
 #'
 #' @rdname markdataholo
 "dfMarkPosHolo"
+#' @description dfAlloParentMarksHolo: Example data for mark position of GISH
+#' @rdname markdataholo
+"dfAlloParentMarksHolo"
+
 
 

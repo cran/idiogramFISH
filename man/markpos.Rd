@@ -8,13 +8,14 @@
 \alias{dfOfMarks2}
 \alias{humMarkPos}
 \alias{allMarksSample}
+\alias{dfAlloParentMarks}
 \title{Mark Positional data - monocentrics}
 \format{bigdfOfMarks a data.frame with cols:
 \describe{
 \item{OTU}{OTU, species, mandatory if in dfChrSize}
 \item{chrName}{name of chromosome}
 \item{markName}{name of mark}
-\item{markArm}{use p for short arm, q for long arm, and cen for centromeric}
+\item{chrRegion}{use p for short arm, q for long arm, and cen for centromeric}
 \item{markDistCen}{distance of mark to centromere (not for cen)}
 \item{markSize}{size of mark (not for cen)}
 }}
@@ -31,6 +32,8 @@ dfOfMarks2
 humMarkPos
 
 allMarksSample
+
+dfAlloParentMarks
 }
 \description{
 When several OTUs, some can be monocen. and others holocen. Marks distance for monocen. are measured from cen. and for
@@ -45,6 +48,8 @@ dfOfMarks2: Marks' position including cen. marks
 humMarkPos: human karyotype marks' position
 
 allMarksSample: Example data for marks' position
+
+dfAlloParentMarks: Example data for mark position of GISH of monocen.
 }
 \references{
 Adler 1994. Idiogram Album. URL: \href{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}{Washington U.}

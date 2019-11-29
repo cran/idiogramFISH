@@ -5,13 +5,13 @@ idiogramFISH
 
 <img src=man/figures/logo.svg align="right" width="12%" hspace="50">
 
-# Idiograms with Marks and Karyotype Indices<br></br><br></br><br></br>
+# Idiograms with Marks and Karyotype Indices<br></br><br></br><br></br><br></br>
 
 <!-- <img src='' align="right" width=20% margin=150px /> -->
 
 <!-- height="120" -->
 
- ![’’](man/figures/cranversion.svg) ![’’](man/figures/crandownload.svg)
+ ![’’](man/figures/cranversion.svg) ![’’](https://cranlogs.r-pkg.org/badges/grand-total/idiogramFISH?color=orange)
  ![’’](man/figures/gitbadge.svg) <br></br>
 [![donate](man/figures/donate.svg)](https://liberapay.com/ferroao/donate)[![donate](man/figures/donateweek.svg)](https://liberapay.com/ferroao/donate)
 <!-- badges: end -->
@@ -46,10 +46,11 @@ install.packages("idiogramFISH")
 
 #### Or the devel version of idiogramFISH
 
-##### From gitlab with devtools (Wickham *et al.*, [2019](#ref-R-devtools))
+##### From gitlab with devtools (Wickham *et al.*, [2019](#ref-R-devtools)[b](#ref-R-devtools))
 
 Attention windows users, please install
-[Rtools](https://cran.r-project.org/bin/windows/Rtools/)
+[Rtools](https://cran.r-project.org/bin/windows/Rtools/) and
+[git](https://git-scm.com/download/win)
 
 ``` r
 # This installs package devtools, necessary for installing the dev version
@@ -72,12 +73,12 @@ if(length(new.packages)) install.packages(new.packages)
 ```
 
 ``` r
-# Linux with vignettes and Windows R-32bits
+# Linux with vignettes and Windows
 devtools::install_git(url = url,build_vignettes = TRUE, force=T)
 ```
 
 ``` r
-# Windows R-64bits and Mac with vignettes
+# Mac with vignettes
 devtools::install_git(url = url, build_opts=c("--no-resave-data","--no-manual") )
 ```
 
@@ -196,14 +197,14 @@ plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
 
     dfOfMarks2
 
-| chrName | markName | markArm | markSize | markDistCen |
-| :------ | :------- | :------ | -------: | ----------: |
-| 1       | 5S       | p       |        1 |         0.5 |
-| 1       | 45S      | q       |        1 |         0.5 |
-| X       | 45S      | p       |        1 |         1.0 |
-| 3       | DAPI     | q       |        1 |         1.0 |
-| 1       | DAPI     | cen     |       NA |          NA |
-| X       | CMA      | cen     |       NA |          NA |
+| chrName | markName | chrRegion | markSize | markDistCen |
+| :------ | :------- | :-------- | -------: | ----------: |
+| 1       | 5S       | p         |        1 |         0.5 |
+| 1       | 45S      | q         |        1 |         0.5 |
+| X       | 45S      | p         |       NA |          NA |
+| 3       | DAPI     | q         |        1 |         1.0 |
+| 1       | DAPI     | cen       |       NA |          NA |
+| X       | CMA      | cen       |       NA |          NA |
 
 #### 2 How to plot a karyotype of holocentrics:
 
@@ -341,6 +342,87 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
 #dev.off() # close svg()
 ```
 
+#### 4\. Plotting GISH results
+
+Available only for ver. \> 1.8.3
+
+``` r
+library(idiogramFISH)
+# load some saved dataframes
+
+# function plotIdiogramsHolo deprecated for ver. > 1.5.1
+par(mar=rep(0,4))
+
+# svg("allo.svg",width=10,height=9 )
+plotIdiograms(dfChrSize = parentalAndHybChrSize,  # d.f. of chr. sizes
+              dfMarkPos = dfAlloParentMarks,      # d.f. of marks' positions
+              cenColor  = NULL,            # cen. color when GISH
+              
+              OTUTextSize = 1,             # font size for OTU names
+              dotRoundCorr=2,              # correction of roundness of vert. and dots
+              chrWidth=2.5,                # rel. chr. width
+              chrSpacing = 2.5,            # rel. horizontal chr. spacing
+              karHeiSpace=2,               # karyotype height including spacing
+              indexIdTextSize=1,           # font size for chr. indexes and chr. name
+              markLabelSize=1,             # font size for labels (legend)
+
+              rulerPos=-1.9,               # ruler position
+              ruler.tck=-0.02,             # ruler tick orientation and length
+              rulerNumberPos=.5,           # rulers' numbers position
+              rulerNumberSize=1            # ruler font size
+              ,legend=""                   # no legend
+)
+```
+
+<img src="man/figures/README-unnamed-chunk-14-1.png" width="70%" />
+
+``` r
+#dev.off() # close svg()
+```
+
+#### Let’s explore the dataframes for GISH:
+
+    parentalAndHybChrSize
+
+| OTU           | chrName | shortArmSize | longArmSize |
+| :------------ | :------ | -----------: | ----------: |
+| Parental 1    | 1       |          3.2 |           4 |
+| Parental 1    | 4       |          1.5 |           2 |
+| Parental 1    | 5       |          4.8 |           6 |
+| Parental 1    | 6       |          6.1 |           7 |
+| Parental 2    | 1       |          3.2 |           4 |
+| Parental 2    | 2       |          4.5 |           5 |
+| Parental 2    | 3       |          2.0 |           3 |
+| Allopolyploid | 1       |          3.2 |           4 |
+| Allopolyploid | 2       |          4.5 |           5 |
+| Allopolyploid | 3       |          2.0 |           3 |
+| Allopolyploid | 4       |          1.5 |           2 |
+| Allopolyploid | 5       |          4.8 |           6 |
+| Allopolyploid | 6       |          6.1 |           7 |
+
+Use `p` for short arm, `q` for long arm, and `w` for whole chromosome
+mark.
+
+    dfAlloParentMarks
+
+| OTU           | chrName | markName   | chrRegion |
+| :------------ | ------: | :--------- | :-------- |
+| Allopolyploid |       1 | Parental 1 | p         |
+| Allopolyploid |       1 | Parental 2 | q         |
+| Allopolyploid |       1 | Parental 2 | cen       |
+| Allopolyploid |       2 | Parental 2 | w         |
+| Allopolyploid |       3 | Parental 2 | w         |
+| Allopolyploid |       4 | Parental 1 | w         |
+| Allopolyploid |       5 | Parental 1 | w         |
+| Allopolyploid |       6 | Parental 1 | w         |
+| Parental 1    |       6 | Parental 1 | w         |
+| Parental 1    |       5 | Parental 1 | w         |
+| Parental 1    |       1 | Parental 1 | w         |
+| Parental 1    |       4 | Parental 1 | w         |
+| Parental 2    |       2 | Parental 2 | w         |
+| Parental 2    |       1 | Parental 2 | w         |
+| Parental 2    |       3 | Parental 2 | w         |
+
 ## Citation
 
 To cite idiogramFISH in publications, please use:
@@ -429,6 +511,13 @@ data*. <https://CRAN.R-project.org/package=plyr>
 
 </div>
 
+<div id="ref-R-dplyr">
+
+Wickham H, François R, Henry L, Müller K. 2019a. *Dplyr: A grammar of
+data manipulation*. <https://CRAN.R-project.org/package=dplyr> 
+
+</div>
+
 <div id="ref-R-pkgdown">
 
 Wickham H, Hesselberth J. 2019. *Pkgdown: Make static html documentation
@@ -438,7 +527,7 @@ for a package*. <https://CRAN.R-project.org/package=pkgdown>
 
 <div id="ref-R-devtools">
 
-Wickham H, Hester J, Chang W. 2019. *Devtools: Tools to make developing
+Wickham H, Hester J, Chang W. 2019b. *Devtools: Tools to make developing
 r packages easier*. <https://CRAN.R-project.org/package=devtools> 
 
 </div>

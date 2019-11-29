@@ -86,10 +86,11 @@ Initially you have to open your chromosome data as a data.frame.
 # Example data.frame written in R, use: (column OTU is optional if only 1 OTU)
 mydfChrSizeHolo<-read.table(text=
 "            OTU chrName chrSize  
-1 \"Species one\"   1     6.5      
-2 \"Species one\"   2     5.0      
-3 \"Species one\"   3     4.0    
-4 \"Species one\"   X     3.0    "  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
+\"Species one\"   1     6.5      
+\"Species one\"   2     5.0      
+\"Species one\"   3     4.0
+\"Species one\"   4     4.0
+\"Species one\"   X     3.0    "  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
 ```
 
@@ -164,13 +165,14 @@ Open or write your mark positions as a data.frame. This data.frame has the marks
 ```{r}
 # We will use column OTU if data.frame because chromosome size df has it
 mydfMarkPosHolo<-read.table(text=
-"             OTU  chrName markName markPos markSize
-1 \"Species one\"       3       5S     1.0      0.5
-2 \"Species one\"       3     DAPI     2.0      0.5
-3 \"Species one\"       1      45S     2.0      0.5
-4 \"Species one\"       2     DAPI     2.0      0.5
-5 \"Species one\"       X      CMA     2.0      0.5
-6 \"Species one\"       X       5S     0.5      0.5"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
+"             OTU  chrName markName markPos markSize chrRegion
+\"Species one\"       4        B      NA       NA        w           # whole chromosome mark, use 'w' in col. chrRegion 
+\"Species one\"       3     DAPI     2.0      0.5
+\"Species one\"       1      45S     2.0      0.5
+\"Species one\"       2     DAPI     2.0      0.5
+\"Species one\"       X      CMA     2.0      0.5
+\"Species one\"       X       5S     0.5      0.5
+\"Species one\"       X       5S     0.5      0.5"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 ```
 
 <div class="verysmall">
@@ -227,6 +229,7 @@ plotIdiograms(dfChrSize  = mydfChrSizeHolo,# data.frame of chr. sizes
               xlimRightMod=10,             # modify xlim right argument
               ylimBotMod=.1                # modify ylim bottom argument
               ,legendWidth=1               # width of legend
+              ,legendHeight=0.5            # height of legend item 
               )
 dev.off()
 ```
@@ -427,3 +430,67 @@ suppressWarnings(par(opar) )
 For another example see:
 https://stackoverflow.com/questions/33727432/how-to-plot-positions-along-a-chromosome-graphic/57153497#57153497
 
+
+# GISH of holocentric chromosomes
+
+You need the data.frame of chr. sizes, and a d.f. of marks 
+
+## Chr. sizes: {-}
+
+<div class="pre-scrollx">
+```{r, comment=NA, echo=F}
+cat(paste0("parentalAndHybHoloChrSize" ) )
+```
+</div>
+<div class="verysmall">
+```{r, echo=F}
+kableExtra::kable_styling(knitr::kable(parentalAndHybHoloChrSize) , full_width = F
+                           , font_size = 10)
+```
+</div>
+
+## Marks' positions data {-}
+
+<div class="pre-scrollx">
+```{r, comment=NA, echo=F}
+cat(paste0("dfAlloParentMarksHolo" ) )
+```
+</div>
+
+<div class="verysmall">
+```{r, echo=F}
+kableExtra::kable_styling(knitr::kable(dfAlloParentMarksHolo) , full_width = F
+                           , font_size = 10
+                          , bootstrap_options = c("striped", "hover", "condensed")
+                          )
+```
+</div>
+
+## Plotting {-}
+
+```{r example_M1, echo=TRUE, results="hide", fig.width=8, fig.height=7, message=FALSE,dev='png'}
+
+# svg("gish.svg",width=8,height=7 )
+# png("mydfChrSize.png", width=600, height=500)
+plotIdiograms(dfChrSize = parentalAndHybHoloChrSize,  # d.f. of chr. sizes
+              dfMarkPos = dfAlloParentMarksHolo,     # d.f. of marks' positions
+              chrColor  = "gray",          # chr. color
+              cenColor  = NULL,            # cen. color when GISH
+
+              OTUTextSize = 1,             # font size for OTU names
+              dotRoundCorr=2,              # correction of roundness of vert. and dots
+              chrWidth=2.5,                # rel. chr. width
+              chrSpacing = 2.5,            # rel. horizontal chr. spacing
+              karHeiSpace=2,               # karyotype height including spacing
+              indexIdTextSize=1,           # font size for chr. indexes and chr. name
+                            distTextChr = 0.5,
+              markLabelSize=1,             # font size for labels (legend)
+
+              rulerPos=-1.9,               # ruler position
+              ruler.tck=-0.02,             # ruler tick orientation and length
+              rulerNumberPos=.5,           # rulers' numbers position
+              rulerNumberSize=0.7            # ruler font size
+              ,legend=""                   # no legend
+)
+# dev.off()
+```

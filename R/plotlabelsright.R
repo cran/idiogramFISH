@@ -25,6 +25,7 @@
 
 plotlabelsright<-function(x,y, markLabelSpacer,chrWidth,dfMarkColorInternal,allMarkMaxSize,normalizeToOne,
                           markLabelSize,xfactor,legendWidth,legendHeight,n) {
+  # message(crayon::green(paste0("legend right section part 1 " ) ) )
   maxx<-(max(unlist(x)) )
 
   miny<-(min(unlist(y)) )
@@ -36,6 +37,7 @@ plotlabelsright<-function(x,y, markLabelSpacer,chrWidth,dfMarkColorInternal,allM
   # labelxdot<-t(replicate(nrow(dfMarkColorInternal),labelxdot) )
 
   if(is.na(legendHeight)){
+    # message(crayon::green(paste0("legend right section part 2 " ) ) )
     if(exists("allMarkMaxSize")){
       legendHeight<-allMarkMaxSize*normalizeToOne
     } else {
@@ -44,39 +46,46 @@ plotlabelsright<-function(x,y, markLabelSpacer,chrWidth,dfMarkColorInternal,allM
   } else {
     legendHeight<-legendHeight*normalizeToOne
   }
-
+  # message(crayon::green(paste0("legend right section part 3 " ) ) )
   labely<- sapply(c(0,0,legendHeight,legendHeight), function(x) x + 0:(nrow(dfMarkColorInternal)-1)*(legendHeight*2) ) + miny
 
   # remove the dot ones
   labelytoplot<-labely[which(dfMarkColorInternal$style!="dots"),]
   labelxtoplot<-labelx[which(dfMarkColorInternal$style!="dots"),]
 
-  ifelse(class(labelytoplot)=="matrix",
+  ifelse(inherits(labelytoplot,"matrix"),
+    # class(labelytoplot)=="matrix",
          labelytoplot<-base::split(labelytoplot, row(labelytoplot) ),
          labelytoplot<-list(t(as.matrix(labelytoplot) ) )
   )
+  # message(crayon::green(paste("3a ",class(labelytoplot) ) ) )
+  # message(crayon::green(paste(labelytoplot ) ) )
 
-  ifelse(class(labelxtoplot)=="matrix",
+  ifelse(
+    # class(labelxtoplot)=="matrix",
+         inherits(labelxtoplot,"matrix"),
          labelxtoplot<-base::split(labelxtoplot, row(labelxtoplot) ),
          labelxtoplot<-list(t(as.matrix(labelxtoplot) ) )
   )
-  # squares of labels
-  mapply(function(x,y,z,w) graphics::polygon(x=x,
-                                           y=y,
-                                           col=z,
-                                           lwd=.5
-                                           # , border=z
-                                           ,border=w
-  ), # polygon
-  x=labelxtoplot,
-  y=labelytoplot
-  ,z=dfMarkColorInternal$markColor[which(dfMarkColorInternal$style!="dots")]
-  ,w=ifelse(dfMarkColorInternal$markColor[which(dfMarkColorInternal$style!="dots")]=="white",
-           "black",
-           dfMarkColorInternal$markColor[which(dfMarkColorInternal$style!="dots")]
-           )#ifelse
-  ) # mapply
+  # message(crayon::green(paste("3b ",class(labelxtoplot) ) ) )
+  # message(crayon::green(paste(labelxtoplot ) ) )
 
+  marks <- dfMarkColorInternal$markColor[which(dfMarkColorInternal$style!="dots")]
+  # message(crayon::green(paste("3c",class(marks) ) ) )
+  # message(crayon::green(paste(length(marks) ) ) )
+  # message(crayon::green(paste(marks, collapse=" ") ) )
+
+  borders <- ifelse(dfMarkColorInternal$markColor[which(dfMarkColorInternal$style!="dots")]=="white",
+         "black",
+         dfMarkColorInternal$markColor[which(dfMarkColorInternal$style!="dots")]
+  ) #ifelse
+  # message(crayon::green(paste("3d",class(borders) ) ) )
+  # message(crayon::green(paste(length(borders) ) ) )
+  # message(crayon::green(paste(borders, collapse =" ") ) )
+
+  # squares of labels
+
+  # message(crayon::green(paste("legend right section part 4b " ) ) )
   # text of labels
   graphics::text(x=t(labelx[which(dfMarkColorInternal$style!="dots"),2]), # was1
                  y=t(
@@ -84,14 +93,33 @@ plotlabelsright<-function(x,y, markLabelSpacer,chrWidth,dfMarkColorInternal,allM
                         labely[which(dfMarkColorInternal$style!="dots"),3]
                    )/2)-.01
                  ) ,
-                 labels=dfMarkColorInternal$markName[which(dfMarkColorInternal$style!="dots")], cex=markLabelSize, col="black", pos=4
+                 labels= dfMarkColorInternal$markName[which(dfMarkColorInternal$style!="dots")],
+                 cex=markLabelSize,
+                 col="black",
+                 pos=4
   ) # graphics::text # pos4 is right
+
+  # message(crayon::green(paste0("legend right section part 4a" ) ) )
+  mapply(function(x,y,z,w) graphics::polygon(x=x,
+                                           y=y,
+                                           col=z,
+                                           lwd=rep(.5,length(marks) )
+                                           # , border=z
+                                           ,border=w
+  ), # polygon
+  x = labelxtoplot,
+  y = labelytoplot
+  ,z = marks
+  ,w = borders
+  ) # mapply
+
 
   ##################
   # circular labels to the right
   ##################
 
   {
+    # message(crayon::green(paste0("legend right section part 5 " ) ) )
     labelxdiff<- (max(labelx) - min(labelx) )
     diffxQuar<-labelxdiff/4
     xcenters<- c((min(labelx)+diffxQuar),(min(labelx)+3*diffxQuar) )
@@ -112,6 +140,7 @@ plotlabelsright<-function(x,y, markLabelSpacer,chrWidth,dfMarkColorInternal,allM
     # xfactor<-(xsizeplot/ysizeplot  )/dotRoundCorr
 
     if(length(listOfxcenters)>0){
+      # message(crayon::green(paste0("legend right section part 6 " ) ) )
       lapply(1:length(listOfxcenters), function(u) {
         mapply(function(x,y,r,z,w) {
           pts2=seq(0, 2 * pi, length.out = n)
@@ -132,7 +161,7 @@ plotlabelsright<-function(x,y, markLabelSpacer,chrWidth,dfMarkColorInternal,allM
         ) # mapply
       } # fun
       ) # lapply
-
+      # message(crayon::green(paste0("legend right section part 7 " ) ) )
       graphics::text(x=t(labelx[which(dfMarkColorInternal$style=="dots"),2]),
                      y=t(
                        c(labely[which(dfMarkColorInternal$style=="dots"),1]+

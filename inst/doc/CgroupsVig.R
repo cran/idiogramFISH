@@ -93,7 +93,7 @@ kableExtra::kable_styling(knitr::kable(dfwithHetero) , full_width = F
 
 ## ------------------------------------------------------------------------
 dfOfMarksHetero<-read.table(text=
-"     chrName markName markArm markSize markDistCen
+"     chrName markName chrRegion markSize markDistCen
 1       1A       5S       p        1         0.9
 2       1B      45S       p        1         0.9
 3       2       CMA       q        1         1.0

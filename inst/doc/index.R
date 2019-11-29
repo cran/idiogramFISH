@@ -29,6 +29,7 @@ myfile<-"pkgdown2.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 }
+library(knitr)
 
 ## ---- echo=F,  results="asis"--------------------------------------------
 img1_path <- "../man/figures/logo.svg"
@@ -64,11 +65,12 @@ if (requireNamespace("RCurl", quietly = TRUE)  ) {
 crandownloads<-"https://cranlogs.r-pkg.org/badges/grand-total/idiogramFISH?color=orange"
 crandownloads_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(crandownloads) ), error=function(e) NA )
 if (!is.na(crandownloads_cont)){
-# crandownloads_contFile <- tempfile(fileext = ".svg")
 crandownloads_contFile <- "crandownload.svg"
 writeLines(crandownloads_cont, con = crandownloads_contFile)
 crandownloads_contFile <- normalizePath(crandownloads_contFile)
 cat(paste0("&nbsp;![''](",knitr::include_graphics(crandownloads_contFile),")" ) )
+#   this gives ERROR WHEN DEVTOOLS INSTALL IN WINDOWS.
+# cat(paste0("&nbsp;![''](",crandownloads,")" ) )
 }
 }
 
@@ -109,11 +111,11 @@ knitr::include_graphics(gitbadge_contFile)
 #  if(length(new.packages)) install.packages(new.packages)
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  # Linux with vignettes and Windows R-32bits
+#  # Linux with vignettes and Windows
 #  devtools::install_git(url = url,build_vignettes = TRUE, force=T)
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  # Windows R-64bits and Mac with vignettes
+#  # Mac with vignettes
 #  devtools::install_git(url = url, build_opts=c("--no-resave-data","--no-manual") )
 
 ## ---- eval=FALSE---------------------------------------------------------
@@ -265,6 +267,46 @@ dev.off()
 
 ## ---- results="asis", comment=NA, echo=FALSE-----------------------------
 cat(paste0("![](monoholoCS.png)" ) )
+
+## ---- echo=T, results="hide", fig.width=10, fig.height=9, message=FALSE----
+library(idiogramFISH)
+# load some saved dataframes
+
+# function plotIdiogramsHolo deprecated for ver. > 1.5.1
+par(mar=rep(0,4))
+
+# svg("allo.svg",width=10,height=9 )
+plotIdiograms(dfChrSize = parentalAndHybChrSize,  # d.f. of chr. sizes
+              dfMarkPos = dfAlloParentMarks,      # d.f. of marks' positions
+              cenColor  = NULL,            # cen. color when GISH
+              
+              OTUTextSize = 1,             # font size for OTU names
+              dotRoundCorr=2,              # correction of roundness of vert. and dots
+              chrWidth=2.5,                # rel. chr. width
+              chrSpacing = 2.5,            # rel. horizontal chr. spacing
+              karHeiSpace=2,               # karyotype height including spacing
+              indexIdTextSize=1,           # font size for chr. indexes and chr. name
+              markLabelSize=1,             # font size for labels (legend)
+
+              rulerPos=-1.9,               # ruler position
+              ruler.tck=-0.02,             # ruler tick orientation and length
+              rulerNumberPos=.5,           # rulers' numbers position
+              rulerNumberSize=1            # ruler font size
+              ,legend=""                   # no legend
+)
+#dev.off() # close svg()
+
+## ---- comment=NA, echo=FALSE---------------------------------------------
+cat("parentalAndHybChrSize")
+
+## ---- comment=NA, echo=F-------------------------------------------------
+print(parentalAndHybChrSize, row.names=F)
+
+## ---- comment=NA, echo=FALSE---------------------------------------------
+cat("dfAlloParentMarks")
+
+## ----gish2, comment=NA, echo=F-------------------------------------------
+print(dfAlloParentMarks, row.names=F)
 
 ## ----citation, results='asis', echo=FALSE--------------------------------
 # chromsome data, if only 1 species, column OTU is optional

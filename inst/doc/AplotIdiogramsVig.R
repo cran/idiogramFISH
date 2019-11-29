@@ -39,10 +39,10 @@ library(idiogramFISH)
 # Example data.frame to write in R, use: (column OTU is optional if only 1 OTU)
 mydfChrSize<-read.table(text=
 "            OTU chrName shortArmSize longArmSize 
-1 \"Species one\"   1     1.5         2.0  
-2 \"Species one\"   2     2.0         2.5  
-3 \"Species one\"   3     1.0         1.5
-4 \"Species one\"   X     2.0         3.5"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
+  \"Species one\"   1     1.5         2.0  
+  \"Species one\"   2     2.0         2.5  
+  \"Species one\"   3     1.0         1.5
+  \"Species one\"   B     2.0         3.5"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
 ## ---- echo=F-------------------------------------------------------------
 # just to show it here
@@ -67,11 +67,12 @@ kableExtra::kable_styling(knitr::kable(mydfChrSize) , full_width = F
 ## ------------------------------------------------------------------------
 # From scratch:
 mydfMarkColor<-read.table(text=
-"  markName markColor  style
-1       5S       red   dots
-2      45S     green square
-3     DAPI      blue square
-4      CMA    yellow square"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
+" markName markColor  style
+        5S       red   dots
+       45S     green square
+      DAPI      blue square
+       CMA    yellow square
+\"B mark\"     black square"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
 ## ---- echo=F-------------------------------------------------------------
 # just to show it here
@@ -87,13 +88,14 @@ kableExtra::kable_styling(knitr::kable(mydfMarkColor) , full_width = F
 ## ------------------------------------------------------------------------
 # We will use column OTU if data.frame because chromosome size df has it
 mydfOfMarks<-read.table(text=
-"            OTU chrName markName markArm markSize markDistCen
-1 \"Species one\"      1       5S       p      0.5         0.5
-2 \"Species one\"      1      45S       q        1         0.5
-3 \"Species one\"      X      45S       p        1         1.0
-4 \"Species one\"      3     DAPI       q        1         1.0
-5 \"Species one\"      1     DAPI      cen
-6 \"Species one\"      X      CMA      cen", header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
+"            OTU chrName markName chrRegion markSize markDistCen
+\"Species one\"      1      45S       p       NA         NA     # no measure means whole arm
+\"Species one\"      1       5S       q        1         0.5
+\"Species one\"      B  \"B mark\"    w       NA         NA     # w for whole chromosome
+\"Species one\"      2     45S        p        1         1.0
+\"Species one\"      3     DAPI       q        1         1.0
+\"Species one\"      1     DAPI       cen
+\"Species one\"      3      CMA       cen", header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
 ## ---- echo=F-------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(mydfOfMarks) , full_width = F
@@ -102,26 +104,27 @@ kableExtra::kable_styling(knitr::kable(mydfOfMarks) , full_width = F
                           )
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  colnames(mydfMarkColor)<-c("OTU", "chrName","markName","markArm","markSize","markDistCen")
+#  colnames(mydfMarkColor)<-c("OTU", "chrName","markName","chrRegion","markSize","markDistCen")
 
 ## ------------------------------------------------------------------------
 # We will use column note to add a note to the right of the karyotype of the OTU in column OTU
 notesdf<-read.table(text=
 "            OTU    note
-1 \"Species one\"   \"Author notes\"  ", header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
+\"Species one\"   \"Author notes\"  ", header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
 ## ----example_M1, echo=TRUE, results="hide", fig.width=7, fig.height=4.5, message=FALSE,dev='svg'----
 # fig.width=7, fig.height=4.5
 
 svg("mydfChrSize.svg",width=13,height=8 )
 # png("mydfChrSize.png", width=600, height=400)
-plotIdiograms(dfChrSize=mydfChrSize,      # chr. size data.frame
-              dfMarkPos=mydfOfMarks,      # mark position df (inc. cen.)
+plotIdiograms(dfChrSize= mydfChrSize,     # chr. size data.frame
+              dfMarkPos= mydfOfMarks,     # mark position df (inc. cen.)
 
               dfMarkColor=mydfMarkColor,  # mark style df
               roundness=3,                # vertices roundness  
               dotRoundCorr=2.5,           # correction of roundness of dots 
               
+              orderBySize = FALSE,        # do not order chr. by size
               chrWidth=4.5,               # width of chr.
               chrSpacing = 4,             # space among chr.
               karHeiSpace=1.6,            # vertical size of karyotype including spacer
@@ -142,10 +145,11 @@ plotIdiograms(dfChrSize=mydfChrSize,      # chr. size data.frame
               ,notesTextSize = 1.3        # font size of notes
               ,notesPos = 1.5             # space from chr. (right) to note
               
-              # ,xlimRightMod = 12
-              # ,legend="aside"           # <- TRY THIS
-              # ,legendWidth = 1.2
-              # ,markLabelSpacer = 4
+              ,xlimRightMod = 12          # modify right xlim
+              ,legend="aside"             # position of legend
+              ,legendWidth = .5           # legend item width
+              ,legendHeight = .5          # legend item height
+              ,markLabelSpacer = 8        # legend spacer
 )
 dev.off()
 
@@ -154,28 +158,32 @@ dev.off()
 cat(paste0("![](mydfChrSize.svg)" ) )
 
 ## ----example_M1cen0, echo=TRUE, results="hide", fig.width=7, fig.height=4.5, message=FALSE,dev='svg'----
-# fig.width=7, fig.height=4.5
 
-png("mydfChrSize2.png", width=600, height=400)
-plotIdiograms(dfChrSize   = mydfChrSize,  # chr. size df
+png("mydfChrSize2.png", width=800, height=950)
+plotIdiograms(dfChrSize   = bigdfOfChrSize[1:14,],  # chr. size df
               dfMarkColor = mydfMarkColor,# mark style df
-              dfMarkPos   = mydfOfMarks,  # mark position df
+              dfMarkPos   = bigdfOfMarks,  # mark position df
               
               # cen. marks NOT AVAILABLE for centromereSize = 0
               centromereSize = 0,         # <- HERE
+              amoSepar = 0.8,             # separ. among kar.
               
-              roundness=3,                # vertices roundness  
-              dotRoundCorr=2.5,           # correction of roundness of dots 
-              chrWidth=4.5,               # width of chr.
+              roundness=2,                # vertices roundness  
+              dotRoundCorr=1.0,           # correction of roundness of dots 
+              
+              chrWidth=4,                 # width of chr.
               chrSpacing = 4,             # space among chr.
-              karHeiSpace=1.6,            # vertical size of karyotype including spacer
-              indexIdTextSize=.7,         # font size fo chr name and indices
-              OTUTextSize=.7,             # font size of OTUs
+              karHeiSpace=2,              # vertical size of karyotype including spacer
+              indexIdTextSize=1,          # font size fo chr name and indices
+              OTUTextSize    =1,          # font size of OTUs
               markLabelSize=.7,           # font size of mark legends
+              distTextChr = .2,
+              
               rulerPos=-1.9,              # ruler position
-              ruler.tck=-0.02,            # ticks of ruler size and orientation
+              ruler.tck=-0.01,            # ticks of ruler size and orientation
               rulerNumberPos=.5,          # position of numbers in ruler
-              rulerNumberSize=.7,         # font size of ruler numbers
+              rulerNumberSize=1,          # font size of ruler numbers
+              
               ylimBotMod = 0.4,           # modify ylim bottom argument
               ylimTopMod = 0              # modify ylim top argument
               
@@ -253,7 +261,7 @@ kableExtra::kable_styling(knitr::kable(bigdfOfMarks) , full_width = F
                           )
 
 ## ----example_M3, echo=TRUE, results="hide", fig.width=6, fig.height=13, message=FALSE, dev='png'----
-# fig.width=6, fig.height=13
+
 # png("bigdfOfChrSize.png", width=650, height=1300)
 plotIdiograms(dfChrSize  =bigdfOfChrSize,# chr sizes
               dfMarkColor=dfMarkColor,   # mark characteristics, optional in dev version. see above. 
@@ -264,7 +272,9 @@ plotIdiograms(dfChrSize  =bigdfOfChrSize,# chr sizes
               karSepar = TRUE,           # modify vertical separation of kar.
               amoSepar = 1.2,            # Vertical separation of kar. when karSpear = TRUE
               
-              dotRoundCorr = .5,         # correction factor for dot marks
+              centromereSize = 1,        # apparent size of cen.
+              roundness = 10,            # roundness of chr. vertices
+              dotRoundCorr = .5,         # correction factor for dot marks and vertices
               distTextChr=.5,            # distance of chr. to text
               morpho=FALSE,              # add chr. morphology
               indexIdTextSize=.6,        # font size of indices and chr. name
@@ -290,4 +300,59 @@ plotIdiograms(dfChrSize  =bigdfOfChrSize,# chr sizes
 
 ## ---- results="asis", comment=NA, echo=FALSE, eval=FALSE-----------------
 #  cat(paste0("![](bigdfOfChrSize.png)" ) )
+
+## ---- comment=NA, echo=F-------------------------------------------------
+cat(paste0("parentalAndHybChrSize" ) )
+
+## ---- echo=F-------------------------------------------------------------
+kableExtra::kable_styling(knitr::kable(parentalAndHybChrSize) , full_width = F
+                           , font_size = 10)
+
+## ---- comment=NA, echo=F-------------------------------------------------
+cat(paste0("dfAlloParentMarks" ) )
+
+## ---- echo=F-------------------------------------------------------------
+kableExtra::kable_styling(knitr::kable(dfAlloParentMarks) , full_width = F
+                           , font_size = 10
+                          , bootstrap_options = c("striped", "hover", "condensed")
+                          )
+
+## ------------------------------------------------------------------------
+# We will use column note to add a note to the right of the karyotype of the OTU in column OTU
+notesdf2<-read.table(text=
+"           OTU                note
+\"Parental 1\"     \"Parental One\"  
+\"Parental 2\"     \"Parental Two\"  
+\"Allopolyploid\"  Allopolyploid  ", header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
+
+## ---- echo=TRUE, results="hide", fig.width=7, fig.height=9, message=FALSE,dev='png'----
+# fig.width=7, fig.height=4.5
+
+# svg("gish.svg",width=7,height=9 )
+# png("mydfChrSize.png", width=700, height=900)
+plotIdiograms(dfChrSize = parentalAndHybChrSize,  # d.f. of chr. sizes
+              dfMarkPos = dfAlloParentMarks,      # d.f. of marks' positions
+              chrColor  = "gray",          # chr. color
+              cenColor  = NULL,            # cen. color when GISH
+
+              OTUTextSize = 1,             # font size for OTU names
+              dotRoundCorr=2,              # correction of roundness of vert. and dots
+              chrWidth=2.5,                # rel. chr. width
+              chrSpacing = 2.5,            # rel. horizontal chr. spacing
+              karHeiSpace=2,               # karyotype height including spacing
+              indexIdTextSize=0.7,         # font size for chr. indexes and chr. name
+              markLabelSize=1,             # font size for labels (legend)
+              distTextChr = 0.3,
+
+              rulerPos=-1.9,               # ruler position
+              ruler.tck=-0.02,             # ruler tick orientation and length
+              rulerNumberPos=.5,           # rulers' numbers position
+              rulerNumberSize=0.5          # ruler font size
+              ,legend=""                   # no legend
+              
+              ,notes=notesdf2              # data.frame with notes NEW
+              ,notesTextSize = 1.3         # font size of notes
+              ,notesPos = 1.5              # space from chr. (right) to note
+)
+# dev.off()
 

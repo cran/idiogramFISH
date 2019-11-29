@@ -291,7 +291,7 @@ allChrSizeSampleHolo <- allChrSizeSampleHolo[,c("OTU","chrName","longArmSize")]
 colnames(allChrSizeSampleHolo)[which(names(allChrSizeSampleHolo)=="longArmSize")]<-"chrSize"
 
 allMarksSampleHolo   <- allMarksSample
-allMarksSampleHolo   <- allMarksSampleHolo[which(allMarksSampleHolo$markArm!="cen"),]
+allMarksSampleHolo   <- allMarksSampleHolo[which(allMarksSampleHolo$chrRegion!="cen"),]
 allMarksSampleHolo   <- allMarksSampleHolo[c("OTU","chrName","markName","markDistCen","markSize")]
 colnames(allMarksSampleHolo)[which(names(allMarksSampleHolo)=="markDistCen")] <- "markPos"
 allMarksSampleHolo[which(allMarksSampleHolo$markName=="5S"),]$markSize <- .5

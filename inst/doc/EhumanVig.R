@@ -121,11 +121,11 @@ humMarkPos21<-humMarkPos[which(humMarkPos$chrName %in% 21),]
 # Making derivative data.frame of Marks
 
 # remove p arm from 21
-humMarkPos21Der<-humMarkPos21[humMarkPos21$markArm=="q",]
-humMarkPos21Der$markArm<-"p"
+humMarkPos21Der<-humMarkPos21[humMarkPos21$chrRegion=="q",]
+humMarkPos21Der$chrRegion<-"p"
 
 # remove p arm from 13
-humMarkPos13Der<-humMarkPos13[humMarkPos13$markArm=="q",]
+humMarkPos13Der<-humMarkPos13[humMarkPos13$chrRegion=="q",]
 
 # rename fragments
 humMarkPos21Der$chrName<-"t(13;21)"

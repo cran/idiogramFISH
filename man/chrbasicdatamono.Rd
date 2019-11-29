@@ -7,6 +7,7 @@
 \alias{bigdfOfChrSize}
 \alias{humChr}
 \alias{allChrSizeSample}
+\alias{parentalAndHybChrSize}
 \title{Chr. basic data Monocen.}
 \format{data.frame with cols:
 \describe{
@@ -27,6 +28,8 @@ bigdfOfChrSize
 humChr
 
 allChrSizeSample
+
+parentalAndHybChrSize
 }
 \description{
 dfOfChrSize: Example data for monocentrics
@@ -36,6 +39,8 @@ bigdfOfChrSize: Example data for monocentrics for several species, OTU
 humChr: Example data for human karyotype (Adler 1994)
 
 allChrSizeSample: Example data for monocentrics for several species, OTU
+
+parentalAndHybChrSize: Example data for monocentrics for GISH
 }
 \references{
 Adler 1994. Idiogram Album. \url{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}

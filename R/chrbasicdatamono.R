@@ -29,3 +29,6 @@ NULL
 #' @description allChrSizeSample: Example data for monocentrics for several species, OTU
 #' @rdname chrbasicdatamono
 "allChrSizeSample"
+#' @description parentalAndHybChrSize: Example data for monocentrics for GISH
+#' @rdname chrbasicdatamono
+"parentalAndHybChrSize"

@@ -1,6 +1,12 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 1.9.1
+
+  - Fixed bug when centromere=0 when several karyotypes
+  - Added rounded vertices for centromere \> 0
+  - Added functionality for plotting GISH.
+
 # idiogramFISH 1.8.3
 
 Fixed dependencies
