@@ -1,6 +1,17 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 1.11.1
+
+  - Added functionality for fixing y x aspect ratio (roundness
+    proportion) using ‘asp = 1’ only
+
+# idiogramFISH 1.10.1
+
+  - Fixed misplacement of marks when origin=“t” or markDistType = “cen”
+  - Added functionality for plotting karyotypes in micrometers and bases
+    together, see monocen. vignette
+
 # idiogramFISH 1.9.1
 
   - Fixed bug when centromere=0 when several karyotypes

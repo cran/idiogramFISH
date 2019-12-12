@@ -28,6 +28,10 @@ NULL
 #' @description dfAlloParentMarksHolo: Example data for mark position of GISH
 #' @rdname markdataholo
 "dfAlloParentMarksHolo"
+#' @description bigdfOfMarks3Mb: Example data for mark position in Mb
+#' @rdname markdataholo
+"bigdfOfMarks3Mb"
+
 
 
 

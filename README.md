@@ -55,6 +55,7 @@ Attention windows users, please install
 ``` r
 # This installs package devtools, necessary for installing the dev version
 install.packages("devtools")
+
 url <- "https://gitlab.com/ferroao/idiogramFISH"
 ```
 
@@ -125,7 +126,7 @@ Phylogeny](https://ferroao.gitlab.io/idiogramfishhelppages/DphylogenyVig.html)
 [Human
 karyotype](https://ferroao.gitlab.io/idiogramfishhelppages/EhumanVig.html)
 
-Launch vignettes from R
+Launch vignettes from R:
 
 ``` r
 browseVignettes("idiogramFISH") 
@@ -133,45 +134,46 @@ browseVignettes("idiogramFISH")
 
 ## Basic examples
 
-#### 1 how to plot a karyotype:
+#### 1 How to plot a karyotype:
 
 Define your plotting window size with something like `par(pin=c(10,6))`
 
 ``` r
-# fig.width=8, fig.height=6
 
 library(idiogramFISH)
-# load some package dataframes
+
 data(dfOfChrSize) # chromsome data
 data(dfMarkColor) # mark general data
 data(dfOfMarks2)  # mark position data (inc. cen.)
 
-# svg("testing.svg",width=14,height=8 )
+# svg("testing.svg",width=11,height=4.5 )
+
+opar <- par(no.readonly = TRUE)      # make a copy of current settings
+par(mar = c(0, 0, 0, 0), omi=rep(0,4), oma=rep(0,4) )
+
 plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
               dfMarkColor=dfMarkColor,  # d.f of mark style                 < == Optional for ver. > 1.0.0
               dfMarkPos=dfOfMarks2,     # df of mark positions (includes cen. marks)
               
-              dotRoundCorr=2,           # correction of dots when non-circular and vertices
+              rulerPos=-.9,             # position of rulers
+              ruler.tck=-0.01,          # size and orientation of ruler ticks
+              rulerNumberSize=.8        # font size of rulers
               
-              chrWidth=2.5,             # width of chromosome
-              chrSpacing = 2.5,         # horizontal space among chromosomes
-              karHeiSpace=1.6,          # vertical size of karyotype including space
+              ,legendWidth=1            # width of legend items
+              ,distTextChr = .5         # chr. text separation
               
-              indexIdTextSize=1,        # font size of chr names and indices
-              markLabelSize=1,          # font size of legends
-              
-              rulerPos=-1.9,            # position of rulers
-              ruler.tck=-0.02,          # size and orientation of ruler ticks
-              rulerNumberPos=.5,        # position of numbers of rulers
-              rulerNumberSize=1         # font size of rulers
-              ,legend="aside"           # try this
-              ,legendWidth=1            # width of legend
+              ,xlimLeftMod = 2          # xlim left param.
+              ,ylimBotMod = 0           # modify ylim bottom argument
+              ,ylimTopMod = 0           # modify ylim top argument
+              ,asp=1                    # y/x aspect, see ?plot
 )
 ```
 
 <img src="man/figures/README-example-1.svg" width="70%" />
 
 ``` r
+
+# par(opar)
 # dev.off() # close svg()
 ```
 
@@ -195,6 +197,9 @@ plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
 | DAPI     | blue      | square |
 | CMA      | yellow    | square |
 
+`p, q` and `w` marks can have empty columns `markDistCen` and `markSize`
+since v. 1.9.1 to plot whole arms (`p`, `q`) and whole chr. `w`.
+
     dfOfMarks2
 
 | chrName | markName | chrRegion | markSize | markDistCen |
@@ -212,33 +217,28 @@ function `plotIdiogramsHolo` deprecated after ver. \> 1.5.1
 
 ``` r
 library(idiogramFISH)
-# load some saved dataframes
+
+# load some package data.frames
 data(dfChrSizeHolo, dfMarkColor, dfMarkPosHolo)
 
 # plotIdiogramsHolo is deprecated
-
+par(mar = c(0, 0, 0, 0), omi=rep(0,4), oma=rep(0,4) )
 # svg("testing.svg",width=14,height=8 )
 plotIdiograms(dfChrSize=dfChrSizeHolo, # data.frame of chr. size
-                  dfMarkColor=dfMarkColor, # df of mark style
-                  dfMarkPos=dfMarkPosHolo, # df of mark positions
-                  addOTUName=FALSE,        # do not add OTU names
-                  
-                  dotRoundCorr=2.5,        # correction of roundness of dots (marks) and chr. vertices
-                  chrWidth=1.5,            # chr. width
-                  indexIdTextSize=1,       # font size of chr. name and indices
-                  legend="aside" ,         # legend of marks to the right of plot
-                  markLabelSize=1,         # font size of mark labels (legend)
-                  
-                  rulerNumberSize=1,       # font size of ruler
-                  rulerPos=-.7,            # position of ruler
-                  ruler.tck=-0.04,         # size and orientation of ruler ticks
-                  rulerNumberPos=.9,       # position of numbers of rulers
-                  
-                  xlimLeftMod=1,           # modify xlim left argument of plot
-                  xlimRightMod=10,         # modify xlim right argument of plot
-                  ylimBotMod=.2            # modify ylim bottom argument of plot
-                  ,legendHeight=.5         # height of legend labels
-                  ,legendWidth = 1.2)      # width of legend labels
+              dfMarkColor=dfMarkColor, # df of mark style
+              dfMarkPos=dfMarkPosHolo, # df of mark positions
+              addOTUName=FALSE,        # do not add OTU names
+              
+              distTextChr = .5,        # chr. name distance to chr.
+              
+              rulerPos=-.9,            # position of ruler
+              rulerNumberPos=.9,       # position of numbers of rulers
+              
+              xlimLeftMod=2,           # modify xlim left argument of plot
+              ylimBotMod=.2            # modify ylim bottom argument of plot
+              ,legendHeight=.5         # height of legend labels
+              ,legendWidth = 1.2       # width of legend labels
+              ,asp=1)                  # y/x aspect
 ```
 
 <img src="man/figures/README-example2-1.png" width="70%" />
@@ -310,33 +310,28 @@ par(mar=rep(0,4))
 plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               dfMarkColor= dfMarkColor,  # df of mark style
               dfMarkPos  = monoholoMarks,# df of mark positions, includes cen. marks
- 
-              roundness = 8,             # vertices roundness
-              dotRoundCorr=1.5,          # correction of roundness of dots (marks) and vertices
               
+              roundness = 4,             # vertices roundness
               addOTUName = TRUE,         # add OTU names
-              OTUTextSize = 1,           # OTU name font size
               
-              chrWidth=1.5,              # chr. width
-              indexIdTextSize=1,         # font size of chr. name and indices
+              karHeiSpace = 3,           # karyotype height inc. spacing
+              karIndexPos = .2,          # move karyotype index
               
-              legend="aside" ,           # legend of marks to the right of plot
-              markLabelSize=1,           # font size of mark labels (legend)
-              legendHeight=.5,           # height of legend labels
+              legendHeight= 1,           # height of legend labels
               legendWidth = 1,           # width of legend labels
-
-              rulerNumberSize=1,         # font size of ruler
-              rulerPos= -1.8,            # position of ruler
+              
+              rulerPos= -0.5,            # position of ruler
               ruler.tck=-0.02,           # size and orientation of ruler ticks
               rulerNumberPos=.9,         # position of numbers of rulers
               
-              xlimLeftMod=4,             # modify xlim left argument of plot
-              xlimRightMod=10,           # modify xlim right argument of plot
+              xlimLeftMod=1,             # modify xlim left argument of plot
+              xlimRightMod=3,            # modify xlim right argument of plot
               ylimBotMod=-.2             # modify ylim bottom argument of plot
+              ,asp=1                     # y x aspect ratio
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-14-1.png" width="70%" />
 
 ``` r
 #dev.off() # close svg()
@@ -350,31 +345,32 @@ Available only for ver. \> 1.8.3
 library(idiogramFISH)
 # load some saved dataframes
 
-# function plotIdiogramsHolo deprecated for ver. > 1.5.1
 par(mar=rep(0,4))
 
 # svg("allo.svg",width=10,height=9 )
+
+par(mar = c(0, 0, 0, 0), omi=rep(0,4), oma=rep(0,4) )
+
 plotIdiograms(dfChrSize = parentalAndHybChrSize,  # d.f. of chr. sizes
               dfMarkPos = dfAlloParentMarks,      # d.f. of marks' positions
-              cenColor  = NULL,            # cen. color when GISH
+              cenColor  = NULL                    # cen. color when GISH
               
-              OTUTextSize = 1,             # font size for OTU names
-              dotRoundCorr=2,              # correction of roundness of vert. and dots
-              chrWidth=2.5,                # rel. chr. width
-              chrSpacing = 2.5,            # rel. horizontal chr. spacing
-              karHeiSpace=2,               # karyotype height including spacing
-              indexIdTextSize=1,           # font size for chr. indexes and chr. name
-              markLabelSize=1,             # font size for labels (legend)
+              ,karHeiSpace=5,                     # karyotype height including spacing
+              karSepar = FALSE,                   # equally sized karyotypes       
+              
+              rulerPos=-1,                        # ruler position
+              ruler.tck= -0.002,                  # ruler tick orientation and length
+              rulerNumberSize=.5                  # ruler font size
+              ,legend=""                          # no legend
+              ,asp=1                              # y x aspect ratio
 
-              rulerPos=-1.9,               # ruler position
-              ruler.tck=-0.02,             # ruler tick orientation and length
-              rulerNumberPos=.5,           # rulers' numbers position
-              rulerNumberSize=1            # ruler font size
-              ,legend=""                   # no legend
+              ,ylimBotMod = 1                     # modifiy ylim bottom argument
+              ,xlimRightMod = 0                   # modify xlim right argument
+              
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-14-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-15-1.png" width="70%" />
 
 ``` r
 #dev.off() # close svg()

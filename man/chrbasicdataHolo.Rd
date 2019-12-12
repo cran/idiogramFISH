@@ -6,6 +6,7 @@
 \alias{dfChrSizeHolo}
 \alias{bigdfChrSizeHolo}
 \alias{parentalAndHybHoloChrSize}
+\alias{bigdfOfChrSize3Mb}
 \title{Chr. basic data Holo.}
 \format{data.frame with cols:
 \describe{
@@ -20,6 +21,8 @@ dfChrSizeHolo
 bigdfChrSizeHolo
 
 parentalAndHybHoloChrSize
+
+bigdfOfChrSize3Mb
 }
 \description{
 dfChrSizeHolo: Example data for holocentrics for 1 species
@@ -27,6 +30,8 @@ dfChrSizeHolo: Example data for holocentrics for 1 species
 bigdfChrSizeHolo: Example data for holocentrics for several species, OTU
 
 parentalAndHybHoloChrSize: Example data for holocentrics for several species, OTU
+
+bigdfOfChrSize3Mb: Example data in Mb without chr. arms for three species, OTU
 }
 \seealso{
 \code{\link{asymmetryA2}}

@@ -36,13 +36,13 @@ cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 ## ----otus, message=FALSE, results="hide"---------------------------------
 library(idiogramFISH)
 # Chromosome sizes for human
-head(humChr)  
+head(humChr) 
 
 ## ---- echo=F-------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(head(humChr) ), full_width = F
                            , font_size = 10)
 
-## ----otus2, message=FALSE------------------------------------------------
+## ---- message=FALSE------------------------------------------------------
 FstRow<-length(which(humChr$group %in% c("A","B") ) )        # groups in 1st row
 SndRow<-length(which(humChr$group %in% "C" ) )               # groups in second row
 TrdRow<-length(which(humChr$group %in% c("D","E") ) )        # groups in third row
@@ -85,19 +85,21 @@ plotIdiograms(humChr,                     # data.frame of chromosome size (in pa
               dfMarkColor = humMarkColor, # df of mark characteristics (in package)
               
               addOTUName = FALSE,         # do not add name of OTU
-              karHeiSpace = 1.7,          # vertical spacing among OTU
+              karHeight = 6,
+              karHeiSpace = 7,            # vertical spacing among OTU
               amoSepar = 7,               # reduce distance among OTUs
               karIndex = FALSE,           # do not add karyotype indices
+              distTextChr = 1.5,          # distance from chr. to text.
               
               chrColor = "black",         # chr. color
-              chrWidth = 1,               # chromosome width
-              chrSpacing = 2,             # space among chromosomes
               chrIndex = FALSE,           # add chromosome indices
               
               morpho = FALSE,             # add morphological categories
-              dotRoundCorr = .5,          # correcting factor for dots
+
               centromereSize = 0,         # apparent centromere size
-              roundness = 7,              # roundness of chr. and marks
+              
+              roundness = 10,             # roundness of chr. and marks
+              legend = "inline",          # mark labels next to chr.
               markLabelSize = .5,         # size of legend font
               pattern= "chr[0-9XY]+",     # REGEX pattern to remove from name of marks
               indexIdTextSize = 2,        # font size of chr name and indices
@@ -107,6 +109,7 @@ plotIdiograms(humChr,                     # data.frame of chromosome size (in pa
               rulerNumberPos = 2,         # position of ruler
               xlimRightMod = 0,           # space to the right of karyotype
               ylimBotMod = -.6            # modify ylim of bottom
+              ,asp=1                      # y x aspect
               )
 
 ## ----translo-------------------------------------------------------------
@@ -151,22 +154,21 @@ humMarkPos1321Der$OTU<-NULL
 ## ----hsel, echo=TRUE, fig.width=6, fig.height=6, message=FALSE, results="hide",dev='png'----
 
 plotIdiograms(humChr1321der,               # data.frame of size of chr.
-              humMarkPos1321Der,           # df of position of marks
-              dfMarkColor = humMarkColor,  # df of style of marks
+              humMarkPos1321Der,           # d.f of position of marks
+              dfMarkColor = humMarkColor,  # d.f of style of marks
               
               addOTUName = FALSE,          # do not add OTU name
               centromereSize=0,            # apparent size of centromere
-              roundness=9,                 # roundness of vertices of chr. and marks
+              roundness=5,                 # roundness of vertices of chr. and marks
               chrColor = "black",          # chr. color
-              chrWidth = 1,                # width of chr.
-              chrSpacing = 1,              # space among chr.
-              karHeiSpace = 2,             # karyotype height including spacing
+              karHeight = 4,               # karyotype height without spacing
               
               chrIndex = FALSE,            # do not add chr. indices
               karIndex = FALSE,            # do not add karyotype indices
+              distTextChr = 2,             # distance from chr. to text.
               morpho = FALSE,              # do not add chr. morphology
-              indexIdTextSize = 1.5,       # font size of chr name
               markLabelSize = .5,          # font size of chr. mark labels
+              legend = "inline",           # mark labels next to chr.
               pattern="chr[0-9]+",         # REGEX pattern to remove from mark names
               lwd.chr=.9,                  # width of chr and mark borders
               
@@ -174,15 +176,21 @@ plotIdiograms(humChr1321der,               # data.frame of size of chr.
               rulerNumberPos = 2,          # ruler number position
               ruler.tck = -.03,            # tick of ruler, orientation and size
               
-              xlimRightMod=2,              # modify xlim right argument
-              ylimBotMod = -.15)           # modify ylim bottom argument
+              ylimBotMod = -.15            # modify ylim bottom argument
+              ,asp=1                       # y x aspect ratio
+              )
 
 ## ----translo2, results="hide"--------------------------------------------
 chrt13q14q<-robert(humChr,humMarkPos,13,14,"q","q")
 
 # which produces a list of two data.frames:
 
+# 1. chr sizes
 dfChrSizeDer<-chrt13q14q$dfChrSizeDer
+# remove the group column
+dfChrSizeDer<-dfChrSizeDer[ , !(names(dfChrSizeDer) %in% "group")]
+
+# 2. marks' positions
 dfMarkPosDer<-chrt13q14q$dfMarkPosDer
 
 head(dfMarkPosDer)
@@ -196,35 +204,32 @@ kableExtra::kable_styling(knitr::kable(head(dfMarkPosDer) ) , full_width = F
 
 par(mar=c(0,2,.5,0))
 
-plotIdiograms(dfChrSizeDer,               # data.frame of chromosome size (in package)
-              dfMarkPosDer,               # df of mark positions  (in package)
+plotIdiograms(dfChrSizeDer,               # data.frame of chromosome size
+              dfMarkPosDer,               # df of mark positions
               dfMarkColor = humMarkColor, # df of mark characteristics (in package)
 
               addOTUName = FALSE,         # do not add name of OTU
-              karHeiSpace = 1.2,          # vertical spacing among OTU
               karIndex = FALSE,           # do not add karyotype indices
-
-              chrColor = "black",         # chr. color
-              chrWidth = .6,              # chromosome width
-              chrSpacing = 2,             # space among chromosomes
-              chrIndex = FALSE,           # do not add chromosome indices
-
               morpho = FALSE,             # do not add morphological categories
-              dotRoundCorr = .5,          # correcting factor for dots
+              chrIndex = FALSE,           # do not add chromosome indices
+              
+              chrColor = "black",         # chr. color
+              chrWidth = 1,               # chromosome width
+              karHeight = 9,              # kar. height without space
               centromereSize = 0,         # apparent centromere size
               roundness = 7,              # roundness of chr. and marks
+
               markLabelSize = .5,         # size of legend font
+              legend = "inline",          # mark labels next to chr.
               pattern= "chr[0-9XY]+",     # REGEX pattern to remove from name of marks
-              distTextChr = 1,            # distance from chr. to text.
+              distTextChr = 6,            # distance from chr. to text.
               indexIdTextSize = 2,        # font size of chr name and indices
               lwd.chr=.5,                 # width of chr and mark borders
 
               rulerNumberSize = .9,       # font size of ruler
-              rulerNumberPos = 1,         # position of ruler
+              rulerNumberPos = 1          # position of ruler
               
-              xlimLeftMod = 4,            # space to the right of karyotype
-              xlimRightMod = 5,           # space to the right of karyotype
-              ylimBotMod = .7,            # modify bottom ylim 
-              ylimTopMod =.1              # modify top ylim
+              ,xlimLeftMod = 4            # space to the right of karyotype
+              ,asp=1                      # aspect ratio y x
 )
 

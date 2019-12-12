@@ -116,28 +116,18 @@ par(mar=c(1,4,1,1)) # bottom left top right
 plotIdiograms(dfChrSize  = mydfChrSizeHolo,# data.frame of chr. sizes
               dfMarkColor= mydfMarkColor,  # df of mark style
               dfMarkPos  = mydfMarkPosHolo,# df of mark positions
-              karHeight = 1.4,             # vertical size of karyotype plus spacing
               addOTUName=FALSE,            # add OTU names
-               
-              chrWidth = 2,                # width of chromosomes
-              chrSpacing = 2,              # space among chromosomes
-              indexIdTextSize=1,           # font size of chr. name and indices 
-               
-              dotRoundCorr=2,              # correction factor for roundness of dots
-              legend="aside" ,             # position of legend, not "inline"
-              markLabelSize=1,             # font size of legend
-               
-              rulerNumberSize=1,           # font size of ruler
-              rulerPos=-2.2,               # position of ruler
+              
+              rulerPos=-1,                 # position of ruler
               ruler.tck=-0.01,             # size and orient. of tick of ruler
               rulerNumberPos=.9,           # ruler's number position
- 
+              
               xlimLeftMod=2.2,             # modify xlim left argument
-              xlimRightMod=10,             # modify xlim right argument
               ylimBotMod=.1                # modify ylim bottom argument
               ,legendWidth=1               # width of legend
-              ,legendHeight=0.5            # height of legend item 
-              )
+              ,legendHeight=.7             # height of legend item 
+              ,asp=1                       # y x aspect
+)
 dev.off()
 
 ## ---- results="asis", comment=NA, echo=FALSE-----------------------------
@@ -151,21 +141,17 @@ cat(paste0("![](mydfChrSizeHolo.svg)" ) )
 #  par(mar=c(1,4,1,1))
 #  # function plotIdiogramsHolo was deprecated
 #  plotIdiograms(dfChrSize = dfChrSizeHolo, # d.f. of chr. size
-#               dfMarkPos  = dfMarkPosHolo, # d.f. of marks' positions
-#               mycolors   = c("green","yellow","blue","red"),  # colors for marks
-#               dotRoundCorr=2.5,           # correction of roundness of vert. and dots
-#               chrWidth=2.5,               # rel. chr width
-#               indexIdTextSize=1,          # font size of indexes and chr. name
-#               legend="aside",             # position of legend to the right
-#               markLabelSize=1,            # font size of legend
-#               addOTUName=F,               # add OTU name
-#               rulerNumberSize=1,          # font size of ruler
-#               rulerPos=-.7,               # ruler position
-#               ruler.tck=-0.04,            # ruler ticks size and orient.
-#               rulerNumberPos=.9,          # position of numbers of ruler
-#               xlimLeftMod=1,              # modify left xlim
-#               xlimRightMod=10,            # modify right xlim
-#               ylimBotMod=.2               # modify bottom ylim
+#                dfMarkPos  = dfMarkPosHolo, # d.f. of marks' positions
+#                mycolors   = c("green","yellow","blue","red"),  # colors for marks
+#  
+#                addOTUName=F,               # add OTU name
+#                rulerPos=-.7,               # ruler position
+#                ruler.tck=-0.01,            # ruler ticks size and orient.
+#                rulerNumberPos=.9,          # position of numbers of ruler
+#                xlimLeftMod=1,              # modify left xlim arg.
+#                xlimRightMod=3,             # modify right xlim arg.
+#                ylimBotMod=.2               # modify bottom ylim
+#                ,asp=1                      # y x aspect
 #  )
 
 ## ------------------------------------------------------------------------
@@ -197,33 +183,29 @@ library(idiogramFISH)
 png("bigdfChrSizeHolo.png", width=600, height=600)
 par(mar=c(1,1,1,1))
 
-plotIdiograms(dfChrSize=bigdfChrSizeHolo,     # df of chr. sizes
-                  dfMarkColor=dfMarkColor,    # df of mark style
-                  dfMarkPos=bigdfMarkPosHolo, # df of marks' position
-                  
-                  MarkDistanceType="cen",     # distance to mark (center of mark)
-                  roundness=6,                # vertices roundness of chr. and marks 
-                  dotRoundCorr=1,             # correction of dots roundness
-                  
-                  karHeight = 1,              # rel. karyotype height
-                  karHeiSpace = 1.7,          # karyotype height including spacing
-                  karSepar=FALSE,             # reduce vertical space among karyotypes 
-                  
-                  markLabelSpacer = 1         # distance from chr. (right) to legend
-                  ,legendWidth = 1            # width of legend labels
-                  ,legend="aside"             # type of legend, right side
+plotIdiograms(dfChrSize=bigdfChrSizeHolo, # df of chr. sizes
+              dfMarkColor=dfMarkColor,    # df of mark style
+              dfMarkPos=bigdfMarkPosHolo, # df of marks' position
               
-                  ,chrId="simple",            # numbering of chr., not using "original" name
-                  chrWidth = 0.5,             # chr. width
-                  chrSpacing = 1,             # space among chr.
-                  
-                  indexIdTextSize=.9,         # font size of chr names and indices
-                  markLabelSize=.9,           # font size of legends
-                  rulerNumberSize=.9,         # font size of ruler
-                  OTUTextSize=1.2,            # font size of OTUs' names
-                  
-                  xlimRightMod=2,             # modify xlim right argument
-                  ylimBotMod=.4               # modify ylim bottom argument
+              markDistType="cen",         # measure towards center of mark
+              roundness=6,                # vertices roundness of chr. and marks 
+              
+              karHeiSpace = 4,            # karyotype height including spacing
+              karSepar=TRUE,              # reduce vertical space among karyotypes 
+              amoSepar = 1,               # separation among karyotypes
+              distTextChr=.5,             # distance text to chr.
+              
+              legendWidth = 1             # width of legend labels
+              
+              ,chrId="simple",            # numbering of chr., not using "original" name
+              
+              indexIdTextSize=.9,         # font size of chr names and indices
+              markLabelSize=.9,           # font size of legends
+              rulerNumberSize=.9,         # font size of ruler
+              ruler.tck= -.004,           # tick length and orient.
+              
+              ylimBotMod=.4               # modify ylim bottom argument
+              ,asp=1                      # y x aspect
 )
 dev.off()
 
@@ -247,31 +229,30 @@ plotIdiograms(dfChrSize=bigdfChrSizeHoloMb,  # df of chr. sizes
               dfMarkColor=dfMarkColor,       # df of mark style
               dfMarkPos=bigdfMarkPosHoloMb,  # df of mark positions
               
-              MarkDistanceType="cen",        # distance to mark is to its center
-              Mb=TRUE, # <- THIS IS NEW      # distances provided are in Mbs
-              ylabline = -3.6, # <- NEW      # if Mb=TRUE modifies position of y axis title (Mb)
-              roundness=6,                   # vertices roundness of chr. and marks 
-              dotRoundCorr=1,                # correction of dots roundness
+              markDistType="cen",            # distance to mark is to its center
+              ylabline = -8, # <- NEW        # modifies position of y axis title (Mb)
+              roundness=4,                   # vertices roundness of chr. and marks 
+              distTextChr = .5,              # separ. chr. to text
               
-              karHeight = 1,                 # rel. karyotype height
-              karHeiSpace = 1.7,             # karyotype height including spacing
+              karHeight = 2,                 # rel. karyotype height
+              karHeiSpace = 4,               # karyotype height including spacing
               karSepar=TRUE,                 # reduce spacing among karyotypes 
-              amoSepar = 3,                  # depends on karSepar, amount of sep.
+              amoSepar = 1,                  # depends on karSepar, amount of sep.
               
               chrId="simple",                # chr. names not "original"
-              chrWidth   = 0.5,              # chr. width
-              chrSpacing = 1.0,              # space among chr.
               indexIdTextSize=.9,            # font size of chr names and indices
               karIndex = FALSE,              # do not add karyotype asymmetry index
               
               markLabelSize=.9,              # font size of legend
               rulerNumberSize=.9,            # font size of ruler
               rulerPos = 0,                  # position of ruler
-              OTUTextSize=1.2,               # font size of OTU names
-
-              xlimRightMod=2,                # modify right argument of xlim
-              xlimLeftMod = 3,               # modify left argument of xlim
-              ylimBotMod=.4)                 # modify bottom argument of ylim
+              ruler.tck= -.004,              # ruler tick length and orient.
+              
+              legendWidth = 1.2,             # width of legends
+              
+              xlimLeftMod = 1,               # modify left argument of xlim
+              ylimBotMod=.4                  # modify bottom argument of ylim
+              ,asp=1)                        # y x aspect
 dev.off()
 
 ## ---- results="asis", comment=NA, echo=FALSE-----------------------------
@@ -301,24 +282,21 @@ kableExtra::kable_styling(knitr::kable(dfAlloParentMarksHolo) , full_width = F
 # svg("gish.svg",width=8,height=7 )
 # png("mydfChrSize.png", width=600, height=500)
 plotIdiograms(dfChrSize = parentalAndHybHoloChrSize,  # d.f. of chr. sizes
-              dfMarkPos = dfAlloParentMarksHolo,     # d.f. of marks' positions
+              dfMarkPos = dfAlloParentMarksHolo,      # d.f. of marks' positions
               chrColor  = "gray",          # chr. color
               cenColor  = NULL,            # cen. color when GISH
-
-              OTUTextSize = 1,             # font size for OTU names
-              dotRoundCorr=2,              # correction of roundness of vert. and dots
-              chrWidth=2.5,                # rel. chr. width
-              chrSpacing = 2.5,            # rel. horizontal chr. spacing
-              karHeiSpace=2,               # karyotype height including spacing
-              indexIdTextSize=1,           # font size for chr. indexes and chr. name
-                            distTextChr = 0.5,
-              markLabelSize=1,             # font size for labels (legend)
-
-              rulerPos=-1.9,               # ruler position
-              ruler.tck=-0.02,             # ruler tick orientation and length
-              rulerNumberPos=.5,           # rulers' numbers position
-              rulerNumberSize=0.7            # ruler font size
+              
+              karHeight = 3,               # karyotype heigth without spacing
+              karHeiSpace=5,               # karyotype height including spacing
+              distTextChr = 0.8,           # separation among chr. and text
+              
+              rulerPos=-1.8,               # ruler position
+              ruler.tck=-0.01,             # ruler tick orientation and length
+              rulerNumberSize=0.7          # ruler font size
               ,legend=""                   # no legend
+              
+              ,xlimRightMod = 0            # xlim right arg. modif.
+              ,asp=1                       # y x aspect
 )
 # dev.off()
 

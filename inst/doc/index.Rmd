@@ -197,10 +197,12 @@ list.of.packages <- c(
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 ```
+
 ``` {r, eval=FALSE}
 # Linux with vignettes and Windows 
 devtools::install_git(url = url,build_vignettes = TRUE, force=T)
 ```
+
 ``` {r, eval=FALSE}
 # Mac with vignettes
 devtools::install_git(url = url, build_opts=c("--no-resave-data","--no-manual") )
@@ -250,7 +252,7 @@ Launch vignettes from R:
 browseVignettes("idiogramFISH") 
 ```
 
-# Minimal examples
+# Basic examples
 
 ## How to plot a karyotype: {-}
 
@@ -261,32 +263,27 @@ Define your plotting window size with something like `par(pin=c(10,6))`
 
 library(idiogramFISH)
 
-# load some package dataframes
 data(dfOfChrSize) # chromsome data
 data(dfMarkColor) # mark general data
-data(dfOfMarks2)  # mark position data, inc. cen.
+data(dfOfMarks2)  # mark position data (inc. cen.)
 
 svg("dfOfChrSize.svg",width=12,height=8 )
 # png("dfOfChrSize.png", width=500, height=400)
 plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
               dfMarkColor=dfMarkColor,  # d.f of mark style                 < == Optional for ver. > 1.0.0
-              dfMarkPos=dfOfMarks2,     # df of mark positions (includes cen. marks also)
-
-              dotRoundCorr=2,           # correction of dots when non-circular and vertices
+              dfMarkPos=dfOfMarks2,     # df of mark positions (includes cen. marks)
               
-              chrWidth=2.5,             # width of chromosome
-              chrSpacing = 2.5,         # horizontal space among chromosomes
-              karHeiSpace=1.6,          # vertical size of karyotype including space
+              rulerPos=-.9,             # position of rulers
+              ruler.tck=-0.01,          # size and orientation of ruler ticks
+              rulerNumberSize=.8        # font size of rulers
               
-              indexIdTextSize=1,        # font size of chr names and indices
-              markLabelSize=1,          # font size of legends
+              ,legendWidth=1            # width of legend items
+              ,distTextChr = .5         # chr. text separation
               
-              rulerPos=-1.9,            # position of rulers
-              ruler.tck=-0.02,          # size and orientation of ruler ticks
-              rulerNumberPos=.5,        # position of numbers of rulers
-              rulerNumberSize=1         # font size of rulers
-              ,legend="aside"           # try this
-              ,legendWidth=1            # width of legend
+              ,xlimLeftMod = 2          # xlim left param.
+              ,ylimBotMod = 0           # modify ylim bottom argument
+              ,ylimTopMod = 0           # modify ylim top argument
+              ,asp=1                    # y/x aspect, see ?plot
 )
 dev.off()
 ```
@@ -304,6 +301,12 @@ cat(paste0("![](dfOfChrSize.svg)" ) )
 dfOfChrSize
 # mark general data
 dfMarkColor 
+```
+
+`p, q` and `w` marks can have empty columns `markDistCen` and `markSize` since v. 1.9.1 to plot whole arms (`p`, `q`) and whole chr. `w`.
+
+
+```{r, comment=NA}
 # mark position data, if only 1 species, column OTU is optional
 dfOfMarks2
 ```
@@ -319,29 +322,23 @@ library(idiogramFISH)
 data(dfChrSizeHolo, dfMarkColor, dfMarkPosHolo)
 
 # plotIdiogramsHolo is deprecated
-
+par(mar = c(0, 0, 0, 0), omi=rep(0,4), oma=rep(0,4) )
 # svg("testing.svg",width=14,height=8 )
 plotIdiograms(dfChrSize=dfChrSizeHolo, # data.frame of chr. size
-                  dfMarkColor=dfMarkColor, # df of mark style
-                  dfMarkPos=dfMarkPosHolo, # df of mark positions
-                  addOTUName=FALSE,        # do not add OTU names
-                  
-                  dotRoundCorr=2.5,        # correction of roundness of dots (marks)  and vertices
-                  chrWidth=1.5,            # chr. width
-                  indexIdTextSize=1,       # font size of chr. name and indices
-                  legend="aside" ,         # legend of marks to the right of plot
-                  markLabelSize=1,         # font size of mark labels (legend)
-                  
-                  rulerNumberSize=1,       # font size of ruler
-                  rulerPos=-.7,            # position of ruler
-                  ruler.tck=-0.04,         # size and orientation of ruler ticks
-                  rulerNumberPos=.9,       # position of numbers of rulers
-                  
-                  xlimLeftMod=1,           # modify xlim left argument of plot
-                  xlimRightMod=10,         # modify xlim right argument of plot
-                  ylimBotMod=.2            # modify ylim bottom argument of plot
-                  ,legendHeight=.5         # height of legend labels
-                  ,legendWidth = 1.2)      # width of legend labels
+              dfMarkColor=dfMarkColor, # df of mark style
+              dfMarkPos=dfMarkPosHolo, # df of mark positions
+              addOTUName=FALSE,        # do not add OTU names
+              
+              distTextChr = .5,        # chr. name distance to chr.
+              
+              rulerPos=-.9,            # position of ruler
+              rulerNumberPos=.9,       # position of numbers of rulers
+              
+              xlimLeftMod=2,           # modify xlim left argument of plot
+              ylimBotMod=.2            # modify ylim bottom argument of plot
+              ,legendHeight=.5         # height of legend labels
+              ,legendWidth = 1.2       # width of legend labels
+              ,asp=1)                  # y/x aspect
 # dev.off() # close svg()
 ```
 
@@ -391,29 +388,24 @@ par(mar=rep(0,4))
 plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               dfMarkColor= dfMarkColor,  # df of mark style
               dfMarkPos  = monoholoMarks,# df of mark positions, includes cen. marks
- 
-              roundness = 8,             # vertices roundness
-              dotRoundCorr=1.5,          # correction of roundness of dots (marks) and vertices
               
+              roundness = 4,             # vertices roundness
               addOTUName = TRUE,         # add OTU names
-              OTUTextSize = 1,           # OTU name font size
               
-              chrWidth=1.5,              # chr. width
-              indexIdTextSize=1,         # font size of chr. name and indices
+              karHeiSpace = 3,           # karyotype height inc. spacing
+              karIndexPos = .2,          # move karyotype index
               
-              legend="aside" ,           # legend of marks to the right of plot
-              markLabelSize=1,           # font size of mark labels (legend)
-              legendHeight=.5,           # height of legend labels
+              legendHeight= 1,           # height of legend labels
               legendWidth = 1,           # width of legend labels
-
-              rulerNumberSize=1,         # font size of ruler
-              rulerPos= -1.8,            # position of ruler
+              
+              rulerPos= -0.5,            # position of ruler
               ruler.tck=-0.02,           # size and orientation of ruler ticks
               rulerNumberPos=.9,         # position of numbers of rulers
               
-              xlimLeftMod=4,             # modify xlim left argument of plot
-              xlimRightMod=10,           # modify xlim right argument of plot
+              xlimLeftMod=1,             # modify xlim left argument of plot
+              xlimRightMod=3,            # modify xlim right argument of plot
               ylimBotMod=-.2             # modify ylim bottom argument of plot
+              ,asp=1                     # y x aspect ratio
 )
 dev.off()
 ```
@@ -430,27 +422,25 @@ Available only for ver. > 1.8.3
 library(idiogramFISH)
 # load some saved dataframes
 
-# function plotIdiogramsHolo deprecated for ver. > 1.5.1
 par(mar=rep(0,4))
 
 # svg("allo.svg",width=10,height=9 )
 plotIdiograms(dfChrSize = parentalAndHybChrSize,  # d.f. of chr. sizes
               dfMarkPos = dfAlloParentMarks,      # d.f. of marks' positions
-              cenColor  = NULL,            # cen. color when GISH
+              cenColor  = NULL                    # cen. color when GISH
               
-              OTUTextSize = 1,             # font size for OTU names
-              dotRoundCorr=2,              # correction of roundness of vert. and dots
-              chrWidth=2.5,                # rel. chr. width
-              chrSpacing = 2.5,            # rel. horizontal chr. spacing
-              karHeiSpace=2,               # karyotype height including spacing
-              indexIdTextSize=1,           # font size for chr. indexes and chr. name
-              markLabelSize=1,             # font size for labels (legend)
+              ,karHeiSpace=5,                     # karyotype height including spacing
+              karSepar = FALSE,                   # equally sized karyotypes       
+              
+              rulerPos=-1,                        # ruler position
+              ruler.tck= -0.002,                  # ruler tick orientation and length
+              rulerNumberSize=.5                  # ruler font size
+              ,legend=""                          # no legend
+              ,asp=1                              # y x aspect ratio
 
-              rulerPos=-1.9,               # ruler position
-              ruler.tck=-0.02,             # ruler tick orientation and length
-              rulerNumberPos=.5,           # rulers' numbers position
-              rulerNumberSize=1            # ruler font size
-              ,legend=""                   # no legend
+              ,ylimBotMod = 1                     # modifiy ylim bottom argument
+              ,xlimRightMod = 0                   # modify xlim right argument
+              
 )
 #dev.off() # close svg()
 ```
@@ -520,7 +510,7 @@ cat(paste0("[![donate](",knitr::include_graphics(donateweek_contFile),")](https:
 ```{r include=FALSE}
 # automatically create a bib database for R packages, this is currently not used by vignette packages2.bib
 knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","pkgdown","crayon","ggtree","ggplot2","ggpubr","phytools","plyr"
+  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","pkgdown","crayon","ggtree","ggplot2","ggpubr","phytools","plyr","dplyr"
 ), 'packages2.bib')
 ```
 

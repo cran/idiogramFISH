@@ -105,35 +105,34 @@ par(fig=c(.3,1,0,1)) # location of right plot
 
 plotIdiograms(allChrSizeSample,                # data.frame of Chr. Sizes
               allMarksSample,                  # d.f. of Marks (inc. cen. marks) 
-
               dfMarkColor =  mydfMaColor,      # d.f. of mark characteristics
-
-              roundness = 10.5,                # roundness of vertices
-              dotRoundCorr = .8,               # correct roundness aspect ratio
+              
+              roundness = 4,                   # roundness of vertices
               lwd.chr=.5,                      # width of lines
               orderBySize = FALSE,             # don't order chr. by size
               centromereSize = 1.3,            # apparent cen. size
-              OTUTextSize = 1,                 # Size of OTU name
-              chrWidth =3,                     # width of chr.
-              chrSpacing = 3,                  # horizontal spacing of chr.
-              karHeiSpace = 1.8,               # karyotype vertical relative size with spacing
+              chrWidth =.75,                   # width of chr.
+              chrSpacing = .25,                # horizontal spacing of chr.
+              indexIdTextSize=.4,              # font size of indices and chr. names
+              
+              karHeight = 4.8,                 # karyotype vertical relative size without spacing
+              karHeiSpace = 6.5,               # karyotype vertical relative size with spacing
               
               nameChrIndexPos=4,               # move the name of chr. indexes to left
               morpho=TRUE,                     # add chr. morphology
               chrIndex = TRUE,                 # add chr. indices
               karIndex = TRUE,                 # add karyotype indices
-
+              
               markLabelSpacer = 0              # spaces from rightmost chr. to legend
-              ,markLabelSize = 1               # font size of legend
-              ,legend="aside"                  # position of legends
               
-              ,ylimTopMod = -.3                # modify ylim top margin
-              ,ylimBotMod=.9                   # modify ylim bottom margin
-              ,xlimRightMod=2                  # modify right xlim
+              ,ylimTopMod = -.1                # modify ylim top margin
+              ,ylimBotMod=1.6                  # modify ylim bottom margin
               
-              ,rulerPos = -0.7                 # position of rulers
+              ,rulerPos = -1                   # position of rulers
               ,rulerNumberSize = .35           # font size of ruler number
               ,rulerNumberPos = .4             # position of ruler numbers
+              ,ruler.tck = -.004               # tick size and orient.
+              ,asp=1                           # y x aspect
               
               ,addMissingOTUAfter = BeforeMissing          # OTUs after which there are ghost karyotypes - empty spaces
               ,missOTUspacings    = valuesOfMissRepsBefore # number of ghost karyotypes
@@ -224,9 +223,11 @@ png(file=paste0("secondplot.png" ),width=962,height=700)
 {
 par(omi=rep(0,4) , mar=c(0,0,0,0), mfrow=c(1,2))
 par(fig=c(0,.3,0,1)) 
+par(mar=c(2,0,2,0)) # b l t r
+
 plot(revBayesPhyloUM)
 par(fig=c(0.3,1,0,1), new=TRUE)
-par(mar=c(3,0,0,0))
+par(mar=c(0,0,0,0)) # b l t r
 
 # Function plotIdiogramsHolo deprecated after ver. 1.5.1 
 
@@ -234,32 +235,28 @@ plotIdiograms(allChrSizeSampleHolo,               # chr. size data.frame
               allMarksSampleHolo,                 # data.frame of marks' positions
               dfMarkColor =  mydfMaColor,         # d.f. of mark characteristics
               
-              roundness = 10.5,                   # vertices roundness
-              dotRoundCorr = 0.9,                 # correction of roundness of dots and vertices
+              roundness = 4,                      # vertices roundness
+              karHeight = 2.8,                    # karyotype height
+              karHeiSpace = 4.5,                  # vertical size of kar. including spacing
 
-              chrWidth =2,                        # width of chr.  
-              chrSpacing = 1.5,                   # horizontal spacing among chr.
-              karHeiSpace = 2,                    # vertical size of kar. including spacing
-              karIndex = TRUE                     # add karyotype index
-              ,OTUTextSize = 1                    # Size of OTU name
+              karIndex = TRUE,                    # add karyotype index
+              indexIdTextSize=.4                  # font size of indices and chr. names
               
               ,addMissingOTUAfter = BeforeMissingPlot2           # add ghost OTUs after these names
               ,missOTUspacings    = valuesOfMissRepsBeforePlot2  # how many ghosts, respectively
               ,lwd.chr=.5                         # line width
 
-              ,legend="aside"                     # make legend to the right
               ,markLabelSpacer = 0                # dist. of legend to rightmost chr.
-              ,markLabelSize = 1                  # font size of legend
               ,legendWidth = 2.3                  # width of square or dots of legend
               
-              ,ylimTopMod = - .3                  # modify ylim of top
-              ,ylimBotMod = - 1.5                 # modify ylim of bottom
-              ,xlimRightMod=2                     # modify xlim of right
-              
-              ,rulerPos = - 0.7                   # position of ruler
+              ,rulerPos = - 1                     # position of ruler
               ,rulerNumberSize = .35              # font size of number of ruler
               ,rulerNumberPos = .4                # position of ruler number
+              ,ruler.tck=-.004
 
+              ,ylimTopMod = 0                     # modify ylim of top
+              ,ylimBotMod = 0                     # modify ylim of bottom
+              ,asp=1                              # y x aspect
 )
 }
 
@@ -329,41 +326,42 @@ png(file=paste0("thirdplot.png" ),width=1100,height=1000)
 {
   par(omi=rep(0,4) , mar=c(0,0,0,0), mfrow=c(1,2))
   par(fig=c(0,.25,0,1)) 
+  par(mar=c(1,0,0,0))
+  
   plot(revBayesPhyloUM)
   par(fig=c(0.25,1,0,1), new=TRUE)
-  par(mar=c(3,0,0,0))
+  par(mar=c(0,0,0,0))
   
 plotIdiograms(mixChrSize,                         # chr. size data.frame
               mixMarks,                           # data.frame of marks' positions (inc. cen. marks)
               dfMarkColor = mydfMaColor,          # d.f. of mark characteristics
               
               origin="b",                         # position measured from bottom of chr.
-              karHeiSpace=2.2,                    # karyotype height with spacing included
               
-              roundness = 10.5,                   # vertices roundness
-              dotRoundCorr = 0.75,                # correction of roundness of dots and vertices
+              karHeight = 2.8,                    # vertical size of kar. including spacing
+              karHeiSpace = 4.5,                  # vertical size of kar. including spacing
+              roundness = 5,                      # vertices roundness
+              chrSpacing = .25,                   # horizontal spacing among chr.
               
-              chrWidth =1.8,                      # width of chr.  
-              chrSpacing = 1.5,                   # horizontal spacing among chr.
               karIndex = TRUE                     # add karyotype index
-              ,OTUTextSize = 1                    # Size of OTU name
+              ,indexIdTextSize=.4                 # font size of indices and chr. names
               
               ,addMissingOTUAfter = BeforeMissingPlot2           # add ghost OTUs after these names
               ,missOTUspacings    = valuesOfMissRepsBeforePlot2  # how many ghosts, respectively
               ,lwd.chr=.5                         # line width
               
-              ,legend="aside"                     # make legend to the right
               ,markLabelSpacer = 0                # dist. of legend to rightmost chr.
-              ,markLabelSize = 1                  # font size of legend
               ,legendWidth = 2                    # width of square or dots of legend
               
-              ,ylimTopMod = -.3                   # modify ylim of top
-              ,ylimBotMod = -1.8                  # modify ylim of bottom
-              ,xlimRightMod=2                     # modify xlim of right
+              ,ylimTopMod = -2                    # modify ylim of top
+              ,ylimBotMod = -2                    # modify ylim of bottom
               
-              ,rulerPos = -0.7                    # position of ruler
+              ,rulerPos = -1                      # position of ruler
               ,rulerNumberSize = .35              # font size of number of ruler
               ,rulerNumberPos = .4                # position of ruler number
+              ,ruler.tck=-.004
+              ,asp = 1                            # y x aspect
+              
 )
 }
 # close png
