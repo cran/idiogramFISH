@@ -7,7 +7,7 @@
 NULL
 #' @description bigdfMarkPosHolo: Example data for mark position of holocentrics with column OTU
 #'
-#' @format data.frame with cols:
+#' @format data.frame with columns:
 #' \describe{
 #'   \item{OTU}{OTU, species, optional}
 #'   \item{chrName}{name of chromosome}
@@ -15,7 +15,7 @@ NULL
 #'   \item{markPos}{position from bottom or top (see parameter \code{origin} in plotIdiograms)}
 #'   \item{markSize}{size of mark in micrometers or Mb}
 #' }
-#' @seealso \code{\link{markpos}}
+#' @seealso \code{\link{markposDFs}}
 #' @seealso \code{\link{plotIdiograms}}
 #' @seealso \code{\link{chrbasicdataHolo}}
 #'

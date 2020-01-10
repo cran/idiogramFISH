@@ -1,7 +1,7 @@
 # fixChrNameDup
 #' This is an internal function fixes duplicated names when no marks
 #'
-#' It returns a list of dataframes
+#' It returns a list of data.frames
 #'
 #' @keywords internal
 #'
@@ -20,7 +20,7 @@ fixChrNameDup<-function(listOfdfChromSize, mybooleanChrName){
   for (s in 1:length(listOfdfChromSize)) {
     if(length(listOfdfChromSize[[s]]$chrName)!=length(unique(listOfdfChromSize[[s]]$chrName) )){
       message(crayon::yellow(
-        paste0("\nWarning: Chromosome names duplicated in dataframe ",names(listOfdfChromSize)[[s]],
+        paste0("\nWarning: Chromosome names duplicated in data.frame ",names(listOfdfChromSize)[[s]],
                ", will be renamed\n this correction is available when no marks to be plotted, otherwise, is fatal")
       ) ) #m
       string<-listOfdfChromSize[[s]]$chrName

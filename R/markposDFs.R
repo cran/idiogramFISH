@@ -3,11 +3,11 @@
 #' holocen. from top or bottom depending on \code{param} \code{origin}. See vignettes.
 #'
 #' @docType data
-#' @name markpos
+#' @name markposDFs
 NULL
 #' @description bigdfOfMarks: Example data for mark position with column OTU
 #'
-#' @format bigdfOfMarks a data.frame with cols:
+#' @format bigdfOfMarks a data.frame with columns:
 #' \describe{
 #'   \item{OTU}{OTU, species, mandatory if in dfChrSize}
 #'   \item{chrName}{name of chromosome}
@@ -21,22 +21,22 @@ NULL
 #' @seealso \code{\link{chrbasicdatamono}}
 #' @seealso \code{\link{dfMarkColor}}
 #'
-#' @rdname markpos
+#' @rdname markposDFs
 "bigdfOfMarks"
 #' @description dfOfMarks: Example data for marks' position
-#' @rdname markpos
+#' @rdname markposDFs
 "dfOfMarks"
 #' @description dfOfMarks2: Marks' position including cen. marks
-#' @rdname markpos
+#' @rdname markposDFs
 "dfOfMarks2"
 #' @description humMarkPos: human karyotype marks' position
 #' @source \href{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}{Washington U}
 #' @references Adler 1994. Idiogram Album. URL: \href{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}{Washington U.}
-#' @rdname markpos
+#' @rdname markposDFs
 "humMarkPos"
 #' @description allMarksSample: Example data for marks' position
-#' @rdname markpos
+#' @rdname markposDFs
 "allMarksSample"
 #' @description dfAlloParentMarks: Example data for mark position of GISH of monocen.
-#' @rdname markpos
+#' @rdname markposDFs
 "dfAlloParentMarks"

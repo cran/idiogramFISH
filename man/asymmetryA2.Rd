@@ -7,13 +7,13 @@
 asymmetryA2(dfChrSize)
 }
 \arguments{
-\item{dfChrSize}{name of dataframe}
+\item{dfChrSize}{name of data.frame}
 }
 \value{
 list
 }
 \description{
-This function reads a dataframe  with columns:
+This function reads a data.frame  with columns:
 \code{shortArmSize} and \code{longArmSize} and optionally \code{OTU} and
 returns a list with the A2 values for the OTUs
 
@@ -45,5 +45,5 @@ Asymmetry. Taxon Vol. 35, No. 3  pp. 526-530
 \code{\link{chrbasicdataHolo}}
 }
 \keyword{arm}
-\keyword{dataframe}
+\keyword{data.frame}
 \keyword{size}

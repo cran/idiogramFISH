@@ -1,89 +1,109 @@
-## ---- results="asis", echo=FALSE, message=FALSE--------------------------
+## ---- results="asis", echo=FALSE, message=FALSE-------------------------------
 # <!-- pkgdown --> 
-# <!-- jquery --><script src="jquery.min.js" crossorigin="anonymous"></script>
-myfile<-"jquery.min.js"
+# <!-- jquery --><script src="js/jquery.min.js" crossorigin="anonymous"></script>
+myfile<-"js/jquery.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
 }
-# <!-- clipboard.js --><script src="clipboard.min.js"  crossorigin="anonymous"></script>
-myfile<-"clipboard.min.js"
+# <!-- clipboard.js --><script src="js/clipboard.min.js"  crossorigin="anonymous"></script>
+myfile<-"js/clipboard.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'"crossorigin="anonymous"></script>'))
 }
-# <!-- Font Awesome icons --><link rel="stylesheet" href="all.minMod.css"  crossorigin="anonymous">
-myfile<-"all.minMod.css"
+# <!-- Font Awesome icons --><link rel="stylesheet" href="css/all.minMod.css"  crossorigin="anonymous">
+myfile<-"css/all.minMod.css"
 if(file.exists(myfile)){
 cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
 }
-# <!-- Bootstrap --><link rel="stylesheet" href="bootstrap.minO.css" crossorigin="anonymous">
-myfile<-"bootstrap.minO.css"
+# <!-- Bootstrap --><link rel="stylesheet" href="css/bootstrap.minO.css" crossorigin="anonymous">
+myfile<-"css/bootstrap.minO.css"
 if(file.exists(myfile)){
 cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
 }
-# <!-- # <script src="bootstrap.min.js"  crossorigin="anonymous"></script> -->
-myfile<-"bootstrap.min.js"
+# <!-- # <script src="js/bootstrap.min.js"  crossorigin="anonymous"></script> -->
+myfile<-"js/bootstrap.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
 }
-myfile<-"pkgdown2.js"
+myfile<-"js/pkgdown2.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 }
 library(knitr)
 
-## ---- echo=F,  results="asis"--------------------------------------------
-img1_path <- "../man/figures/logo.svg"
+## ---- echo=F,  results="asis"-------------------------------------------------
+img1_path <- "../man/logo.svg"
 if(file.exists(img1_path)) {
 cat(paste0("<img src=",img1_path," class=\"right\" width=\"20%\">") )
 }
 
-## ---- include = FALSE----------------------------------------------------
+## ---- include = FALSE---------------------------------------------------------
  badge_devel_gitlab<-function(pkg, color){
     v <- rvcheck:::check_github_gitlab(pkg, "gitlab")$latest_version
     url <- paste0("https://gitlab.com/", pkg)
-    idiogramFISH:::badge_custom("devel version", v, color, url)
+    badger::badge_custom("devel version", v, color, url)
  }
 
-## ---- echo=F, fig.show = "hold", fig.align = "default"-------------------
+## ---- echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"----
+# was ``` {r, echo=F, fig.show = "hold", fig.align = "default"}
 # library(badger)
+
 if (requireNamespace("RCurl", quietly = TRUE)  ) {
+  
 cranversion <- "https://www.r-pkg.org/badges/version/idiogramFISH?color=orange"
 cranversion_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(cranversion) ), error=function(e) NA )
-if (!is.na(cranversion_cont)){
-cranversion_contFile <- "cranversion.svg"
-writeLines(cranversion_cont, con = cranversion_contFile)
-cranversion_contFile <- normalizePath(cranversion_contFile)
-knitr::include_graphics(cranversion_contFile)
-}
-}
+
+  if (!is.na(cranversion_cont)){
+  cranversion_contFile <- "../man/figures/cranversion.svg"
+  writeLines(cranversion_cont, con = cranversion_contFile)
+  cranversion_contFile <- normalizePath(cranversion_contFile)
+  # knitr::include_graphics(cranversion_contFile)
+  cat(paste0("![''](",knitr::include_graphics(cranversion_contFile),")" ) )
+  } # cran version
+
 # tryCatch(cat(paste(badger::badge_cran_release("idiogramFISH", "orange")  ,"&nbsp;" ) ), error=function(e) return("") )  
 # tryCatch(cat(paste(badger::badge_cran_download("idiogramFISH", type="grand-total", color="orange") ) ), error=function(e) return("") )
-
-## ---- echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"----
+# ``` 
+# ``` {r, echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"}
 # library(badger)
-if (requireNamespace("RCurl", quietly = TRUE)  ) {
+  
 crandownloads<-"https://cranlogs.r-pkg.org/badges/grand-total/idiogramFISH?color=orange"
 crandownloads_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(crandownloads) ), error=function(e) NA )
-if (!is.na(crandownloads_cont)){
-crandownloads_contFile <- "crandownload.svg"
-writeLines(crandownloads_cont, con = crandownloads_contFile)
-crandownloads_contFile <- normalizePath(crandownloads_contFile)
-cat(paste0("&nbsp;![''](",knitr::include_graphics(crandownloads_contFile),")" ) )
-#   this gives ERROR WHEN DEVTOOLS INSTALL IN WINDOWS.
-# cat(paste0("&nbsp;![''](",crandownloads,")" ) )
-}
-}
 
-## ---- echo=F, message=FALSE, warning=F, include=T------------------------
+  if (!is.na(crandownloads_cont)){
+  crandownloads_contFile <- "../man/figures/crandownload.svg"
+  writeLines(crandownloads_cont, con = crandownloads_contFile)
+  crandownloads_contFile <- normalizePath(crandownloads_contFile)
+  
+  cat(paste0("&nbsp;![''](",knitr::include_graphics(crandownloads_contFile),")" ) )
+  #   this gives ERROR WHEN DEVTOOLS INSTALL IN WINDOWS.
+  # cat(paste0("&nbsp;![''](",crandownloads,")" ) )
+  } # cran down
+
+doibadge <- "https://zenodo.org/badge/DOI/10.5281/zenodo.3579417.svg"
+doibadge_cont      <- tryCatch(suppressWarnings(RCurl::getURLContent(doibadge)      ), error=function(e) NA )
+
+  if (!is.na(doibadge_cont)){
+  doibadge_contFile <- "../man/figures/doibadge.svg"
+  writeLines(doibadge_cont, con = doibadge_contFile)
+  doibadge_contFile <- normalizePath(doibadge_contFile)
+  
+  cat(paste0("&nbsp;[![DOI](",knitr::include_graphics(doibadge_contFile)         ,")](https://doi.org/10.5281/zenodo.3579417)" ) )
+  #cat(paste0("&nbsp;[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3579417.svg)](https://doi.org/10.5281/zenodo.3579417)" ) )
+  } # doi
+
+} # rcurl
+
+## ---- echo=F, message=FALSE, warning=FALSE, include=T-------------------------
 if (requireNamespace("RCurl", quietly = TRUE)  ) {
 v<-tryCatch(suppressWarnings(rvcheck:::check_github_gitlab("ferroao/idiogramFISH", "gitlab")$latest_version), error=function(e) NA )
-link<-tryCatch(suppressWarnings(idiogramFISH:::badge_custom("devel version", v, "green") ), error=function(e) NA )
+link<-tryCatch(suppressWarnings(badger::badge_custom("devel version", v, "green") ), error=function(e) NA )
 if(!is.na(link)){
 svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
 gitbadge_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svglink) ), error=function(e) NA )
 if (!is.na(gitbadge_cont)){
 # gitbadge_contFile <- tempfile(fileext = ".svg")
-gitbadge_contFile <- "gitbadge.svg"
+gitbadge_contFile <- "../man/figures/gitbadge.svg"
 writeLines(gitbadge_cont, con = gitbadge_contFile)
 gitbadge_contFile <- normalizePath(gitbadge_contFile)
 knitr::include_graphics(gitbadge_contFile)
@@ -91,13 +111,13 @@ knitr::include_graphics(gitbadge_contFile)
 }
 }
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  # This installs package devtools, necessary for installing the dev version
 #  install.packages("devtools")
 #  
 #  url <- "https://gitlab.com/ferroao/idiogramFISH"
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  # Necessary packages for vignettes:
 #  list.of.packages <- c(
 #      "knitr",
@@ -105,20 +125,21 @@ knitr::include_graphics(gitbadge_contFile)
 #      "prettydoc",
 #      "rmarkdown",
 #      "RCurl",
-#      "rvcheck"
+#      "rvcheck",
+#      "badger"
 #      )
 #  new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 #  if(length(new.packages)) install.packages(new.packages)
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  # Linux with vignettes and Windows
-#  devtools::install_git(url = url,build_vignettes = TRUE, force=T)
+#  devtools::install_git(url = url,build_vignettes = TRUE, force=TRUE)
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  # Mac with vignettes
 #  devtools::install_git(url = url, build_opts=c("--no-resave-data","--no-manual") )
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  # clone repository:
 #  git clone "https://gitlab.com/ferroao/idiogramFISH"
 #  
@@ -126,7 +147,7 @@ knitr::include_graphics(gitbadge_contFile)
 #  # install
 #  R CMD INSTALL idiogramFISH_*.tar.gz
 
-## ----example, echo=T, results="hide", fig.width=10, fig.height=6, message=FALSE, dev='svg'----
+## ----example, echo=T, results="hide", message=FALSE, dev='svg'----------------
 # fig.width=10, fig.height=6
 
 library(idiogramFISH)
@@ -136,10 +157,12 @@ data(dfMarkColor) # mark general data
 data(dfOfMarks2)  # mark position data (inc. cen.)
 
 svg("dfOfChrSize.svg",width=12,height=8 )
-# png("dfOfChrSize.png", width=500, height=400)
 plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
-              dfMarkColor=dfMarkColor,  # d.f of mark style                 < == Optional for ver. > 1.0.0
+              dfMarkColor=dfMarkColor,  # d.f of mark style <- Optional
               dfMarkPos=dfOfMarks2,     # df of mark positions (includes cen. marks)
+              
+              morpho="Guerra",          # chr. morpho. classif. (Guerra, Levan, both, "" ) ver. >= 1.12 only
+              chrIndex="CI",            # cen. pos. (CI, AR, both, "" ) ver. >= 1.12 only
               
               rulerPos=-.9,             # position of rulers
               ruler.tck=-0.01,          # size and orientation of ruler ticks
@@ -155,18 +178,18 @@ plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
 )
 dev.off()
 
-## ---- results="asis", comment=NA, echo=FALSE-----------------------------
+## ---- results="asis", comment=NA, echo=FALSE----------------------------------
 # cat(paste0("![](dfOfChrSize.png)" ) )
 cat(paste0("![](dfOfChrSize.svg)" ) )
 
-## ----monocentrics, comment=NA--------------------------------------------
+## ----monocentrics, comment=NA-------------------------------------------------
 
 # chromsome data, if only 1 species, column OTU is optional
 dfOfChrSize
 # mark general data
 dfMarkColor 
 
-## ---- comment=NA---------------------------------------------------------
+## ---- comment=NA--------------------------------------------------------------
 # mark position data, if only 1 species, column OTU is optional
 dfOfMarks2
 
@@ -196,7 +219,7 @@ plotIdiograms(dfChrSize=dfChrSizeHolo, # data.frame of chr. size
               ,asp=1)                  # y/x aspect
 # dev.off() # close svg()
 
-## ----holocentrics, comment=NA--------------------------------------------
+## ----holocentrics, comment=NA-------------------------------------------------
 # chromsome data, if only 1 species, column OTU is optional
 dfChrSizeHolo
 # mark general data
@@ -204,7 +227,7 @@ dfMarkColor
 # mark position, if only 1 species, column OTU is optional
 dfMarkPosHolo
 
-## ---- echo=T,  comment=NA, results="hide", message=FALSE-----------------
+## ---- echo=T,  comment=NA, results="hide", message=FALSE----------------------
 # chromosome data, if only 1 species, column OTU is optional
 require(plyr)
 dfOfChrSize$OTU   <- "Species mono"
@@ -218,9 +241,9 @@ dfMarkPosHolo$OTU <-"Species holo"
 
 monoholoMarks <- plyr::rbind.fill(dfOfMarks2,dfMarkPosHolo)
 
-## ---- echo=T, results="hide", fig.width=10, fig.height=6, message=FALSE, dev='svg'----
+## ---- echo=T, results="hide", message=FALSE, dev='svg'------------------------
 library(idiogramFISH)
-# load some saved dataframes
+# load some saved data.frames
 
 # function plotIdiogramsHolo deprecated for ver. > 1.5.1
 
@@ -233,6 +256,7 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               
               roundness = 4,             # vertices roundness
               addOTUName = TRUE,         # add OTU names
+              distTextChr = .5,          # separ. among chr. and text and among chr. name and indices
               
               karHeiSpace = 3,           # karyotype height inc. spacing
               karIndexPos = .2,          # move karyotype index
@@ -246,17 +270,17 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               
               xlimLeftMod=1,             # modify xlim left argument of plot
               xlimRightMod=3,            # modify xlim right argument of plot
-              ylimBotMod=-.2             # modify ylim bottom argument of plot
+              ylimBotMod= .2             # modify ylim bottom argument of plot
               ,asp=1                     # y x aspect ratio
 )
 dev.off()
 
-## ---- results="asis", comment=NA, echo=FALSE-----------------------------
+## ---- results="asis", comment=NA, echo=FALSE----------------------------------
 cat(paste0("![](monoholoCS.png)" ) )
 
-## ---- echo=T, results="hide", fig.width=10, fig.height=9, message=FALSE----
+## ---- echo=T, results="hide", fig.width=10, fig.height=9, message=FALSE-------
 library(idiogramFISH)
-# load some saved dataframes
+# load some saved data.frames
 
 par(mar=rep(0,4))
 
@@ -280,34 +304,38 @@ plotIdiograms(dfChrSize = parentalAndHybChrSize,  # d.f. of chr. sizes
 )
 #dev.off() # close svg()
 
-## ---- comment=NA, echo=FALSE---------------------------------------------
+## ---- comment=NA, echo=FALSE--------------------------------------------------
 cat("parentalAndHybChrSize")
 
-## ---- comment=NA, echo=F-------------------------------------------------
+## ---- comment=NA, echo=F------------------------------------------------------
 print(parentalAndHybChrSize, row.names=F)
 
-## ---- comment=NA, echo=FALSE---------------------------------------------
+## ---- comment=NA, echo=FALSE--------------------------------------------------
 cat("dfAlloParentMarks")
 
-## ----gish2, comment=NA, echo=F-------------------------------------------
+## ----gish2, comment=NA, echo=F------------------------------------------------
 print(dfAlloParentMarks, row.names=F)
 
-## ----citation, results='asis', echo=FALSE--------------------------------
-# chromsome data, if only 1 species, column OTU is optional
-print(citation("idiogramFISH"),bibtex=FALSE)
+## ----citation, echo=FALSE, comment=NA,results='asis'--------------------------
+print(citation("idiogramFISH"),bibtex=FALSE )
+
+## ---- echo=TRUE, results=FALSE, eval=FALSE------------------------------------
+#  sink("idiogramFISH.bib")
+#  toBibtex(citation("idiogramFISH"))
+#  sink()
 
 ## ---- echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"----
 # library(badger)
 if (requireNamespace("RCurl", quietly = TRUE)  ) {
 # donate_cont <- tryCatch(RCurl::getURLContent(donate), error=function(e) NA )
 # if (!is.na(donate_cont)){
-# donate_contFile <- "donate.svg"
+# donate_contFile <- "../man/figures/donate.svg"
 # # donate_contFile <- tempfile(fileext = ".svg")
 # writeLines(donate_cont, con = donate_contFile)
 # cat(paste0("[![donate](",knitr::include_graphics(donate_contFile),")](https://liberapay.com/ferroao/donate)" ) )
 # }
 donate <- "https://liberapay.com/assets/widgets/donate.svg"
-donate_contFile <- "donate.svg"
+donate_contFile <- "../man/figures/donate2.svg"
 tryCatch(suppressWarnings(download.file(donate, donate_contFile) ), error=function(e) "")
 if(file.exists(donate_contFile ) ) {
 cat(paste0("[![donate](",knitr::include_graphics(donate_contFile),")](https://liberapay.com/ferroao/donate)" ) )
@@ -318,16 +346,16 @@ cat(paste0("[![donate](",knitr::include_graphics(donate_contFile),")](https://li
 # library(badger)
 if (requireNamespace("RCurl", quietly = TRUE) ) {
 donateweek <- "http://img.shields.io/liberapay/receives/ferroao.svg"
-donateweek_contFile <- "donateweek.svg"
+donateweek_contFile <- "../man/figures/donateweek.svg"
 tryCatch(suppressWarnings(download.file(donateweek, donateweek_contFile) ), error=function(e) "")
 if(file.exists(donateweek_contFile ) ) {
 cat(paste0("[![donate](",knitr::include_graphics(donateweek_contFile),")](https://liberapay.com/ferroao/donate)" ) )
 }
 }
 
-## ----include=FALSE-------------------------------------------------------
-# automatically create a bib database for R packages, this is currently not used by vignette packages2.bib
-knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","pkgdown","crayon","ggtree","ggplot2","ggpubr","phytools","plyr","dplyr"
-), 'packages2.bib')
+## ----include=FALSE,eval=FALSE-------------------------------------------------
+#  # automatically create a bib database for R packages, this is currently not used by vignette refs/packages2.bib
+#  knitr::write_bib(c(
+#    .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","pkgdown","crayon","ggtree","ggplot2","ggpubr","phytools","plyr","dplyr"
+#  ), 'refs/packages2.bib')
 

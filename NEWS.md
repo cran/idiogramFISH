@@ -1,21 +1,39 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 1.12.1
+
+06-01-2020
+
+  - Fixed bug of absence of chr. indices when monocen. and holocen.
+    together
+  - Added functionality to print each index separately
+  - Added functionality to print groups below chr. name
+
+# idiogramFISH 1.11.2
+
+16-12-2019
+
+  - DOI added
+  - minor vignette corrections
+
 # idiogramFISH 1.11.1
 
   - Added functionality for fixing y x aspect ratio (roundness
-    proportion) using ‘asp = 1’ only
+    proportion) using `asp = 1` only
+  - Use of `dotRoundCorr` discouraged, requires `useXYfactor = TRUE`
 
 # idiogramFISH 1.10.1
 
-  - Fixed misplacement of marks when origin=“t” or markDistType = “cen”
+  - Fixed misplacement of marks when `origin="t"` or `markDistType =
+    "cen"`
   - Added functionality for plotting karyotypes in micrometers and bases
     together, see monocen. vignette
 
 # idiogramFISH 1.9.1
 
   - Fixed bug when centromere=0 when several karyotypes
-  - Added rounded vertices for centromere \> 0
+  - Added rounded vertices for `centromere > 0`
   - Added functionality for plotting GISH.
 
 # idiogramFISH 1.8.3
@@ -56,7 +74,7 @@ Documentation changes, new examples.
 
 02 10 2019  
 Added support to plot monocen. and holocen. together  
-Function plotIdiogramsHolo deprecated
+Function `plotIdiogramsHolo` deprecated
 
 # idiogramFISH 1.5.1
 
@@ -93,7 +111,7 @@ Added rounded vertices when `centromereSize =0`
 
 # idiogramFISH 1.1.0
 
-You don’t have to use dfMarkColor dataframe, is not mandatory now.
+You don’t have to use dfMarkColor data.frame, is not mandatory now.
 
 You can use (optionally) a character vector to pass colors.
 

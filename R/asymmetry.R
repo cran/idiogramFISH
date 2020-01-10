@@ -1,6 +1,6 @@
 #' FUNCTION to calculate karyotype asymmetry A and A2
 #'
-#' @description This function reads a dataframe  with columns:
+#' @description This function reads a data.frame  with columns:
 #' \code{shortArmSize} and \code{longArmSize}
 #' @description If several species present, use
 #' column \code{OTU}.
@@ -19,9 +19,9 @@
 #'       CVCL = A2 * 100}
 #' @description(CV = coeff. var.)
 #'
-#' @param dfChrSize name of dataframe
+#' @param dfChrSize name of data.frame
 #'
-#' @keywords dataframe size arm
+#' @keywords data.frame size arm
 #' @export
 #' @examples
 #' asymmetry(dfOfChrSize)
@@ -53,9 +53,10 @@ asymmetry<- function(dfChrSize){
     listOfdfChromSize[[s]]$largest <-pmax(listOfdfChromSize[[s]]$shortArmSize,listOfdfChromSize[[s]]$longArmSize)
     listOfdfChromSize[[s]]$length <-listOfdfChromSize[[s]]$shortArmSize+listOfdfChromSize[[s]]$longArmSize
     listOfdfChromSize[[s]]$Aeach<- mapply(function(X,Y) (X-Y)/(X+Y), X=listOfdfChromSize[[s]]$largest, Y=listOfdfChromSize[[s]]$smallest)
+
     if(!identical(listOfdfChromSize[[s]]$smallest,listOfdfChromSize[[s]]$shortArmSize) ){
-        message(crayon::red("\nERROR in short/long arm classif., It will not be fixed\nWill not calculate kar. ind.")
-        )# cat
+        message(crayon::red("\nERROR in short/long arm classif. It will not be fixed\nWill not calculate kar. ind.")
+        ) # m
         if("OTU" %in% colnames(listOfdfChromSize[[s]]) ){message(crayon::red(paste("in OTU",unique(listOfdfChromSize[[s]]$OTU) )) ) }
         return(NULL)
     } # fi

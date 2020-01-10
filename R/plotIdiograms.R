@@ -1,23 +1,24 @@
 #' FUNCTION to plot idiograms of karyotypes with and without centromere
-#' @description This function reads a data.frame  with columns: \code{chrName} and
+#' @description This function reads a data.frame passed to \code{dfChrSize} with columns: \code{chrName} (mono/holo) and
 #' \code{shortArmSize} and \code{longArmSize} for monocentrics or a column \code{chrSize} for holocentrics and produces a plot of idiograms. If more
 #' than one species, a column named \code{OTU} is needed.
 #'
-#' @description Optionally, it reads another data.frame with the position of
-#' marks (sites) \code{dfMarkPos} \code{\link{markpos}}, in which case a data.frame for mark characteristics
-#' can be used \code{\link{dfMarkColor}} or a vector for \code{mycolors}
+#' @description Optionally, it reads another data.frame passed to \code{dfMarkPos} with the position of
+#' marks (sites). Examples: \code{\link{markposDFs}}. Another data.frame for mark characteristics
+#' can be used \code{\link{dfMarkColor}} or a character vector passed to \code{mycolors}
 #'
 #' @param dfChrSize mandatory data.frame, with columns: \code{OTU} (optional), \code{chrName} (mandatory),
 #'   \code{shortArmSize}, \code{longArmSize} for monocen. or \code{chrSize} for holocen.
-#' @param dfMarkPos data.frame of marks (sites): cols: \code{OTU} (opt) \code{chrName},
-#'   \code{markName} (name of site), \code{chrRegion} (for monocen), \code{markDistCen} (for monocen.),
+#' @param dfMarkPos data.frame of marks (sites): columns: \code{OTU} (opt), \code{chrName},
+#'   \code{markName} (name of site), \code{chrRegion} (for monocen. and opt for whole arm (w) in holocen.), \code{markDistCen} (for monocen.),
 #'   \code{markPos} (for holocen.), \code{markSize}; column \code{chrRegion}:
-#'   use \code{p} for short arm, \code{q} for long arm and \code{cen} for centromeric mark; col. \code{markDistCen}: use distance from
-#'   centromere to mark, not necessary for cen. marks. See param. \code{markDistType}
-#' @param dfCenMarks data.frame, specific for centromeric marks. cols: \code{chrName}
+#'   use \code{p} for short arm, \code{q} for long arm, \code{cen} for centromeric mark and \code{w} for whole chr. mark; column
+#'   \code{markDistCen}: use distance from
+#'   centromere to mark, not necessary for cen. marks (cen), w, p, q (when whole arm). See also param. \code{markDistType}
+#' @param dfCenMarks data.frame, specific for centromeric marks. columns: \code{chrName}
 #'   and \code{markName}. See also \code{dfMarkPos} for another option to pass cen. marks
 #' @param dfMarkColor data.frame, optional, specifying colors and style for marks (sites);
-#'   cols: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: \code{square} or \code{dots}.
+#'   columns: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: \code{square} or \code{dots}.
 #'   (if \code{style} missing all are plotted as \code{square})
 #' @param mycolors character vector, optional, i.e. \code{c("blue","red","green")} for specifying color of marks in order of appearance. if diverges with number of marks will be recycled if \code{dfMarkColor} present, mycolors will be ignored. To know the
 #' order of your marks use something like: \code{unique(c(dfMarkPos$markName,dfCenMarks$markName) ) }
@@ -27,11 +28,12 @@
 #'   length from the largest to the smallest
 #' @param centromereSize numeric, this establishes the apparent size of cen in
 #'   the plot in \eqn{\mu}m
-#' @param origin, For non-monocentric chr. (for holocentrics only) Use \code{"b"} if distance to mark in (\code{"markPos"} col. in \code{"dfMarkPos"}) data.frame measured from bottom of chromosome, use \code{"t"} for distance to mark from top
+#' @param origin, For non-monocentric chr. (for holocentrics only) Use \code{"b"} if distance to mark in (\code{"markPos"} column in \code{"dfMarkPos"}) data.frame measured from bottom of chromosome, use \code{"t"} for distance to mark from top of chr.
 #' @param MarkDistanceType, deprecated, use \code{markDistType}
-#' @param markDistType character, if \code{cen} = the distance you provided is to
-#'   the center of the mark, if \code{beg} = the distance you provided is to the
-#'   beginning of the mark
+#' @param markDistType character, if \code{"cen"} = the distance you provided in data.frame (\code{dfMarkPos}) column \code{markDistCen}
+#' or \code{markPos}  is to
+#'   the center of the mark, if \code{"beg"} = the distance you provided is to the
+#'   beginning of the mark (Default)
 #' @param chrWidth numeric, relative chromosome width. Defaults to \code{0.5}
 #' @param chrSpacing numeric, horizontal spacing among chromosomes, see also  \code{chrWidth}. Defaults to \code{0.5}
 #' @param chrColor character, main color for chromosomes
@@ -51,9 +53,10 @@
 #'   name in OTU column of dfChrSize, \code{"simple"} (just 1 to ...) or \code{""} (none).
 #' @param distTextChr numeric, distance from name of chromosome to chromosome,
 #'   also affects vertical separation of indices. Defaults to \code{1}
+#' @param groupUp boolean, when \code{TRUE} when groups present, they appear over the chr. name. Defaults to \code{TRUE}
 #' @param indexIdTextSize numeric, font size of chr. and kar. indices and
 #'   chromosome name. Defaults to \code{1}
-#' @param OTUTextSize numeric, font size of OTU name (species). Defaults to \code{1}
+#' @param OTUTextSize numeric, font size of OTU name (species). Defaults to \code{1}. When \code{OTUasNote} is \code{TRUE}, use  \code{notesTextSize} instead
 #' @param legend character, \code{""} for no legend; \code{"inline"} prints labels near
 #'   chromosomes; \code{"aside"} prints legend to the right of karyotypes (default). See \code{markLabelSpacer}
 #' @param legendWidth factor to increase width of squares and of legend
@@ -63,16 +66,16 @@
 #' @param markLabelSpacer numeric, only if \code{legend="aside"}, space from the
 #'   rightmost chr. to legend. Defaults to \code{1}
 #' @param pattern REGEX pattern to remove from names of marks
-#' @param chrIndex logical, add arm ratio and centromeric index
+#' @param chrIndex character, add arm ratio with \code{"AR"} and centromeric index with \code{"CI"}, or \code{"both"} (Default), or \code{""} for none
 #' @param nameChrIndexPos numeric, modify position of name of chr. indices
 #' @param karIndex logical, add karyotype indices A (intrachromosomal -
 #'   centromere pos.) and A2 (interchromosomal asymmetry, variation among
 #'   chromosome sizes)
 #' @param karIndexPos numeric, move karyotype index
 #' @param notesPos numeric, move notes to the right
-#' @param morpho boolean, if \code{TRUE} prints the Guerra and Levan classif of cen.
-#'   position. see \code{?armRatioCI}
+#' @param morpho character, if \code{"both"} (default) prints the Guerra and Levan classif of cen. position, use also \code{"Guerra"} or  \code{"Levan"} or \code{""} for none. See also \code{?armRatioCI}.
 #' @param addOTUName boolean, if \code{TRUE} adds OTU (species) name to karyotype
+#' @param OTUasNote boolean, if \code{TRUE} adds OTU (species) name to the right, see \code{notes}
 #' @param revOTUs boolean, The order of species is the one in the main
 #'   data.frame, use \code{TRUE} to reverse
 #' @param ruler boolean, display ruler to the left of karyotype, when \code{FALSE} no ruler
@@ -94,7 +97,7 @@
 #' @param MbThresholds, numeric vector of length 2. \code{c(10000,1000)}. If chrSize > 10000 will be considered Mb. If markSize > 1000 will be considered Mb.
 #' @param ylabline, numeric, modify position of y axis title (Mb). See \code{MbThresholds}
 #' @param n, numeric vertices number for round corners
-#' @param notes, data.frame, optional, with cols \code{OTU} and \code{note} for adding notes to each OTU, they appear to the right of chromosomes
+#' @param notes, data.frame, optional, with columns \code{OTU} and \code{note} for adding notes to each OTU, they appear to the right of chromosomes
 #' @param notesTextSize numeric, font size of notes, see \code{notes}
 #' @param fixCenBorder boolean, use chr. color as centromere border color, see \code{cenColor}
 #' @param propWidth, boolean, defaults to \code{FALSE}. Diminishes chr. width with increasing number of OTUs
@@ -109,13 +112,13 @@
 #'
 #' @examples
 #' data(dfOfChrSize)
-#' plotIdiograms(dfOfChrSize)
+#' plotIdiograms(dfOfChrSize, ylimBotMod = .75)
 #' plotIdiograms(dfChrSizeHolo)
 #' @seealso \code{\link{asymmetry}}
 #' @seealso \code{\link{armRatioCI}}
 #' @seealso \code{\link{chrbasicdatamono}}
 #' @seealso \code{\link{chrbasicdataHolo}}
-#' @seealso \code{\link{markpos}}
+#' @seealso \code{\link{markposDFs}}
 #' @seealso \code{\link{markdataholo}}
 #' @seealso \code{\link{dfMarkColor}}
 #'
@@ -124,28 +127,74 @@
 #' @export
 
 
-plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors, markDistType="beg",orderBySize=TRUE,
-                        centromereSize =1, chrWidth=0.5, chrSpacing=0.5,chrColor="gray", cenColor="gray",
-                        roundness=4, dotRoundCorr,
-                        karHeight=2,karHeiSpace=2.5,karSepar=TRUE,amoSepar=9,
-                        chrId="original", distTextChr=1,
+plotIdiograms<-function(
+                        # karyotype
+                        dfChrSize,
+                        Mb, MbThresholds= c(10000,1000),
+                        addOTUName=TRUE, OTUTextSize=1,
+                        OTUasNote=FALSE,
+                        revOTUs=FALSE,
+                        karHeight=2,karHeiSpace=2.5,
+                        karSepar=TRUE,amoSepar=9,
+                        addMissingOTUAfter=NA,missOTUspacings=0,
+                        n=50,
+                        notes, notesTextSize=.4, notesPos=.5,
+                        propWidth=FALSE,
+
+                        # chromosomes
+                        orderBySize=TRUE,
+                        # orderBySize=FALSE,
+                        chrId="original",
+                        # chrId="simple",
                         indexIdTextSize=1,
-                        notesTextSize=.4,
-                        OTUTextSize=1,
-                        legend="aside", markLabelSize=1,
-                        markLabelSpacer=1,
-                        chrIndex=TRUE, nameChrIndexPos=2, karIndex=TRUE, karIndexPos=.5,
-                        notesPos=.5,
-                        morpho=TRUE,
-                        addOTUName=TRUE,revOTUs=FALSE,
-                        ruler=TRUE,rulerPos=-.5, rulerPosMod=0, ruler.tck=-0.02, rulerNumberPos=0.5, rulerNumberSize=1,
-                        xlimLeftMod=1,  xlimRightMod=2, ylimBotMod=.2,ylimTopMod=.2,
-                        lwd.chr=2, pattern="", addMissingOTUAfter=NA,missOTUspacings=0,
+                        distTextChr=1,
+                        groupUp=FALSE,
+                        chrWidth=0.5, chrSpacing=0.5,
+                        chrColor="gray",
+                        centromereSize =1, cenColor="gray",
+                        fixCenBorder=TRUE,
+                        roundness=4,
+                        lwd.chr=2,
+
+                        #marks
+                        dfMarkPos, dfCenMarks,
+                        MarkDistanceType,
+                        markDistType="beg",
+                        # markDistType="cen",
+                        origin="b",
+                        # origin="t",
+                        dfMarkColor,
+                        mycolors,
+                        pattern="",
+                        dotRoundCorr,useXYfactor=FALSE,
+
+                        # mark labels
+                        legend="aside",
+                        # legend="inline",
                         legendWidth=1.7, legendHeight=NA,
-                        Mb, MbThresholds= c(10000,1000), ylabline=0,
-                        origin="b", n=50, notes,
-                        fixCenBorder=TRUE, MarkDistanceType,
-                        propWidth=FALSE, useXYfactor=FALSE,
+                        markLabelSize=1,
+                        markLabelSpacer=1,
+
+                        #indices
+                        chrIndex="both",
+                        morpho="both",
+                        nameChrIndexPos=2,
+                        karIndex=TRUE,
+                        # karIndex=FALSE,
+                        karIndexPos=.5,
+
+                        # rulers
+                        ruler=TRUE,
+                        rulerPos=-.5,
+                        rulerPosMod=0,
+                        ruler.tck=-0.02,
+                        rulerNumberPos=0.5,
+                        rulerNumberSize=1,
+                        ylabline=0,
+
+                        # margins
+                        xlimLeftMod=1, xlimRightMod=2,
+                        ylimBotMod=.2, ylimTopMod=.2,
                         ...)
 {
 
@@ -160,7 +209,7 @@ plotIdiograms<-function(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
   # if(exists("dfMarkPos") ) {
 
     #
-    #   rename col markArm if necessary
+    #   rename column markArm if necessary
     #
 
     if("markArm" %in% colnames(dfMarkPos)  ){
@@ -286,6 +335,7 @@ if ("OTU" %in% colnames(dfChrSizeInternal) ) {
     listOfdfChromSize<-list(dfChrSizeInternal)
     names(listOfdfChromSize)<-1
     addOTUName<-FALSE
+    OTUasNote <-FALSE
 }
   #
   #   reconstitute dfChrSizeInternal OTU
@@ -348,6 +398,8 @@ for (i in 1:length(listOfdfChromSize)) {
       message(crayon::green(paste(c("\nOTU ",names(listOfdfChromSize)[[i]]," has all columns with info to have holocen. If not, you have to clean your data")))
       ) # message
       attr(listOfdfChromSize[[i]], 'cenType') <- "holocen"
+      attr(listOfdfChromSize[[i]], 'indexStatus') <- "missing"
+
 
       #
       #   if larger than 100 000 reduce
@@ -408,14 +460,23 @@ for (i in 1:length(listOfdfChromSize)) {
   #
 
   #
-  #    generate Chromosome indexes
+  #    generate Chromosome indexes for Monocen
   #
 
-  if(chrIndex | morpho){
+  if(chrIndex=="both" | chrIndex=="AR"| chrIndex=="CI" | morpho=="both" | morpho=="Guerra" | morpho == "Levan") {
     for (i in 1:length(listOfdfChromSize)) {
-      if(attr(listOfdfChromSize[[i]], "cenType")=="monocen"){
+      if(attr(listOfdfChromSize[[i]], "cenType")=="monocen"){ # only for monocen
+
         listOfdfChromSize[[i]]<-armRatioCI(listOfdfChromSize[[i]])
-      } # if
+
+        if(attr(listOfdfChromSize[[i]], "indexStatus")=="failure"){
+          if("OTU" %in% colnames(listOfdfChromSize[[i]])){
+            message(crayon::red(paste("in",unique(listOfdfChromSize[[i]]$OTU) ) ) )
+            } # otu
+          message(crayon::red("\nFix measures or use chrIndex=\"\", and morpho=\"\" ")
+                  ) #m
+      } # if failure
+    } # monocen
     } # for
   } # if chrIndex
 
@@ -811,7 +872,7 @@ if(markDistType=="cen") { # center
       listOfdfMarkPosMonocen[[i]] <- listOfdfMarkPosMonocen[[i]][, !apply(is.na(listOfdfMarkPosMonocen[[i]]), 2, all)]
 
       #
-      #   rename col markpos if necessary
+      #   rename column markpos if necessary
       #
 
       if(!"markDistCen" %in% colnames(listOfdfMarkPosMonocen[[i]]) & "markPos" %in% colnames(listOfdfMarkPosMonocen[[i]])  ){
@@ -904,7 +965,7 @@ if(markDistType=="cen") { # center
       ) ) ,]
 
       #
-      #   rename col markdistcen if necessary
+      #   rename column markdistcen if necessary
       #
 
       if(!"markPos" %in% colnames(listOfdfMarkPosHolocen[[i]]) & "markDistCen" %in% colnames(listOfdfMarkPosHolocen[[i]])  ){
@@ -1182,7 +1243,7 @@ if(markDistType=="cen") { # center
         }
       } # fi # end allmarknames exist
       else { # all Mark Names does not exist
-        message(crayon::red("\nError in dfMarkColor Names respect to Marks dataframes, dfMarkColor REMOVED\n")
+        message(crayon::red("\nError in dfMarkColor Names respect to Marks data.frames, dfMarkColor REMOVED\n")
         )
         remove(dfMarkColorInternal)
       } # else
@@ -1306,7 +1367,7 @@ else if (missing(mycolors) ) { # if dfMarkColor not exist and missing mycolors
   #   total size of chr
   #####################
   #
-  #   add column total to dataframes
+  #   add column total to data.frames
   #
 
   for ( i in 1:length(listOfdfChromSize)) {
@@ -1341,7 +1402,7 @@ else if (missing(mycolors) ) { # if dfMarkColor not exist and missing mycolors
 
     ##################################################
     #
-    #   add column of new chro index to dataframes
+    #   add column of new chro index to data.frames
     #
     ##################################################
 
@@ -1577,8 +1638,10 @@ for (s in 1:length(ym)) {
     ym[[s]]<-NA
     xm[[s]]<-NA
     listOfdfChromSize[[s]]<-NA
-  } # for species
-} #fi
+
+  } # if
+  attr(listOfdfChromSize[[s]],"groupPresence") <- 0
+} # for
 
 {
     areNA<-which(is.na(ym))
@@ -1679,7 +1742,7 @@ for (s in 1:length(ym)) {
 
         for (s in 1:length(yMod) ) {
 
-          if(class(listOfdfChromSizenoNA[[s]])=="data.frame"){
+          if(class(listOfdfChromSizenoNA[[s]])=="data.frame") {
             ########################################################
 
           if(attr(listOfdfChromSizenoNA[[s]], "cenType")=="monocen" ) { ############################## monocen 1
@@ -2097,24 +2160,28 @@ lapply(1:length(y), function(s) mapply(function(x,y) graphics::polygon(x=x, y=y,
   #
 
     if("group" %in% colnames(dfChrSizeInternal)){
+
+      groupSegmentDistance <- ifelse(groupUp, 1, 2)
+
     for (s in 1:length(xmnoNA)){
       ngroup<-length(table(listOfdfChromSizenoNA[[s]]$group ) )
+      attr(listOfdfChromSizenoNA[[s]],"groupPresence") <- ngroup
       for (g in 1: ngroup){
         x0= xmnoNA[[s]][,3][ifelse(length(cumsum(table(listOfdfChromSizenoNA[[s]]$group))[g-1] )==0,
                                1,
                                cumsum(table(listOfdfChromSizenoNA[[s]]$group) )[g-1]+1
         )]
-        x1= xmnoNA[[s]][,3][cumsum(table(listOfdfChromSizenoNA[[s]]$group) )[g]  ]+chrWidth
+        x1= xmnoNA[[s]][,3][cumsum(table(listOfdfChromSizenoNA[[s]]$group) )[g] ] + chrWidth
       segments(x0=x0,
-               y0=(min(ymnoNA[[s]])-(distTextChr/3)),
+               y0=(min(ymnoNA[[s]])-((distTextChr/3)*groupSegmentDistance)),
                x1=x1,
-               y1=(min(ymnoNA[[s]])-(distTextChr/3) )
+               y1=(min(ymnoNA[[s]])-((distTextChr/3)*groupSegmentDistance) )
       ) # seg
       ########################
       #     group name, after 1.1.0
       ########################3
       text( (x0+x1)/2,
-            (min(ymnoNA[[s]])-(distTextChr/3)*2 ),
+            min(ymnoNA[[s]]) - ( ( (distTextChr/3)* groupSegmentDistance ) + (distTextChr/3) ),
            labels = names( table(listOfdfChromSizenoNA[[s]]$group)[g] ),
            cex=indexIdTextSize
       )# text end
@@ -2125,131 +2192,209 @@ lapply(1:length(y), function(s) mapply(function(x,y) graphics::polygon(x=x, y=y,
   ###################################################################################################################3
   #  chromosome names
   #################################
-
-  chrNameDistance<-ifelse(exists("grouporderlist"),3,1)
+  # if(groupUp){
+  #   chrNameDistance <-ifelse(exists("grouporderlist"),3,1)
+  # } else {
+    chrNameDistance <-1
+  # }
   # original
   {
   if(chrId=="original"){
-      for (i in 1:length(xmnoNA)){
-        if(attr(xmnoNA[[i]],"cenType")=="monocen") {armFactor<-2} else {armFactor<-1}
-      graphics::text(xmnoNA[[i]][,3][1:(nrow(xmnoNA[[i]])/armFactor)]+chrWidth/2,
-                     rep( (min(ymnoNA[[i]])-(distTextChr/3) * chrNameDistance ),(nrow(xmnoNA[[i]])/armFactor) ),
-                     # labels = listOfdfChromSize[[i]][,"chrName"][orderlist[[i]]],
-                     labels = listOfdfChromSizenoNA[[i]][,"chrName"],
+      for (s in 1:length(xmnoNA)){
+        if(attr(xmnoNA[[s]],"cenType")=="monocen") {armFactor<-2} else {armFactor<-1}
+
+        if(as.numeric(attr(listOfdfChromSizenoNA[[s]],"groupPresence") ) > 0 & groupUp ) {groupCount=2   } else{groupCount=0}
+
+      graphics::text(xmnoNA[[s]][,3][1:(nrow(xmnoNA[[s]])/armFactor)]+chrWidth/2,
+                     rep( (min(ymnoNA[[s]])-(distTextChr/3) * (chrNameDistance + groupCount) ),(nrow(xmnoNA[[s]])/armFactor) ),
+                     # labels = listOfdfChromSize[[s]][,"chrName"][orderlist[[s]]],
+                     labels = listOfdfChromSizenoNA[[s]][,"chrName"],
 
                      cex=indexIdTextSize
       ) # end graphics::text
       } # for
-  } # fi
+  } # fi original
   else if (chrId=="simple"){
     # Simple numbering from 1 to ...
-      for (i in 1:length(xmnoNA)){
-      if(attr(xmnoNA[[i]],"cenType")=="monocen") {armFactor<-2} else {armFactor<-1}
-      graphics::text(xmnoNA[[i]][,3][1:(nrow(xmnoNA[[i]])/armFactor)]+chrWidth/2,
-                     rep( (min(ymnoNA[[i]])-(distTextChr/3)*chrNameDistance ),(nrow(xmnoNA[[i]])/armFactor) ),
-                     # rep( (min(ymnoNA[[i]])-.1),(nrow(xmnoNA[[i]])/2) ),
-                     labels = 1:(nrow(xmnoNA[[i]])/armFactor),
+      for (s in 1:length(xmnoNA)){
+        if(attr(xmnoNA[[s]],"cenType")=="monocen") {armFactor<-2} else {armFactor<-1}
+        if(as.numeric(attr(listOfdfChromSizenoNA[[s]],"groupPresence") ) > 0 & groupUp ) {groupCount=2   } else{groupCount=0}
+
+        graphics::text(xmnoNA[[s]][,3][1:(nrow(xmnoNA[[s]])/armFactor)]+chrWidth/2,
+                     rep( (min(ymnoNA[[s]])-(distTextChr/3)* ( chrNameDistance + groupCount) ),(nrow(xmnoNA[[s]])/armFactor) ),
+                     # rep( (min(ymnoNA[[s]])-.1),(nrow(xmnoNA[[s]])/2) ),
+                     labels = 1:(nrow(xmnoNA[[s]])/armFactor),
                      cex=indexIdTextSize
       ) # t
       } # for
-  } # elif
+  } # elif simple
 }
   #################################
   # horizontal chromosome index
   #################################
+    chrIdCount<-ifelse(chrId=="",1,0)
+
+    morphoCount<-ifelse(morpho=="Guerra" | morpho=="Levan", 1,
+                        ifelse(morpho=="both",2,0
+                        )
+    ) #mC
+
+    # chrIndCount<-ifelse(chrIndbool, 2, 0
+    #                     # ifelse(morpho=="both",2,0
+    # ) # cC
+
+    indexCount<-ifelse(chrIndex=="CI" | chrIndex == "AR", 1,
+                        ifelse(chrIndex == "both",2,0
+                        )
+    ) #mC
+
+    newDistVector<-morphoCount+indexCount
 
   chrIndDistance<-ifelse(exists("grouporderlist"),4,2)
 
-  chrIndbool<-(chrIndex & "AR" %in% colnames(listOfdfChromSizenoNA[[1]]) )
-  if(chrIndbool){
-    lapply(1:length(xmnoNA), function(s)
-      graphics::text(c(xmnoNA[[s]][,3][1]-(chrWidth/2)*nameChrIndexPos, xmnoNA[[s]][,3][1:(nrow(xmnoNA[[s]])/2)]+(chrWidth/2)),
-                     rep( (min(ymnoNA[[s]])-( ( (distTextChr/3)*chrIndDistance)) ),(nrow(xmnoNA[[s]])/2)+1 ),
+  # chrIndbool<-(chrIndex ) #& "AR" %in% colnames(listOfdfChromSizenoNA[[1]]) )
+
+  if(chrIndex=="both"){bothAddI=1} else {bothAddI=0}
+
+  #
+  #   add CI
+  #
+  if(chrIndex=="both" | chrIndex == "CI" ){
+
+  # if(chrIndbool){
+    # lapply(1:length(xmnoNA), function(s)
+
+      for (s in 1:length(listOfdfChromSizenoNA) ) {
+        if(as.numeric(attr(listOfdfChromSizenoNA[[s]],"groupPresence") ) > 0 ) {groupCount=2
+        } else {
+          groupCount=0
+        } # end ifelse
+
+        # if(attr(listOfdfChromSizenoNA[[s]],"indexStatus")=="failure") {indexCount2=indexCount*0} else{indexCount2=indexCount}
+        if(attr(listOfdfChromSizenoNA[[s]],"indexStatus")=="success") {
+
+          graphics::text(c(xmnoNA[[s]][,3][1]-(chrWidth/2)*nameChrIndexPos, xmnoNA[[s]][,3][1:(nrow(xmnoNA[[s]])/2)]+(chrWidth/2)),
+                     rep( (min(ymnoNA[[s]])-( ( (distTextChr/3) * (chrIdCount+groupCount+indexCount-bothAddI+1) )) ),(nrow(xmnoNA[[s]])/2)+1 ),
+                     #chrIndDistance
                      labels = tryCatch(c("CI",listOfdfChromSizenoNA[[s]][,"CI"] ),error=function(e){NA})
                      ,cex=indexIdTextSize
-      ) # end graphics::text
-    ) # end lapply
-    lapply(1:length(xmnoNA), function(s)
+                    ) # end graphics::text
+        # ) # end lapply
+       } # success
+      } # FOR
+  } # BORH OR CI
+
+  #
+  #   add AR (r)
+  #
+  if(chrIndex=="both" | chrIndex == "AR" ){
+
+    for (s in 1:length(listOfdfChromSizenoNA) ) {
+      if(as.numeric(attr(listOfdfChromSizenoNA[[s]],"groupPresence") ) > 0 ) {groupCount=2   } else{groupCount=0}
+
+      # if(attr(listOfdfChromSizenoNA[[s]],"indexStatus")=="failure") {indexCount2=indexCount*0} else{indexCount2=indexCount}
+      if(attr(listOfdfChromSizenoNA[[s]],"indexStatus")=="success") {
+    # lapply(1:length(xmnoNA), function(s)
       graphics::text(c(xmnoNA[[s]][,3][1]-(chrWidth/2)*nameChrIndexPos, xmnoNA[[s]][,3][1:(nrow(xmnoNA[[s]])/2)]+chrWidth/2),
-                     rep( (min(ymnoNA[[s]])-( ( (distTextChr/3)*(chrIndDistance+1) )) ),(nrow(xmnoNA[[s]])/2)+1 ),
+                     rep( (min(ymnoNA[[s]])-( ( (distTextChr/3) * (chrIdCount+groupCount+indexCount+1) )) ),(nrow(xmnoNA[[s]])/2)+1 ),
                      labels = tryCatch(c("r",listOfdfChromSizenoNA[[s]][,"AR"] ),error=function(e){NA})
                      ,cex=indexIdTextSize
       ) # end graphics::text
-    ) # end lapply
-  } # fi
+    # ) # end lapply
+      } # success
+    } # FOR
+  } # fi BOTH OR AR
 
   #################################
   # horizontal chromosome morphology categories
   #################################
 
-  chrIndboolGue<-(morpho & "AR" %in% colnames(listOfdfChromSize[[1]]) )
-
-  distVectorGue<-if(exists("grouporderlist") ){
-    a<-c(6,0,4,0)
-  } else {
-    a<-c(4,0,2,0)
-  }
-
-  decVector<-ifelse(chrIndboolGue & chrIndex,1, # chrind and Guerra
-                    ifelse(chrIndboolGue==FALSE & chrIndbool,2, # only chrInd                  # not necessary
-                           ifelse(chrIndboolGue & chrIndex==FALSE,3, # only Guerra
-                                  ifelse(chrIndboolGue==FALSE & chrIndbool==FALSE,4,NA) # none # not necessary
-                           )
-                    )
-  )
-
   #
   #   add Guerra and Levan
   #
 
-  if(chrIndboolGue){
-    lapply(1:length(xmnoNA), function(s)
+  if(morpho=="both"){bothAdd=1} else {bothAdd=0}
+
+  #
+  #   add Guerra
+  #
+  if(morpho=="both" | morpho == "Guerra" ){ # & "AR" %in% colnames(listOfdfChromSizenoNA[[1]]) ) {
+    # lapply(1:length(xmnoNA), function(s)
+
+    for (s in 1:length(listOfdfChromSizenoNA) ) {
+      if(as.numeric(attr(listOfdfChromSizenoNA[[s]],"groupPresence") ) > 0 ) {groupCount=2   } else{groupCount=0}
+
+      if(attr(listOfdfChromSizenoNA[[s]],"indexStatus")=="success") {
+
       graphics::text(c(xmnoNA[[s]][,3][1]-(chrWidth/2)*nameChrIndexPos, xmnoNA[[s]][,3][1:(nrow(xmnoNA[[s]])/2)]+chrWidth/2),
-                     rep( (min(ymnoNA[[s]])-( ( (distTextChr/3)*distVectorGue[decVector])) ),(nrow(xmnoNA[[s]])/2)+1 ),
+                     rep( (min(ymnoNA[[s]])-( ( (distTextChr/3)*(chrIdCount+morphoCount+indexCount-bothAdd+groupCount+1) ) ) ), (nrow(xmnoNA[[s]])/2)+1 ),
+                     # distVectorGue[decVector]
                      labels = tryCatch(c("Guerra",listOfdfChromSizenoNA[[s]][,"Guerra"]),error=function(e){NA})
                      ,cex=indexIdTextSize
       ) # end graphics::text
-    ) # end lapply
-    lapply(1:length(xmnoNA), function(s)
-      graphics::text(c(xmnoNA[[s]][,3][1]-(chrWidth/2)*nameChrIndexPos, xmnoNA[[s]][,3][1:(nrow(xmnoNA[[s]])/2)]+chrWidth/2),
-                     rep( (min(ymnoNA[[s]])-( ( (distTextChr/3)*(distVectorGue[decVector]+1))) ),(nrow(xmnoNA[[s]])/2)+1 ),
-                     labels = tryCatch(c("Levan",listOfdfChromSizenoNA[[s]][,"Levan"]),error=function(e){NA})
-                     ,cex=indexIdTextSize
-      ) # end graphics::text
-    ) # end lapply
+    # ) # end lapply
+      } # if success
+    } # for
+  } # if guerra
+
+  #
+  #   add Levan
+  #
+  if(morpho=="both" | morpho == "Levan" ) { # & "AR" %in% colnames(listOfdfChromSizenoNA[[1]]) ) {
+    # lapply(1:length(xmnoNA), function(s)
+      for (s in 1:length(listOfdfChromSizenoNA) ) {
+        if(as.numeric(attr(listOfdfChromSizenoNA[[s]],"groupPresence") ) > 0 ) {groupCount=2   } else {groupCount=0}
+
+        if(attr(listOfdfChromSizenoNA[[s]],"indexStatus")=="success") {
+
+          graphics::text(c(xmnoNA[[s]][,3][1]-(chrWidth/2)*nameChrIndexPos, xmnoNA[[s]][,3][1:(nrow(xmnoNA[[s]])/2)]+chrWidth/2),
+                         rep( (min(ymnoNA[[s]])-( ( (distTextChr/3)* (chrIdCount+morphoCount+indexCount+groupCount+1) ) ) ),(nrow(xmnoNA[[s]])/2)+1 ),
+                         #distVectorGue[decVector]
+                         labels = tryCatch(c("Levan",listOfdfChromSizenoNA[[s]][,"Levan"]),error=function(e){NA})
+                         ,cex=indexIdTextSize
+          ) # end graphics::text
+        # ) # end lapply
+        } # if success
+      } # for
   } # fi
 
 #################################
-# vertical karyotype index
+# karyotype index (left side)
 #################################
 
   if(karIndex){
     # message(crayon::green(paste0("karyotype indices section start" ) ) )
-    for (i in 1:length(listOfdfChromSizenoNA) ) {
+
+    for (i in 1:length(listOfdfChromSizenoNA) ) { # for each OTU
+
       if(attr(listOfdfChromSizenoNA[[i]],"cenType")=="monocen"){
-        if(is.character(names(listOfdfChromSizenoNA)[[i]]  ) ){
-          message(crayon::green(paste0(names(listOfdfChromSizenoNA)[[i]],":" ) )
-          ) # mess
+            if(is.character(names(listOfdfChromSizenoNA)[[i]]  ) ){
+              message(crayon::green(paste0(names(listOfdfChromSizenoNA)[[i]],":" ) ) # otu name:  Calc. (asymmetry)
+              ) # mess
+            }
+
+        ind<-asymmetry(listOfdfChromSizenoNA[[i]])
+        if(is.null(ind)){
+          message(crayon::red("Fix short/long measures or use karIndex=FALSE"))
         }
 
-    ind<-asymmetry(listOfdfChromSizenoNA[[i]])
-
-    if(!is.null(ind)){
-        graphics::text( c( (xmnoNA[[i]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),
-                        rep( min(ymnoNA[[i]][,1]), 1 ), #2
-                        labels = paste("A ",ind$A ),
-                        cex=indexIdTextSize,
-                        adj=c(1) # justif
-        ) # end graphics::text
-        graphics::text(c( (xmnoNA[[i]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),
-                       rep( (min(ymnoNA[[i]][,1])-(distTextChr/3) ) , 1 ), # avoid overlap
-                       labels = paste("A2",ind$A2 ),
-                       cex=indexIdTextSize,
-                       adj=c(1) # 0.5 centered
-        ) # end graphics::text
-    } # null
+        if(!is.null(ind)){
+            graphics::text( c( (xmnoNA[[i]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),
+                            rep( min(ymnoNA[[i]][,1]), 1 ), #2
+                            labels = paste("A ",ind$A ),
+                            cex=indexIdTextSize,
+                            adj=c(1) # justif
+            ) # end graphics::text
+            graphics::text(c( (xmnoNA[[i]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),
+                           rep( (min(ymnoNA[[i]][,1])-(distTextChr/3) ) , 1 ), # avoid overlap
+                           labels = paste("A2",ind$A2 ),
+                           cex=indexIdTextSize,
+                           adj=c(1) # 0.5 centered
+            ) # end graphics::text
+        } # null
 
      } # if monocen
+
       else if(attr(listOfdfChromSizenoNA[[i]],"cenType")=="holocen"){
         if(is.character(names(listOfdfChromSizenoNA)[[i]]  ) ){
           message(crayon::green(paste0(names(listOfdfChromSizenoNA)[[i]],":" ) )
@@ -2274,32 +2419,46 @@ lapply(1:length(y), function(s) mapply(function(x,y) graphics::polygon(x=x, y=y,
   #########################################################################
   # add species names
   #########################################################################
-
-  distVector<-if(exists("grouporderlist") ){
-    a<-c((distTextChr/3)*9 ,(distTextChr/3)*7,(distTextChr/3)*7,(distTextChr/3)*5,(distTextChr/3)*4 )
-  } else {
-    a<-c((distTextChr/3)*7 ,(distTextChr/3)*5,(distTextChr/3)*5,(distTextChr/3)*3,(distTextChr/3)*3 )
+  if(OTUasNote){
+    addOTUName<-FALSE
+      if(!missing(notes)){
+          message(crayon::blurred("Error: OTUasNote is TRUE, other notes will be removed"))
+      }
+    notes<-data.frame(OTU=unique(dfChrSizeInternal$OTU), note=unique(dfChrSizeInternal$OTU) )
   }
-
   if(addOTUName){
     # message(crayon::green(paste0("OTU section start" ) ) )
 
-    lapply(1:length(xmnoNA), function(s) {
+    for (s in 1:length(xmnoNA) ) {
+      if(as.numeric(attr(listOfdfChromSizenoNA[[s]],"groupPresence") ) > 0 ) {
+        groupCount=2
+        } else {
+          groupCount=0
+      } # end ifelse
+
+      if(attr(listOfdfChromSizenoNA[[s]],"indexStatus")=="failure") {indexCount2=indexCount*0} else {indexCount2=indexCount}
+      if(attr(listOfdfChromSizenoNA[[s]],"indexStatus")=="failure") {morphoCount2=morphoCount*0} else {morphoCount2=morphoCount}
+
+    # lapply(1:length(xmnoNA), function(s) {
       if(attr(xmnoNA[[s]],"cenType")=="holocen") {
-        decVector<-5
-      }
+        # decVector<-5
+        holocenDisCount <- morphoCount2 + indexCount2 #newDistVector #+bothAdd
+      } else {
+        holocenDisCount <- 0
+      } # ifelse holocen
 
       graphics::text( c( (xmnoNA[[s]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),
-                      ydistance <- (min(ymnoNA[[s]]) - distVector[decVector] ),
+                      ydistance <- (min(ymnoNA[[s]]) - ((distTextChr/3) * (chrIdCount + morphoCount2 + indexCount2 + groupCount + 3 - holocenDisCount) ) ),
+                      # distVector[decVector] ),
                       labels = paste("",names(listOfdfChromSizenoNA)[[s]] ),
                       cex=OTUTextSize,
                       adj=c(0) # justif 0 =left
       ) # end graphics::text
-    }
-    ) # end lapply
-# message(crayon::green(paste0("OTU section END" ) ) )
+    } # for
+    # ) # end lapply
+    # message(crayon::green(paste0("OTU section END" ) ) )
 
-  } # fi
+  } # fi add OTU name
 
   ##########################################################################################################3
   #
@@ -2937,13 +3096,3 @@ if (fixCenBorder){
   }
 }  # end of function
 
-#' @export
-#' @rdname idiogramFISH-deprecated
-#' @inheritParams plotIdiograms
-plotIdiogramsHolo <- function() {
-  message(crayon::red(paste0(
-    "plotIdiogramsHolo() is deprecated. ",
-    "Please use plotIdiograms() instead",
-    "") ) )
-  plotIdiograms()
-}

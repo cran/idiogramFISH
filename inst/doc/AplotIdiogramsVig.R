@@ -1,41 +1,101 @@
-## ---- results="asis", echo=FALSE, message=FALSE--------------------------
+## ---- echo=F, warning=FALSE, error=FALSE, comment=NA--------------------------
+if(rmarkdown::pandoc_version()<2){
+  message(crayon::red("\nMissing pandoc version > 2. Vignette may fail because it uses lua filter for multiple bibliographies
+                      \nMore info:
+                      \nhttps://stat.ethz.ch/pipermail/r-package-devel/2019q2/004127.html
+                      \nhttps://stat.ethz.ch/pipermail/r-package-devel/2020q1/004814.html
+                      \nLua filters are supported by rmarkdown
+                      \nhttps://cran.r-project.org/web/packages/rmarkdown/vignettes/lua-filters.html
+                      \nLua filters are an old characteristic of pandoc
+                      \nhttps://pandoc.org/lua-filters.html
+                      \nInstall pandoc >2 or try with package installr (if in Windows):
+                      \nhttps://github.com/jgm/pandoc/releases")
+          )# me
+  if(Sys.info()['sysname']=="Windows"){
+  message("pandoc > 2 not available, see online vignettes")
+  # system("powershell -Command \"$pwd.Path\" ")
+  # shell("powershell -Command \"(gc index.Rmd) -replace 'pandoc_args', '#pandoc_args' | Out-File -encoding ASCII index.Rmd ")
+  # shell("powershell -Command \"(gc DphylogenyVig.Rmd) -replace 'pandoc_args', '#pandoc_args' | Out-File -encoding ASCII DphylogenyVig.Rmd ")
+  shell("del index.Rmd")
+  shell("del DphylogenyVig.Rmd")
+shell("@echo off")
+shell('@echo --- > index.Rmd')
+shell('@echo title: "1. Plotting monocentric chromosomes" >> index.Rmd')
+shell('@echo author: "Fernando Roa" >> index.Rmd')
+shell('@echo date: "23 08 2019" >> index.Rmd')
+shell('@echo output: >> index.Rmd')
+shell('@echo   prettydoc::html_pretty: >> index.Rmd')
+shell('@echo     theme: leonids >> index.Rmd')
+shell('@echo     highlight: github >> index.Rmd')
+shell('@echo     toc: true >> index.Rmd')
+shell('@echo     toc_depth: 1 >> index.Rmd')
+shell('@echo     number_sections: true >> index.Rmd')
+shell('@echo vignette: ^> >> index.Rmd')
+shell("@echo   %\\VignetteIndexEntry{1. Plotting monocentric chromosomes} >> index.Rmd")
+shell('@echo   %\\VignetteEngine{knitr::rmarkdown} >> index.Rmd')
+shell('@echo   %\\VignetteEncoding{UTF-8} >> index.Rmd')
+shell('@echo --- >> index.Rmd')
+shell('@echo(     >> index.Rmd')
+shell('@echo pandoc ^> 2 not available, visit https://ferroao.gitlab.io/idiogramfishhelppages >> index.Rmd')
+shell('@echo --- > DphylogenyVig.Rmd')
+shell('@echo title: "4. Plotting alongside phylogeny" >> DphylogenyVig.Rmd')
+shell('@echo author: "Fernando Roa" >> DphylogenyVig.Rmd')
+shell('@echo date: "23 08 2019" >> DphylogenyVig.Rmd')
+shell('@echo output: >> DphylogenyVig.Rmd')
+shell('@echo   prettydoc::html_pretty: >> DphylogenyVig.Rmd')
+shell('@echo     theme: leonids >> DphylogenyVig.Rmd')
+shell('@echo     highlight: github >> DphylogenyVig.Rmd')
+shell('@echo     toc: true >> DphylogenyVig.Rmd')
+shell('@echo     toc_depth: 1 >> DphylogenyVig.Rmd')
+shell('@echo     number_sections: true >> DphylogenyVig.Rmd')
+shell('@echo vignette: ^> >> DphylogenyVig.Rmd')
+shell("@echo   %\\VignetteDphylogenyVigEntry{4. Plotting alongside phylogeny} >> DphylogenyVig.Rmd")
+shell('@echo   %\\VignetteEngine{knitr::rmarkdown} >> DphylogenyVig.Rmd')
+shell('@echo   %\\VignetteEncoding{UTF-8} >> DphylogenyVig.Rmd')
+shell('@echo --- >> DphylogenyVig.Rmd')
+shell('@echo(     >> DphylogenyVig.Rmd')
+shell('@echo pandoc ^> 2 not available, visit https://ferroao.gitlab.io/idiogramfishhelppages >> DphylogenyVig.Rmd')
+  } # if windows
+} # pandoc < 2
+
+## ---- results="asis", echo=FALSE, message=FALSE-------------------------------
 # <!-- pkgdown --> 
-# <!-- jquery --><script src="jquery.min.js" crossorigin="anonymous"></script>
-myfile<-"jquery.min.js"
+# <!-- jquery --><script src="js/jquery.min.js" crossorigin="anonymous"></script>
+myfile<-"js/jquery.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
 }
-# <!-- clipboard.js --><script src="clipboard.min.js"  crossorigin="anonymous"></script>
-myfile<-"clipboard.min.js"
+# <!-- clipboard.js --><script src="js/clipboard.min.js"  crossorigin="anonymous"></script>
+myfile<-"js/clipboard.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'"crossorigin="anonymous"></script>'))
 }
-# <!-- Font Awesome icons --><link rel="stylesheet" href="all.minMod.css"  crossorigin="anonymous">
-myfile<-"all.minMod.css"
+# <!-- Font Awesome icons --><link rel="stylesheet" href="css/all.minMod.css"  crossorigin="anonymous">
+myfile<-"css/all.minMod.css"
 if(file.exists(myfile)){
 cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
 }
-# <!-- Bootstrap --><link rel="stylesheet" href="bootstrap.minO.css" crossorigin="anonymous">
-myfile<-"bootstrap.minO.css"
+# <!-- Bootstrap --><link rel="stylesheet" href="css/bootstrap.minO.css" crossorigin="anonymous">
+myfile<-"css/bootstrap.minO.css"
 if(file.exists(myfile)){
 cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
 }
-# <!-- # <script src="bootstrap.min.js"  crossorigin="anonymous"></script> -->
-myfile<-"bootstrap.min.js"
+# <!-- # <script src="js/bootstrap.min.js"  crossorigin="anonymous"></script> -->
+myfile<-"js/bootstrap.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
 }
-myfile<-"pkgdown2.js"
+myfile<-"js/pkgdown2.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 }
 
-## ---- results="hide", message=FALSE, warning=FALSE, eval=TRUE------------
+## ---- results="hide", message=FALSE, warning=FALSE, eval=TRUE-----------------
 
 #load package
 library(idiogramFISH) 
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # Example data.frame to write in R, use: (column OTU is optional if only 1 OTU)
 mydfChrSize<-read.table(text=
 "            OTU chrName shortArmSize longArmSize 
@@ -44,27 +104,24 @@ mydfChrSize<-read.table(text=
   \"Species one\"   3     1.0         1.5
   \"Species one\"   B     2.0         3.5"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 # just to show it here
 kableExtra::kable_styling(knitr::kable(mydfChrSize) , full_width = F
                            , font_size = 10)
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  setwd("~/folder/subfolder")
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  mydfChrSize<-read.csv("somefile.csv")
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  bigdfOfChrSize <- edit(bigdfOfChrSize, edit.row.names = FALSE)
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  colnames(mydfChrSize)<-c("OTU", "chrName","shortArmSize","longArmSize")
 
-## ---- eval=FALSE---------------------------------------------------------
-#  packageVersion("idiogramFISH")
-
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # From scratch:
 mydfMarkColor<-read.table(text=
 " markName markColor  style
@@ -74,18 +131,18 @@ mydfMarkColor<-read.table(text=
        CMA    yellow square
 \"B mark\"     black square"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 # just to show it here
 kableExtra::kable_styling(knitr::kable(mydfMarkColor) , full_width = F
                            , font_size = 10
                           # , bootstrap_options = c("striped", "hover", "condensed") 
                           )
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  colnames(mydfMarkColor)<-c("markName", "markColor","style")
 #  # if style column is not present it will be filled with "square"
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # We will use column OTU if data.frame because chromosome size df has it
 mydfOfMarks<-read.table(text=
 "            OTU chrName markName chrRegion markSize markDistCen
@@ -97,16 +154,16 @@ mydfOfMarks<-read.table(text=
 \"Species one\"      1     DAPI       cen
 \"Species one\"      3      CMA       cen", header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(mydfOfMarks) , full_width = F
                            , font_size = 10
                           , bootstrap_options = c("striped", "hover", "condensed")
                           )
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  colnames(mydfMarkColor)<-c("OTU", "chrName","markName","chrRegion","markSize","markDistCen")
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # We will use column note to add a note to the right of the karyotype of the OTU in column OTU
 notesdf<-read.table(text=
 "            OTU    note
@@ -114,7 +171,6 @@ notesdf<-read.table(text=
 
 ## ----example_M1, echo=TRUE, results="hide", fig.width=13, fig.height=8, message=FALSE, dev='png'----
 # svg("mydfChrSize.svg",width=13,height=8 )
-# png("mydfChrSize.png", width=600, height=400)
 
 # par(mar = c(0, 0, 0, 0), omi=rep(0,4), oma=rep(0,4) )
 
@@ -146,7 +202,7 @@ plotIdiograms(dfChrSize= mydfChrSize,     # chr. size data.frame
 )
 # dev.off()
 
-## ---- results="asis", comment=NA, echo=FALSE-----------------------------
+## ---- results="asis", comment=NA, echo=FALSE----------------------------------
 # cat(paste0("![](mydfChrSize.png)" ) )
 # cat(paste0("![](mydfChrSize.svg)" ) )
 
@@ -179,13 +235,13 @@ plotIdiograms(dfChrSize   = bigdfOfChrSize[1:14,],  # chr. size df
 )
 dev.off()
 
-## ---- results="asis", comment=NA, echo=FALSE-----------------------------
+## ---- results="asis", comment=NA, echo=FALSE----------------------------------
 cat(paste0("![](mydfChrSize2.png)" ) )
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  unique(c(dfOfMarks$markName,dfOfCenMarks$markName) )
 
-## ---- eval=FALSE, dev='svg'----------------------------------------------
+## ---- eval=FALSE, dev='svg'---------------------------------------------------
 #  
 #  charVectorCol <- c("tomato3","darkolivegreen4","dfsd","blue","green")
 #  png("dfOfChrSize.png", width=600, height=400)
@@ -210,29 +266,29 @@ cat(paste0("![](mydfChrSize2.png)" ) )
 #  )
 #  dev.off()
 
-## ---- eval=F-------------------------------------------------------------
+## ---- eval=F------------------------------------------------------------------
 #  head(bigdfOfChrSize,30)
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(head(bigdfOfChrSize,30)) , full_width = F
                            , font_size = 10
                           , bootstrap_options = c("striped", "hover", "condensed"),
                  
 ) 
 
-## ---- width=45-----------------------------------------------------------
+## ---- width=45----------------------------------------------------------------
 data("dfMarkColor")
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(dfMarkColor) , full_width = F
                            , font_size = 10
                           , bootstrap_options = c("striped", "hover", "condensed")
                           )
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 data("bigdfOfMarks")
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(bigdfOfMarks) , full_width = F
                            , font_size = 10
                           , bootstrap_options = c("striped", "hover", "condensed")
@@ -240,7 +296,6 @@ kableExtra::kable_styling(knitr::kable(bigdfOfMarks) , full_width = F
 
 ## ----example_M3, echo=TRUE, results="hide", fig.width=6, fig.height=13, message=FALSE, dev='png'----
 
-# png("bigdfOfChrSize.png", width=650, height=1300)
 plotIdiograms(dfChrSize  =bigdfOfChrSize,# chr sizes
               dfMarkColor=dfMarkColor,   # mark characteristics, optional in dev version. see above. 
               dfMarkPos  =bigdfOfMarks,  # mark positions (inc. cen. marks)
@@ -248,12 +303,13 @@ plotIdiograms(dfChrSize  =bigdfOfChrSize,# chr sizes
 
               karHeight=2.5,             # karyotype rel. height
               karHeiSpace=6,             # karyotype vertical size with spacing
-              amoSepar = 2,              # Vertical separation of kar. when karSpear = TRUE
+              amoSepar = 2,              # Vertical separation of kar. when karSepar = TRUE
               
               centromereSize = 1,        # apparent size of cen.
               roundness = 10,            # roundness of chr. vertices
               distTextChr=.8,            # distance of chr. to text
-              morpho=FALSE,              # add chr. morphology
+              chrIndex = "AR",           # add arm ratio only. For v. >=1.12
+              morpho="Guerra",           # add chr. morphology by Guerra, see above. For v. >=1.12
               indexIdTextSize=.6,        # font size of indices and chr. name
               OTUTextSize=.9,            # font size of OTU names
               
@@ -275,26 +331,26 @@ plotIdiograms(dfChrSize  =bigdfOfChrSize,# chr sizes
 
 # dev.off() # for png()
 
-## ---- results="asis", comment=NA, echo=FALSE, eval=FALSE-----------------
+## ---- results="asis", comment=NA, echo=FALSE, eval=FALSE----------------------
 #  cat(paste0("![](bigdfOfChrSize.png)" ) )
 
-## ---- comment=NA, echo=F-------------------------------------------------
+## ---- comment=NA, echo=F------------------------------------------------------
 cat(paste0("parentalAndHybChrSize" ) )
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(parentalAndHybChrSize) , full_width = F
                            , font_size = 10)
 
-## ---- comment=NA, echo=F-------------------------------------------------
+## ---- comment=NA, echo=F------------------------------------------------------
 cat(paste0("dfAlloParentMarks" ) )
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(dfAlloParentMarks) , full_width = F
                            , font_size = 10
                           , bootstrap_options = c("striped", "hover", "condensed")
                           )
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # We will use column note to add a note to the right of the karyotype of the OTU in column OTU
 notesdf2<-read.table(text=
 "           OTU                note
@@ -305,7 +361,7 @@ notesdf2<-read.table(text=
 ## ---- echo=TRUE, results="hide", fig.width=7, fig.height=9, message=FALSE,dev='png'----
 
 # svg("gish.svg",width=7,height=9 )
-# png("mydfChrSize.png", width=700, height=900)
+#png("parentalAndHybChrSize.png", width=700, height=900)
 plotIdiograms(dfChrSize = parentalAndHybChrSize,  # d.f. of chr. sizes
               dfMarkPos = dfAlloParentMarks,      # d.f. of marks' positions
               cenColor  = NULL,            # cen. color 
@@ -321,6 +377,7 @@ plotIdiograms(dfChrSize = parentalAndHybChrSize,  # d.f. of chr. sizes
               ,asp=1                       # y x aspect ratio
               
               ,notes=notesdf2              # data.frame with notes NEW
+              #,OTUasNote=TRUE             # TRY THIS (OTU name to the right)
               ,notesTextSize = 1.3         # font size of notes
               ,notesPos = 1.5              # space from chr. (right) to note
               
@@ -341,23 +398,23 @@ mixedThreeSpMarks <- plyr::rbind.fill(bigdfOfMarks , bigdfOfMarks3Mb)
 plotIdiograms(dfChrSize   = mixedThreeSpChrSize,  # chr. size df
               dfMarkPos   = mixedThreeSpMarks,    # mark position df
               centromereSize = 1,         # cen. size
-              amoSepar = 0.8,             # separ. among kar.
-              
               roundness=5,                # vertices roundness
               
-              chrWidth=.3,                # width of chr.
-              chrSpacing = .3,            # space among chr.
-              kerHeight=3,                # karyotype height without spacing
-              karHeiSpace = 3.5,          # vertical size of karyotype including spacer
-              indexIdTextSize=.7,         # font size fo chr name and indices
+              chrWidth=.6,                # width of chr.
+              chrSpacing = .6,            # space among chr.
+              karHeight = 3,              # kar. height without interspace
+              karHeiSpace = 5,            # vertical size of karyotype including spacer
+              amoSepar =2,                # separ. among kar.
+              
+              indexIdTextSize=.6,         # font size fo chr name and indices
               markLabelSize=.7,           # font size of mark legends
-              distTextChr = .55,          # separation among chr. names and indices
+              distTextChr = .65,          # separation among chr. names and indices
               
               legendWidth = 1.5           # legend items width
               ,ylabline = -7              # position of Mb (title) in axis               
               
-              ,rulerPos=-.5,              # ruler position
-              ruler.tck=-0.01,            # ticks of ruler size and orientation
+              ,rulerPos=-.9,              # ruler position
+              ruler.tck=-0.005,           # ticks of ruler size and orientation
               rulerNumberPos =.7,         # position of numbers in ruler
               rulerNumberSize=.5,         # font size of ruler numbers
               
@@ -366,20 +423,20 @@ plotIdiograms(dfChrSize   = mixedThreeSpChrSize,  # chr. size df
               ,asp=1                      # aspect of plot
 )
 
-## ---- eval=F-------------------------------------------------------------
+## ---- eval=F------------------------------------------------------------------
 #  head(mixedThreeSpChrSize,6)
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(head(mixedThreeSpChrSize,6)) , full_width = F
                            , font_size = 10
                           , bootstrap_options = c("striped", "hover", "condensed"),
                  
 ) 
 
-## ---- eval=F-------------------------------------------------------------
+## ---- eval=F------------------------------------------------------------------
 #  mixedThreeSpMarks[which(mixedThreeSpMarks$OTU %in% c("Species 1","Species 1 genome") ),]
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 options("scipen"=10)  
 kableExtra::kable_styling(knitr::kable(mixedThreeSpMarks[which(mixedThreeSpMarks$OTU %in% c("Species 1","Species 1 genome") ),] 
  ) , full_width = F

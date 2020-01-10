@@ -13,6 +13,6 @@ makeNumCols(df)
 data.frame
 }
 \description{
-It returns a dataframes
+It returns a data.frames
 }
 \keyword{internal}

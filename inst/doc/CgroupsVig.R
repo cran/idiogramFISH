@@ -1,40 +1,40 @@
-## ---- results="asis", echo=FALSE, message=FALSE--------------------------
+## ---- results="asis", echo=FALSE, message=FALSE-------------------------------
 # <!-- pkgdown --> 
-# <!-- jquery --><script src="jquery.min.js" crossorigin="anonymous"></script>
-myfile<-"jquery.min.js"
+# <!-- jquery --><script src="js/jquery.min.js" crossorigin="anonymous"></script>
+myfile<-"js/jquery.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
 }
-# <!-- clipboard.js --><script src="clipboard.min.js"  crossorigin="anonymous"></script>
-myfile<-"clipboard.min.js"
+# <!-- clipboard.js --><script src="js/clipboard.min.js"  crossorigin="anonymous"></script>
+myfile<-"js/clipboard.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'"crossorigin="anonymous"></script>'))
 }
-# <!-- Font Awesome icons --><link rel="stylesheet" href="all.minMod.css"  crossorigin="anonymous">
-myfile<-"all.minMod.css"
+# <!-- Font Awesome icons --><link rel="stylesheet" href="css/all.minMod.css"  crossorigin="anonymous">
+myfile<-"css/all.minMod.css"
 if(file.exists(myfile)){
 cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
 }
-# <!-- Bootstrap --><link rel="stylesheet" href="bootstrap.minO.css" crossorigin="anonymous">
-myfile<-"bootstrap.minO.css"
+# <!-- Bootstrap --><link rel="stylesheet" href="css/bootstrap.minO.css" crossorigin="anonymous">
+myfile<-"css/bootstrap.minO.css"
 if(file.exists(myfile)){
 cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
 }
-# <!-- # <script src="bootstrap.min.js"  crossorigin="anonymous"></script> -->
-myfile<-"bootstrap.min.js"
+# <!-- # <script src="js/bootstrap.min.js"  crossorigin="anonymous"></script> -->
+myfile<-"js/bootstrap.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
 }
-myfile<-"pkgdown2.js"
+myfile<-"js/pkgdown2.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 }
 
-## ---- results="hide", message=FALSE, warning=FALSE, eval=TRUE------------
+## ---- results="hide", message=FALSE, warning=FALSE, eval=TRUE-----------------
 #load package
 library(idiogramFISH) 
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # Example data.frame written in R, use
 dfwithgroups<-read.table(text="
       chrName shortArmSize longArmSize group
@@ -43,9 +43,9 @@ dfwithgroups<-read.table(text="
 3        1            3.5         4.8   1
 4        4            1           3     NA
 5        5            3           5     NA
-6        X            4           6     NA", header=T, stringsAsFactors=F)
+6        X            4           6     NA", header=TRUE, stringsAsFactors=F)
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 # just to show it here
 kableExtra::kable_styling(knitr::kable(dfwithgroups) , full_width = F
                            , font_size = 10)
@@ -56,10 +56,11 @@ plotIdiograms(dfChrSize=dfwithgroups, # chr sizes
               orderBySize = TRUE,     # order chr. by size
               chrColor = "gray",      # chr. color  
               cenColor = "gray",      # centromere color
+              groupUp  = TRUE,        # group name over chr. name - Only for ver. >= 1.12
               
               chrId="original",       # chr. names as in you data.frame
-              chrIndex = FALSE,       # do not add chr. indices 
-              morpho=FALSE,           # do not add chr. morphology
+              chrIndex = "",          # do not add chr. indices 
+              morpho   = "",          # do not add chr. morphology
               karIndex = FALSE,       # do not add karyotype indices
               
               rulerPos=-.5,           # position of ruler
@@ -70,7 +71,7 @@ plotIdiograms(dfChrSize=dfwithgroups, # chr sizes
               ,asp=1                  # y x aspect
 )
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 dfwithHetero<-read.table(text="
        chrName shortArmSize longArmSize group
 1        1A           3           5     1
@@ -79,12 +80,12 @@ dfwithHetero<-read.table(text="
 5        3            3           5     NA
 6        4            4           6     NA", header=TRUE, stringsAsFactors=FALSE)
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 # just to show it here
 kableExtra::kable_styling(knitr::kable(dfwithHetero) , full_width = F
                            , font_size = 10)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 dfOfMarksHetero<-read.table(text=
 "     chrName markName chrRegion markSize markDistCen
 1       1A       5S       p        1         0.9
@@ -92,22 +93,22 @@ dfOfMarksHetero<-read.table(text=
 3       2       CMA       q        1         1.0
 4       3      DAPI       q        1         1.0", header=TRUE, stringsAsFactors=FALSE)
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 # just to show it here
 kableExtra::kable_styling(knitr::kable(dfOfMarksHetero) , full_width = F
                            , font_size = 10)
 
-## ----example_G2, echo=TRUE, results="hide", fig.width=7, fig.height=4.5, message=FALSE, dev='png'----
+## ----example_G2, echo=TRUE, results="hide", fig.width=13.5, fig.height=8, message=FALSE, dev='png'----
 
-svg("dfwithHetero.svg",width=13.5,height=8 )
+# svg("dfwithHetero.svg",width=13.5,height=8 )
 plotIdiograms(dfChrSize=dfwithHetero,    # chr sizes
               dfMarkPos=dfOfMarksHetero, # position of marks
               chrColor = "gray",         # colors of chr.
               cenColor = "gray",         # colors of centromeres
               
               chrId="original",          # chr. name in df.
-              chrIndex = FALSE,          # do not add chr. indices
-              morpho=FALSE,              # do not add chr. morphologies  
+              chrIndex = "",             # do not add chr. indices
+              morpho="",                 # do not add chr. morphologies  
               karIndex = FALSE,          # do not add karyotype indices
               distTextChr = .8,          # distance from text to chr.
               
@@ -121,13 +122,13 @@ plotIdiograms(dfChrSize=dfwithHetero,    # chr sizes
               , legendWidth = 1          # width of legend
               , asp =1                   # y x aspect of plot
 )
-dev.off()
+# dev.off()
 
-## ---- results="asis", comment=NA, echo=FALSE-----------------------------
-# cat(paste0("![](mydfChrSizeHolo.png)" ) )
-cat(paste0("![](dfwithHetero.svg)" ) )
+## ---- results="asis", comment=NA, echo=FALSE----------------------------------
+# cat(paste0("![](mydChrSizeHolo.png)" ) )
+# cat(paste0("![](dfwithHetero.svg)" ) )
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 data("dfChrSizeHolo")
 data("dfMarkPosHolo")
 dfMarkPosHoloHetero<-dfMarkPosHolo
@@ -156,13 +157,14 @@ plotIdiograms(dfChrSize=dfChrSizeHoloHetero, # df of chr sizes
               ,asp=1                         # y x aspect
 )
 
-## ------------------------------------------------------------------------
-dfChrSizeHoloGroup<-data.frame(chrName=c(1,1,1,1,2,3,4), 
+## -----------------------------------------------------------------------------
+dfChrSizeHoloGroup<-data.frame(OTU="Species name", 
+                               chrName=c(1,1,1,1,2,3,4), 
                                chrSize=c(3.1,3.2,3.3,3.4,4,5,6), 
                                group=c(1,1,1,1,NA,NA,NA) 
                                )
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 # just to show it here
 kableExtra::kable_styling(knitr::kable(dfChrSizeHoloGroup) , full_width = F
                            , font_size = 10)
@@ -171,6 +173,7 @@ kableExtra::kable_styling(knitr::kable(dfChrSizeHoloGroup) , full_width = F
 plotIdiograms(dfChrSize=dfChrSizeHoloGroup, # data.frame of chr sizes
               orderBySize = FALSE,          # do not order chr. by size
               karIndex = FALSE,             # do not add karyotype indices
+              addOTUName = TRUE,            # add OTU name
               
               rulerPos=-.5,                 # position of ruler
               ruler.tck=-0.03,              # size and orientation of ticks of ruler
@@ -178,7 +181,7 @@ plotIdiograms(dfChrSize=dfChrSizeHoloGroup, # data.frame of chr sizes
               
               xlimLeftMod=0,                # modify left argument of xlim
               xlimRightMod=0,               # modify right argument of xlim
-              ylimBotMod=.3                 # modify bottom argument of ylim
+              ylimBotMod=1.3                # modify bottom argument of ylim
               ,asp =1                       # y x aspect
 )
 

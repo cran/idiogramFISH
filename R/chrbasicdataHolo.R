@@ -5,7 +5,7 @@
 NULL
 #' @description dfChrSizeHolo: Example data for holocentrics for 1 species
 #'
-#' @format data.frame with cols:
+#' @format data.frame with columns:
 #' \describe{
 #'   \item{OTU}{grouping OTU (species), optional if only one OTU}
 #'   \item{chrName}{name of chromosome}

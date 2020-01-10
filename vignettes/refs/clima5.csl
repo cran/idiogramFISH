@@ -2,7 +2,7 @@
 <style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="never" default-locale="en-US">
   <info>
     <title>International Journal of Climatology</title>
-    <id>http://www.zotero.org/styles/international-journal-of-climatology</id>
+    <id>https://csl.mendeley.com/styles/10078/international-journal-of-climatology-FER-note-3</id>
     <link href="http://www.zotero.org/styles/international-journal-of-climatology" rel="self"/>
     <link href="http://www.zotero.org/styles/the-holocene" rel="template"/>
     <link href="http://onlinelibrary.wiley.com/journal/10.1002/(ISSN)1097-0088/homepage/ForAuthors.html#reference_style" rel="documentation"/>
@@ -16,7 +16,7 @@
     <issn>0899-8418</issn>
     <eissn>1097-0088</eissn>
     <summary>The International Journal of Climatology citation style.</summary>
-    <updated>2019-09-12T20:41:13+00:00</updated>
+    <updated>2019-12-29T22:41:16+00:00</updated>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
   <macro name="author">
@@ -75,17 +75,24 @@
       <if type="thesis">
         <group delimiter=", ">
           <text variable="genre"/>
-          <text variable="publisher-place"/>
           <text variable="publisher"/>
+          <text variable="publisher-place"/>
         </group>
       </if>
-      <else>
-        <text variable="genre" suffix=". "/>
-        <group delimiter=": ">
+      <else-if type="book">
+        <group delimiter=", ">
+          <text variable="genre"/>
           <text variable="publisher"/>
           <text variable="publisher-place"/>
         </group>
-      </else>
+      </else-if>
+      <else-if type="article-journal" match="none">
+        <group delimiter=", ">
+          <text variable="genre"/>
+          <text variable="publisher"/>
+          <text variable="publisher-place"/>
+        </group>
+      </else-if>
     </choose>
   </macro>
   <macro name="event">
@@ -133,19 +140,30 @@
           </group>
         </group>
       </else-if>
+      <else-if type="article-journal" match="none">
+        <choose>
+          <if match="any" variable="note">
+            <text variable="note" prefix=". " suffix="."/>
+          </if>
+        </choose>
+      </else-if>
       <else>
         <text variable="page" prefix=", "/>
       </else>
     </choose>
   </macro>
-  <macro name="access">
+  <macro name="doi">
     <choose>
       <if match="any" variable="DOI">
         <text variable="DOI" prefix="https://doi.org/"/>
       </if>
-      <else-if match="any" variable="URL">
+    </choose>
+  </macro>
+    <macro name="url">
+    <choose>
+      <if match="any" variable="URL">
         <text variable="URL"/>
-      </else-if>
+      </if>
     </choose>
   </macro>
   <citation et-al-min="3" et-al-use-first="1" disambiguate-add-year-suffix="true" collapse="year">
@@ -179,7 +197,8 @@
         <text macro="publisher"/>
       </group>
       <text macro="locators"/>
-      <text macro="access" prefix=". "/>
+      <text macro="doi" prefix=". "/>
+      <text macro="url" prefix=". "/>
     </layout>
   </bibliography>
 </style>

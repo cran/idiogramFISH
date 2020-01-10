@@ -8,7 +8,7 @@
 \alias{dfAlloParentMarksHolo}
 \alias{bigdfOfMarks3Mb}
 \title{Mark Positional data - Holocen.}
-\format{data.frame with cols:
+\format{data.frame with columns:
 \describe{
 \item{OTU}{OTU, species, optional}
 \item{chrName}{name of chromosome}
@@ -38,7 +38,7 @@ dfAlloParentMarksHolo: Example data for mark position of GISH
 bigdfOfMarks3Mb: Example data for mark position in Mb
 }
 \seealso{
-\code{\link{markpos}}
+\code{\link{markposDFs}}
 
 \code{\link{plotIdiograms}}
 

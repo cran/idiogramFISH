@@ -2,14 +2,13 @@
 title: "2. Plotting holocentric chromosomes"
 author: "Fernando Roa"
 date: "23 08 2019"
-# pkgdown:
-  # as_is: true
+pkgdown:
+  as_is: true
 output:
   prettydoc::html_pretty:
     theme: leonids
     highlight: github
     toc: true
-    # toc_float: true
     toc_depth: 1
     number_sections: true
     
@@ -23,44 +22,44 @@ vignette: >
 
 ``` {r, results="asis", echo=FALSE, message=FALSE}
 # <!-- pkgdown --> 
-# <!-- jquery --><script src="jquery.min.js" crossorigin="anonymous"></script>
-myfile<-"jquery.min.js"
+# <!-- jquery --><script src="js/jquery.min.js" crossorigin="anonymous"></script>
+myfile<-"js/jquery.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
 }
-# <!-- clipboard.js --><script src="clipboard.min.js"  crossorigin="anonymous"></script>
-myfile<-"clipboard.min.js"
+# <!-- clipboard.js --><script src="js/clipboard.min.js"  crossorigin="anonymous"></script>
+myfile<-"js/clipboard.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'"crossorigin="anonymous"></script>'))
 }
-# <!-- Font Awesome icons --><link rel="stylesheet" href="all.minMod.css"  crossorigin="anonymous">
-myfile<-"all.minMod.css"
+# <!-- Font Awesome icons --><link rel="stylesheet" href="css/all.minMod.css"  crossorigin="anonymous">
+myfile<-"css/all.minMod.css"
 if(file.exists(myfile)){
 cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
 }
-# <!-- Bootstrap --><link rel="stylesheet" href="bootstrap.minO.css" crossorigin="anonymous">
-myfile<-"bootstrap.minO.css"
+# <!-- Bootstrap --><link rel="stylesheet" href="css/bootstrap.minO.css" crossorigin="anonymous">
+myfile<-"css/bootstrap.minO.css"
 if(file.exists(myfile)){
 cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
 }
-# <!-- # <script src="bootstrap.min.js"  crossorigin="anonymous"></script> -->
-myfile<-"bootstrap.min.js"
+# <!-- # <script src="js/bootstrap.min.js"  crossorigin="anonymous"></script> -->
+myfile<-"js/bootstrap.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
 }
-myfile<-"pkgdown2.js"
+myfile<-"js/pkgdown2.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 }
 ```
-<link rel="stylesheet" href="mystyle.css">
+<link rel="stylesheet" href="css/mystyle.css">
 
 <div class="goright">
 Go to [home](index.html)  
-Go to [1. monocentrics Vignette](AplotIdiogramsVig.html)  
-Go to [3. groups Vignette](CgroupsVig.html)  
-Go to [4. phylogeny Vignette](DphylogenyVig.html)  
-Go to [5. human Vignette](EhumanVig.html)  
+Go to [1. Monocentrics Vignette](AplotIdiogramsVig.html)  
+Go to [3. Groups Vignette](CgroupsVig.html)  
+Go to [4. Phylogeny Vignette](DphylogenyVig.html)  
+Go to [5. Human Vignette](EhumanVig.html)  
 <!-- # there are 2 spaces at the end of those lines -->
 </div>
 
@@ -198,11 +197,11 @@ opar <- par(no.readonly = TRUE)      # make a copy of current settings
 on.exit(suppressWarnings(par(opar)) )
 ```
 
-```{r example, echo=TRUE, results="hide", fig.width=6, fig.height=3.5, message=FALSE, dev='svg'}
+```{r example, echo=TRUE, results="hide", fig.width=13.5, fig.height=8, message=FALSE, dev='png'}
 # library(idiogramFISH)
-svg("mydfChrSizeHolo.svg",width=13.5,height=8 )
-# png("mydfChrSizeHolo.png", width=600, height=400)
-par(mar=c(1,4,1,1)) # bottom left top right
+# svg("mydfChrSizeHolo.svg",width=13.5,height=8 )
+# png("mydChrSizeHolo.png", width=600, height=400)
+par(mar=c(0,4,1,1)) # bottom left top right
 
 # function `plotIdiogramsHolo` deprecated after ver. > 1.5.1
 
@@ -216,20 +215,20 @@ plotIdiograms(dfChrSize  = mydfChrSizeHolo,# data.frame of chr. sizes
               rulerNumberPos=.9,           # ruler's number position
               
               xlimLeftMod=2.2,             # modify xlim left argument
-              ylimBotMod=.1                # modify ylim bottom argument
+              ylimBotMod=-2                # modify ylim bottom argument
               ,legendWidth=1               # width of legend
               ,legendHeight=.7             # height of legend item 
               ,asp=1                       # y x aspect
 )
-dev.off()
+# dev.off() # closes png or svg
 ```
 
 ```{r, results="asis", comment=NA, echo=FALSE}
-# cat(paste0("![](mydfChrSizeHolo.png)" ) )
-cat(paste0("![](mydfChrSizeHolo.svg)" ) )
+# cat(paste0("![](mydChrSizeHolo.png)" ) )
+# cat(paste0("![](mydfChrSizeHolo.svg)" ) )
 ```
 
-For ver. > 1.0.0 there is no need to add `dfMarkColor` and you can also use the parameter
+It is not mandatory to use `dfMarkColor` and you can also use the parameter
 `mycolors` (optional too), to establish marks' colors. When using `mycolors`, colors are assigned depending on the order of marks, i.e.:
 
 ```{r, eval=FALSE,dev='svg'}
@@ -452,7 +451,6 @@ kableExtra::kable_styling(knitr::kable(dfAlloParentMarksHolo) , full_width = F
 ```{r example_M1, echo=TRUE, results="hide", fig.width=8, fig.height=7, message=FALSE,dev='png'}
 
 # svg("gish.svg",width=8,height=7 )
-# png("mydfChrSize.png", width=600, height=500)
 plotIdiograms(dfChrSize = parentalAndHybHoloChrSize,  # d.f. of chr. sizes
               dfMarkPos = dfAlloParentMarksHolo,      # d.f. of marks' positions
               chrColor  = "gray",          # chr. color

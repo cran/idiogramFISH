@@ -9,7 +9,7 @@
 #' @param y The y axis coordinates of chromosomes
 #' @param markLabelSpacer distance from right chr to legend
 #' @param chrWidth chr widht
-#' @param dfMarkColorInternal dataframe of mark characteristics
+#' @param dfMarkColorInternal data.frame of mark characteristics
 #' @param allMarkMaxSize maximum size of marks
 #' @param normalizeToOne transformation value of karyotype height
 #' @param markLabelSize font size of legends

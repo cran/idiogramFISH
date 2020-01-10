@@ -4,7 +4,7 @@
 #' @name chrbasicdatamono
 NULL
 #' @description dfOfChrSize: Example data for monocentrics
-#' @format data.frame with cols:
+#' @format data.frame with columns:
 #' \describe{
 #'   \item{OTU}{OTU, species, optional if only one OTU (species)}
 #'   \item{chrName}{name of chromosome}
@@ -15,7 +15,7 @@ NULL
 #' @seealso \code{\link{plotIdiograms}}
 #' @seealso \code{\link{armRatioCI}}
 #' @seealso \code{\link{asymmetry}}
-#' @seealso \code{\link{markpos}}
+#' @seealso \code{\link{markposDFs}}
 #' @rdname chrbasicdatamono
 "dfOfChrSize"
 #' @description bigdfOfChrSize: Example data for monocentrics for several species, OTU

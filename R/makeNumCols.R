@@ -1,7 +1,7 @@
 # makeNumCols
 #' This is an internal function that eliminates factors
 #'
-#' It returns a dataframes
+#' It returns a data.frames
 #'
 #' @keywords internal
 #'

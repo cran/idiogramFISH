@@ -1,8 +1,8 @@
-#' Function to automatically make a dataframe of Marks' characterisitcs
+#' Function to automatically make a data.frame of Marks' characterisitcs
 #'
 #' @description This function reads character vector with marks names, a character vector of prohibited colors and a custom list of colors
 #' to be associated with the mark names
-#' @description It returns a dataframe with color and style for each mark
+#' @description It returns a data.frame with color and style for each mark
 #'
 #' @param markNames names of marks
 #' @param colorstoremove character vector of colors to remove from mycolors

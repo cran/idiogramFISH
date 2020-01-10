@@ -7,7 +7,7 @@
 \alias{humMarkColor}
 \alias{mydfMaColor}
 \title{Mark characteristics}
-\format{dfMarkColor a data.frame with cols:
+\format{dfMarkColor a data.frame with columns:
 \describe{
 \item{markName}{name of mark}
 \item{markColor}{use R colors}
@@ -38,7 +38,7 @@ Adler 1994. Idiogram Album. URL: \url{http://www.pathology.washington.edu/resear
 \seealso{
 \code{\link{plotIdiograms}}
 
-\code{\link{markpos}}
+\code{\link{markposDFs}}
 
 \code{\link{markdataholo}}
 }

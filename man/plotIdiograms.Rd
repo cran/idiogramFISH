@@ -4,67 +4,88 @@
 \alias{plotIdiograms}
 \title{FUNCTION to plot idiograms of karyotypes with and without centromere}
 \usage{
-plotIdiograms(dfChrSize, dfMarkPos, dfCenMarks, dfMarkColor, mycolors,
-  markDistType = "beg", orderBySize = TRUE, centromereSize = 1,
-  chrWidth = 0.5, chrSpacing = 0.5, chrColor = "gray",
-  cenColor = "gray", roundness = 4, dotRoundCorr, karHeight = 2,
-  karHeiSpace = 2.5, karSepar = TRUE, amoSepar = 9,
-  chrId = "original", distTextChr = 1, indexIdTextSize = 1,
-  notesTextSize = 0.4, OTUTextSize = 1, legend = "aside",
-  markLabelSize = 1, markLabelSpacer = 1, chrIndex = TRUE,
-  nameChrIndexPos = 2, karIndex = TRUE, karIndexPos = 0.5,
-  notesPos = 0.5, morpho = TRUE, addOTUName = TRUE,
-  revOTUs = FALSE, ruler = TRUE, rulerPos = -0.5, rulerPosMod = 0,
-  ruler.tck = -0.02, rulerNumberPos = 0.5, rulerNumberSize = 1,
-  xlimLeftMod = 1, xlimRightMod = 2, ylimBotMod = 0.2,
-  ylimTopMod = 0.2, lwd.chr = 2, pattern = "",
-  addMissingOTUAfter = NA, missOTUspacings = 0, legendWidth = 1.7,
-  legendHeight = NA, Mb, MbThresholds = c(10000, 1000), ylabline = 0,
-  origin = "b", n = 50, notes, fixCenBorder = TRUE, MarkDistanceType,
-  propWidth = FALSE, useXYfactor = FALSE, ...)
+plotIdiograms(
+  dfChrSize,
+  Mb,
+  MbThresholds = c(10000, 1000),
+  addOTUName = TRUE,
+  OTUTextSize = 1,
+  OTUasNote = FALSE,
+  revOTUs = FALSE,
+  karHeight = 2,
+  karHeiSpace = 2.5,
+  karSepar = TRUE,
+  amoSepar = 9,
+  addMissingOTUAfter = NA,
+  missOTUspacings = 0,
+  n = 50,
+  notes,
+  notesTextSize = 0.4,
+  notesPos = 0.5,
+  propWidth = FALSE,
+  orderBySize = TRUE,
+  chrId = "original",
+  indexIdTextSize = 1,
+  distTextChr = 1,
+  groupUp = FALSE,
+  chrWidth = 0.5,
+  chrSpacing = 0.5,
+  chrColor = "gray",
+  centromereSize = 1,
+  cenColor = "gray",
+  fixCenBorder = TRUE,
+  roundness = 4,
+  lwd.chr = 2,
+  dfMarkPos,
+  dfCenMarks,
+  MarkDistanceType,
+  markDistType = "beg",
+  origin = "b",
+  dfMarkColor,
+  mycolors,
+  pattern = "",
+  dotRoundCorr,
+  useXYfactor = FALSE,
+  legend = "aside",
+  legendWidth = 1.7,
+  legendHeight = NA,
+  markLabelSize = 1,
+  markLabelSpacer = 1,
+  chrIndex = "both",
+  morpho = "both",
+  nameChrIndexPos = 2,
+  karIndex = TRUE,
+  karIndexPos = 0.5,
+  ruler = TRUE,
+  rulerPos = -0.5,
+  rulerPosMod = 0,
+  ruler.tck = -0.02,
+  rulerNumberPos = 0.5,
+  rulerNumberSize = 1,
+  ylabline = 0,
+  xlimLeftMod = 1,
+  xlimRightMod = 2,
+  ylimBotMod = 0.2,
+  ylimTopMod = 0.2,
+  ...
+)
 }
 \arguments{
 \item{dfChrSize}{mandatory data.frame, with columns: \code{OTU} (optional), \code{chrName} (mandatory),
 \code{shortArmSize}, \code{longArmSize} for monocen. or \code{chrSize} for holocen.}
 
-\item{dfMarkPos}{data.frame of marks (sites): cols: \code{OTU} (opt) \code{chrName},
-\code{markName} (name of site), \code{chrRegion} (for monocen), \code{markDistCen} (for monocen.),
-\code{markPos} (for holocen.), \code{markSize}; column \code{chrRegion}:
-use \code{p} for short arm, \code{q} for long arm and \code{cen} for centromeric mark; col. \code{markDistCen}: use distance from
-centromere to mark, not necessary for cen. marks. See param. \code{markDistType}}
+\item{Mb, }{deprecated, use \code{MbThresholds}}
 
-\item{dfCenMarks}{data.frame, specific for centromeric marks. cols: \code{chrName}
-and \code{markName}. See also \code{dfMarkPos} for another option to pass cen. marks}
+\item{MbThresholds, }{numeric vector of length 2. \code{c(10000,1000)}. If chrSize > 10000 will be considered Mb. If markSize > 1000 will be considered Mb.}
 
-\item{dfMarkColor}{data.frame, optional, specifying colors and style for marks (sites);
-cols: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: \code{square} or \code{dots}.
-(if \code{style} missing all are plotted as \code{square})}
+\item{addOTUName}{boolean, if \code{TRUE} adds OTU (species) name to karyotype}
 
-\item{mycolors}{character vector, optional, i.e. \code{c("blue","red","green")} for specifying color of marks in order of appearance. if diverges with number of marks will be recycled if \code{dfMarkColor} present, mycolors will be ignored. To know the
-order of your marks use something like: \code{unique(c(dfMarkPos$markName,dfCenMarks$markName) ) }}
+\item{OTUTextSize}{numeric, font size of OTU name (species). Defaults to \code{1}. When \code{OTUasNote} is \code{TRUE}, use  \code{notesTextSize} instead}
 
-\item{markDistType}{character, if \code{cen} = the distance you provided is to
-the center of the mark, if \code{beg} = the distance you provided is to the
-beginning of the mark}
+\item{OTUasNote}{boolean, if \code{TRUE} adds OTU (species) name to the right, see \code{notes}}
 
-\item{orderBySize}{logical value, when \code{TRUE}, sorts chromosomes by total
-length from the largest to the smallest}
-
-\item{centromereSize}{numeric, this establishes the apparent size of cen in
-the plot in \eqn{\mu}m}
-
-\item{chrWidth}{numeric, relative chromosome width. Defaults to \code{0.5}}
-
-\item{chrSpacing}{numeric, horizontal spacing among chromosomes, see also  \code{chrWidth}. Defaults to \code{0.5}}
-
-\item{chrColor}{character, main color for chromosomes}
-
-\item{cenColor}{character, color for centromeres, if GISH use NULL}
-
-\item{roundness}{numeric, shape of vertices of chromosomes and square marks,
-higher values more squared}
-
-\item{dotRoundCorr}{numeric, to be deprecated, requires \code{useXYfactor=TRUE} corrects roundness of dots and vertices of chromosomes. When  \code{style} of sites = \code{dots}, an increase in this, makes the horizontal radius of the dot smaller. Use \code{asp=1} instead}
+\item{revOTUs}{boolean, The order of species is the one in the main
+data.frame, use \code{TRUE} to reverse}
 
 \item{karHeight}{numeric, vertical size of karyotypes. See also  \code{karHeiSpace}. Defaults to \code{2}}
 
@@ -77,21 +98,90 @@ sized karyotypes or \code{TRUE} = equally spaced karyotypes. Incompatible with \
 karyotypes will have no distance among them, if overlap,
 increase this and \code{karHeiSpace}}
 
+\item{addMissingOTUAfter}{character, when you want to add space (ghost OTUs) after one or several OTUs, pass the names of OTUs preceding the desired space in a character vector i.e. \code{c("species one","species five")}}
+
+\item{missOTUspacings}{numeric, when you use \code{addMissingOTUAfter} this numeric vector should have the same length and corresponds to the number of free spaces (ghost OTUs) to add after each OTU respectively}
+
+\item{n, }{numeric vertices number for round corners}
+
+\item{notes, }{data.frame, optional, with columns \code{OTU} and \code{note} for adding notes to each OTU, they appear to the right of chromosomes}
+
+\item{notesTextSize}{numeric, font size of notes, see \code{notes}}
+
+\item{notesPos}{numeric, move notes to the right}
+
+\item{propWidth, }{boolean, defaults to \code{FALSE}. Diminishes chr. width with increasing number of OTUs}
+
+\item{orderBySize}{logical value, when \code{TRUE}, sorts chromosomes by total
+length from the largest to the smallest}
+
 \item{chrId}{character, print name of chromosome, \code{"original"} uses the original
 name in OTU column of dfChrSize, \code{"simple"} (just 1 to ...) or \code{""} (none).}
-
-\item{distTextChr}{numeric, distance from name of chromosome to chromosome,
-also affects vertical separation of indices. Defaults to \code{1}}
 
 \item{indexIdTextSize}{numeric, font size of chr. and kar. indices and
 chromosome name. Defaults to \code{1}}
 
-\item{notesTextSize}{numeric, font size of notes, see \code{notes}}
+\item{distTextChr}{numeric, distance from name of chromosome to chromosome,
+also affects vertical separation of indices. Defaults to \code{1}}
 
-\item{OTUTextSize}{numeric, font size of OTU name (species). Defaults to \code{1}}
+\item{groupUp}{boolean, when \code{TRUE} when groups present, they appear over the chr. name. Defaults to \code{TRUE}}
+
+\item{chrWidth}{numeric, relative chromosome width. Defaults to \code{0.5}}
+
+\item{chrSpacing}{numeric, horizontal spacing among chromosomes, see also  \code{chrWidth}. Defaults to \code{0.5}}
+
+\item{chrColor}{character, main color for chromosomes}
+
+\item{centromereSize}{numeric, this establishes the apparent size of cen in
+the plot in \eqn{\mu}m}
+
+\item{cenColor}{character, color for centromeres, if GISH use NULL}
+
+\item{fixCenBorder}{boolean, use chr. color as centromere border color, see \code{cenColor}}
+
+\item{roundness}{numeric, shape of vertices of chromosomes and square marks,
+higher values more squared}
+
+\item{lwd.chr}{thick of border of chr. and marks.}
+
+\item{dfMarkPos}{data.frame of marks (sites): columns: \code{OTU} (opt), \code{chrName},
+\code{markName} (name of site), \code{chrRegion} (for monocen. and opt for whole arm (w) in holocen.), \code{markDistCen} (for monocen.),
+\code{markPos} (for holocen.), \code{markSize}; column \code{chrRegion}:
+use \code{p} for short arm, \code{q} for long arm, \code{cen} for centromeric mark and \code{w} for whole chr. mark; column
+\code{markDistCen}: use distance from
+centromere to mark, not necessary for cen. marks (cen), w, p, q (when whole arm). See also param. \code{markDistType}}
+
+\item{dfCenMarks}{data.frame, specific for centromeric marks. columns: \code{chrName}
+and \code{markName}. See also \code{dfMarkPos} for another option to pass cen. marks}
+
+\item{MarkDistanceType, }{deprecated, use \code{markDistType}}
+
+\item{markDistType}{character, if \code{"cen"} = the distance you provided in data.frame (\code{dfMarkPos}) column \code{markDistCen}
+or \code{markPos}  is to
+the center of the mark, if \code{"beg"} = the distance you provided is to the
+beginning of the mark (Default)}
+
+\item{origin, }{For non-monocentric chr. (for holocentrics only) Use \code{"b"} if distance to mark in (\code{"markPos"} column in \code{"dfMarkPos"}) data.frame measured from bottom of chromosome, use \code{"t"} for distance to mark from top of chr.}
+
+\item{dfMarkColor}{data.frame, optional, specifying colors and style for marks (sites);
+columns: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: \code{square} or \code{dots}.
+(if \code{style} missing all are plotted as \code{square})}
+
+\item{mycolors}{character vector, optional, i.e. \code{c("blue","red","green")} for specifying color of marks in order of appearance. if diverges with number of marks will be recycled if \code{dfMarkColor} present, mycolors will be ignored. To know the
+order of your marks use something like: \code{unique(c(dfMarkPos$markName,dfCenMarks$markName) ) }}
+
+\item{pattern}{REGEX pattern to remove from names of marks}
+
+\item{dotRoundCorr}{numeric, to be deprecated, requires \code{useXYfactor=TRUE} corrects roundness of dots and vertices of chromosomes. When  \code{style} of sites = \code{dots}, an increase in this, makes the horizontal radius of the dot smaller. Use \code{asp=1} instead}
+
+\item{useXYfactor}{boolean, for backwards compatibility, for using \code{dotRoundCorr}. Defaults to \code{FALSE}}
 
 \item{legend}{character, \code{""} for no legend; \code{"inline"} prints labels near
 chromosomes; \code{"aside"} prints legend to the right of karyotypes (default). See \code{markLabelSpacer}}
+
+\item{legendWidth}{factor to increase width of squares and of legend}
+
+\item{legendHeight}{factor to increase height of squares and dots of legend}
 
 \item{markLabelSize}{numeric, only if legend != (not) "", size of the text of
 labels of marks (legend). Defaults to \code{1}}
@@ -99,7 +189,9 @@ labels of marks (legend). Defaults to \code{1}}
 \item{markLabelSpacer}{numeric, only if \code{legend="aside"}, space from the
 rightmost chr. to legend. Defaults to \code{1}}
 
-\item{chrIndex}{logical, add arm ratio and centromeric index}
+\item{chrIndex}{character, add arm ratio with \code{"AR"} and centromeric index with \code{"CI"}, or \code{"both"} (Default), or \code{""} for none}
+
+\item{morpho}{character, if \code{"both"} (default) prints the Guerra and Levan classif of cen. position, use also \code{"Guerra"} or  \code{"Levan"} or \code{""} for none. See also \code{?armRatioCI}.}
 
 \item{nameChrIndexPos}{numeric, modify position of name of chr. indices}
 
@@ -108,16 +200,6 @@ centromere pos.) and A2 (interchromosomal asymmetry, variation among
 chromosome sizes)}
 
 \item{karIndexPos}{numeric, move karyotype index}
-
-\item{notesPos}{numeric, move notes to the right}
-
-\item{morpho}{boolean, if \code{TRUE} prints the Guerra and Levan classif of cen.
-position. see \code{?armRatioCI}}
-
-\item{addOTUName}{boolean, if \code{TRUE} adds OTU (species) name to karyotype}
-
-\item{revOTUs}{boolean, The order of species is the one in the main
-data.frame, use \code{TRUE} to reverse}
 
 \item{ruler}{boolean, display ruler to the left of karyotype, when \code{FALSE} no ruler}
 
@@ -134,6 +216,8 @@ argument of \code{axis} R plot}
 
 \item{rulerNumberSize}{numeric, size of number's font in ruler. Defaults to \code{1}}
 
+\item{ylabline, }{numeric, modify position of y axis title (Mb). See \code{MbThresholds}}
+
 \item{xlimLeftMod}{numeric, modifies \code{xlim} left argument of plot}
 
 \item{xlimRightMod}{numeric, \code{xlim} right side modification by adding space to the right
@@ -143,55 +227,23 @@ of idiograms. Defaults to \code{2}}
 
 \item{ylimTopMod}{numeric, modify \code{ylim} top argument of plot}
 
-\item{lwd.chr}{thick of border of chr. and marks.}
-
-\item{pattern}{REGEX pattern to remove from names of marks}
-
-\item{addMissingOTUAfter}{character, when you want to add space (ghost OTUs) after one or several OTUs, pass the names of OTUs preceding the desired space in a character vector i.e. \code{c("species one","species five")}}
-
-\item{missOTUspacings}{numeric, when you use \code{addMissingOTUAfter} this numeric vector should have the same length and corresponds to the number of free spaces (ghost OTUs) to add after each OTU respectively}
-
-\item{legendWidth}{factor to increase width of squares and of legend}
-
-\item{legendHeight}{factor to increase height of squares and dots of legend}
-
-\item{Mb, }{deprecated, use \code{MbThresholds}}
-
-\item{MbThresholds, }{numeric vector of length 2. \code{c(10000,1000)}. If chrSize > 10000 will be considered Mb. If markSize > 1000 will be considered Mb.}
-
-\item{ylabline, }{numeric, modify position of y axis title (Mb). See \code{MbThresholds}}
-
-\item{origin, }{For non-monocentric chr. (for holocentrics only) Use \code{"b"} if distance to mark in (\code{"markPos"} col. in \code{"dfMarkPos"}) data.frame measured from bottom of chromosome, use \code{"t"} for distance to mark from top}
-
-\item{n, }{numeric vertices number for round corners}
-
-\item{notes, }{data.frame, optional, with cols \code{OTU} and \code{note} for adding notes to each OTU, they appear to the right of chromosomes}
-
-\item{fixCenBorder}{boolean, use chr. color as centromere border color, see \code{cenColor}}
-
-\item{MarkDistanceType, }{deprecated, use \code{markDistType}}
-
-\item{propWidth, }{boolean, defaults to \code{FALSE}. Diminishes chr. width with increasing number of OTUs}
-
-\item{useXYfactor}{boolean, for backwards compatibility, for using \code{dotRoundCorr}. Defaults to \code{FALSE}}
-
 \item{...}{accepts other arguments for the plot, such as, \code{asp}}
 }
 \value{
 plot
 }
 \description{
-This function reads a data.frame  with columns: \code{chrName} and
+This function reads a data.frame passed to \code{dfChrSize} with columns: \code{chrName} (mono/holo) and
 \code{shortArmSize} and \code{longArmSize} for monocentrics or a column \code{chrSize} for holocentrics and produces a plot of idiograms. If more
 than one species, a column named \code{OTU} is needed.
 
-Optionally, it reads another data.frame with the position of
-marks (sites) \code{dfMarkPos} \code{\link{markpos}}, in which case a data.frame for mark characteristics
-can be used \code{\link{dfMarkColor}} or a vector for \code{mycolors}
+Optionally, it reads another data.frame passed to \code{dfMarkPos} with the position of
+marks (sites). Examples: \code{\link{markposDFs}}. Another data.frame for mark characteristics
+can be used \code{\link{dfMarkColor}} or a character vector passed to \code{mycolors}
 }
 \examples{
 data(dfOfChrSize)
-plotIdiograms(dfOfChrSize)
+plotIdiograms(dfOfChrSize, ylimBotMod = .75)
 plotIdiograms(dfChrSizeHolo)
 }
 \seealso{
@@ -203,7 +255,7 @@ plotIdiograms(dfChrSizeHolo)
 
 \code{\link{chrbasicdataHolo}}
 
-\code{\link{markpos}}
+\code{\link{markposDFs}}
 
 \code{\link{markdataholo}}
 

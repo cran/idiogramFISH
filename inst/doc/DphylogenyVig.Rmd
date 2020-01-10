@@ -2,20 +2,35 @@
 title: "4. Plotting alongside phylogeny"
 author: "Fernando Roa"
 date: "02 10 2019"
-# pkgdown:
-  # as_is: true
+pkgdown:
+  as_is: true
 output:
   prettydoc::html_pretty:
     theme: leonids
     highlight: github
     toc: true
-    # toc_float: true
     toc_depth: 1
     number_sections: true
-bibliography: [allrefs.bib, packages.bib, iqtree.bib,revbayes.bib]
-csl: climaMod.csl
+    pandoc_args: ["--lua-filter=refs/multiple-bibliographies.lua"]
+    
+#bibliography: [refs/allrefs.bib,refs/iqtree.bib,refs/revbayes.bib,refs/packages.bib, refs/idiogramFISH.bib, refs/Rrefs.bib]
+
+bibliography_normal: [refs/allrefs.bib,refs/iqtree.bib,refs/revbayes.bib]
+bibliography_software: [refs/packages.bib, refs/idiogramFISH.bib, refs/Rrefs.bib]
+# bibliography_docs: [refs/docPackages.bib]
+
+csl: refs/clima5.csl
 link-citations: yes
 resource_files:
+  - refs/multiple-bibliographies.lua
+  - refs/allrefs.bib
+  - refs/iqtree.bib
+  - refs/revbayes.bib
+  - refs/packages.bib
+  - refs/idiogramFISH.bib
+  - refs/Rrefs.bib
+  - refs/docPackages.bib
+  - refs/clima5.csl
   - firstplot2.png
   - secondplot2.png
   - thirdplot2.png
@@ -33,44 +48,44 @@ vignette: >
 
 ``` {r, results="asis", echo=FALSE, message=FALSE}
 # <!-- pkgdown --> 
-# <!-- jquery --><script src="jquery.min.js" crossorigin="anonymous"></script>
-myfile<-"jquery.min.js"
+# <!-- jquery --><script src="js/jquery.min.js" crossorigin="anonymous"></script>
+myfile<-"js/jquery.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
 }
-# <!-- clipboard.js --><script src="clipboard.min.js"  crossorigin="anonymous"></script>
-myfile<-"clipboard.min.js"
+# <!-- clipboard.js --><script src="js/clipboard.min.js"  crossorigin="anonymous"></script>
+myfile<-"js/clipboard.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'"crossorigin="anonymous"></script>'))
 }
-# <!-- Font Awesome icons --><link rel="stylesheet" href="all.minMod.css"  crossorigin="anonymous">
-myfile<-"all.minMod.css"
+# <!-- Font Awesome icons --><link rel="stylesheet" href="css/all.minMod.css"  crossorigin="anonymous">
+myfile<-"css/all.minMod.css"
 if(file.exists(myfile)){
 cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
 }
-# <!-- Bootstrap --><link rel="stylesheet" href="bootstrap.minO.css" crossorigin="anonymous">
-myfile<-"bootstrap.minO.css"
+# <!-- Bootstrap --><link rel="stylesheet" href="css/bootstrap.minO.css" crossorigin="anonymous">
+myfile<-"css/bootstrap.minO.css"
 if(file.exists(myfile)){
 cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
 }
-# <!-- # <script src="bootstrap.min.js"  crossorigin="anonymous"></script> -->
-myfile<-"bootstrap.min.js"
+# <!-- # <script src="js/bootstrap.min.js"  crossorigin="anonymous"></script> -->
+myfile<-"js/bootstrap.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
 }
-myfile<-"pkgdown2.js"
+myfile<-"js/pkgdown2.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 }
 ```
-<link rel="stylesheet" href="mystyle.css">
+<link rel="stylesheet" href="css/mystyle.css">
 
 <div class="goright">
 Go to [home](index.html)  
-Go to [1. monocentrics Vignette](AplotIdiogramsVig.html)  
-Go to [2. holocentrics Vignette](BplotIdiogramsHoloVig.html)  
-Go to [3. groups Vignette](CgroupsVig.html)  
-Go to [5. human Vignette](EhumanVig.html)  
+Go to [1. Monocentrics Vignette](AplotIdiogramsVig.html)  
+Go to [2. Holocentrics Vignette](BplotIdiogramsHoloVig.html)  
+Go to [3. Groups Vignette](CgroupsVig.html)  
+Go to [5. Human Vignette](EhumanVig.html)  
 
 <!-- # there are 2 spaces at the end of those lines -->
 </div>
@@ -94,7 +109,7 @@ idiogramFISH comes with two trees and data.frames with chr. and marks' data for 
 
 ## Load the iqtree: {-}
 
-We will use phytools for that [@R-phytools]
+We will use phytools for that [@phytools2012]
 
 ```{r , message=FALSE, echo=FALSE}
 packageCheck<-all(unlist(invisible(lapply(c("ggtree","grid","ggpubr","phytools","treeio","plyr"), function(pkg) requireNamespace(pkg, quietly=TRUE)  ) ) ) )
@@ -119,13 +134,13 @@ iqtreephyloUM <- force.ultrametric(iqtreephylo, method= "extend") # phytools
 
 ```
 
-## Make a ggtree [@R-ggtree] {-}
+## Make a ggtree [@ggtree2018] {-}
 
 ```{r, message=FALSE, eval=packageCheck}
 ggtreeOf8 <- ggtree(iqtreephyloUM) + geom_tiplab(size=6)
 ```
 
-Modify optionally graphical parameters with ggplot and ggpubr: [@R-ggplot2; @R-ggpubr]
+Modify optionally graphical parameters with ggplot and ggpubr: [@ggplot22016; @R-ggpubr]
 
 ```{r, message=FALSE,eval=packageCheck}
 gbuil2      <-  ggplot_build(ggtreeOf8)       # get ggplot_built
@@ -187,8 +202,8 @@ par(fig=c(0,.3,0,1)) # location of left ghost plot
 plot.new()           # ghost plot to the left
 par(fig=c(.3,1,0,1)) # location of right plot
 
-plotIdiograms(allChrSizeSample,                # data.frame of Chr. Sizes
-              allMarksSample,                  # d.f. of Marks (inc. cen. marks) 
+plotIdiograms(dfChrSize = allChrSizeSample,    # data.frame of Chr. Sizes
+              dfMarkPos = allMarksSample,      # d.f. of Marks (inc. cen. marks) 
               dfMarkColor =  mydfMaColor,      # d.f. of mark characteristics
               
               roundness = 4,                   # roundness of vertices
@@ -203,8 +218,8 @@ plotIdiograms(allChrSizeSample,                # data.frame of Chr. Sizes
               karHeiSpace = 6.5,               # karyotype vertical relative size with spacing
               
               nameChrIndexPos=4,               # move the name of chr. indexes to left
-              morpho=TRUE,                     # add chr. morphology
-              chrIndex = TRUE,                 # add chr. indices
+              morpho="both",                   # add chr. morphology
+              chrIndex = "both",               # add chr. indices
               karIndex = TRUE,                 # add karyotype indices
               
               markLabelSpacer = 0              # spaces from rightmost chr. to legend
@@ -237,8 +252,8 @@ if(packageCheck){
 cat(paste0("![](firstplot.png)" ) )
 # cat(paste0("![](firstplot.svg)" ) )
 } else {
-cat(paste0("![](firstplot2.png)" ) )
-# img1_path <- "../man/figures/firstplot2.svg"
+cat(paste0("![](../man/figures/firstplot2.png)" ) )
+# img1_path <- "../man/firstplot2.svg"
 # if(file.exists(img1_path)) {
 # cat(paste0("<img src=",img1_path," width=\"100%\">") )
 # }
@@ -335,17 +350,17 @@ png(file=paste0("secondplot.png" ),width=962,height=700)
 
 {
 par(omi=rep(0,4) , mar=c(0,0,0,0), mfrow=c(1,2))
-par(fig=c(0,.3,0,1)) 
+par(fig=c(0,.27,0,1)) 
 par(mar=c(2,0,2,0)) # b l t r
 
 plot(revBayesPhyloUM)
-par(fig=c(0.3,1,0,1), new=TRUE)
+par(fig=c(0.27,1,0,1), new=TRUE)
 par(mar=c(0,0,0,0)) # b l t r
 
 # Function plotIdiogramsHolo deprecated after ver. 1.5.1 
 
 plotIdiograms(allChrSizeSampleHolo,               # chr. size data.frame
-              allMarksSampleHolo,                 # data.frame of marks' positions
+              dfMarkPos = allMarksSampleHolo,     # data.frame of marks' positions
               dfMarkColor =  mydfMaColor,         # d.f. of mark characteristics
               
               roundness = 4,                      # vertices roundness
@@ -365,11 +380,13 @@ plotIdiograms(allChrSizeSampleHolo,               # chr. size data.frame
               ,rulerPos = - 1                     # position of ruler
               ,rulerNumberSize = .35              # font size of number of ruler
               ,rulerNumberPos = .4                # position of ruler number
-              ,ruler.tck=-.004
+              ,ruler.tck=-.004                    # tick of ruler size and orient.
 
-              ,ylimTopMod = 0                     # modify ylim of top
-              ,ylimBotMod = 0                     # modify ylim of bottom
+              ,ylimTopMod = -4                    # modify ylim of top
+              ,ylimBotMod = -4                    # modify ylim of bottom
+              ,xlimRightMod = 3                   # modify xlim right argument
               ,asp=1                              # y x aspect
+              
 )
 }
 
@@ -383,8 +400,8 @@ if(packageCheck){
 # cat(paste0("![](",myt2,")"))
 cat(paste0("![](secondplot.png)" ) )
 } else {
-cat(paste0("![](secondplot2.png)" ) )
-# img1_path <- "../man/figures/secondplot2.svg"
+cat(paste0("![](../man/figures/secondplot2.png)" ) )
+# img1_path <- "../man/secondplot2.svg"
 # if(file.exists(img1_path)) {
 # cat(paste0("<img src=",img1_path," width=\"100%\">") )
 # }
@@ -395,7 +412,7 @@ cat(paste0("![](secondplot2.png)" ) )
 
 Available for ver. > 1.5.1
 
-Create data.frames with both types of karyotypes [@R-plyr]
+Create data.frames with both types of karyotypes [@plyr2011]
 
 ```{r, message=FALSE,eval=packageCheck}
 
@@ -462,7 +479,7 @@ png(file=paste0("thirdplot.png" ),width=1100,height=1000)
   par(mar=c(0,0,0,0))
   
 plotIdiograms(mixChrSize,                         # chr. size data.frame
-              mixMarks,                           # data.frame of marks' positions (inc. cen. marks)
+              dfMarkPos = mixMarks,               # data.frame of marks' positions (inc. cen. marks)
               dfMarkColor = mydfMaColor,          # d.f. of mark characteristics
               
               origin="b",                         # position measured from bottom of chr.
@@ -474,6 +491,7 @@ plotIdiograms(mixChrSize,                         # chr. size data.frame
               
               karIndex = TRUE                     # add karyotype index
               ,indexIdTextSize=.4                 # font size of indices and chr. names
+              ,distTextChr=0.7                    # dist. among chr. and chr. name
               
               ,addMissingOTUAfter = BeforeMissingPlot2           # add ghost OTUs after these names
               ,missOTUspacings    = valuesOfMissRepsBeforePlot2  # how many ghosts, respectively
@@ -488,7 +506,7 @@ plotIdiograms(mixChrSize,                         # chr. size data.frame
               ,rulerPos = -1                      # position of ruler
               ,rulerNumberSize = .35              # font size of number of ruler
               ,rulerNumberPos = .4                # position of ruler number
-              ,ruler.tck=-.004
+              ,ruler.tck=-.004                    # ruler tick size and orient.
               ,asp = 1                            # y x aspect
               
 )
@@ -501,12 +519,29 @@ dev.off()
 if(packageCheck){
 cat(paste0("![](thirdplot.png)" ) )
 } else {
-cat(paste0("![](thirdplot2.png)" ) )
-# img1_path <- "../man/figures/logo.svg"
+cat(paste0("![](../man/figures/thirdplot2.png)" ) )
+# img1_path <- "../man/logo.svg"
 # if(file.exists(img1_path)) {
 # cat(paste0("<img src=",img1_path," width=\"100%\">") )
 # }
 }
 ```
+
+`r if (knitr:::is_html_output()) '
+# References {-}
+'`
+::: {#refs_normal}
+:::
+
+# R-packages references {-}
+
+::: {#refs_software}
+:::
+
+<!-- # Documentation references {-} -->
+
+<!-- ::: {#refs_docs} -->
+<!-- ::: -->
+
 
 

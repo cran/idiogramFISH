@@ -4,8 +4,17 @@
 \alias{roundPlotMark}
 \title{This is an internal function that eliminates factors}
 \usage{
-roundPlotMark(roundness, x, y, dfMarkColorInternal, listOfdfMarkPosSq,
-  chrWidth, yfactor, n2, lwd.chr)
+roundPlotMark(
+  roundness,
+  x,
+  y,
+  dfMarkColorInternal,
+  listOfdfMarkPosSq,
+  chrWidth,
+  yfactor,
+  n2,
+  lwd.chr
+)
 }
 \arguments{
 \item{roundness}{roundness of vertices <}
@@ -30,6 +39,6 @@ roundPlotMark(roundness, x, y, dfMarkColorInternal, listOfdfMarkPosSq,
 plot
 }
 \description{
-It returns a dataframes
+It returns a data.frames
 }
 \keyword{internal}

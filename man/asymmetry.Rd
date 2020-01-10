@@ -7,13 +7,13 @@
 asymmetry(dfChrSize)
 }
 \arguments{
-\item{dfChrSize}{name of dataframe}
+\item{dfChrSize}{name of data.frame}
 }
 \value{
 list
 }
 \description{
-This function reads a dataframe  with columns:
+This function reads a data.frame  with columns:
 \code{shortArmSize} and \code{longArmSize}
 
 If several species present, use
@@ -56,5 +56,5 @@ Asymmetry. Taxon Vol. 35, No. 3  pp. 526-530
 \code{\link{chrbasicdatamono}}
 }
 \keyword{arm}
-\keyword{dataframe}
+\keyword{data.frame}
 \keyword{size}

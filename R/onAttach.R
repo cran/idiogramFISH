@@ -1,5 +1,6 @@
 # nocov start
-
+#' @importFrom utils packageVersion
+#'
 .onAttach <- function(libname, pkgname) {
-packageStartupMessage("see help: ?idiogramFISH - browseVignettes(\'idiogramFISH\') - https://ferroao.gitlab.io/manualidiogramfish")
+packageStartupMessage(paste("version",packageVersion("idiogramFISH"),"See help: ?idiogramFISH - browseVignettes(\'idiogramFISH\') - https://ferroao.gitlab.io/manualidiogramfish") )
 }

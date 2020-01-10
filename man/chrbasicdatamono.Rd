@@ -9,7 +9,7 @@
 \alias{allChrSizeSample}
 \alias{parentalAndHybChrSize}
 \title{Chr. basic data Monocen.}
-\format{data.frame with cols:
+\format{data.frame with columns:
 \describe{
 \item{OTU}{OTU, species, optional if only one OTU (species)}
 \item{chrName}{name of chromosome}
@@ -52,6 +52,6 @@ Adler 1994. Idiogram Album. \url{http://www.pathology.washington.edu/research/cy
 
 \code{\link{asymmetry}}
 
-\code{\link{markpos}}
+\code{\link{markposDFs}}
 }
 \keyword{datasets}

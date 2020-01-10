@@ -1,48 +1,48 @@
-## ----setup, include=FALSE------------------------------------------------
+## ----setup, include=FALSE-----------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE)
 
-## ---- results="asis", echo=FALSE, message=FALSE--------------------------
+## ---- results="asis", echo=FALSE, message=FALSE-------------------------------
 # <!-- pkgdown --> 
-# <!-- jquery --><script src="jquery.min.js" crossorigin="anonymous"></script>
-myfile<-"jquery.min.js"
+# <!-- jquery --><script src="js/jquery.min.js" crossorigin="anonymous"></script>
+myfile<-"js/jquery.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
 }
-# <!-- clipboard.js --><script src="clipboard.min.js"  crossorigin="anonymous"></script>
-myfile<-"clipboard.min.js"
+# <!-- clipboard.js --><script src="js/clipboard.min.js"  crossorigin="anonymous"></script>
+myfile<-"js/clipboard.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'"crossorigin="anonymous"></script>'))
 }
-# <!-- Font Awesome icons --><link rel="stylesheet" href="all.minMod.css"  crossorigin="anonymous">
-myfile<-"all.minMod.css"
+# <!-- Font Awesome icons --><link rel="stylesheet" href="css/all.minMod.css"  crossorigin="anonymous">
+myfile<-"css/all.minMod.css"
 if(file.exists(myfile)){
 cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
 }
-# <!-- Bootstrap --><link rel="stylesheet" href="bootstrap.minO.css" crossorigin="anonymous">
-myfile<-"bootstrap.minO.css"
+# <!-- Bootstrap --><link rel="stylesheet" href="css/bootstrap.minO.css" crossorigin="anonymous">
+myfile<-"css/bootstrap.minO.css"
 if(file.exists(myfile)){
 cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
 }
-# <!-- # <script src="bootstrap.min.js"  crossorigin="anonymous"></script> -->
-myfile<-"bootstrap.min.js"
+# <!-- # <script src="js/bootstrap.min.js"  crossorigin="anonymous"></script> -->
+myfile<-"js/bootstrap.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
 }
-myfile<-"pkgdown2.js"
+myfile<-"js/pkgdown2.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 }
 
-## ----otus, message=FALSE, results="hide"---------------------------------
+## ----otus, message=FALSE, results="hide"--------------------------------------
 library(idiogramFISH)
 # Chromosome sizes for human
 head(humChr) 
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(head(humChr) ), full_width = F
                            , font_size = 10)
 
-## ---- message=FALSE------------------------------------------------------
+## ---- message=FALSE-----------------------------------------------------------
 FstRow<-length(which(humChr$group %in% c("A","B") ) )        # groups in 1st row
 SndRow<-length(which(humChr$group %in% "C" ) )               # groups in second row
 TrdRow<-length(which(humChr$group %in% c("D","E") ) )        # groups in third row
@@ -59,21 +59,21 @@ OTUdf$chrName<-humChr$chrName
 
 humChr$OTU<-OTUdf$OTU
 
-## ----chunk2, results="hide"----------------------------------------------
+## ----chunk2, results="hide"---------------------------------------------------
 # data.frame with marks' position
 head(humMarkPos)  
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(head(humMarkPos) ), full_width = F
                            , font_size = 10)
 
-## ---- echo=T-------------------------------------------------------------
+## ---- echo=T------------------------------------------------------------------
 humMarkPos$OTU<-OTUdf$OTU[match(humMarkPos$chrName, OTUdf$chrName)]
 
-## ---- results="hide"-----------------------------------------------------
+## ---- results="hide"----------------------------------------------------------
 head(humMarkColor)
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(head(humMarkColor )) , full_width = F
                            , font_size = 10)
 
@@ -81,7 +81,7 @@ kableExtra::kable_styling(knitr::kable(head(humMarkColor )) , full_width = F
 # fig.width=10, fig.height=28
 
 plotIdiograms(humChr,                     # data.frame of chromosome size (in package)
-              humMarkPos,                 # df of mark positions  (in package)
+              dfMarkPos = humMarkPos,     # df of mark positions  (in package)
               dfMarkColor = humMarkColor, # df of mark characteristics (in package)
               
               addOTUName = FALSE,         # do not add name of OTU
@@ -92,9 +92,8 @@ plotIdiograms(humChr,                     # data.frame of chromosome size (in pa
               distTextChr = 1.5,          # distance from chr. to text.
               
               chrColor = "black",         # chr. color
-              chrIndex = FALSE,           # add chromosome indices
-              
-              morpho = FALSE,             # add morphological categories
+              chrIndex = "",              # do not add chromosome indices
+              morpho = "",                # do not add morphological categories
 
               centromereSize = 0,         # apparent centromere size
               
@@ -112,7 +111,7 @@ plotIdiograms(humChr,                     # data.frame of chromosome size (in pa
               ,asp=1                      # y x aspect
               )
 
-## ----translo-------------------------------------------------------------
+## ----translo------------------------------------------------------------------
 # extract 13 data
 humChr13<-humChr[which(humChr$chrName %in% 13),]
 humMarkPos13<-humMarkPos[which(humMarkPos$chrName %in% 13),]
@@ -153,9 +152,9 @@ humMarkPos1321Der$OTU<-NULL
 
 ## ----hsel, echo=TRUE, fig.width=6, fig.height=6, message=FALSE, results="hide",dev='png'----
 
-plotIdiograms(humChr1321der,               # data.frame of size of chr.
-              humMarkPos1321Der,           # d.f of position of marks
-              dfMarkColor = humMarkColor,  # d.f of style of marks
+plotIdiograms(humChr1321der,                # data.frame of size of chr.
+              dfMarkPos = humMarkPos1321Der,# d.f of position of marks
+              dfMarkColor = humMarkColor,   # d.f of style of marks
               
               addOTUName = FALSE,          # do not add OTU name
               centromereSize=0,            # apparent size of centromere
@@ -163,10 +162,11 @@ plotIdiograms(humChr1321der,               # data.frame of size of chr.
               chrColor = "black",          # chr. color
               karHeight = 4,               # karyotype height without spacing
               
-              chrIndex = FALSE,            # do not add chr. indices
+              chrIndex = "",               # do not add chr. indices
+              morpho = "",                 # do not add chr. morphology
               karIndex = FALSE,            # do not add karyotype indices
               distTextChr = 2,             # distance from chr. to text.
-              morpho = FALSE,              # do not add chr. morphology
+
               markLabelSize = .5,          # font size of chr. mark labels
               legend = "inline",           # mark labels next to chr.
               pattern="chr[0-9]+",         # REGEX pattern to remove from mark names
@@ -180,7 +180,7 @@ plotIdiograms(humChr1321der,               # data.frame of size of chr.
               ,asp=1                       # y x aspect ratio
               )
 
-## ----translo2, results="hide"--------------------------------------------
+## ----translo2, results="hide"-------------------------------------------------
 chrt13q14q<-robert(humChr,humMarkPos,13,14,"q","q")
 
 # which produces a list of two data.frames:
@@ -195,7 +195,7 @@ dfMarkPosDer<-chrt13q14q$dfMarkPosDer
 
 head(dfMarkPosDer)
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 
 kableExtra::kable_styling(knitr::kable(head(dfMarkPosDer) ) , full_width = F
                            , font_size = 10)
@@ -205,13 +205,13 @@ kableExtra::kable_styling(knitr::kable(head(dfMarkPosDer) ) , full_width = F
 par(mar=c(0,2,.5,0))
 
 plotIdiograms(dfChrSizeDer,               # data.frame of chromosome size
-              dfMarkPosDer,               # df of mark positions
+              dfMarkPos = dfMarkPosDer,   # df of mark positions
               dfMarkColor = humMarkColor, # df of mark characteristics (in package)
 
               addOTUName = FALSE,         # do not add name of OTU
               karIndex = FALSE,           # do not add karyotype indices
-              morpho = FALSE,             # do not add morphological categories
-              chrIndex = FALSE,           # do not add chromosome indices
+              morpho = "",                # do not add morphological categories
+              chrIndex = "",              # do not add chromosome indices
               
               chrColor = "black",         # chr. color
               chrWidth = 1,               # chromosome width

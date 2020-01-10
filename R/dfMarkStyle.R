@@ -6,14 +6,14 @@
 NULL
 #' @description dfMarkColor: Example General data for marks NOT position
 #'
-#' @format dfMarkColor a data.frame with cols:
+#' @format dfMarkColor a data.frame with columns:
 #' \describe{
 #'   \item{markName}{name of mark}
 #'   \item{markColor}{use R colors}
 #'   \item{style}{character, use square or dots, optional}
 #' }
 #' @seealso \code{\link{plotIdiograms}}
-#' @seealso \code{\link{markpos}}
+#' @seealso \code{\link{markposDFs}}
 #' @seealso \code{\link{markdataholo}}
 #'
 #' @rdname dfMarkStyle

@@ -1,6 +1,6 @@
 #' FUNCTION to calculate karyotype asymmetry
 #'
-#' @description This function reads a dataframe  with columns:
+#' @description This function reads a data.frame  with columns:
 #'   \code{shortArmSize} and \code{longArmSize} and optionally \code{OTU} and
 #'   returns a list with the A2 values for the OTUs
 #'
@@ -14,9 +14,9 @@
 #' @description(CV = coeff. var.)
 #'
 #'
-#' @param dfChrSize name of dataframe
+#' @param dfChrSize name of data.frame
 #'
-#' @keywords dataframe size arm
+#' @keywords data.frame size arm
 #' @importFrom stats sd
 #' @export
 #' @examples

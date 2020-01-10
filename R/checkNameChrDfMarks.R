@@ -1,6 +1,6 @@
-#' Function to check names of OTUs (species) among dataframes
+#' Function to check names of OTUs (species) among data.frames
 #'
-#' This function reads two dataframes the one with chromosome sizes, and one df
+#' This function reads two data.frames the one with chromosome sizes, and one df
 #' with data of marks (sites) both have to have the column \code{chrName} and if
 #' several species, \code{OTU}. The functions returns a filtered list with 1. data.frame of chrSizes,
 #' 2. data.frame of marks, 3. mark names 4. max mark size.
@@ -18,7 +18,7 @@
 #'
 checkNameChrDfMarks<- function(listOfdfChromSize,listOfdfMarks){
   pars <- as.character(match.call()[-1])
-  message(crayon::black(paste(("\nComparing chromosome names among dataframes:\n") ) )
+  message(crayon::black(paste(("\nComparing chromosome names among data.frames:\n") ) )
      )# message
 
   # result<-logical()
@@ -29,7 +29,7 @@ checkNameChrDfMarks<- function(listOfdfChromSize,listOfdfMarks){
     name<-names(listOfdfChromSize)[[s]]
     if(length(listOfdfChromSize[[s]]$chrName)!=length(unique(listOfdfChromSize[[s]]$chrName) ) ) {
       message(crayon::yellow(
-        paste("\nWARNING Chromosome Names in dataframe",name,"duplicated - Error when d.f. of marks present")
+        paste("\nWARNING Chromosome Names in data.frame",name,"duplicated - Error when d.f. of marks present")
       )) #m
       # message(crayon::red(
       #   paste("\ndata of OTU",name,"removed")
@@ -39,7 +39,7 @@ checkNameChrDfMarks<- function(listOfdfChromSize,listOfdfMarks){
 
       if (length(which(names(listOfdfMarks)==name) )!=0 ) {
 
-        message(crayon::black(paste(c("\nComparing OTU named: ", name,"of main dataframe with correspondent dataframe ",
+        message(crayon::black(paste(c("\nComparing OTU named: ", name,"of main data.frame with correspondent data.frame ",
                                       pars[2],
 
                                       " "),
@@ -64,7 +64,7 @@ checkNameChrDfMarks<- function(listOfdfChromSize,listOfdfMarks){
           message(crayon::red(paste(c("\nERROR: There are chromosome Name(s) -see above - of OTU ",
                 # pars[2],
                 name
-                 ,"missing in the dataframe of chromosome sizes\n this OTU's marks will be removed"), sep=" ", collapse = " " ) )
+                 ,"missing in the data.frame of chromosome sizes\n this OTU's marks will be removed"), sep=" ", collapse = " " ) )
               )#message
 
           listOfdfMarks[which(names(listOfdfMarks)==name)]<-NULL

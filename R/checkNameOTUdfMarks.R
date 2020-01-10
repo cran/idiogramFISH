@@ -1,18 +1,18 @@
-#' Function to check names of chromosomes among dataframes
+#' Function to check names of chromosomes among data.frames
 #'
-#' This function reads two dataframes the one with chromosome sizes
+#' This function reads two data.frames the one with chromosome sizes
 #' \code{dfChrSize} and one df with data of marks (sites) both have to have the
 #' column \code{chrName} and if several species, \code{OTU}. The functions
-#' returns \code{TRUE} if names of OTUs in dataframe of marks are included in
-#' dataframe of chr. size.
+#' returns \code{TRUE} if names of OTUs in data.frame of marks are included in
+#' data.frame of chr. size.
 #'
-#' @param dfChrSize dataframe, of chr. size with columns: OTU (optional),
+#' @param dfChrSize data.frame, of chr. size with columns: OTU (optional),
 #'   chrName, for chr. with cen.: shortArmSize, longArmSize, for holoc.: chrSize
-#' @param dfMarks dataframe, of marks (sites): OTU (opt / mandat. if in
+#' @param dfMarks data.frame, of marks (sites): OTU (opt / mandat. if in
 #'   dfChrSize), chrName markName markSize, for chr. with cen.:  chrRegion (p,q)
 #'   markDistCen, for holoc: markPos
 #'
-#' @keywords dataframe check
+#' @keywords data.frame check
 #' @keywords internal
 #' @return logical
 #'
@@ -24,11 +24,11 @@ checkNameOTUdfMarks<- function(dfChrSize,dfMarks){
       )) # message
       if (length(setdiff(dfMarks$OTU,dfChrSize$OTU) )>0){
         diff<-setdiff(dfMarks$OTU,dfChrSize$OTU)
-        message(crayon::red(paste(c("\nERROR:",diff,"OTU(s) of",pars[2],"dataframe NOT in Chr. size (main) dataframe"), sep=" ", collapse = " ")
+        message(crayon::red(paste(c("\nERROR:",diff,"OTU(s) of",pars[2],"data.frame NOT in Chr. size (main) data.frame"), sep=" ", collapse = " ")
             ))#message
         return(FALSE)
       } else {#fi
-        message(crayon::black(paste(c("\nCheck OK, OTUs of dataframe ",pars[2]," present in Chr. size (main) dataframe"), sep=" ", collapse = " ")
+        message(crayon::black(paste(c("\nCheck OK, OTUs of data.frame ",pars[2]," present in Chr. size (main) data.frame"), sep=" ", collapse = " ")
                               )#b
         )#m
         return(TRUE)

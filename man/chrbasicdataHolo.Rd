@@ -8,7 +8,7 @@
 \alias{parentalAndHybHoloChrSize}
 \alias{bigdfOfChrSize3Mb}
 \title{Chr. basic data Holo.}
-\format{data.frame with cols:
+\format{data.frame with columns:
 \describe{
 \item{OTU}{grouping OTU (species), optional if only one OTU}
 \item{chrName}{name of chromosome}

@@ -7,9 +7,9 @@
 robert(dfChrSize, dfMarkPos, chr1, chr2, arm1, arm2)
 }
 \arguments{
-\item{dfChrSize}{name of dataframe of chr. sizes}
+\item{dfChrSize}{name of data.frame of chr. sizes}
 
-\item{dfMarkPos}{name of dataframe of chr marks' positions}
+\item{dfMarkPos}{name of data.frame of chr marks' positions}
 
 \item{chr1}{name of chr.}
 
@@ -23,8 +23,8 @@ robert(dfChrSize, dfMarkPos, chr1, chr2, arm1, arm2)
 list
 }
 \description{
-This function reads a dataframe with chr. sizes \code{\link{chrbasicdatamono}} and another with marks' positions,
-\code{\link{markpos}} and gets as arguments two chr. names and two arms, respectively.
+This function reads a data.frame with chr. sizes \code{\link{chrbasicdatamono}} and another with marks' positions,
+\code{\link{markposDFs}} and gets as arguments two chr. names and two arms, respectively.
 
 It returns a list with two data.frames. One with the chr. size of the resulting translocation
 and another with the marks' positions for the derivative chr.

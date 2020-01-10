@@ -2,7 +2,7 @@
 % Please edit documentation in R/checkNameChrDfMarks.R
 \name{checkNameChrDfMarks}
 \alias{checkNameChrDfMarks}
-\title{Function to check names of OTUs (species) among dataframes}
+\title{Function to check names of OTUs (species) among data.frames}
 \usage{
 checkNameChrDfMarks(listOfdfChromSize, listOfdfMarks)
 }
@@ -18,7 +18,7 @@ markDistCen, for holoc: markPos}
 list
 }
 \description{
-This function reads two dataframes the one with chromosome sizes, and one df
+This function reads two data.frames the one with chromosome sizes, and one df
 with data of marks (sites) both have to have the column \code{chrName} and if
 several species, \code{OTU}. The functions returns a filtered list with 1. data.frame of chrSizes,
 2. data.frame of marks, 3. mark names 4. max mark size.

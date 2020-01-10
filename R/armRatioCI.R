@@ -1,11 +1,11 @@
 #' FUNCTION to calculate Arm Ratio and C.I. and morphological categories
 #'
-#' This function reads a dataframe and produces AR (r), CI, Guerra and Levan
+#' This function reads a data.frame and produces AR (r), CI, Guerra and Levan
 #' classifications
 #'
-#' @param dfOfChrSize name of dataframe with columns: shortArmSize, longArmSize
+#' @param dfOfChrSize name of data.frame with columns: shortArmSize, longArmSize
 #'
-#' @keywords dataframe size arm
+#' @keywords data.frame size arm
 #' @export
 #' @examples
 #' armRatioCI(dfOfChrSize)
@@ -21,11 +21,14 @@
 armRatioCI<- function(dfOfChrSize){
   # message(crayon::black("\nCalculating chromosome indexes\n") )
   dfOfChrSize$smallest<-pmin(dfOfChrSize$shortArmSize, dfOfChrSize$longArmSize)
+
   if(!identical(dfOfChrSize$smallest,dfOfChrSize$shortArmSize) ){
-    message(crayon::red("\nERROR in short/long arm classif., It will not be fixed\nChr. (cen) indexes will not be calculated\n") )
-    if("OTU" %in% colnames(dfOfChrSize)){message(crayon::red(paste("in",unique(dfOfChrSize$OTU) ))) }
+    dfOfChrSize$diffSmallShort<-dfOfChrSize$shortArmSize-dfOfChrSize$smallest
+    message(crayon::red("\nERROR in short/long arm classif. It will not be fixed\nChr. (cen) indexes will not be calculated") )
+    attr(dfOfChrSize, "indexStatus")<-"failure"
     return(dfOfChrSize)
   }
+
   if("OTU" %in% colnames(dfOfChrSize)){message(crayon::black(paste("\nCalculating chromosome indexes in",unique(dfOfChrSize$OTU) ))) }
 
   dfOfChrSize$largest <-pmax(dfOfChrSize$shortArmSize, dfOfChrSize$longArmSize)
@@ -53,5 +56,6 @@ armRatioCI<- function(dfOfChrSize){
                             )
                       )
   )
+  attr(dfOfChrSize, "indexStatus")<-"success"
   return(dfOfChrSize)
 }

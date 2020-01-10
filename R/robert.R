@@ -1,13 +1,13 @@
 #' FUNCTION to produce a Robertsonian translocation
 #'
-#' @description This function reads a dataframe with chr. sizes \code{\link{chrbasicdatamono}} and another with marks' positions,
-#' \code{\link{markpos}} and gets as arguments two chr. names and two arms, respectively.
+#' @description This function reads a data.frame with chr. sizes \code{\link{chrbasicdatamono}} and another with marks' positions,
+#' \code{\link{markposDFs}} and gets as arguments two chr. names and two arms, respectively.
 #'
 #' @description It returns a list with two data.frames. One with the chr. size of the resulting translocation
 #' and another with the marks' positions for the derivative chr.
 #'
-#' @param dfChrSize name of dataframe of chr. sizes
-#' @param dfMarkPos name of dataframe of chr marks' positions
+#' @param dfChrSize name of data.frame of chr. sizes
+#' @param dfMarkPos name of data.frame of chr marks' positions
 #' @param chr1 name of chr.
 #' @param chr2 name of chr.
 #' @param arm1 arm of \code{chr1} to be included

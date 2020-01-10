@@ -1,41 +1,41 @@
-## ---- results="asis", echo=FALSE, message=FALSE--------------------------
+## ---- results="asis", echo=FALSE, message=FALSE-------------------------------
 # <!-- pkgdown --> 
-# <!-- jquery --><script src="jquery.min.js" crossorigin="anonymous"></script>
-myfile<-"jquery.min.js"
+# <!-- jquery --><script src="js/jquery.min.js" crossorigin="anonymous"></script>
+myfile<-"js/jquery.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
 }
-# <!-- clipboard.js --><script src="clipboard.min.js"  crossorigin="anonymous"></script>
-myfile<-"clipboard.min.js"
+# <!-- clipboard.js --><script src="js/clipboard.min.js"  crossorigin="anonymous"></script>
+myfile<-"js/clipboard.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'"crossorigin="anonymous"></script>'))
 }
-# <!-- Font Awesome icons --><link rel="stylesheet" href="all.minMod.css"  crossorigin="anonymous">
-myfile<-"all.minMod.css"
+# <!-- Font Awesome icons --><link rel="stylesheet" href="css/all.minMod.css"  crossorigin="anonymous">
+myfile<-"css/all.minMod.css"
 if(file.exists(myfile)){
 cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
 }
-# <!-- Bootstrap --><link rel="stylesheet" href="bootstrap.minO.css" crossorigin="anonymous">
-myfile<-"bootstrap.minO.css"
+# <!-- Bootstrap --><link rel="stylesheet" href="css/bootstrap.minO.css" crossorigin="anonymous">
+myfile<-"css/bootstrap.minO.css"
 if(file.exists(myfile)){
 cat(paste0('<link rel="stylesheet" href="',myfile,'"  crossorigin="anonymous">'))
 }
-# <!-- # <script src="bootstrap.min.js"  crossorigin="anonymous"></script> -->
-myfile<-"bootstrap.min.js"
+# <!-- # <script src="js/bootstrap.min.js"  crossorigin="anonymous"></script> -->
+myfile<-"js/bootstrap.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
 }
-myfile<-"pkgdown2.js"
+myfile<-"js/pkgdown2.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 }
 
-## ---- results="hide", message=FALSE, warning=FALSE, eval=TRUE------------
+## ---- results="hide", message=FALSE, warning=FALSE, eval=TRUE-----------------
 
 #load package
 library(idiogramFISH) 
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # Example data.frame written in R, use: (column OTU is optional if only 1 OTU)
 mydfChrSizeHolo<-read.table(text=
 "            OTU chrName chrSize  
@@ -46,24 +46,24 @@ mydfChrSizeHolo<-read.table(text=
 \"Species one\"   X     3.0    "  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 # just to show it here
 kableExtra::kable_styling(knitr::kable(mydfChrSizeHolo) , full_width = F
                            , font_size = 10)
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  setwd("~/folder/subfolder")
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  mydfChrSize<-read.csv("somefile.csv")
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  colnames(mydfChrSize)<-c("OTU", "chrName","chrSize")
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  packageVersion("idiogramFISH")
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # From scratch:
 mydfMarkColor<-read.table(text=
 "  markName markColor  style
@@ -72,16 +72,16 @@ mydfMarkColor<-read.table(text=
 3     DAPI      blue square
 4      CMA    yellow square"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 # just to show it here
 kableExtra::kable_styling(knitr::kable(mydfMarkColor) , full_width = F
                            , font_size = 10)
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  colnames(mydfMarkColor)<-c("markName", "markColor","style")
 #  # if style column not present it will be filled with "square"
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # We will use column OTU if data.frame because chromosome size df has it
 mydfMarkPosHolo<-read.table(text=
 "             OTU  chrName markName markPos markSize chrRegion
@@ -93,23 +93,23 @@ mydfMarkPosHolo<-read.table(text=
 \"Species one\"       X       5S     0.5      0.5
 \"Species one\"       X       5S     0.5      0.5"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 # just to show it here
 kableExtra::kable_styling(knitr::kable(mydfMarkPosHolo) , full_width = F
                            , font_size = 10)
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  colnames(mydfMarkColor)<-c("OTU", "chrName","markName","markPos","markSize")
 
-## ----parinit, echo=FALSE-------------------------------------------------
+## ----parinit, echo=FALSE------------------------------------------------------
 opar <- par(no.readonly = TRUE)      # make a copy of current settings
 on.exit(suppressWarnings(par(opar)) )
 
-## ----example, echo=TRUE, results="hide", fig.width=6, fig.height=3.5, message=FALSE, dev='svg'----
+## ----example, echo=TRUE, results="hide", fig.width=13.5, fig.height=8, message=FALSE, dev='png'----
 # library(idiogramFISH)
-svg("mydfChrSizeHolo.svg",width=13.5,height=8 )
-# png("mydfChrSizeHolo.png", width=600, height=400)
-par(mar=c(1,4,1,1)) # bottom left top right
+# svg("mydfChrSizeHolo.svg",width=13.5,height=8 )
+# png("mydChrSizeHolo.png", width=600, height=400)
+par(mar=c(0,4,1,1)) # bottom left top right
 
 # function `plotIdiogramsHolo` deprecated after ver. > 1.5.1
 
@@ -123,21 +123,21 @@ plotIdiograms(dfChrSize  = mydfChrSizeHolo,# data.frame of chr. sizes
               rulerNumberPos=.9,           # ruler's number position
               
               xlimLeftMod=2.2,             # modify xlim left argument
-              ylimBotMod=.1                # modify ylim bottom argument
+              ylimBotMod=-2                # modify ylim bottom argument
               ,legendWidth=1               # width of legend
               ,legendHeight=.7             # height of legend item 
               ,asp=1                       # y x aspect
 )
-dev.off()
+# dev.off() # closes png or svg
 
-## ---- results="asis", comment=NA, echo=FALSE-----------------------------
-# cat(paste0("![](mydfChrSizeHolo.png)" ) )
-cat(paste0("![](mydfChrSizeHolo.svg)" ) )
+## ---- results="asis", comment=NA, echo=FALSE----------------------------------
+# cat(paste0("![](mydChrSizeHolo.png)" ) )
+# cat(paste0("![](mydfChrSizeHolo.svg)" ) )
 
-## ---- eval=FALSE,dev='svg'-----------------------------------------------
+## ---- eval=FALSE,dev='svg'----------------------------------------------------
 #  unique(dfMarkPosHolo$markName)
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  par(mar=c(1,4,1,1))
 #  # function plotIdiogramsHolo was deprecated
 #  plotIdiograms(dfChrSize = dfChrSizeHolo, # d.f. of chr. size
@@ -154,24 +154,24 @@ cat(paste0("![](mydfChrSizeHolo.svg)" ) )
 #                ,asp=1                      # y x aspect
 #  )
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 data(bigdfChrSizeHolo)
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(bigdfChrSizeHolo) , full_width = F
                            , font_size = 10, position = "center")
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 data(dfMarkColor) 
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(dfMarkColor) , full_width = F
                            , font_size = 10)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 data(bigdfMarkPosHolo)
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 # just to show it here
 kableExtra::kable_styling(knitr::kable(bigdfMarkPosHolo) , full_width = F
                            , font_size = 10)
@@ -209,10 +209,10 @@ plotIdiograms(dfChrSize=bigdfChrSizeHolo, # df of chr. sizes
 )
 dev.off()
 
-## ---- results="asis", comment=NA, echo=FALSE-----------------------------
+## ---- results="asis", comment=NA, echo=FALSE----------------------------------
 cat(paste0("![](bigdfChrSizeHolo.png)" ) )
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # transform previous data.frames for simplicity
 bigdfChrSizeHoloMb <- bigdfChrSizeHolo
 bigdfChrSizeHoloMb$chrSize <- bigdfChrSizeHoloMb$chrSize * 980000
@@ -255,23 +255,23 @@ plotIdiograms(dfChrSize=bigdfChrSizeHoloMb,  # df of chr. sizes
               ,asp=1)                        # y x aspect
 dev.off()
 
-## ---- results="asis", comment=NA, echo=FALSE-----------------------------
+## ---- results="asis", comment=NA, echo=FALSE----------------------------------
 cat(paste0("![](bigdfChrSizeHolo2.png)" ) )
 
-## ----returntooldpar, echo=FALSE------------------------------------------
+## ----returntooldpar, echo=FALSE-----------------------------------------------
 suppressWarnings(par(opar) )
 
-## ---- comment=NA, echo=F-------------------------------------------------
+## ---- comment=NA, echo=F------------------------------------------------------
 cat(paste0("parentalAndHybHoloChrSize" ) )
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(parentalAndHybHoloChrSize) , full_width = F
                            , font_size = 10)
 
-## ---- comment=NA, echo=F-------------------------------------------------
+## ---- comment=NA, echo=F------------------------------------------------------
 cat(paste0("dfAlloParentMarksHolo" ) )
 
-## ---- echo=F-------------------------------------------------------------
+## ---- echo=F------------------------------------------------------------------
 kableExtra::kable_styling(knitr::kable(dfAlloParentMarksHolo) , full_width = F
                            , font_size = 10
                           , bootstrap_options = c("striped", "hover", "condensed")
@@ -280,7 +280,6 @@ kableExtra::kable_styling(knitr::kable(dfAlloParentMarksHolo) , full_width = F
 ## ----example_M1, echo=TRUE, results="hide", fig.width=8, fig.height=7, message=FALSE,dev='png'----
 
 # svg("gish.svg",width=8,height=7 )
-# png("mydfChrSize.png", width=600, height=500)
 plotIdiograms(dfChrSize = parentalAndHybHoloChrSize,  # d.f. of chr. sizes
               dfMarkPos = dfAlloParentMarksHolo,      # d.f. of marks' positions
               chrColor  = "gray",          # chr. color

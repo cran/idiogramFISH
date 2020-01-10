@@ -4,9 +4,20 @@
 \alias{plotlabelsright}
 \title{This is an internal function to plot labels to the right, when "aside" for its position}
 \usage{
-plotlabelsright(x, y, markLabelSpacer, chrWidth, dfMarkColorInternal,
-  allMarkMaxSize, normalizeToOne, markLabelSize, xfactor, legendWidth,
-  legendHeight, n)
+plotlabelsright(
+  x,
+  y,
+  markLabelSpacer,
+  chrWidth,
+  dfMarkColorInternal,
+  allMarkMaxSize,
+  normalizeToOne,
+  markLabelSize,
+  xfactor,
+  legendWidth,
+  legendHeight,
+  n
+)
 }
 \arguments{
 \item{x}{The x axis coordinates of chromosomes}
@@ -17,7 +28,7 @@ plotlabelsright(x, y, markLabelSpacer, chrWidth, dfMarkColorInternal,
 
 \item{chrWidth}{chr widht}
 
-\item{dfMarkColorInternal}{dataframe of mark characteristics}
+\item{dfMarkColorInternal}{data.frame of mark characteristics}
 
 \item{allMarkMaxSize}{maximum size of marks}
 

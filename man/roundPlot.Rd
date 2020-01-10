@@ -29,6 +29,6 @@ roundPlot(roundness, x, y, col, border, chrWidth, yfactor, n2, lwd.chr)
 plot
 }
 \description{
-It returns a dataframes
+It returns a data.frames
 }
 \keyword{internal}

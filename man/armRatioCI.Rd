@@ -7,13 +7,13 @@
 armRatioCI(dfOfChrSize)
 }
 \arguments{
-\item{dfOfChrSize}{name of dataframe with columns: shortArmSize, longArmSize}
+\item{dfOfChrSize}{name of data.frame with columns: shortArmSize, longArmSize}
 }
 \value{
 data.frame
 }
 \description{
-This function reads a dataframe and produces AR (r), CI, Guerra and Levan
+This function reads a data.frame and produces AR (r), CI, Guerra and Levan
 classifications
 }
 \examples{
@@ -31,5 +31,5 @@ al. Braz. Jour. Gen. Vol IX, 4, 741-743
 \code{\link{chrbasicdatamono}}
 }
 \keyword{arm}
-\keyword{dataframe}
+\keyword{data.frame}
 \keyword{size}

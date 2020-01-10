@@ -15,6 +15,6 @@ fixChrNameDupDF(list1dfChromSize, mybooleanChrName)
 Returns a graphics element
 }
 \description{
-It returns a list of dataframes
+It returns a list of data.frames
 }
 \keyword{internal}

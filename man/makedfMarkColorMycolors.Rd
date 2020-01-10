@@ -2,7 +2,7 @@
 % Please edit documentation in R/makedfMarkColorMycolors.R
 \name{makedfMarkColorMycolors}
 \alias{makedfMarkColorMycolors}
-\title{Function to automatically make a dataframe of Marks' characterisitcs}
+\title{Function to automatically make a data.frame of Marks' characterisitcs}
 \usage{
 makedfMarkColorMycolors(markNames, colorstoremove, mycolors)
 }
@@ -20,7 +20,7 @@ data.frame
 This function reads character vector with marks names, a character vector of prohibited colors and a custom list of colors
 to be associated with the mark names
 
-It returns a dataframe with color and style for each mark
+It returns a data.frame with color and style for each mark
 }
 \keyword{internal}
 \keyword{mark}
