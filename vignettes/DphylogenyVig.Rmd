@@ -1,5 +1,5 @@
 ---
-title: "4. Plotting alongside phylogeny"
+title: "Plotting alongside phylogeny"
 author: "Fernando Roa"
 date: "02 10 2019"
 pkgdown:
@@ -8,10 +8,12 @@ output:
   prettydoc::html_pretty:
     theme: leonids
     highlight: github
+    includes:
+      in_header: myheader.html
     toc: true
-    toc_depth: 1
+    toc_depth: 2
     number_sections: true
-    pandoc_args: ["--lua-filter=refs/multiple-bibliographies.lua"]
+    pandoc_args: ["--lua-filter=refs/multiple-bibliographies.lua", "--number-offset=2"]
     
 #bibliography: [refs/allrefs.bib,refs/iqtree.bib,refs/revbayes.bib,refs/packages.bib, refs/idiogramFISH.bib, refs/Rrefs.bib]
 
@@ -41,10 +43,26 @@ resource_files:
 # params:
   # packageCheck: FALSE
 vignette: >
-  %\VignetteIndexEntry{4. Plotting alongside phylogeny}
+  %\VignetteIndexEntry{3. Plotting alongside phylogeny}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+<a name="top"></a>
+```{r setup, include=FALSE}
+#Create myheader.html
+if(Sys.info()['sysname']=="Windows"){
+res<-!as.logical(system(paste("ping", "www.google.com")) )
+  if(res){
+  fileConn <- file("myheader.html")
+  writeLines('<script src="https://kit.fontawesome.com/af0a13599b.js" crossorigin="anonymous"></script>', fileConn)
+  close(fileConn)
+  }
+} else {
+  fileConn <- file("myheader.html")
+  writeLines('<script src="https://kit.fontawesome.com/af0a13599b.js" crossorigin="anonymous"></script>', fileConn)
+  close(fileConn)
+}
+```
 
 ``` {r, results="asis", echo=FALSE, message=FALSE}
 # <!-- pkgdown --> 
@@ -81,19 +99,40 @@ cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 <link rel="stylesheet" href="css/mystyle.css">
 
 <div class="goright">
-Go to [home](index.html)  
-Go to [1. Monocentrics Vignette](AplotIdiogramsVig.html)  
-Go to [2. Holocentrics Vignette](BplotIdiogramsHoloVig.html)  
-Go to [3. Groups Vignette](CgroupsVig.html)  
-Go to [5. Human Vignette](EhumanVig.html)  
+Go to [1. Plotting I](AplotIdiogramsVig.html)  
+Go to [2. Plotting II](BplotIdiogramsHoloVig.html)  
+Go to [4. Human Vignette](EhumanVig.html)  
+Go to [5. Credits](index.html)  
 
 <!-- # there are 2 spaces at the end of those lines -->
 </div>
 
+``` {r, echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"}
+if (requireNamespace("RCurl", quietly = TRUE)  ) {
+# version of manual
+v<-sub("Version: ","",readLines("../DESCRIPTION")[3])
+# v<-tryCatch(suppressWarnings(rvcheck:::check_github_gitlab("ferroao/idiogramFISH", "gitlab")$latest_version), error=function(e) NA )
+pkg<-"idiogramFISH"
+link<-tryCatch(suppressWarnings(badger::badge_custom("Documentation", paste(pkg,v), "cornflowerblue") ), error=function(e) NA )
+  if(!is.na(link)){
+  svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
+  manual_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svglink) ), error=function(e) NA )
+    if (!is.na(manual_cont)){
+    manual_contFile <- "../man/figures/manual.svg"
+    writeLines(manual_cont, con = manual_contFile)
+    manual_contFile <- normalizePath(manual_contFile)
+    knitr::include_graphics(manual_contFile)
+    # cat(paste0("&nbsp;![''](",knitr::include_graphics(manual_contFile),")" ) )
+    }
+  }
+} # rcurl
+```
+
+# Plotting alongside phylogeny
 
 This guide shows the files to plot idiograms alongside a phylogeny 
 
-# Load package
+## Load package
 
 visit gitlab for installation instructions https://gitlab.com/ferroao/idiogramFISH
 
@@ -103,11 +142,11 @@ visit gitlab for installation instructions https://gitlab.com/ferroao/idiogramFI
 library(idiogramFISH) 
 ```
 
-# ggtree of iqtree and monocentrics
+## ggtree of iqtree and monocentrics
 
 idiogramFISH comes with two trees and data.frames with chr. and marks' data for the correspondent OTUs, first we will plot a tree produced with iqtree [@Nguyen2015c]
 
-## Load the iqtree: {-}
+### Load the iqtree: {-}
 
 We will use phytools for that [@phytools2012]
 
@@ -134,7 +173,7 @@ iqtreephyloUM <- force.ultrametric(iqtreephylo, method= "extend") # phytools
 
 ```
 
-## Make a ggtree [@ggtree2018] {-}
+### Make a ggtree [@ggtree2018] {-}
 
 ```{r, message=FALSE, eval=packageCheck}
 ggtreeOf8 <- ggtree(iqtreephyloUM) + geom_tiplab(size=6)
@@ -157,7 +196,7 @@ ggtreeOf8TIPS<-ggtreeOf8$data[which(ggtreeOf8$data$isTip),]
 desiredOrder  <- rev(ggtreeOf8TIPS[order(ggtreeOf8TIPS$y),]$label)
 ```
  
-## Order OTUs of data.frame of chr. data {-}
+### Order OTUs of data.frame of chr. data {-}
 
 Apply order of phylogeny to data.frame
 
@@ -188,7 +227,7 @@ BeforeMissing             <- desiredFiltered[posOTUsBeforeMissing]
 valuesOfMissRepsBefore    <- reps$lengths[which(reps$values=="R")]
 ```
 
-## Plotting {-}
+### Plotting {-}
 
 Now we are ready to plot adding those arguments for `addMissingOTUAfter` and `missOTUspacings`
 
@@ -221,17 +260,18 @@ plotIdiograms(dfChrSize = allChrSizeSample,    # data.frame of Chr. Sizes
               morpho="both",                   # add chr. morphology
               chrIndex = "both",               # add chr. indices
               karIndex = TRUE,                 # add karyotype indices
+              yTitle= "",
               
               markLabelSpacer = 0              # spaces from rightmost chr. to legend
               
               ,ylimTopMod = -.1                # modify ylim top margin
               ,ylimBotMod=1.6                  # modify ylim bottom margin
               
-              ,rulerPos = -1                   # position of rulers
+              ,rulerPos = -0.5                 # position of rulers
               ,rulerNumberSize = .35           # font size of ruler number
               ,rulerNumberPos = .4             # position of ruler numbers
               ,ruler.tck = -.004               # tick size and orient.
-              ,asp=1                           # y x aspect
+              # ,asp=1                         # y x aspect
               
               ,addMissingOTUAfter = BeforeMissing          # OTUs after which there are ghost karyotypes - empty spaces
               ,missOTUspacings    = valuesOfMissRepsBefore # number of ghost karyotypes
@@ -259,14 +299,16 @@ cat(paste0("![](../man/figures/firstplot2.png)" ) )
 # }
 }
 ```
-
-# plot of revBayes tree and holocentrics
+<div class="goright95">
+<a href="#top">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
+</div>
+## plot of revBayes tree and holocentrics
 
 Function `plotIdiogramsHolo` deprecated after ver. 1.5.1 
 
 Now we are going to plot a tree from revBayes [@Hohna2017]
 
-## First, load the revBayes tree: {-}
+### First, load the revBayes tree: {-}
 
 ``` {r , message=FALSE, eval=packageCheck}
 require(ggplot2)
@@ -295,7 +337,7 @@ ordered_tips     <- revBayesPhyloUM$edge[is_tip, 2]
 desiredorderRevB <- rev(revBayesPhyloUM$tip.label[ordered_tips])
 ```
  
-## Order OTUs of data.frame of chr. data {-}
+### Order OTUs of data.frame of chr. data {-}
 
 First, create some data for holocentrics
 
@@ -340,7 +382,7 @@ BeforeMissingPlot2          <- desiredFiltered[posOTUsBeforeMissing]
 valuesOfMissRepsBeforePlot2 <- reps$lengths[which(reps$values=="R")]
 ```
 
-## Plotting {-}
+### Plotting {-}
 
 Now we are ready to plot adding those arguments for `addMissingOTUAfter` and `missOTUspacings`
 
@@ -366,6 +408,7 @@ plotIdiograms(allChrSizeSampleHolo,               # chr. size data.frame
               roundness = 4,                      # vertices roundness
               karHeight = 2.8,                    # karyotype height
               karHeiSpace = 4.5,                  # vertical size of kar. including spacing
+              yTitle="",
 
               karIndex = TRUE,                    # add karyotype index
               indexIdTextSize=.4                  # font size of indices and chr. names
@@ -377,7 +420,7 @@ plotIdiograms(allChrSizeSampleHolo,               # chr. size data.frame
               ,markLabelSpacer = 0                # dist. of legend to rightmost chr.
               ,legendWidth = 2.3                  # width of square or dots of legend
               
-              ,rulerPos = - 1                     # position of ruler
+              ,rulerPos = -0.5                    # position of ruler
               ,rulerNumberSize = .35              # font size of number of ruler
               ,rulerNumberPos = .4                # position of ruler number
               ,ruler.tck=-.004                    # tick of ruler size and orient.
@@ -385,9 +428,8 @@ plotIdiograms(allChrSizeSampleHolo,               # chr. size data.frame
               ,ylimTopMod = -4                    # modify ylim of top
               ,ylimBotMod = -4                    # modify ylim of bottom
               ,xlimRightMod = 3                   # modify xlim right argument
-              ,asp=1                              # y x aspect
-              
-)
+              # ,asp=1                            # y x aspect
+              )
 }
 
 # close png
@@ -407,15 +449,17 @@ cat(paste0("![](../man/figures/secondplot2.png)" ) )
 # }
 }
 ```
-
-# plot of revBayes tree and holocentrics and monocentrics
+<div class="goright95">
+<a href="#top">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
+</div>
+## plot of revBayes tree and holocentrics and monocentrics
 
 Available for ver. > 1.5.1
 
 Create data.frames with both types of karyotypes [@plyr2011]
 
 ```{r, message=FALSE,eval=packageCheck}
-
+require(plyr)
 # Select this OTU from the monocen.
 monosel<-c("Species_F","Species_C","Species_A")
 # chr.
@@ -462,7 +506,7 @@ BeforeMissingPlot2          <- desiredFiltered[posOTUsBeforeMissing]
 valuesOfMissRepsBeforePlot2 <- reps$lengths[which(reps$values=="R")]
 ```
 
-## Plotting {-}
+### Plotting {-}
 
 Now we are ready to plot adding those arguments for `addMissingOTUAfter` and `missOTUspacings`
 
@@ -488,6 +532,7 @@ plotIdiograms(mixChrSize,                         # chr. size data.frame
               karHeiSpace = 4.5,                  # vertical size of kar. including spacing
               roundness = 5,                      # vertices roundness
               chrSpacing = .25,                   # horizontal spacing among chr.
+              yTitle = "",
               
               karIndex = TRUE                     # add karyotype index
               ,indexIdTextSize=.4                 # font size of indices and chr. names
@@ -503,12 +548,12 @@ plotIdiograms(mixChrSize,                         # chr. size data.frame
               ,ylimTopMod = -2                    # modify ylim of top
               ,ylimBotMod = -2                    # modify ylim of bottom
               
-              ,rulerPos = -1                      # position of ruler
+              ,rulerPos = -0.5                    # position of ruler
               ,rulerNumberSize = .35              # font size of number of ruler
               ,rulerNumberPos = .4                # position of ruler number
               ,ruler.tck=-.004                    # ruler tick size and orient.
-              ,asp = 1                            # y x aspect
-              
+              ,OTUfont=3                          # italics
+              ,OTUfamily="Courier New"            # for OTU name
 )
 }
 # close png
@@ -526,14 +571,16 @@ cat(paste0("![](../man/figures/thirdplot2.png)" ) )
 # }
 }
 ```
-
+<div class="goright95">
+<a href="#top">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
+</div>
 `r if (knitr:::is_html_output()) '
-# References {-}
+## References {-}
 '`
 ::: {#refs_normal}
 :::
 
-# R-packages references {-}
+### R-packages references {-}
 
 ::: {#refs_software}
 :::

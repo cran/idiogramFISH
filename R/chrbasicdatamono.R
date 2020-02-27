@@ -32,3 +32,7 @@ NULL
 #' @description parentalAndHybChrSize: Example data for monocentrics for GISH
 #' @rdname chrbasicdatamono
 "parentalAndHybChrSize"
+#' @description traspadf: Example data for monocentrics
+#' @references Golczyk H, Hasterok R, Joachimiak AJ (2005) FISH-aimed karyotyping and characterization of Renner complexes in permanent heterozygote Rhoeo spathacea. Genome 48:145–153.
+#' @rdname chrbasicdatamono
+"traspadf"

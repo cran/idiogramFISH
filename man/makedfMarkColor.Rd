@@ -4,7 +4,12 @@
 \alias{makedfMarkColor}
 \title{Function to automatically make a data.frame of Marks' characterisitcs}
 \usage{
-makedfMarkColor(dfMarkColor, markNames, colorstoremove = NA)
+makedfMarkColor(
+  dfMarkColor,
+  markNames,
+  colorstoremove = NA,
+  defaultStyleMark = "square"
+)
 }
 \arguments{
 \item{dfMarkColor}{d.f of marks to use}
@@ -12,6 +17,8 @@ makedfMarkColor(dfMarkColor, markNames, colorstoremove = NA)
 \item{markNames}{names of marks}
 
 \item{colorstoremove}{remove this colors from the result}
+
+\item{defaultStyleMark}{character vector with default style \code{"square"} \code{"cM"} \code{"dots"}}
 }
 \value{
 data.frame

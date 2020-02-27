@@ -40,3 +40,7 @@ NULL
 #' @description dfAlloParentMarks: Example data for mark position of GISH of monocen.
 #' @rdname markposDFs
 "dfAlloParentMarks"
+#' @description traspaMarks: T. spathacea  marks' position
+#' @references Golczyk H, Hasterok R, Joachimiak AJ (2005) FISH-aimed karyotyping and characterization of Renner complexes in permanent heterozygote Rhoeo spathacea. Genome 48:145–153.
+#' @rdname markposDFs
+"traspaMarks"

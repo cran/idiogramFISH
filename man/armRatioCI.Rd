@@ -2,23 +2,35 @@
 % Please edit documentation in R/armRatioCI.R
 \name{armRatioCI}
 \alias{armRatioCI}
-\title{FUNCTION to calculate Arm Ratio and C.I. and morphological categories}
+\alias{swapChrRegionDfSizeAndMarks}
+\title{FUNCTIONS armRatioCI and swapChrRegionDfSizeAndMarks.}
 \usage{
-armRatioCI(dfOfChrSize)
+armRatioCI(dfChrSize)
+
+swapChrRegionDfSizeAndMarks(dfChrSize, dfMarkPos, chrNamesToSwap)
 }
 \arguments{
-\item{dfOfChrSize}{name of data.frame with columns: shortArmSize, longArmSize}
+\item{dfChrSize}{name of data.frame with columns: shortArmSize, longArmSize}
+
+\item{dfMarkPos}{name of data.frame of marks}
+
+\item{chrNamesToSwap}{name of chr. names to swap arms}
 }
 \value{
-data.frame
+data.frame (armRatioCI)
+
+list of data.frames (swapChrRegionDfSizeAndMarks)
 }
 \description{
-This function reads a data.frame and produces AR (r), CI, Guerra and Levan
-classifications
+armRatioCI: reads a data.frame and produces AR (radius), CI, Guerra and Levan classifications.
+
+swapChrRegionDfSizeAndMarks: reads data.frames to swap arms
 }
 \examples{
 armRatioCI(dfOfChrSize)
 armRatioCI(bigdfOfChrSize)
+
+swapChrRegionDfSizeAndMarks(dfOfChrSize,dfOfMarks,"1")
 }
 \references{
 LEVAN A, FREDGA K, SANDBERG AA (1964) NOMENCLATURE FOR

@@ -4,14 +4,21 @@
 \alias{makedfMarkColorMycolors}
 \title{Function to automatically make a data.frame of Marks' characterisitcs}
 \usage{
-makedfMarkColorMycolors(markNames, colorstoremove, mycolors)
+makedfMarkColorMycolors(
+  markNames,
+  mycolors,
+  colorstoremove = NULL,
+  defaultStyleMark = "square"
+)
 }
 \arguments{
 \item{markNames}{names of marks}
 
+\item{mycolors}{character vector of names of colors}
+
 \item{colorstoremove}{character vector of colors to remove from mycolors}
 
-\item{mycolors}{character vector of names of colors}
+\item{defaultStyleMark}{character vector with default style \code{"square"} \code{"cM"} \code{"dots"}}
 }
 \value{
 data.frame

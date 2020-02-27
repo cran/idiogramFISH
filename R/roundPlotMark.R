@@ -1,55 +1,122 @@
-# roundPlotMark
-#' This is an internal function that eliminates factors
+#' roundPlotMark
+#' This is an internal function that plot marks
 #'
-#' It returns a data.frames
+#' It returns a plot
 #'
 #' @keywords internal
 #'
 #' @param roundness roundness of vertices <
-#' @param x x component of polygon
-#' @param y y component of polygon
+#' @param xMark x component of polygon
+#' @param yMark yMark component of polygon
 #' @param dfMarkColorInternal colors for marks
 #' @param listOfdfMarkPosSq list of df. of mark pos.
-#' @param chrWidth width of chr.
-#' @param yfactor y distortion based on canvas proportion
-#' @param n2 numeric, to define vertices of rounded portions
+#' @param chrWidth numeric, width of chr.
+#' @param specialChrWidth numeric, width of chr.
+#' @param yfactor yMark distortion based on canvas proportion
+#' @param n numeric, to define vertices of rounded portions
 #' @param lwd.chr thick of border line
+#' @param listOfdfChromSize chr size df list
+#' @param circularPlot boolean TRUE for circ.
+#' @param y list, y coords.
+#' @param markLabelSize numeric, font size
+#' @param pattern character, regex
+#' @param separFactor numeric, sep. kars.
+#' @param labelSpacing numeric, spacing
+#' @param circleCenter numeric
+#' @param circleCenterY numeric
+#' @param radius numeric
+#' @param legend character
+#' @param ylistTransChr list, transf. coords.
+#' @param rotation rotate
+#' @param labelOutwards srt
 #'
 #' @return plot
 #' @importFrom graphics polygon text
 #'
 
-roundPlotMark<-function(roundness, x, y, dfMarkColorInternal,listOfdfMarkPosSq, chrWidth, yfactor,n2,lwd.chr){
-  # if(roundness<1){
-  #   roundness<-1
-  # }
-  # if((min(dfMarkPosInternal$markSize)*roundness)<2 ){
-  #   roundness<-2/min(dfMarkPosInternal$markSize)
-  # }
-  if(roundness>20){
-    lapply(1:length(x), function(w) mapply(function(x,y,z) graphics::polygon(x=x, y=y,
-                                                                                 col=dfMarkColorInternal$markColor[match(     z   ,dfMarkColorInternal$markName)],
-                                                                                 lwd=lwd.chr,
-                                                                                 # border=dfMarkColorInternal$markColor[match(  z   ,dfMarkColorInternal$markName)]
-                                                                                 border=ifelse(dfMarkColorInternal$markColor[match(z,dfMarkColorInternal$markName)]=="white",
-                                                                                           "black",
-                                                                                           dfMarkColorInternal$markColor[match(z,dfMarkColorInternal$markName)]
-                                                                                 ) # ifelse
-                                                                                 ), # pol
-                                               x=x[[w]],
-                                               y=y[[w]]
-                                              ,z=listOfdfMarkPosSq[[w]]$markName
-                                           ) # mapply
+roundPlotMark<-function(roundness, xMark, yMark,
+                        dfMarkColorInternal,listOfdfMarkPosSq,
+                        chrWidth, specialChrWidth,
+                        yfactor,n,
+                        lwd.chr,listOfdfChromSize,
+                        circularPlot,
+                        y,
+                        markLabelSize,pattern,
+                        separFactor,
+                        labelSpacing,
+                        circleCenter,circleCenterY,radius,
+                        legend,ylistTransChr,rotation,labelOutwards) {
+
+#  xMarkSq<<-xMark
+#  yMarkSq<<-yMark
+
+#  listOfdfMarkPosSqInternal<<-listOfdfMarkPosSq
+#  dfMarkColorInternal2<<-dfMarkColorInternal
+
+  if(roundness>20) {
+
+    if(circularPlot==FALSE) {
+
+            lapply(1:length(xMark), function(w) mapply(function(x,y,z)
+                graphics::polygon(
+                  x=x,
+                  y=y,
+                  col= dfMarkColorInternal$markColor[match(     z   , dfMarkColorInternal$markName)],
+                  lwd=lwd.chr,
+                  border = ifelse(dfMarkColorInternal$markColor[match(z,dfMarkColorInternal$markName)]=="white",
+                  "black",
+                  dfMarkColorInternal$markColor[match(z,dfMarkColorInternal$markName)]
+                          ) # ifelse
+                ), # pol
+              x=xMark[[w]],
+              y=yMark[[w]]
+              ,z=listOfdfMarkPosSq[[w]]$markName
+
+        ) # mapply
     ) # lapp
-  } else {
+    } # CIRC
+    else { # circ true
 
-    r2 <- chrWidth/(roundness*2)
-    pts_1 <- seq(-pi/2, 0, length.out = n2)
-    pts_2 <- seq( 0, pi/2, length.out = n2)
-    pts_3 <- seq(pi, pi*1.5, length.out = n2)
-    pts_4 <- seq(pi/2, pi, length.out = n2)
+      #
+      #   x to vertical
+      #
 
-    yMod<-y # Y
+#      xMarkSq<<-xMark
+#      yMarkSq<<-yMark
+#      yInternalSq<<-y
+
+
+        xlistNew<-xHortoVer(xMark)
+
+        yMarkPer<-markMapPer(yMark,y)
+
+        textyMarkPer<-centerMarkMapPer(yMark,y)
+
+        ylistTransMark<-transyListMark(yMarkPer,ylistTransChr)
+
+        textylistTransMark<-transyListMark(textyMarkPer,ylistTransChr)
+
+        circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,    ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
+
+        circleMapsLabels <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,textylistTransMark,xlistNew,n,
+                                           labelSpacing,chrWidth,rotation=rotation)
+
+        drawPlotMark(circleMapsMarks,dfMarkColorInternal,listOfdfMarkPosSq,lwd.chr)
+
+if(legend=="inline"){
+        circLabelMark(circleMapsLabels,listOfdfMarkPosSq,markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY)
+}
+
+    } # circular
+  } else {                                            # roundness < 20
+
+    pts_1 <- seq(-pi/2, 0, length.out = n)
+    pts_2 <- seq( 0, pi/2, length.out = n)
+    pts_3 <- seq(pi, pi*1.5, length.out = n)
+    pts_4 <- seq(pi/2, pi, length.out = n)
+
+    yModMark<-yMark # yMark
+
     topline_y<-list()
     bottomline_y<-list()
     topBotline_x<-list()
@@ -64,75 +131,73 @@ roundPlotMark<-function(roundness, x, y, dfMarkColorInternal,listOfdfMarkPosSq, 
     newLongx<-list()
     newLongy<-list()
 
-    for (s in 1:length(yMod) ) {
-      topline_y[[s]]<-list()
-      bottomline_y[[s]]<-list()
-      topBotline_x[[s]]<-list()
-      x2_1[[s]]<-list()
-      x2_2[[s]]<-list()
-      y2_1[[s]]<-list()
-      y2_2[[s]]<-list()
-      xy_1[[s]]<-list()
-      xy_2[[s]]<-list()
-      xy_3[[s]]<-list()
-      xy_4[[s]]<-list()
-      newLongx[[s]]<-list()
-      newLongy[[s]]<-list()
+    for (s in 1:length(yModMark) ) {
 
-      for (m in 1: length(yMod[[s]]) ) { # mark
-        # topline_y<-rep(max(y),2)
-        topline_y[[s]][[m]]   <-rep(max(yMod[[s]][[m]]),2)
-        # bottomline_y<-rep(min(y),2)
-        bottomline_y[[s]][[m]]<-rep(min(yMod[[s]][[m]]),2)
-        # topBotline_x<-   c(min(x)+r2, max(x)-r2)
-        topBotline_x[[s]][[m]]<-c(min(x[[s]][[m]])+r2,max(x[[s]][[m]])-r2 )
-        # yMod[which(yMod==max(yMod))]<-yMod[which(yMod==max(yMod))]-r2
-        yMod[[s]][[m]][which(yMod[[s]][[m]]==max(yMod[[s]][[m]]))]<-yMod[[s]][[m]][which(yMod[[s]][[m]]==max(yMod[[s]][[m]]))]-r2*yfactor
-        # yMod[which(yMod==min(yMod))]<-yMod[which(yMod==min(yMod))]+r2
-        yMod[[s]][[m]][which(yMod[[s]][[m]]==min(yMod[[s]][[m]]))]<-yMod[[s]][[m]][which(yMod[[s]][[m]]==min(yMod[[s]][[m]]))]+r2*yfactor
+      corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfMarkPosSq)[[s]] )
 
-        # x2_1<-min(x)+r2
-        # x2_2<-max(x)-r2
-        x2_1[[s]][[m]]<-min(x[[s]][[m]])+r2
-        x2_2[[s]][[m]]<-max(x[[s]][[m]])-r2
-        # y2_1<-max(y)-r2
-        # y2_2<-min(y)+r2
-        y2_1[[s]][[m]]<-max(y[[s]][[m]])-r2*yfactor
-        y2_2[[s]][[m]]<-min(y[[s]][[m]])+r2*yfactor
-        # xy_1 <- cbind(x2_1 + r2 * sin(pts_1), y2_1 + r2 * cos(pts_1))
-        xy_1[[s]][[m]] <- cbind(x2_1[[s]][[m]] + r2 * sin(pts_1), y2_1[[s]][[m]] + (r2 * cos(pts_1) *yfactor) )
-        # xy_2 <- cbind(x2_2 + r2 * sin(pts_2), y2_1 + r2 * cos(pts_2))
-        xy_2[[s]][[m]] <- cbind(x2_2[[s]][[m]] + r2 * sin(pts_2), y2_1[[s]][[m]] + (r2 * cos(pts_2) *yfactor) )
-        # xy_3 <- cbind(x2_1 + r2 * sin(pts_3), y2_2 + r2 * cos(pts_3))
-        xy_3[[s]][[m]] <- cbind(x2_1[[s]][[m]] + r2 * sin(pts_3), y2_2[[s]][[m]] + (r2 * cos(pts_3) *yfactor) )
-        # xy_4 <- cbind(x2_2 + r2 * sin(pts_4), y2_2 + r2 * cos(pts_4))
-        xy_4[[s]][[m]] <- cbind(x2_2[[s]][[m]] + r2 * sin(pts_4), y2_2[[s]][[m]] + (r2 * cos(pts_4) *yfactor) )
-        # newLongx<-c(x[1:2],xy_4[,1],topBotline_x,xy_3[,1],
-        # x[3:4],xy_1[,1],topBotline_x,xy_2[,1])
-        newLongx[[s]][[m]]<-c(x[[s]][[m]][1:2],xy_4[[s]][[m]][,1],topBotline_x[[s]][[m]],xy_3[[s]][[m]][,1],
-                              x[[s]][[m]][3:4],xy_1[[s]][[m]][,1],topBotline_x[[s]][[m]],xy_2[[s]][[m]][,1])
-        # newLongy<-c(yMod[1:2],xy_4[,2],bottomline_y,xy_3[,2],
-        # yMod[3:4], xy_1[,2],topline_y,xy_2[,2] )
-        newLongy[[s]][[m]]<-c(yMod[[s]][[m]][1:2],xy_4[[s]][[m]][,2],bottomline_y[[s]][[m]],xy_3[[s]][[m]][,2],
-                              yMod[[s]][[m]][3:4],xy_1[[s]][[m]][,2],topline_y[[s]][[m]],xy_2[[s]][[m]][,2])
-      } # for
+      if(attr(listOfdfChromSize[[corr_index]],"ytitle")=="cM"){
+        chrWidth2  <-specialChrWidth
+      } else {
+        chrWidth2 <- chrWidth
+      }
+
+      r2 <- chrWidth2/(roundness*2)
+
+      xyCoords<-mapXY(1 , (length(yModMark[[s]]) ) ,
+                      yMark[[s]], yModMark[[s]] ,
+                      xMark[[s]],
+                      yfactor,r2,
+                      pts_1,pts_2,pts_3,pts_4)
+
+      newLongx[[s]]<-xyCoords$newLongx
+      newLongy[[s]]<-xyCoords$newLongy
+
+      attr(newLongy[[s]],"sqname") <- attr(yMark[[s]],"sqname")
+      attr(newLongx[[s]],"sqname") <- attr(xMark[[s]],"sqname")
+
     } # for
-    # cat("I am here")
-    # print(length(x))
-    # print(length(y))
-    lapply(1:length(x), function(w) mapply(function(x,y,z) graphics::polygon(x=x, y=y,
-                                                                                 col=dfMarkColorInternal$markColor[match(z   ,dfMarkColorInternal$markName)],
-                                                                                 lwd=lwd.chr,
-                                                                                 # border=     dfMarkColorInternal$markColor[match(z,dfMarkColorInternal$markName)]
-                                                                                 border=ifelse(dfMarkColorInternal$markColor[match(z,dfMarkColorInternal$markName)]=="white",
-                                                                                    "black",
-                                                                                    dfMarkColorInternal$markColor[match(z,dfMarkColorInternal$markName)]
-                                                                                    ) # ifelse
-                                                                           ), # pol
-                                               x=newLongx[[w]],
-                                               y=newLongy[[w]] #
-                                              ,z=listOfdfMarkPosSq[[w]]$markName
-                                              ) # mapply
-    ) # l
-  } # else
+    names(newLongy)<-names(yMark)
+
+#    newLongyMarks<<-newLongy
+#    newLongxMarks<<-newLongx
+
+    if(circularPlot==FALSE) {
+
+      lapply(1:length(xMark), function(w)
+        mapply(function(x,y,z)
+          graphics::polygon(x=x, y=y,
+                            col=dfMarkColorInternal$markColor[match(z   ,dfMarkColorInternal$markName)],
+                            lwd=lwd.chr,
+                            border=dfMarkColorInternal$markBorderColor[match(z,dfMarkColorInternal$markName)]
+                            ), # pol
+                x=newLongx[[w]],
+                y=newLongy[[w]] #
+                ,z=listOfdfMarkPosSq[[w]]$markName
+                ) # mapply
+      ) # l
+
+    } # cir FALSE
+
+    else { # circ true
+
+      xlistNew<-xHortoVer(newLongx)
+
+      yMarkPer<-markMapPer(newLongy,y)
+      ylistTransMark<-transyListMark(yMarkPer,ylistTransChr)
+
+      textyMarkPer<-centerMarkMapPer(newLongy,y)
+      textylistTransMark<-transyListMark(textyMarkPer,ylistTransChr)
+
+      circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
+
+      circleMapsLabels <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,textylistTransMark,xlistNew,n,
+                                         labelSpacing,chrWidth,rotation=rotation)
+
+      drawPlotMark(circleMapsMarks,dfMarkColorInternal,listOfdfMarkPosSq,lwd.chr)
+if(legend=="inline"){
+      circLabelMark(circleMapsLabels,listOfdfMarkPosSq,markLabelSize,pattern)
 }
+
+    } # circular
+  } # else ROUNDNESS
+} # FUN

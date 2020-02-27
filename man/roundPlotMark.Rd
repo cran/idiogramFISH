@@ -2,43 +2,89 @@
 % Please edit documentation in R/roundPlotMark.R
 \name{roundPlotMark}
 \alias{roundPlotMark}
-\title{This is an internal function that eliminates factors}
+\title{roundPlotMark
+This is an internal function that plot marks}
 \usage{
 roundPlotMark(
   roundness,
-  x,
-  y,
+  xMark,
+  yMark,
   dfMarkColorInternal,
   listOfdfMarkPosSq,
   chrWidth,
+  specialChrWidth,
   yfactor,
-  n2,
-  lwd.chr
+  n,
+  lwd.chr,
+  listOfdfChromSize,
+  circularPlot,
+  y,
+  markLabelSize,
+  pattern,
+  separFactor,
+  labelSpacing,
+  circleCenter,
+  circleCenterY,
+  radius,
+  legend,
+  ylistTransChr,
+  rotation,
+  labelOutwards
 )
 }
 \arguments{
 \item{roundness}{roundness of vertices <}
 
-\item{x}{x component of polygon}
+\item{xMark}{x component of polygon}
 
-\item{y}{y component of polygon}
+\item{yMark}{yMark component of polygon}
 
 \item{dfMarkColorInternal}{colors for marks}
 
 \item{listOfdfMarkPosSq}{list of df. of mark pos.}
 
-\item{chrWidth}{width of chr.}
+\item{chrWidth}{numeric, width of chr.}
 
-\item{yfactor}{y distortion based on canvas proportion}
+\item{specialChrWidth}{numeric, width of chr.}
 
-\item{n2}{numeric, to define vertices of rounded portions}
+\item{yfactor}{yMark distortion based on canvas proportion}
+
+\item{n}{numeric, to define vertices of rounded portions}
 
 \item{lwd.chr}{thick of border line}
+
+\item{listOfdfChromSize}{chr size df list}
+
+\item{circularPlot}{boolean TRUE for circ.}
+
+\item{y}{list, y coords.}
+
+\item{markLabelSize}{numeric, font size}
+
+\item{pattern}{character, regex}
+
+\item{separFactor}{numeric, sep. kars.}
+
+\item{labelSpacing}{numeric, spacing}
+
+\item{circleCenter}{numeric}
+
+\item{circleCenterY}{numeric}
+
+\item{radius}{numeric}
+
+\item{legend}{character}
+
+\item{ylistTransChr}{list, transf. coords.}
+
+\item{rotation}{rotate}
+
+\item{labelOutwards}{srt}
 }
 \value{
 plot
 }
 \description{
-It returns a data.frames
+It returns a plot
 }
 \keyword{internal}

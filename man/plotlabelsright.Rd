@@ -5,7 +5,7 @@
 \title{This is an internal function to plot labels to the right, when "aside" for its position}
 \usage{
 plotlabelsright(
-  x,
+  maxx,
   y,
   markLabelSpacer,
   chrWidth,
@@ -16,12 +16,12 @@ plotlabelsright(
   xfactor,
   legendWidth,
   legendHeight,
-  n
+  n,
+  pattern,
+  legendYcoord
 )
 }
 \arguments{
-\item{x}{The x axis coordinates of chromosomes}
-
 \item{y}{The y axis coordinates of chromosomes}
 
 \item{markLabelSpacer}{distance from right chr to legend}
@@ -43,6 +43,12 @@ plotlabelsright(
 \item{legendHeight}{factor to increase height of legend squares and dots}
 
 \item{n}{numeric, vertices for round parts}
+
+\item{pattern, }{character, regex to remove from markNames}
+
+\item{legendYcoord}{numeric modify Y position of legend}
+
+\item{x}{The x axis coordinates of chromosomes}
 }
 \value{
 Returns a graphics element

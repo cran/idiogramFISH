@@ -1,3 +1,18 @@
+## ----setup, include=FALSE-----------------------------------------------------
+#Create myheader.html
+if(Sys.info()['sysname']=="Windows"){
+res<-!as.logical(system(paste("ping", "www.google.com")) )
+  if(res){
+  fileConn <- file("myheader.html")
+  writeLines('<script src="https://kit.fontawesome.com/af0a13599b.js" crossorigin="anonymous"></script>', fileConn)
+  close(fileConn)
+  }
+} else {
+  fileConn <- file("myheader.html")
+  writeLines('<script src="https://kit.fontawesome.com/af0a13599b.js" crossorigin="anonymous"></script>', fileConn)
+  close(fileConn)
+}
+
 ## ---- results="asis", echo=FALSE, message=FALSE-------------------------------
 # <!-- pkgdown --> 
 # <!-- jquery --><script src="js/jquery.min.js" crossorigin="anonymous"></script>
@@ -29,6 +44,26 @@ myfile<-"js/pkgdown2.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 }
+
+## ---- echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"----
+if (requireNamespace("RCurl", quietly = TRUE)  ) {
+# version of manual
+v<-sub("Version: ","",readLines("../DESCRIPTION")[3])
+# v<-tryCatch(suppressWarnings(rvcheck:::check_github_gitlab("ferroao/idiogramFISH", "gitlab")$latest_version), error=function(e) NA )
+pkg<-"idiogramFISH"
+link<-tryCatch(suppressWarnings(badger::badge_custom("Documentation", paste(pkg,v), "cornflowerblue") ), error=function(e) NA )
+  if(!is.na(link)){
+  svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
+  manual_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svglink) ), error=function(e) NA )
+    if (!is.na(manual_cont)){
+    manual_contFile <- "../man/figures/manual.svg"
+    writeLines(manual_cont, con = manual_contFile)
+    manual_contFile <- normalizePath(manual_contFile)
+    knitr::include_graphics(manual_contFile)
+    # cat(paste0("&nbsp;![''](",knitr::include_graphics(manual_contFile),")" ) )
+    }
+  }
+} # rcurl
 
 ## ---- results="hide", message=FALSE, warning=FALSE, eval=TRUE-----------------
 
@@ -122,17 +157,18 @@ plotIdiograms(dfChrSize = allChrSizeSample,    # data.frame of Chr. Sizes
               morpho="both",                   # add chr. morphology
               chrIndex = "both",               # add chr. indices
               karIndex = TRUE,                 # add karyotype indices
+              yTitle= "",
               
               markLabelSpacer = 0              # spaces from rightmost chr. to legend
               
               ,ylimTopMod = -.1                # modify ylim top margin
               ,ylimBotMod=1.6                  # modify ylim bottom margin
               
-              ,rulerPos = -1                   # position of rulers
+              ,rulerPos = -0.5                 # position of rulers
               ,rulerNumberSize = .35           # font size of ruler number
               ,rulerNumberPos = .4             # position of ruler numbers
               ,ruler.tck = -.004               # tick size and orient.
-              ,asp=1                           # y x aspect
+              # ,asp=1                         # y x aspect
               
               ,addMissingOTUAfter = BeforeMissing          # OTUs after which there are ghost karyotypes - empty spaces
               ,missOTUspacings    = valuesOfMissRepsBefore # number of ghost karyotypes
@@ -238,6 +274,7 @@ plotIdiograms(allChrSizeSampleHolo,               # chr. size data.frame
               roundness = 4,                      # vertices roundness
               karHeight = 2.8,                    # karyotype height
               karHeiSpace = 4.5,                  # vertical size of kar. including spacing
+              yTitle="",
 
               karIndex = TRUE,                    # add karyotype index
               indexIdTextSize=.4                  # font size of indices and chr. names
@@ -249,7 +286,7 @@ plotIdiograms(allChrSizeSampleHolo,               # chr. size data.frame
               ,markLabelSpacer = 0                # dist. of legend to rightmost chr.
               ,legendWidth = 2.3                  # width of square or dots of legend
               
-              ,rulerPos = - 1                     # position of ruler
+              ,rulerPos = -0.5                    # position of ruler
               ,rulerNumberSize = .35              # font size of number of ruler
               ,rulerNumberPos = .4                # position of ruler number
               ,ruler.tck=-.004                    # tick of ruler size and orient.
@@ -257,9 +294,8 @@ plotIdiograms(allChrSizeSampleHolo,               # chr. size data.frame
               ,ylimTopMod = -4                    # modify ylim of top
               ,ylimBotMod = -4                    # modify ylim of bottom
               ,xlimRightMod = 3                   # modify xlim right argument
-              ,asp=1                              # y x aspect
-              
-)
+              # ,asp=1                            # y x aspect
+              )
 }
 
 # close png
@@ -279,7 +315,7 @@ cat(paste0("![](../man/figures/secondplot2.png)" ) )
 }
 
 ## ---- message=FALSE,eval=packageCheck-----------------------------------------
-
+require(plyr)
 # Select this OTU from the monocen.
 monosel<-c("Species_F","Species_C","Species_A")
 # chr.
@@ -344,6 +380,7 @@ plotIdiograms(mixChrSize,                         # chr. size data.frame
               karHeiSpace = 4.5,                  # vertical size of kar. including spacing
               roundness = 5,                      # vertices roundness
               chrSpacing = .25,                   # horizontal spacing among chr.
+              yTitle = "",
               
               karIndex = TRUE                     # add karyotype index
               ,indexIdTextSize=.4                 # font size of indices and chr. names
@@ -359,12 +396,12 @@ plotIdiograms(mixChrSize,                         # chr. size data.frame
               ,ylimTopMod = -2                    # modify ylim of top
               ,ylimBotMod = -2                    # modify ylim of bottom
               
-              ,rulerPos = -1                      # position of ruler
+              ,rulerPos = -0.5                    # position of ruler
               ,rulerNumberSize = .35              # font size of number of ruler
               ,rulerNumberPos = .4                # position of ruler number
               ,ruler.tck=-.004                    # ruler tick size and orient.
-              ,asp = 1                            # y x aspect
-              
+              ,OTUfont=3                          # italics
+              ,OTUfamily="Courier New"            # for OTU name
 )
 }
 # close png

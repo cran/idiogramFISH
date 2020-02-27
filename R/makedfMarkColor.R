@@ -6,13 +6,18 @@
 #' @param markNames names of marks
 #' @param dfMarkColor d.f of marks to use
 #' @param colorstoremove remove this colors from the result
+#' @param defaultStyleMark character vector with default style \code{"square"} \code{"cM"} \code{"dots"}
 #'
 #' @keywords mark
 #' @keywords internal
 #' @return data.frame
 #' @importFrom grDevices col2rgb
 
-makedfMarkColor<- function(dfMarkColor,markNames,colorstoremove=NA){
+makedfMarkColor<- function(dfMarkColor,markNames,colorstoremove=NA,defaultStyleMark="square"){
+
+  message(crayon::green(paste("By default 5S are plotted as dots, to change this behavior make your own dfMarkColor data.frame") ) )
+
+  dfMarkColor[which(dfMarkColor$style %in% "square"),]$style<-defaultStyleMark
   # dfMarkColor<-idiogramFISH::dfMarkColor
   manualcolors<-c('black','forestgreen', 'orange', 'cornflowerblue',
                     'magenta', 'darkolivegreen4',
@@ -46,7 +51,7 @@ makedfMarkColor<- function(dfMarkColor,markNames,colorstoremove=NA){
   dfMarkColorNew$markColor[which(is.na(dfMarkColorNew$markColor))]<-manualcolors[1:lenman]
 
   dfMarkColorNew$style<-dfMarkColor$style[match(toupper(dfMarkColorNew$markName),toupper(dfMarkColor$markName) )]
-  dfMarkColorNew$style[which(is.na(dfMarkColorNew$style))]<-"square"
+  dfMarkColorNew$style[which(is.na(dfMarkColorNew$style))]<-defaultStyleMark
 
   return(dfMarkColorNew)
 }

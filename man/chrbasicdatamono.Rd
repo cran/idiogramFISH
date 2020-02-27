@@ -8,6 +8,7 @@
 \alias{humChr}
 \alias{allChrSizeSample}
 \alias{parentalAndHybChrSize}
+\alias{traspadf}
 \title{Chr. basic data Monocen.}
 \format{data.frame with columns:
 \describe{
@@ -30,6 +31,8 @@ humChr
 allChrSizeSample
 
 parentalAndHybChrSize
+
+traspadf
 }
 \description{
 dfOfChrSize: Example data for monocentrics
@@ -41,9 +44,13 @@ humChr: Example data for human karyotype (Adler 1994)
 allChrSizeSample: Example data for monocentrics for several species, OTU
 
 parentalAndHybChrSize: Example data for monocentrics for GISH
+
+traspadf: Example data for monocentrics
 }
 \references{
 Adler 1994. Idiogram Album. \url{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}
+
+Golczyk H, Hasterok R, Joachimiak AJ (2005) FISH-aimed karyotyping and characterization of Renner complexes in permanent heterozygote Rhoeo spathacea. Genome 48:145–153.
 }
 \seealso{
 \code{\link{plotIdiograms}}

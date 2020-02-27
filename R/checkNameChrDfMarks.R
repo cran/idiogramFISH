@@ -72,17 +72,13 @@ checkNameChrDfMarks<- function(listOfdfChromSize,listOfdfMarks){
         } else {
             message(crayon::black(paste("\n No divergence"))
             )#m
-            # result<-c(result,TRUE)
 
           if(class(listOfdfMarks[[which(names(listOfdfMarks)==name)]])=="data.frame"){
             markNames   <- c(markNames,unique(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$markName) )
-            # }
-            # if(class(listOfdfMarks[[which(names(listOfdfMarks)==name)]])=="data.frame"){
-            #
+
             if(length(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$markSize)>0){
               markSize <- c(markSize,max(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$markSize, na.rm=TRUE) )
-              # , error=function(e) NULL ) )
-            } # length >0
+            } # length > 0
           } # is data.frame
 
         } # else

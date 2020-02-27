@@ -2,9 +2,12 @@
 % Please edit documentation in R/asymmetry.R
 \name{asymmetry}
 \alias{asymmetry}
-\title{FUNCTION to calculate karyotype asymmetry A and A2}
+\alias{asymmetryA2}
+\title{FUNCTIONS asymmetry and asymmetryA2.}
 \usage{
 asymmetry(dfChrSize)
+
+asymmetryA2(dfChrSize)
 }
 \arguments{
 \item{dfChrSize}{name of data.frame}
@@ -13,7 +16,11 @@ asymmetry(dfChrSize)
 list
 }
 \description{
-This function reads a data.frame  with columns:
+asymmetry: calculates karyotype asymmetry A and A2.
+
+asymmetryA2: calculates karyotype asymmetry A2
+
+This functions read a data.frame  with columns:
 \code{shortArmSize} and \code{longArmSize}
 
 If several species present, use
@@ -29,21 +36,25 @@ A: Watanabe et al. (1999) asymmetry of karyotype ranging from 0
 \deqn{A_{2} = \frac{sCL}{xCL}}{%
      A2 = sCL / xCL}
 
-(s = std dev, CL = chr. length, x = mean)
+(s = std dev, CL = chr. length, x = mean) (Romero-Zarco 1986)
 
 related to:
 \deqn{CV_{CL} = A_{2} * 100}{%
       CVCL = A2 * 100}
 
-(CV = coeff. var.)
+(CV = coeff. var.) (Paszko 2006)
 }
 \examples{
 asymmetry(dfOfChrSize)
 myAlist<-asymmetry(bigdfOfChrSize)
 as.data.frame(myAlist)
+asymmetryA2(dfOfChrSize)
+as.data.frame(asymmetryA2(bigdfOfChrSize))
+asymmetryA2(dfChrSizeHolo)
+as.data.frame(asymmetryA2(bigdfChrSizeHolo))
 }
 \references{
-Watanabe K, Yahara T, Denda T, Kosuge K. (1999) Chromosomal
+Watanabe K, Yahara T, Denda T, Kosuge K. 1999. Chromosomal
 evolution in the genus Brachyscome (Asteraceae, Astereae): Statistical tests
 regarding correlation between changes in karyotype and habit using
 phylogenetic information. Journal of Plant Research 112: 145-161.
@@ -51,9 +62,15 @@ phylogenetic information. Journal of Plant Research 112: 145-161.
 
 A2: Romero-Zarco. 1986. A New Method for Estimating Karyotype
 Asymmetry. Taxon Vol. 35, No. 3  pp. 526-530
+
+Paszko B. 2006. A critical review and a new proposal of karyotype asymmetry indices. Plant Syst Evol 258:39–48.
 }
 \seealso{
 \code{\link{chrbasicdatamono}}
+
+\code{\link{chrbasicdatamono}}
+
+\code{\link{chrbasicdataHolo}}
 }
 \keyword{arm}
 \keyword{data.frame}

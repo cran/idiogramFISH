@@ -1,4 +1,17 @@
 ## ----setup, include=FALSE-----------------------------------------------------
+#Create myheader.html
+if(Sys.info()['sysname']=="Windows"){
+res<-!as.logical(system(paste("ping", "www.google.com")) )
+  if(res){
+  fileConn <- file("myheader.html")
+  writeLines('<script src="https://kit.fontawesome.com/af0a13599b.js" crossorigin="anonymous"></script>', fileConn)
+  close(fileConn)
+  }
+} else {
+  fileConn <- file("myheader.html")
+  writeLines('<script src="https://kit.fontawesome.com/af0a13599b.js" crossorigin="anonymous"></script>', fileConn)
+  close(fileConn)
+}
 knitr::opts_chunk$set(echo = TRUE)
 
 ## ---- results="asis", echo=FALSE, message=FALSE-------------------------------
@@ -32,6 +45,26 @@ myfile<-"js/pkgdown2.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 }
+
+## ---- echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"----
+if (requireNamespace("RCurl", quietly = TRUE)  ) {
+# version of manual
+v<-sub("Version: ","",readLines("../DESCRIPTION")[3])
+# v<-tryCatch(suppressWarnings(rvcheck:::check_github_gitlab("ferroao/idiogramFISH", "gitlab")$latest_version), error=function(e) NA )
+pkg<-"idiogramFISH"
+link<-tryCatch(suppressWarnings(badger::badge_custom("Documentation", paste(pkg,v), "cornflowerblue") ), error=function(e) NA )
+  if(!is.na(link)){
+  svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
+  manual_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svglink) ), error=function(e) NA )
+    if (!is.na(manual_cont)){
+    manual_contFile <- "../man/figures/manual.svg"
+    writeLines(manual_cont, con = manual_contFile)
+    manual_contFile <- normalizePath(manual_contFile)
+    knitr::include_graphics(manual_contFile)
+    # cat(paste0("&nbsp;![''](",knitr::include_graphics(manual_contFile),")" ) )
+    }
+  }
+} # rcurl
 
 ## ----otus, message=FALSE, results="hide"--------------------------------------
 library(idiogramFISH)
@@ -79,15 +112,18 @@ kableExtra::kable_styling(knitr::kable(head(humMarkColor )) , full_width = F
 
 ## ----hkaryo, echo=TRUE,  message=FALSE, results="hide", fig.width=10, fig.height=28, dev='png'----
 # fig.width=10, fig.height=28
-
+par(mar=rep(0,4))
 plotIdiograms(humChr,                     # data.frame of chromosome size (in package)
               dfMarkPos = humMarkPos,     # df of mark positions  (in package)
               dfMarkColor = humMarkColor, # df of mark characteristics (in package)
               
               addOTUName = FALSE,         # do not add name of OTU
-              karHeight = 6,
+              karHeight = 6,              # vertical size of kar.
               karHeiSpace = 7,            # vertical spacing among OTU
-              amoSepar = 7,               # reduce distance among OTUs
+              chrWidth = .4,              # chr. width
+              chrSpacing = .6,            # space among chr.
+              
+              amoSepar = 2,               # reduce distance among OTUs
               karIndex = FALSE,           # do not add karyotype indices
               distTextChr = 1.5,          # distance from chr. to text.
               
@@ -100,84 +136,16 @@ plotIdiograms(humChr,                     # data.frame of chromosome size (in pa
               roundness = 10,             # roundness of chr. and marks
               legend = "inline",          # mark labels next to chr.
               markLabelSize = .5,         # size of legend font
+              colorBorderMark = "black",  # force color of border of marks 
               pattern= "chr[0-9XY]+",     # REGEX pattern to remove from name of marks
               indexIdTextSize = 2,        # font size of chr name and indices
               lwd.chr=.5,                 # width of chr and mark borders
               
-              rulerNumberSize = .9,       # font size of ruler
-              rulerNumberPos = 2,         # position of ruler
+              ruler= FALSE,
+
               xlimRightMod = 0,           # space to the right of karyotype
               ylimBotMod = -.6            # modify ylim of bottom
-              ,asp=1                      # y x aspect
-              )
-
-## ----translo------------------------------------------------------------------
-# extract 13 data
-humChr13<-humChr[which(humChr$chrName %in% 13),]
-humMarkPos13<-humMarkPos[which(humMarkPos$chrName %in% 13),]
-
-# extract 21 data
-humChr21<-humChr[which(humChr$chrName %in% 21),]
-humMarkPos21<-humMarkPos[which(humMarkPos$chrName %in% 21),]
-
-# Making derivative data.frame of Marks
-
-# remove p arm from 21
-humMarkPos21Der<-humMarkPos21[humMarkPos21$chrRegion=="q",]
-humMarkPos21Der$chrRegion<-"p"
-
-# remove p arm from 13
-humMarkPos13Der<-humMarkPos13[humMarkPos13$chrRegion=="q",]
-
-# rename fragments
-humMarkPos21Der$chrName<-"t(13;21)"
-humMarkPos13Der$chrName<-"t(13;21)"
-
-# merge fragments of Marks
-humMarkPosDer<-rbind(humMarkPos21Der,humMarkPos13Der)
-
-# Making derivative data.frame of chr. size
-
-humChrDer<-humChr13
-humChrDer$shortArmSize<-humChr21$longArmSize
-humChrDer$chrName<-"t(13;21)"
-
-# Make data.frame of chr. to plot
-humChr1321der<-rbind(humChr13, humChrDer , humChr21)
-humChr1321der<-humChr1321der[,c("chrName","shortArmSize","longArmSize"),]
-
-# marks for them, together:
-humMarkPos1321Der<-rbind(humMarkPos13, humMarkPos21, humMarkPosDer)
-humMarkPos1321Der$OTU<-NULL
-
-## ----hsel, echo=TRUE, fig.width=6, fig.height=6, message=FALSE, results="hide",dev='png'----
-
-plotIdiograms(humChr1321der,                # data.frame of size of chr.
-              dfMarkPos = humMarkPos1321Der,# d.f of position of marks
-              dfMarkColor = humMarkColor,   # d.f of style of marks
-              
-              addOTUName = FALSE,          # do not add OTU name
-              centromereSize=0,            # apparent size of centromere
-              roundness=5,                 # roundness of vertices of chr. and marks
-              chrColor = "black",          # chr. color
-              karHeight = 4,               # karyotype height without spacing
-              
-              chrIndex = "",               # do not add chr. indices
-              morpho = "",                 # do not add chr. morphology
-              karIndex = FALSE,            # do not add karyotype indices
-              distTextChr = 2,             # distance from chr. to text.
-
-              markLabelSize = .5,          # font size of chr. mark labels
-              legend = "inline",           # mark labels next to chr.
-              pattern="chr[0-9]+",         # REGEX pattern to remove from mark names
-              lwd.chr=.9,                  # width of chr and mark borders
-              
-              rulerNumberSize = .9,        # ruler font size
-              rulerNumberPos = 2,          # ruler number position
-              ruler.tck = -.03,            # tick of ruler, orientation and size
-              
-              ylimBotMod = -.15            # modify ylim bottom argument
-              ,asp=1                       # y x aspect ratio
+              # ,asp=1                    # y x aspect
               )
 
 ## ----translo2, results="hide"-------------------------------------------------
@@ -185,7 +153,7 @@ chrt13q14q<-robert(humChr,humMarkPos,13,14,"q","q")
 
 # which produces a list of two data.frames:
 
-# 1. chr sizes
+# 1. chr. sizes
 dfChrSizeDer<-chrt13q14q$dfChrSizeDer
 # remove the group column
 dfChrSizeDer<-dfChrSizeDer[ , !(names(dfChrSizeDer) %in% "group")]
@@ -225,11 +193,11 @@ plotIdiograms(dfChrSizeDer,               # data.frame of chromosome size
               distTextChr = 6,            # distance from chr. to text.
               indexIdTextSize = 2,        # font size of chr name and indices
               lwd.chr=.5,                 # width of chr and mark borders
-
-              rulerNumberSize = .9,       # font size of ruler
-              rulerNumberPos = 1          # position of ruler
+              colorBorderMark = "black",  # force color of border of marks 
+              
+              ruler= FALSE
               
               ,xlimLeftMod = 4            # space to the right of karyotype
-              ,asp=1                      # aspect ratio y x
+              # ,asp=1                    # aspect ratio y x
 )
 

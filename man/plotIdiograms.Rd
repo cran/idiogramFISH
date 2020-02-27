@@ -3,84 +3,71 @@
 \name{plotIdiograms}
 \alias{plotIdiograms}
 \title{FUNCTION to plot idiograms of karyotypes with and without centromere}
-\usage{
-plotIdiograms(
-  dfChrSize,
-  Mb,
-  MbThresholds = c(10000, 1000),
-  addOTUName = TRUE,
-  OTUTextSize = 1,
-  OTUasNote = FALSE,
-  revOTUs = FALSE,
-  karHeight = 2,
-  karHeiSpace = 2.5,
-  karSepar = TRUE,
-  amoSepar = 9,
-  addMissingOTUAfter = NA,
-  missOTUspacings = 0,
-  n = 50,
-  notes,
-  notesTextSize = 0.4,
-  notesPos = 0.5,
-  propWidth = FALSE,
-  orderBySize = TRUE,
-  chrId = "original",
-  indexIdTextSize = 1,
-  distTextChr = 1,
-  groupUp = FALSE,
-  chrWidth = 0.5,
-  chrSpacing = 0.5,
-  chrColor = "gray",
-  centromereSize = 1,
-  cenColor = "gray",
-  fixCenBorder = TRUE,
-  roundness = 4,
-  lwd.chr = 2,
-  dfMarkPos,
-  dfCenMarks,
-  MarkDistanceType,
-  markDistType = "beg",
-  origin = "b",
-  dfMarkColor,
-  mycolors,
-  pattern = "",
-  dotRoundCorr,
-  useXYfactor = FALSE,
-  legend = "aside",
-  legendWidth = 1.7,
-  legendHeight = NA,
-  markLabelSize = 1,
-  markLabelSpacer = 1,
-  chrIndex = "both",
-  morpho = "both",
-  nameChrIndexPos = 2,
-  karIndex = TRUE,
-  karIndexPos = 0.5,
-  ruler = TRUE,
-  rulerPos = -0.5,
-  rulerPosMod = 0,
-  ruler.tck = -0.02,
-  rulerNumberPos = 0.5,
-  rulerNumberSize = 1,
-  ylabline = 0,
-  xlimLeftMod = 1,
-  xlimRightMod = 2,
-  ylimBotMod = 0.2,
-  ylimTopMod = 0.2,
+\usage{plotIdiograms(  dfChrSize,  MbThreshold = 10000,  threshold = 35,
+  MbUnit = "Mb",  yTitle = "µm",  specialyTitle = "cM",
+  specialOTUNames = "",  addOTUName = TRUE,  OTUTextSize = 1,
+  OTUfont,  OTUfamily,  OTUasNote = FALSE,
+  revOTUs = FALSE,  karHeight = 2,  karHeiSpace = 2.5,
+  karSepar = TRUE,  amoSepar = 9,  addMissingOTUAfter = NA,
+  missOTUspacings = 0,  n = 50,  notes,
+  notesTextSize = 0.4,  notesPos = 0.5,  propWidth = FALSE,
+  orderBySize = TRUE,  chrId = "original",  indexIdTextSize = 1,
+  distTextChr = 1,  groupUp = FALSE,  chrWidth = 0.5,
+  chrSpacing = 0.5,  specialChrWidth = 0.3,  specialChrSpacing = 0.7,
+  chrColor = "gray",  chrBorderColor,  centromereSize,
+  cenColor,  fixCenBorder,  roundness = 4,
+  lwd.chr = 0.5,  lwd.cM,  dfMarkPos,
+  dfCenMarks,  defaultStyleMark = "square",  markDistType = "beg",
+  protruding = 0.2,  origin = "b",  dfMarkColor,
+  mycolors,  borderOfWhiteMarks = TRUE,  colorBorderMark,
+  pattern = "",  dotRoundCorr,  useXYfactor = FALSE,
+  legend = "aside",  legendWidth = 1.7,  legendHeight = NA,
+  markLabelSize = 1,  markLabelSpacer = 1,  legendYcoord = 0,
+  chrIndex = "both",  morpho = "both",  nameChrIndexPos = 2,
+  karIndex = TRUE,  karIndexPos = 0.5,  ruler = TRUE,
+  rulerPos = 0,  rulerPosMod = 0,  ruler.tck = -0.02,
+  rulerNumberPos = 0.5,  rulerNumberSize = 1,  rulerInterval,
+  rulerIntervalcM,  rulerIntervalMb,  ceilingFactor = 0,
+  ylabline = 0,  xlimLeftMod = 1,  xlimRightMod = 2,
+  ylimBotMod = 0.2,  ylimTopMod = 0.2,  defaultFontFamily,
+  circularPlot = FALSE,  shrinkFactor = 0.9,  separFactor = 1.5,
+  labelSpacing = 0.7,  labelOutwards = FALSE,  chrLabelSpacing = 0.5,
+  OTUlabelSpacing = 0.3,  radius = 0.5,  OTUsrt = 0,
+  OTUplacing = "first",  useOneDot = TRUE,  circleCenter = 1,
+  circleCenterY = 1,  callPlot = TRUE,  asp = 1,
+  OTULabelSpacerx = 0,  OTULabelSpacery = 0,  OTUcentered = TRUE,
+  OTUjustif = 0,  OTUlegendHeight = NA,  rotation = 0.5,
   ...
 )
 }
 \arguments{
 \item{dfChrSize}{mandatory data.frame, with columns: \code{OTU} (optional), \code{chrName} (mandatory),
+
 \code{shortArmSize}, \code{longArmSize} for monocen. or \code{chrSize} for holocen.}
 
-\item{Mb, }{deprecated, use \code{MbThresholds}}
+\item{MbThreshold, }{numeric, if greater than this number (defaults to \code{10000}),
+ \code{MbUnit} will apply and \code{specialyTitle} will not.}
 
-\item{MbThresholds, }{numeric vector of length 2. \code{c(10000,1000)}. If chrSize > 10000 will be considered Mb. If markSize > 1000 will be considered Mb.}
+\item{threshold, }{this is the max. value allowed for the main two significative digits, otherwise scale will shrink. For example,
+ after 35 \eqn{\mu m} (Default), apparent size will be 3.5 and scale interval will change. See also \code{ceilingFactor}, you may have to use \code{-1}. Introduced in 1.13}
+
+\item{MbUnit, }{character, text of units of title when \code{MbThreshold} met and OTU not in \code{specialOTUNames}. See \code{specialyTitle}
+Defaults to \code{"Mb"}, but anything can be used. Introduced in 1.13. See \code{specialyTitle}}
+
+\item{yTitle}{character, units for common title. Defaults to \eqn{\mu m}}
+
+\item{specialyTitle, }{character, title of ruler if OTU is in \code{specialOTUNames}. Will not apply if \code{MbThreshold} met. In that case use \code{MbUnit}}
+
+\item{specialOTUNames}{character vector, normally title of ruler is micrometer or Mb (big numbers). Use this param. to be able to put a different unit in ruler title. See \code{"specialyTitle"}}
 
 \item{addOTUName}{boolean, if \code{TRUE} adds OTU (species) name to karyotype}
 
 \item{OTUTextSize}{numeric, font size of OTU name (species). Defaults to \code{1}. When \code{OTUasNote} is \code{TRUE}, use  \code{notesTextSize} instead}
+
+\item{OTUfont}{numeric, \code{1} for normal,  \code{2} for bold,
+  \code{3} for italics,  \code{4} for bold-italics}
+
+\item{OTUfamily}{character, font family for OTU name.}
 
 \item{OTUasNote}{boolean, if \code{TRUE} adds OTU (species) name to the right, see \code{notes}}
 
@@ -89,7 +76,8 @@ data.frame, use \code{TRUE} to reverse}
 
 \item{karHeight}{numeric, vertical size of karyotypes. See also  \code{karHeiSpace}. Defaults to \code{2}}
 
-\item{karHeiSpace}{numeric, vertical size of karyotypes including spacing. Proportional to \code{karHeight}, if overlap, increase}
+\item{karHeiSpace}{numeric, vertical size of karyotypes including spacing. Proportional to \code{karHeight}, if overlap,
+ increase. Defautl value \code{2.5}}
 
 \item{karSepar}{boolean, reduce distance among karyotypes \code{FALSE} = equally
 sized karyotypes or \code{TRUE} = equally spaced karyotypes. Incompatible with \code{addMissingOTUAfter}}
@@ -98,13 +86,15 @@ sized karyotypes or \code{TRUE} = equally spaced karyotypes. Incompatible with \
 karyotypes will have no distance among them, if overlap,
 increase this and \code{karHeiSpace}}
 
-\item{addMissingOTUAfter}{character, when you want to add space (ghost OTUs) after one or several OTUs, pass the names of OTUs preceding the desired space in a character vector i.e. \code{c("species one","species five")}}
+\item{addMissingOTUAfter}{character, when you want to add space (ghost OTUs) after one or several OTUs, pass the names of OTUs preceding the desired space in a character vector i.e. \code{c("species one",
+"species five")}}
 
 \item{missOTUspacings}{numeric, when you use \code{addMissingOTUAfter} this numeric vector should have the same length and corresponds to the number of free spaces (ghost OTUs) to add after each OTU respectively}
 
 \item{n, }{numeric vertices number for round corners}
 
-\item{notes, }{data.frame, optional, with columns \code{OTU} and \code{note} for adding notes to each OTU, they appear to the right of chromosomes}
+\item{notes, }{data.frame, optional,
+ with columns \code{OTU} and \code{note} for adding notes to each OTU, they appear to the right of chromosomes}
 
 \item{notesTextSize}{numeric, font size of notes, see \code{notes}}
 
@@ -124,64 +114,81 @@ chromosome name. Defaults to \code{1}}
 \item{distTextChr}{numeric, distance from name of chromosome to chromosome,
 also affects vertical separation of indices. Defaults to \code{1}}
 
-\item{groupUp}{boolean, when \code{TRUE} when groups present, they appear over the chr. name. Defaults to \code{TRUE}}
+\item{groupUp}{boolean, when \code{TRUE} when groups present, they appear over the chr. name. Defaults to \code{FALSE}}
 
 \item{chrWidth}{numeric, relative chromosome width. Defaults to \code{0.5}}
 
 \item{chrSpacing}{numeric, horizontal spacing among chromosomes, see also  \code{chrWidth}. Defaults to \code{0.5}}
 
-\item{chrColor}{character, main color for chromosomes}
+\item{specialChrWidth}{numeric, relative chromosome width. Defaults to \code{0.5} for OTUs in \code{specialOTUNames}}
 
-\item{centromereSize}{numeric, this establishes the apparent size of cen in
-the plot in \eqn{\mu}m}
+\item{specialChrSpacing}{numeric, horizontal spacing among chromosomes for OTUs in \code{specialOTUNames}, see also  \code{chrWidth}. Defaults to \code{0.5}}
 
-\item{cenColor}{character, color for centromeres, if GISH use NULL}
+\item{chrColor}{character, main color for chromosomes. Defaults to \code{"gray"}}
 
-\item{fixCenBorder}{boolean, use chr. color as centromere border color, see \code{cenColor}}
+\item{chrBorderColor}{character, color for border of chromosomes, defaults to \code{chrColor}}
+
+\item{centromereSize}{numeric, this establishes the apparent size of cen in the plot in \eqn{\mu}m. Automatic. No default.}
+
+\item{cenColor}{character, color for centromeres, if GISH use \code{NULL} or \code{NA}. Defaults to \code{chrColor}}
+
+\item{fixCenBorder}{boolean, when \code{TRUE} uses \code{chrColor} as centromere (and cen. mark) border color. See also \code{cenColor},
+\code{chrColor}, \code{colorBorderMark}, \code{borderOfWhiteMarks}. No default value.}
 
 \item{roundness}{numeric, shape of vertices of chromosomes and square marks,
-higher values more squared}
+higher values more squared. Defaults to \code{4}}
 
-\item{lwd.chr}{thick of border of chr. and marks.}
+\item{lwd.chr}{thickness of border of chr., marks; ruler. Also thick of cM marks if \code{lwd.cM} absent Defaults to \code{0.5}}
+
+\item{lwd.cM}{thickness of cM marks. Defaults to \code{lwd.chr}}
 
 \item{dfMarkPos}{data.frame of marks (sites): columns: \code{OTU} (opt), \code{chrName},
 \code{markName} (name of site), \code{chrRegion} (for monocen. and opt for whole arm (w) in holocen.), \code{markDistCen} (for monocen.),
+
 \code{markPos} (for holocen.), \code{markSize}; column \code{chrRegion}:
 use \code{p} for short arm, \code{q} for long arm, \code{cen} for centromeric mark and \code{w} for whole chr. mark; column
 \code{markDistCen}: use distance from
-centromere to mark, not necessary for cen. marks (cen), w, p, q (when whole arm). See also param. \code{markDistType}}
+centromere to mark, not necessary for cen. marks (cen), w,
+ p, q (when whole arm). See also param. \code{markDistType}}
 
 \item{dfCenMarks}{data.frame, specific for centromeric marks. columns: \code{chrName}
 and \code{markName}. See also \code{dfMarkPos} for another option to pass cen. marks}
 
-\item{MarkDistanceType, }{deprecated, use \code{markDistType}}
+\item{defaultStyleMark}{character, default style of mark, only used when \code{style} column of \code{dfMarkColor} data.frame is missing or in absence of this data.frame. Use \code{"square"} (default) \code{"dots"} or \code{"cM"}. Introduced in 1.13}
 
 \item{markDistType}{character, if \code{"cen"} = the distance you provided in data.frame (\code{dfMarkPos}) column \code{markDistCen}
-or \code{markPos}  is to
-the center of the mark, if \code{"beg"} = the distance you provided is to the
+or \code{markPos}  is to the center of the mark, if \code{"beg"} = the distance you provided is to the
 beginning of the mark (Default)}
 
-\item{origin, }{For non-monocentric chr. (for holocentrics only) Use \code{"b"} if distance to mark in (\code{"markPos"} column in \code{"dfMarkPos"}) data.frame measured from bottom of chromosome, use \code{"t"} for distance to mark from top of chr.}
+\item{protruding}{numeric, when style of mark is \code{"cM"}, fraction of chrWidth to stretch marker. Defaults to \code{0.2}. Introduced in 1.13}
+
+\item{origin, }{For non-monocentric chr. (for holocentrics only) Use \code{"b"} (default) if distance to mark in (\code{"markPos"} column in \code{"dfMarkPos"}) data.frame measured from bottom of chromosome, use \code{"t"} for distance to mark from top of chr.}
 
 \item{dfMarkColor}{data.frame, optional, specifying colors and style for marks (sites);
-columns: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: \code{square} or \code{dots}.
-(if \code{style} missing all are plotted as \code{square})}
+columns: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: \code{square} or \code{dots} or \code{cM}.
+(if column \code{style} missing all (except 5S) are plotted as in param. \code{defaultStyleMark}). \code{cM} introduced in 1.13}
 
-\item{mycolors}{character vector, optional, i.e. \code{c("blue","red","green")} for specifying color of marks in order of appearance. if diverges with number of marks will be recycled if \code{dfMarkColor} present, mycolors will be ignored. To know the
+\item{mycolors}{character vector, optional, i.e. \code{c("blue",
+"red","green")} for specifying color of marks in order of appearance. if diverges with number of marks will be recycled if \code{dfMarkColor} present, mycolors will be ignored. To know the
 order of your marks use something like: \code{unique(c(dfMarkPos$markName,dfCenMarks$markName) ) }}
+
+\item{borderOfWhiteMarks}{boolean, if \code{TRUE} (Default) uses black border for white marks. See \code{dfMarkColor}}
+
+\item{colorBorderMark}{character, without default, pass a name of a color to use as border of marks. See \code{borderOfWhiteMarks}}
 
 \item{pattern}{REGEX pattern to remove from names of marks}
 
-\item{dotRoundCorr}{numeric, to be deprecated, requires \code{useXYfactor=TRUE} corrects roundness of dots and vertices of chromosomes. When  \code{style} of sites = \code{dots}, an increase in this, makes the horizontal radius of the dot smaller. Use \code{asp=1} instead}
+\item{dotRoundCorr}{numeric, to be deprecated, requires \code{useXYfactor=TRUE} corrects roundness of dots and vertices of chromosomes. When  \code{style} of sites = \code{dots},
+ an increase in this, makes the horizontal radius of the dot smaller. Use \code{asp=1} instead}
 
 \item{useXYfactor}{boolean, for backwards compatibility, for using \code{dotRoundCorr}. Defaults to \code{FALSE}}
 
 \item{legend}{character, \code{""} for no legend; \code{"inline"} prints labels near
 chromosomes; \code{"aside"} prints legend to the right of karyotypes (default). See \code{markLabelSpacer}}
 
-\item{legendWidth}{factor to increase width of squares and of legend}
+\item{legendWidth}{numeric, factor to increase width of squares and of legend. Defaults to \code{1.7}}
 
-\item{legendHeight}{factor to increase height of squares and dots of legend}
+\item{legendHeight}{numeric, factor to increase height of squares and dots of legend. Automatic.}
 
 \item{markLabelSize}{numeric, only if legend != (not) "", size of the text of
 labels of marks (legend). Defaults to \code{1}}
@@ -189,7 +196,10 @@ labels of marks (legend). Defaults to \code{1}}
 \item{markLabelSpacer}{numeric, only if \code{legend="aside"}, space from the
 rightmost chr. to legend. Defaults to \code{1}}
 
-\item{chrIndex}{character, add arm ratio with \code{"AR"} and centromeric index with \code{"CI"}, or \code{"both"} (Default), or \code{""} for none}
+\item{legendYcoord}{numeric, modify Y position of legend when \code{legend="aside"}}
+
+\item{chrIndex}{character, add arm ratio with \code{"AR"} and centromeric index with \code{"CI"}, or \code{"both"} (Default),
+ or \code{""} for none}
 
 \item{morpho}{character, if \code{"both"} (default) prints the Guerra and Levan classif of cen. position, use also \code{"Guerra"} or  \code{"Levan"} or \code{""} for none. See also \code{?armRatioCI}.}
 
@@ -216,7 +226,16 @@ argument of \code{axis} R plot}
 
 \item{rulerNumberSize}{numeric, size of number's font in ruler. Defaults to \code{1}}
 
-\item{ylabline, }{numeric, modify position of y axis title (Mb). See \code{MbThresholds}}
+\item{rulerInterval}{numeric, intervals in ruler. No default, automatic. Introduced in 1.13}
+
+\item{rulerIntervalcM}{numeric, intervals in ruler of OTU in \code{specialOTUNames}. No default. Introduced in 1.13}
+
+\item{rulerIntervalMb}{numeric, intervals in ruler of OTU with data in Mb (>\code{MbThreshold}) and absent from \code{specialOTUNames}. No default. Introduced in 1.13}
+
+\item{ceilingFactor}{numeric, affects number of decimals for ceiling. Affects max. value of ruler. Defaults to \code{0}. When \code{threshold} is greater than \code{35} this may have to be negative. Introduced in 1.13}
+
+\item{ylabline, }{numeric, modify position of ruler title. See \code{yTitle,
+ specialyTitle, MbUnit}}
 
 \item{xlimLeftMod}{numeric, modifies \code{xlim} left argument of plot}
 
@@ -227,7 +246,19 @@ of idiograms. Defaults to \code{2}}
 
 \item{ylimTopMod}{numeric, modify \code{ylim} top argument of plot}
 
-\item{...}{accepts other arguments for the plot, such as, \code{asp}}
+\item{defaultFontFamily}{character. use this as the font family. No default value.}
+
+\item{circularPlot}{boolean, if \code{TRUE} chromosomes are plotted in concentric circles. Defaults to \code{FALSE}}
+
+\item{shrinkFactor}{numeric, for \code{circularPlot=TRUE} percentage of usage of circle. Defaults to \code{0.9}}\item{separFactor}{numeric, for \code{circularPlot=TRUE} modify separation of concentric karyotypes. Defaults to \code{1.5}}\item{labelSpacing}{numeric,
+ for \code{circularPlot=TRUE}. Spacing of mark labels. Defaults to \code{0.7}}\item{labelOutwards}{boolean, inline labels projected outwards}\item{chrLabelSpacing}{numeric, for \code{circularPlot=TRUE}. Spacing of chr. labels. Defaults to \code{0.5}}\item{OTUlabelSpacing}{numeric,
+ for \code{circularPlot=TRUE}. Spacing for OTU names. Defaults to \code{0.3}}\item{radius}{numeric, for \code{circularPlot=TRUE}. Affects radius of karyotypes. Defaults to \code{0.5}}\item{OTUsrt}{numeric, for \code{circularPlot=TRUE}. Angle to use for OTU names. Defaults to \code{0}}\item{OTUplacing}{character,
+ for \code{circularPlot=TRUE}. location of OTU name. Defaults to \code{"first"} plots name nearfirst chr. \code{"number"} places number near 1st chr. and index and name to the right or center.\code{"simple"} place name to the right or center without numbering. See also \code{OTUcentered}}\item{useOneDot}{numeric, for \code{circularPlot=TRUE}. use one dot instead of two in style of marks \code{dots}. Defaults to \code{TRUE}}\item{circleCenter}{numeric, for \code{circularPlot=TRUE}. Affects coordinates of center of circles. Affects \code{legend="aside"} position.}\item{circleCenterY}{numeric,
+ for \code{circularPlot=TRUE}. Affects coordinates of center of circles. Affects \code{legend="aside"} position.}\item{callPlot}{boolean, create new plot in your device. Defaults to \code{TRUE}}\item{asp, }{numeric,
+ y x aspect of plot. Defautls to \code{1}}\item{OTULabelSpacerx}{numeric, for \code{circularPlot=TRUE} and \code{OTUplacing="number" or "simple"}. Modifies x names position}\item{OTULabelSpacery}{numeric, for \code{circularPlot=TRUE} and \code{OTUplacing="number" or "simple"}. Modifies y names position}\item{OTUcentered}{boolean,
+ for \code{circularPlot=TRUE} and \code{OTUplacing="number" or "simple"}. OTU name in center of circlewhen \code{TRUE}, otherwise, to the right.}\item{OTUjustif}{numeric,
+ for \code{circularPlot=TRUE} and \code{OTUplacing="number" or "simple"}. Justification of OTU name. \code{0} = left(Default); use \code{0.5} for centered. See \code{?text} -> \code{adj}}\item{OTUlegendHeight}{numeric, for \code{circularPlot=TRUE} and \code{OTUplacing="number" or "simple"}. Modifies y names separation}\item{rotation}{numeric, anti-clockwise rotation,
+ defaults to \code{0.5} which rotates chr. from top to -90 degrees. (-0.5*\eqn{\pi} )}\item{...}{accepts other arguments for the plot, see, \code{?plot}}
 }
 \value{
 plot
@@ -243,8 +274,9 @@ can be used \code{\link{dfMarkColor}} or a character vector passed to \code{myco
 }
 \examples{
 data(dfOfChrSize)
-plotIdiograms(dfOfChrSize, ylimBotMod = .75)
-plotIdiograms(dfChrSizeHolo)
+plotIdiograms(dfOfChrSize, ylimBotMod = .75, rulerPos=-.5)
+plotIdiograms(dfOfChrSize, circularPlot = TRUE, chrLabelSpacing = 1)
+plotIdiograms(dfChrSizeHolo, rulerPos=-.5)
 }
 \seealso{
 \code{\link{asymmetry}}
