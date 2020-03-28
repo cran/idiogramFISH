@@ -138,18 +138,18 @@ yVertoHor<-function(y,monocenNames){
   return(ylistNew)
 } # fun
 
-xHortoVer<-function(xlist){
+xHortoVer<-function(xlist,shrink=0){
   xlistNew<-list()
 
   for (s in 1:length(xlist)){
     xlistNew[[s]]<-xlist[[s]]
     for (i in 1:length(xlist[[s]])){
-      minSpecies<-min(xlistNew[[s]][[i]], na.rm=T)
-      xlistNew[[s]][[i]]<-xlistNew[[s]][[i]]-minSpecies
+      minChro<-min(xlistNew[[s]][[i]], na.rm=T)
+      maxChro<-max(xlistNew[[s]][[i]], na.rm=T)
+      xlistNew[[s]][[i]]<-xlistNew[[s]][[i]] - minChro + (shrink*(maxChro-minChro) )
     }
     names(xlistNew)[s] <- names(xlist[s])
   } # for
-
   return(xlistNew)
 } # fun
 
@@ -232,7 +232,7 @@ xHortoVerDots<-function(xMarkList,x){
 
   for (s in 1:length(xMarkList)){
     xlistNew[[s]]<-list()
-    currName<-attr(xMarkList[[s]],"sqname")
+    currName<-attr(xMarkList[[s]],"spname")
     corrIndex<-which(names(x)%in% currName) # x5 x
 # i
     for (i in 1:length(xMarkList[[s]])){
@@ -253,7 +253,7 @@ xHortoVerDots<-function(xMarkList,x){
         xlistNew[[s]][[i]]<-xlistNew[[s]][[i]]-minXChr
       }
     } #2 f
-    attr(xlistNew[[s]],"sqname")<-attr(xMarkList[[s]],"sqname")
+    attr(xlistNew[[s]],"spname")<-attr(xMarkList[[s]],"spname")
   } #1 for
 
   return(xlistNew)
@@ -521,12 +521,12 @@ drawPlotMark<-function(circleMaps,dfMarkColorInternal,listOfdfMarkPosSq,lwd.chr)
                         col = dfMarkColorInternal$markColor[match(     listOfdfMarkPosSq[[s]]$markName[[i]]   ,
                                                                      dfMarkColorInternal$markName)],
                         lwd=lwd.chr,
-                        border = ifelse(dfMarkColorInternal$markBorderColor[match( listOfdfMarkPosSq[[s]]$markName[[i]],
-                                                                             dfMarkColorInternal$markName)]=="white",
-                                        "black",
-                                        dfMarkColorInternal$markBorderColor[match( listOfdfMarkPosSq[[s]]$markName[[i]]
+                        border = #ifelse(dfMarkColorInternal$markBorderColor[match( listOfdfMarkPosSq[[s]]$markName[[i]],
+                                                                             # dfMarkColorInternal$markName)]=="white",
+                                        # "black",
+                                  dfMarkColorInternal$markBorderColor[match( listOfdfMarkPosSq[[s]]$markName[[i]]
                                                                              ,dfMarkColorInternal$markName)]
-                        ) # ifelse
+                        # ) # ifelse
       ) # polygon
     } # for
   } # for
@@ -651,7 +651,7 @@ plotChrNames<-function(chrNames, indexIdTextSize,chrId,monocenNames,chrColor) {
 addChrNameAttrMark<-function(xMark,yMark,x){
   markList<-list()
   for(i in 1:length(xMark)){
-    currName<-attr(xMark[[i]],"sqname")
+    currName<-attr(xMark[[i]],"spname")
     corrIndex<-which(names(x)%in% currName) # x5 x
     for (j in 1:length(xMark[[i]]) ) {
       for (k in 1:length( x[[corrIndex]] ) ){
@@ -675,7 +675,7 @@ addChrNameAttrMark<-function(xMark,yMark,x){
 addChrNameAttrMarkDots<-function(xMark,yMark,x){
   markList<-list()
   for(i in 1:length(xMark)){
-    currName<-attr(xMark[[i]],"sqname")
+    currName<-attr(xMark[[i]],"spname")
     corrIndex<-which(names(x)%in% currName) # x5 x
     for (j in 1:length(xMark[[i]]) ) {
       for (k in 1:length( x[[corrIndex]] ) ){
@@ -712,7 +712,7 @@ markMapPerCen<-function(yMark,y){
       yMarkPer[[s]][[m]] <-  psum( ( ( yMark[[s]][[m]]  -  max(unlist(y[[s]][[m]])  ) )  ) * fac  , 1, na.rm=T)
       attr(yMarkPer[[s]][[m]],"rowIndex")<-m
     }
-    attr(yMarkPer[[s]],"sqname") <- names(yMark[s])
+    attr(yMarkPer[[s]],"spname") <- names(yMark[s])
   } # for
   return(yMarkPer)
 } # fun
@@ -722,7 +722,7 @@ markMapPer<-function(yMark,y){
 
   for( s in 1:length(yMark) ){
     yMarkPer[[s]]<-list()
-    corrIndex <- which( names(y) %in% attr(yMark[[s]],"sqname")  )
+    corrIndex <- which( names(y) %in% attr(yMark[[s]],"spname")  )
 
     for ( m in 1:length(yMark[[s]] ) ){
       name <- attr(yMark[[s]][[m]],"rowIndex")
@@ -742,7 +742,7 @@ markMapPer<-function(yMark,y){
 
       attr(yMarkPer[[s]][[m]],"rowIndex")<-name
     }
-    attr(yMarkPer[[s]],"sqname")<-attr(yMark[[s]],"sqname")
+    attr(yMarkPer[[s]],"spname")<-attr(yMark[[s]],"spname")
   } # for
   return(yMarkPer)
 } # fun
@@ -753,7 +753,7 @@ markMapPercM<-function(yMark,y)
 
   for( s in 1:length(yMark) ){
     yMarkPer[[s]]<-list()
-    corrIndex <- which( names(y) %in% attr(yMark[[s]],"sqname")  )
+    corrIndex <- which( names(y) %in% attr(yMark[[s]],"spname")  )
 
     for ( m in 1:length(yMark[[s]] ) ){
       name <- attr(yMark[[s]][[m]],"rowIndex")
@@ -765,7 +765,7 @@ markMapPercM<-function(yMark,y)
       yMarkPer[[s]][[m]]<- ( ( yMark[[s]][[m]]  -  min(unlist(y[[corrIndex]][name])  ) ) - distBeg ) * fac  + disBegPer
       attr(yMarkPer[[s]][[m]],"rowIndex")<-name
     }
-    attr(yMarkPer[[s]],"sqname") <- attr(yMark[[s]],"sqname")
+    attr(yMarkPer[[s]],"spname") <- attr(yMark[[s]],"spname")
   } # for
   return(yMarkPer)
 } # fun
@@ -776,7 +776,7 @@ markMapPerDots<-function(yMark,y)
 
   for( s in 1:length(yMark) ){
     yMarkPer[[s]]<-list()
-    corrIndex <- which( names(y) %in% attr(yMark[[s]],"sqname")  )
+    corrIndex <- which( names(y) %in% attr(yMark[[s]],"spname")  )
 
     for ( m in 1:length(yMark[[s]] ) ){
 
@@ -794,7 +794,7 @@ markMapPerDots<-function(yMark,y)
       }
       attr(yMarkPer[[s]][[m]],"rowIndex")<-name
     }
-    attr(yMarkPer[[s]],"sqname") <- attr(yMark[[s]],"sqname")
+    attr(yMarkPer[[s]],"spname") <- attr(yMark[[s]],"spname")
   } # for
   return(yMarkPer)
 } # fun
@@ -804,7 +804,7 @@ radDotsPer<-function(rad,y) {
 
   for( s in 1:length(rad) ){
     radPer[[s]]<-list()
-    # corrIndex <- which( names(y) %in% attr(rad[[s]],"sqname")  )
+    # corrIndex <- which( names(y) %in% attr(rad[[s]],"spname")  )
 
     for ( m in 1:length(rad[[s]] ) ){
       # name <- attr(rad[[s]][[m]],"rowIndex")
@@ -827,7 +827,7 @@ centerMarkMapPer<-function(yMark,y){
 
   for( s in 1:length(yMark) ){
     yMarkPer[[s]]<-list()
-    corrIndex <- which( names(y) %in% attr(yMark[[s]],"sqname")  )
+    corrIndex <- which( names(y) %in% attr(yMark[[s]],"spname")  )
 
     for ( m in 1:length(yMark[[s]] ) ){
       name <- attr(yMark[[s]][[m]],"rowIndex")
@@ -847,7 +847,7 @@ centerMarkMapPer<-function(yMark,y){
 
       attr(yMarkPer[[s]][[m]],"rowIndex")<-name
     }
-    attr(yMarkPer[[s]],"sqname")<-attr(yMark[[s]],"sqname")
+    attr(yMarkPer[[s]],"spname")<-attr(yMark[[s]],"spname")
   } # for
   return(yMarkPer)
 } # fun
@@ -872,7 +872,7 @@ ylistTransMark<-list()
 
   for (s in 1:length(yMarkPer) ){
     ylistTransMark[[s]]<-list()
-    corrIndex <- which( names(ylistTransChr) %in% attr(yMarkPer[[s]],"sqname") )
+    corrIndex <- which( names(ylistTransChr) %in% attr(yMarkPer[[s]],"spname") )
 
     for (m in 1: length(yMarkPer[[s]]) ) {
       name<-NULL
@@ -887,7 +887,7 @@ ylistTransMark<-list()
         ylistTransMark[[s]][[m]] <- ylistTransMark[[s]][[m]] + min(unlist(ylistTransChr[[corrIndex]][corrIndexMark] ) )
       }
     }
-    attr(ylistTransMark[[s]],"sqname")<-attr(yMarkPer[[s]],"sqname")
+    attr(ylistTransMark[[s]],"spname")<-attr(yMarkPer[[s]],"spname")
     attr(ylistTransMark[[s]],"positionnoNA")<-attr(ylistTransChr[[corrIndex]],"positionnoNA")
 
   } # for
@@ -898,7 +898,7 @@ transRadDots<-function(radPerCr,yMarkPer,ylistTransChr){
   radTrans<-list()
   for (s in 1:length(radPerCr) ){
     radTrans[[s]]<-list()
-    corrIndex <- which( names(ylistTransChr) %in% attr(yMarkPer[[s]],"sqname") )
+    corrIndex <- which( names(ylistTransChr) %in% attr(yMarkPer[[s]],"spname") )
     for (m in 1:length(radPerCr[[s]])) {
       chrSize <- max(unlist(ylistTransChr[[1]][1] ) ) - min(unlist(ylistTransChr[[1]][1])  )
       radTrans[[s]][[m]]<-list()
@@ -908,7 +908,7 @@ transRadDots<-function(radPerCr,yMarkPer,ylistTransChr){
         radTrans[[s]][[m]]<- radPerCr[[s]][[m]] * chrSize
       }
     }
-    attr(radTrans[[s]],"sqname")<-attr(yMarkPer[[s]],"sqname")
+    attr(radTrans[[s]],"spname")<-attr(yMarkPer[[s]],"spname")
     attr(radTrans[[s]],"positionnoNA")<-attr(ylistTransChr[[corrIndex]],"positionnoNA")
   } # for
   return(radTrans)
@@ -921,7 +921,7 @@ transyListMarkDots<-function(yMarkPer,ylistTransChr){
 
   for (s in 1:length(yMarkPer) ){
     ylistTransMark[[s]]<-list()
-    corrIndex <- which( names(ylistTransChr) %in% attr(yMarkPer[[s]],"sqname") )
+    corrIndex <- which( names(ylistTransChr) %in% attr(yMarkPer[[s]],"spname") )
     for (m in 1:length(yMarkPer[[s]])) {
       name<-NULL
       name<-attr(yMarkPer[[s]][[m]],"rowIndex")
@@ -940,7 +940,7 @@ transyListMarkDots<-function(yMarkPer,ylistTransChr){
       }
       attr(ylistTransMark[[s]][[m]],"rowIndex")<-attr(yMarkPer[[s]][[m]],"rowIndex")
     }
-    attr(ylistTransMark[[s]],"sqname")<-attr(yMarkPer[[s]],"sqname")
+    attr(ylistTransMark[[s]],"spname")<-attr(yMarkPer[[s]],"spname")
     attr(ylistTransMark[[s]],"positionnoNA")<-attr(ylistTransChr[[corrIndex]],"positionnoNA")
 
   } # for
@@ -973,7 +973,7 @@ mapChrCenter <- function(ylistTransChr){
 #
 #   for (s in 1:length(yMarkPer) ){
 #     ylistTransMark[[s]]<-list()
-#     corrIndex <- which( names(ylistTransChr) %in% attr(yMarkPer[[s]],"sqname") )
+#     corrIndex <- which( names(ylistTransChr) %in% attr(yMarkPer[[s]],"spname") )
 #     for (m in 1:length(yMarkPer[[s]])) {
 #       name<-attr(yMarkPer[[s]][[m]],"chrNameB")
 #
@@ -986,7 +986,7 @@ mapChrCenter <- function(ylistTransChr){
 #       ylistTransMark[[s]][[m]] <- yMarkPer[[s]][[m]] * chrSize
 #       ylistTransMark[[s]][[m]] <- ylistTransMark[[s]][[m]] + min(unlist(ylistTransChr[[corrIndex]][name] ) ) + markType
 #     }
-#     attr(ylistTransMark[[s]],"sqname")<-attr(yMarkPer[[s]],"sqname")
+#     attr(ylistTransMark[[s]],"spname")<-attr(yMarkPer[[s]],"spname")
 #     attr(ylistTransMark[[s]],"positionnoNA")<-attr(ylistTransChr[[corrIndex]],"positionnoNA")
 #
 #   } # for
@@ -1003,7 +1003,7 @@ oneDot<-function(xMarkCr){
       oneDotXList[[s]][[m]]<-  sum(both)/2
       attr(oneDotXList[[s]][[m]],"rowIndex") <- attr(xMarkCr[[s]][[m]],"rowIndex")
     }
-    attr(oneDotXList[[s]],"sqname") <- attr(xMarkCr[[s]],"sqname")
+    attr(oneDotXList[[s]],"spname") <- attr(xMarkCr[[s]],"spname")
   }
   return(oneDotXList)
 }
@@ -1017,7 +1017,7 @@ yVertoHorCenMarks<-function(yMarkCen,ylistNewCen){
   yMarkNewCen <- list()
   for (s in 1:length(yMarkCen)){
     # if(names(y[s]) %in% monocenNames){
-    corrIndex <- which( names(ylistNewCen) %in% attr(yMarkCen[[s]],"sqname")  )
+    corrIndex <- which( names(ylistNewCen) %in% attr(yMarkCen[[s]],"spname")  )
     yMarkNewCen[[s]]<-list()
 
     for (m in 1:length(yMarkCen[[s]])){
@@ -1027,7 +1027,7 @@ yVertoHorCenMarks<-function(yMarkCen,ylistNewCen){
       corrIndexMark <- which( names(ylistNewCen[[corrIndex]]) %in% getRow )
       yMarkNewCen[[s]][[m]]<-  ylistNewCen[[corrIndex]][[corrIndexMark]]
     }
-    attr(yMarkNewCen[[s]],"sqname")<-attr(yMarkCen[[s]],"sqname")
+    attr(yMarkNewCen[[s]],"spname")<-attr(yMarkCen[[s]],"spname")
     attr(yMarkNewCen[[s]],"positionnoNA")<-attr(ylistNewCen[[corrIndex]],"positionnoNA")
     # }
   }
@@ -1055,7 +1055,7 @@ drawCenMarks <- function(circleMaps,dfMarkColorInternal,listOfdfDataCen,lwd.chr,
 
 # attribToName<-function(xlistMarkCen){
 #   for (s in 1:length(xlistMarkCen)){
-#     names(xlistMarkCen)[s]<-attr(xlistMarkCen[[s]],"sqname")
+#     names(xlistMarkCen)[s]<-attr(xlistMarkCen[[s]],"spname")
 #     for (m in 1:length(xlistMarkCen[[s]] ) ) {
 #       if(length(attr(xlistMarkCen[[s]][[m]],"rowIndex"))>0 ){
 #       names(xlistMarkCen[[s]])[m]<-attr(xlistMarkCen[[s]][[m]],"rowIndex")

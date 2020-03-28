@@ -49,9 +49,26 @@ doibadge_cont      <- tryCatch(suppressWarnings(RCurl::getURLContent(doibadge)  
 
 } # rcurl
 
-## ---- echo=F, message=FALSE, warning=FALSE, include=T-------------------------
+## ---- echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"----
 if (requireNamespace("RCurl", quietly = TRUE)  ) {
-  v<-tryCatch(suppressWarnings(rvcheck:::check_github_gitlab("ferroao/idiogramFISH", "gitlab")$latest_version), error=function(e) NA )
+#cran version
+v<-"NEWS"#tryCatch(suppressWarnings(rvcheck::check_cran("idiogramFISH")$latest_version), error=function(e) NA )
+
+link<-tryCatch(suppressWarnings(badger::badge_custom("gitlab", paste(v), "orange") ), error=function(e) NA )
+  if(!is.na(link)){
+  svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
+  news_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svglink) ), error=function(e) NA )
+    if (!is.na(news_cont)){
+    news_cont_contFile <- "../man/figures/NEWS.svg"
+    writeLines(news_cont, con = news_cont_contFile)
+    }
+  }
+} # rcurl
+
+## ---- echo=F, message=FALSE, warning=FALSE, include=TRUE, fig.show = "hold", fig.align = "default", results="asis"----
+if (requireNamespace("RCurl", quietly = TRUE)  ) {
+  # v<-tryCatch(suppressWarnings(rvcheck:::check_github_gitlab("ferroao/idiogramFISH", "gitlab")$latest_version), error=function(e) NA )
+  v<-sub("Version: ","",readLines("../DESCRIPTION")[3])
   link<-tryCatch(suppressWarnings(badger::badge_custom("devel version", v, "cornflowerblue") ), error=function(e) NA )
   if(!is.na(link)){
   svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
@@ -61,7 +78,8 @@ if (requireNamespace("RCurl", quietly = TRUE)  ) {
     gitbadge_contFile <- "../man/figures/gitbadge.svg"
     writeLines(gitbadge_cont, con = gitbadge_contFile)
     gitbadge_contFile <- normalizePath(gitbadge_contFile)
-    knitr::include_graphics(gitbadge_contFile)
+    cat(paste0("![devel version](",knitr::include_graphics(gitbadge_contFile),")" ) )
+    cat(paste0("&nbsp;[![NEWS](",knitr::include_graphics(news_cont_contFile),")](https://gitlab.com/ferroao/idiogramFISH/blob/master/NEWS.md)" ) )
     }
   }
 }
@@ -69,10 +87,10 @@ if (requireNamespace("RCurl", quietly = TRUE)  ) {
 ## ---- echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"----
 if (requireNamespace("RCurl", quietly = TRUE)  ) {
 #cran version
-v <- "gitlab" #tryCatch(suppressWarnings(rvcheck::check_cran("idiogramFISH")$latest_version), error=function(e) NA )
+v <- "README" #tryCatch(suppressWarnings(rvcheck::check_cran("idiogramFISH")$latest_version), error=function(e) NA )
 
 pkg<-"idiogramFISH"
-link<-tryCatch(suppressWarnings(badger::badge_custom("README", paste(v), "orange") ), error=function(e) NA )
+link<-tryCatch(suppressWarnings(badger::badge_custom("gitlab", paste(v), "orange") ), error=function(e) NA )
   if(!is.na(link)){
   svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
   manual_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svglink) ), error=function(e) NA )
@@ -118,7 +136,7 @@ link<-tryCatch(suppressWarnings(badger::badge_custom("pkgdown", paste(pkg,v), "c
     if (!is.na(develmanual_cont)){
     pkgdownmanual_contFile <- "../man/figures/develmanualpkgdown.svg"
     writeLines(develmanual_cont, con = pkgdownmanual_contFile)
-    cat(paste0("&nbsp;[![https://gitlab.com/ferroao/idiogramFISH](",knitr::include_graphics(README_contFile),")](https://gitlab.com/ferroao/idiogramFISH)" ) )
+    cat(paste0("[![https://gitlab.com/ferroao/idiogramFISH](",knitr::include_graphics(README_contFile),")](https://gitlab.com/ferroao/idiogramFISH)" ) )
     cat(paste0("&nbsp;[![https://ferroao.gitlab.io/manualidiogramfish](",knitr::include_graphics(bookdownmanual_contFile),")](https://ferroao.gitlab.io/manualidiogramfish/)" ) )
     cat(paste0("&nbsp;[![https://ferroao.gitlab.io/idiogramFISH](",knitr::include_graphics(pkgdownmanual_contFile),")](https://ferroao.gitlab.io/idiogramFISH)" ) )
     }
@@ -184,6 +202,6 @@ cat(paste0("[![donate](",knitr::include_graphics(donateweek_contFile),")](https:
 ## ----include=FALSE,eval=FALSE-------------------------------------------------
 #  # automatically create a bib database for R packages, this is currently not used by vignette refs/packages2.bib
 #  knitr::write_bib(c(
-#    .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","pkgdown","crayon","ggtree","ggplot2","ggpubr","phytools","plyr","dplyr","tidyr"
+#    .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","pkgdown","crayon","ggtree","ggplot2","ggpubr","phytools","plyr","dplyr","tidyr","rentrez"
 #  ), 'refs/packages2.bib')
 

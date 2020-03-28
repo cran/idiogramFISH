@@ -2,7 +2,7 @@
 % Please edit documentation in R/makeNumCols.R
 \name{makeNumCols}
 \alias{makeNumCols}
-\title{This is an internal function that eliminates factors}
+\title{These are internal functions that eliminate factors}
 \usage{
 makeNumCols(df)
 }
@@ -13,6 +13,6 @@ makeNumCols(df)
 data.frame
 }
 \description{
-It returns a data.frames
+It returns a data.frame
 }
 \keyword{internal}

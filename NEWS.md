@@ -1,6 +1,21 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 1.14.7
+
+27-03-2020
+
+  - Compatibility with `rentrez` downloaded data
+  - Better reading of `join` from genBank data
+  - param. `rulerTitleSize`: Font size of units (title)
+  - new styles of mark: `cenStyle` to add constrictions anywhere;
+    `upArrow` (clockwise in circular plot); `downArrow` (anti-clockwise
+    in circular plot)
+  - fixed bug when `legend="inline"` in circular plots
+  - `arrowhead`: proportion of head of arrow - length
+  - `shrinkArrow`: proportion to shrink body of arrow - width
+  - `arrowheadWidthShrink`: proportion to shrink arrowhead - width
+
 # idiogramFISH 1.14.2
 
 26-02-2020

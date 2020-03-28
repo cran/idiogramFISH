@@ -1,8 +1,8 @@
 #' @name genBankReadIF
 #' @title FUNCTION genBankReadIF
-#' @description genBankReadIF: creates a list of data.frames from a genbank format file
+#' @description genBankReadIF: creates a list of data.frames from a genbank format file or a rentrez object
 #'
-#' @param filename.gb name of file to read, downloaded from genBank
+#' @param filename.gb name of file to read, downloaded from genBank, or, object from \code{rentrez::entrez_fetch(db="nuccore", id="theID", rettype="gbwithparts", retmode = "text")}
 #'
 #' @keywords genBank
 #' @export
@@ -11,9 +11,15 @@
 #' @importFrom tidyr fill
 #' @importFrom dplyr %>% group_by summarise mutate arrange
 #' @return list
-genBankReadIF<-function(filename.gb){
+#'
+genBankReadIF <- function(filename.gb) {
   value <- field <- NULL
-# @importFrom magrittr %>%
+  # @importFrom magrittr %>%
+
+  # filename.gb<-nostoc_seqs
+  # require("dplyr")
+  # require("tidyr")
+
   requireNamespace("dplyr")
   if(requireNamespace("tidyr")==FALSE){
     message(crayon::red("You need to install tidyr"))
@@ -21,7 +27,15 @@ genBankReadIF<-function(filename.gb){
   } else {
     requireNamespace("tidyr")
   }
-  readed<-readLines(filename.gb)
+  if( nchar(filename.gb)>300 ){
+    # filename.gb<-nostoc_seqs
+    readed <- unlist(strsplit(filename.gb,"\n") )
+    begSeq <- grep("ORIGIN",readed)
+    readed <- readed[1:(begSeq)]
+  } else {
+    # filename.gb<-"gitNo/nostoc.gb"
+    readed<-readLines(filename.gb)
+  }
   assemblyPresence<-grep("Genome-Assembly-Data",readed)
   if(length(assemblyPresence)>0){
     assemblyPresence<-TRUE
@@ -89,7 +103,7 @@ genBankReadIF<-function(filename.gb){
   firstcolumn3 <-trimws(firstcolumn3)
   secondcolumn3 <-substr(readed[interval],posSecond3, nchar(readed[interval]) )
   secondcolumn3 <-trimws(secondcolumn3)
-  gbdf3<-data.frame(field=firstcolumn3,value=secondcolumn3, stringsAsFactors = F)
+  gbdf3 <- data.frame(field=firstcolumn3,value=secondcolumn3, stringsAsFactors = F)
 
   gbdf3$field[gbdf3$field!=""]<-make.unique(gbdf3$field[gbdf3$field!=""])
   gbdf3$field[gbdf3$field==""]<-NA
@@ -103,13 +117,13 @@ genBankReadIF<-function(filename.gb){
   listOfDfs$gbdfAnnoMeta<-gbdf3
 
   # FEATURES             Location/Qualifiers
-  "CONTIG      join(CP009939.1:1..52166)"
+  # "CONTIG      join(CP009939.1:1..52166)"
 
   # FORTH PART
   ##Genome-Annotation-Data-START##
   string4<-"Location/Qualifiers"
   begAsData4 <- grep(string4, readed)+1
-  endstring4<-"CONTIG"
+  endstring4<-"CONTIG|ORIGIN"
   endAsData4 <- grep(endstring4, readed)-1
   #
   #   limit readed lines
@@ -153,24 +167,43 @@ genBankReadIF<-function(filename.gb){
     fieldNamesCDS<-lapply(fieldNamesCDS, function(x) gsub("/|=","",x) )
 
     gbdf4CDS$value<-paste(gbdf4CDS$value,"/")
-
     pattern2<-'=.*?/'
+
     fieldValuesCDS<-regmatches(gbdf4CDS$value, gregexpr(pattern2, gbdf4CDS$value))
     fieldValuesCDS<-lapply(fieldValuesCDS, function(x) gsub('\"',"",x) )
     fieldValuesCDS<-lapply(fieldValuesCDS, function(x) gsub('=|; /',"",x) )
     fieldValuesCDS<-lapply(fieldValuesCDS, function(x) gsub('\\s/$',"",x) )
 
     firstField<-sub(";.*","",gbdf4CDS$value, perl=T)
-    firstFieldBac<-firstField
-    firstFieldPrefix<-NULL
-    firstFieldPrefix<-sub("([[:alpha:]]+)?.*","\\1",firstFieldBac)
+
+    compleBool<-grepl("complement",firstField)
+    joinBool  <-grepl("join",firstField)
+    commaPos  <-grep(",",firstField)
+
+    if(length(commaPos)>0) {
+      fieldValuesCDS<-insertInList(fieldValuesCDS,commaPos,fieldValuesCDS[commaPos])
+      fieldNamesCDS <-insertInList(fieldNamesCDS ,commaPos, fieldNamesCDS[commaPos])
+      compleBool <-insertInList(compleBool ,commaPos, compleBool[commaPos])
+      joinBool <-insertInList(joinBool ,commaPos, joinBool[commaPos])
+    }
+
+    joinElements   <-  grep(",",firstField, value=T)
+    joinElementsAC <-  sub(".*\\,","", joinElements)
+
+    if(length(commaPos)>0) {
+      firstField<-insertInList(firstField,commaPos,joinElementsAC)
+    }
+
     firstField<-gsub("complement\\(|\\)","",firstField)
     firstField<-gsub("join\\(|\\)","",firstField)
     firstField<-gsub("<","",firstField)
 
     beginSeq<- sub("\\..*","", firstField,perl=T)
+    # as.numeric(beginSeq)
     endSeq<- sub("[[:digit:]]+\\.+>?([[:digit:]]+)","\\1", firstField,perl=T)
     endSeq<- sub("\\,.*","\\1", endSeq,perl=T)
+    endSeq<- gsub("\\)","",   endSeq,perl=T)
+    # as.numeric(endSeq)
 
     dflistCDS<-list()
     for (i in 1:length(fieldNamesCDS)){
@@ -181,9 +214,11 @@ genBankReadIF<-function(filename.gb){
     dfCDS <- dplyr::bind_rows(dflistCDS)
     dfCDS$begin<-beginSeq
     dfCDS$end<-endSeq
-    dfCDS$seqType<-firstFieldPrefix
+    dfCDS$isComplement<-compleBool
+    dfCDS$isJoin <- joinBool
+
     listOfDfs[[feature]] <- dfCDS
-    # }
-  }
+    #}
+  } # big for
   return(listOfDfs)
-}
+} # fun

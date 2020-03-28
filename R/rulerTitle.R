@@ -15,12 +15,13 @@
 #' @return plot
 #' @importFrom graphics mtext
 
-rulerTitle<-function(ycoord,listOfdfChromSizeCenType,MbUnit,specialyTitle,yTitle,ylabline){
+rulerTitle<-function(ycoord,listOfdfChromSizeCenType,MbUnit,specialyTitle,yTitle,ylabline,rulerTitleSize){
   for (i in 1:length(listOfdfChromSizeCenType)){
     if( attr(listOfdfChromSizeCenType[[i]], "ytitle" )=="Mb" ){
       graphics::mtext(MbUnit,
                       side=2,
                       line=ylabline
+                      ,cex=rulerTitleSize
                       ,at= max(unlist(ycoord[[i]]),na.rm= TRUE )
       ) # MTEXT
     } # if Mb
@@ -29,6 +30,7 @@ rulerTitle<-function(ycoord,listOfdfChromSizeCenType,MbUnit,specialyTitle,yTitle
       graphics::mtext(specialyTitle,
                       side=2,
                       line=ylabline
+                      ,cex=rulerTitleSize
                       ,at= max(unlist(ycoord[[i]]),na.rm= TRUE )
       ) # MTEXT
     } # if sp cM
@@ -36,6 +38,7 @@ rulerTitle<-function(ycoord,listOfdfChromSizeCenType,MbUnit,specialyTitle,yTitle
       graphics::mtext(yTitle,
                       side=2,
                       line=ylabline
+                      ,cex=rulerTitleSize
                       ,at= max(unlist(ycoord[[i]]),na.rm= TRUE )
       ) # MTEXT
     } # else microm ( not mb no cM)

@@ -52,6 +52,7 @@ resource_files:
   - ../man/figures/dfOfChrSize.svg
   - ../man/figures/doibadge.svg
   - ../man/figures/logo.png
+  - ../man/figures/NEWS.svg
   - css/mystyle.css
 vignette: >
   %\VignetteIndexEntry{idiogramFISH: Installation and minimal examples}
@@ -59,15 +60,15 @@ vignette: >
   %\VignetteEncoding{UTF-8}
   
 ---
-<a name="top"></a>
+<!-- <a name="top"></a> --> 
 <link rel="stylesheet" href="css/mystyle.css">
 
 <!-- <div class="aright"> -->
-<div class="goright">
-Go to [1. Plotting I](AplotIdiogramsVig.html)  
-Go to [2. Plotting II](BplotIdiogramsHoloVig.html)  
-Go to [3. Phylogeny Vignette](DphylogenyVig.html)  
-Go to [4. Human Vignette](EhumanVig.html)  
+<div class="goright" id="top">
+Vignette [1. Plotting chromosomes](AplotIdiogramsVig.html)  
+Vignette [2. Circular Plots](BcircularVig.html)  
+Vignette [3. Phylogeny](DphylogenyVig.html)  
+Vignette [4. Human karyotype](EhumanVig.html)  
 
 <!-- # there are 2 spaces at the end of those lines -->
 </div>
@@ -91,17 +92,17 @@ cat(paste0("<img src=",img1_path," class=\"right\" width=\"20%\">") )
 }
 ```
 
-The goal of idiogramFISH is to plot idiograms of several karyotypes having a set of data.frames for chromosome data
+The goal of idiogramFISH is to plot idiograms of karyotypes, plasmids and circ. chr. having a set of data.frames for chromosome data
     and optionally marks' data (`plotIdiograms` function) [@Roa2020]. Idiograms can also be plotted in 
     concentric circles.<br>
-    <br>Marks can have square, dot or cM style, its legend (label) can be drawn inline 
+    <br>Six styles of marks are available: square, dots, cM, cenStyle, upArrow, downArrow; its legend (label) can be drawn inline 
     or to the right of karyotypes. It is possible to calculate
     also chromosome and karyotype indexes [@Watanabe1999;@Zarco1986new] and classify chromosome morphology in the categories of
     Levan [-@Levan1964], and [Guerra](https://ferroao.gitlab.io/guerra1986/Guerra1986.pdf) [-@Guerra1986d].
 
-IdiogramFISH was written in R [@R-base] and also uses crayon [@R-crayon], tidyr [@R-tidyr] and dplyr packages [@R-dplyr]. Documentation was written with R-packages roxygen2 [@R-roxygen2], usethis [@R-usethis], bookdown [@bookdown2016], knitr [@Xie2015], pkgdown [@R-pkgdown], Rmarkdown [@rmarkdown2018], rvcheck [@R-rvcheck], badger [@R-badger], kableExtra [@R-kableExtra], prettydoc [@R-prettydoc] and RCurl [@R-RCurl]. For some vignette figures, packages plyr [@plyr2011], phytools [@phytools2012], ggtree [@ggtree2018], ggplot2 [@ggplot22016] and ggpubr [@R-ggpubr] were used. 
+IdiogramFISH was written in R [@R-base] and also uses crayon [@R-crayon], tidyr [@R-tidyr] and dplyr packages [@R-dplyr]. Documentation was written with R-packages roxygen2 [@R-roxygen2], usethis [@R-usethis], bookdown [@bookdown2016], knitr [@Xie2015], pkgdown [@R-pkgdown], Rmarkdown [@rmarkdown2018], rvcheck [@R-rvcheck], badger [@R-badger], kableExtra [@R-kableExtra], prettydoc [@R-prettydoc] and RCurl [@R-RCurl]. For some vignette figures, packages rentrez [@rentrez2017], plyr [@plyr2011], phytools [@phytools2012], ggtree [@ggtree2018], ggplot2 [@ggplot22016] and ggpubr [@R-ggpubr] were used. 
 <div class="goright95">
-<a href="#top">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
+<a href="#TOC">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
 </div>
 ## Installation instructions
 
@@ -153,9 +154,27 @@ install.packages("idiogramFISH")
  
 Or the devel version: 
 
-``` {r, echo=F, message=FALSE, warning=FALSE, include=T}
+``` {r, echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"}
 if (requireNamespace("RCurl", quietly = TRUE)  ) {
-  v<-tryCatch(suppressWarnings(rvcheck:::check_github_gitlab("ferroao/idiogramFISH", "gitlab")$latest_version), error=function(e) NA )
+#cran version
+v<-"NEWS"#tryCatch(suppressWarnings(rvcheck::check_cran("idiogramFISH")$latest_version), error=function(e) NA )
+
+link<-tryCatch(suppressWarnings(badger::badge_custom("gitlab", paste(v), "orange") ), error=function(e) NA )
+  if(!is.na(link)){
+  svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
+  news_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svglink) ), error=function(e) NA )
+    if (!is.na(news_cont)){
+    news_cont_contFile <- "../man/figures/NEWS.svg"
+    writeLines(news_cont, con = news_cont_contFile)
+    }
+  }
+} # rcurl
+```
+
+``` {r, echo=F, message=FALSE, warning=FALSE, include=TRUE, fig.show = "hold", fig.align = "default", results="asis"}
+if (requireNamespace("RCurl", quietly = TRUE)  ) {
+  # v<-tryCatch(suppressWarnings(rvcheck:::check_github_gitlab("ferroao/idiogramFISH", "gitlab")$latest_version), error=function(e) NA )
+  v<-sub("Version: ","",readLines("../DESCRIPTION")[3])
   link<-tryCatch(suppressWarnings(badger::badge_custom("devel version", v, "cornflowerblue") ), error=function(e) NA )
   if(!is.na(link)){
   svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
@@ -165,7 +184,8 @@ if (requireNamespace("RCurl", quietly = TRUE)  ) {
     gitbadge_contFile <- "../man/figures/gitbadge.svg"
     writeLines(gitbadge_cont, con = gitbadge_contFile)
     gitbadge_contFile <- normalizePath(gitbadge_contFile)
-    knitr::include_graphics(gitbadge_contFile)
+    cat(paste0("![devel version](",knitr::include_graphics(gitbadge_contFile),")" ) )
+    cat(paste0("&nbsp;[![NEWS](",knitr::include_graphics(news_cont_contFile),")](https://gitlab.com/ferroao/idiogramFISH/blob/master/NEWS.md)" ) )
     }
   }
 }
@@ -176,10 +196,10 @@ Visit:
 ``` {r, echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"}
 if (requireNamespace("RCurl", quietly = TRUE)  ) {
 #cran version
-v <- "gitlab" #tryCatch(suppressWarnings(rvcheck::check_cran("idiogramFISH")$latest_version), error=function(e) NA )
+v <- "README" #tryCatch(suppressWarnings(rvcheck::check_cran("idiogramFISH")$latest_version), error=function(e) NA )
 
 pkg<-"idiogramFISH"
-link<-tryCatch(suppressWarnings(badger::badge_custom("README", paste(v), "orange") ), error=function(e) NA )
+link<-tryCatch(suppressWarnings(badger::badge_custom("gitlab", paste(v), "orange") ), error=function(e) NA )
   if(!is.na(link)){
   svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
   manual_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svglink) ), error=function(e) NA )
@@ -227,7 +247,7 @@ link<-tryCatch(suppressWarnings(badger::badge_custom("pkgdown", paste(pkg,v), "c
     if (!is.na(develmanual_cont)){
     pkgdownmanual_contFile <- "../man/figures/develmanualpkgdown.svg"
     writeLines(develmanual_cont, con = pkgdownmanual_contFile)
-    cat(paste0("&nbsp;[![https://gitlab.com/ferroao/idiogramFISH](",knitr::include_graphics(README_contFile),")](https://gitlab.com/ferroao/idiogramFISH)" ) )
+    cat(paste0("[![https://gitlab.com/ferroao/idiogramFISH](",knitr::include_graphics(README_contFile),")](https://gitlab.com/ferroao/idiogramFISH)" ) )
     cat(paste0("&nbsp;[![https://ferroao.gitlab.io/manualidiogramfish](",knitr::include_graphics(bookdownmanual_contFile),")](https://ferroao.gitlab.io/manualidiogramfish/)" ) )
     cat(paste0("&nbsp;[![https://ferroao.gitlab.io/idiogramFISH](",knitr::include_graphics(pkgdownmanual_contFile),")](https://ferroao.gitlab.io/idiogramFISH)" ) )
     }
@@ -235,7 +255,7 @@ link<-tryCatch(suppressWarnings(badger::badge_custom("pkgdown", paste(pkg,v), "c
 } # rcurl
 ```
 <div class="goright95">
-<a href="#top">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
+<a href="#TOC">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
 </div>
 ## Online Help
 
@@ -266,7 +286,7 @@ link<-tryCatch(suppressWarnings(badger::badge_custom("vignettes", paste(pkg,v), 
 } # rcurl
 ```
 <div class="goright95">
-<a href="#top">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
+<a href="#TOC">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
 </div>
 ## Citation
 
@@ -281,7 +301,7 @@ toBibtex(citation("idiogramFISH"))
 sink()
 ```
 <div class="goright95">
-<a href="#top">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
+<a href="#TOC">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
 </div>
 ## Authors 
 
@@ -314,14 +334,14 @@ cat(paste0("[![donate](",knitr::include_graphics(donateweek_contFile),")](https:
 ```{r include=FALSE,eval=FALSE}
 # automatically create a bib database for R packages, this is currently not used by vignette refs/packages2.bib
 knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","pkgdown","crayon","ggtree","ggplot2","ggpubr","phytools","plyr","dplyr","tidyr"
+  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","pkgdown","crayon","ggtree","ggplot2","ggpubr","phytools","plyr","dplyr","tidyr","rentrez"
 ), 'refs/packages2.bib')
 ```
 <div class="goright95">
-<a href="#top">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
+<a href="#TOC">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
 </div>
 `r if (knitr:::is_html_output()) '
-## References
+## References {-}
 '`
 ::: {#refs_normal}
 :::

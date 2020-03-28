@@ -1,4 +1,4 @@
-#' roundPlotMark
+#' mimicCenPlotMark
 #' This is an internal function that plot marks
 #'
 #' It returns a plot
@@ -9,7 +9,7 @@
 #' @param xMark x component of polygon
 #' @param yMark yMark component of polygon
 #' @param dfMarkColorInternal colors for marks
-#' @param listOfdfMarkPosSq list of df. of mark pos.
+#' @param listOfdfMarkPosCenStyle list of df. of mark pos.
 #' @param chrWidth numeric, width of chr.
 #' @param specialChrWidth numeric, width of chr.
 #' @param yfactor yMark distortion based on canvas proportion
@@ -34,8 +34,8 @@
 #' @importFrom graphics polygon text
 #'
 
-roundPlotMark<-function(roundness, xMark, yMark,
-                        dfMarkColorInternal,listOfdfMarkPosSq,
+mimicCenPlotMark<-function(roundness, xMark, yMark,
+                        dfMarkColorInternal,listOfdfMarkPosCenStyle,
                         chrWidth, specialChrWidth,
                         yfactor,n,
                         lwd.chr,listOfdfChromSize,
@@ -50,7 +50,7 @@ roundPlotMark<-function(roundness, xMark, yMark,
 #  xMarkSq<<-xMark
 #  yMarkSq<<-yMark
 
-#  listOfdfMarkPosSqInternal<<-listOfdfMarkPosSq
+#  listOfdfMarkPosCenStyleInternal<<-listOfdfMarkPosCenStyle
 #  dfMarkColorInternal2<<-dfMarkColorInternal
 
   if(roundness>20) {
@@ -62,20 +62,18 @@ roundPlotMark<-function(roundness, xMark, yMark,
                   x=x,
                   y=y,
                   col= dfMarkColorInternal$markColor[match(     z   , dfMarkColorInternal$markName)],
-                  lwd=lwd.chr,
-                  border =
-                    # ifelse(dfMarkColorInternal$markColor[match(z,dfMarkColorInternal$markName)]=="white",
-                  # "black",
+                  lwd=lwd.chr*3,
+                  border = #ifelse(dfMarkColorInternal$markColor[match(z,dfMarkColorInternal$markName)]=="white", "black",
                   dfMarkColorInternal$markBorderColor[match(z,dfMarkColorInternal$markName)]
-                          # ) # ifelse
+                          #) # ifelse
                 ), # pol
               x=xMark[[w]],
               y=yMark[[w]]
-              ,z=listOfdfMarkPosSq[[w]]$markName
+              ,z=listOfdfMarkPosCenStyle[[w]]$markName
 
         ) # mapply
-    ) # lapp
-    } # CIRC
+      ) # lapp
+    } # CIRC FALSE
     else { # circ true
 
       #
@@ -99,22 +97,25 @@ roundPlotMark<-function(roundness, xMark, yMark,
 
         circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,    ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
 
-        circleMapsLabels <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,textylistTransMark,xlistNew,n,
-                                           labelSpacing,chrWidth,rotation=rotation)
+        # circleMapsLabels <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,textylistTransMark,xlistNew,n,
+                                           # labelSpacing,chrWidth,rotation=rotation)
 
-        drawPlotMark(circleMapsMarks,dfMarkColorInternal,listOfdfMarkPosSq,lwd.chr)
+        drawPlotMark(circleMapsMarks,dfMarkColorInternal,listOfdfMarkPosCenStyle,lwd.chr*3)
 
-if(legend=="inline"){
-        circLabelMark(circleMapsLabels,listOfdfMarkPosSq,markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY)
-}
+      # if(legend=="inline"){
+              # circLabelMark(circleMapsLabels,listOfdfMarkPosCenStyle,markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY)
+      # }
 
-    } # circular
-  } else {                                            # roundness < 20
+    } # circular TRUE
 
-    pts_1 <- seq(-pi/2, 0, length.out = n)
-    pts_2 <- seq( 0, pi/2, length.out = n)
-    pts_3 <- seq(pi, pi*1.5, length.out = n)
-    pts_4 <- seq(pi/2, pi, length.out = n)
+  } else {                                            # roundness < 20 ##############################################
+
+    pts<- seq(-pi/2, pi*1.5, length.out = n)
+
+    # pts_1 <- seq(-pi/2, 0, length.out = n)
+    # pts_2 <- seq( 0, pi/2, length.out = n)
+    # pts_3 <- seq(pi, pi*1.5, length.out = n)
+    # pts_4 <- seq(pi/2, pi, length.out = n)
 
     yModMark<-yMark # yMark
 
@@ -123,7 +124,7 @@ if(legend=="inline"){
 
     for (s in 1:length(yModMark) ) {
 
-      corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfMarkPosSq)[[s]] )
+      corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfMarkPosCenStyle)[[s]] )
 
       if(attr(listOfdfChromSize[[corr_index]],"ytitle")=="cM"){
         chrWidth2  <-specialChrWidth
@@ -133,11 +134,11 @@ if(legend=="inline"){
 
       r2 <- chrWidth2/(roundness*2)
 
-      xyCoords<-mapXY(1 , (length(yModMark[[s]]) ) ,
+      xyCoords<-mapXYCen(1 , (length(yModMark[[s]]) ) ,
                       yMark[[s]], yModMark[[s]] ,
                       xMark[[s]],
                       yfactor,r2,
-                      pts_1,pts_2,pts_3,pts_4)
+                      pts)
 
       newLongx[[s]]<-xyCoords$newLongx
       newLongy[[s]]<-xyCoords$newLongy
@@ -157,12 +158,12 @@ if(legend=="inline"){
         mapply(function(x,y,z)
           graphics::polygon(x=x, y=y,
                             col=dfMarkColorInternal$markColor[match(z   ,dfMarkColorInternal$markName)],
-                            lwd=lwd.chr,
+                            lwd=lwd.chr*3,
                             border=dfMarkColorInternal$markBorderColor[match(z,dfMarkColorInternal$markName)]
                             ), # pol
                 x=newLongx[[w]],
                 y=newLongy[[w]] #
-                ,z=listOfdfMarkPosSq[[w]]$markName
+                ,z=listOfdfMarkPosCenStyle[[w]]$markName
                 ) # mapply
       ) # l
 
@@ -180,16 +181,15 @@ if(legend=="inline"){
 
       circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
 
-      circleMapsLabels <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,textylistTransMark,xlistNew,n,
-                                         labelSpacing,chrWidth,rotation=rotation)
+      # circleMapsLabels <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,textylistTransMark,xlistNew,n,
+                                         # labelSpacing,chrWidth,rotation=rotation)
 
-      drawPlotMark(circleMapsMarks,dfMarkColorInternal,listOfdfMarkPosSq,lwd.chr)
-if(legend=="inline"){
-
-     # circLabelMark(circleMaps,     listOfdfMarkPos, markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY,iscM=FALSE)
-      circLabelMark(circleMapsLabels,listOfdfMarkPosSq,markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY)
-}
+      drawPlotMark(circleMapsMarks,dfMarkColorInternal,listOfdfMarkPosCenStyle,lwd.chr*3)
+# if(legend=="inline"){
+      # circLabelMark(circleMapsLabels,listOfdfMarkPosCenStyle,markLabelSize,pattern)
+# }
 
     } # circular
   } # else ROUNDNESS
+
 } # FUN

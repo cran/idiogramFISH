@@ -18,16 +18,16 @@ for your
 donation](man/figures/donateweek.svg)](https://liberapay.com/ferroao/donate)
 <!-- badges: end -->
 
-The goal of idiogramFISH is to plot idiograms of several karyotypes
-having a set of data.frames for chromosome data and optionally marks’
-data (`plotIdiograms` function) (Roa and PC Telles,
+The goal of idiogramFISH is to plot idiograms of karyotypes, plasmids
+and circ. chr. having a set of data.frames for chromosome data and
+optionally marks’ data (`plotIdiograms` function) (Roa and PC Telles,
 [2020](#ref-Roa2020)). Idiograms can also be plotted in concentric
-circles.<br> <br>Marks can have square, dot or cM style, its legend
-(label) can be drawn inline or to the right of karyotypes. It is
-possible to calculate also chromosome and karyotype indexes
-(Romero-Zarco, [1986](#ref-Zarco1986new); Watanabe *et al.*,
-[1999](#ref-Watanabe1999)) and classify chromosome morphology in the
-categories of Levan ([1964](#ref-Levan1964)), and
+circles.<br> <br>Six styles of marks are available: square, dots, cM,
+cenStyle, upArrow, downArrow; its legend (label) can be drawn inline or
+to the right of karyotypes. It is possible to calculate also chromosome
+and karyotype indexes (Romero-Zarco, [1986](#ref-Zarco1986new); Watanabe
+*et al.*, [1999](#ref-Watanabe1999)) and classify chromosome morphology
+in the categories of Levan ([1964](#ref-Levan1964)), and
 [Guerra](https://ferroao.gitlab.io/guerra1986/Guerra1986.pdf)
 ([1986](#ref-Guerra1986d)).
 
@@ -44,8 +44,9 @@ al.*, [2018](#ref-rmarkdown2018)), rvcheck (Yu,
 [2019](#ref-R-badger)[b](#ref-R-badger)), kableExtra (Zhu,
 [2019](#ref-R-kableExtra)), prettydoc (Qiu, [2019](#ref-R-prettydoc))
 and RCurl (Temple Lang and CRAN team, [2019](#ref-R-RCurl)). For some
-vignette figures, packages plyr (Wickham, [2011](#ref-plyr2011)),
-phytools (Revell, [2012](#ref-phytools2012)), ggtree (Yu *et al.*,
+vignette figures, packages rentrez (Winter, [2017](#ref-rentrez2017)),
+plyr (Wickham, [2011](#ref-plyr2011)), phytools (Revell,
+[2012](#ref-phytools2012)), ggtree (Yu *et al.*,
 [2018](#ref-ggtree2018)), ggplot2 (Wickham, [2016](#ref-ggplot22016))
 and ggpubr (Kassambara, [2019](#ref-R-ggpubr)) were used.
 
@@ -185,6 +186,7 @@ plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
               rulerPos= 0,              # position of ruler
               ruler.tck=-0.01,          # size and orientation of ruler ticks
               rulerNumberSize=.8        # font size of rulers
+              ,ylabline= -6             # ruler units (title) pos.
               
               ,legendWidth=1            # width of legend items
               ,fixCenBorder = TRUE      # use chrColor as border color of cen. or cen. marks
@@ -730,6 +732,7 @@ plotIdiograms(dfChrSize  =dfChrSizeHolo, # data.frame of chr. size
               
               rulerPos=-.4,            # position of ruler
               rulerNumberPos=.9,       # position of numbers of rulers
+              ylabline=-3,             # ruler units (title) pos.
               
               xlimLeftMod=2,           # modify xlim left argument of plot
               ylimBotMod=.2            # modify ylim bottom argument of plot
@@ -1220,6 +1223,7 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               rulerPos= 0,               # position of ruler
               ruler.tck=-0.02,           # size and orientation of ruler ticks
               rulerNumberPos=.9,         # position of numbers of rulers
+              ylabline=-6,               # ruler units (title) pos.
               
               xlimLeftMod=1,             # modify xlim left argument of plot
               xlimRightMod=3,            # modify xlim right argument of plot
@@ -1232,7 +1236,7 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               # ,circleCenter = 3          # X coordinate of circleCenter (affects legend pos.)
               # ,chrLabelSpacing = .9      # chr. names spacing
               
-              # ,OTUsrt = 0                # angle for OTU name (or nuber)
+              # ,OTUsrt = 0                # angle for OTU name (or number)
               # ,OTUplacing = "number"     # Use number and legend instead of name
               # ,OTULabelSpacerx = -1.5    # modify position of OTU label, when OTUplacing="number" or "simple"
               # ,OTUlegendHeight = 1.5     # space among OTU names when in legend - OTUplacing
@@ -1253,7 +1257,7 @@ To cite idiogramFISH in publications, please use:
 
 Roa F, Telles MPC (2020) idiogramFISH: Idiograms with Marks and
 Karyotype Indices, Universidade Federal de Goiás. Brazil. R-package.
-version 1.14.2 <https://ferroao.gitlab.io/manualidiogramfish/>.
+version 1.14.7 <https://ferroao.gitlab.io/manualidiogramfish/>.
 doi:<!-- breaklink -->10.5281/zenodo.3579417
 
 To write citation to file:
@@ -1388,6 +1392,13 @@ Wickham H, Henry L. 2020. *Tidyr: Tidy messy data*. R package version
 Wickham H, Hester J, Chang W. 2019b. *Devtools: Tools to make developing
 r packages easier*. R package version 2.2.1.
 <https://CRAN.R-project.org/package=devtools> 
+
+</div>
+
+<div id="ref-rentrez2017">
+
+Winter DJ. 2017. rentrez: An r package for the ncbi eUtils api *The R
+Journal*, 9(2): 520–526 
 
 </div>
 

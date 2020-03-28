@@ -7,12 +7,12 @@
 genBankReadIF(filename.gb)
 }
 \arguments{
-\item{filename.gb}{name of file to read, downloaded from genBank}
+\item{filename.gb}{name of file to read, downloaded from genBank, or, object from \code{rentrez::entrez_fetch(db="nuccore", id="theID", rettype="gbwithparts", retmode = "text")}}
 }
 \value{
 list
 }
 \description{
-genBankReadIF: creates a list of data.frames from a genbank format file
+genBankReadIF: creates a list of data.frames from a genbank format file or a rentrez object
 }
 \keyword{genBank}

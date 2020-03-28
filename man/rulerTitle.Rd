@@ -11,7 +11,8 @@ rulerTitle(
   MbUnit,
   specialyTitle,
   yTitle,
-  ylabline
+  ylabline,
+  rulerTitleSize
 )
 }
 \arguments{

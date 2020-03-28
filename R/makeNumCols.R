@@ -1,7 +1,7 @@
-# makeNumCols
-#' This is an internal function that eliminates factors
+# makeNumCols and makeCharCols
+#' These are internal functions that eliminate factors
 #'
-#' It returns a data.frames
+#' It returns a data.frame
 #'
 #' @keywords internal
 #'
@@ -21,3 +21,8 @@ makeNumCols<-function(df){
   return(df)
 }
 
+makeCharCols<-function(df){
+  df<-as.data.frame(df)
+  df[] <- lapply(df, as.character)
+  return(df)
+}

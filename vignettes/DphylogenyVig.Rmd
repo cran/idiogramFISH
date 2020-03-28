@@ -47,7 +47,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-<a name="top"></a>
+<!--<a name="top"></a> -->
 ```{r setup, include=FALSE}
 #Create myheader.html
 if(Sys.info()['sysname']=="Windows"){
@@ -98,11 +98,11 @@ cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 ```
 <link rel="stylesheet" href="css/mystyle.css">
 
-<div class="goright">
-Go to [1. Plotting I](AplotIdiogramsVig.html)  
-Go to [2. Plotting II](BplotIdiogramsHoloVig.html)  
-Go to [4. Human Vignette](EhumanVig.html)  
-Go to [5. Credits](index.html)  
+<div class="goright" id="top">
+Vignette [1. Plotting chromosomes](AplotIdiogramsVig.html)  
+Vignette [2. Circular Plots](BcircularVig.html)  
+Vignette [4. Human karyotype](EhumanVig.html)  
+Vignette [5. Credits](index.html)  
 
 <!-- # there are 2 spaces at the end of those lines -->
 </div>
@@ -300,7 +300,7 @@ cat(paste0("![](../man/figures/firstplot2.png)" ) )
 }
 ```
 <div class="goright95">
-<a href="#top">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
+<a href="#TOC">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
 </div>
 ## plot of revBayes tree and holocentrics
 
@@ -450,7 +450,7 @@ cat(paste0("![](../man/figures/secondplot2.png)" ) )
 }
 ```
 <div class="goright95">
-<a href="#top">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
+<a href="#TOC">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
 </div>
 ## plot of revBayes tree and holocentrics and monocentrics
 
@@ -572,7 +572,7 @@ cat(paste0("![](../man/figures/thirdplot2.png)" ) )
 }
 ```
 <div class="goright95">
-<a href="#top">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
+<a href="#TOC">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
 </div>
 `r if (knitr:::is_html_output()) '
 ## References {-}
