@@ -166,6 +166,8 @@ genBankReadIF <- function(filename.gb) {
     fieldNamesCDS<-regmatches(gbdf4CDS$value, gregexpr(mypattern, gbdf4CDS$value))
     fieldNamesCDS<-lapply(fieldNamesCDS, function(x) gsub("/|=","",x) )
 
+    fieldNamesCDS <- lapply(fieldNamesCDS, function(x) make.unique(x, sep = '_' ) )
+
     gbdf4CDS$value<-paste(gbdf4CDS$value,"/")
     pattern2<-'=.*?/'
 
@@ -183,8 +185,8 @@ genBankReadIF <- function(filename.gb) {
     if(length(commaPos)>0) {
       fieldValuesCDS<-insertInList(fieldValuesCDS,commaPos,fieldValuesCDS[commaPos])
       fieldNamesCDS <-insertInList(fieldNamesCDS ,commaPos, fieldNamesCDS[commaPos])
-      compleBool <-insertInList(compleBool ,commaPos, compleBool[commaPos])
-      joinBool <-insertInList(joinBool ,commaPos, joinBool[commaPos])
+      compleBool    <-insertInList(compleBool ,commaPos, compleBool[commaPos])
+      joinBool      <-insertInList(joinBool ,commaPos, joinBool[commaPos])
     }
 
     joinElements   <-  grep(",",firstField, value=T)

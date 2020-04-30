@@ -10,27 +10,22 @@ arrowPlotMark(
   xMark,
   yMark,
   dfMarkColorInternal,
-  listOfdfMarkPosSq,
+  listOfdfMarkPosArrow,
   chrWidth,
-  specialChrWidth,
-  yfactor,
   n,
   lwd.chr,
-  listOfdfChromSize,
   circularPlot,
   y,
+  x,
   markLabelSize,
-  pattern,
   separFactor,
   labelSpacing,
   circleCenter,
   circleCenterY,
   radius,
-  legend,
   ylistTransChr,
   rotation,
-  labelOutwards,
-  arrowWidthShrink
+  arrowheadWidthShrink
 )
 }
 \arguments{
@@ -42,27 +37,19 @@ arrowPlotMark(
 
 \item{dfMarkColorInternal}{colors for marks}
 
-\item{listOfdfMarkPosSq}{list of df. of mark pos.}
+\item{listOfdfMarkPosArrow}{list of df. of mark pos.}
 
 \item{chrWidth}{numeric, width of chr.}
-
-\item{specialChrWidth}{numeric, width of chr.}
-
-\item{yfactor}{yMark distortion based on canvas proportion}
 
 \item{n}{numeric, to define vertices of rounded portions}
 
 \item{lwd.chr}{thick of border line}
-
-\item{listOfdfChromSize}{chr size df list}
 
 \item{circularPlot}{boolean TRUE for circ.}
 
 \item{y}{list, y coords.}
 
 \item{markLabelSize}{numeric, font size}
-
-\item{pattern}{character, regex}
 
 \item{separFactor}{numeric, sep. kars.}
 
@@ -74,13 +61,9 @@ arrowPlotMark(
 
 \item{radius}{numeric}
 
-\item{legend}{character}
-
 \item{ylistTransChr}{list, transf. coords.}
 
-\item{rotation}{rotate}
-
-\item{labelOutwards}{srt}
+\item{rotation}{rotate*}
 }
 \value{
 plot

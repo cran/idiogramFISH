@@ -39,13 +39,13 @@ dfOfChrSize: Example data for monocentrics
 
 bigdfOfChrSize: Example data for monocentrics for several species, OTU
 
-humChr: Example data for human karyotype (Adler 1994)
+humChr: Data for human karyotype, measured from Adler (1994)
 
 allChrSizeSample: Example data for monocentrics for several species, OTU
 
 parentalAndHybChrSize: Example data for monocentrics for GISH
 
-traspadf: Example data for monocentrics
+traspadf: Example data for Tradescantia (Rhoeo) spathacea (Golczyk et al. 2005)
 }
 \references{
 Adler 1994. Idiogram Album. \url{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}

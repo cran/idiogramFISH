@@ -25,16 +25,28 @@ cranversion_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(cranversion) 
   cat(paste0("![https://cran.r-project.org/web/packages/idiogramFISH](",knitr::include_graphics(cranversion_contFile),")" ) )
   } # cran version
 
-crandownloads<-"https://cranlogs.r-pkg.org/badges/grand-total/idiogramFISH?color=orange"
-crandownloads_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(crandownloads) ), error=function(e) NA )
+# crandownloads<-"https://cranlogs.r-pkg.org/badges/grand-total/idiogramFISH?color=orange"
+# crandownloads_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(crandownloads) ), error=function(e) NA )
 
-  if (!is.na(crandownloads_cont)){
-  crandownloads_contFile <- "../man/figures/crandownload.svg"
-  writeLines(crandownloads_cont, con = crandownloads_contFile)
-  crandownloads_contFile <- normalizePath(crandownloads_contFile)
-  
-  cat(paste0("&nbsp;![''](",knitr::include_graphics(crandownloads_contFile),")" ) )
-  } # cran down
+newdownlink<-tryCatch(suppressWarnings(badger::badge_custom("CRAN",  "downloads","green") ), error=function(e) NA )
+if(!is.na(newdownlink)){
+svgnewdownlink<-gsub("\\[|\\]|!|\\(|\\)","", newdownlink)
+realdo_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svgnewdownlink) ), error=function(e) NA )
+}
+
+  # if (!is.na(crandownloads_cont)){
+  # crandownloads_contFile <- "../man/figures/crandownload.svg"
+  # writeLines(crandownloads_cont, con = crandownloads_contFile)
+  # crandownloads_contFile <- normalizePath(crandownloads_contFile)
+  # 
+  # cat(paste0("&nbsp;![''](",knitr::include_graphics(crandownloads_contFile),")" ) )
+  # } # cran down
+    if (!is.na(realdo_cont)){
+      realdo_contFile <- "../man/figures/realdownloads.svg"
+      writeLines(realdo_cont, con = realdo_contFile)
+                            # message                                              # link
+      cat(paste0("&nbsp;[![downloads](",knitr::include_graphics(realdo_contFile),")](https://ferroao.gitlab.io/idiogramfishhelppages/downloads.png)" ) )
+    }
 
 doibadge <- "https://zenodo.org/badge/DOI/10.5281/zenodo.3579417.svg"
 doibadge_cont      <- tryCatch(suppressWarnings(RCurl::getURLContent(doibadge)      ), error=function(e) NA )
@@ -54,7 +66,7 @@ if (requireNamespace("RCurl", quietly = TRUE)  ) {
 #cran version
 v<-"NEWS"#tryCatch(suppressWarnings(rvcheck::check_cran("idiogramFISH")$latest_version), error=function(e) NA )
 
-link<-tryCatch(suppressWarnings(badger::badge_custom("gitlab", paste(v), "orange") ), error=function(e) NA )
+link<-tryCatch(suppressWarnings(badger::badge_custom("gitlab", paste(v), "orange","?logo=gitlab") ), error=function(e) NA )
   if(!is.na(link)){
   svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
   news_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svglink) ), error=function(e) NA )
@@ -69,7 +81,7 @@ link<-tryCatch(suppressWarnings(badger::badge_custom("gitlab", paste(v), "orange
 if (requireNamespace("RCurl", quietly = TRUE)  ) {
   # v<-tryCatch(suppressWarnings(rvcheck:::check_github_gitlab("ferroao/idiogramFISH", "gitlab")$latest_version), error=function(e) NA )
   v<-sub("Version: ","",readLines("../DESCRIPTION")[3])
-  link<-tryCatch(suppressWarnings(badger::badge_custom("devel version", v, "cornflowerblue") ), error=function(e) NA )
+  link<-tryCatch(suppressWarnings(badger::badge_custom("devel version", v, "cornflowerblue","?logo=gitlab") ), error=function(e) NA )
   if(!is.na(link)){
   svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
   gitbadge_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svglink) ), error=function(e) NA )
@@ -90,7 +102,7 @@ if (requireNamespace("RCurl", quietly = TRUE)  ) {
 v <- "README" #tryCatch(suppressWarnings(rvcheck::check_cran("idiogramFISH")$latest_version), error=function(e) NA )
 
 pkg<-"idiogramFISH"
-link<-tryCatch(suppressWarnings(badger::badge_custom("gitlab", paste(v), "orange") ), error=function(e) NA )
+link<-tryCatch(suppressWarnings(badger::badge_custom("gitlab", paste(v), "orange","?logo=gitlab") ), error=function(e) NA )
   if(!is.na(link)){
   svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
   manual_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svglink) ), error=function(e) NA )
@@ -127,7 +139,6 @@ v<-sub("Version: ","",readLines("../DESCRIPTION")[3])
 # v<-tryCatch(suppressWarnings(rvcheck:::check_github_gitlab("ferroao/idiogramFISH", "gitlab")$latest_version), error=function(e) NA )
 #cran version
 # v<-tryCatch(suppressWarnings(rvcheck::check_cran("idiogramFISH")$latest_version), error=function(e) NA )
-
 pkg<-"idiogramFISH"
 link<-tryCatch(suppressWarnings(badger::badge_custom("pkgdown", paste(pkg,v), "cornflowerblue") ), error=function(e) NA )
   if(!is.na(link)){
@@ -159,12 +170,10 @@ link<-tryCatch(suppressWarnings(badger::badge_custom("vignettes", paste(pkg,v), 
     if (!is.na(develmanual_cont)){
     vignettemanual_contFile <- "../man/figures/develmanualvignette.svg"
     writeLines(develmanual_cont, con = vignettemanual_contFile)
-#    manual_contFile <- normalizePath(manual_contFile)
-    # knitr::include_graphics(manual_contFile)
-
-        cat(paste0("&nbsp;[![pkgdown](",knitr::include_graphics(vignettemanual_contFile),")](https://ferroao.gitlab.io/idiogramfishhelppages)" ) )
-            cat(paste0("&nbsp;[![bookdown](",knitr::include_graphics(bookdownmanual_contFile),")](https://ferroao.gitlab.io/manualidiogramfish/)" ) )
-    cat(paste0("&nbsp;[![pkgdown](",knitr::include_graphics(pkgdownmanual_contFile),")](https://ferroao.gitlab.io/idiogramFISH)" ) )
+        cat(paste0("[![bookdown](",knitr::include_graphics(bookdownmanual_contFile),")](https://ferroao.gitlab.io/manualidiogramfish/)" ) )
+        cat(paste0("&nbsp;[![pkgdown](",knitr::include_graphics(pkgdownmanual_contFile),")](https://ferroao.gitlab.io/idiogramFISH)" ) )
+        cat(paste0("&nbsp;[![vignettes](",knitr::include_graphics(vignettemanual_contFile),")](https://ferroao.gitlab.io/idiogramfishhelppages)" ) )
+        
     }
   }
 } # rcurl

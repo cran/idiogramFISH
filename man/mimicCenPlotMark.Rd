@@ -20,13 +20,11 @@ mimicCenPlotMark(
   circularPlot,
   y,
   markLabelSize,
-  pattern,
   separFactor,
   labelSpacing,
   circleCenter,
   circleCenterY,
   radius,
-  legend,
   ylistTransChr,
   rotation,
   labelOutwards
@@ -61,8 +59,6 @@ mimicCenPlotMark(
 
 \item{markLabelSize}{numeric, font size}
 
-\item{pattern}{character, regex}
-
 \item{separFactor}{numeric, sep. kars.}
 
 \item{labelSpacing}{numeric, spacing}
@@ -72,8 +68,6 @@ mimicCenPlotMark(
 \item{circleCenterY}{numeric}
 
 \item{radius}{numeric}
-
-\item{legend}{character}
 
 \item{ylistTransChr}{list, transf. coords.}
 

@@ -48,13 +48,13 @@ dfOfMarks: Example data for marks' position
 
 dfOfMarks2: Marks' position including cen. marks
 
-humMarkPos: human karyotype marks' position
+humMarkPos: human karyotype bands' (marks) positions, measured from Adler (1994)
 
 allMarksSample: Example data for marks' position
 
 dfAlloParentMarks: Example data for mark position of GISH of monocen.
 
-traspaMarks: T. spathacea  marks' position
+traspaMarks: T. spathacea (Rhoeo) marks' positions, from Golczyk et al. (2005)
 }
 \references{
 Adler 1994. Idiogram Album. URL: \href{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}{Washington U.}

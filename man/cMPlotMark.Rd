@@ -8,6 +8,7 @@ cMPlotMark(
   xMark,
   yMark,
   y,
+  x,
   dfMarkColorInternal,
   listOfdfMarkPoscM,
   lwd.cM,
@@ -21,7 +22,6 @@ cMPlotMark(
   n,
   labelSpacing,
   chrWidth,
-  legend,
   ylistTransChr,
   rotation,
   labelOutwards
@@ -59,8 +59,6 @@ cMPlotMark(
 \item{labelSpacing}{numeric}
 
 \item{chrWidth}{numeric, chr. width}
-
-\item{legend}{character}
 
 \item{ylistTransChr}{list}
 

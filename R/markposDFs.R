@@ -29,7 +29,7 @@ NULL
 #' @description dfOfMarks2: Marks' position including cen. marks
 #' @rdname markposDFs
 "dfOfMarks2"
-#' @description humMarkPos: human karyotype marks' position
+#' @description humMarkPos: human karyotype bands' (marks) positions, measured from Adler (1994)
 #' @source \href{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}{Washington U}
 #' @references Adler 1994. Idiogram Album. URL: \href{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}{Washington U.}
 #' @rdname markposDFs
@@ -40,7 +40,7 @@ NULL
 #' @description dfAlloParentMarks: Example data for mark position of GISH of monocen.
 #' @rdname markposDFs
 "dfAlloParentMarks"
-#' @description traspaMarks: T. spathacea  marks' position
+#' @description traspaMarks: T. spathacea (Rhoeo) marks' positions, from Golczyk et al. (2005)
 #' @references Golczyk H, Hasterok R, Joachimiak AJ (2005) FISH-aimed karyotyping and characterization of Renner complexes in permanent heterozygote Rhoeo spathacea. Genome 48:145–153.
 #' @rdname markposDFs
 "traspaMarks"

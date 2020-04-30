@@ -11,7 +11,7 @@
 Plot idiograms of karyotypes, plasmids, circular chr. having a set of data.frames 
     for chromosome data and optionally mark data. 
     Supports micrometers, cM and Mb. 
-    Four styles of marks are available: square, dots, cM, cenStyle, upArrow, downArrow; 
+    Seven styles of marks are available: square, dots, cM, cMLeft, cenStyle, upArrow, downArrow; 
     its legend (label) can be drawn inline or to the right of karyotypes. Idiograms can also be plotted in 
     concentric circles. It is possible to calculate chromosome indices by Levan et al. (1964) 
     <doi:10.1111/j.1601-5223.1964.tb01953.x>, karyotype indices of Watanabe et al. (1999) 

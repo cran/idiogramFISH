@@ -109,22 +109,14 @@ link<-tryCatch(suppressWarnings(badger::badge_custom("Documentation", paste(pkg,
 
 # Circular Plots
 
-This guide shows the files to plot idiograms of karyotypes of holocentrics and optionally marks. 
-
-## Load package
 
 visit gitlab for installation instructions https://gitlab.com/ferroao/idiogramFISH
-
-```{r, results="hide", message=FALSE, warning=FALSE, eval=TRUE}
-
-#load package
-library(idiogramFISH) 
-```
 
 ## Example with monocen. and holocen.
 
 ```{r, echo=TRUE, results="hide", fig.width=10, fig.height=7, message=FALSE,dev='png', eval=TRUE}
 {
+  require(idiogramFISH)
   require(plyr)
   dfOfChrSize$OTU   <- "Species mono"
   dfChrSizeHolo$OTU <- "Species holo"
@@ -218,7 +210,7 @@ plotIdiograms(dfChrSize = listradfs$dfChrSize,  # d.f. of chr. sizes
 
 ## Plasmid data from genBank
 
-Using of `upArrow` and `downArrow` styles, clockwise and anti-clockwise, respectively.
+Using `upArrow` and `downArrow` styles, clockwise and anti-clockwise, respectively.
 
 ```{r, echo=TRUE, fig.width=9, fig.height=9, message=FALSE,dev='png', eval=TRUE,collapse=TRUE, comment="#"}
 
@@ -236,12 +228,12 @@ esummaries<-rentrez::entrez_summary(db = "nuccore", id = bcereus_search$ids)
 # From the entrez formats:
 # https://www.ncbi.nlm.nih.gov/books/NBK25499/table/chapter4.T._valid_values_of__retmode_and/
 # idiogramFISH can read only:
-rentrezDownload  <- rentrez::entrez_fetch(db="nuccore", 
-                                   id = bcereus_search$ids[1], 
-                                   rettype="gbwithparts", 
-                                   retmode = "text")
+rentrezDownloadPlas  <- rentrez::entrez_fetch(db="nuccore", 
+                                              id = bcereus_search$ids[1], 
+                                              rettype="gbwithparts", 
+                                              retmode = "text")
 
-mylist<-genBankReadIF(rentrezDownload)
+mylist<-genBankReadIF(rentrezDownloadPlas)
 
 # data.frames in mylist
 names(mylist)
@@ -257,6 +249,7 @@ names(mylist)
 paste(mylist$gbdfMain[which(mylist$gbdfMain$field=="AUTHORS"),][1,2] )
 
 # create plasmid size data data.frame
+{
 myPlasmiddf <- data.frame(chrName=1, chrSize=mylist$source$end)
 myPlasmiddf$OTU<-mylist$gbdfMain[which(mylist$gbdfMain$field=="DEFINITION"),]$value
 myPlasmiddf$OTU<-gsub(", complete sequence.","",myPlasmiddf$OTU)
@@ -269,6 +262,7 @@ mylistSelDF <- dplyr::bind_rows(mylistSel, .id="feature")
 mylistSelDF$markPos <-pmin(as.numeric(mylistSelDF$begin),as.numeric(mylistSelDF$end) )
 mylistSelDF$markSize<-abs(as.numeric(mylistSelDF$end)-as.numeric(mylistSelDF$begin) )
 mylistSelDF$markName<-mylistSelDF$locus_tag
+
 # orientation of arrows
 mylistSelDF$style<-ifelse(mylistSelDF$isComplement,"downArrow","upArrow")
 
@@ -276,85 +270,79 @@ mylistSelDF$style<-ifelse(mylistSelDF$isComplement,"downArrow","upArrow")
 mylistSelDF[which(!is.na(mylistSelDF$gene) ),]$markName<-
   mylistSelDF[which(!is.na(mylistSelDF$gene) ),]$gene
 
-
-
 # subset columns
-marksDf<-mylistSelDF[,c("markName","markPos","markSize","style"),]
+marksDfPlas<-mylistSelDF[,c("markName","markPos","markSize","style"),]
 
-# add spaces before name
-distantNames<-unlist(lapply(marksDf$markName, 
-                            function(x) gsub("(.*)",paste0(paste0(rep(" ",20),collapse=""),"\\1"),x) ) )
-# add spaces after name
-distantNames2<-unlist(lapply(marksDf$markName, 
-                             function(x) gsub("(.*)",paste0("\\1",paste0(rep(" ",20), collapse="")),x) ) )
-
-# Replace names
-for (i in seq(1,nrow(marksDf ), by=2) )  { marksDf$markName[i]<-distantNames[i]}
-for (i in seq(2,nrow(marksDf ), by=2) )  { marksDf$markName[i]<-distantNames2[i]}
+# add OTU name
+marksDfPlas$OTU<-myPlasmiddf$OTU
 
 # add mandatory column
-marksDf$chrName<-1
+marksDfPlas$chrName<-myPlasmiddf$chrName
+
+# organize inner arrows (downArrow) in two columns avoiding overlap
+
+protVal <- .5     # this values (and others) must be the same 
+circVal <- TRUE   # in plotIdiograms function
+rotaVal <- 0
+
+marksDfPlasCols<-namesToColumns(marksDfPlas, myPlasmiddf, 
+                        markType=c("downArrow"),
+                        amountofSpaces=10,colNumber=2,
+                        protrudingInt=1.3, protruding = protVal, 
+                        circularPlot = circVal,
+                        rotation=rotaVal
+                        )
+
 
 # add marker for start pos.
-marksDf<-rbind(marksDf,c(paste0("START",paste0(rep(" ",20), collapse="")),1,NA,"square",1) )
-
-# add column - name of plasmid
-marksDf$OTU <- myPlasmiddf$OTU
+colnames(marksDfPlasCols)
+marksDfPlasCols<-rbind(marksDfPlasCols,c(paste0("START",paste0(rep(" ",0), collapse="")),1,NA,"square",myPlasmiddf$OTU,1,NA) )
 
 # create mark general data data.frame
-markStyle2 <-markStyle  <- idiogramFISH:::makedfMarkColorMycolors(unique(marksDf$markName),
-                                                                  c("black","forestgreen","cornflowerblue") )
-# 1st plot with cM style of marks
-markStyle$style<-"cM"
+markStyle   <- idiogramFISH:::makedfMarkColorMycolors(
+  unique(marksDfPlasCols$markName), c("black","forestgreen","cornflowerblue") )
 
 # arrows
-markStyle2$style <- marksDf$style[match(markStyle2$markName, marksDf$markName)]
+markStyle$style      <- marksDfPlasCols$style[match(markStyle$markName, marksDfPlasCols$markName)]
+markStyle$protruding <- marksDfPlasCols$protruding[match(markStyle$markName, marksDfPlasCols$markName)]
 
 # prefix to remove from marks
-mypattern<-sub("([[:alnum:]]+_).*","\\1",trimws(marksDf$markName[1]) )
-
+mypattern<-sub("([[:alnum:]]+_).*","\\1",trimws(marksDfPlas$markName[1]) )
+}
 library(idiogramFISH)
-par(mar=rep(0,4))
+par(mar=rep(0,4), oma = rep(0,4) )
+
 plotIdiograms(dfChrSize = myPlasmiddf,  # plasmid size d.f.
-              dfMarkPos = marksDf,      # mark pos d.f.
+              dfMarkPos = marksDfPlasCols,  # mark pos d.f.
               dfMarkColor = markStyle,  # mark style d.f.
               
               roundness = 21,           # corners not rounded
               chrWidth = .1,            # chr. width
               chrId="",                 # no chr. name
               
-              markLabelSize=.5,         # font size of labels
+              markLabelSize=.7,         # font size of labels
               pattern=mypattern,        # remove pattern from mark names
-              protruding=.5,            # modify cM marks size
+              cMBeginCenter = TRUE,
+              legend ="inline",
+              protruding= protVal,
               
               ylimBotMod = 0,           # modify plot size
               ylimTopMod = 0, 
               xlimLeftMod = 2, 
               
               # circular params.
-              circularPlot = TRUE,      # circular
+              circularPlot = circVal,   # circular
+              rotation=rotaVal,         # begin plasmid in top
+              
+              radius=2.5,
               shrinkFactor = 1,         # use 100% of circle
-              labelSpacing = 1.5,       # label spacing from chr.
-              rotation=0,               # begin plasmid in top
+              labelSpacing = 1.7,       # label spacing from chr.
               labelOutwards = TRUE,     # label projected based on mark angle
+              
               OTUjustif = 0.5,          # OTU name justif. centered.
               OTUplacing = "simple"     # plasmid name place. See OTUcentered
+              ,OTUTextSize = .8         # font size of OTU name
 )
-
-# overlap arrow style of marks with second plot
-
-# plot over previous plot
-plotIdiograms(dfChrSize = myPlasmiddf, dfMarkPos = marksDf, 
-              circularPlot = TRUE,
-              shrinkFactor = 1, roundness = 21, chrWidth = .1, labelSpacing = 2, chrId="",
-              ylimBotMod = 0, ylimTopMod = 0, rotation=0, legend="", 
-              addOTUName = FALSE,       # do not add OTU name, see above
-              callPlot = FALSE          # do not create a new plot
-              ,dfMarkColor = markStyle2 # d.f. of mark style downArrow and upArrow
-              ,shrinkArrow = 0.1        # Arrow without protruding head
-)
-
-
 ```
 <div class="goright95">
 <a href="#TOC">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
@@ -374,6 +362,7 @@ library(idiogramFISH)
 data.gb <- "nostoc.gb" # 5 Mbytes
 
 # Option 2: Download with rentrez package
+
 library(rentrez)
 # search string
 nostoc <- "'Nostoc azollae' 0708, complete genome"
@@ -389,130 +378,133 @@ select
 # 3 8
 
 # download chr. data
-data.gb  <- rentrez::entrez_fetch(db="nuccore", 
-                                      id=nostoc_search$ids[select][1], 
-                                      rettype="gbwithparts", 
-                                      retmode = "text")
+dataChr.gb  <- rentrez::entrez_fetch(db="nuccore", 
+                                     id=nostoc_search$ids[select][1], 
+                                     rettype="gbwithparts", 
+                                     retmode = "text")
 # START: 
-mylist<-genBankReadIF(data.gb) 
-names(mylist)
+library(idiogramFISH)
+mylistChr<-genBankReadIF(dataChr.gb) # 9 seconds
+names(mylistChr)
 # "gbdfMain"     "gbdfAnnoMeta" "source"       "gene"         "CDS"          "tRNA"
 # "regulatory"   "ncRNA"        "rRNA"         "misc_feature" "tmRNA"
 
 # Authors of sequence
-paste(mylist$gbdfMain[which(mylist$gbdfMain$field=="AUTHORS"),][1,2] )
+paste(mylistChr$gbdfMain[which(mylistChr$gbdfMain$field=="AUTHORS"),][1,2] )
 # [1] "Ran,L., Larsson,J., Vigil-Stenman,T., Nylander,J.A., Ininbergs,K.,;
 # Zheng,W.W., Lapidus,A., Lowry,S., Haselkorn,R. and Bergman,B."
 
 # create chr. size data data.frame
-myProkaryotedf <- data.frame(chrName=1, chrSize=mylist$source$end)
-myProkaryotedf$OTU<-mylist$gbdfMain[which(mylist$gbdfMain$field=="DEFINITION"),]$value
+# columns chrName and chrSize
+myProkaryotedf <- data.frame(chrName=1, chrSize=mylistChr$source$end)
+# column with OTU name
+myProkaryotedf$OTU<-mylistChr$gbdfMain[which(mylistChr$gbdfMain$field=="DEFINITION"),]$value
 myProkaryotedf$OTU<-gsub(", complete genome.","",myProkaryotedf$OTU)
 
 # Creating mark info data.frame excluding some features
-mylistSel  <- mylist[which(names(mylist) %in%
-                             setdiff( names(mylist) , c("gbdfMain","gbdfAnnoMeta","source","CDS") ) )]
+mylistChrSel  <- mylistChr[which(names(mylistChr) %in%
+                                   setdiff( names(mylistChr) , c("gbdfMain","gbdfAnnoMeta","source","CDS") ) )]
 # or:
-# mylistSel<- mylist[which(names(mylist) %in% "CDS")]
+# mylistSel<- mylistChr[which(names(mylistChr) %in% "CDS")]
 
-mylistSelDF<-dplyr::bind_rows(mylistSel, .id="feature")
+# transform list into data.frame
+mylistChrDF<-dplyr::bind_rows(mylistChrSel, .id="feature")
+# add necessary columns
+mylistChrDF$markPos <-pmin(as.numeric(mylistChrDF$begin),as.numeric(mylistChrDF$end) )
+mylistChrDF$markSize<-abs(as.numeric(mylistChrDF$end)-as.numeric(mylistChrDF$begin) )
+mylistChrDF$markName<-mylistChrDF$locus_tag
 
-mylistSelDF$markPos <-pmin(as.numeric(mylistSelDF$begin),as.numeric(mylistSelDF$end) )
-mylistSelDF$markSize<-abs(as.numeric(mylistSelDF$end)-as.numeric(mylistSelDF$begin) )
-mylistSelDF$markName<-mylistSelDF$locus_tag
+# Replace codes with genes, and replace NAs in markNames (locus_tag)
+mylistChrDF[which(!is.na(mylistChrDF$gene) ),]$markName<-
+  mylistChrDF[which(!is.na(mylistChrDF$gene) ),]$gene
 
-# orientation of arrows	
-mylistSelDF$style<-ifelse(mylistSelDF$isComplement,"downArrow","upArrow")
+mylistChrDF[which(!is.na(mylistChrDF$regulatory_class) ),]$markName<-
+  mylistChrDF[which(!is.na(mylistChrDF$regulatory_class) ),]$regulatory_class
 
-dim(mylistSelDF)
+# careful
+mylistChrDF[which(is.na(mylistChrDF$markName) ),]$markName<-
+  sub("([[:alpha:] ]+);.*","\\1", mylistChrDF[which(is.na(mylistChrDF$markName) ),]$note )
 
-# Replace codes with names
-mylistSelDF[which(!is.na(mylistSelDF$gene) ),]$markName<-
-  mylistSelDF[which(!is.na(mylistSelDF$gene) ),]$gene
+# orientation of arrows 
+mylistChrDF$style<-ifelse(mylistChrDF$isComplement,"downArrow","upArrow")
 
-marksDf<-mylistSelDF[,c("markName","markPos","markSize","feature","isJoin","style"),]
+# select main columns for data.frame of marks' positions
+marksDfChr<-mylistChrDF[,c("markName","markPos","markSize","feature","isJoin","style"),]
 
-# Separate names in 4 columns
-distantNames1<-unlist(lapply(marksDf$markName, function(x)
-  gsub("(.*)",paste0("\\1",paste0(rep(" ",25*3), collapse = "")),x) ) )
-distantNamesCenter2<-unlist(lapply(marksDf$markName, function(x)
-  gsub("(.*)",paste0(paste0(rep(" ",25), collapse = ""),"\\1",paste0(rep(" ",25*2), collapse = "")),x) ) )
-distantNamesCenter3<-unlist(lapply(marksDf$markName, function(x)
-  gsub("(.*)",paste0(paste0(rep(" ",25*2), collapse = ""),"\\1",paste0(rep(" ",25), collapse = "")),x) ) )
-distantNames4<-unlist(lapply(marksDf$markName, function(x)
-  gsub("(.*)",paste0(paste0(rep(" ",25*3), collapse = ""),"\\1"),x ) ) )
-
-for (i in seq(1,nrow(marksDf), by=4) )  { marksDf$markName[i]<-distantNames1[i]}
-for (i in seq(2,nrow(marksDf), by=4) )  { marksDf$markName[i]<-distantNamesCenter2[i]}
-for (i in seq(3,nrow(marksDf), by=4) )  { marksDf$markName[i]<-distantNamesCenter3[i]}
-for (i in seq(4,nrow(marksDf), by=4) )  { marksDf$markName[i]<-distantNames4[i]}
-
-# add marker for start
-colnames(marksDf)
-marksDf<-rbind(marksDf,c("START",1,NA,"start",FALSE,"square") )
-
+marksDfChr$OTU<-myProkaryotedf$OTU
 # add mandatory column
-marksDf$chrName<-1
+marksDfChr$chrName<-myProkaryotedf$chrName
 
-# add column OTU, when in main data.frame
-marksDf$OTU <- myProkaryotedf$OTU
+# Organize mark names in columns to avoid overlap
+rotaVal<-0
+marksDfChrCols<-namesToColumns(marksDfChr, myProkaryotedf, 
+               markType=c("downArrow","upArrow"),
+               amountofSpaces=13,colNumber=4,
+               protrudingInt=0.5,
+               rotation = rotaVal)
+  
+{
+# add marker for start pos.
+colnames(marksDfChrCols)
+marksDfChrCols<-rbind(marksDfChrCols,c("          START",1,NA,"start",FALSE,"square",myProkaryotedf$OTU,1,NA) )
+  
+# create mark general data data.frame
+markStyle   <- idiogramFISH:::makedfMarkColorMycolors(
+  unique(marksDfChrCols$markName), c("black","forestgreen","cornflowerblue") )
 
-unique(marksDf$feature)
+unique(marksDfChrCols$feature)
 # [1] "gene"         "tRNA"         "regulatory"   "ncRNA"        "rRNA"         "misc_feature" "tmRNA"        "start"       
-unique(marksDf$isJoin)
+unique(marksDfChrCols$isJoin)
 # [1] "FALSE"
 
-# create mark general data data.frame
-markStyle  <- idiogramFISH:::makedfMarkColorMycolors(unique(marksDf$markName),
-                                                     c("black","forestgreen","cornflowerblue") )
 # change some colors depending on feature
 markStyle[which(markStyle$markName %in%
-                  marksDf[which(marksDf$feature %in% c("tRNA","tmRNA") ),]$markName
+                  marksDfChrCols[which(marksDfChrCols$feature %in% c("tRNA","tmRNA") ),]$markName
 ),]$markColor<-"magenta"
+
 markStyle[which(markStyle$markName %in%
-                  marksDf[which(marksDf$feature %in% c("regulatory","ncRNA") ),]$markName
+                  marksDfChrCols[which(marksDfChrCols$feature %in% c("regulatory","ncRNA") ),]$markName
 ),]$markColor<-"tomato3"
+
 markStyle[which(markStyle$markName %in%
-                  marksDf[which(marksDf$feature %in% "rRNA" ),]$markName
+                  marksDfChrCols[which(marksDfChrCols$feature %in% "rRNA" ),]$markName
 ),]$markColor<-"red2"
+
 markStyle[which(markStyle$markName %in%
-                  marksDf[which(marksDf$feature %in% "misc_feature" ),]$markName
+                  marksDfChrCols[which(marksDfChrCols$feature %in% "misc_feature" ),]$markName
 ),]$markColor<-"lightsalmon"
 
 # or:
 # When isJoin is TRUE (CDS feature included)
 # markStyle[which(markStyle$markName %in%
-#                   marksDf[which(marksDf$isJoin==TRUE),]$markName
+#                   marksDfChrCols[which(marksDfChrCols$isJoin==TRUE),]$markName
 # ),]$markColor<-"red"
 
-# duplicate mark style data.frame for arrow styles
-markStyle2 <- markStyle
+# arrows info. to d.f. of charac.
+markStyle$style      <- marksDfChrCols$style[match(markStyle$markName, marksDfChrCols$markName)]
+markStyle$protruding <- marksDfChrCols$protruding[match(markStyle$markName, marksDfChrCols$markName)]
 
-# cM style d.f.
-markStyle$style<-"cM"
+mypattern<-sub("([[:alnum:]]+_).*","\\1",trimws(marksDfChrCols$markName[1]) )
+}
 
-# downArrow, upArrow styles, using them instead of squares, increases plot size in bytes	
-markStyle2$style <- marksDf$style[match(markStyle2$markName, marksDf$markName)]
 
-# prefix to remove from mark names
-mypattern<-sub("([[:alnum:]]+_).*","\\1",trimws(marksDf$markName[1]) )
-
-# png("NOSTOC2.png", width=9500, height=9500) #  14 Mbytes
-pdf("NOSTOC2.pdf",   width=130,  height=130)  #  20 Mb with arrows
-# svg("NOSTOC2.svg", width=130,  height=130)  # 140 Mb with arrows
+# png("NOSTOC.png", width=9500, height=9500) #  14 Mbytes
+pdf("NOSTOC.pdf",   width=130,  height=130)  #  20 Mb with arrows
+# svg("NOSTOC.svg", width=130,  height=130)  # 140 Mb with arrows
 
 par(mar=rep(0,4))
+
 plotIdiograms(dfChrSize = myProkaryotedf,  # chr. data d.f.
-              dfMarkPos = marksDf,         # mark pos d.f.
+              dfMarkPos = marksDfChrCols,  # mark pos d.f.
               dfMarkColor = markStyle,     # mark style d.f. style cM
               
               roundness = 21,           # corners not rounded
               n=100,                    # number of vertices in rounded items.
               chrWidth = .02,           # chr. width
               chrId="",                 # no chr. name
+              legend="inline",          # for arrows, this mimics cM and cMLeft marks
               
               markLabelSize=1,          # font size of labels
-              protruding=.5,            # modify cM marks size
               pattern= mypattern,       # remove pattern from mark names
               
               ylimBotMod = -.5,         # modify plot size
@@ -523,27 +515,17 @@ plotIdiograms(dfChrSize = myProkaryotedf,  # chr. data d.f.
               # circular plot params.
               circularPlot = TRUE,      # circular
               shrinkFactor = 1,         # use 100% of circle
-              labelSpacing = 1.2,       # label spacing from chr.
-              rotation=0,               # begin chr. in top
+              labelSpacing = 1,         # label spacing from chr.
+              rotation=rotaVal,         # begin chr. in top
               labelOutwards = TRUE      # label projected based on mark angle
+              
               ,OTUjustif = 0.5          # OTU name centered
               ,OTUplacing = "simple"    # location of OTU name, see OTUcentered
               ,radius = .1              # radius of circle
               ,OTUTextSize = 10         # font size of OTU name
+              ,cMBeginCenter = TRUE     # label of arrows (inline) start in the middle
 )
-# plot over previous plot arrow style
-plotIdiograms(dfChrSize = myProkaryotedf, dfMarkPos = marksDf, 
-              dfMarkColor = markStyle2, # style downArrow and upArrow
-              circularPlot = TRUE,
-              shrinkFactor = 1, roundness = 21,   chrWidth = .02, chrId="",
-              ylimBotMod = -.5, ylimTopMod = -.5, xlimLeftMod = .3,
-              xlimRightMod = .3, radius=.1, n=100, rotation=0,
-              arrowhead = .65,          # proportion of head of arrow
-              legend="",                # do not add legend for marks
-              addOTUName = FALSE,       # do not add. OTU name
-              callPlot = FALSE          # plot over previous plot
-)
-dev.off()
+dev.off()                    
 ```
 ```{r, results="asis", comment=NA, echo=FALSE, eval=TRUE}
     nostocFile1 <- "../man/figures/nostoc.jpg"

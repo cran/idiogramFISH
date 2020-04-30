@@ -120,10 +120,9 @@ yVertoHor<-function(y,monocenNames){
           attr(ylistNew[[s]][[c]], "chrName1") <- attr(y[[s]][[c]], "chrName1")
         }
       }
-    } #  mono
-    else { # holo
+    } else { # end mono beg. holo
     ylistNew[[s]]<-y[[s]]
-    if(length(y[[s]] ) >=2){
+    if(length(y[[s]] ) >= 2 ) {
       diffPrevious<-0
       for (i in 2:length(y[[s]] )) {
         diffPrevious<-diffPrevious + max(ylistNew[[s]][[i-1]], na.rm=T) - min(ylistNew[[s]][[i-1]], na.rm=T)
@@ -143,12 +142,15 @@ xHortoVer<-function(xlist,shrink=0){
 
   for (s in 1:length(xlist)){
     xlistNew[[s]]<-xlist[[s]]
+
     for (i in 1:length(xlist[[s]])){
-      minChro<-min(xlistNew[[s]][[i]], na.rm=T)
-      maxChro<-max(xlistNew[[s]][[i]], na.rm=T)
-      xlistNew[[s]][[i]]<-xlistNew[[s]][[i]] - minChro + (shrink*(maxChro-minChro) )
+      minChro <- min(xlistNew[[s]][[i]], na.rm=T)
+      maxChro <- max(xlistNew[[s]][[i]], na.rm=T)
+      xlistNew[[s]][[i]] <- xlistNew[[s]][[i]] - minChro + (shrink * (maxChro-minChro) )
+      attr(xlistNew[[s]][[i]],"rowIndex") <- attr(xlist[[s]][[i]],"rowIndex")          # i
     }
     names(xlistNew)[s] <- names(xlist[s])
+    attr(xlistNew[[s]],"spname") <- attr(xlist[[s]],"spname")
   } # for
   return(xlistNew)
 } # fun
@@ -261,7 +263,9 @@ xHortoVerDots<-function(xMarkList,x){
 
 mapCircle<-function(x,y,n,radius,circleCenter,circleCenterY,position,separFactor,
                     labelSpacing,chrWidth,rotation) {
+
   r2 <- radius*position*chrWidth*2 + position*separFactor + chrWidth*labelSpacing
+
   yValue2<-list()
   xValue2<-list()
   if (length(y)>1){
@@ -545,7 +549,7 @@ drawCen<-function(circleMaps,cenColor2,cenBorder,lwd.chr) {
   } # for
 } # fun
 
-circLabelMark<-function(circleMaps,listOfdfMarkPos,markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY,iscM=FALSE) {
+circLabelMark<-function(circleMaps,listOfdfMarkPos,markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY,iscM=FALSE,adj=0.5,iscMLeft=FALSE) {
   for (s in 1:length(circleMaps)){
 
     for (i in 1:length(circleMaps[[s]] ) ) {
@@ -569,12 +573,34 @@ circLabelMark<-function(circleMaps,listOfdfMarkPos,markLabelSize,pattern,labelOu
       }
 
       if (iscM){
+
         minX<-min(unlist(circleMaps[[s]][[i]]$x) )
         maxX<-max(unlist(circleMaps[[s]][[i]]$x) )
+
         minY<-min(unlist(circleMaps[[s]][[i]]$y) )
         maxY<-max(unlist(circleMaps[[s]][[i]]$y) )
-        xmoreDistant<-ifelse(abs(minX-circleCenter)  > abs(maxX-circleCenter),  centerX<-minX, centerX<-maxX )
-        ymoreDistant<-ifelse(abs(minY-circleCenterY) > abs(maxY-circleCenterY), centerY<-minY, centerY<-maxY )
+
+        xmoreDistant<-ifelse(abs(minX-circleCenter)  > abs(maxX-circleCenter),
+                             centerX<-minX,
+                             centerX<-maxX )
+        ymoreDistant<-ifelse(abs(minY-circleCenterY) > abs(maxY-circleCenterY),
+                             centerY<-minY,
+                             centerY<-maxY )
+      }
+      if (iscMLeft){
+
+        minX<-min(unlist(circleMaps[[s]][[i]]$x) )
+        maxX<-max(unlist(circleMaps[[s]][[i]]$x) )
+
+        minY<-min(unlist(circleMaps[[s]][[i]]$y) )
+        maxY<-max(unlist(circleMaps[[s]][[i]]$y) )
+
+        xmoreDistant<-ifelse(abs(minX-circleCenter)  > abs(maxX-circleCenter),
+                             centerX<-maxX,
+                             centerX<-minX )
+        ymoreDistant<-ifelse(abs(minY-circleCenterY) > abs(maxY-circleCenterY),
+                             centerY<-maxY,
+                             centerY<-minY )
       }
 
       graphics::text(x=centerX,
@@ -582,7 +608,7 @@ circLabelMark<-function(circleMaps,listOfdfMarkPos,markLabelSize,pattern,labelOu
                        ,label=sub(pattern,"",listOfdfMarkPos[[s]]$markName[i])
                        ,cex=markLabelSize
                      # pos=4,
-                       ,adj=0.5
+                       ,adj=adj
                        ,srt=srt
       ) # text
     } # for
@@ -717,6 +743,56 @@ markMapPerCen<-function(yMark,y){
   return(yMarkPer)
 } # fun
 
+
+# xMark<-xMarkArr
+# x <- xlistNewOrig1
+
+xMarkMap<-function(xMark,x, shrink) {
+  xMarkList<-list()
+
+  for( s in 1:length(xMark) ){
+    xMarkList[[s]]<-xMark[[s]]
+
+    corrIndex <- which( names(x) %in% attr(xMark[[s]],"spname")  )
+
+    for ( m in 1:length(xMark[[s]] ) ){
+      name <- attr(xMark[[s]][[m]],"rowIndex")
+
+      minMark <- min(xMark[[s]][[m]], na.rm=T)
+      maxMark <- max(xMark[[s]][[m]], na.rm=T)
+
+      xMarkList[[s]][[m]] <- xMarkList[[s]][[m]] - min(unlist(x[[corrIndex]][name])  ) + ( (shrink/2) * (maxMark-minMark) )
+
+      attr(xMarkList[[s]][[m]],"rowIndex")<-name
+    }
+    attr(xMarkList[[s]],"spname")<-attr(xMark[[s]],"spname")
+  } # for
+  return(xMarkList)
+} # fun
+
+xMarkMapLeft<-function(xMark,x) {
+  xMarkList<-list()
+
+  for( s in 1:length(xMark) ){
+    xMarkList[[s]]<-xMark[[s]]
+
+    corrIndex <- which( names(x) %in% attr(xMark[[s]],"spname")  )
+
+    for ( m in 1:length(xMark[[s]] ) ){
+      name <- attr(xMark[[s]][[m]],"rowIndex")
+
+      minMark <- min(xMark[[s]][[m]], na.rm=T)
+      maxMark <- max(xMark[[s]][[m]], na.rm=T)
+
+      xMarkList[[s]][[m]] <- xMarkList[[s]][[m]] - min(unlist(x[[corrIndex]][name])  )
+
+      attr(xMarkList[[s]][[m]],"rowIndex")<-name
+    }
+    attr(xMarkList[[s]],"spname")<-attr(xMark[[s]],"spname")
+  } # for
+  return(xMarkList)
+} # fun
+
 markMapPer<-function(yMark,y){
   yMarkPer<-list()
 
@@ -747,8 +823,7 @@ markMapPer<-function(yMark,y){
   return(yMarkPer)
 } # fun
 
-markMapPercM<-function(yMark,y)
-{
+markMapPercM<-function(yMark,y) {
   yMarkPer<-list()
 
   for( s in 1:length(yMark) ){
@@ -1087,12 +1162,6 @@ xForRounded<- function(xlist,diffXRounded,monocenNames){
   return(xRounded)
 } # fun
 
-psum <- function(...,na.rm=FALSE) {
-  rowSums(do.call(cbind,list(...)),na.rm=na.rm)
-}
-
-
-
 OTUlabelsright<-function(y, circleCenter,OTULabelSpacerx,circleCenterY,OTULabelSpacery,OTUlegendHeight,radius,
                          chrWidth,font,family,OTUTextSize,normalizeToOne,OTUplacing,OTUcentered,OTUjustif,maxPos,separFactor,labelSpacing) {
 #  yLabel<<-y
@@ -1138,5 +1207,7 @@ OTUlabelsright<-function(y, circleCenter,OTULabelSpacerx,circleCenterY,OTULabelS
   ) # graphics::text # pos4 is to the right of coords
 }# end of function
 
-
+psum <- function(...,na.rm=FALSE) {
+  rowSums(do.call(cbind,list(...)),na.rm=na.rm)
+}
 

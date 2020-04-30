@@ -19,32 +19,22 @@
 mapXY <- function(start,end,y,yMod,x,yfactor,r2,pts_1,pts_2,pts_3,pts_4 ){
   topBotline_x <- list()
 
-  x2_1<-list()
-  x2_2<-list()
+  x2_1<-x2_2<-list()
 
-  topline_y<-list()
+  bottomline_y<-topline_y<-list()
 
-  y2_1<-list() # NEW
-  y2_2<-list() # NEW
+  y2_1<-y2_2<-list() #
 
-  xy_1<-list()
-  xy_2<-list()
+  xy_1<-xy_2<-list()
+  xy_3<-xy_4<-list() #
 
-  xy_3<-list() # NEW
-  xy_4<-list() # NEW
-
-  newLongx<-list()
-  newLongy<-list()
-
-  bottomline_y<-list()
+  newLongx<-newLongy<-list()
 
   for (counter in start: end ) {
     r2backup<-r2
     diffx<-max(x[[counter]]) - min(x[[counter]])
     diffy<-max(y[[counter]]) - min(y[[counter]])
     ratexy<-diffx/diffy
-    # max<-max(c(diffx,diffy))
-    # rad <- max(x)/number*2
     ifelse( (diffx/r2) * 2 < ratexy*4 ,  r2 <- diffx/(ratexy*2) ,r2 )
 
     topBotline_x[[counter]]<-c(min(x[[counter]])+r2,
@@ -83,10 +73,7 @@ mapXY <- function(start,end,y,yMod,x,yfactor,r2,pts_1,pts_2,pts_3,pts_4 ){
   r2<-r2backup
   } # for
   longxlongy<-list()
-
   longxlongy$newLongx<-newLongx
   longxlongy$newLongy<-newLongy
-
-
   return(longxlongy)
 }

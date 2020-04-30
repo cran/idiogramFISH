@@ -19,13 +19,11 @@
 #' @param circularPlot boolean TRUE for circ.
 #' @param y list, y coords.
 #' @param markLabelSize numeric, font size
-#' @param pattern character, regex
 #' @param separFactor numeric, sep. kars.
 #' @param labelSpacing numeric, spacing
 #' @param circleCenter numeric
 #' @param circleCenterY numeric
 #' @param radius numeric
-#' @param legend character
 #' @param ylistTransChr list, transf. coords.
 #' @param rotation rotate
 #' @param labelOutwards srt
@@ -41,11 +39,11 @@ mimicCenPlotMark<-function(roundness, xMark, yMark,
                         lwd.chr,listOfdfChromSize,
                         circularPlot,
                         y,
-                        markLabelSize,pattern,
+                        markLabelSize,
                         separFactor,
                         labelSpacing,
                         circleCenter,circleCenterY,radius,
-                        legend,ylistTransChr,rotation,labelOutwards) {
+                        ylistTransChr,rotation,labelOutwards) {
 
 #  xMarkSq<<-xMark
 #  yMarkSq<<-yMark
@@ -97,25 +95,13 @@ mimicCenPlotMark<-function(roundness, xMark, yMark,
 
         circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,    ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
 
-        # circleMapsLabels <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,textylistTransMark,xlistNew,n,
-                                           # labelSpacing,chrWidth,rotation=rotation)
-
         drawPlotMark(circleMapsMarks,dfMarkColorInternal,listOfdfMarkPosCenStyle,lwd.chr*3)
-
-      # if(legend=="inline"){
-              # circLabelMark(circleMapsLabels,listOfdfMarkPosCenStyle,markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY)
-      # }
 
     } # circular TRUE
 
   } else {                                            # roundness < 20 ##############################################
 
     pts<- seq(-pi/2, pi*1.5, length.out = n)
-
-    # pts_1 <- seq(-pi/2, 0, length.out = n)
-    # pts_2 <- seq( 0, pi/2, length.out = n)
-    # pts_3 <- seq(pi, pi*1.5, length.out = n)
-    # pts_4 <- seq(pi/2, pi, length.out = n)
 
     yModMark<-yMark # yMark
 
@@ -181,13 +167,7 @@ mimicCenPlotMark<-function(roundness, xMark, yMark,
 
       circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
 
-      # circleMapsLabels <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,textylistTransMark,xlistNew,n,
-                                         # labelSpacing,chrWidth,rotation=rotation)
-
       drawPlotMark(circleMapsMarks,dfMarkColorInternal,listOfdfMarkPosCenStyle,lwd.chr*3)
-# if(legend=="inline"){
-      # circLabelMark(circleMapsLabels,listOfdfMarkPosCenStyle,markLabelSize,pattern)
-# }
 
     } # circular
   } # else ROUNDNESS

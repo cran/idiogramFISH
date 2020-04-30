@@ -1,5 +1,10 @@
 ## ---- echo=F, warning=FALSE, error=FALSE, comment=NA--------------------------
 if(Sys.info()['sysname']=="Darwin") {
+      # system("rm index.Rmd")
+      # system("rm DphylogenyVig.Rmd")
+      # system("rm EhumanVig.Rmd")         
+      # system("rm AplotIdiogramsVig.Rmd")
+      # system("rm BcircularVig.Rmd")
     
       system('echo "---" > index.Rmd')
       system('echo "title: \'Credits\'" >> index.Rmd')
@@ -20,8 +25,46 @@ if(Sys.info()['sysname']=="Darwin") {
       system('echo ""    >> index.Rmd')
       system('echo "visit https://ferroao.gitlab.io/idiogramfishhelppages" >> index.Rmd')
       
+      system('echo "---" > AplotIdiogramsVig.Rmd')
+      system('echo "title: \'1. Plotting chromosomes\'" >> AplotIdiogramsVig.Rmd')
+      system('echo "author: \'Fernando Roa\'" >> AplotIdiogramsVig.Rmd')
+      system('echo "date: \'23 08 2019\'" >> AplotIdiogramsVig.Rmd')
+      system('echo "output:" >> AplotIdiogramsVig.Rmd')
+      system('echo "  prettydoc::html_pretty:" >> AplotIdiogramsVig.Rmd')
+      system('echo "    theme: leonids" >> AplotIdiogramsVig.Rmd')
+      system('echo "    highlight: github" >> AplotIdiogramsVig.Rmd')
+      system('echo "    toc: true" >> AplotIdiogramsVig.Rmd')
+      system('echo "    toc_depth: 1" >> AplotIdiogramsVig.Rmd')
+      system('echo "    number_sections: true" >> AplotIdiogramsVig.Rmd')
+      system('echo "vignette: >" >> AplotIdiogramsVig.Rmd')
+      system('echo "  %\\VignetteAplotIdiogramsVigEntry{1. Plotting chromosomes}" >> AplotIdiogramsVig.Rmd')
+      system('echo "  %\\VignetteEngine{knitr::rmarkdown}" >> AplotIdiogramsVig.Rmd')
+      system('echo "  %\\VignetteEncoding{UTF-8}" >> AplotIdiogramsVig.Rmd')
+      system('echo "---" >> AplotIdiogramsVig.Rmd')
+      system('echo ""    >> AplotIdiogramsVig.Rmd')
+      system('echo "visit https://ferroao.gitlab.io/idiogramfishhelppages" >> AplotIdiogramsVig.Rmd')
+      
+      system('echo "---" > BcircularVig.Rmd')
+      system('echo "title: \'2. Circular Plots\'" >> BcircularVig.Rmd')
+      system('echo "author: \'Fernando Roa\'" >> BcircularVig.Rmd')
+      system('echo "date: \'23 08 2019\'" >> BcircularVig.Rmd')
+      system('echo "output:" >> BcircularVig.Rmd')
+      system('echo "  prettydoc::html_pretty:" >> BcircularVig.Rmd')
+      system('echo "    theme: leonids" >> BcircularVig.Rmd')
+      system('echo "    highlight: github" >> BcircularVig.Rmd')
+      system('echo "    toc: true" >> BcircularVig.Rmd')
+      system('echo "    toc_depth: 1" >> BcircularVig.Rmd')
+      system('echo "    number_sections: true" >> BcircularVig.Rmd')
+      system('echo "vignette: >" >> BcircularVig.Rmd')
+      system('echo "  %\\VignetteAplotIdiogramsVigEntry{2. Circular Plots}" >> BcircularVig.Rmd')
+      system('echo "  %\\VignetteEngine{knitr::rmarkdown}" >> BcircularVig.Rmd')
+      system('echo "  %\\VignetteEncoding{UTF-8}" >> BcircularVig.Rmd')
+      system('echo "---" >> BcircularVig.Rmd')
+      system('echo ""    >> BcircularVig.Rmd')
+      system('echo "visit https://ferroao.gitlab.io/idiogramfishhelppages" >> BcircularVig.Rmd')
+      
       system('echo "---" > DphylogenyVig.Rmd')
-      system('echo "title: \'4. Phylogeny\'" >> DphylogenyVig.Rmd')
+      system('echo "title: \'3. Phylogeny\'" >> DphylogenyVig.Rmd')
       system('echo "author: \'Fernando Roa\'" >> DphylogenyVig.Rmd')
       system('echo "date: \'23 08 2019\'" >> DphylogenyVig.Rmd')
       system('echo "output:" >> DphylogenyVig.Rmd')
@@ -32,12 +75,31 @@ if(Sys.info()['sysname']=="Darwin") {
       system('echo "    toc_depth: 1" >> DphylogenyVig.Rmd')
       system('echo "    number_sections: true" >> DphylogenyVig.Rmd')
       system('echo "vignette: >" >> DphylogenyVig.Rmd')
-      system('echo "  %\\VignetteIndexEntry{4. Phylogeny}" >> DphylogenyVig.Rmd')
+      system('echo "  %\\VignetteIndexEntry{3. Phylogeny}" >> DphylogenyVig.Rmd')
       system('echo "  %\\VignetteEngine{knitr::rmarkdown}" >> DphylogenyVig.Rmd')
       system('echo "  %\\VignetteEncoding{UTF-8}" >> DphylogenyVig.Rmd')
       system('echo "---" >> DphylogenyVig.Rmd')
       system('echo ""    >> DphylogenyVig.Rmd')
       system('echo "visit https://ferroao.gitlab.io/idiogramfishhelppages" >> DphylogenyVig.Rmd')
+      
+     system('echo "---" > EhumanVig.Rmd')
+     system('echo "title: \'4. Human\'" >> EhumanVig.Rmd')
+     system('echo "author: \'Fernando Roa\'" >> EhumanVig.Rmd')
+     system('echo "date: \'23 08 2019\'" >> EhumanVig.Rmd')
+     system('echo "output:" >> EhumanVig.Rmd')
+     system('echo "  prettydoc::html_pretty:" >> EhumanVig.Rmd')
+     system('echo "    theme: leonids" >> EhumanVig.Rmd')
+     system('echo "    highlight: github" >> EhumanVig.Rmd')
+     system('echo "    toc: true" >> EhumanVig.Rmd')
+     system('echo "    toc_depth: 1" >> EhumanVig.Rmd')
+     system('echo "    number_sections: true" >> EhumanVig.Rmd')
+     system('echo "vignette: >" >> EhumanVig.Rmd')
+     system('echo "  %\\VignetteEhumanVigEntry{4. Human}" >> EhumanVig.Rmd')
+     system('echo "  %\\VignetteEngine{knitr::rmarkdown}" >> EhumanVig.Rmd')
+     system('echo "  %\\VignetteEncoding{UTF-8}" >> EhumanVig.Rmd')
+     system('echo "---" >> EhumanVig.Rmd')
+     system('echo ""    >> EhumanVig.Rmd')
+     system('echo "visit https://ferroao.gitlab.io/idiogramfishhelppages" >> EhumanVig.Rmd')
     
 }
 if(length(rmarkdown::pandoc_version()<2)>0) { # solaris workaround
@@ -261,10 +323,11 @@ mydfMarkColor<-read.table(text=
 " markName markColor  style
         5S       red   dots
        45S     green square
-     gene1    orange upArrow   # <- new style 
-     gene2    salmon downArrow # <- new style 
+     gene1    orange upArrow    
+     gene2    salmon downArrow
+     gene3    \"#056522\" cMLeft  # <- new style of marks (used for arrow inline legends also)  
       DAPI      blue     cM   
-  constric     white cenStyle  # <- new style 
+  constric     white cenStyle   
        CMA    yellow square
 \"B mark\"     black square"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
@@ -283,14 +346,15 @@ kableExtra::kable_styling(knitr::kable(mydfMarkColor) , full_width = F
 # We will use column OTU if data.frame because chromosome size df has it
 mydfOfMarks<-read.table(text=
 "            OTU chrName markName chrRegion markSize markDistCen
-\"Species one\"      1      45S       p       NA         NA     # no measure means whole arm
+\"Species one\"      1      45S       p       NA         NA     # no measure means whole arm for square marks
 \"Species one\"      1       5S       q      0.5         0.5
-\"Species one\"      B  \"B mark\"    w       NA         NA     # w for whole chromosome
-\"Species one\"      B  constric      q       NA         1.0    # size is optional, see above, new mark style
+\"Species one\"      B  \"B mark\"    w       NA         NA     # w for whole chromosome for square marks
+\"Species one\"      B  constric      q       NA         1.0    
 \"Species one\"      2     45S        p        1         1.0
 \"Species one\"      2     gene1      q      0.5         1.0
 \"Species one\"      2     gene2      q      0.5         2.0
-\"Species one\"      3     DAPI       q        1         1.0
+\"Species one\"      3     DAPI       q       NA          1
+\"Species one\"      3     gene3      p       NA         .5 
 \"Species one\"      1     DAPI       cen
 \"Species one\"      3      CMA       cen", header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
@@ -515,7 +579,7 @@ plotIdiograms(dfChrSize  = mydfChrSizeHolo,# data.frame of chr. sizes
               ylimTopMod= -1,              # modify ylim top argument
               ylimBotMod= -2               # modify ylim bottom argument
               ,rulerPos = 0                # ruler position
-              ,ruler.tck = -0.01           # ruler tick size and orient.
+              ,ruler.tck = -0.01           # ruler ticks size and orient.
               
               ,legendWidth=1               # width of legend
               ,legendHeight=.7             # height of legend item 
@@ -624,6 +688,7 @@ plotIdiograms(dfChrSize  =bigdfOfChrSize,# chr. sizes
               roundness = 10,            # roundness of chr. vertices
               distTextChr=.8,            # distance of chr. to text
               chrIndex = "AR",           # add arm ratio only. For v. >=1.12
+              nameChrIndexPos = 3,
               morpho="Guerra",           # add chr. morphology by Guerra, see above. For v. >=1.12
               indexIdTextSize=.6,        # font size of indices and chr. name
               OTUTextSize=.9,            # font size of OTU names
@@ -638,7 +703,7 @@ plotIdiograms(dfChrSize  =bigdfOfChrSize,# chr. sizes
               rulerNumberPos=.4,         # position of numbers of ruler
               rulerNumberSize=.4,        # font size of ruler
               ylabline = -1,             # ruler units pos.
-              rulerTitleSize=.5,         # ATTENTION in devel. version only, not in CRAN
+              rulerTitleSize=.5,         # ruler font size of units (title)
 
               xlimRightMod = 3,          # modify xlim left argument 
               xlimLeftMod = 2,           # modify xlim left argument 
@@ -701,10 +766,10 @@ plotIdiograms(dfChrSize=bigdfChrSizeHolo, # chr. size data.frame
               indexIdTextSize=.9,         # font size of chr names and indices
               markLabelSize=.9,           # font size of legends
               
-              rulerPos=0,
+              rulerPos=0,                 # position of ruler
               rulerNumberSize=.9,         # font size of ruler
               ruler.tck= -.004,           # tick length and orient.
-              ylabline = -3,              # pos of ruler units
+              ylabline = -3,              # position of ruler units (title)
               
               ylimBotMod=.4               # modify ylim bottom argument
               #,asp=1                     # y x aspect

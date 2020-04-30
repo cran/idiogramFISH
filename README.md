@@ -11,7 +11,7 @@ idiogramFISH
 
 <!-- height="120" -->
 
-![<https://cran.r-project.org/web/packages/idiogramFISH/>](man/figures/cranversion.svg) ![<https://ferroao.gitlab.io/idiogramfishhelppages/downloads.png>](https://cranlogs.r-pkg.org/badges/grand-total/idiogramFISH?color=orange) [![10.5281/zenodo.3579417](man/figures/doibadge.svg)](https://doi.org/10.5281/zenodo.3579417)
+![<https://cran.r-project.org/web/packages/idiogramFISH/>](man/figures/cranversion.svg) [![downloads](man/figures/realdownloads.svg)](https://ferroao.gitlab.io/idiogramfishhelppages/downloads.png) [![10.5281/zenodo.3579417](man/figures/doibadge.svg)](https://doi.org/10.5281/zenodo.3579417)
  ![gitlab.com/ferroao/idiogramFISH](man/figures/gitbadge.svg) <br></br>
 [![donate](man/figures/donate2.svg)](https://liberapay.com/ferroao/donate) [![thanks
 for your
@@ -22,12 +22,13 @@ The goal of idiogramFISH is to plot idiograms of karyotypes, plasmids
 and circ. chr. having a set of data.frames for chromosome data and
 optionally marks’ data (`plotIdiograms` function) (Roa and PC Telles,
 [2020](#ref-Roa2020)). Idiograms can also be plotted in concentric
-circles.<br> <br>Six styles of marks are available: square, dots, cM,
-cenStyle, upArrow, downArrow; its legend (label) can be drawn inline or
-to the right of karyotypes. It is possible to calculate also chromosome
-and karyotype indexes (Romero-Zarco, [1986](#ref-Zarco1986new); Watanabe
-*et al.*, [1999](#ref-Watanabe1999)) and classify chromosome morphology
-in the categories of Levan ([1964](#ref-Levan1964)), and
+circles.<br> <br>Seven styles of marks are available: square, dots, cM,
+cMLeft, cenStyle, upArrow, downArrow; its legend (label) can be drawn
+inline or to the right of karyotypes. It is possible to calculate also
+chromosome and karyotype indexes (Romero-Zarco,
+[1986](#ref-Zarco1986new); Watanabe *et al.*, [1999](#ref-Watanabe1999))
+and classify chromosome morphology in the categories of Levan
+([1964](#ref-Levan1964)), and
 [Guerra](https://ferroao.gitlab.io/guerra1986/Guerra1986.pdf)
 ([1986](#ref-Guerra1986d)).
 
@@ -77,9 +78,7 @@ Vignettes use a lua filter, so you need
 install.packages("devtools")
 
 url <- "https://gitlab.com/ferroao/idiogramFISH"
-```
 
-``` r
 # Necessary packages for vignettes:
 list.of.packages <- c(
     "plyr",
@@ -89,7 +88,8 @@ list.of.packages <- c(
     "rmarkdown",
     "RCurl",
     "rvcheck",
-    "badger"
+    "badger",
+    "rentrez"
     )
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
@@ -209,506 +209,35 @@ plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
 
     dfOfChrSize
 
-<table>
-
-<thead>
-
-<tr>
-
-<th style="text-align:left;">
-
-chrName
-
-</th>
-
-<th style="text-align:right;">
-
-shortArmSize
-
-</th>
-
-<th style="text-align:right;">
-
-longArmSize
-
-</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-<tr>
-
-<td style="text-align:left;">
-
-1
-
-</td>
-
-<td style="text-align:right;">
-
-3
-
-</td>
-
-<td style="text-align:right;">
-
-4
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-2
-
-</td>
-
-<td style="text-align:right;">
-
-4
-
-</td>
-
-<td style="text-align:right;">
-
-5
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-3
-
-</td>
-
-<td style="text-align:right;">
-
-2
-
-</td>
-
-<td style="text-align:right;">
-
-3
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-X
-
-</td>
-
-<td style="text-align:right;">
-
-1
-
-</td>
-
-<td style="text-align:right;">
-
-2
-
-</td>
-
-</tr>
-
-</tbody>
-
-</table>
+| chrName | shortArmSize | longArmSize |
+| :------ | -----------: | ----------: |
+| 1       |            3 |           4 |
+| 2       |            4 |           5 |
+| 3       |            2 |           3 |
+| X       |            1 |           2 |
 
     dfMarkColor
 
-<table>
-
-<thead>
-
-<tr>
-
-<th style="text-align:left;">
-
-markName
-
-</th>
-
-<th style="text-align:left;">
-
-markColor
-
-</th>
-
-<th style="text-align:left;">
-
-style
-
-</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-<tr>
-
-<td style="text-align:left;">
-
-5S
-
-</td>
-
-<td style="text-align:left;">
-
-red
-
-</td>
-
-<td style="text-align:left;">
-
-dots
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-45S
-
-</td>
-
-<td style="text-align:left;">
-
-green
-
-</td>
-
-<td style="text-align:left;">
-
-square
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-DAPI
-
-</td>
-
-<td style="text-align:left;">
-
-blue
-
-</td>
-
-<td style="text-align:left;">
-
-square
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-CMA
-
-</td>
-
-<td style="text-align:left;">
-
-yellow
-
-</td>
-
-<td style="text-align:left;">
-
-square
-
-</td>
-
-</tr>
-
-</tbody>
-
-</table>
+| markName | markColor | style  |
+| :------- | :-------- | :----- |
+| 5S       | red       | dots   |
+| 45S      | green     | square |
+| DAPI     | blue      | square |
+| CMA      | yellow    | square |
 
 `p, q` and `w` marks can have empty columns `markDistCen` and `markSize`
 since v. 1.9.1 to plot whole arms (`p`, `q`) and whole chr. `w`.
 
     dfOfMarks2
 
-<table>
-
-<thead>
-
-<tr>
-
-<th style="text-align:left;">
-
-chrName
-
-</th>
-
-<th style="text-align:left;">
-
-markName
-
-</th>
-
-<th style="text-align:left;">
-
-chrRegion
-
-</th>
-
-<th style="text-align:right;">
-
-markSize
-
-</th>
-
-<th style="text-align:right;">
-
-markDistCen
-
-</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-<tr>
-
-<td style="text-align:left;">
-
-1
-
-</td>
-
-<td style="text-align:left;">
-
-5S
-
-</td>
-
-<td style="text-align:left;">
-
-p
-
-</td>
-
-<td style="text-align:right;">
-
-1
-
-</td>
-
-<td style="text-align:right;">
-
-0.5
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-1
-
-</td>
-
-<td style="text-align:left;">
-
-45S
-
-</td>
-
-<td style="text-align:left;">
-
-q
-
-</td>
-
-<td style="text-align:right;">
-
-1
-
-</td>
-
-<td style="text-align:right;">
-
-0.5
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-X
-
-</td>
-
-<td style="text-align:left;">
-
-45S
-
-</td>
-
-<td style="text-align:left;">
-
-p
-
-</td>
-
-<td style="text-align:right;">
-
-NA
-
-</td>
-
-<td style="text-align:right;">
-
-NA
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-3
-
-</td>
-
-<td style="text-align:left;">
-
-DAPI
-
-</td>
-
-<td style="text-align:left;">
-
-q
-
-</td>
-
-<td style="text-align:right;">
-
-1
-
-</td>
-
-<td style="text-align:right;">
-
-1.0
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-1
-
-</td>
-
-<td style="text-align:left;">
-
-DAPI
-
-</td>
-
-<td style="text-align:left;">
-
-cen
-
-</td>
-
-<td style="text-align:right;">
-
-NA
-
-</td>
-
-<td style="text-align:right;">
-
-NA
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-X
-
-</td>
-
-<td style="text-align:left;">
-
-CMA
-
-</td>
-
-<td style="text-align:left;">
-
-cen
-
-</td>
-
-<td style="text-align:right;">
-
-NA
-
-</td>
-
-<td style="text-align:right;">
-
-NA
-
-</td>
-
-</tr>
-
-</tbody>
-
-</table>
+| chrName | markName | chrRegion | markSize | markDistCen |
+| :------ | :------- | :-------- | -------: | ----------: |
+| 1       | 5S       | p         |        1 |         0.5 |
+| 1       | 45S      | q         |        1 |         0.5 |
+| X       | 45S      | p         |       NA |          NA |
+| 3       | DAPI     | q         |        1 |         1.0 |
+| 1       | DAPI     | cen       |       NA |          NA |
+| X       | CMA      | cen       |       NA |          NA |
 
 #### 2 How to plot a karyotype of holocentrics:
 
@@ -752,431 +281,32 @@ plotIdiograms(dfChrSize  =dfChrSizeHolo, # data.frame of chr. size
 
     dfChrSizeHolo
 
-<table>
-
-<thead>
-
-<tr>
-
-<th style="text-align:right;">
-
-chrName
-
-</th>
-
-<th style="text-align:right;">
-
-chrSize
-
-</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-<tr>
-
-<td style="text-align:right;">
-
-1
-
-</td>
-
-<td style="text-align:right;">
-
-3
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:right;">
-
-2
-
-</td>
-
-<td style="text-align:right;">
-
-4
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:right;">
-
-3
-
-</td>
-
-<td style="text-align:right;">
-
-2
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:right;">
-
-4
-
-</td>
-
-<td style="text-align:right;">
-
-5
-
-</td>
-
-</tr>
-
-</tbody>
-
-</table>
+| chrName | chrSize |
+| ------: | ------: |
+|       1 |       3 |
+|       2 |       4 |
+|       3 |       2 |
+|       4 |       5 |
 
     dfMarkColor
 
-<table>
-
-<thead>
-
-<tr>
-
-<th style="text-align:left;">
-
-markName
-
-</th>
-
-<th style="text-align:left;">
-
-markColor
-
-</th>
-
-<th style="text-align:left;">
-
-style
-
-</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-<tr>
-
-<td style="text-align:left;">
-
-5S
-
-</td>
-
-<td style="text-align:left;">
-
-red
-
-</td>
-
-<td style="text-align:left;">
-
-dots
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-45S
-
-</td>
-
-<td style="text-align:left;">
-
-green
-
-</td>
-
-<td style="text-align:left;">
-
-square
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-DAPI
-
-</td>
-
-<td style="text-align:left;">
-
-blue
-
-</td>
-
-<td style="text-align:left;">
-
-square
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-CMA
-
-</td>
-
-<td style="text-align:left;">
-
-yellow
-
-</td>
-
-<td style="text-align:left;">
-
-square
-
-</td>
-
-</tr>
-
-</tbody>
-
-</table>
+| markName | markColor | style  |
+| :------- | :-------- | :----- |
+| 5S       | red       | dots   |
+| 45S      | green     | square |
+| DAPI     | blue      | square |
+| CMA      | yellow    | square |
 
     dfMarkPosHolo
 
-<table>
-
-<thead>
-
-<tr>
-
-<th style="text-align:right;">
-
-chrName
-
-</th>
-
-<th style="text-align:left;">
-
-markName
-
-</th>
-
-<th style="text-align:right;">
-
-markPos
-
-</th>
-
-<th style="text-align:right;">
-
-markSize
-
-</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-<tr>
-
-<td style="text-align:right;">
-
-3
-
-</td>
-
-<td style="text-align:left;">
-
-5S
-
-</td>
-
-<td style="text-align:right;">
-
-1.0
-
-</td>
-
-<td style="text-align:right;">
-
-0.5
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:right;">
-
-3
-
-</td>
-
-<td style="text-align:left;">
-
-DAPI
-
-</td>
-
-<td style="text-align:right;">
-
-1.5
-
-</td>
-
-<td style="text-align:right;">
-
-0.5
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:right;">
-
-1
-
-</td>
-
-<td style="text-align:left;">
-
-45S
-
-</td>
-
-<td style="text-align:right;">
-
-2.0
-
-</td>
-
-<td style="text-align:right;">
-
-0.5
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:right;">
-
-2
-
-</td>
-
-<td style="text-align:left;">
-
-DAPI
-
-</td>
-
-<td style="text-align:right;">
-
-2.0
-
-</td>
-
-<td style="text-align:right;">
-
-0.5
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:right;">
-
-4
-
-</td>
-
-<td style="text-align:left;">
-
-CMA
-
-</td>
-
-<td style="text-align:right;">
-
-2.0
-
-</td>
-
-<td style="text-align:right;">
-
-0.5
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:right;">
-
-4
-
-</td>
-
-<td style="text-align:left;">
-
-5S
-
-</td>
-
-<td style="text-align:right;">
-
-0.5
-
-</td>
-
-<td style="text-align:right;">
-
-0.5
-
-</td>
-
-</tr>
-
-</tbody>
-
-</table>
+| chrName | markName | markPos | markSize |
+| ------: | :------- | ------: | -------: |
+|       3 | 5S       |     1.0 |      0.5 |
+|       3 | DAPI     |     1.5 |      0.5 |
+|       1 | 45S      |     2.0 |      0.5 |
+|       2 | DAPI     |     2.0 |      0.5 |
+|       4 | CMA      |     2.0 |      0.5 |
+|       4 | 5S       |     0.5 |      0.5 |
 
 #### 3\. Plotting both mono. and holo.
 
@@ -1243,13 +373,13 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-17-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-16-1.png" width="70%" />
 
 ``` r
 #dev.off() # close svg()
 ```
 
-<img src="man/figures/README-unnamed-chunk-18-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-17-1.png" width="70%" />
 
 ## Citation
 
@@ -1257,7 +387,7 @@ To cite idiogramFISH in publications, please use:
 
 Roa F, Telles MPC (2020) idiogramFISH: Idiograms with Marks and
 Karyotype Indices, Universidade Federal de Goiás. Brazil. R-package.
-version 1.14.7 <https://ferroao.gitlab.io/manualidiogramfish/>.
+version 1.14.11 <https://ferroao.gitlab.io/manualidiogramfish/>.
 doi:<!-- breaklink -->10.5281/zenodo.3579417
 
 To write citation to file:

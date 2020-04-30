@@ -12,6 +12,7 @@
 \item{markName}{name of mark}
 \item{markColor}{use R colors}
 \item{style}{character, use square or dots, optional}
+\item{protruding}{numeric, modifies aspect of cM/cMLeft marks, see parameter \code{protruding} in \code{\link{plotIdiograms}}, optional}
 }}
 \source{
 \url{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}
@@ -28,7 +29,7 @@ style column does not apply to cen. marks, only color.
 
 dfMarkColor: Example General data for marks NOT position
 
-humMarkColor: human mark characteristics
+humMarkColor: human bands' characteristics, from Adler (1994)
 
 mydfMaColor: mark characteristics used in vignette of phylogeny
 }

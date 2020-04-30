@@ -1,17 +1,60 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 1.14.11
+
+23-04-2020
+
+  - `genBankReadIF` function, now allows duplicated field names
+  - `cMLeft` style of mark added
+  - `cM` and `cMLeft`styles are used as `inline` type of `legend` for
+    arrows (`upArrow`,`downArrow`)
+  - A new column `protruding` can be added to `dfMarkColor` data.frame
+    to define aspect of `cM` marks
+  - `namesToColumns` new function to avoid overlap of mark names, for
+    holoc. and monoc.
+
+params (`namesToColumns`):
+
+  - `marksDf` data.frame of marks
+  - `dfChrSize` data.frame, size of chr. same as plot.
+  - `markType` of type “downArrow”,“upArrow”,“cM”,“cMLeft”
+  - `amountofSpaces` numeric, number of spaces for each column
+  - `colNumber` numeric, number of columns
+  - `protruding` numeric, same as plot, equivalent to cM protruding
+  - `protrudingInt` numeric, spacing of columns in terms of width of
+    chr. percent 1 = 100%.
+  - `circularPlot` same as plot
+  - `rotation` same as plot
+  - `defaultStyleMark` if some data in column style missing fill with
+    this one
+  - `orderBySize` same as in plot.
+  - `halfModUp` when plotting several chromosomes in a circular plot,
+    corrects for alignment problems of “upArrows”, “cM” labels.
+  - `halfModDown` when plotting several chromosomes in a circular plot,
+    corrects for alignment problems of “downArrows”, “cMLeft” labels.
+  - `rotatMod` for circ. plots, when rotation diff. from `0`, corrects
+    alignment of labels.
+
+params:
+
+  - `cMBeginCenter` modifies start position of `cM` and `cMLeft` marks
+  - `arrowsToSide` arrows are plotted near chr. margin
+
 # idiogramFISH 1.14.7
 
 27-03-2020
 
   - Compatibility with `rentrez` downloaded data
   - Better reading of `join` from genBank data
-  - param. `rulerTitleSize`: Font size of units (title)
   - new styles of mark: `cenStyle` to add constrictions anywhere;
     `upArrow` (clockwise in circular plot); `downArrow` (anti-clockwise
     in circular plot)
   - fixed bug when `legend="inline"` in circular plots
+
+params:
+
+  - `rulerTitleSize`: Font size of units (title)
   - `arrowhead`: proportion of head of arrow - length
   - `shrinkArrow`: proportion to shrink body of arrow - width
   - `arrowheadWidthShrink`: proportion to shrink arrowhead - width
@@ -24,8 +67,12 @@
     tidyr.  
   - function `swapChrRegionDfSizeAndMarks` to swap arm size and marks
   - tolerance when column `markSize` absent
+
+params:
+
+  - `legendYcoord`: modify mark legend Y pos (for common plot also)
   - Added circular plot `circularPlot=TRUE` and other params. for
-    circular plot:
+    circular plot
   - `shrinkFactor`: size of chr. in fraction of circle
   - `separFactor`: separ among kar.
   - `labelSpacing`: among label and chr.
@@ -38,47 +85,49 @@
   - `circleCenter`: X coordinate
   - `circleCenterY`: Y coordinate
   - `callPlot`: call plot.new or use your device (when FALSE)
-  - `OTULabelSpacerx`: modify OTU name pos
-  - `OTULabelSpacery`: modify OTU name pos
+  - `OTULabelSpacerx`: modify OTU name pos.
+  - `OTULabelSpacery`: modify OTU name pos.
   - `OTUcentered`: OTU name centered
   - `OTUjustif`: OTU name justif.
   - `OTUlegendHeight`: separ. of OTU names when `OTUplacing`
-  - `legendYcoord`: modify mark legend Y pos (for common plot also)
 
 # idiogramFISH 1.13.8
 
 05-02-2020
+
+  - Fixed bug when plotting several OTU with groups
+  - cen. marks allowed also when `centromereSize = 0`
+  - improvement in automatic scale of ruler.
+  - Added the “cM” style of mark, with custom `protruding`
+  - `centromereSize` is automatic (when absent), as well as
+    `rulerInterval`
+
+params:
 
   - `lwd.cM`: thickness of cM marks
   - `OTUfont`: style of font of OTU name
   - `OTUfamily`: font family for OTU names
   - `lwd.chr`: affects ruler too.
   - `defaultFontFamily`: modify font of texts.
-  - Fixed bug when plotting several OTU with groups
+  - Custom default style of mark with `defaultStyleMark`
   - `fixCenBorder` affects cen. marks also.
   - `chrBorderColor` for adding optionally chr. border color.
   - `cenColor` defaults to `chrColor` now.
   - `colorBorderMark` forces custom color in border of marks.
   - `borderOfWhiteMarks`, if `TRUE`, when mark is white, its border is
     black.
-  - cen. marks allowed also when `centromereSize = 0`
-  - `centromereSize` is automatic (if absent), as well as
-    `rulerInterval`
   - `ceilingFactor` number of significative digits to consider when
     rounding ruler max. value.
-  - improvement in automatic scale of ruler. `MbThreshold` created
-    (substitutes `MbThresholds`)
+  - `MbThreshold` created (substitutes `MbThresholds`)
   - added option to modify ruler intervals for Mb, and cM independently
     with params: `rulerIntervalMb`, `rulerIntervalcM`
   - other added parameters: `defaultStyleMark`, `protruding`,
     `ceilingFactor`, `rulerInterval`, `threshold`, `MbUnit`,
     `specialChrWidth`, `specialChrSpacing`, `specialOTUNames`,
     `specialyTitle`
-  - params: OTUs passed to `specialOTUNames`, can have special:
+  - OTUs passed to `specialOTUNames`, can have special:
     `specialChrWidth`, `specialChrSpacing`, and `specialyTitle`. Useful
     for e.g. cM.
-  - Added the “cM” style of mark, with custom `protruding`
-  - Custom default style of mark with `defaultStyleMark`
   - Allowed customization of ruler (`ceilingFactor`, `rulerInterval`)
   - Allowed custom ruler title `MbUnit`, `specialyTitle`, `yTitle`.
     `yTitle` is the common (micrometers). `specialyTitle` is for OTUs in
