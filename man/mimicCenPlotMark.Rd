@@ -6,16 +6,16 @@
 This is an internal function that plot marks}
 \usage{
 mimicCenPlotMark(
-  roundness,
+  squareness,
   xMark,
   yMark,
-  dfMarkColorInternal,
+  defCenStyleCol,
   listOfdfMarkPosCenStyle,
   chrWidth,
   specialChrWidth,
   yfactor,
   n,
-  lwd.chr,
+  lwd.mimicCen,
   listOfdfChromSize,
   circularPlot,
   y,
@@ -27,17 +27,20 @@ mimicCenPlotMark(
   radius,
   ylistTransChr,
   rotation,
-  labelOutwards
+  labelOutwards,
+  yMarkLine,
+  xMarkRightLine,
+  xMarkLeftLine,
+  x,
+  roundedCen = FALSE
 )
 }
 \arguments{
-\item{roundness}{roundness of vertices <}
+\item{squareness}{squareness of vertices <}
 
 \item{xMark}{x component of polygon}
 
 \item{yMark}{yMark component of polygon}
-
-\item{dfMarkColorInternal}{colors for marks}
 
 \item{listOfdfMarkPosCenStyle}{list of df. of mark pos.}
 
@@ -48,8 +51,6 @@ mimicCenPlotMark(
 \item{yfactor}{yMark distortion based on canvas proportion}
 
 \item{n}{numeric, to define vertices of rounded portions}
-
-\item{lwd.chr}{thick of border line}
 
 \item{listOfdfChromSize}{chr size df list}
 
@@ -74,6 +75,10 @@ mimicCenPlotMark(
 \item{rotation}{rotate}
 
 \item{labelOutwards}{srt}
+
+\item{dfMarkColorInternal}{colors for marks}
+
+\item{lwd.chr}{thick of border line}
 }
 \value{
 plot

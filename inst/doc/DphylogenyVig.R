@@ -142,7 +142,7 @@ plotIdiograms(dfChrSize = allChrSizeSample,    # data.frame of Chr. Sizes
               dfMarkPos = allMarksSample,      # d.f. of Marks (inc. cen. marks) 
               dfMarkColor =  mydfMaColor,      # d.f. of mark characteristics
               
-              roundness = 4,                   # roundness of vertices
+              squareness = 4,                   # squareness of vertices
               lwd.chr=.5,                      # width of lines
               orderBySize = FALSE,             # don't order chr. by size
               centromereSize = 1.3,            # apparent cen. size
@@ -271,7 +271,7 @@ plotIdiograms(allChrSizeSampleHolo,               # chr. size data.frame
               dfMarkPos = allMarksSampleHolo,     # data.frame of marks' positions
               dfMarkColor =  mydfMaColor,         # d.f. of mark characteristics
               
-              roundness = 4,                      # vertices roundness
+              squareness = 4,                      # vertices squareness
               karHeight = 2.8,                    # karyotype height
               karHeiSpace = 4.5,                  # vertical size of kar. including spacing
               yTitle="",
@@ -294,7 +294,7 @@ plotIdiograms(allChrSizeSampleHolo,               # chr. size data.frame
               ,ylimTopMod = -4                    # modify ylim of top
               ,ylimBotMod = -4                    # modify ylim of bottom
               ,xlimRightMod = 3                   # modify xlim right argument
-              # ,asp=1                            # y x aspect
+              ,xModifier=0.005                    # separ. among chromatids
               )
 }
 
@@ -378,7 +378,7 @@ plotIdiograms(mixChrSize,                         # chr. size data.frame
               
               karHeight = 2.8,                    # vertical size of kar. including spacing
               karHeiSpace = 4.5,                  # vertical size of kar. including spacing
-              roundness = 5,                      # vertices roundness
+              squareness = 5,                      # vertices squareness
               chrSpacing = .25,                   # horizontal spacing among chr.
               yTitle = "",
               
@@ -402,6 +402,9 @@ plotIdiograms(mixChrSize,                         # chr. size data.frame
               ,ruler.tck=-.004                    # ruler tick size and orient.
               ,OTUfont=3                          # italics
               ,OTUfamily="Courier New"            # for OTU name
+              
+              ,xModMonoHoloRate = 5               # factor (quotient) to shrink separation of chromatids of holocen.
+              
 )
 }
 # close png

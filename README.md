@@ -12,17 +12,16 @@ idiogramFISH
 <!-- height="120" -->
 
 ![<https://cran.r-project.org/web/packages/idiogramFISH/>](man/figures/cranversion.svg) [![downloads](man/figures/realdownloads.svg)](https://ferroao.gitlab.io/idiogramfishhelppages/downloads.png) [![10.5281/zenodo.3579417](man/figures/doibadge.svg)](https://doi.org/10.5281/zenodo.3579417)
- ![gitlab.com/ferroao/idiogramFISH](man/figures/gitbadge.svg) <br></br>
-[![donate](man/figures/donate2.svg)](https://liberapay.com/ferroao/donate) [![thanks
-for your
-donation](man/figures/donateweek.svg)](https://liberapay.com/ferroao/donate)
+ ![gitlab.com/ferroao/idiogramFISH](man/figures/gitbadge.svg)
+<br></br><br></br><a href='https://ko-fi.com/X7X71PZZG' target='_blank'><img height='36' style='border:0px;height:36px;' src='man/figures/kofi1.png' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 <!-- badges: end -->
 
 The goal of idiogramFISH is to plot idiograms of karyotypes, plasmids
 and circ. chr. having a set of data.frames for chromosome data and
 optionally marks’ data (`plotIdiograms` function) (Roa and PC Telles,
 [2020](#ref-Roa2020)). Idiograms can also be plotted in concentric
-circles.<br> <br>Seven styles of marks are available: square, dots, cM,
+circles. Separated chromatids can be visible when not in a circular
+plot.<br> <br>Seven styles of marks are available: square, dots, cM,
 cMLeft, cenStyle, upArrow, downArrow; its legend (label) can be drawn
 inline or to the right of karyotypes. It is possible to calculate also
 chromosome and karyotype indexes (Romero-Zarco,
@@ -166,6 +165,8 @@ data(dfOfChrSize) # chromsome data
 data(dfMarkColor) # mark general data
 data(dfOfMarks2)  # mark position data (inc. cen.)
 
+dfOfMarks2[which(dfOfMarks2$markName=="5S"),]$markSize<-0.8 # modif. of mark size
+
 # svg("testing.svg",width=11,height=4.5 )
 
 opar <- par(no.readonly = TRUE)      # make a copy of current settings if you want to restore them later
@@ -209,35 +210,506 @@ plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
 
     dfOfChrSize
 
-| chrName | shortArmSize | longArmSize |
-| :------ | -----------: | ----------: |
-| 1       |            3 |           4 |
-| 2       |            4 |           5 |
-| 3       |            2 |           3 |
-| X       |            1 |           2 |
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+chrName
+
+</th>
+
+<th style="text-align:right;">
+
+shortArmSize
+
+</th>
+
+<th style="text-align:right;">
+
+longArmSize
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+3
+
+</td>
+
+<td style="text-align:right;">
+
+4
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+2
+
+</td>
+
+<td style="text-align:right;">
+
+4
+
+</td>
+
+<td style="text-align:right;">
+
+5
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+3
+
+</td>
+
+<td style="text-align:right;">
+
+2
+
+</td>
+
+<td style="text-align:right;">
+
+3
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+X
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+2
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
     dfMarkColor
 
-| markName | markColor | style  |
-| :------- | :-------- | :----- |
-| 5S       | red       | dots   |
-| 45S      | green     | square |
-| DAPI     | blue      | square |
-| CMA      | yellow    | square |
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+markName
+
+</th>
+
+<th style="text-align:left;">
+
+markColor
+
+</th>
+
+<th style="text-align:left;">
+
+style
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+5S
+
+</td>
+
+<td style="text-align:left;">
+
+red
+
+</td>
+
+<td style="text-align:left;">
+
+dots
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+45S
+
+</td>
+
+<td style="text-align:left;">
+
+green
+
+</td>
+
+<td style="text-align:left;">
+
+square
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+DAPI
+
+</td>
+
+<td style="text-align:left;">
+
+blue
+
+</td>
+
+<td style="text-align:left;">
+
+square
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+CMA
+
+</td>
+
+<td style="text-align:left;">
+
+yellow
+
+</td>
+
+<td style="text-align:left;">
+
+square
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 `p, q` and `w` marks can have empty columns `markDistCen` and `markSize`
 since v. 1.9.1 to plot whole arms (`p`, `q`) and whole chr. `w`.
 
     dfOfMarks2
 
-| chrName | markName | chrRegion | markSize | markDistCen |
-| :------ | :------- | :-------- | -------: | ----------: |
-| 1       | 5S       | p         |        1 |         0.5 |
-| 1       | 45S      | q         |        1 |         0.5 |
-| X       | 45S      | p         |       NA |          NA |
-| 3       | DAPI     | q         |        1 |         1.0 |
-| 1       | DAPI     | cen       |       NA |          NA |
-| X       | CMA      | cen       |       NA |          NA |
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+chrName
+
+</th>
+
+<th style="text-align:left;">
+
+markName
+
+</th>
+
+<th style="text-align:left;">
+
+chrRegion
+
+</th>
+
+<th style="text-align:right;">
+
+markSize
+
+</th>
+
+<th style="text-align:right;">
+
+markDistCen
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+1
+
+</td>
+
+<td style="text-align:left;">
+
+5S
+
+</td>
+
+<td style="text-align:left;">
+
+p
+
+</td>
+
+<td style="text-align:right;">
+
+0.8
+
+</td>
+
+<td style="text-align:right;">
+
+0.5
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+1
+
+</td>
+
+<td style="text-align:left;">
+
+45S
+
+</td>
+
+<td style="text-align:left;">
+
+q
+
+</td>
+
+<td style="text-align:right;">
+
+1.0
+
+</td>
+
+<td style="text-align:right;">
+
+0.5
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+X
+
+</td>
+
+<td style="text-align:left;">
+
+45S
+
+</td>
+
+<td style="text-align:left;">
+
+p
+
+</td>
+
+<td style="text-align:right;">
+
+NA
+
+</td>
+
+<td style="text-align:right;">
+
+NA
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+3
+
+</td>
+
+<td style="text-align:left;">
+
+DAPI
+
+</td>
+
+<td style="text-align:left;">
+
+q
+
+</td>
+
+<td style="text-align:right;">
+
+1.0
+
+</td>
+
+<td style="text-align:right;">
+
+1.0
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+1
+
+</td>
+
+<td style="text-align:left;">
+
+DAPI
+
+</td>
+
+<td style="text-align:left;">
+
+cen
+
+</td>
+
+<td style="text-align:right;">
+
+NA
+
+</td>
+
+<td style="text-align:right;">
+
+NA
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+X
+
+</td>
+
+<td style="text-align:left;">
+
+CMA
+
+</td>
+
+<td style="text-align:left;">
+
+cen
+
+</td>
+
+<td style="text-align:right;">
+
+NA
+
+</td>
+
+<td style="text-align:right;">
+
+NA
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 #### 2 How to plot a karyotype of holocentrics:
 
@@ -267,7 +739,7 @@ plotIdiograms(dfChrSize  =dfChrSizeHolo, # data.frame of chr. size
               ylimBotMod=.2            # modify ylim bottom argument of plot
               ,legendHeight=.5         # height of legend labels
               ,legendWidth = 1.2       # width of legend labels
-              # ,asp=1                 # y/x aspect
+              ,xModifier = .025         # separ. among chromatids
               )                  
 ```
 
@@ -281,32 +753,431 @@ plotIdiograms(dfChrSize  =dfChrSizeHolo, # data.frame of chr. size
 
     dfChrSizeHolo
 
-| chrName | chrSize |
-| ------: | ------: |
-|       1 |       3 |
-|       2 |       4 |
-|       3 |       2 |
-|       4 |       5 |
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:right;">
+
+chrName
+
+</th>
+
+<th style="text-align:right;">
+
+chrSize
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+3
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:right;">
+
+2
+
+</td>
+
+<td style="text-align:right;">
+
+4
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:right;">
+
+3
+
+</td>
+
+<td style="text-align:right;">
+
+2
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:right;">
+
+4
+
+</td>
+
+<td style="text-align:right;">
+
+5
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
     dfMarkColor
 
-| markName | markColor | style  |
-| :------- | :-------- | :----- |
-| 5S       | red       | dots   |
-| 45S      | green     | square |
-| DAPI     | blue      | square |
-| CMA      | yellow    | square |
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+markName
+
+</th>
+
+<th style="text-align:left;">
+
+markColor
+
+</th>
+
+<th style="text-align:left;">
+
+style
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+5S
+
+</td>
+
+<td style="text-align:left;">
+
+red
+
+</td>
+
+<td style="text-align:left;">
+
+dots
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+45S
+
+</td>
+
+<td style="text-align:left;">
+
+green
+
+</td>
+
+<td style="text-align:left;">
+
+square
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+DAPI
+
+</td>
+
+<td style="text-align:left;">
+
+blue
+
+</td>
+
+<td style="text-align:left;">
+
+square
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+CMA
+
+</td>
+
+<td style="text-align:left;">
+
+yellow
+
+</td>
+
+<td style="text-align:left;">
+
+square
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
     dfMarkPosHolo
 
-| chrName | markName | markPos | markSize |
-| ------: | :------- | ------: | -------: |
-|       3 | 5S       |     1.0 |      0.5 |
-|       3 | DAPI     |     1.5 |      0.5 |
-|       1 | 45S      |     2.0 |      0.5 |
-|       2 | DAPI     |     2.0 |      0.5 |
-|       4 | CMA      |     2.0 |      0.5 |
-|       4 | 5S       |     0.5 |      0.5 |
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:right;">
+
+chrName
+
+</th>
+
+<th style="text-align:left;">
+
+markName
+
+</th>
+
+<th style="text-align:right;">
+
+markPos
+
+</th>
+
+<th style="text-align:right;">
+
+markSize
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:right;">
+
+3
+
+</td>
+
+<td style="text-align:left;">
+
+5S
+
+</td>
+
+<td style="text-align:right;">
+
+1.0
+
+</td>
+
+<td style="text-align:right;">
+
+0.5
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:right;">
+
+3
+
+</td>
+
+<td style="text-align:left;">
+
+DAPI
+
+</td>
+
+<td style="text-align:right;">
+
+1.5
+
+</td>
+
+<td style="text-align:right;">
+
+0.5
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:left;">
+
+45S
+
+</td>
+
+<td style="text-align:right;">
+
+2.0
+
+</td>
+
+<td style="text-align:right;">
+
+0.5
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:right;">
+
+2
+
+</td>
+
+<td style="text-align:left;">
+
+DAPI
+
+</td>
+
+<td style="text-align:right;">
+
+2.0
+
+</td>
+
+<td style="text-align:right;">
+
+0.5
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:right;">
+
+4
+
+</td>
+
+<td style="text-align:left;">
+
+CMA
+
+</td>
+
+<td style="text-align:right;">
+
+2.0
+
+</td>
+
+<td style="text-align:right;">
+
+0.5
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:right;">
+
+4
+
+</td>
+
+<td style="text-align:left;">
+
+5S
+
+</td>
+
+<td style="text-align:right;">
+
+0.5
+
+</td>
+
+<td style="text-align:right;">
+
+0.5
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 #### 3\. Plotting both mono. and holo.
 
@@ -338,7 +1209,8 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               dfMarkColor= dfMarkColor,  # df of mark style
               dfMarkPos  = monoholoMarks,# df of mark positions, includes cen. marks
               
-              roundness = 4,             # vertices roundness
+              squareness = 4,            # vertices squareness
+              roundedCen = FALSE,        # triangular cen.
               addOTUName = TRUE,         # add OTU names
               OTUTextSize = .7,          # font size of OTU
               distTextChr = .5,          # separ. among chr. and text and among chr. name and indices
@@ -358,6 +1230,8 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               xlimLeftMod=1,             # modify xlim left argument of plot
               xlimRightMod=3,            # modify xlim right argument of plot
               ylimBotMod= .2             # modify ylim bottom argument of plot
+              
+              ,chromatids=FALSE          # do not show separ. chromatids
               
               # for Circular Plot, add:
               
@@ -387,7 +1261,7 @@ To cite idiogramFISH in publications, please use:
 
 Roa F, Telles MPC (2020) idiogramFISH: Idiograms with Marks and
 Karyotype Indices, Universidade Federal de Goiás. Brazil. R-package.
-version 1.14.11 <https://ferroao.gitlab.io/manualidiogramfish/>.
+version 1.15.1 <https://ferroao.gitlab.io/manualidiogramfish/>.
 doi:<!-- breaklink -->10.5281/zenodo.3579417
 
 To write citation to file:
@@ -491,7 +1365,7 @@ R-package. version 1.12.1. <https://doi.org/10.5281/zenodo.3579417>.
 
 Wickham H. 2011. The split-apply-combine strategy for data analysis
 *Journal of Statistical Software*, 40(1): 1–29.
-<http://www.jstatsoft.org/v40/i01/> 
+<https://www.jstatsoft.org/article/view/v040i01> 
 
 </div>
 

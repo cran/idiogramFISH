@@ -8,13 +8,21 @@
 \alias{parentalAndHybHoloChrSize}
 \alias{bigdfOfChrSize3Mb}
 \title{Chr. basic data Holo.}
-\format{data.frame with columns:
+\format{
+data.frame with columns:
 \describe{
 \item{OTU}{grouping OTU (species), optional if only one OTU}
 \item{chrName}{name of chromosome}
 \item{chrSize}{size of chromosome, micrometers or Mb}
 \item{group}{chromosome group, optional}
-}}
+}
+
+An object of class \code{data.frame} with 12 rows and 3 columns.
+
+An object of class \code{data.frame} with 13 rows and 3 columns.
+
+An object of class \code{data.frame} with 14 rows and 3 columns.
+}
 \usage{
 dfChrSizeHolo
 

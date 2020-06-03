@@ -7,13 +7,19 @@
 \alias{humMarkColor}
 \alias{mydfMaColor}
 \title{Mark characteristics}
-\format{dfMarkColor a data.frame with columns:
+\format{
+dfMarkColor a data.frame with columns:
 \describe{
 \item{markName}{name of mark}
 \item{markColor}{use R colors}
 \item{style}{character, use square or dots, optional}
 \item{protruding}{numeric, modifies aspect of cM/cMLeft marks, see parameter \code{protruding} in \code{\link{plotIdiograms}}, optional}
-}}
+}
+
+An object of class \code{data.frame} with 395 rows and 3 columns.
+
+An object of class \code{data.frame} with 6 rows and 3 columns.
+}
 \source{
 \url{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}
 }

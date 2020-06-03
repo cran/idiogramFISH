@@ -6,7 +6,8 @@
 This is an internal function that plot marks}
 \usage{
 roundPlotMark(
-  roundness,
+  bannedMarkName,
+  squareness,
   xMark,
   yMark,
   dfMarkColorInternal,
@@ -33,7 +34,7 @@ roundPlotMark(
 )
 }
 \arguments{
-\item{roundness}{roundness of vertices <}
+\item{squareness}{squareness of vertices <}
 
 \item{xMark}{x component of polygon}
 

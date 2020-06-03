@@ -10,14 +10,26 @@
 \alias{parentalAndHybChrSize}
 \alias{traspadf}
 \title{Chr. basic data Monocen.}
-\format{data.frame with columns:
+\format{
+data.frame with columns:
 \describe{
 \item{OTU}{OTU, species, optional if only one OTU (species)}
 \item{chrName}{name of chromosome}
 \item{shortArmSize}{size of short arm, micrometers }
 \item{longArmSize}{size of long arm, micrometers }
 \item{group}{chr group, optional}
-}}
+}
+
+An object of class \code{data.frame} with 50 rows and 4 columns.
+
+An object of class \code{data.frame} with 24 rows and 4 columns.
+
+An object of class \code{data.frame} with 75 rows and 4 columns.
+
+An object of class \code{data.frame} with 13 rows and 4 columns.
+
+An object of class \code{data.frame} with 12 rows and 4 columns.
+}
 \source{
 \url{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}
 }

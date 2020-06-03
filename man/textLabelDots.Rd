@@ -14,6 +14,7 @@ textLabelDots(
   chrSpacing,
   markLabelSize,
   pattern,
+  bannedMarkName,
   xBoundariesQuar
 )
 }

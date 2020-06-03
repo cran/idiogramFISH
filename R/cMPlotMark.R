@@ -29,7 +29,7 @@
 #' @importFrom graphics polygon text
 #'
 
-cMPlotMark<-function(xMark, yMark,y, x, dfMarkColorInternal,listOfdfMarkPoscM, lwd.cM,circularPlot,
+cMPlotMark<-function(bannedMarkName,xMark, yMark,y, x, dfMarkColorInternal,listOfdfMarkPoscM, lwd.cM,circularPlot,
                      radius,circleCenter,circleCenterY,separFactor,markLabelSize,pattern,n,labelSpacing,chrWidth,
                      ylistTransChr,rotation,labelOutwards) {
 
@@ -71,12 +71,13 @@ cMPlotMark<-function(xMark, yMark,y, x, dfMarkColorInternal,listOfdfMarkPoscM, l
                                          chrWidth,
                                          rotation=rotation)
 
-      circLabelMark(circleMapsLabels,listOfdfMarkPoscM,markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY,iscM=FALSE,adj=0.5)
+      circLabelMark(bannedMarkName,circleMapsLabels,listOfdfMarkPoscM,markLabelSize,pattern,labelOutwards,
+                    circleCenter,circleCenterY,iscM=FALSE,adj=0.5)
   }
 } # fun
 
 
-cMLeftPlotMark<-function(xMark, yMark,y,x, dfMarkColorInternal,listOfdfMarkPoscM, lwd.cM,circularPlot,
+cMLeftPlotMark<-function(bannedMarkName,xMark, yMark,y,x, dfMarkColorInternal,listOfdfMarkPoscM, lwd.cM,circularPlot,
                      radius,circleCenter,circleCenterY,separFactor,markLabelSize,pattern,n,labelSpacing,chrWidth,
                      ylistTransChr,rotation,labelOutwards) {
   if(circularPlot==FALSE) {
@@ -119,7 +120,8 @@ cMLeftPlotMark<-function(xMark, yMark,y,x, dfMarkColorInternal,listOfdfMarkPoscM
                                        chrWidth,      # left
                                        rotation=rotation)
 
-    circLabelMark(circleMapsLabels,listOfdfMarkPoscM,markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY,iscMLeft=FALSE,adj=0.5)
+    circLabelMark(bannedMarkName,circleMapsLabels,listOfdfMarkPoscM,markLabelSize,pattern,
+                  labelOutwards,circleCenter,circleCenterY,iscMLeft=FALSE,adj=0.5)
   }
 } # fun
 

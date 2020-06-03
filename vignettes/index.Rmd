@@ -92,9 +92,9 @@ cat(paste0("<img src=",img1_path," class=\"right\" width=\"20%\">") )
 }
 ```
 
-The goal of idiogramFISH is to plot idiograms of karyotypes, plasmids and circ. chr. having a set of data.frames for chromosome data
+The goal of idiogramFISH is to plot idiograms of karyotypes, plasmids and circular chr. having a set of data.frames for chromosome data
     and optionally marks' data (`plotIdiograms` function) [@Roa2020]. Idiograms can also be plotted in 
-    concentric circles.<br>
+    concentric circles. Separated chromatids can be visible when not in a circular plot.<br>
     <br>Seven styles of marks are available: square, dots, cM, cMLeft, cenStyle, upArrow, downArrow; its legend (label) can be drawn inline 
     or to the right of karyotypes. It is possible to calculate
     also chromosome and karyotype indexes [@Watanabe1999;@Zarco1986new] and classify chromosome morphology in the categories of
@@ -316,26 +316,25 @@ sink()
 
 [Fernando Roa](https://ferroao.gitlab.io/curriculumpu/)
 ``` {r, echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"}
+cat("<a href='https://ko-fi.com/X7X71PZZG' target='_blank'><img height='36' style='border:0px;height:36px;' src='../man/figures/kofi1.png' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>")
 # library(badger)
-if (requireNamespace("RCurl", quietly = TRUE)  ) {
-donate <- "https://liberapay.com/assets/widgets/donate.svg"
-donate_contFile <- "../man/figures/donate2.svg"
-tryCatch(suppressWarnings(download.file(donate, donate_contFile) ), error=function(e) "")
-if(file.exists(donate_contFile ) ) {
-cat(paste0("[![donate](",knitr::include_graphics(donate_contFile),")](https://liberapay.com/ferroao/donate)" ) )
-}
-}
-```
-``` {r, echo=F, message=FALSE, fig.show = "hold", fig.align = "default", warning=FALSE, results="asis"}
+# if (requireNamespace("RCurl", quietly = TRUE)  ) {
+# donate <- "https://liberapay.com/assets/widgets/donate.svg"
+# donate_contFile <- "../man/figures/donate2.svg"
+# tryCatch(suppressWarnings(download.file(donate, donate_contFile) ), error=function(e) "")
+# if(file.exists(donate_contFile ) ) {
+# cat(paste0("[![donate](",knitr::include_graphics(donate_contFile),")](https://liberapay.com/ferroao/donate)" ) )
+# }
+# }
 # library(badger)
-if (requireNamespace("RCurl", quietly = TRUE) ) {
-donateweek <- "http://img.shields.io/liberapay/receives/ferroao.svg"
-donateweek_contFile <- "../man/figures/donateweek.svg"
-tryCatch(suppressWarnings(download.file(donateweek, donateweek_contFile) ), error=function(e) "")
-if(file.exists(donateweek_contFile ) ) {
-cat(paste0("[![donate](",knitr::include_graphics(donateweek_contFile),")](https://liberapay.com/ferroao/donate)" ) )
-}
-}
+# if (requireNamespace("RCurl", quietly = TRUE) ) {
+# donateweek <- "http://img.shields.io/liberapay/receives/ferroao.svg"
+# donateweek_contFile <- "../man/figures/donateweek.svg"
+# tryCatch(suppressWarnings(download.file(donateweek, donateweek_contFile) ), error=function(e) "")
+# if(file.exists(donateweek_contFile ) ) {
+# cat(paste0("[![donate](",knitr::include_graphics(donateweek_contFile),")](https://liberapay.com/ferroao/donate)" ) )
+# }
+# }
 ```
   
 [Mariana PC Telles](http://lattes.cnpq.br/4648436798023532)  

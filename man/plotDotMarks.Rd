@@ -6,6 +6,7 @@
 This is an internal function that plot dot marks}
 \usage{
 plotDotMarks(
+  bannedMarkName,
   xMarkCr,
   yMarkCr,
   rad,

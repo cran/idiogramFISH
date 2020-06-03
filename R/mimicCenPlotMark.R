@@ -5,7 +5,7 @@
 #'
 #' @keywords internal
 #'
-#' @param roundness roundness of vertices <
+#' @param squareness squareness of vertices <
 #' @param xMark x component of polygon
 #' @param yMark yMark component of polygon
 #' @param dfMarkColorInternal colors for marks
@@ -32,37 +32,72 @@
 #' @importFrom graphics polygon text
 #'
 
-mimicCenPlotMark<-function(roundness, xMark, yMark,
-                        dfMarkColorInternal,listOfdfMarkPosCenStyle,
+mimicCenPlotMark<-function(squareness, xMark, yMark,
+                           defCenStyleCol,
+                        listOfdfMarkPosCenStyle,
                         chrWidth, specialChrWidth,
                         yfactor,n,
-                        lwd.chr,listOfdfChromSize,
+                        lwd.mimicCen,listOfdfChromSize,
                         circularPlot,
                         y,
                         markLabelSize,
                         separFactor,
                         labelSpacing,
                         circleCenter,circleCenterY,radius,
-                        ylistTransChr,rotation,labelOutwards) {
+                        ylistTransChr,rotation,labelOutwards,
+                        yMarkLine,xMarkRightLine,xMarkLeftLine,
+                        x,
+                        roundedCen=FALSE) {
 
-#  xMarkSq<<-xMark
-#  yMarkSq<<-yMark
+if (squareness <= 20) {
 
-#  listOfdfMarkPosCenStyleInternal<<-listOfdfMarkPosCenStyle
-#  dfMarkColorInternal2<<-dfMarkColorInternal
+  pts<- seq(-pi/2, pi*1.5, length.out = n)
 
-  if(roundness>20) {
+  roundedX<-list()
+  roundedY<-list()
+
+  for (s in 1:length(yMark) ) {
+
+    corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfMarkPosCenStyle)[[s]] )
+
+    if(attr(listOfdfChromSize[[corr_index]],"ytitle")=="cM"){
+      chrWidth2  <-specialChrWidth
+    } else {
+      chrWidth2 <- chrWidth
+    }
+
+    r2 <- chrWidth2/(squareness*2)
+
+    xyCoords<-mapXYCenMimic(1 , (length(yMark[[s]]) ) ,
+                            yMark[[s]],
+                            xMark[[s]],
+                            yfactor,r2,
+                            pts,
+                            roundedCen)
+
+    roundedX[[s]]<-xyCoords$roundedX
+    roundedY[[s]]<-xyCoords$roundedY
+
+    attr(roundedY[[s]],"spname") <- attr(yMark[[s]],"spname")
+    attr(roundedX[[s]],"spname") <- attr(xMark[[s]],"spname")
+
+  } # for s
+
+  names(roundedY)<-names(yMark)
+  xMark<-roundedX
+  yMark<-roundedY
+} # end squareness
 
     if(circularPlot==FALSE) {
 
-            lapply(1:length(xMark), function(w) mapply(function(x,y,z)
+      lapply(1:length(xMark), function(w) mapply(function(x,y,z)
                 graphics::polygon(
                   x=x,
                   y=y,
-                  col= dfMarkColorInternal$markColor[match(     z   , dfMarkColorInternal$markName)],
-                  lwd=lwd.chr*3,
-                  border = #ifelse(dfMarkColorInternal$markColor[match(z,dfMarkColorInternal$markName)]=="white", "black",
-                  dfMarkColorInternal$markBorderColor[match(z,dfMarkColorInternal$markName)]
+                  col = defCenStyleCol #dfMarkColorInternal$markColor[match(     z   , dfMarkColorInternal$markName)],
+                  ,lwd = 0.05#lwd.mimicCen,
+                  ,border = defCenStyleCol#ifelse(dfMarkColorInternal$markColor[match(z,dfMarkColorInternal$markName)]=="white", "black",
+                  # dfMarkColorInternal$markBorderColor[match(z,dfMarkColorInternal$markName)]
                           #) # ifelse
                 ), # pol
               x=xMark[[w]],
@@ -71,44 +106,116 @@ mimicCenPlotMark<-function(roundness, xMark, yMark,
 
         ) # mapply
       ) # lapp
-    } # CIRC FALSE
-    else { # circ true
+      # left line
+      lapply(1:length(xMarkLeftLine), function(w) mapply(function(x,y,z)
+        graphics::lines(
+          x=x,
+          y=y,
+          col = defCenStyleCol#dfMarkColorInternal$markColor[match(     z   , dfMarkColorInternal$markName)],
+          ,lwd = lwd.mimicCen,
+        ), # pol
+        x=xMarkLeftLine[[w]],
+        y=yMarkLine[[w]]
+        ,z=listOfdfMarkPosCenStyle[[w]]$markName
+
+      ) # mapply
+      ) # lapp
+      # r. line
+      lapply(1:length(xMarkRightLine), function(w) mapply(function(x,y,z)
+        graphics::lines(
+          x=x,
+          y=y,
+          col = defCenStyleCol#dfMarkColorInternal$markColor[match(     z   , dfMarkColorInternal$markName)],
+          ,lwd = lwd.mimicCen,
+        ), # pol
+        x=xMarkRightLine[[w]],
+        y=yMarkLine[[w]]
+        ,z=listOfdfMarkPosCenStyle[[w]]$markName
+      )
+      )#l
+
+
+    } else { # circ true
 
       #
       #   x to vertical
       #
 
-#      xMarkSq<<-xMark
-#      yMarkSq<<-yMark
-#      yInternalSq<<-y
-
-
         xlistNew<-xHortoVer(xMark)
 
-        yMarkPer<-markMapPer(yMark,y)
+        yMarkPer <- markMapPer(yMark,y)
 
-        textyMarkPer<-centerMarkMapPer(yMark,y)
-
-        ylistTransMark<-transyListMark(yMarkPer,ylistTransChr)
-
-        textylistTransMark<-transyListMark(textyMarkPer,ylistTransChr)
+        ylistTransMark <- transyListMark(yMarkPer, ylistTransChr)
 
         circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,    ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
 
-        drawPlotMark(circleMapsMarks,dfMarkColorInternal,listOfdfMarkPosCenStyle,lwd.chr*3)
+        # drawPlotMark(circleMapsMarks,dfMarkColorInternal,listOfdfMarkPosCenStyle,.05)#lwd.mimicCen)
+        drawCenStyle(circleMapsMarks,defCenStyleCol,.05)
+        #############
+
+        xlistNew<-xHortoVer(xMarkLeftLine)
+#        xMarkLeftLine164<<-xMarkLeftLine
+#        xlistNew165<<-xlistNew
+
+        yMarkPer <- markMapPer(yMarkLine,y)
+
+        ylistTransMark <- transyListMark(yMarkPer, ylistTransChr)
+
+        circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,    ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
+
+        # drawPlotMarkLine(circleMapsMarks,dfMarkColorInternal,listOfdfMarkPosCenStyle,lwd.mimicCen)
+        drawPlotMarkLine(circleMapsMarks,defCenStyleCol,lwd.mimicCen)
+        #############
+
+        xlistNew<-xHortoVerDots(xMarkRightLine,x)
+#        xMarkRightLine176<<-xMarkRightLine
+#        xlistNew178<<-xlistNew
+
+        yMarkPer <- markMapPer(yMarkLine,y)
+
+        ylistTransMark <- transyListMark(yMarkPer, ylistTransChr)
+
+        circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,    ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
+
+        # drawPlotMarkLine(circleMapsMarks,dfMarkColorInternal,listOfdfMarkPosCenStyle,lwd.mimicCen)
+        drawPlotMarkLine(circleMapsMarks,defCenStyleCol,lwd.mimicCen)
 
     } # circular TRUE
 
-  } else {                                            # roundness < 20 ##############################################
+} # FUN
+
+mimicCenPlotMarkInside<-function(pattern,bannedMarkName,squareness, xMarkCenStyleBody, yMarkCenStyleBody,
+                           defCenStyleCol,
+                           dfMarkColorInternal,
+                           listOfdfMarkPosCenStyle,
+                           chrWidth, specialChrWidth,
+                           yfactor,n,
+                           lwd.mimicCen,listOfdfChromSize,
+                           circularPlot,
+                           y,
+                           markLabelSize,
+                           separFactor,
+                           labelSpacing,
+                           circleCenter,circleCenterY,radius,
+                           ylistTransChr,rotation,labelOutwards,
+                           yMarkLine,xMarkRightLine,xMarkLeftLine,
+                           x,
+                           lwd.chr, # new
+                           legend,
+                           roundedCen=FALSE) {
+
+
+  if(squareness <= 20 ) { # squareness
 
     pts<- seq(-pi/2, pi*1.5, length.out = n)
 
-    yModMark<-yMark # yMark
+    roundedXInside<-list()
+    roundedYInside<-list()
 
-    newLongx<-list()
-    newLongy<-list()
+#    # yMarkCenStyleBody213<<-yMarkCenStyleBody
+#    # xMarkCenStyleBody214<<-xMarkCenStyleBody
 
-    for (s in 1:length(yModMark) ) {
+    for (s in 1:length(yMarkCenStyleBody) ) {
 
       corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfMarkPosCenStyle)[[s]] )
 
@@ -118,58 +225,78 @@ mimicCenPlotMark<-function(roundness, xMark, yMark,
         chrWidth2 <- chrWidth
       }
 
-      r2 <- chrWidth2/(roundness*2)
+      r2 <- chrWidth2/(squareness*2)
 
-      xyCoords<-mapXYCen(1 , (length(yModMark[[s]]) ) ,
-                      yMark[[s]], yModMark[[s]] ,
-                      xMark[[s]],
-                      yfactor,r2,
-                      pts)
+      # yMarkCenStyleBody<-yMarkCenStyleBody213
+      # xMarkCenStyleBody<-xMarkCenStyleBody214
 
-      newLongx[[s]]<-xyCoords$newLongx
-      newLongy[[s]]<-xyCoords$newLongy
+      xyCoords<-mapXYCenMimicInside(1,
+                                    length(yMarkCenStyleBody[[s]]),
+                                    yMarkCenStyleBody[[s]],
+                                    xMarkCenStyleBody[[s]],
+                                    yfactor,
+                                    r2,
+                                    pts,
+                                    roundedCen)
 
-      attr(newLongy[[s]],"spname") <- attr(yMark[[s]],"spname")
-      attr(newLongx[[s]],"spname") <- attr(xMark[[s]],"spname")
+      roundedXInside[[s]]<-xyCoords$roundedX
+      roundedYInside[[s]]<-xyCoords$roundedY
 
-    } # for
-    names(newLongy)<-names(yMark)
+      attr(roundedYInside[[s]],"spname") <- attr(yMarkCenStyleBody[[s]],"spname")
+      attr(roundedXInside[[s]],"spname") <- attr(xMarkCenStyleBody[[s]],"spname")
 
-#    newLongyMarks<<-newLongy
-#    newLongxMarks<<-newLongx
+    } # for s
 
-    if(circularPlot==FALSE) {
+    names(roundedYInside)<-names(yMarkCenStyleBody)
+    xMarkCenStyleBody<-roundedXInside
+    yMarkCenStyleBody<-roundedYInside
 
-      lapply(1:length(xMark), function(w)
-        mapply(function(x,y,z)
-          graphics::polygon(x=x, y=y,
-                            col=dfMarkColorInternal$markColor[match(z   ,dfMarkColorInternal$markName)],
-                            lwd=lwd.chr*3,
-                            border=dfMarkColorInternal$markBorderColor[match(z,dfMarkColorInternal$markName)]
-                            ), # pol
-                x=newLongx[[w]],
-                y=newLongy[[w]] #
-                ,z=listOfdfMarkPosCenStyle[[w]]$markName
-                ) # mapply
-      ) # l
+  } # end squareness <=20
 
-    } # cir FALSE
+  if(circularPlot==FALSE) {
 
-    else { # circ true
+    lapply(1:length(yMarkCenStyleBody), function(m)
+      mapply(function(x,y,z)
+        graphics::polygon(
+          x=x,
+          y=y,
+          col = dfMarkColorInternal$markColor[match(z, dfMarkColorInternal$markName)] ,
+          lwd= lwd.chr,
+          border= dfMarkColorInternal$markBorderColor[match(z, dfMarkColorInternal$markName)] # z outside
+        ), # p
+        x=xMarkCenStyleBody[[m]],
+        y=yMarkCenStyleBody[[m]],
+        z=listOfdfMarkPosCenStyle[[m]]$markName # ifelse here gives error
 
-      xlistNew<-xHortoVer(newLongx)
+      ) # mapply
+    ) #l
 
-      yMarkPer<-markMapPer(newLongy,y)
-      ylistTransMark<-transyListMark(yMarkPer,ylistTransChr)
 
-      textyMarkPer<-centerMarkMapPer(newLongy,y)
-      textylistTransMark<-transyListMark(textyMarkPer,ylistTransChr)
+  } else { # circ true
 
-      circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
+    #
+    #   x to vertical
+    #
 
-      drawPlotMark(circleMapsMarks,dfMarkColorInternal,listOfdfMarkPosCenStyle,lwd.chr*3)
+    xlistNew<-xHortoVer(xMarkCenStyleBody)
 
-    } # circular
-  } # else ROUNDNESS
+    yMarkPer <- markMapPer(yMarkCenStyleBody,y)
+
+    ylistTransMark <- transyListMark(yMarkPer, ylistTransChr)
+
+    circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,    ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
+
+    drawPlotMark(circleMapsMarks,dfMarkColorInternal,listOfdfMarkPosCenStyle,.05)#lwd.mimicCen)
+    # drawCenStyle(circleMapsMarks,defCenStyleCol,.05)
+
+    if(legend=="inline"){
+      circleMapsMarksLabelMimicCen  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,ylistTransMark,xlistNew,n,
+                                                 labelSpacing ,chrWidth, rotation=rotation)
+      circLabelMark(bannedMarkName,circleMapsMarksLabelMimicCen,listOfdfMarkPosCenStyle, markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY)
+    }
+    #############
+
+  } # circular TRUE
 
 } # FUN
+

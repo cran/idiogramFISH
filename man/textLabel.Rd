@@ -14,6 +14,7 @@ textLabel(
   chrSpacing,
   markLabelSize,
   pattern,
+  bannedMarkName,
   isCentromeric = FALSE
 )
 }

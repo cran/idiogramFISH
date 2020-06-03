@@ -187,26 +187,25 @@ print(citation("idiogramFISH"),bibtex=FALSE )
 #  sink()
 
 ## ---- echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"----
+cat("<a href='https://ko-fi.com/X7X71PZZG' target='_blank'><img height='36' style='border:0px;height:36px;' src='../man/figures/kofi1.png' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>")
 # library(badger)
-if (requireNamespace("RCurl", quietly = TRUE)  ) {
-donate <- "https://liberapay.com/assets/widgets/donate.svg"
-donate_contFile <- "../man/figures/donate2.svg"
-tryCatch(suppressWarnings(download.file(donate, donate_contFile) ), error=function(e) "")
-if(file.exists(donate_contFile ) ) {
-cat(paste0("[![donate](",knitr::include_graphics(donate_contFile),")](https://liberapay.com/ferroao/donate)" ) )
-}
-}
-
-## ---- echo=F, message=FALSE, fig.show = "hold", fig.align = "default", warning=FALSE, results="asis"----
+# if (requireNamespace("RCurl", quietly = TRUE)  ) {
+# donate <- "https://liberapay.com/assets/widgets/donate.svg"
+# donate_contFile <- "../man/figures/donate2.svg"
+# tryCatch(suppressWarnings(download.file(donate, donate_contFile) ), error=function(e) "")
+# if(file.exists(donate_contFile ) ) {
+# cat(paste0("[![donate](",knitr::include_graphics(donate_contFile),")](https://liberapay.com/ferroao/donate)" ) )
+# }
+# }
 # library(badger)
-if (requireNamespace("RCurl", quietly = TRUE) ) {
-donateweek <- "http://img.shields.io/liberapay/receives/ferroao.svg"
-donateweek_contFile <- "../man/figures/donateweek.svg"
-tryCatch(suppressWarnings(download.file(donateweek, donateweek_contFile) ), error=function(e) "")
-if(file.exists(donateweek_contFile ) ) {
-cat(paste0("[![donate](",knitr::include_graphics(donateweek_contFile),")](https://liberapay.com/ferroao/donate)" ) )
-}
-}
+# if (requireNamespace("RCurl", quietly = TRUE) ) {
+# donateweek <- "http://img.shields.io/liberapay/receives/ferroao.svg"
+# donateweek_contFile <- "../man/figures/donateweek.svg"
+# tryCatch(suppressWarnings(download.file(donateweek, donateweek_contFile) ), error=function(e) "")
+# if(file.exists(donateweek_contFile ) ) {
+# cat(paste0("[![donate](",knitr::include_graphics(donateweek_contFile),")](https://liberapay.com/ferroao/donate)" ) )
+# }
+# }
 
 ## ----include=FALSE,eval=FALSE-------------------------------------------------
 #  # automatically create a bib database for R packages, this is currently not used by vignette refs/packages2.bib

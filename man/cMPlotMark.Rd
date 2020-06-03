@@ -5,6 +5,7 @@
 \title{This is an internal function that eliminates factors}
 \usage{
 cMPlotMark(
+  bannedMarkName,
   xMark,
   yMark,
   y,

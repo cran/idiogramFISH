@@ -14,19 +14,19 @@ mapXY(start, end, y, yMod, x, yfactor, r2, pts_1, pts_2, pts_3, pts_4)
 
 \item{y}{y coords}
 
-\item{yMod}{y coords modified because of roundness}
+\item{yMod}{y coords modified because of squareness}
 
 \item{yfactor}{y x factor}
 
 \item{r2}{radius}
 
-\item{pts_1}{points of roundness}
+\item{pts_1}{points of squareness}
 
-\item{pts_2}{points of roundness}
+\item{pts_2}{points of squareness}
 
-\item{pts_3}{points of roundness}
+\item{pts_3}{points of squareness}
 
-\item{pts_4}{points of roundness}
+\item{pts_4}{points of squareness}
 }
 \value{
 list

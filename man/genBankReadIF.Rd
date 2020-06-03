@@ -14,5 +14,7 @@ list
 }
 \description{
 genBankReadIF: creates a list of data.frames from a genbank format file or a rentrez object
+
+Requires tidyr
 }
 \keyword{genBank}

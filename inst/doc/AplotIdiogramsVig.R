@@ -321,15 +321,15 @@ kableExtra::kable_styling(knitr::kable(mydfChrSize) , full_width = F
 # From scratch:
 mydfMarkColor<-read.table(text=
 " markName markColor  style
-        5S       red   dots
-       45S     green square
-     gene1    orange upArrow    
-     gene2    salmon downArrow
-     gene3    \"#056522\" cMLeft  # <- new style of marks (used for arrow inline legends also)  
-      DAPI      blue     cM   
-  constric     white cenStyle   
-       CMA    yellow square
-\"B mark\"     black square"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
+        5S      red       dots
+       45S      green     square
+     gene1      orange    upArrow    
+     gene2      salmon    downArrow
+     gene3      \"#056522\" cMLeft    
+      DAPI      blue      cM   
+\"cB mark\"     black     cenStyle   
+       CMA      yellow    square
+\"B mark\"      black     square"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
 ## ---- echo=F------------------------------------------------------------------
 # just to show it here
@@ -349,7 +349,7 @@ mydfOfMarks<-read.table(text=
 \"Species one\"      1      45S       p       NA         NA     # no measure means whole arm for square marks
 \"Species one\"      1       5S       q      0.5         0.5
 \"Species one\"      B  \"B mark\"    w       NA         NA     # w for whole chromosome for square marks
-\"Species one\"      B  constric      q       NA         1.0    
+\"Species one\"      B  \"cB mark\"   q       NA         1.0    
 \"Species one\"      2     45S        p        1         1.0
 \"Species one\"      2     gene1      q      0.5         1.0
 \"Species one\"      2     gene2      q      0.5         2.0
@@ -382,9 +382,10 @@ plotIdiograms(dfChrSize= mydfChrSize,     # chr. size data.frame
               dfMarkPos= mydfOfMarks,     # mark position data.frame (inc. cen.)
               dfMarkColor=mydfMarkColor,  # mark style d.f.
               
-              distTextChr = .7,           # separation among text and chr names and ind.              
+              distTextChr = .7,           # separation among text and chr names and ind.        
               orderBySize = FALSE,        # do not order chr. by size
-              karHeiSpace=1.6             # vertical size of karyotype including spacer
+              karHeiSpace=1.6,             # vertical size of karyotype including spacer
+              chrSpacing=.6
               
               ,arrowhead = .5             # proportion of head of arrow
               
@@ -392,6 +393,7 @@ plotIdiograms(dfChrSize= mydfChrSize,     # chr. size data.frame
               ,legendWidth = .8           # legend item width
               ,legendHeight = .5          # legend item height
               ,markLabelSpacer = 2        # legend spacer
+              ,lwd.mimicCen = 2.5         # constric. mark line width
               
               ,rulerPos=0                 # ruler position
               ,ruler.tck=-0.01            # ticks of ruler size and orientation
@@ -406,7 +408,10 @@ plotIdiograms(dfChrSize= mydfChrSize,     # chr. size data.frame
               ,xlimLeftMod = 2            # modify left xlim
               ,xlimRightMod = 3           # modify right xlim
               ,lwd.cM = 2                 # thickness of cM marks 
-
+              ,pattern = "^c"             # regex pattern to remove from mark names
+              ,remSimiMarkLeg=TRUE        # remove pseudoduplicated mark names from legend (same after pattern removal)
+              # ,legend="inline"            # legend next to chr.
+              # ,bannedMarkName = "cB mark" # remove from legends
 )
 # dev.off()
 
@@ -424,7 +429,7 @@ plotIdiograms(dfChrSize   = bigdfOfChrSize[1:8,],  # chr. size data.frame
               
               centromereSize = 0,         # <- HERE
               
-              roundness=3,                # vertices roundness  
+              squareness=3,               # vertices squareness  
               chrSpacing = .7,            # space among chr.
               karHeight = 2,              # karyotype rel. height 
               karHeiSpace=4,              # vertical size of karyotype including spacer
@@ -583,6 +588,7 @@ plotIdiograms(dfChrSize  = mydfChrSizeHolo,# data.frame of chr. sizes
               
               ,legendWidth=1               # width of legend
               ,legendHeight=.7             # height of legend item 
+              ,xModifier=0.01              # separation among chromatids
 )
 # dev.off() # closes png or svg
 
@@ -602,6 +608,7 @@ plotIdiograms(dfChrSize = dfChrSizeHolo, # d.f. of chr. size
               xlimLeftMod=1,              # modify left xlim arg.
               xlimRightMod=3,             # modify right xlim arg.
               ylimBotMod=.2               # modify bottom ylim
+              ,chromatids=FALSE           # do not show separ. chromatids
 )
 
 ## -----------------------------------------------------------------------------
@@ -612,12 +619,16 @@ mydfMarkColor2<-read.table(text=
 2      45S     green   square
 3     DAPI      blue   square
 4      CMA    yellow   square
-5   constr     white   cenStyle # <- simulate Cen."  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
+5     c45S     green   cenStyle # <- simulate Cen.
+6      c5S       red   cenStyle
+7       cB     black   cenStyle
+8   constr        NA   cenStyle
+9        B     black   square"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
 # add new marks to data.frame of marks' position
 mydfMarkPosHolo2<-plyr::rbind.fill(mydfMarkPosHolo,data.frame(OTU="Species one",
                                                              chrName=1:4,
-                                                             markName="constr", # <- use new mark
+                                                             markName=c("c45S","c5S","constr","cB"), # <- use new mark
                                                              markPos=2.5,
                                                              markSize=NA 
                                                              )
@@ -642,7 +653,11 @@ plotIdiograms(dfChrSize  = mydfChrSizeHolo,# data.frame of chr. sizes
               
               ,legendWidth=1               # width of legend
               ,legendHeight=.7             # height of legend item 
-              #,asp=1                      # y x aspect
+              ,lwd.mimicCen=2.5            # line width of const. mark
+              ,pattern="^c"                # regex pattern to remove from mark names
+              ,remSimiMarkLeg = TRUE       # remove pseudoduplicated mark names (got equal after pattern removal)
+              # ,legend="inline"             # legends inline
+              # ,bannedMarkName = c("c45S","cB") # do not use this names from labels
 )
 # dev.off() # closes png or svg
 
@@ -675,6 +690,7 @@ kableExtra::kable_styling(knitr::kable(bigdfOfMarks) , full_width = F
                           )
 
 ## ----example_M3, echo=TRUE, results="hide", fig.width=6, fig.height=13, message=FALSE, dev='png'----
+# png("bigdfOfChrSize.png", width=650, height=1300)
 par(mar = c(0, 0, 0, 0))
 plotIdiograms(dfChrSize  =bigdfOfChrSize,# chr. sizes
               dfMarkColor=dfMarkColor,   # mark characteristics, optional in dev version. see above. 
@@ -685,7 +701,7 @@ plotIdiograms(dfChrSize  =bigdfOfChrSize,# chr. sizes
               chrWidth = .35,            # chr. width
               amoSepar = 2,              # Vertical separation of kar. when karSepar = TRUE
               
-              roundness = 10,            # roundness of chr. vertices
+              squareness = 10,           # squareness of chr. vertices
               distTextChr=.8,            # distance of chr. to text
               chrIndex = "AR",           # add arm ratio only. For v. >=1.12
               nameChrIndexPos = 3,
@@ -744,7 +760,6 @@ library(idiogramFISH)
 
 # fig.width=6, fig.height=6
 png("bigdfChrSizeHolo.png", width=600, height=600)
-# par(mar=c(1,1,1,1))
 par(mar=rep(0,4)) 
 
 plotIdiograms(dfChrSize=bigdfChrSizeHolo, # chr. size data.frame
@@ -752,7 +767,7 @@ plotIdiograms(dfChrSize=bigdfChrSizeHolo, # chr. size data.frame
               dfMarkPos=bigdfMarkPosHolo, # df of marks' position
               
               markDistType="cen",         # measure towards center of mark
-              roundness=6,                # vertices roundness of chr. and marks 
+              squareness=6,               # vertices squareness of chr. and marks 
               
               karHeiSpace = 4,            # karyotype height including spacing
               karSepar=TRUE,              # reduce vertical space among karyotypes 
@@ -772,7 +787,7 @@ plotIdiograms(dfChrSize=bigdfChrSizeHolo, # chr. size data.frame
               ylabline = -3,              # position of ruler units (title)
               
               ylimBotMod=.4               # modify ylim bottom argument
-              #,asp=1                     # y x aspect
+              ,xModifier=0.01             # separation among chromatids
 )
 dev.off()
 
@@ -864,7 +879,7 @@ plotIdiograms(dfChrSize = parentalAndHybHoloChrSize,  # d.f. of chr. sizes
               ,legend=""                   # no legend
               
               ,xlimRightMod = 0            # xlim right arg. modif.
-              #,asp=1                      # y x aspect
+              ,xModifier=.005              # separ. among chromatids
 )
 # dev.off()
 
@@ -887,7 +902,7 @@ plotIdiograms(dfChrSize=bigdfChrSizeHoloMb,  # chr. size data.frame
               dfMarkPos=bigdfMarkPosHoloMb,  # df of mark positions
               
               markDistType="cen",            # distance to mark is to its center
-              roundness=4,                   # vertices roundness of chr. and marks 
+              squareness=4,                  # vertices squareness of chr. and marks 
               distTextChr = .5,              # separ. chr. to text
               
               karHeight = 2,                 # rel. karyotype height
@@ -909,7 +924,7 @@ plotIdiograms(dfChrSize=bigdfChrSizeHoloMb,  # chr. size data.frame
               
               xlimLeftMod = 1,               # modify left argument of xlim
               ylimBotMod=.4                  # modify bottom argument of ylim
-              # ,asp=1                       # y x aspect
+              ,chromatids=FALSE              # do not show chromatids
               )                     
 dev.off()
 
@@ -955,6 +970,7 @@ plotIdiograms(dfChrSize   = bigdfOfChrSize3_100Mb,  # chr. size data.frame
 
               ylimBotMod = 0.4,           # modify ylim bottom argument
               ylimTopMod = 0              # modify ylim top argument
+              ,chromatids=FALSE           # do not show chromatids
               
                          ####  NEW    #####
               ,threshold = 90             # this will allow to not to shrink data greater than 350 Mb
@@ -967,7 +983,7 @@ bigdfOfChrSize3_100Mb<-bigdfOfChrSize3Mb[1:8,]
 bigdfOfChrSize3_100Mb$chrSize<-bigdfOfChrSize3_100Mb$chrSize*100
 
 bigdfOfMarks3_100Mb<-bigdfOfMarks3Mb
-bigdfOfMarks3_100Mb$markPos<-bigdfOfMarks3_100Mb$markPos*100
+bigdfOfMarks3_100Mb$markPos <-bigdfOfMarks3_100Mb$markPos *100
 bigdfOfMarks3_100Mb$markSize<-bigdfOfMarks3_100Mb$markSize*100
 
 # merge data.frames in micrometers and number of bases
@@ -979,55 +995,73 @@ mixedThreeSpChrSize <- mixedThreeSpChrSize[order(mixedThreeSpChrSize$OTU),]
 # compare rulers
 bigdfSimCenMarks<- bigdfOfChrSize3_100Mb
 bigdfSimCenMarks$markPos<-bigdfSimCenMarks$chrSize/2
+
 bigdfSimCenMarks$markName<-"sim. cen."
 bigdfSimCenMarks$chrSize<-NULL
 
 # merge marks in micrometers and bases
 mixedThreeSpMarks <- plyr::rbind.fill(bigdfOfMarks , bigdfOfMarks3_100Mb,bigdfSimCenMarks)
 
-# replace the cen. markSize and markPos with the info. of CMA and DAPI cen. bands
-mixedThreeSpMarks[which(mixedThreeSpMarks$OTU %in% "Species 2 genome" & 
+# remove cenStyle mark info.
+mixedThreeSpMarks<-mixedThreeSpMarks[which(!( mixedThreeSpMarks$OTU %in% "Species 2 genome" & 
                           mixedThreeSpMarks$chrName %in% c(1,4) &
-                          mixedThreeSpMarks$markName %in% "sim. cen.") ,c("markPos","markSize")]<-
-mixedThreeSpMarks[which(mixedThreeSpMarks$OTU %in% "Species 2 genome" & 
-                          mixedThreeSpMarks$markName %in% c("CMA","DAPI")),c("markPos","markSize")]
+                          mixedThreeSpMarks$markName %in% "sim. cen.") ),]
 
+# constric. marks
+mixedThreeSpMarks[which(mixedThreeSpMarks$OTU %in% "Species 2 genome" & 
+                          mixedThreeSpMarks$chrName %in% c(1,4) ),]$markName<-c("cDAPI","cCMA")
+                        
+# add arrow mark
+mixedThreeSpMarks <- dplyr::bind_rows(mixedThreeSpMarks , mixedThreeSpMarks[nrow(mixedThreeSpMarks),] )
+mixedThreeSpMarks[nrow(mixedThreeSpMarks),]$markName<-"S58A"
+mixedThreeSpMarks[nrow(mixedThreeSpMarks),]$markPos<-.7e+08
+mixedThreeSpMarks[nrow(mixedThreeSpMarks),]$markSize<-.7e+08
+  
 dfMarkColorAndStyle<-idiogramFISH:::makedfMarkColorMycolors(unique(mixedThreeSpMarks$markName),
-                                       c("red","green","blue","yellow","white")
+                                                            c("red","green","blue","yellow","blue","yellow","black")
 )
 
-dfMarkColorAndStyle$style[5]<-"cenStyle"
+# d.f. of marks'styles
+
+dfMarkColorAndStyle$style[5:7]<-"cenStyle"
+dfMarkColorAndStyle$markColor[7]<-NA
+dfMarkColorAndStyle$style[8]<-"upArrow"
+
 dfMarkColorAndStyle
 
 par(mar=rep(0,4))
 plotIdiograms(dfChrSize   = mixedThreeSpChrSize,  # chr. size data.frame
               dfMarkPos   = mixedThreeSpMarks,    # mark position df
               dfMarkColor = dfMarkColorAndStyle,
-
+              
               chrWidth=.6,                # width of chr.
               chrSpacing = .6,            # space among chr.
               karHeight = 3,              # kar. height without interspace
               karHeiSpace = 5,            # vertical size of karyotype including spacer
               amoSepar =2,                # separ. among kar.
-
+              
               indexIdTextSize=.6,         # font size of chr. name and indices
               markLabelSize=.7,           # font size of mark legends
               distTextChr = .65,          # separation among chr. names and indices
-
-              legendWidth = 1.5           # legend items width
-              ,fixCenBorder = TRUE        # use chrColor as border color of cen. or cen. marks
-
-              ,ylabline = -10             # position of Mb (title) in ruler
-              ,rulerPos= 0,               # ruler position
+              lwd.mimicCen = 1.5,         # constric. line width
+              
+              legendWidth = 1.5,          # legend items width
+              fixCenBorder = TRUE,        # use chrColor as border color of cen. or cen. marks
+              
+              ylabline = -10,             # position of Mb (title) in ruler
+              rulerPos= 0,                # ruler position
               ruler.tck=-0.005,           # ticks of ruler size and orientation
               rulerNumberPos =.7,         # position of numbers in ruler
               rulerNumberSize=.7,         # font size of ruler numbers
               rulerInterval = 1.5,        # ruler interval for micrometeres
               rulerIntervalMb = 150000000,# ruler interval for Mb
               ceilingFactor = 1,          # affects rounding for ruler max. value
-
+              
               ylimBotMod = 0.4,           # modify ylim bottom argument
               ylimTopMod = 0              # modify ylim top argument
+              ,holocenNotAsChromatids = TRUE # do not use chromatids in holocen.
+              ,pattern="^c"               # regex pattern to remove from mark names
+              ,remSimiMarkLeg = TRUE      # remove pseudoduplicate names arising from pattern removal
 )
 
 ## ---- eval=F------------------------------------------------------------------
@@ -1107,6 +1141,7 @@ plotIdiograms(dfChrSize   = mixedThreeSpChrSize,  # chr. size data.frame
               ,legendWidth = 2            # legend items width
               ,fixCenBorder = TRUE        # use chrColor as border color of cen. or cen. marks
               ,lwd.cM = 2                 # thickness of cM marks 
+              ,holocenNotAsChromatids=TRUE# do not use chromatids in holocen. kar.
               
               ,ylabline = -10             # position of Mb or cM (title) in ruler               
               ,rulerPos= 0,               # ruler position
@@ -1238,5 +1273,6 @@ plotIdiograms(dfChrSize=mergedChrSize,      # data.frame of chr. sizes
               xlimLeftMod=-1,               # modify left argument of xlim
               xlimRightMod=0,               # modify right argument of xlim
               ylimBotMod=1.3                # modify bottom argument of ylim
+              ,xModifier=0.005              # separ. among chromatids
 )
 

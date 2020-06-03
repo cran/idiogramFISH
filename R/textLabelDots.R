@@ -20,7 +20,7 @@
 #'
 
 textLabelDots<-function(xMarkCr,yMarkCr,listOfdfChromSize,listOfdfMarkPosCr,specialChrSpacing,
-                    chrSpacing,markLabelSize,pattern,xBoundariesQuar){
+                    chrSpacing,markLabelSize,pattern, bannedMarkName, xBoundariesQuar){
 # lapply(1:length(xMark), function(s)
 
     # lapply(1:length(xMarkCr), function(s)
@@ -31,7 +31,10 @@ textLabelDots<-function(xMarkCr,yMarkCr,listOfdfChromSize,listOfdfMarkPosCr,spec
       } else {
         chrSpacing2<-chrSpacing
       }
-      lapply(1:length(xMarkCr[[s]]), function (m)
+      # lapply(1:length(xMarkCr[[s]]), function (m)
+        for ( m in 1:length(xMarkCr[[s]] ) ) {
+
+          if( !listOfdfMarkPosCr[[s]]$markName[m] %in% bannedMarkName ){
         mapply(function(x,y,z) graphics::text(x=x,
                                               y=y,
                                               label=z,
@@ -44,6 +47,8 @@ textLabelDots<-function(xMarkCr,yMarkCr,listOfdfChromSize,listOfdfMarkPosCr,spec
         z=sub(pattern,"",listOfdfMarkPosCr[[s]]$markName[m])
         # t
         ) #m
-      )# l
+      # )# l
+          } # if
+        } # for m
     } # for )# l
 }

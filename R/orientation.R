@@ -1,12 +1,6 @@
-#' FUNCTIONS: yVertoHor,xHortoVer,xHortoVerRoundCen,makeCenCoordsY,
-#' makeCenCoordsX,xHortoVerDots,mapCircle,mapRadius,
-#' transYList,mapOTUnames,addOTUnames,applyMapCircle,
-#' intercalate,drawPlot,drawPlotMark,drawCen,
-#' circLabelMark,circPlotDots,plotChrNames,addChrNameAttrMark,
-#' addChrNameAttrMarkDots,markMapPerCen,markMapPer,markMapPercM,
-#' markMapPerDots,radDotsPer,centerMarkMapPer,transyListMark,
-#' transRadDots,transyListMarkDots,oneDot,yVertoHorCenMarks
+#' FUNCTIONS: yVertoHor, xHortoVer, xHortoVerRoundCen, xHortoVerDots, mapCircle, mapRadius, transYList, mapOTUnames, addOTUnames, applyMapCircle, intercalate, drawPlot, drawPlotMark, drawPlotMarkLine, drawCen, circLabelMark, circPlotDots, plotChrNames, addChrNameAttrMark, addChrNameAttrMarkDots, xMarkMap, xMarkMapLeft, markMapPer, markMapPercM, markMapPerDots, radDotsPer, centerMarkMapPer, transyListMark, transyListCen, transRadDots, transyListMarkDots, oneDot, OTUlabelsright
 #'
+# grep -oP '^\K\w+(?=<-function)' ../R/orientation.R | sed ':a;N;s/\n/, /;ba'
 #'
 #' @keywords internal
 #'
@@ -170,65 +164,6 @@ xHortoVerRoundCen<-function(xlist,diffXRounded){
   return(xlistNew)
 } # fun
 
-#
-#   mono function, returns only mono data
-#
-
-makeCenCoordsY<-function(ylistTransChr,monocenNames){
-  ylistNewCen<-list()
-  for (s in 1:length(ylistTransChr)) {
-    if(names(ylistTransChr[s]) %in% monocenNames){
-      ylistNewCen[[s]]<-list()
-      # m<-1
-      armIndexVector<-numeric()
-
-      for (m in 1: (length(ylistTransChr[[s]])/2)   ) {
-
-        armIndex<-m*2 - 1
-        # ylistNewCen[[s]][[m]]<-list()
-        ylistNewCen[[s]][[m]]<-  rep(max(ylistTransChr[[s]][[armIndex]]),2)
-        ylistNewCen[[s]][[m]]<-  c(ylistNewCen[[s]][[m]], rep(min(ylistTransChr[[s]][[armIndex+1]]),2) )
-        armIndexVector<-c(armIndexVector,armIndex)
-      }
-      # names(ylistNewCen[[s]])<-armIndexVector
-      names(ylistNewCen[[s]]) <- 1: (length(ylistTransChr[[s]])/2)
-      attr(ylistNewCen[[s]],"positionnoNA")<- attr(ylistTransChr[[s]],"positionnoNA")
-      names(ylistNewCen)[s]<-names(ylistTransChr[s])
-
-    } # if monocen
-  }
-  ylistNewCen<-Filter(function(x) {length(x) >= 1}, ylistNewCen)
-  return(ylistNewCen)
-}
-
-#
-#   mono function, returns only mono data
-#
-
-makeCenCoordsX<-function(xlistNewChr,monocenNames){
-  xlistNewCen<-list()
-  for (s in 1:length(xlistNewChr)) {
-    if(names(xlistNewChr[s]) %in% monocenNames){
-    xlistNewCen[[s]]<-list()
-
-      for (m in 1:(length(xlistNewChr[[s]])/2) ) {
-        xlistNewCen[[s]][[m]]<-xlistNewChr[[s]][[m]]
-        xlistNewCen[[s]][[m]][[3]]<-xlistNewChr[[s]][[m]][[2]]
-        xlistNewCen[[s]][[m]][[2]]<-xlistNewChr[[s]][[m]][[4]]
-      }
-      names(xlistNewCen[[s]])<-1: (length(xlistNewChr[[s]])/2)
-      names(xlistNewCen)[s]<-names(xlistNewChr[s])
-
-    }
-  }
-  xlistNewCen<-Filter(function(x) {length(x) >= 1}, xlistNewCen)
-  return(xlistNewCen)
-}
-
-# xMarkList<-xMarkCrInternal
-# i<-1
-# x<-xlist
-
 xHortoVerDots<-function(xMarkList,x){
   xlistNew<-list()
 
@@ -297,37 +232,6 @@ mapRadius<-function(x,y,n,radius,circleCenter,circleCenterY, position,separFacto
   # attr(xyCircle,"positionB")
   return(newrad)
 }
-
-# transYList<-function(ylistNew,shrinkFactor) {
-#   ylistTrans<-list()
-#
-#   for (s in 1:length(ylistNew)){
-#     yMin<-min(unlist(ylistNew[[s]]), na.rm=T  )
-#     ylistTrans[[s]] <- lapply(ylistNew[[s]], function(y) y - yMin )
-#   }
-#
-#   for (s in 1:length(ylistNew)){
-#     yMax<-max(unlist(ylistTrans[[s]]), na.rm=T  )
-#     ylistTrans[[s]] <- lapply(ylistTrans[[s]], function(y) y/yMax )
-#   }
-#
-#   # shrinkFactor<-.98
-#
-#   for (s in 1:length(ylistTrans)){
-#
-#     ylistTrans[[s]] <- lapply(ylistTrans[[s]], function(y) y*shrinkFactor )
-#
-#     for (c in 1:(length(ylistTrans[[s]] ) ) ) {
-#
-#       ylistTrans[[s]][[c]] <- (ylistTrans[[s]][[c]]) +   (   ( (1 - shrinkFactor)/2 )   * (c*2-1) ) / length(ylistTrans[[s]] )
-#       attr(ylistTrans[[s]][[c]], "chrName1") <- attr(ylistNew[[s]][[c]], "chrName1")
-#     }
-#     attr(ylistTrans[[s]],"positionnoNA")<- attr(ylistNew[[s]],"positionnoNA")
-#
-#   }
-#
-#   return(ylistTrans)
-# }
 
 transYList<-function(ylistNew,shrinkFactor,monocenNames) {
   ylistTrans<-list()
@@ -522,19 +426,54 @@ drawPlotMark<-function(circleMaps,dfMarkColorInternal,listOfdfMarkPosSq,lwd.chr)
     for (i in 1:length(circleMaps[[s]] ) ) {
       graphics::polygon(x=circleMaps[[s]][[i]]$x,
                         y=circleMaps[[s]][[i]]$y,
-                        col = dfMarkColorInternal$markColor[match(     listOfdfMarkPosSq[[s]]$markName[[i]]   ,
-                                                                     dfMarkColorInternal$markName)],
+                        col = dfMarkColorInternal$markColor[match(     listOfdfMarkPosSq[[s]]$markName[[i]] ,
+                                 dfMarkColorInternal$markName)],
                         lwd=lwd.chr,
-                        border = #ifelse(dfMarkColorInternal$markBorderColor[match( listOfdfMarkPosSq[[s]]$markName[[i]],
-                                                                             # dfMarkColorInternal$markName)]=="white",
-                                        # "black",
-                                  dfMarkColorInternal$markBorderColor[match( listOfdfMarkPosSq[[s]]$markName[[i]]
+                        border = dfMarkColorInternal$markBorderColor[match( listOfdfMarkPosSq[[s]]$markName[[i]]
                                                                              ,dfMarkColorInternal$markName)]
                         # ) # ifelse
       ) # polygon
     } # for
   } # for
 } # fun
+
+drawCenStyle<-function(circleMaps,defCenStyleCol,lwd.chr) {
+  for (s in 1:length(circleMaps)){
+    for (i in 1:length(circleMaps[[s]] ) ) {
+      graphics::polygon(x=circleMaps[[s]][[i]]$x,
+                        y=circleMaps[[s]][[i]]$y,
+                        col = defCenStyleCol,
+                        lwd=lwd.chr,
+                        border = defCenStyleCol
+                        # ) # ifelse
+      ) # polygon
+    } # for
+  } # for
+} # fun
+# drawPlotMarkLine<-function(circleMaps,dfMarkColorInternal,listOfdfMarkPosSq,lwd.chr) {
+#   for (s in 1:length(circleMaps)){
+#     for (i in 1:length(circleMaps[[s]] ) ) {
+#       graphics::lines(x=circleMaps[[s]][[i]]$x,
+#                       y=circleMaps[[s]][[i]]$y,
+#                       col = dfMarkColorInternal$markColor[match(     listOfdfMarkPosSq[[s]]$markName[[i]]   ,
+#                                                                      dfMarkColorInternal$markName)],
+#                       lwd=lwd.chr,
+#       ) # polygon
+#     } # for
+#   } # for
+# } # fun
+drawPlotMarkLine<-function(circleMaps,defCenStyleCol,lwd.chr) {
+  for (s in 1:length(circleMaps)){
+    for (i in 1:length(circleMaps[[s]] ) ) {
+      graphics::lines(x=circleMaps[[s]][[i]]$x,
+                        y=circleMaps[[s]][[i]]$y,
+                        col = defCenStyleCol,
+                      lwd=lwd.chr,
+      ) # polygon
+    } # for
+  } # for
+} # fun
+
 
 drawCen<-function(circleMaps,cenColor2,cenBorder,lwd.chr) {
   for (s in 1:length(circleMaps)){
@@ -549,10 +488,12 @@ drawCen<-function(circleMaps,cenColor2,cenBorder,lwd.chr) {
   } # for
 } # fun
 
-circLabelMark<-function(circleMaps,listOfdfMarkPos,markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY,iscM=FALSE,adj=0.5,iscMLeft=FALSE) {
+circLabelMark<-function(bannedMarkName,circleMaps,listOfdfMarkPos,markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY,iscM=FALSE,adj=0.5,iscMLeft=FALSE) {
   for (s in 1:length(circleMaps)){
 
     for (i in 1:length(circleMaps[[s]] ) ) {
+
+      if( !listOfdfMarkPos[[s]]$markName[i] %in% bannedMarkName ){
 
       centerX<-mean(unlist(circleMaps[[s]][[i]]$x) )
       centerY<-mean(unlist(circleMaps[[s]][[i]]$y) )
@@ -602,16 +543,19 @@ circLabelMark<-function(circleMaps,listOfdfMarkPos,markLabelSize,pattern,labelOu
                              centerY<-maxY,
                              centerY<-minY )
       }
+      w=tryCatch(listOfdfMarkPos[[s]]$chrRegionOrig[i], error=function(e) {NA} )
+      z=sub(pattern,"",listOfdfMarkPos[[s]]$markName[i])
 
       graphics::text(x=centerX,
                      y=centerY
-                       ,label=sub(pattern,"",listOfdfMarkPos[[s]]$markName[i])
+                       ,label=ifelse(any(is.na(w),is.null(w) ),z,"")
                        ,cex=markLabelSize
                      # pos=4,
                        ,adj=adj
                        ,srt=srt
       ) # text
-    } # for
+      } # if
+    } # for i
 
   } # for
 } # fun
@@ -723,30 +667,6 @@ addChrNameAttrMarkDots<-function(xMark,yMark,x){
   return(markList)
 } # fun
 
-markMapPerCen<-function(yMark,y){
-  yMarkPer<-list()
-
-  for( s in 1:length(yMark) ){
-    yMarkPer[[s]]<-list()
-    for ( m in 1:length(yMark[[s]] ) ){
-      armSize <- max(unlist(y[[s]][[m]] ) ) - min(unlist(y[[s]][[m]])  )
-      cenSize <- max(yMark[[s]][[m]] ) -  min(yMark[[s]][[m]] )
-
-      fac<-cenSize/armSize
-      fac<-ifelse(is.na(fac),0,fac)
-
-      yMarkPer[[s]][[m]] <-  psum( ( ( yMark[[s]][[m]]  -  max(unlist(y[[s]][[m]])  ) )  ) * fac  , 1, na.rm=T)
-      attr(yMarkPer[[s]][[m]],"rowIndex")<-m
-    }
-    attr(yMarkPer[[s]],"spname") <- names(yMark[s])
-  } # for
-  return(yMarkPer)
-} # fun
-
-
-# xMark<-xMarkArr
-# x <- xlistNewOrig1
-
 xMarkMap<-function(xMark,x, shrink) {
   xMarkList<-list()
 
@@ -805,21 +725,56 @@ markMapPer<-function(yMark,y){
       chrSize <- max(unlist(y[[corrIndex]][name] ) ) - min(unlist(y[[corrIndex]][name])  )
       distBeg <- min(yMark[[s]][[m]] ) -  (min(unlist(y[[corrIndex]][name])  ) )
       disBegPer<- distBeg/chrSize
+
       distEnd <- max(yMark[[s]][[m]])  -  (min(unlist(y[[corrIndex]][name])  ) )
       disEndPer<- distEnd/chrSize
-      diffPer<-disEndPer-disBegPer
+      diffPer <- disEndPer - disBegPer
 
       diffReal<-distEnd-distBeg
 
       fac<-diffPer/diffReal
       fac<-ifelse(is.na(fac),0,fac)
-        yMarkPer[[s]][[m]]<-  psum( ( ( yMark[[s]][[m]]  -  min(unlist(y[[corrIndex]][name])  ) ) - distBeg ) * fac  , disBegPer, na.rm=T)
-        # yMarkPer[[s]][[m]]<-   ( ( yMark[[s]][[m]]  -  min(unlist(y[[corrIndex]][name])  ) ) - distBeg ) * fac  + disBegPer #, na.rm=T)
+
+        yMarkPer[[s]][[m]]<-  psum( ( ( yMark[[s]][[m]]  -  min(unlist(y[[corrIndex]][name] ) ) ) - distBeg ) * fac  , disBegPer, na.rm=T)
 
       attr(yMarkPer[[s]][[m]],"rowIndex")<-name
     }
     attr(yMarkPer[[s]],"spname")<-attr(yMark[[s]],"spname")
   } # for
+  return(yMarkPer)
+} # fun
+
+markMapPerCen <- function(yMark,y){ # use y
+  yMarkPer<-list()
+
+  for( s in 1:length(yMark) ){
+    yMarkPer[[s]]<-list()
+    corrIndex <- which( names(y) %in% names(yMark)[s]  )
+    for ( m in 1:length(yMark[[s]] ) ){
+      # longArmIndex<-m*2-1
+      armSize <- max(unlist(y[[corrIndex]][[m]] ) ) - min(unlist(y[[corrIndex]][[m]])  )
+
+      distBeg <- min(yMark[[s]][[m]] ) -  (min(unlist(y[[corrIndex]][[m]])  ) )
+      disBegPer <- distBeg/armSize
+      # disBegPer<-1
+      distEnd <- max(yMark[[s]][[m]])  -  (min(unlist(y[[corrIndex]][[m]])  ) )
+      disEndPer <- distEnd/armSize
+      diffPer <- disEndPer-disBegPer
+
+      diffReal <- distEnd -  distBeg
+
+      fac<-diffPer/diffReal
+      fac<-ifelse(is.na(fac),0,fac)
+
+      yMarkPer[[s]][[m]] <-  psum( ( ( yMark[[s]][[m]]  -  min(unlist(y[[corrIndex]][[m]] ) ) ) - distBeg ) * fac  , disBegPer , na.rm=T)
+      attr(yMarkPer[[s]][[m]],"rowIndex")<-m
+    }
+    names(yMarkPer[[s]]) <- 1: (length(yMarkPer[[s]]) ) # was len y but 4 != 8
+    names(yMarkPer)[s]<-names(y[s])
+    # attr(yMarkPer[[s]],"spname") <- names(yMark[s])
+    # attr(yMarkPer[[s]], "positionnoNA") <- s
+  } # for s
+
   return(yMarkPer)
 } # fun
 
@@ -931,16 +886,6 @@ centerMarkMapPer<-function(yMark,y){
 #   trans Marks
 #
 
-
-# yMarkPer<-yMarkPerSq
-# s<-1
-# m<-2
-#
-# s
-# m
-#
-# transyListMark(yMarkPerSq,ylistTransChr)
-
 transyListMark<-function(yMarkPer,ylistTransChr){
 
 ylistTransMark<-list()
@@ -966,6 +911,38 @@ ylistTransMark<-list()
     attr(ylistTransMark[[s]],"positionnoNA")<-attr(ylistTransChr[[corrIndex]],"positionnoNA")
 
   } # for
+  return(ylistTransMark)
+}
+
+transyListCen<-function(yMarkPer,ylistTransChr){
+
+  ylistTransMark<-list()
+
+  for (s in 1:length(yMarkPer) ) {
+    ylistTransMark[[s]]<-list()
+    # corrIndex <- which( names(ylistTransChr) %in% attr(yMarkPer[[s]],"spname") )
+    corrIndex <- which( names(ylistTransChr) %in% names(yMarkPer)[s] )
+    # if(length(corrIndex)>0 ) {
+    for (m in 1: length(yMarkPer[[s]]) ) {
+      # name<-NULL
+      # corrIndexMark<-NULL
+      # name<-attr(yMarkPer[[s]][[m]],"rowIndex")
+      # corrIndexMark <- which( names(ylistTransChr[[corrIndex]]) %in% name )
+
+      if (length(m)>0){
+        intercaIndex<-m*2-1
+        chrSize <- max(unlist(ylistTransChr[[corrIndex]][[intercaIndex]] ) ) - min(unlist(ylistTransChr[[corrIndex]][[intercaIndex]] )  )
+
+        ylistTransMark[[s]][[m]] <- yMarkPer[[s]][[m]] * chrSize
+        ylistTransMark[[s]][[m]] <- ylistTransMark[[s]][[m]] + min(unlist(ylistTransChr[[corrIndex]][[intercaIndex]] ) )
+      }
+    } # m
+    # attr(ylistTransMark[[s]],"spname")<-attr(yMarkPer[[s]],"spname")
+    attr(ylistTransMark[[s]],"positionnoNA") <- attr(ylistTransChr[[corrIndex]],"positionnoNA")
+    names(ylistTransMark[[s]]) <- 1: (length(ylistTransMark[[s]]) )
+
+  } # for s
+  # }
   return(ylistTransMark)
 }
 
@@ -1042,33 +1019,6 @@ mapChrCenter <- function(ylistTransChr){
   return(listChrCenter)
 }
 
-# centerTransyListMark<-function(yMarkPer,ylistTransChr,markDistType){
-#
-#   ylistTransMark<-list()
-#
-#   for (s in 1:length(yMarkPer) ){
-#     ylistTransMark[[s]]<-list()
-#     corrIndex <- which( names(ylistTransChr) %in% attr(yMarkPer[[s]],"spname") )
-#     for (m in 1:length(yMarkPer[[s]])) {
-#       name<-attr(yMarkPer[[s]][[m]],"chrNameB")
-#
-#       markSize <- max(unlist(yMarkPer[[s]][[m]]))-min(unlist(yMarkPer[[s]][[m]]))
-#       chrSize <- max(unlist(ylistTransChr[[corrIndex]][name] ) ) - min(unlist(ylistTransChr[[corrIndex]][name])  )
-#
-#       # markType <- ifelse(markDistType=="beg", 0 , ( (markSize/2)*chrSize))
-#       markType <- 0# (markSize/2)*chrSize
-#
-#       ylistTransMark[[s]][[m]] <- yMarkPer[[s]][[m]] * chrSize
-#       ylistTransMark[[s]][[m]] <- ylistTransMark[[s]][[m]] + min(unlist(ylistTransChr[[corrIndex]][name] ) ) + markType
-#     }
-#     attr(ylistTransMark[[s]],"spname")<-attr(yMarkPer[[s]],"spname")
-#     attr(ylistTransMark[[s]],"positionnoNA")<-attr(ylistTransChr[[corrIndex]],"positionnoNA")
-#
-#   } # for
-#   return(ylistTransMark)
-# }
-
-
 oneDot<-function(xMarkCr){
   oneDotXList <- list()
   for (s in 1:length(xMarkCr)){
@@ -1082,33 +1032,6 @@ oneDot<-function(xMarkCr){
   }
   return(oneDotXList)
 }
-
-#
-#   pseudomono function,  inputs is/are mono
-#
-
-
-yVertoHorCenMarks<-function(yMarkCen,ylistNewCen){
-  yMarkNewCen <- list()
-  for (s in 1:length(yMarkCen)){
-    # if(names(y[s]) %in% monocenNames){
-    corrIndex <- which( names(ylistNewCen) %in% attr(yMarkCen[[s]],"spname")  )
-    yMarkNewCen[[s]]<-list()
-
-    for (m in 1:length(yMarkCen[[s]])){
-      getRow<-NULL
-      getRow<-attr(yMarkCen[[s]][[m]],"rowIndex")
-      corrIndexMark<-NULL
-      corrIndexMark <- which( names(ylistNewCen[[corrIndex]]) %in% getRow )
-      yMarkNewCen[[s]][[m]]<-  ylistNewCen[[corrIndex]][[corrIndexMark]]
-    }
-    attr(yMarkNewCen[[s]],"spname")<-attr(yMarkCen[[s]],"spname")
-    attr(yMarkNewCen[[s]],"positionnoNA")<-attr(ylistNewCen[[corrIndex]],"positionnoNA")
-    # }
-  }
-  return(yMarkNewCen)
-}
-
 
 drawCenMarks <- function(circleMaps,dfMarkColorInternal,listOfdfDataCen,lwd.chr,fixCenBorder2,chrColor) {
   for (s in 1:length(circleMaps)){
@@ -1126,40 +1049,6 @@ drawCenMarks <- function(circleMaps,dfMarkColorInternal,listOfdfDataCen,lwd.chr,
       ) # polygon
     } # for
   } # for
-} # fun
-
-# attribToName<-function(xlistMarkCen){
-#   for (s in 1:length(xlistMarkCen)){
-#     names(xlistMarkCen)[s]<-attr(xlistMarkCen[[s]],"spname")
-#     for (m in 1:length(xlistMarkCen[[s]] ) ) {
-#       if(length(attr(xlistMarkCen[[s]][[m]],"rowIndex"))>0 ){
-#       names(xlistMarkCen[[s]])[m]<-attr(xlistMarkCen[[s]][[m]],"rowIndex")
-#       }
-#     }
-#   }
-#   return(xlistMarkCen)
-# }
-
-#
-#   mono function, returns only mono data
-#
-
-xForRounded<- function(xlist,diffXRounded,monocenNames){
-  xRounded<-list()
-  for (s in 1:length(xlist)){
-    if(names(xlist[s]) %in% monocenNames){ # mono test
-    xRounded[[s]]<-list()
-    for (m in 1:length(xlist[[s]])){
-      xRounded[[s]][[m]]<-xlist[[s]][[m]][1:2]-diffXRounded
-      xRounded[[s]][[m]]<-c(xRounded[[s]][[m]],xlist[[s]][[m]][3:4]+diffXRounded)
-    }
-    names(xRounded[[s]]) <- 1: (length(xlist[[s]]))
-    names(xRounded)[s]<-names(xlist[s])
-
-    }
-  } # s
-  xRounded <- Filter(function(x) {length(x) >= 1}, xRounded)
-  return(xRounded)
 } # fun
 
 OTUlabelsright<-function(y, circleCenter,OTULabelSpacerx,circleCenterY,OTULabelSpacery,OTUlegendHeight,radius,

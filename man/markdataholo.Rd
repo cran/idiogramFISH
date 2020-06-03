@@ -8,14 +8,22 @@
 \alias{dfAlloParentMarksHolo}
 \alias{bigdfOfMarks3Mb}
 \title{Mark Positional data - Holocen.}
-\format{data.frame with columns:
+\format{
+data.frame with columns:
 \describe{
 \item{OTU}{OTU, species, optional}
 \item{chrName}{name of chromosome}
 \item{markName}{name of mark}
 \item{markPos}{position from bottom or top (see parameter \code{origin} in plotIdiograms)}
 \item{markSize}{size of mark in micrometers or Mb}
-}}
+}
+
+An object of class \code{data.frame} with 6 rows and 4 columns.
+
+An object of class \code{data.frame} with 13 rows and 4 columns.
+
+An object of class \code{data.frame} with 12 rows and 5 columns.
+}
 \usage{
 bigdfMarkPosHolo
 

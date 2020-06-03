@@ -5,7 +5,7 @@
 #'
 #' @keywords internal
 #'
-#' @param roundness roundness of vertices <
+#' @param squareness squareness of vertices <
 #' @param xMark x component of polygon
 #' @param yMark yMark component of polygon
 #' @param dfMarkColorInternal colors for marks
@@ -28,7 +28,7 @@
 #' @importFrom graphics polygon text
 #'
 
-arrowPlotMark<-function(roundness, xMark, yMark,
+arrowPlotMark<-function(squareness, xMark, yMark,
                         dfMarkColorInternal,listOfdfMarkPosArrow,
                         chrWidth,
                         n,
@@ -48,7 +48,7 @@ arrowPlotMark<-function(roundness, xMark, yMark,
 #  listOfdfMarkPosArrowInternal<<-listOfdfMarkPosArrow
 #  dfMarkColorInternal2<<-dfMarkColorInternal
 
-  # if(roundness>20) {
+  # if(squareness>20) {
 
     if(circularPlot==FALSE) {
 

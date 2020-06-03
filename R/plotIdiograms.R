@@ -32,7 +32,7 @@
 #' @param arrowhead numeric, proportion of head of arrow (mark styles: \code{upArrow,downArrow}). Defaults to \code{0.3}
 #' @param shrinkArrow numeric, proportion, shrinks body of arrow. Defaults to \code{0.3333}
 #' @param arrowheadWidthShrink numeric, proportion, shrinks head of arrow. Defaults to \code{0.1}
-#' @param arrowsToSide boolean, when \code{FALSE} use a centered arrow, instead of an arrow next to chr. margins. Defaults to \code{TRUE}
+#' @param arrowsToSide boolean, when \code{FALSE} use a centered arrow, instead of an arrow next to chr. margins (\code{TRUE}, default)
 #' @param markDistType character, if \code{"cen"} = the distance you provided in data.frame (\code{dfMarkPos}) column \code{markDistCen}
 #' or \code{markPos}  is to the center of the mark, if \code{"beg"} = the distance you provided is to the
 #'   beginning of the mark (Default)
@@ -43,7 +43,10 @@
 #' @param chrColor character, main color for chromosomes. Defaults to \code{"gray"}
 #' @param chrBorderColor character, color for border of chromosomes, defaults to \code{chrColor}
 #' @param cenColor character, color for centromeres, if GISH use \code{NULL} or \code{NA}. Defaults to \code{chrColor}
-#' @param roundness numeric, shape of vertices of chromosomes and square marks,
+#' @param fixCenBorder boolean, when \code{TRUE} uses \code{chrColor} as centromere (and cen. mark) border color. See also \code{cenColor},
+#' \code{chrColor}, \code{colorBorderMark}, \code{borderOfWhiteMarks}. No default value.
+#' @param roundedCen boolean, when \code{FALSE}, cen has triangular aspect. When \code{TRUE}, it has rounded aspect (Default).
+#' @param squareness numeric, shape of vertices of chromosomes and square marks,
 #'   higher values more squared. Defaults to \code{4}
 #' @param karHeight numeric, vertical size of karyotypes. See also  \code{karHeiSpace}. Defaults to \code{2}
 #' @param karHeiSpace numeric, vertical size of karyotypes including spacing. Proportional to \code{karHeight}, if overlap, increase. Defautl value \code{2.5}
@@ -57,16 +60,26 @@
 #' @param distTextChr numeric, distance from name of chromosome to chromosome,
 #'   also affects vertical separation of indices. Defaults to \code{1}
 #' @param groupUp boolean, when \code{TRUE} when groups present, they appear over the chr. name. Defaults to \code{FALSE}
+#' @param chromatids boolean, when \code{TRUE} shows separated chromatids. Defaults to \code{TRUE}
+#' @param arrowsBothChrt boolean, when \code{TRUE} (default) (for \code{chromatids=TRUE}) shows \code{upArrow, downArrow} styles of marks in both chromatids when \code{arrowsToSide=TRUE}.
+#' @param holocenNotAsChromatids boolean, when \code{TRUE} and \code{chromatids=TRUE} does not plot holocen kar. with chromatids. Defaults to \code{FALSE}. A value of \code{TRUE} modifies excHoloFrArrToSide to \code{TRUE} always.
+#' @param excHoloFrArrToSide boolean, when \code{arrowsToSide=TRUE}, excludes holocen. from this behaviour, plotting a centered arrow only.
+#' @param xModifier numeric, for \code{chromatids=TRUE}, separation among chromatids
+#' @param xModMonoHoloRate numeric, factor to shrink xModifier for holocen. 5 means 5 times smaller (quotient).
 #' @param indexIdTextSize numeric, font size of chr. and kar. indices and
 #'   chromosome name. Defaults to \code{1}
 #' @param OTUTextSize numeric, font size of OTU name (species). Defaults to \code{1}. When \code{OTUasNote} is \code{TRUE}, use  \code{notesTextSize} instead
 #' @param legend character, \code{""} for no legend; \code{"inline"} prints labels near
 #'   chromosomes; \code{"aside"} prints legend to the right of karyotypes (default). See \code{markLabelSpacer}
+#' @param remSimiMarkLeg boolean, when \code{legend="aside"}, if you use \code{pattern}, you can have several marks with same name. When \code{TRUE} this remove this pseudoduplicates from legend. Be sure that this pseudoduplicates have the same color, otherwise you should use \code{FALSE} (default).
+#' @param bannedMarkName character, character string or vector with mark names to be removed from plot. Not the marks but the labels.
 #' @param legendWidth numeric, factor to increase width of squares and of legend. Defaults to \code{1.7}
 #' @param legendHeight numeric, factor to increase height of squares and dots of legend. Automatic.
 #' @param defaultStyleMark character, default style of mark, only used when \code{style} column of \code{dfMarkColor} data.frame is missing or in absence of this data.frame. Use \code{"square"} (default) \code{"dots"} or \code{"cM"}. Introduced in 1.13
 #' @param colorBorderMark character, without default, pass a name of a color to use as border of marks. See \code{borderOfWhiteMarks}
 #' @param borderOfWhiteMarks boolean, if \code{TRUE} (Default) uses black border for white marks. See \code{dfMarkColor}. Does not apply to marks with style \code{cenStyle}
+#' @param lwd.mimicCen thickness of lines of \code{cenStyle} marks; affects only lateral borders. Defaults to \code{lwd.chr}
+#' @param defCenStyleCol character, color of outer part of \code{cenStyle} marks. Defaults to \code{white}
 #' @param protruding numeric, when style of mark is \code{"cM"}, fraction of chrWidth to stretch marker. Defaults to \code{0.2}. Introduced in 1.13
 #' @param markLabelSize numeric, only if legend != (not) "", size of the text of
 #'   labels of marks (legend). Defaults to \code{1}
@@ -120,8 +133,6 @@
 #' @param n, numeric vertices number for round corners
 #' @param notes, data.frame, optional, with columns \code{OTU} and \code{note} for adding notes to each OTU, they appear to the right of chromosomes
 #' @param notesTextSize numeric, font size of notes, see \code{notes}
-#' @param fixCenBorder boolean, when \code{TRUE} uses \code{chrColor} as centromere (and cen. mark) border color. See also \code{cenColor},
-#' \code{chrColor}, \code{colorBorderMark}, \code{borderOfWhiteMarks}. No default value.
 #' @param propWidth, boolean, defaults to \code{FALSE}. Diminishes chr. width with increasing number of OTUs
 #' @param asp, numeric, y x aspect of plot. Defautls to \code{1}
 #' @param defaultFontFamily character. use this as the font family. No default value.
@@ -149,6 +160,7 @@
 #' @param OTUlegendHeight numeric, for \code{circularPlot=TRUE} and \code{OTUplacing="number" or "simple"}. Modifies y names separation
 #' @param callPlot boolean, create new plot in your device. Defaults to \code{TRUE}
 #' @param rotation numeric, anti-clockwise rotation, defaults to \code{0.5} which rotates chr. from top to -90 degrees. (-0.5*\eqn{\pi} )
+#' @param roundness deprecated, use \code{squareness}
 #' @param ... accepts other arguments for the plot, see, \code{?plot}
 #'
 #' @keywords data.frame chromosome
@@ -208,6 +220,15 @@ plotIdiograms <- function(dfChrSize, # karyotype
   indexIdTextSize=1,
   distTextChr=1,
   groupUp=FALSE,
+  # chromatids=FALSE,
+  chromatids=TRUE,
+  arrowsBothChrt=TRUE,
+
+  holocenNotAsChromatids=FALSE,
+  excHoloFrArrToSide=FALSE,
+
+  xModifier,
+  xModMonoHoloRate,
   chrWidth=0.5,
   chrSpacing=0.5,
   specialChrWidth=0.3, specialChrSpacing=0.7,
@@ -217,7 +238,8 @@ plotIdiograms <- function(dfChrSize, # karyotype
   centromereSize=NA,
   cenColor,
   fixCenBorder,
-  roundness=4,
+  roundedCen=TRUE,
+  squareness=4,
   lwd.chr=0.5,
   lwd.cM,
 
@@ -239,10 +261,14 @@ plotIdiograms <- function(dfChrSize, # karyotype
   mycolors,
   borderOfWhiteMarks=TRUE,
   colorBorderMark,
+  lwd.mimicCen,
+  defCenStyleCol,
   pattern="",
 
   # mark labels
   legend="aside",
+  remSimiMarkLeg=FALSE,
+  bannedMarkName,
   # legend="inline",
   legendWidth=1.7, legendHeight=NA,
   markLabelSize=1,
@@ -304,6 +330,7 @@ plotIdiograms <- function(dfChrSize, # karyotype
   OTUcentered=TRUE,
   OTUjustif=0,
   OTUlegendHeight=NA,
+  roundness,
   ...) {
 
   xfactor <- yfactor <- 1
@@ -323,10 +350,34 @@ plotIdiograms <- function(dfChrSize, # karyotype
     defaultFontFamily2<-"sans"
   }
 
+  if(missing(xModifier)) {
+    xModifier <- chrWidth/12
+  }
+  if(missing(xModMonoHoloRate)){
+    xModifierMono<-xModifier
+    xModifierHolo<-xModifier
+  } else {
+    xModifierMono<-xModifier
+    xModifierHolo<-xModifier/as.numeric(xModMonoHoloRate)
+  }
+
+  if(missing(defCenStyleCol) ) {
+    defCenStyleCol <- "white"
+  }
+
+  if(!missing(roundness)){
+    crayon::red("roundness is deprecated and was substituted with new param. 'squareness'")
+  }
+
   if(!missing(lwd.cM)){
     lwd.cM2 <- lwd.cM
   } else {
     lwd.cM2 <- lwd.chr
+  }
+  if(!missing(lwd.mimicCen)){
+    lwd.mimicCen2 <- lwd.mimicCen
+  } else {
+    lwd.mimicCen2 <- lwd.chr
   }
 
   OTUfont2<-ifelse( !missing(OTUfont),   OTUfont,   1)
@@ -600,6 +651,7 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
 
       dfpGISHInternalMonocen2 <- dplyr::bind_rows(listOfdfpGISHInternalMonocen2, .id = "OTU")
       dfpGISHInternalMonocen2$chrRegion<-"p"
+      dfpGISHInternalMonocen2$chrRegionOrig<-"w"
 
       #
       #   q part
@@ -609,6 +661,7 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
 
       dfqGISHInternalMonocen2 <- dplyr::bind_rows(listOfdfqGISHInternalMonocen2, .id = "OTU")
       dfqGISHInternalMonocen2$chrRegion<-"q"
+      dfqGISHInternalMonocen2$chrRegionOrig<-"w"
 
       #
       # cen part
@@ -617,6 +670,7 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
       listOfdfCenMarksInternal2 <- listOfdfwholeGISHMonocen
       dfCenMarksInternal2 <- dplyr::bind_rows(listOfdfCenMarksInternal2, .id = "OTU")
       dfCenMarksInternal2$chrRegion<-"cen"
+      # dfCenMarksInternal2$chrRegionOrig<-"w" leaving this hides w names completely in inline
 
       if(exists("dfCenMarksInternal") & exists("dfCenMarksInternal2") ) {
         dfCenMarksInternal <- dplyr::bind_rows(dfCenMarksInternal,dfCenMarksInternal2)
@@ -647,7 +701,7 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
     dfwholeGISHHolocen$markSize<-dfChrSizeInternal[match(interaction(dfwholeGISHHolocen[c("OTU","chrName")] ),
                                                                  interaction(dfChrSizeInternal[c("OTU","chrName") ] )
                                                                  ),]$chrSize
-    dfwholeGISHHolocen$markPos<-0
+    dfwholeGISHHolocen$markPos <- 0
     if(markDistType=="cen") { # center
       dfwholeGISHHolocen$markPos <- dfChrSizeInternal[match(interaction(dfwholeGISHHolocen[c("OTU","chrName")] ),
                                                            interaction(dfChrSizeInternal[c("OTU","chrName") ] )
@@ -760,6 +814,7 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
     #
 
     listOfdfMarkPosHolocen<-listOfdfMarkPosInternal[which(names(listOfdfMarkPosInternal) %in% holocenNames)]
+
     if(length(listOfdfMarkPosHolocen)==0){
       remove(listOfdfMarkPosHolocen)
     }
@@ -1149,7 +1204,7 @@ is.na(listOfdfMarkPosMonocen[[i]]$markDistCen)
   {
   if(exists("dfMarkColorInternal") ) {
 
-#    dfMarkColorInternal1311<<-dfMarkColorInternal
+#   dfMarkColorInternal1311<<-dfMarkColorInternal
 
     message(crayon::black("\n####\nChecking mandatory columns from dfMarkColor: markName, markColor\n"
     ) )#cat
@@ -1175,7 +1230,20 @@ is.na(listOfdfMarkPosMonocen[[i]]$markDistCen)
       message(crayon::red("\nError in dfMarkColor, REMOVED\n") )
     } #fi
     else {  # column names ok
-      if(exists("allMarkNames")){
+#      dfMarkColorInternal1212<<-dfMarkColorInternal
+
+      # missing color for constric cenStyle
+
+      tryCatch(dfMarkColorInternal[which(dfMarkColorInternal$markColor==""),]$markColor <- NA, error= function(e){NA})
+
+      tryCatch(bannedMarkName2 <- dfMarkColorInternal[which(is.na(dfMarkColorInternal$markColor) ) , ]$markName, error= function(e){NA} )
+
+      tryCatch(dfMarkColorInternal[which(is.na(dfMarkColorInternal$markColor) &
+                     dfMarkColorInternal$style %in% "cenStyle"),]$markColor<-chrColor,
+               error= function (e) NA )
+#      dfMarkColorInternal1218<<-dfMarkColorInternal
+
+      if(exists("allMarkNames")) {
         dfMarkColorInternal <- dfMarkColorInternal[which(dfMarkColorInternal$markName %in% allMarkNames) ,]
         if (nrow(dfMarkColorInternal)==0){
           message(crayon::red("\nError in dfMarkColor markNames respect to Marks pos. data.frames, dfMarkColor REMOVED\n")
@@ -1183,10 +1251,12 @@ is.na(listOfdfMarkPosMonocen[[i]]$markDistCen)
           remove(dfMarkColorInternal)
         } else if ( length(setdiff(allMarkNames,unique(dfMarkColorInternal$markName) ) )>0) { # nrow not 0
           message(crayon::black("\nColors provided in to dfMarkColor are not enough, internal colors will be used.\n") )
-          dfMarkColorInternal<-makedfMarkColor(dfMarkColorInternal,allMarkNames,c(chrColor,cenColor2) )
+          dfMarkColorInternal <- makedfMarkColor(dfMarkColorInternal,allMarkNames, c(chrColor,cenColor2) )
         } else { # nrow not 0
           message(crayon::black("\nCheck OK\n") )
         }
+#        dfMarkColorInternal1232 <<-dfMarkColorInternal
+
       } # fi # end allmarknames exist
       else { # all Mark Names does not exist
         message(crayon::red("\nError in dfMarkColor Names respect to Marks data.frames, dfMarkColor REMOVED\n")
@@ -1243,6 +1313,15 @@ is.na(listOfdfMarkPosMonocen[[i]]$markDistCen)
     }
   }
 
+  if(!missing(bannedMarkName) & exists("bannedMarkName2")  ){
+#    bannedMarkName1301<<-bannedMarkName
+    tryCatch(bannedMarkName<-c(bannedMarkName,bannedMarkName2), error= function(e){NA} )
+  } else if(exists("bannedMarkName2") ){
+    bannedMarkName<-bannedMarkName2
+  } else {
+    bannedMarkName<-NULL
+  }
+#  bannedMarkName1308<<-bannedMarkName
 # dfMarkColorInternal1402<<-dfMarkColorInternal
   #
   #   CREATION OF CHILD DATAFRAMES MARKS
@@ -1256,6 +1335,7 @@ is.na(listOfdfMarkPosMonocen[[i]]$markDistCen)
 
   if(exists("listOfdfMarkPosMonocen") & exists("dfMarkColorInternal")  ){
     listOfdfMarkPosMonocenArrowsLabels<-list()
+#    listOfdfMarkPosMonocen1322<<-listOfdfMarkPosMonocen
 
     for (i in 1:length(listOfdfMarkPosMonocen)){
       if(class(listOfdfMarkPosMonocen[[i]])=="data.frame" ) {
@@ -1297,8 +1377,12 @@ is.na(listOfdfMarkPosMonocen[[i]]$markDistCen)
                  ,error = function(e) {""}
                  )
 
-      if(length(listOfdfMarkPosMonocen[[i]][which(listOfdfMarkPosMonocen[[i]]$style %in% "cenStyle"),]$markSize)>0){
 
+
+      if(nrow(listOfdfMarkPosMonocen[[i]][which(listOfdfMarkPosMonocen[[i]]$style %in% "cenStyle"),])>0){
+        if(!"markSize" %in% colnames(listOfdfMarkPosMonocen[[i]])){
+          listOfdfMarkPosMonocen[[i]]$markSize<-NA
+        }
         for (m in 1:nrow(listOfdfMarkPosMonocen[[i]][which(listOfdfMarkPosMonocen[[i]]$style %in% "cenStyle"),] ) ) {
           if( is.na(listOfdfMarkPosMonocen[[i]][which(listOfdfMarkPosMonocen[[i]]$style %in% "cenStyle"),]$markSize[m]) ) {
             listOfdfMarkPosMonocen[[i]][which(listOfdfMarkPosMonocen[[i]]$style %in% "cenStyle"),]$markSize[m]<-
@@ -1310,11 +1394,15 @@ is.na(listOfdfMarkPosMonocen[[i]]$markDistCen)
 
             } # if
           } # for
+
         } # if
+
+
       } # if data.frame
 
     } # for each monocen
 
+#    listOfdfMarkPosMonocen1376<<-listOfdfMarkPosMonocen
 #    listOfdfMarkPosMonocenArrowsLabels1 <<- listOfdfMarkPosMonocenArrowsLabels
 #    listOfdfMarkPosMonocen1 <<- listOfdfMarkPosMonocen
 
@@ -1324,8 +1412,8 @@ is.na(listOfdfMarkPosMonocen[[i]]$markDistCen)
   if(exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal")  ) {
 
     listOfdfMarkPosHolocenArrowsLabels<-list()
-
-    for (i in 1:length(listOfdfMarkPosHolocen)){
+#    listOfdfMarkPosHolocen1390<<-listOfdfMarkPosHolocen
+    for (i in 1:length(listOfdfMarkPosHolocen)) {
       if(class(listOfdfMarkPosHolocen[[i]])=="data.frame" ) {
 
         listOfdfMarkPosHolocen[[i]]$style<-dfMarkColorInternal$style[match(listOfdfMarkPosHolocen[[i]]$markName, dfMarkColorInternal$markName)]
@@ -1356,7 +1444,10 @@ is.na(listOfdfMarkPosMonocen[[i]]$markDistCen)
         )
 
 
-      if(length(listOfdfMarkPosHolocen[[i]][which(listOfdfMarkPosHolocen[[i]]$style %in% "cenStyle"),]$markSize)>0){
+      if(nrow(listOfdfMarkPosHolocen[[i]][which(listOfdfMarkPosHolocen[[i]]$style %in% "cenStyle"),])>0){
+        if(!"markSize" %in% colnames(listOfdfMarkPosHolocen[[i]]) ) {
+          listOfdfMarkPosMonocen[[i]]$markSize<-NA
+        }
         for (m in 1:nrow(listOfdfMarkPosHolocen[[i]][which(listOfdfMarkPosHolocen[[i]]$style %in% "cenStyle"),] ) ) {
           if( is.na(listOfdfMarkPosHolocen[[i]][which(listOfdfMarkPosHolocen[[i]]$style %in% "cenStyle"),]$markSize[m]) ) {
             listOfdfMarkPosHolocen[[i]][which(listOfdfMarkPosHolocen[[i]]$style %in% "cenStyle"),]$markSize[m]<-
@@ -1372,7 +1463,7 @@ is.na(listOfdfMarkPosMonocen[[i]]$markDistCen)
 
       } # if data.frame
     } # for
-#    # listOfdfMarkPosHolocen1<<-listOfdfMarkPosHolocen
+#   listOfdfMarkPosHolocen1438<<-listOfdfMarkPosHolocen
   } # fi
 
 
@@ -1749,9 +1840,6 @@ for (s in 1:length(y) ){
   }
 } # chunk
 
-
-
-
     {
       # monocenVector2<-integer()
       for(i in 1:length(listOfdfChromSizenoNA)){
@@ -1829,8 +1917,8 @@ for (s in 1:length(y) ){
     xsizeplot<-(max(unlist(x), na.rm=TRUE)+xlimRightMod )- ( (min(unlist(x), na.rm=TRUE)-(xlimLeftMod)) )
     ysizeplot<- max(unlist(y), na.rm=TRUE)
 
-    if(roundness < 1) {
-      roundness<- 1
+    if(squareness < 1) {
+      squareness<- 1
     }
     # plot types
 
@@ -1843,32 +1931,183 @@ for (s in 1:length(y) ){
       ylistTransChrSimple<-transYList(ylistNewChrSimple,shrinkFactor,monocenNames)
       names(ylistTransChrSimple)<-names(ylistNewChrSimple)
 
-      if(roundness > 20) {  ########################################  roundness > 20 #################### > 20
+      if(squareness > 20) {  ########################################  squareness > 20 #################### > 20
 
-        if(circularPlot==FALSE){
+        if(circularPlot==FALSE) {
 
         #####################################################################################################################
           if(callPlot){
             graphics::plot("",xlim=c( (min(unlist(x), na.rm=TRUE)-xlimLeftMod),(max(unlist(x), na.rm=TRUE)+xlimRightMod ) ),
                        ylim = c( ylimBotMod*-1 , ( (max(unlist(y), na.rm = TRUE) )+ylimTopMod) ) ,
                        ylab = "", xaxt='n',
-                       xlab="", yaxt='n',main = NULL, frame.plot = FALSE, asp=asp, ...)
-        # xlab="", yaxt='n',main = NULL, frame.plot = FALSE)
-          }
+                       xlab="", yaxt='n',main = NULL, frame.plot = FALSE, asp=asp, ...
+                       )
+             }
         ######################################################################################################################
+          if(chromatids==FALSE){
 
           lapply(1:length(y), function(s) mapply(function(x,y) graphics::polygon(x=x,
                                                                                  y=y,
                                                                                  col=chrColor,
                                                                                  lwd=lwd.chr,
-                                                                                 border=chrColor),
+                                                                                 border=chrBorderColor2),
                                                  x=x[[s]],
                                                  y=y[[s]]
-                                          )#m
-          )#l
-        } # circular false
+                                          ) #m
+                 ) # l
 
-        else { # circular TRUE
+          } # ct FALSE
+          if (chromatids & holocenNotAsChromatids) {
+            for (s in 1:length(y) ) {
+              if(attr(listOfdfChromSizenoNA[[s]],"cenType")=="holocen"){
+
+                  mapply(function(x,y) graphics::polygon(x=x,
+                                                                                       y=y,
+                                                                                       col=chrColor,
+                                                                                       lwd=lwd.chr,
+                                                                                       border=chrBorderColor2),
+                                                       x=x[[s]],
+                                                       y=y[[s]]
+                  ) #m
+
+              } # holocen
+            } # for
+          } # if
+          if (chromatids) { # CHROMAT TRUE
+
+            XSA<-YSA<-XLA<-YLA<-list()
+
+            XHO1<-XHO2<-YHO1<-YHO2<-list()
+
+            for (s in 1:length(y) ) {
+
+              if(class(listOfdfChromSizenoNA[[s]])=="data.frame") {
+                ########################################################
+
+                if(attr(listOfdfChromSizenoNA[[s]], "cenType")=="monocen" ) {                 ############# monocen ###########
+
+
+
+                  chrtXchrtYSA <- mapXYchromatidSA( (length(y[[s]])/2)+1 ,
+                                                    length(y[[s]]),
+                                                    y[[s]],
+                                                    x[[s]],
+                                                    xModifierMono )
+
+                  chrtXchrtYLA <- mapXYchromatidLA( 1,
+                                                   (length(y[[s]])/2) ,
+                                                    y[[s]],
+                                                    x[[s]],
+                                                    xModifierMono )
+
+
+
+                  XSA[[s]]<-chrtXchrtYSA$shortArmChrtx
+                  YSA[[s]]<-chrtXchrtYSA$shortArmChrty
+
+                  XLA[[s]]<-chrtXchrtYLA$longArmChrtx
+                  YLA[[s]]<-chrtXchrtYLA$longArmChrty
+
+                  attr(YSA[[s]], "positionnoNA")<- attr(listOfdfChromSizenoNA[[s]],"positionnoNA")
+                  # attr(YLA[[s]], "positionnoNA")<- attr(listOfdfChromSizenoNA[[s]],"positionnoNA")
+
+                  # important integration of long arm and short arms info
+
+                  YSA[[s]][sapply(YSA[[s]], is.null)]<-YLA[[s]][!sapply(YLA[[s]], is.null)]
+
+                  XSA[[s]][sapply(XSA[[s]], is.null)]<-XLA[[s]][!sapply(XLA[[s]], is.null)]
+
+                  # short arm indices are in the second half of list, so YLA is a smaller list
+
+                  names(XSA)[s]<-names(YSA)[s]<-names(y[s])
+
+                  for (a in 1: length(YSA[[s]]) ){
+                    # attr(roundedY[[s]][[a]],"chrName1")<- attr(y[[s]][[a]],"chrName1")
+                    names(YSA[[s]])[a]<- names(y[[s]][a])
+                    names(XSA[[s]])[a]<- names(y[[s]][a])
+                  }
+
+              } else if (attr(listOfdfChromSizenoNA[[s]], "cenType")=="holocen" & holocenNotAsChromatids==FALSE ) { # if monocen else  #####  holo
+
+                  # mapXYchromatidHolo <- function(start,end,y,x,xModifier ){
+                  chrtXchrtYHolo<-mapXYchromatidHolo(1 ,
+                                                 (length(y[[s]]) ) ,
+                                    y[[s]],
+                                    x[[s]],
+                                    xModifierHolo
+                    )
+
+                    XHO1[[s]]<-chrtXchrtYHolo$xCT1
+                    XHO2[[s]]<-chrtXchrtYHolo$xCT2
+                    YHO1[[s]]<-chrtXchrtYHolo$yCT1
+                    YHO2[[s]]<-chrtXchrtYHolo$yCT2
+
+                    attr(YHO1[[s]], "positionnoNA")<- attr(listOfdfChromSizenoNA[[s]],"positionnoNA")
+                    attr(YHO2[[s]], "positionnoNA")<- attr(listOfdfChromSizenoNA[[s]],"positionnoNA")
+
+                    names(YHO1)[s]<-names(XHO1)[s]<-names(YHO2)[s]<-names(XHO2)[s]<-names(y[s])
+
+                    for (a in 1: length(YHO1[[s]])){
+                      names(YHO1[[s]])[a]<- names(y[[s]][a])
+                      names(XHO1[[s]])[a]<- names(y[[s]][a])
+                      names(YHO2[[s]])[a]<- names(y[[s]][a])
+                      names(XHO2[[s]])[a]<- names(y[[s]][a])
+                    }
+                } # holo holocenNotAsChromatids F
+              } # df
+            } # for s
+
+            #make YSA same length as Y
+
+            if(length(YSA)>0) { # monocen plot chromatid sq
+
+            # this is not only SA, were integrated
+
+            YSA<-YSA[lengths(YSA) != 0]
+            XSA<-XSA[lengths(XSA) != 0]
+
+              lapply(1:length(YSA), function(s) mapply(function(x,y) graphics::polygon(x=x, y=y,
+                                                                                     col=chrColor,
+                                                                                     lwd=lwd.chr,
+                                                                                     border=chrBorderColor2),
+                                                     x=XSA[[s]],
+                                                     y=YSA[[s]]
+                   )#m
+              ) #l
+
+            } # if YSA
+
+            if(length(YHO1)>0){ # PLOT HOLOCEN SQ CHROMATID
+
+              YHO1 <- YHO1[lengths(YHO1) != 0]
+              XHO1 <- XHO1[lengths(XHO1) != 0]
+              YHO2 <- YHO2[lengths(YHO2) != 0]
+              XHO2 <- XHO2[lengths(XHO2) != 0]
+
+              # LEFT CHROMATID
+              lapply(1:length(YHO1), function(s) mapply(function(x,y) graphics::polygon(x=x, y=y,
+                                                                                     col=chrColor,
+                                                                                     lwd=lwd.chr,
+                                                                                     border=chrBorderColor2),
+                                                     x=XHO1[[s]],
+                                                     y=YHO1[[s]]
+              )#m
+              ) #l
+              # RIGHT CHROMATID
+              lapply(1:length(YHO1), function(s) mapply(function(x,y) graphics::polygon(x=x, y=y,
+                                                                                     col=chrColor,
+                                                                                     lwd=lwd.chr,
+                                                                                     border=chrBorderColor2),
+                                                     x=XHO2[[s]],
+                                                     y=YHO2[[s]]
+              )#m
+              ) #l
+            } # if YHO1
+
+
+          } # chromatids FALSE TRUE
+
+        } else { # circular false # circular TRUE sq > 20
 
           #
           #   x horizontal to vertical
@@ -1879,29 +2118,23 @@ for (s in 1:length(y) ){
           circleMaps <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,ylistTransChrSimple,xlistNewChr,n,0,
                                        chrWidth,rotation=rotation)
 
-
-#          # ylistTransChrSimpleI<<-ylistTransChrSimple
-#          # listYChrCenterI<<-listYChrCenter
-#          #          chrNamesI<<-chrNames
-
-#          circleMapsOTUname1851<<-circleMapsOTUname
           if(callPlot){
 
-          graphics::plot("",xlim=c( (min(unlist(circleMaps), na.rm=TRUE)-xlimLeftMod),
-                                    (max(unlist(circleMaps), na.rm=TRUE)+xlimRightMod )
-          ),
-          ylim = c( min (unlist(circleMaps), na.rm = TRUE) +ylimBotMod*-1 ,
-                    ( (max(unlist(circleMaps), na.rm = TRUE) )+ylimTopMod)
-          ) ,
-          ylab = "",
-          xaxt='n',
-          xlab="",
-          yaxt='n',
-          main = NULL, frame.plot = FALSE,
-          asp=asp,
-          ...
-          ) # plot
-          }
+            graphics::plot("",xlim=c( (min(unlist(circleMaps), na.rm=TRUE)-xlimLeftMod),
+                                      (max(unlist(circleMaps), na.rm=TRUE)+xlimRightMod )
+            ),
+            ylim = c( min (unlist(circleMaps), na.rm = TRUE) +ylimBotMod*-1 ,
+                      ( (max(unlist(circleMaps), na.rm = TRUE) )+ylimTopMod)
+            ) ,
+            ylab = "",
+            xaxt='n',
+            xlab="",
+            yaxt='n',
+            main = NULL, frame.plot = FALSE,
+            asp=asp,
+            ...
+            ) # plot
+          } # callPlot
 
           #
           #   plot chr
@@ -1912,14 +2145,15 @@ for (s in 1:length(y) ){
           #
           #   add OTU names
           #
-          if(addOTUName){
+
+          if(addOTUName) {
 
             firstXchrEach <- lapply(xlistNewChr, `[[`, 1)
             firstYchrEach <- lapply(ylistTransChrSimple, `[[`, 1)
 
-          circleMapsOTUname <- mapOTUnames(firstYchrEach , firstXchrEach, ylistNewChrSimple, n, radius, circleCenter, circleCenterY,separFactor,
+            circleMapsOTUname <- mapOTUnames(firstYchrEach , firstXchrEach, ylistNewChrSimple, n, radius, circleCenter, circleCenterY,separFactor,
                                            OTUlabelSpacing, chrWidth,rotation=rotation)
-          addOTUnames(circleMapsOTUname,OTUTextSize,OTUsrt,OTUplacing,OTUfont2,OTUfamily2,
+            addOTUnames(circleMapsOTUname,OTUTextSize,OTUsrt,OTUplacing,OTUfont2,OTUfamily2,
                       circleCenter,OTULabelSpacerx,circleCenterY,OTULabelSpacery,
                       OTUlegendHeight*normalizeToOne,radius,chrWidth,normalizeToOne,OTUcentered,OTUjustif,separFactor,labelSpacing)
           }
@@ -1928,7 +2162,7 @@ for (s in 1:length(y) ){
           # Plot chr names
           #
 
-          if(chrId!=""){
+          if(chrId!="") {
             listXChrCenter <- mapChrCenter(xlistNewChr)
             listYChrCenter <- mapChrCenter(ylistTransChrSimple)
             names(listYChrCenter)<-names(ylistTransChrSimple)
@@ -1938,95 +2172,192 @@ for (s in 1:length(y) ){
             plotChrNames(chrNames, indexIdTextSize, chrId,monocenNames,chrColor)
           }
 
-        } # cP true
+        } # cP true if else
 
-      } else { # if roundness ##################                                       ######## roundness < 20
-        # message(crayon::green(paste0("main plot roundness section start" ) ) )
-        pts_1 <- seq(-pi/2, 0, length.out = n)
-        pts_2 <- seq( 0, pi/2, length.out = n)
-        pts_3 <- seq(pi, pi*1.5, length.out = n)
-        pts_4 <- seq(pi/2, pi, length.out = n)
+      } else {         # if squareness > 20 ###########         else             ########          squareness <= 20
+
+        pts<- seq(-pi/2, pi*1.5, length.out = n*4)
+        ptsl<-split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
 
         yMod<-y
 
-        newLongy<-newLongx<-list()
+        roundedY<-roundedX<-list()
+
+        XSARO<-YSARO<-XLARO<-YLARO<-list()
+
+        XHO1Ro<-YHO1Ro<-XHO2Ro<-YHO2Ro<-list()
 
         for (s in 1:length(yMod) ) {
 
           if(class(listOfdfChromSizenoNA[[s]])=="data.frame") {
             ########################################################
 
-          if(attr(listOfdfChromSizenoNA[[s]], "cenType")=="monocen" ) {                 ############# monocen ###############
+          if(attr(listOfdfChromSizenoNA[[s]], "cenType")=="monocen" ) {                 ############# monocen ###########
             if(attr(listOfdfChromSizenoNA[[s]],"ytitle")=="cM"){
               chrWidth2  <-specialChrWidth
             } else {
               chrWidth2 <- chrWidth
             }
-            r2<- chrWidth2/(roundness*2)
+            r2<- chrWidth2/(squareness*2)
+
+            if(chromatids==FALSE | circularPlot==TRUE) {
 
                   shortxyCoords<-mapXY(( (length(yMod[[s]])/2)+1 ) , length(yMod[[s]]),
                                            y[[s]],yMod[[s]],x[[s]],
-                                           yfactor,r2,pts_1,pts_2,pts_3,pts_4)
-#                  shortxyCoordsIPREV<<-shortxyCoords
+                                           yfactor,r2,
+                                       ptsl[[1]],ptsl[[2]],ptsl[[4]],ptsl[[3]]
+                                      )
 
-                   longxyCoords<-mapXY( 1 , (length(yMod[[s]])/2 ) ,
+                  longxyCoords<-mapXY( 1 , (length(yMod[[s]])/2 ) ,
                                           y[[s]], yMod[[s]] ,x[[s]],
-                                          yfactor,r2,pts_1,pts_2,pts_3,pts_4)
-#                   longxyCoordsI<<-longxyCoords
+                                          yfactor,r2,
+                                        ptsl[[1]],ptsl[[2]],ptsl[[4]],ptsl[[3]]
+                                      )
 
-                  shortxyCoords$newLongx[sapply(shortxyCoords$newLongx, is.null)] <-
-                    longxyCoords$newLongx[!sapply(longxyCoords$newLongx, is.null)]
+                  # integration of X coords of short and long
+                  shortxyCoords$roundedX[sapply(shortxyCoords$roundedX, is.null)] <-
+                    longxyCoords$roundedX[!sapply(longxyCoords$roundedX, is.null)]
 
-                  shortxyCoords$newLongy[sapply(shortxyCoords$newLongy, is.null)] <-
-                    longxyCoords$newLongy[!sapply(longxyCoords$newLongy, is.null)]
+                  # integration of Y coords of short and long
+                  shortxyCoords$roundedY[sapply(shortxyCoords$roundedY, is.null)] <-
+                    longxyCoords$roundedY[!sapply(longxyCoords$roundedY, is.null)]
 
 #                  shortxyCoordsINEW<<-shortxyCoords
 
-                  newLongx[[s]]<-shortxyCoords$newLongx
-                  newLongy[[s]]<-shortxyCoords$newLongy
+                                 # this is not short only
+                  roundedX[[s]]<-shortxyCoords$roundedX
+                  roundedY[[s]]<-shortxyCoords$roundedY
+                  attr(roundedY[[s]], "positionnoNA")<- attr(listOfdfChromSizenoNA[[s]],"positionnoNA")
+                  attr(roundedY[[s]], "cenType")<- attr(listOfdfChromSizenoNA[[s]],"cenType")
 
-    } # if monocen
-            ###########################################################                                   holocen
+                  for (a in 1: length(roundedY[[s]])){
+                    # attr(roundedY[[s]][[a]],"chrName1")<- attr(y[[s]][[a]],"chrName1")
+                    names(roundedY[[s]])[a]<- names(y[[s]][a])
+                    names(roundedX[[s]])[a]<- names(y[[s]][a])
+                  }
+                  names(roundedX)[s]<-names(roundedY)[s]<-names(y[s])
 
-          else if(attr(listOfdfChromSizenoNA[[s]], "cenType")=="holocen" ) {
+            } else if(chromatids==TRUE & circularPlot==FALSE) { # chromatids FALSE TRUE
+
+              pts<- seq(-pi/2, pi*1.5, length.out = n*4)
+
+              chrtXchrtYSARo <- mapXYchromatidSARo(
+                (length(y[[s]])/2)+1  ,
+                (length(y[[s]]) )
+                ,y[[s]],
+                x[[s]],
+                r2,
+                xModifierMono ,
+                pts)
+#              chrtXchrtYSARo2157<<-chrtXchrtYSARo
+
+              chrtXchrtYLARo <- mapXYchromatidLARo(
+                1 ,
+                (length(y[[s]])/2 )
+                ,y[[s]],
+                x[[s]],
+                r2,
+                xModifierMono,
+                pts)
+
+              XSARO[[s]] <- chrtXchrtYSARo$RoundedSAChrtx
+              YSARO[[s]] <-chrtXchrtYSARo$RoundedSAChrty
+              XLARO[[s]] <- chrtXchrtYLARo$RoundedLAChrtx
+              YLARO[[s]] <-chrtXchrtYLARo$RoundedLAChrty
+
+#              listOfdfChromSizenoNA2179<<-listOfdfChromSizenoNA
+              attr(YSARO[[s]], "positionnoNA") <- attr(listOfdfChromSizenoNA[[s]],"positionnoNA")
+
+              # important integration of long arm and short arms info
+              YSARO[[s]][sapply(YSARO[[s]], is.null)] <- YLARO[[s]][!sapply(YLARO[[s]], is.null)]
+
+              XSARO[[s]][sapply(XSARO[[s]], is.null)] <- XLARO[[s]][!sapply(XLARO[[s]], is.null)]
+              # short arm indices are in the second half of list, so YLA is a smaller list
+
+              names(XSARO)[s]<-names(YSARO)[s]<-names(y[s])
+
+              for (a in 1: length(YSARO[[s]]) ){
+                # attr(roundedY[[s]][[a]],"chrName1")<- attr(y[[s]][[a]],"chrName1")
+                names(YSARO[[s]])[a]<- names(y[[s]][a])
+                names(XSARO[[s]])[a]<- names(y[[s]][a])
+              }
+
+            } # chromatids TRUE
+
+    } else if (attr(listOfdfChromSizenoNA[[s]], "cenType")=="holocen") { # if monocen else  holocen #########################
+
             if(attr(listOfdfChromSizenoNA[[s]],"ytitle")=="cM"){
               chrWidth2  <-specialChrWidth
             } else {
               chrWidth2<-chrWidth
             }
 
-            r2<- chrWidth2/(roundness*2)
+            r2<- chrWidth2/(squareness*2)
+
+            if(chromatids==FALSE | holocenNotAsChromatids | circularPlot==TRUE) {
 
             xyCoords<-mapXY(1 , (length(yMod[[s]]) ) ,
                                 y[[s]], yMod[[s]] ,
                                 x[[s]],
                                 yfactor,r2,
-                                pts_1,pts_2,pts_3,pts_4)
+                                # pts_1,pts_2,pts_3,pts_4
+                            ptsl[[1]],ptsl[[2]],ptsl[[4]],ptsl[[3]]
+                            )
 
-            newLongx[[s]]<-xyCoords$newLongx
-            newLongy[[s]]<-xyCoords$newLongy
+            roundedX[[s]]<-xyCoords$roundedX
+            roundedY[[s]]<-xyCoords$roundedY
+            attr(roundedY[[s]], "positionnoNA")<- attr(listOfdfChromSizenoNA[[s]],"positionnoNA")
+            attr(roundedY[[s]], "cenType")<- attr(listOfdfChromSizenoNA[[s]],"cenType")
+
+            for (a in 1: length(roundedY[[s]])){
+              # attr(roundedY[[s]][[a]],"chrName1")<- attr(y[[s]][[a]],"chrName1")
+              names(roundedY[[s]])[a]<- names(y[[s]][a])
+              names(roundedX[[s]])[a]<- names(y[[s]][a])
+            }
+            names(roundedX)[s]<-names(roundedY)[s]<-names(y[s])
+
+            } else if( chromatids==TRUE & holocenNotAsChromatids==FALSE | circularPlot==FALSE) { # chromatids FALSE TRUE
+
+              pts<- seq(-pi/2, pi*1.5, length.out = n*4)
+
+              chrtXchrtYHoloRo<-mapXYchromatidHoloRo(1 ,
+                                                 (length(y[[s]]) ) ,
+                                                 y[[s]],
+                                                 x[[s]],
+                                                 r2,
+                                                 xModifierHolo,
+                                                 pts
+              )
+
+              XHO1Ro[[s]]<-chrtXchrtYHoloRo$holoRightx
+              YHO1Ro[[s]]<-chrtXchrtYHoloRo$holoRighty
+
+              XHO2Ro[[s]]<-chrtXchrtYHoloRo$holoLeftx
+              YHO2Ro[[s]]<-chrtXchrtYHoloRo$holoLefty
+
+              attr(YHO1Ro[[s]], "positionnoNA")<- attr(listOfdfChromSizenoNA[[s]],"positionnoNA")
+              attr(YHO2Ro[[s]], "positionnoNA")<- attr(listOfdfChromSizenoNA[[s]],"positionnoNA")
+
+              names(YHO1Ro)[s]<-names(XHO1Ro)[s]<-names(YHO2Ro)[s]<-names(XHO2Ro)[s]<-names(y[s])
+
+              for (a in 1: length(YHO1Ro[[s]])){
+                names(YHO1Ro[[s]])[a]<- names(y[[s]][a])
+                names(XHO1Ro[[s]])[a]<- names(y[[s]][a])
+                names(YHO2Ro[[s]])[a]<- names(y[[s]][a])
+                names(XHO2Ro[[s]])[a]<- names(y[[s]][a])
+              }
+
+            } # chrt FALSE
 
           } # holocen ################################################################################# END HOLOCEN
-      } # d.f.
+    } # d.f.
+
    } # for species
 
-  newLongy<-newLongy[!is.na(newLongy)]
-  newLongx<-newLongx[!is.na(newLongx)]
-
-  for(s in 1: length(newLongy)){
-    attr(newLongy[[s]], "positionnoNA")<- attr(listOfdfChromSizenoNA[[s]],"positionnoNA")
-    for (a in 1: length(newLongy[[s]])){
-      # attr(newLongy[[s]][[a]],"chrName1")<- attr(y[[s]][[a]],"chrName1")
-      names(newLongy[[s]])[a]<- names(y[[s]][a])
-      names(newLongx[[s]])[a]<- names(y[[s]][a])
-    }
+  if(exists("roundedY") ){
+    roundedY<-roundedY[!is.na(roundedY)]
+    roundedX<-roundedX[!is.na(roundedX)]
   }
-
-  names(newLongy)<-names(y)
-  names(newLongx)<-names(y)
-
-#  newLongyInternal<<-newLongy
-#  newLongxInternal<<-newLongx
 
   if(circularPlot==FALSE){
 
@@ -2035,23 +2366,85 @@ for (s in 1:length(y) ){
     graphics::plot("",xlim=c( (min(unlist(x), na.rm=TRUE)-xlimLeftMod),(max(unlist(x), na.rm=TRUE)+xlimRightMod ) ),
                    ylim = c( ylimBotMod*-1 ,( (max(unlist(y), na.rm = TRUE) )+ylimTopMod) ) , ylab = "", xaxt='n',
                    xlab="", yaxt='n',main = NULL, frame.plot = FALSE, asp=asp, ...)
-    # xlab="", yaxt='n',main = NULL, frame.plot = FALSE)
-}
+    }
     ######################################################################################################################
+      if (chromatids==FALSE ) {
+            lapply(1:length(y), function(s) mapply(function(x,y) graphics::polygon(x=x, y=y,
+                                                                                     col=chrColor,
+                                                                                     lwd=lwd.chr,
+                                                                                     border=chrBorderColor2),
+                                                     x=roundedX[[s]],
+                                                     y=roundedY[[s]]
+                                              )#m
+            ) #l
+      }
+      if (chromatids & holocenNotAsChromatids) {
 
-      lapply(1:length(y), function(s) mapply(function(x,y) graphics::polygon(x=x, y=y,
-                                                                               col=chrColor,
-                                                                               lwd=lwd.chr,
-                                                                               border=chrBorderColor2),
-                                               x=newLongx[[s]],
-                                               y=newLongy[[s]]
-                                        )#m
-      ) #l
-   } # cP FALSE
+      for (s in 1:length(roundedY) ) {
+        if(length(attr(roundedY[[s]],"cenType"))>0){
+        if(attr(roundedY[[s]],"cenType")=="holocen"){
 
-  else { # cP TRUE         ####################################################         circular - roundness < 20
+          mapply(function(x,y) graphics::polygon(x=x,
+                                                 y=y,
+                                                 col=chrColor,
+                                                 lwd=lwd.chr,
+                                                 border=chrBorderColor2),
+                 x=roundedX[[s]],
+                 y=roundedY[[s]]
+          ) #m
 
-    yInterLong<-intercalate(newLongy,monocenNames)
+        } # holocen
+        }
+      } # for
+    } # if
+     if (chromatids) { #        CHRT TRUE
+
+        # this is not only SA, arms were integrated
+        if(length(YSARO)>0) {
+        YSARO<-YSARO[lengths(YSARO) != 0]
+        XSARO<-XSARO[lengths(XSARO) != 0]
+
+        lapply(1:length(YSARO), function(s) mapply(function(x,y) graphics::polygon(x=x, y=y,
+                                                                                 col=chrColor,
+                                                                                 lwd=lwd.chr,
+                                                                                 border=chrBorderColor2),
+                                                 x=XSARO[[s]],
+                                                 y=YSARO[[s]]
+          )#m
+         ) #l
+        } # YHARO len
+
+        if(length(YHO1Ro)>0){ # PLOT HOLOCEN SQ CHROMATID
+
+          YHO1Ro <- YHO1Ro[lengths(YHO1Ro) != 0]
+          XHO1Ro <- XHO1Ro[lengths(XHO1Ro) != 0]
+          YHO2Ro <- YHO2Ro[lengths(YHO2Ro) != 0]
+          XHO2Ro <- XHO2Ro[lengths(XHO2Ro) != 0]
+
+          # LEFT CHROMATID
+          lapply(1:length(YHO1Ro), function(s) mapply(function(x,y) graphics::polygon(x=x, y=y,
+                                                                                    col=chrColor,
+                                                                                    lwd=lwd.chr,
+                                                                                    border=chrBorderColor2),
+                                                    x=XHO1Ro[[s]],
+                                                    y=YHO1Ro[[s]]
+          )#m
+          ) #l
+          # RIGHT CHROMATID
+          lapply(1:length(YHO1Ro), function(s) mapply(function(x,y) graphics::polygon(x=x, y=y,
+                                                                                    col=chrColor,
+                                                                                    lwd=lwd.chr,
+                                                                                    border=chrBorderColor2),
+                                                    x=XHO2Ro[[s]],
+                                                    y=YHO2Ro[[s]]
+          )#m
+          ) #l
+        } # if YHO1Ro
+
+      } # CHRT T
+   } else {  # cP FALSE # cP TRUE         ####################################################         circular - squareness < 20
+
+    yInterLong<-intercalate(roundedY,monocenNames)
     names(yInterLong)<-names(y)
 
     ylistNewChrLong<-yVertoHor(yInterLong,monocenNames )
@@ -2061,9 +2454,10 @@ for (s in 1:length(y) ){
     #   x horizontal to vertical
     #
 
-    xlistNewChr<-xHortoVer(newLongx)
+    xlistNewChr <- xHortoVer(roundedX)
 
-    ylistTransChr<-transYList(ylistNewChrLong,shrinkFactor,monocenNames)
+    ylistTransChr <- transYList(ylistNewChrLong,shrinkFactor,monocenNames)
+
     names(ylistTransChr)<-names(ylistNewChrLong)
 #    ylistTransChrI<<-ylistTransChr
     #
@@ -2102,7 +2496,7 @@ for (s in 1:length(y) ){
       firstXchrEach <- lapply(xlistNewChr, `[[`, 1)
 
       firstYchrEach <- lapply(ylistTransChr, `[[`, 1)
-      #      chrNamesI<<-chrNames
+#      #      chrNamesI<<-chrNames
 
       #
       #  OTU name place
@@ -2124,7 +2518,7 @@ for (s in 1:length(y) ){
         listYChrCenter <- mapChrCenter(ylistTransChr)
         names(listYChrCenter)<-names(ylistTransChr)
 
-        #      listYChrCenterI<<-listYChrCenter
+#        #      listYChrCenterI<<-listYChrCenter
 
         listXChrCenter <- mapChrCenter(xlistNewChr)
 
@@ -2139,9 +2533,7 @@ for (s in 1:length(y) ){
        } # if
 } # circularplot ####################################################################################################
 
-}# roundness if roundness <20
-
- #} # plot types
+} # squareness if squareness <20 end plot
 
   ####################################################################################
   #
@@ -2794,203 +3186,850 @@ if(addOTUName){
                                                 #       MARKS            #
                                                 ##########################
 
-  ##########################################################################################################3
-  #
-  #                           painting Marks monocen              square marks
-  #
-  ############################################################################################################
-
-  if (exists("listOfdfMarkPosMonocen") & exists("dfMarkColorInternal") ){
-    # message(crayon::green(paste0("monocen. marks section start" ) ) )
 
 
-    xMarkSq<-yMarkSq<-listOfdfMarkPosSq<-list()
 
-    j<-1
-    for (k in 1:length(listOfdfMarkPosMonocen)) {
-      currName<-names(listOfdfMarkPosMonocen)[[k]]
-      if(nrow(listOfdfMarkPosMonocen[[k]][which(listOfdfMarkPosMonocen[[k]]$style=="square"),])>0){
-        listOfdfMarkPosSq<-c(listOfdfMarkPosSq,list(listOfdfMarkPosMonocen[[k]][which(listOfdfMarkPosMonocen[[k]]$style=="square"),]))
-        names(listOfdfMarkPosSq)[[j]]<-currName
-        j<-j+1
-      }
-    }
+      ##########################################################################################################3
+      #
+      #                           painting Marks monocen              square marks
+      #
+      ############################################################################################################
 
-    if(length(listOfdfMarkPosSq)>0){
-    for (sm in 1:length(listOfdfMarkPosSq)) {
-      yMark1<-NULL
-      xMark1<-NULL
-      # which(names(listOfdfChromSize) %in% names(listOfdfMarkPosSq)[[sm]] )
-
-      corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfMarkPosSq)[[sm]] )
-
-      for (m in 1:nrow(listOfdfMarkPosSq[[sm]]) ){
-        ifelse(listOfdfMarkPosSq[[sm]][m,"chrRegion"]=="q",longORshort<- 0,longORshort<- 1) # ifelseinloop
-        ifelse(listOfdfMarkPosSq[[sm]][m,"chrRegion"]=="q",column<- 1, column<- 2)
-        ifelse(listOfdfMarkPosSq[[sm]][m,"chrRegion"]=="q",mySign<- -1,mySign<- 1)
-        rowIndex<- nrow(listOfdfChromSize[[corr_index]] ) * longORshort + (listOfdfMarkPosSq[[sm]][,"neworder"][m])
-        armStart<-ym[[corr_index]][rowIndex,column]
-        yprox <- armStart +
-          (listOfdfMarkPosSq[[sm]][m,"markDistCen"]                                                             *normalizeToOne*mySign)
-
-        yter <- armStart +
-          ( sum( listOfdfMarkPosSq[[sm]][m,"markDistCen"] , listOfdfMarkPosSq[[sm]][m,"markSize"], na.rm=TRUE ) *normalizeToOne*mySign )
-
-        yMark1[[m]]<-if(longORshort==0) {c(yprox,yter,yter,yprox)} else {c(yter,yprox,yprox,yter)}
-
-        attr(yMark1[[m]],"arm")<-listOfdfMarkPosSq[[sm]][m,"chrRegion"]
-        # attr(yMark1[[m]],"armStart")<-armStart
-        attr(yMark1[[m]],"rowIndex")<-rowIndex
-
-        xMark1[[m]]<-xm[[corr_index]][listOfdfMarkPosSq[[sm]][,"neworder"][m],]
-        attr(xMark1[[m]],"rowIndex")<-rowIndex
-
-      }
-      yMarkSq[[sm]]<-yMark1
-      attr(yMarkSq[[sm]], "spname")<-names(listOfdfMarkPosSq)[[sm]]
-      xMarkSq[[sm]]<-xMark1
-      attr(xMarkSq[[sm]], "spname")<-names(listOfdfMarkPosSq)[[sm]]
-    } # end for
-
-    # markList<-addChrNameAttrMark(xMarkSq,yMarkSq,x)
-    #
-    # xMarkSq<-markList$xMark
-    # yMarkSq<-markList$yMark
-                                                ########################
-                                                #                      #
-                                                #   add marks to plot monocen #
-                                                #                      #
-                                                ########################
-      # if(circularPlot==FALSE){
-      roundPlotMark(roundness, xMarkSq, yMarkSq,
-                    dfMarkColorInternal,
-                    listOfdfMarkPosSq,
-                    chrWidth, #use for calc r2
-                    specialChrWidth,
-                    yfactor,
-                    n,
-                    lwd.chr,
-                    listOfdfChromSize,
-                    circularPlot,
-                    y,
-                    markLabelSize,
-                    pattern,
-                    separFactor,
-                    labelSpacing,circleCenter,circleCenterY,radius,
-                    legend,ylistTransChrSimple,rotation=rotation,labelOutwards)
-
-    } #     if(length(listOfdfMarkPosSq)>0)
-
-    else {remove(listOfdfMarkPosSq)}
-
-  # square labels not cen (monocen.)
-  booleanForsquareInlineLabel<- legend=="inline" & exists("dfMarkColorInternal") & exists("listOfdfMarkPosSq") & circularPlot==FALSE
-
-  if(booleanForsquareInlineLabel) {
-    textLabel(xMarkSq,yMarkSq,listOfdfChromSize,listOfdfMarkPosSq,specialChrSpacing,chrSpacing,markLabelSize,pattern)
-  }
-
-  } # if presence end painting marks
-
-  ##################################################################################################
-  #
-  #                                                 painting Marks square holocen
-  #
-  ##################################################################################################
-
-  if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
-    # message(crayon::green(paste0("holocen. marks section start" ) ) )
-    xMarkSq<-yMarkSq<-listOfdfMarkPosSq<-list()
-
-    j<-1
-    for (k in 1:length(listOfdfMarkPosHolocen)) {
-      currName<-names(listOfdfMarkPosHolocen)[[k]]
-      if(nrow(listOfdfMarkPosHolocen[[k]][which(listOfdfMarkPosHolocen[[k]]$style=="square"),])>0){
-        listOfdfMarkPosSq<-c(listOfdfMarkPosSq,list(listOfdfMarkPosHolocen[[k]][which(listOfdfMarkPosHolocen[[k]]$style=="square"),]) )
-        names(listOfdfMarkPosSq)[[j]]<-currName
-        j<-j+1
-      }
-    }
-
-    if(length(listOfdfMarkPosSq)>0){
-      for (sm in 1:length(listOfdfMarkPosSq)) {
-
-      yMark1<-NULL
-      xMark1<-NULL
-      corr_index<-which(names(ym) %in% names(listOfdfMarkPosSq)[[sm]] )
-
-      for (m in 1:nrow(listOfdfMarkPosSq[[sm]])){
-        rowIndex<-(listOfdfMarkPosSq[[sm]][,"neworder"][m])
-        chrStart<-ym[[corr_index]][rowIndex ,2]
-        yinf <- chrStart +                        # was ysup
-          (listOfdfMarkPosSq[[sm]][m,"markPos"]                                                          *normalizeToOne)
-
-        ysup <- chrStart +
-          (  sum(listOfdfMarkPosSq[[sm]][m,"markPos"],listOfdfMarkPosSq[[sm]][m,"markSize"],na.rm=TRUE ) *normalizeToOne )
-
-        yMark1[[m]]<-c(ysup,yinf,yinf,ysup)
-        attr(yMark1[[m]],"rowIndex")<-rowIndex
-
-        xMark1[[m]]<-xm[[corr_index]][listOfdfMarkPosSq[[sm]][,"neworder"][m],]
-        attr(xMark1[[m]],"rowIndex")<-rowIndex
-
-      }
-      yMarkSq[[sm]]<-yMark1
-      attr(yMarkSq[[sm]], "spname")<-names(listOfdfMarkPosSq)[[sm]]
-      xMarkSq[[sm]]<-xMark1
-      attr(xMarkSq[[sm]], "spname")<-names(listOfdfMarkPosSq)[[sm]]
-    } # end for
-
-# markList<-addChrNameAttrMark(xMarkSq,yMarkSq,x)
-
-# xMarkSq<-markList$xMark
-# yMarkSq<-markList$yMark
-
-                                                          #####################
-                                                          #   add sq marks to plot holocen
-                                                          #####################
-
-# if(roundness<20){
-#   myY<- y #newLongy
-# } else {
-#   myY<-y
-# }
+      if (exists("listOfdfMarkPosMonocen") & exists("dfMarkColorInternal") ){
+        # message(crayon::green(paste0("monocen. marks section start" ) ) )
 
 
-      roundPlotMark(roundness, xMarkSq, yMarkSq,
-                    dfMarkColorInternal,
-                    listOfdfMarkPosSq,
-                    chrWidth, #use for calc r2
-                    specialChrWidth,
-                    yfactor,
-                    n,
-                    lwd.chr,
-                    listOfdfChromSize,
-                    circularPlot,
-                    y,
-                    markLabelSize,
-                    pattern,
-                    separFactor,
-                    labelSpacing,circleCenter,circleCenterY,radius,
-                    legend,ylistTransChrSimple,rotation=rotation,labelOutwards) #
+        xMarkSq<-yMarkSq<-listOfdfMarkPosSq<-list()
 
-    } #     if(length(listOfdfMarkPosSq)>0){
+        j<-1
+        for (k in 1:length(listOfdfMarkPosMonocen)) {
+          currName<-names(listOfdfMarkPosMonocen)[[k]]
+          if(nrow(listOfdfMarkPosMonocen[[k]][which(listOfdfMarkPosMonocen[[k]]$style=="square"),])>0){
+            listOfdfMarkPosSq<-c(listOfdfMarkPosSq,list(listOfdfMarkPosMonocen[[k]][which(listOfdfMarkPosMonocen[[k]]$style=="square"),]))
+            names(listOfdfMarkPosSq)[[j]]<-currName
+            j<-j+1
+          }
+        }
 
-    else {remove(listOfdfMarkPosSq)}
+        if(length(listOfdfMarkPosSq)>0){
+          for (sm in 1:length(listOfdfMarkPosSq)) {
+            yMark1<-NULL
+            xMark1<-NULL
+            # which(names(listOfdfChromSize) %in% names(listOfdfMarkPosSq)[[sm]] )
 
-  #
-  #   inline legend holocen
-  #
+            corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfMarkPosSq)[[sm]] )
 
-    booleanForsquareInlineLabel<- legend=="inline" & exists("dfMarkColorInternal") & exists("listOfdfMarkPosSq") & circularPlot==FALSE
+            for (m in 1:nrow(listOfdfMarkPosSq[[sm]]) ){
+              ifelse(listOfdfMarkPosSq[[sm]][m,"chrRegion"]=="q",longORshort<- 0,longORshort<- 1) # ifelseinloop
+              ifelse(listOfdfMarkPosSq[[sm]][m,"chrRegion"]=="q",column<- 1, column<- 2)
+              ifelse(listOfdfMarkPosSq[[sm]][m,"chrRegion"]=="q",mySign<- -1,mySign<- 1)
+              rowIndex<- nrow(listOfdfChromSize[[corr_index]] ) * longORshort + (listOfdfMarkPosSq[[sm]][,"neworder"][m])
+              armStart<-ym[[corr_index]][rowIndex,column]
+              yprox <- armStart +
+                (listOfdfMarkPosSq[[sm]][m,"markDistCen"]                                                             *normalizeToOne*mySign)
 
-    if(booleanForsquareInlineLabel) {
-      textLabel(xMarkSq,yMarkSq,listOfdfChromSize,listOfdfMarkPosSq,specialChrSpacing,chrSpacing,markLabelSize,pattern)
-    }
+              yter <- armStart +
+                ( sum( listOfdfMarkPosSq[[sm]][m,"markDistCen"] , listOfdfMarkPosSq[[sm]][m,"markSize"], na.rm=TRUE ) *normalizeToOne*mySign )
 
-  } #   if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") )
+              yMark1[[m]]<-if(longORshort==0) {c(yprox,yter,yter,yprox)} else {c(yter,yprox,yprox,yter)}
 
-                                                      # end square marks  #
+              attr(yMark1[[m]],"arm")<-listOfdfMarkPosSq[[sm]][m,"chrRegion"]
+              # attr(yMark1[[m]],"armStart")<-armStart
+              attr(yMark1[[m]],"rowIndex")<-rowIndex
+
+              xMark1[[m]]<-xm[[corr_index]][listOfdfMarkPosSq[[sm]][,"neworder"][m],]
+              attr(xMark1[[m]],"rowIndex")<-rowIndex
+
+            }
+            yMarkSq[[sm]]<-yMark1
+            attr(yMarkSq[[sm]], "spname")<-names(listOfdfMarkPosSq)[[sm]]
+            xMarkSq[[sm]]<-xMark1
+            attr(xMarkSq[[sm]], "spname")<-names(listOfdfMarkPosSq)[[sm]]
+          } # end for
+
+          # markList<-addChrNameAttrMark(xMarkSq,yMarkSq,x)
+          #
+          # xMarkSq<-markList$xMark
+          # yMarkSq<-markList$yMark
+          ########################
+          #                      #
+          #   add marks to plot monocen #
+          #                      #
+          ########################
+          if(chromatids==FALSE | circularPlot==TRUE) {
+
+            # if(circularPlot==FALSE){
+            roundPlotMark(bannedMarkName,squareness, xMarkSq, yMarkSq,
+                          dfMarkColorInternal,
+                          listOfdfMarkPosSq,
+                          chrWidth, #use for calc r2
+                          specialChrWidth,
+                          yfactor,
+                          n,
+                          lwd.chr,
+                          listOfdfChromSize,
+                          circularPlot,
+                          y,
+                          markLabelSize,
+                          pattern,
+                          separFactor,
+                          labelSpacing,circleCenter,circleCenterY,radius,
+                          legend,ylistTransChrSimple,rotation=rotation,labelOutwards)
+
+          } else if (chromatids & circularPlot==FALSE) {
+
+            chrtSqMark(squareness,yMarkSq,xMarkSq,xModifierMono,r2,dfMarkColorInternal,lwd.chr,listOfdfMarkPosSq,n)
+
+          } # chromatids
+
+
+
+        } else { #     if(length(listOfdfMarkPosSq)>0)
+          remove(listOfdfMarkPosSq)
+        }
+
+        # square labels not centrom. (monocen.)
+        booleanForsquareInlineLabel<- legend=="inline" & exists("dfMarkColorInternal") & exists("listOfdfMarkPosSq") & circularPlot==FALSE
+
+        if(booleanForsquareInlineLabel) {
+          textLabel(xMarkSq,yMarkSq,listOfdfChromSize,listOfdfMarkPosSq,specialChrSpacing,chrSpacing,markLabelSize,pattern,bannedMarkName)
+        }
+
+      } # if presence end painting marks
+
+      ##################################################################################################
+      #
+      #                                                 painting Marks square holocen
+      #
+      ##################################################################################################
+
+      if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
+        # message(crayon::green(paste0("holocen. marks section start" ) ) )
+        xMarkSq<-yMarkSq<-listOfdfMarkPosSq<-list()
+
+        j<-1
+        for (k in 1:length(listOfdfMarkPosHolocen)) {
+          currName<-names(listOfdfMarkPosHolocen)[[k]]
+          if(nrow(listOfdfMarkPosHolocen[[k]][which(listOfdfMarkPosHolocen[[k]]$style=="square"),])>0){
+            listOfdfMarkPosSq<-c(listOfdfMarkPosSq,list(listOfdfMarkPosHolocen[[k]][which(listOfdfMarkPosHolocen[[k]]$style=="square"),]) )
+            names(listOfdfMarkPosSq)[[j]]<-currName
+            j<-j+1
+          }
+        }
+
+        if(length(listOfdfMarkPosSq)>0){
+          for (sm in 1:length(listOfdfMarkPosSq)) {
+
+            yMark1<-NULL
+            xMark1<-NULL
+            corr_index<-which(names(ym) %in% names(listOfdfMarkPosSq)[[sm]] )
+
+            for (m in 1:nrow(listOfdfMarkPosSq[[sm]])){
+              rowIndex<-(listOfdfMarkPosSq[[sm]][,"neworder"][m])
+              chrStart<-ym[[corr_index]][rowIndex ,2]
+              yinf <- chrStart +                        # was ysup
+                (listOfdfMarkPosSq[[sm]][m,"markPos"]                                                          *normalizeToOne)
+
+              ysup <- chrStart +
+                (  sum(listOfdfMarkPosSq[[sm]][m,"markPos"],listOfdfMarkPosSq[[sm]][m,"markSize"],na.rm=TRUE ) *normalizeToOne )
+
+              yMark1[[m]]<-c(ysup,yinf,yinf,ysup)
+              attr(yMark1[[m]],"rowIndex")<-rowIndex
+
+              xMark1[[m]]<-xm[[corr_index]][listOfdfMarkPosSq[[sm]][,"neworder"][m],]
+              attr(xMark1[[m]],"rowIndex")<-rowIndex
+
+            }
+            yMarkSq[[sm]]<-yMark1
+            attr(yMarkSq[[sm]], "spname")<-names(listOfdfMarkPosSq)[[sm]]
+            xMarkSq[[sm]]<-xMark1
+            attr(xMarkSq[[sm]], "spname")<-names(listOfdfMarkPosSq)[[sm]]
+          } # end for
+
+          # markList<-addChrNameAttrMark(xMarkSq,yMarkSq,x)
+
+          # xMarkSq<-markList$xMark
+          # yMarkSq<-markList$yMark
+
+          #####################
+          #   add sq marks to plot holocen
+          #####################
+          if(chromatids==FALSE | holocenNotAsChromatids | circularPlot==TRUE) {
+
+            roundPlotMark(bannedMarkName,squareness, xMarkSq, yMarkSq,
+                          dfMarkColorInternal,
+                          listOfdfMarkPosSq,
+                          chrWidth, #use for calc r2
+                          specialChrWidth,
+                          yfactor,
+                          n,
+                          lwd.chr,
+                          listOfdfChromSize,
+                          circularPlot,
+                          y,
+                          markLabelSize,
+                          pattern,
+                          separFactor,
+                          labelSpacing,circleCenter,circleCenterY,radius,
+                          legend,ylistTransChrSimple,rotation=rotation,labelOutwards) #
+
+          } else if (chromatids & holocenNotAsChromatids==FALSE & circularPlot==FALSE) {
+
+            chrtSqMark(squareness,yMarkSq,xMarkSq,xModifierHolo,r2,dfMarkColorInternal,lwd.chr,listOfdfMarkPosSq,n)
+
+          } # chromatids
+
+
+        } #     if(length(listOfdfMarkPosSq)>0){
+
+        else {remove(listOfdfMarkPosSq)}
+
+        #
+        #   inline legend holocen
+        #
+
+        booleanForsquareInlineLabel<- legend=="inline" & exists("dfMarkColorInternal") & exists("listOfdfMarkPosSq") & circularPlot==FALSE
+
+        if(booleanForsquareInlineLabel) {
+          textLabel(xMarkSq,yMarkSq,listOfdfChromSize,listOfdfMarkPosSq,specialChrSpacing,chrSpacing,markLabelSize,pattern,bannedMarkName)
+        }
+
+      } #   if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") )
+
+      # end square marks  #
+
+      ##########################################################################################################3
+      #
+      #                                               painting Marks monocen              cenStyle marks
+      #
+      ############################################################################################################
+
+      if (exists("listOfdfMarkPosMonocen") & exists("dfMarkColorInternal") ){
+        # message(crayon::green(paste0("monocen. marks section start" ) ) )
+
+        yMarkLine<-xMarkRightLine<-xMarkLeftLine<-xMarkCenStyle<-yMarkCenStyle<-listOfdfMarkPosCenStyle<-list()
+
+        j<-1
+
+        for (k in 1:length(listOfdfMarkPosMonocen)) {
+          currName<-names(listOfdfMarkPosMonocen)[[k]]
+          if(nrow(listOfdfMarkPosMonocen[[k]][which(listOfdfMarkPosMonocen[[k]]$style=="cenStyle"),])>0){
+            listOfdfMarkPosCenStyle<-c(listOfdfMarkPosCenStyle,list(listOfdfMarkPosMonocen[[k]][which(listOfdfMarkPosMonocen[[k]]$style=="cenStyle"),]))
+            names(listOfdfMarkPosCenStyle)[[j]]<-currName
+            j<-j+1
+          }
+        }
+
+        if(length(listOfdfMarkPosCenStyle)>0) {
+
+          for (sm in 1:length(listOfdfMarkPosCenStyle)) {
+            yMark1<-yMark2<-NULL
+            xMark1<-xMark2Min<-xMark2Max<-NULL
+            # which(names(listOfdfChromSize) %in% names(listOfdfMarkPosCenStyle)[[sm]] )
+#            #        listOfdfChromSize4918<<-listOfdfChromSize
+            corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfMarkPosCenStyle)[[sm]] )
+
+            for (m in 1:nrow(listOfdfMarkPosCenStyle[[sm]]) ){
+              ifelse(listOfdfMarkPosCenStyle[[sm]][m,"chrRegion"]=="q",longORshort<- 0,longORshort<- 1) # ifelseinloop
+              ifelse(listOfdfMarkPosCenStyle[[sm]][m,"chrRegion"]=="q",column<- 1, column<- 2)
+              ifelse(listOfdfMarkPosCenStyle[[sm]][m,"chrRegion"]=="q",mySign<- -1,mySign<- 1)
+              rowIndex<- ( nrow(listOfdfChromSize[[corr_index]] ) * longORshort ) + listOfdfMarkPosCenStyle[[sm]][,"neworder"][m]
+              armStart<-ym[[corr_index]][rowIndex,column]
+              yprox <- armStart +
+                (listOfdfMarkPosCenStyle[[sm]][m,"markDistCen"]                                                             *normalizeToOne*mySign)
+
+              yter <- armStart +
+                ( sum( listOfdfMarkPosCenStyle[[sm]][m,"markDistCen"] , listOfdfMarkPosCenStyle[[sm]][m,"markSize"], na.rm=TRUE ) *normalizeToOne*mySign )
+
+              # yMark1[[m]]<-if(longORshort==0) {c(yprox,yter,yter,yprox)} else {c(yter,yprox,yprox,yter)}
+              yMark1[[m]]<-if(longORshort==0) {c(yprox,yter,yprox,yter)} else {c(yter,yprox,yter,yprox)}
+              attr(yMark1[[m]],"arm")<-listOfdfMarkPosCenStyle[[sm]][m,"chrRegion"]
+              attr(yMark1[[m]],"rowIndex")<-rowIndex
+
+              ##
+              yMark2[[m]]<-if(longORshort==0) {c(yprox,yter)} else {c(yter,yprox)}
+              attr(yMark2[[m]],"arm")<-listOfdfMarkPosCenStyle[[sm]][m,"chrRegion"]
+              attr(yMark2[[m]],"rowIndex")<-rowIndex
+              ##
+
+              # attr(yMark1[[m]],"armStart")<-armStart
+
+              xMark1[[m]]<-xm[[corr_index]][listOfdfMarkPosCenStyle[[sm]][,"neworder"][m],]
+              xMark2Min[[m]]<-rep(min(xMark1[[m]]),2)
+              xMark2Max[[m]]<-rep(max(xMark1[[m]]),2)
+
+              attr(xMark1[[m]],"rowIndex")<-rowIndex
+              attr(xMark2Min[[m]],"rowIndex")<-rowIndex
+              attr(xMark2Max[[m]],"rowIndex")<-rowIndex
+
+            }
+            yMarkCenStyle[[sm]]<-yMark1
+            attr(yMarkCenStyle[[sm]], "spname")<-names(listOfdfMarkPosCenStyle)[[sm]]
+
+            yMarkLine[[sm]]<- yMark2
+            attr(yMarkLine[[sm]], "spname")    <-names(listOfdfMarkPosCenStyle)[[sm]]
+
+            ##
+            xMarkCenStyle[[sm]]<-xMark1
+            attr(xMarkCenStyle[[sm]], "spname")<-names(listOfdfMarkPosCenStyle)[[sm]]
+
+            xMarkRightLine[[sm]]<-xMark2Max
+            xMarkLeftLine[[sm]] <-xMark2Min
+
+            attr(xMarkLeftLine[[sm]], "spname")<-names(listOfdfMarkPosCenStyle)[[sm]]
+            attr(xMarkRightLine[[sm]], "spname")<-names(listOfdfMarkPosCenStyle)[[sm]]
+
+            ##
+
+          } # end for
+
+          if(roundedCen){
+            pts<- seq(-pi/2, pi*1.5, length.out = n*4)
+            ptsl<-split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
+
+            newLongyCenMarksStyle <- newLongxCenMarksStyle<-list()
+
+            for (s in 1:length(yMarkCenStyle) ) {
+
+              xyCoordsCenMarksStyle <- mapXYCen(1 , (length(yMarkCenStyle[[s]]) ) ,
+                                                yMarkCenStyle[[s]],
+                                                xMarkCenStyle[[s]] ,
+                                                ptsl[[1]],ptsl[[2]],ptsl[[3]],ptsl[[4]],
+                                                mimic=TRUE
+              )
+
+              newLongxCenMarksStyle[[s]] <- xyCoordsCenMarksStyle$roundedX
+              newLongyCenMarksStyle[[s]] <- xyCoordsCenMarksStyle$roundedY
+
+            } # for s
+
+            for(s in 1: length(newLongyCenMarksStyle)) {
+              attr(newLongyCenMarksStyle[[s]], "spname")<- attr(yMarkCenStyle[[s]], "spname")
+              attr(newLongxCenMarksStyle[[s]], "spname")<- attr(xMarkCenStyle[[s]], "spname")
+
+              for (a in 1: length(newLongyCenMarksStyle[[s]])){
+                attr(newLongyCenMarksStyle[[s]][[a]],"rowIndex")<- attr(yMarkCenStyle[[s]][[a]],"rowIndex")
+                attr(newLongxCenMarksStyle[[s]][[a]],"rowIndex")<- attr(xMarkCenStyle[[s]][[a]],"rowIndex")
+
+              }
+            }
+
+          } # rC
+
+
+          ########################
+          #                      #
+          #   add marks to plot monocen #
+          #                      #
+          ########################
+#          #      amHere<<-5011
+#          #      listOfdfMarkPosCenStyle5012<<-listOfdfMarkPosCenStyle
+          if(roundedCen==FALSE){
+            mimicCenPlotMark(squareness, xMarkCenStyle, yMarkCenStyle,
+                             defCenStyleCol,
+                             listOfdfMarkPosCenStyle,
+                             chrWidth, #use for calc r2
+                             specialChrWidth,
+                             yfactor,
+                             n,
+                             lwd.mimicCen2,
+                             listOfdfChromSize,
+                             circularPlot,
+                             y,
+                             markLabelSize,
+                             separFactor,
+                             labelSpacing,circleCenter,circleCenterY,radius,
+                             ylistTransChrSimple,
+                             rotation=rotation,labelOutwards,
+                             yMarkLine,xMarkRightLine,xMarkLeftLine,
+                             x)
+          } else {
+            mimicCenPlotMark(squareness, newLongxCenMarksStyle, newLongyCenMarksStyle,
+                             defCenStyleCol,
+                             listOfdfMarkPosCenStyle,
+                             chrWidth, #use for calc r2
+                             specialChrWidth,
+                             yfactor,
+                             n,
+                             lwd.mimicCen2,
+                             listOfdfChromSize,
+                             circularPlot,
+                             y,
+                             markLabelSize,
+                             separFactor,
+                             labelSpacing,circleCenter,circleCenterY,radius,
+                             ylistTransChrSimple,
+                             rotation=rotation,labelOutwards,
+                             yMarkLine,xMarkRightLine,xMarkLeftLine,
+                             x
+                             ,roundedCen)
+          } # rC
+
+          ######## new ######################################## inside cenStyle
+          xMarkCenStyleBody<-yMarkCenStyleBody<-list()
+#          #      amHere<<-5057
+          # if(chromatids & circularPlot==FALSE) {
+#            #        amHere<<-5059
+#            #        listOfdfMarkPosCenStyle5059<<-listOfdfMarkPosCenStyle
+            for (sm in 1:length(listOfdfMarkPosCenStyle) ) {
+
+              yMark1body <- NULL
+              xMark1body <- NULL
+
+#              #          listOfdfChromSize5064 <<- listOfdfChromSize
+              corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfMarkPosCenStyle)[[sm]] )
+#              #          corr_index5061<<-corr_index
+
+              for (m in 1:nrow(listOfdfMarkPosCenStyle[[sm]]) ){
+
+                #
+                ifelse(listOfdfMarkPosCenStyle[[sm]][m,"chrRegion"]=="q",longORshort<- 0,longORshort<- 1) # ifelseinloop
+                ifelse(listOfdfMarkPosCenStyle[[sm]][m,"chrRegion"]=="q",column<- 1, column<- 2)
+                ifelse(listOfdfMarkPosCenStyle[[sm]][m,"chrRegion"]=="q",mySign<- -1,mySign<- 1)
+                rowIndex<- ( nrow(listOfdfChromSize[[corr_index]] ) * longORshort ) + listOfdfMarkPosCenStyle[[sm]][,"neworder"][m]
+#                #            rowIndex5070<<-rowIndex
+
+                armStart<-ym[[corr_index]][rowIndex,column]
+                yprox <- armStart +
+                  (listOfdfMarkPosCenStyle[[sm]][m,"markDistCen"]                                                             *normalizeToOne*mySign)
+
+
+                yter <- armStart +
+                  ( sum( listOfdfMarkPosCenStyle[[sm]][m,"markDistCen"] , listOfdfMarkPosCenStyle[[sm]][m,"markSize"], na.rm=TRUE ) *normalizeToOne*mySign )
+
+                yMark1body[[m]] <-if(longORshort==0) {c(yter,yter,yprox,yprox)} else {c(yprox,yprox,yter,yter)}
+
+                attr(yMark1body[[m]],"arm")<-listOfdfMarkPosCenStyle[[sm]][m,"chrRegion"]
+                attr(yMark1body[[m]],"rowIndex")<-rowIndex
+                #
+                fourX<-xm[[corr_index]][listOfdfMarkPosCenStyle[[sm]][,"neworder"][m],]
+                xMark1body[[m]] <- rep(c(min(fourX),max(fourX)),2)
+                attr(xMark1body[[m]],"rowIndex")<-rowIndex
+
+                # xMarkCen1[[i]] <- xcoordCents[[corr_index]][ rowIndex ,]
+                # attr(xMarkCen1[[i]],"rowIndex")<-rowIndex
+
+              } # each mark
+
+              yMarkCenStyleBody[[sm]]<-yMark1body
+#              #          yMark1body5090<<-yMark1body
+              attr(yMarkCenStyleBody[[sm]], "spname")<-names(listOfdfMarkPosCenStyle)[[sm]]
+              xMarkCenStyleBody[[sm]]<-xMark1body
+#              #          xMark1body5093<<-xMark1body
+
+              attr(xMarkCenStyleBody[[sm]], "spname")<-names(listOfdfMarkPosCenStyle)[[sm]]
+
+            } # for each df
+
+            if (roundedCen) {
+              pts<- seq(-pi/2, pi*1.5, length.out = n*4)
+              ptsl<-split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
+
+
+              newLongyCenMarksBodyStyle <- newLongxCenMarksBodyStyle<-list()
+
+              for (s in 1:length(yMarkCenStyleBody) ) {
+
+                xyCoordsCenMarksStyle <- mapXYCen(1 , (length(yMarkCenStyleBody[[s]]) ) ,
+                                                  yMarkCenStyleBody[[s]],
+                                                  xMarkCenStyleBody[[s]] ,
+                                                  ptsl[[1]],ptsl[[2]],ptsl[[3]],ptsl[[4]]
+
+                )
+
+                newLongxCenMarksBodyStyle[[s]] <- xyCoordsCenMarksStyle$roundedX
+                newLongyCenMarksBodyStyle[[s]] <- xyCoordsCenMarksStyle$roundedY
+
+              } # for s
+
+              for(s in 1: length(newLongyCenMarksBodyStyle)) {
+                attr(newLongyCenMarksBodyStyle[[s]], "spname")<- attr(yMarkCenStyleBody[[s]], "spname")
+                attr(newLongxCenMarksBodyStyle[[s]], "spname")<- attr(xMarkCenStyleBody[[s]], "spname")
+
+                for (a in 1: length(newLongyCenMarksBodyStyle[[s]])){
+                  attr(newLongyCenMarksBodyStyle[[s]][[a]],"rowIndex")<- attr(yMarkCenStyleBody[[s]][[a]],"rowIndex")
+                  attr(newLongxCenMarksBodyStyle[[s]][[a]],"rowIndex")<- attr(xMarkCenStyleBody[[s]][[a]],"rowIndex")
+
+                }
+              } # f
+
+            } # rC
+
+          if(roundedCen==FALSE){
+            mimicCenPlotMarkInside(pattern,bannedMarkName,squareness, xMarkCenStyleBody, yMarkCenStyleBody ,
+                                   defCenStyleCol,
+                                   dfMarkColorInternal,
+                                   listOfdfMarkPosCenStyle,
+                                   chrWidth, #use for calc r2
+                                   specialChrWidth,
+                                   yfactor,
+                                   n,
+                                   lwd.mimicCen2,
+                                   listOfdfChromSize,
+                                   circularPlot,
+                                   y,
+                                   markLabelSize,
+                                   separFactor,
+                                   labelSpacing,circleCenter,circleCenterY,radius,
+                                   ylistTransChrSimple,
+                                   rotation=rotation,labelOutwards,
+                                   yMarkLine,xMarkRightLine,xMarkLeftLine,
+                                   x,lwd.chr,legend)
+          } else {
+            mimicCenPlotMarkInside(pattern,bannedMarkName,squareness, newLongxCenMarksBodyStyle, newLongyCenMarksBodyStyle,
+                                   defCenStyleCol,
+                                   dfMarkColorInternal,
+                                   listOfdfMarkPosCenStyle,
+                                   chrWidth, #use for calc r2
+                                   specialChrWidth,
+                                   yfactor,
+                                   n,
+                                   lwd.mimicCen2,
+                                   listOfdfChromSize,
+                                   circularPlot,
+                                   y,
+                                   markLabelSize,
+                                   separFactor,
+                                   labelSpacing,circleCenter,circleCenterY,radius,
+                                   ylistTransChrSimple,
+                                   rotation=rotation,labelOutwards,
+                                   yMarkLine,xMarkRightLine,xMarkLeftLine,
+                                   x,
+                                   lwd.chr,
+                                   legend
+                                   ,roundedCen)
+          } # rC
+
+          # } # chromatids
+          ########
+
+
+        } else { remove(listOfdfMarkPosCenStyle) } #     if(length(listOfdfMarkPosCenStyle)>0)
+
+      } # if exists monocen end painting marks
+
+      ###########################################
+      #
+      #   plotting labels inline mimicCENTR. monocen
+      #
+      ###########################################
+
+      # cen labels
+      booleanColorInternalMimicMarkCen<- legend=="inline" & exists("dfMarkColorInternal") & exists("listOfdfMarkPosCenStyle") & circularPlot==FALSE
+
+      if(booleanColorInternalMimicMarkCen)  {
+#        bannedMarkName3699<<-bannedMarkName
+        textLabelCen(xMarkCenStyleBody,yMarkCenStyleBody,listOfdfChromSize,listOfdfMarkPosCenStyle,specialChrSpacing,chrSpacing,markLabelSize,pattern,
+                     bannedMarkName)
+      } # if
+
+      ##################################################################################################
+      #
+      #                                        painting Marks cenStyle holocen
+      #
+      ##################################################################################################
+
+      if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
+        # message(crayon::green(paste0("holocen. marks section start" ) ) )
+        yMarkLine<-xMarkRightLine<-xMarkLeftLine<-xMarkCenStyle<-yMarkCenStyle<-listOfdfMarkPosCenStyle<-list()
+
+        j<-1
+        for (k in 1:length(listOfdfMarkPosHolocen)) {
+          currName<-names(listOfdfMarkPosHolocen)[[k]]
+          if(nrow(listOfdfMarkPosHolocen[[k]][which(listOfdfMarkPosHolocen[[k]]$style=="cenStyle"),])>0){
+            listOfdfMarkPosCenStyle<-c(listOfdfMarkPosCenStyle,list(listOfdfMarkPosHolocen[[k]][which(listOfdfMarkPosHolocen[[k]]$style=="cenStyle"),]) )
+            names(listOfdfMarkPosCenStyle)[[j]]<-currName
+            j<-j+1
+          }
+        }
+
+        if(length(listOfdfMarkPosCenStyle)>0){
+          for (sm in 1:length(listOfdfMarkPosCenStyle)) {
+
+            yMark1<-yMark2<-NULL
+            xMark1<-xMark2Min<-xMark2Max<-NULL
+            corr_index<-which(names(ym) %in% names(listOfdfMarkPosCenStyle)[[sm]] )
+
+            for (m in 1:nrow(listOfdfMarkPosCenStyle[[sm]])){
+              rowIndex<-(listOfdfMarkPosCenStyle[[sm]][,"neworder"][m])
+              chrStart<-ym[[corr_index]][rowIndex ,2]
+              yinf <- chrStart +                        # was ysup
+                (listOfdfMarkPosCenStyle[[sm]][m,"markPos"]                                                          *normalizeToOne)
+
+              ysup <- chrStart +
+                (  sum(listOfdfMarkPosCenStyle[[sm]][m,"markPos"],listOfdfMarkPosCenStyle[[sm]][m,"markSize"],na.rm=TRUE ) *normalizeToOne )
+
+              yMark1[[m]]<-c(ysup,yinf,ysup,yinf)
+              yMark2[[m]]<-c(yinf,ysup)
+
+              attr(yMark1[[m]],"rowIndex")<-rowIndex
+              attr(yMark2[[m]],"rowIndex")<-rowIndex
+
+              xMark1[[m]]<-xm[[corr_index]][listOfdfMarkPosCenStyle[[sm]][,"neworder"][m],]
+              xMark2Min[[m]]<-rep(min(xMark1[[m]]),2)
+              xMark2Max[[m]]<-rep(max(xMark1[[m]]),2)
+
+              attr(xMark1[[m]],"rowIndex")<-rowIndex
+              attr(xMark2Min[[m]],"rowIndex")<-rowIndex
+              attr(xMark2Max[[m]],"rowIndex")<-rowIndex
+
+            }
+
+            yMarkCenStyle[[sm]]<-yMark1
+            attr(yMarkCenStyle[[sm]], "spname")<-names(listOfdfMarkPosCenStyle)[[sm]]
+
+            yMarkLine[[sm]]<- yMark2
+            attr(yMarkLine[[sm]], "spname")    <-names(listOfdfMarkPosCenStyle)[[sm]]
+
+            #
+
+            xMarkCenStyle[[sm]]<-xMark1
+            xMarkRightLine[[sm]]<-xMark2Max
+            xMarkLeftLine[[sm]] <-xMark2Min
+            attr(xMarkCenStyle[[sm]], "spname")<-names(listOfdfMarkPosCenStyle)[[sm]]
+            attr(xMarkLeftLine[[sm]], "spname")<-names(listOfdfMarkPosCenStyle)[[sm]]
+            attr(xMarkRightLine[[sm]], "spname")<-names(listOfdfMarkPosCenStyle)[[sm]]
+
+          } # end for
+
+          # markList<-addChrNameAttrMark(xMarkCenStyle,yMarkCenStyle,x)
+
+          # xMarkCenStyle<-markList$xMark
+          # yMarkCenStyle<-markList$yMark
+
+          if(roundedCen){
+            pts<- seq(-pi/2, pi*1.5, length.out = n*4)
+            ptsl<-split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
+
+            newLongyCenMarksStyle <- newLongxCenMarksStyle<-list()
+
+            for (s in 1:length(yMarkCenStyle) ) {
+
+              xyCoordsCenMarksStyle <- mapXYCen(1 , (length(yMarkCenStyle[[s]]) ) ,
+                                                yMarkCenStyle[[s]],
+                                                xMarkCenStyle[[s]] ,
+                                                ptsl[[1]],ptsl[[2]],ptsl[[3]],ptsl[[4]],
+                                                mimic=TRUE
+              )
+
+              newLongxCenMarksStyle[[s]] <- xyCoordsCenMarksStyle$roundedX
+              newLongyCenMarksStyle[[s]] <- xyCoordsCenMarksStyle$roundedY
+
+            } # for s
+
+            # newLongyCenMarksStyle<-newLongyCenMarksStyle[!is.na(newLongyCenMarksStyle)]
+            # newLongxCenMarksStyle<-newLongxCenMarksStyle[!is.na(newLongxCenMarksStyle)]
+
+            for(s in 1: length(newLongyCenMarksStyle)) {
+              attr(newLongyCenMarksStyle[[s]], "spname")<- attr(yMarkCenStyle[[s]], "spname")
+              attr(newLongxCenMarksStyle[[s]], "spname")<- attr(xMarkCenStyle[[s]], "spname")
+
+              for (a in 1: length(newLongyCenMarksStyle[[s]])){
+                attr(newLongyCenMarksStyle[[s]][[a]],"rowIndex")<- attr(yMarkCenStyle[[s]][[a]],"rowIndex")
+                attr(newLongxCenMarksStyle[[s]][[a]],"rowIndex")<- attr(xMarkCenStyle[[s]][[a]],"rowIndex")
+              }
+            }
+          } # rC
+
+          #####################
+          #   add marks to plot holocen
+          #####################
+
+          if(roundedCen){
+            mimicCenPlotMark(squareness, newLongxCenMarksStyle, newLongyCenMarksStyle,
+                             defCenStyleCol,
+                             listOfdfMarkPosCenStyle,
+                             chrWidth, #use for calc r2
+                             specialChrWidth,
+                             yfactor,
+                             n,
+                             lwd.mimicCen2,
+                             listOfdfChromSize,
+                             circularPlot,
+                             y,
+                             markLabelSize,
+                             separFactor,
+                             labelSpacing,circleCenter,circleCenterY,radius,
+                             ylistTransChrSimple,
+                             rotation=rotation,labelOutwards,
+                             yMarkLine,xMarkRightLine,xMarkLeftLine,
+                             x
+                             ,roundedCen) #
+
+          } else {
+            mimicCenPlotMark(squareness, xMarkCenStyle, yMarkCenStyle,
+                             defCenStyleCol,
+                             listOfdfMarkPosCenStyle,
+                             chrWidth, #use for calc r2
+                             specialChrWidth,
+                             yfactor,
+                             n,
+                             lwd.mimicCen2,
+                             listOfdfChromSize,
+                             circularPlot,
+                             y,
+                             markLabelSize,
+                             separFactor,
+                             labelSpacing,circleCenter,circleCenterY,radius,
+                             ylistTransChrSimple,
+                             rotation=rotation,labelOutwards,
+                             yMarkLine,xMarkRightLine,xMarkLeftLine,
+                             x) #
+          }
+
+          ######## new ######################################## inside cenStyle holocen
+
+          xMarkCenStyleBody<-yMarkCenStyleBody<-list()
+#          #      amHere<<-5057
+    #      if(chromatids & holocenNotAsChromatids==FALSE & circularPlot==FALSE) {
+#            #        amHere<<-5059
+#            #        listOfdfMarkPosCenStyle5059<<-listOfdfMarkPosCenStyle
+            for (sm in 1:length(listOfdfMarkPosCenStyle) ) {
+
+              yMark1body <- NULL
+              xMark1body <- NULL
+
+#              #          listOfdfChromSize5064 <<- listOfdfChromSize
+              corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfMarkPosCenStyle)[[sm]] )
+#              #          corr_index5061<<-corr_index
+
+              for (m in 1:nrow(listOfdfMarkPosCenStyle[[sm]]) ) {
+                rowIndex<-(listOfdfMarkPosCenStyle[[sm]][,"neworder"][m])
+                chrStart<-ym[[corr_index]][rowIndex ,2]
+                yinf <- chrStart +                        # was ysup
+                  (listOfdfMarkPosCenStyle[[sm]][m,"markPos"]                                                          *normalizeToOne)
+
+                ysup <- chrStart +
+                  (  sum(listOfdfMarkPosCenStyle[[sm]][m,"markPos"],listOfdfMarkPosCenStyle[[sm]][m,"markSize"],na.rm=TRUE ) *normalizeToOne )
+
+                yMark1body[[m]]<-c(yinf,yinf,ysup,ysup)
+
+                attr(yMark1body[[m]],"rowIndex")<-rowIndex
+
+                fourX <-     xm[[corr_index]][listOfdfMarkPosCenStyle[[sm]][,"neworder"][m],]
+                xMark1body[[m]] <- rep(c(min(fourX),max(fourX)),2)
+
+                attr(xMark1body[[m]],"rowIndex")<-rowIndex
+              } # each mark
+
+              yMarkCenStyleBody[[sm]]<-yMark1body
+#              #          yMark1body5090<<-yMark1body
+              attr(yMarkCenStyleBody[[sm]], "spname")<-names(listOfdfMarkPosCenStyle)[[sm]]
+              xMarkCenStyleBody[[sm]]<-xMark1body
+#              #          xMark1body5093<<-xMark1body
+
+              attr(xMarkCenStyleBody[[sm]], "spname")<-names(listOfdfMarkPosCenStyle)[[sm]]
+
+            } # for each df
+
+            if(roundedCen) {
+              pts<- seq(-pi/2, pi*1.5, length.out = n*4)
+              ptsl<-split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
+
+              newLongyCenMarksBodyStyle <- newLongxCenMarksBodyStyle<-list()
+
+              for (s in 1:length(yMarkCenStyleBody) ) {
+
+                xyCoordsCenMarksStyle <- mapXYCen(1 , (length(yMarkCenStyleBody[[s]]) ) ,
+                                                  yMarkCenStyleBody[[s]],
+                                                  xMarkCenStyleBody[[s]] ,
+                                                  ptsl[[1]],ptsl[[2]],ptsl[[3]],ptsl[[4]]
+
+                )
+
+                newLongxCenMarksBodyStyle[[s]] <- xyCoordsCenMarksStyle$roundedX
+                newLongyCenMarksBodyStyle[[s]] <- xyCoordsCenMarksStyle$roundedY
+
+              } # for s
+
+              for(s in 1: length(newLongyCenMarksBodyStyle)) {
+                attr(newLongyCenMarksBodyStyle[[s]], "spname")<- attr(yMarkCenStyleBody[[s]], "spname")
+                attr(newLongxCenMarksBodyStyle[[s]], "spname")<- attr(xMarkCenStyleBody[[s]], "spname")
+
+                for (a in 1: length(newLongyCenMarksBodyStyle[[s]])){
+                  attr(newLongyCenMarksBodyStyle[[s]][[a]],"rowIndex")<- attr(yMarkCenStyleBody[[s]][[a]],"rowIndex")
+                  attr(newLongxCenMarksBodyStyle[[s]][[a]],"rowIndex")<- attr(xMarkCenStyleBody[[s]][[a]],"rowIndex")
+
+                }
+              }
+            } # rC
+
+
+            # } # chromatids
+
+          if(roundedCen==FALSE){
+            mimicCenPlotMarkInside(pattern,bannedMarkName,squareness, xMarkCenStyleBody, yMarkCenStyleBody ,
+                                   defCenStyleCol,
+                                   dfMarkColorInternal,
+                                   listOfdfMarkPosCenStyle,
+                                   chrWidth, #use for calc r2
+                                   specialChrWidth,
+                                   yfactor,
+                                   n,
+                                   lwd.mimicCen2,
+                                   listOfdfChromSize,
+                                   circularPlot,
+                                   y,
+                                   markLabelSize,
+                                   separFactor,
+                                   labelSpacing,circleCenter,circleCenterY,radius,
+                                   ylistTransChrSimple,
+                                   rotation=rotation,labelOutwards,
+                                   yMarkLine,xMarkRightLine,xMarkLeftLine,
+                                   x,lwd.chr,legend)
+          } else {
+#            newLongxCenMarksBodyStyle4054<<-newLongxCenMarksBodyStyle
+#            newLongyCenMarksBodyStyle4055<<-newLongyCenMarksBodyStyle
+
+            mimicCenPlotMarkInside(pattern,bannedMarkName,squareness, newLongxCenMarksBodyStyle, newLongyCenMarksBodyStyle,
+                                   defCenStyleCol,
+                                   dfMarkColorInternal,
+                                   listOfdfMarkPosCenStyle,
+                                   chrWidth, #use for calc r2
+                                   specialChrWidth,
+                                   yfactor,
+                                   n,
+                                   lwd.mimicCen2,
+                                   listOfdfChromSize,
+                                   circularPlot,
+                                   y,
+                                   markLabelSize,
+                                   separFactor,
+                                   labelSpacing,circleCenter,circleCenterY,radius,
+                                   ylistTransChrSimple,
+                                   rotation=rotation,labelOutwards,
+                                   yMarkLine,xMarkRightLine,xMarkLeftLine,
+                                   x,
+                                   lwd.chr
+                                   ,legend
+                                   ,roundedCen)
+          } # rC
+
+          ########
+
+        } else {  #     if(length(listOfdfMarkPosCenStyle)>0){
+          remove(listOfdfMarkPosCenStyle)
+        }
+
+        ###########################################
+        #
+        #   plotting labels inline mimicCENTR. holocen
+        #
+        ###########################################
+
+        # cen labels
+        booleanColorInternalMimicMarkCen<- legend=="inline" & exists("dfMarkColorInternal") & exists("listOfdfMarkPosCenStyle") & circularPlot==FALSE
+
+        if(booleanColorInternalMimicMarkCen)  {
+
+          textLabelCen(xMarkCenStyleBody,yMarkCenStyleBody,listOfdfChromSize,listOfdfMarkPosCenStyle,
+                    specialChrSpacing,chrSpacing,markLabelSize,pattern,bannedMarkName)
+        } # if
+
+      } #   if (exists("listOfdfMarkPosHolocen") & ("dfMarkColorInternal") )
+      # end cenStyle marks
+
+      ## end cenStyle
 
 
 
@@ -3005,6 +4044,7 @@ if(addOTUName){
     arrowhead2<-1-arrowhead
     if (exists("listOfdfMarkPosMonocen") & exists("dfMarkColorInternal") ){
       yMarkUpAr<-xMarkUpAr<-listOfdfMarkPosUpAr<-list()
+      xMarkUpAr_2nd<-list()
 
       j<-1
 
@@ -3021,6 +4061,8 @@ if(addOTUName){
         for (sm in 1:length(listOfdfMarkPosUpAr)) {
           yMark1<-NULL
           xMark1<-NULL
+          xMark1_2nd<-NULL
+
           # which(names(listOfdfChromSize) %in% names(listOfdfMarkPosUpAr)[[sm]] )
 
           corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfMarkPosUpAr)[[sm]] )
@@ -3054,24 +4096,21 @@ if(addOTUName){
             yMark1[[m]]<- yArrow + ybase
 
             attr(yMark1[[m]],"arm")<-listOfdfMarkPosUpAr[[sm]][m,"chrRegion"]
-            # attr(yMark1[[m]],"armStart")<-armStart
             attr(yMark1[[m]],"rowIndex")<-rowIndex
 
-            # xMark1[[m]] <- xm[[corr_index]][listOfdfMarkPosUpAr[[sm]][,"neworder"][m],]
             fourX <- xm[[corr_index]][listOfdfMarkPosUpAr[[sm]][,"neworder"][m],]
-
-
-
             xsize<-max(fourX)-min(fourX)
-
-            if(arrowsToSide){
-              xsize<-xsize/2
-            }
-
             xbase<-min(fourX)
 
             if(arrowsToSide){
-              xbase<-xbase+xsize
+              xsize<-xsize/2
+              xbase <- xbase + xsize
+
+              if(chromatids & circularPlot==FALSE){
+                xsize<-xsize-xModifierMono
+                xbase <- xbase + (xModifierMono)
+              }
+
             }
 
             xArrow<-c(.5*xsize, xsize-(arrowheadWidthShrink*xsize),
@@ -3081,33 +4120,53 @@ if(addOTUName){
             )
             # +1 represents base (min)
             xMark1[[m]] <- xArrow + xbase
-
             attr(xMark1[[m]],"rowIndex")<-rowIndex
 
-          }
+            # For chromatids, arrows in both chromatids
+
+            if(chromatids & arrowsToSide & arrowsBothChrt & circularPlot==FALSE){
+              xbase<-min(fourX)
+              xsize<-max(fourX)-min(fourX)
+
+              xsize<-xsize/2
+              xsize<-xsize-xModifierMono
+
+              xArrow<-c(.5*xsize, xsize-(arrowheadWidthShrink*xsize),
+                        (1-shrinkArrow)*xsize,(1-shrinkArrow)*xsize,
+                        shrinkArrow*xsize,shrinkArrow*xsize,
+                        0+(arrowheadWidthShrink*xsize),.5*xsize
+              )
+
+              xMark1_2nd[[m]] <- xArrow + xbase
+              attr(xMark1_2nd[[m]],"rowIndex")<-rowIndex
+            } # SECOND arrow if
+
+          } # for each mark
+
           yMarkUpAr[[sm]]<-yMark1
           attr(yMarkUpAr[[sm]], "spname")<-names(listOfdfMarkPosUpAr)[[sm]]
           xMarkUpAr[[sm]]<-xMark1
           attr(xMarkUpAr[[sm]], "spname")<-names(listOfdfMarkPosUpAr)[[sm]]
+
+          if(chromatids & arrowsToSide & arrowsBothChrt & circularPlot==FALSE) {
+            xMarkUpAr_2nd[[sm]]<-xMark1_2nd
+            attr(xMarkUpAr_2nd[[sm]], "spname")<-names(listOfdfMarkPosUpAr)[[sm]]
+          }
+
         } # end for
 
-        # markList<-addChrNameAttrMark(xMarkUpAr,yMarkUpAr,x)
-        #
-        # xMarkUpAr<-markList$xMark
-        # yMarkUpAr<-markList$yMark
         ########################
         #                      #
         #   add marks to plot monocen #
         #                      #
         ########################
         # if(circularPlot==FALSE){
-        arrowPlotMark(roundness, xMarkUpAr, yMarkUpAr,
+        arrowPlotMark(squareness, xMarkUpAr, yMarkUpAr,
                       dfMarkColorInternal,
                       listOfdfMarkPosUpAr,
                       chrWidth, #use for calc r2
                       n,
                       lwd.chr,
-
                       circularPlot,
                       y,
                       x,
@@ -3116,18 +4175,28 @@ if(addOTUName){
                       labelSpacing,circleCenter,circleCenterY,radius,
                       ylistTransChrSimple,rotation=rotation,
                       arrowheadWidthShrink)
+        # plot second arrow when chrt
+        if(chromatids & arrowsToSide & arrowsBothChrt & circularPlot==FALSE) {
+          arrowPlotMark(squareness, xMarkUpAr_2nd, yMarkUpAr,
+                        dfMarkColorInternal,
+                        listOfdfMarkPosUpAr,
+                        chrWidth, #use for calc r2
+                        n,
+                        lwd.chr,
+                        circularPlot,
+                        y,
+                        x,
+                        markLabelSize,
+                        separFactor,
+                        labelSpacing,circleCenter,circleCenterY,radius,
+                        ylistTransChrSimple,rotation=rotation,
+                        arrowheadWidthShrink)
+        }
+
 
       } #     if(length(listOfdfMarkPosUpAr)>0)
 
       else {remove(listOfdfMarkPosUpAr)}
-
-      # upArrow labels not cen (monocen.)
-
-      # booleanForupArrowInlineLabel<- legend=="inline" & exists("dfMarkColorInternal") & exists("listOfdfMarkPosUpAr") & circularPlot==FALSE
-      #
-      # if(booleanForupArrowInlineLabel) {
-      #   textLabel(xMarkUpAr,yMarkUpAr,listOfdfChromSize,listOfdfMarkPosUpAr,specialChrSpacing,chrSpacing,markLabelSize,pattern)
-      # }
 
     } # if presence end painting marks
 
@@ -3153,11 +4222,12 @@ if(addOTUName){
       if(length(listOfdfMarkPosUpAr)>0){
         for (sm in 1:length(listOfdfMarkPosUpAr)) {
 
-          yMark1<-NULL
-          xMark1<-NULL
+          yMark1<-xMark1<-NULL
+          xMark1_2nd<-NULL
+
           corr_index<-which(names(ym) %in% names(listOfdfMarkPosUpAr)[[sm]] )
 
-          for (m in 1:nrow(listOfdfMarkPosUpAr[[sm]])){
+          for (m in 1:nrow(listOfdfMarkPosUpAr[[sm]])) {
             rowIndex<-(listOfdfMarkPosUpAr[[sm]][,"neworder"][m])
             chrStart<-ym[[corr_index]][rowIndex ,2]
             yinf <- chrStart +                        # was ysup
@@ -3176,67 +4246,83 @@ if(addOTUName){
 
             yMark1[[m]] <- yArrow + yinf
 
-            # yMark1[[m]] <- c(ysup,yinf,yinf,ysup)
             attr(yMark1[[m]],"rowIndex")<-rowIndex
-
-            # xMark1[[m]]<-xm[[corr_index]][listOfdfMarkPosUpAr[[sm]][,"neworder"][m],]
 
             fourX <- xm[[corr_index]][listOfdfMarkPosUpAr[[sm]][,"neworder"][m],]
 
             xsize <- max(fourX) - min(fourX)
             xbase <- min(fourX)
 
-            if(arrowsToSide){
+            if(holocenNotAsChromatids){
+              excHoloFrArrToSide<-TRUE
+            }
+
+            if(arrowsToSide & excHoloFrArrToSide==FALSE){
               xsize<-xsize/2
+              xbase <- xbase + xsize
+              if(chromatids & holocenNotAsChromatids==FALSE & circularPlot==FALSE){
+                xsize <- xsize - xModifierHolo
+                xbase <- xbase + xModifierHolo
+              }
             }
 
-            if(arrowsToSide){
-              xbase<-xbase+xsize
-            }
-
+            # conflict holocenNotaschr TRUE
+            #          excHoloFrArrToSide FALSE
+            # HOLOCENNOTASCHROMATIDS TRUE REQUIRES EXCHOLOFRARRTOSIDE TRUE
 
             xArrow<-c(.5*xsize, xsize-(arrowheadWidthShrink*xsize),
                       (1-shrinkArrow)*xsize,(1-shrinkArrow)*xsize,
                  shrinkArrow*xsize,shrinkArrow*xsize,
                  0+(arrowheadWidthShrink*xsize),.5*xsize
             )
+
             # +1 represents base (min)
             xMark1[[m]] <- xArrow + xbase
-
             attr(xMark1[[m]],"rowIndex")<-rowIndex
 
-          }
+            # For chromatids, arrows in both chromatids
+
+            if(chromatids & arrowsToSide & arrowsBothChrt & circularPlot==FALSE & excHoloFrArrToSide==FALSE  ){
+              xbase<-min(fourX)
+              xsize<-max(fourX)-min(fourX)
+
+              xsize<-xsize/2
+              xsize<-xsize-xModifierHolo
+
+              xArrow<-c(.5*xsize, xsize-(arrowheadWidthShrink*xsize),
+                        (1-shrinkArrow)*xsize,(1-shrinkArrow)*xsize,
+                        shrinkArrow*xsize,shrinkArrow*xsize,
+                        0+(arrowheadWidthShrink*xsize),.5*xsize
+              )
+
+              xMark1_2nd[[m]] <- xArrow + xbase
+              attr(xMark1_2nd[[m]],"rowIndex")<-rowIndex
+            } # SECOND arrow if
+
+          } # for mark
+
           yMarkUpAr[[sm]]<-yMark1
           attr(yMarkUpAr[[sm]], "spname")<-names(listOfdfMarkPosUpAr)[[sm]]
           xMarkUpAr[[sm]]<-xMark1
           attr(xMarkUpAr[[sm]], "spname")<-names(listOfdfMarkPosUpAr)[[sm]]
+
+          if(chromatids & arrowsToSide & arrowsBothChrt & circularPlot==FALSE & excHoloFrArrToSide==FALSE ) {
+            xMarkUpAr_2nd[[sm]]<-xMark1_2nd
+            attr(xMarkUpAr_2nd[[sm]], "spname")<-names(listOfdfMarkPosUpAr)[[sm]]
+          }
+
         } # end for
-
-        # markList<-addChrNameAttrMark(xMarkUpAr,yMarkUpAr,x)
-
-        # xMarkUpAr<-markList$xMark
-        # yMarkUpAr<-markList$yMark
 
         #####################
         #   add UpAr marks to plot holocen
         #####################
 
-        # if(roundness<20){
-        #   myY<- y #newLongy
-        # } else {
-        #   myY<-y
-        # }
-
-
-        arrowPlotMark(roundness, xMarkUpAr, yMarkUpAr,
+        arrowPlotMark(squareness, xMarkUpAr, yMarkUpAr,
                       dfMarkColorInternal,
                       listOfdfMarkPosUpAr,
                       chrWidth, #use for calc r2
-
-
                       n,
                       lwd.chr,
-
                       circularPlot,
                       y,
                       x,
@@ -3246,6 +4332,23 @@ if(addOTUName){
                       ylistTransChrSimple,rotation=rotation,
                       arrowheadWidthShrink) #
 
+        if(chromatids & arrowsToSide & arrowsBothChrt & circularPlot==FALSE & excHoloFrArrToSide==FALSE) {
+          arrowPlotMark(squareness, xMarkUpAr_2nd, yMarkUpAr,
+                        dfMarkColorInternal,
+                        listOfdfMarkPosUpAr,
+                        chrWidth, #use for calc r2
+                        n,
+                        lwd.chr,
+                        circularPlot,
+                        y,
+                        x,
+                        markLabelSize,
+                        separFactor,
+                        labelSpacing,circleCenter,circleCenterY,radius,
+                        ylistTransChrSimple,rotation=rotation,
+                        arrowheadWidthShrink) #
+        }
+
       } #     if(length(listOfdfMarkPosUpAr)>0){
 
       else {remove(listOfdfMarkPosUpAr)}
@@ -3253,12 +4356,6 @@ if(addOTUName){
       #
       #   inline legend holocen
       #
-
-      # booleanForupArrowInlineLabel<- legend=="inline" & exists("dfMarkColorInternal") & exists("listOfdfMarkPosUpAr") & circularPlot==FALSE
-      #
-      # if(booleanForupArrowInlineLabel) {
-      #   textLabel(xMarkUpAr,yMarkUpAr,listOfdfChromSize,listOfdfMarkPosUpAr,specialChrSpacing,chrSpacing,markLabelSize,pattern)
-      # }
 
     } #   if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") )
 
@@ -3277,7 +4374,7 @@ if(addOTUName){
     if (exists("listOfdfMarkPosMonocen") & exists("dfMarkColorInternal") ){
 
       xMarkDwAr<-yMarkDwAr<-listOfdfMarkPosDwAr<-list()
-
+      xMarkDwAr_2nd<-list()
       j<-1
 
       for (k in 1:length(listOfdfMarkPosMonocen)) {
@@ -3291,8 +4388,8 @@ if(addOTUName){
 
       if(length(listOfdfMarkPosDwAr)>0){
         for (sm in 1:length(listOfdfMarkPosDwAr)) {
-          yMark1<-NULL
-          xMark1<-NULL
+          yMark1<-xMark1<-NULL
+          yMark1_2nd<-xMark1_2nd<-NULL
 
           corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfMarkPosDwAr)[[sm]] )
 
@@ -3333,11 +4430,15 @@ if(addOTUName){
 
             xsize <- max(fourX)-min(fourX)
 
+            xbase<-min(fourX)
+
             if(arrowsToSide){
               xsize<-xsize/2
-            }
 
-            xbase<-min(fourX)
+              if(chromatids  & circularPlot==FALSE){
+                xsize<-xsize-xModifierMono
+              }
+            }
 
             xArrow<-c((1-shrinkArrow)*xsize , (1-shrinkArrow)*xsize,
                       xsize-(arrowheadWidthShrink*xsize),.5*xsize,
@@ -3347,14 +4448,47 @@ if(addOTUName){
 
             # +1 represents base (min)
             xMark1[[m]] <- xArrow + xbase
-
             attr(xMark1[[m]],"rowIndex")<-rowIndex
 
-          }
+            # 2nd arrow
+
+            if(chromatids & arrowsToSide & arrowsBothChrt & circularPlot==FALSE) {
+              xsize <- max(fourX) - min(fourX)
+              xbase <- min(fourX)
+
+              xsize<-xsize/2
+              xbase <- xbase + xsize
+
+              xsize<-xsize-xModifierMono
+              xbase <- xbase + (xModifierMono)
+
+
+
+            xArrow<-c((1-shrinkArrow)*xsize , (1-shrinkArrow)*xsize,
+                      xsize-(arrowheadWidthShrink*xsize),.5*xsize,
+                      0+(arrowheadWidthShrink*xsize),shrinkArrow*xsize,
+                      shrinkArrow*xsize,(1-shrinkArrow)*xsize
+            )
+
+            xMark1_2nd[[m]] <- xArrow + xbase
+            attr(xMark1_2nd[[m]],"rowIndex")<-rowIndex
+
+            }
+
+          } # for mark
+
           yMarkDwAr[[sm]]<-yMark1
           attr(yMarkDwAr[[sm]], "spname")<-names(listOfdfMarkPosDwAr)[[sm]]
           xMarkDwAr[[sm]]<-xMark1
           attr(xMarkDwAr[[sm]], "spname")<-names(listOfdfMarkPosDwAr)[[sm]]
+
+          if(chromatids & arrowsToSide & arrowsBothChrt & circularPlot==FALSE) {
+            xMarkDwAr_2nd[[sm]]<-xMark1_2nd
+            attr(xMarkDwAr_2nd[[sm]], "spname")<-names(listOfdfMarkPosDwAr)[[sm]]
+          }
+
+
+
         } # end for
 
         # markList<-addChrNameAttrMark(xMarkDwAr,yMarkDwAr,x)
@@ -3367,15 +4501,12 @@ if(addOTUName){
         #                      #
         ########################
         # if(circularPlot==FALSE){
-        arrowPlotMark(roundness, xMarkDwAr, yMarkDwAr,
+        arrowPlotMark(squareness, xMarkDwAr, yMarkDwAr,
                       dfMarkColorInternal,
                       listOfdfMarkPosDwAr,
                       chrWidth, #use for calc r2
-
-
                       n,
                       lwd.chr,
-
                       circularPlot,
                       y,
                       x,
@@ -3385,17 +4516,26 @@ if(addOTUName){
                       ylistTransChrSimple,rotation=rotation,
                       arrowheadWidthShrink)
 
+        if(chromatids & arrowsToSide & arrowsBothChrt & circularPlot==FALSE) {
+          arrowPlotMark(squareness, xMarkDwAr_2nd, yMarkDwAr,
+                        dfMarkColorInternal,
+                        listOfdfMarkPosDwAr,
+                        chrWidth, #use for calc r2
+                        n,
+                        lwd.chr,
+                        circularPlot,
+                        y,
+                        x,
+                        markLabelSize,
+                        separFactor,
+                        labelSpacing,circleCenter,circleCenterY,radius,
+                        ylistTransChrSimple,rotation=rotation,
+                        arrowheadWidthShrink)
+        }
+
       } #     if(length(listOfdfMarkPosDwAr)>0)
 
       else {remove(listOfdfMarkPosDwAr)}
-
-      # downArrow labels not cen (monocen.)
-
-      # booleanFordownArrowInlineLabel<- legend=="inline" & exists("dfMarkColorInternal") & exists("listOfdfMarkPosDwAr") & circularPlot==FALSE
-      #
-      # if(booleanFordownArrowInlineLabel) {
-      #   textLabel(xMarkDwAr,yMarkDwAr,listOfdfChromSize,listOfdfMarkPosDwAr,specialChrSpacing,chrSpacing,markLabelSize,pattern)
-      # }
 
     } # if presence end painting marks
 
@@ -3445,20 +4585,23 @@ if(addOTUName){
 
             yMark1[[m]] <- yArrow + yinf
 
-            # yMark1[[m]] <- c(ysup,yinf,yinf,ysup)
             attr(yMark1[[m]],"rowIndex")<-rowIndex
-
-            # xMark1[[m]]<-xm[[corr_index]][listOfdfMarkPosDwAr[[sm]][,"neworder"][m],]
 
             fourX <- xm[[corr_index]][listOfdfMarkPosDwAr[[sm]][,"neworder"][m],]
 
             xsize <- max(fourX) - min(fourX)
+            xbase <- min(fourX)
 
-            if(arrowsToSide){
-              xsize<-xsize/2
+            if(holocenNotAsChromatids){
+              excHoloFrArrToSide<-TRUE
             }
 
-            xbase <- min(fourX)
+            if(arrowsToSide & excHoloFrArrToSide==FALSE ){
+              xsize<-xsize/2
+              if(chromatids & holocenNotAsChromatids==FALSE & circularPlot==FALSE){
+                xsize<-xsize-xModifierHolo
+              }
+            }
 
             xArrow<-c((1-shrinkArrow)*xsize , (1-shrinkArrow)*xsize,
                       xsize-(arrowheadWidthShrink*xsize),.5*xsize,
@@ -3467,13 +4610,41 @@ if(addOTUName){
             )
             # +1 represents base (min)
             xMark1[[m]] <- xArrow + xbase
-
             attr(xMark1[[m]],"rowIndex") <- rowIndex
-          }
+
+            # 2nd arrow
+
+            if(chromatids & arrowsToSide & arrowsBothChrt & circularPlot==FALSE & excHoloFrArrToSide==FALSE) {
+              xsize <- max(fourX) - min(fourX)
+              xbase <- min(fourX)
+
+              xsize<-xsize/2
+              xbase <- xbase + xsize
+
+              xsize <- xsize - xModifierHolo
+              xbase <- xbase + xModifierHolo
+
+              xArrow<-c((1-shrinkArrow)*xsize , (1-shrinkArrow)*xsize,
+                        xsize-(arrowheadWidthShrink*xsize),.5*xsize,
+                        0+(arrowheadWidthShrink*xsize),shrinkArrow*xsize,
+                        shrinkArrow*xsize,(1-shrinkArrow)*xsize
+              )
+
+              xMark1_2nd[[m]] <- xArrow + xbase
+              attr(xMark1_2nd[[m]],"rowIndex")<-rowIndex
+            }
+
+          } # for mark
           yMarkDwAr[[sm]]<-yMark1
           attr(yMarkDwAr[[sm]], "spname")<-names(listOfdfMarkPosDwAr)[[sm]]
           xMarkDwAr[[sm]]<-xMark1
           attr(xMarkDwAr[[sm]], "spname")<-names(listOfdfMarkPosDwAr)[[sm]]
+
+          if(chromatids & arrowsToSide & arrowsBothChrt & circularPlot==FALSE & excHoloFrArrToSide==FALSE ) {
+            xMarkDwAr_2nd[[sm]]<-xMark1_2nd
+            attr(xMarkDwAr_2nd[[sm]], "spname")<-names(listOfdfMarkPosDwAr)[[sm]]
+          }
+
         } # end for
 
         # markList<-addChrNameAttrMark(xMarkDwAr,yMarkDwAr,x)
@@ -3485,14 +4656,12 @@ if(addOTUName){
         #   add DwAr marks to plot holocen
         #####################
 
-        arrowPlotMark(roundness, xMarkDwAr, yMarkDwAr,
+        arrowPlotMark(squareness, xMarkDwAr, yMarkDwAr,
                       dfMarkColorInternal,
                       listOfdfMarkPosDwAr,
                       chrWidth, #use for calc r2
-
                       n,
                       lwd.chr,
-
                       circularPlot,
                       y,
                       x,
@@ -3500,7 +4669,25 @@ if(addOTUName){
                       separFactor,
                       labelSpacing,circleCenter,circleCenterY,radius,
                       ylistTransChrSimple,rotation=rotation,
-                      arrowheadWidthShrink) #
+                      arrowheadWidthShrink)
+
+        if(chromatids & arrowsToSide & arrowsBothChrt & circularPlot==FALSE & excHoloFrArrToSide==FALSE) {
+          arrowPlotMark(squareness, xMarkDwAr_2nd, yMarkDwAr,
+                        dfMarkColorInternal,
+                        listOfdfMarkPosDwAr,
+                        chrWidth, #use for calc r2
+                        n,
+                        lwd.chr,
+                        circularPlot,
+                        y,
+                        x,
+                        markLabelSize,
+                        separFactor,
+                        labelSpacing,circleCenter,circleCenterY,radius,
+                        ylistTransChrSimple,rotation=rotation,
+                        arrowheadWidthShrink
+                        )
+        }
 
       } #     if(length(listOfdfMarkPosDwAr)>0){
 
@@ -3509,12 +4696,6 @@ if(addOTUName){
       #
       #   inline legend holocen
       #
-
-      # booleanFordownArrowInlineLabel<- legend=="inline" & exists("dfMarkColorInternal") & exists("listOfdfMarkPosDwAr") & circularPlot==FALSE
-      #
-      # if(booleanFordownArrowInlineLabel) {
-      #   textLabel(xMarkDwAr,yMarkDwAr,listOfdfChromSize,listOfdfMarkPosDwAr,specialChrSpacing,chrSpacing,markLabelSize,pattern)
-      # }
 
     } #   if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") )
 
@@ -3580,6 +4761,10 @@ if (exists("listOfdfMarkPosMonocen") & exists("dfMarkColorInternal") ){
             xMark1[[m]][2] <- xMark1[[m]][2] +   ( (xMark1[[m]][1] - xMark1[[m]][2])  / 2)
           }
 
+          if(chromatids & circularPlot==FALSE) {
+            xMark1[[m]][2] <- xMark1[[m]][2] +   ( (xMark1[[m]][1] - xMark1[[m]][2])  / 2) + xModifierMono
+          }
+
           xMark1[[m]][1] <- xMark1[[m]][1] +   ( (xMark1[[m]][1] - initOrig2  )  * protruding2) # 1st protruding
 
           attr(xMark1[[m]],"rowIndex")<-rowIndex
@@ -3594,7 +4779,7 @@ if (exists("listOfdfMarkPosMonocen") & exists("dfMarkColorInternal") ){
       #   add marks to plot
       #####################
       # cMPlotMark(xMarkcM, yMarkcM, dfMarkColorInternal,listOfdfMarkPoscM, lwd.cM2,circularPlot)
-      cMPlotMark(xMarkcM, yMarkcM,y, x, dfMarkColorInternal,listOfdfMarkPoscM, lwd.cM2,circularPlot,
+      cMPlotMark(bannedMarkName,xMarkcM, yMarkcM,y, x, dfMarkColorInternal,listOfdfMarkPoscM, lwd.cM2,circularPlot,
         radius,circleCenter,circleCenterY,separFactor,markLabelSize,pattern,n,labelSpacing,chrWidth,
         ylistTransChrSimple,rotation=rotation,labelOutwards)
 
@@ -3611,7 +4796,7 @@ booleanColorInternalMarkcM<- exists ("dfMarkColorInternal") & exists ("listOfdfM
 
 if(booleanColorInternalMarkcM)  {
 
-      textLabel(xMarkcM,yMarkcM,listOfdfChromSize,listOfdfMarkPoscM,specialChrSpacing,chrSpacing,markLabelSize,pattern)
+      textLabel(xMarkcM,yMarkcM,listOfdfChromSize,listOfdfMarkPoscM,specialChrSpacing,chrSpacing,markLabelSize,pattern,bannedMarkName)
 }
 
 } # if presence end painting marks
@@ -3669,6 +4854,10 @@ if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
             xMark1[[m]][2] <- xMark1[[m]][2] +   ( (xMark1[[m]][1] - xMark1[[m]][2])  / 2)
           }
 
+          if(chromatids & holocenNotAsChromatids==FALSE & circularPlot==FALSE) {
+            xMark1[[m]][2] <- xMark1[[m]][2] +   ( (xMark1[[m]][1] - xMark1[[m]][2])  / 2) + xModifierHolo
+          }
+
           xMark1[[m]][1]<-xMark1[[m]][1]+((xMark1[[m]][1] - initOrig2) *protruding2)
 
           attr(xMark1[[m]],"rowIndex")<-rowIndex
@@ -3691,7 +4880,7 @@ if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
       #####################
 
       # cMPlotMark(xMarkcM, yMarkcM,    dfMarkColorInternal,listOfdfMarkPoscM, lwd.cM2,circularPlot)
-      cMPlotMark(xMarkcM, yMarkcM, y, x, dfMarkColorInternal,listOfdfMarkPoscM, lwd.cM2,circularPlot,
+      cMPlotMark(bannedMarkName,xMarkcM, yMarkcM, y, x, dfMarkColorInternal,listOfdfMarkPoscM, lwd.cM2,circularPlot,
                  radius,circleCenter,circleCenterY,separFactor,markLabelSize,pattern,n,labelSpacing,chrWidth,
                  ylistTransChrSimple,rotation=rotation,labelOutwards)
 
@@ -3710,7 +4899,7 @@ if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
 
   if(booleanColorInternalMarkcM)  {
 
-    textLabel(xMarkcM,yMarkcM,listOfdfChromSize,listOfdfMarkPoscM,specialChrSpacing,chrSpacing,markLabelSize,pattern)
+    textLabel(xMarkcM,yMarkcM,listOfdfChromSize,listOfdfMarkPoscM,specialChrSpacing,chrSpacing,markLabelSize,pattern,bannedMarkName)
   } # if
 } # if listOfdfMarkPosHolocen
 
@@ -3775,6 +4964,10 @@ if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
               xMark1[[m]][1] <- xMark1[[m]][1] -   ( (xMark1[[m]][1] - xMark1[[m]][2])  / 2)
             }
 
+            if(chromatids & circularPlot==FALSE) {
+              xMark1[[m]][1] <- xMark1[[m]][1] -   ( (xMark1[[m]][1] - xMark1[[m]][2])  / 2 ) - xModifierMono
+            }
+
             xMark1[[m]][2] <- xMark1[[m]][2] -   ( (initOrig1 - xMark1[[m]][2])  * protruding2) # left
             attr(xMark1[[m]],"rowIndex")<-rowIndex
           }
@@ -3788,7 +4981,7 @@ if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
         #   add marks to plot
         #####################
 
-        cMLeftPlotMark(xMarkcMLeft, yMarkcMLeft,y, x, dfMarkColorInternal,listOfdfMarkPoscMLeft, lwd.cM2,circularPlot,
+        cMLeftPlotMark(bannedMarkName,xMarkcMLeft, yMarkcMLeft,y, x, dfMarkColorInternal,listOfdfMarkPoscMLeft, lwd.cM2,circularPlot,
                    radius,circleCenter,circleCenterY,separFactor,markLabelSize,pattern,n,labelSpacing,chrWidth,
                    ylistTransChrSimple,rotation=rotation,labelOutwards)
 
@@ -3805,7 +4998,7 @@ if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
 
       if(booleanColorInternalMarkcMLeft)  {
 
-        textLabelLeft(xMarkcMLeft,yMarkcMLeft,listOfdfChromSize,listOfdfMarkPoscMLeft,specialChrSpacing,chrSpacing,markLabelSize,pattern)
+        textLabelLeft(xMarkcMLeft,yMarkcMLeft,listOfdfChromSize,listOfdfMarkPoscMLeft,specialChrSpacing,chrSpacing,markLabelSize,pattern,bannedMarkName)
       }
 
     } # if presence end painting marks
@@ -3862,9 +5055,11 @@ if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
               xMark1[[m]][1] <- xMark1[[m]][1] -   ( (xMark1[[m]][1] - xMark1[[m]][2])  / 2)
             }
 
-            xMark1[[m]][2] <- xMark1[[m]][2] -   ( (initOrig1 - xMark1[[m]][2])  * protruding2) # left
-            # xMark1[[m]][2] <- xMark1[[m]][2] -   ( (xMark1[[m]][1] - xMark1[[m]][2])  * protruding)
+            if(chromatids & holocenNotAsChromatids==FALSE & circularPlot==FALSE) {
+              xMark1[[m]][1] <- xMark1[[m]][1] -   ( (xMark1[[m]][1] - xMark1[[m]][2])  / 2 ) - xModifierHolo
+            }
 
+            xMark1[[m]][2] <- xMark1[[m]][2] -   ( (initOrig1 - xMark1[[m]][2])  * protruding2) # left
             attr(xMark1[[m]],"rowIndex")<-rowIndex
 
           }
@@ -3885,7 +5080,7 @@ if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
         #####################
 
         # cMLeftPlotMark(xMarkcMLeft, yMarkcMLeft,    dfMarkColorInternal,listOfdfMarkPoscMLeft, lwd.cMLeft2,circularPlot)
-        cMLeftPlotMark(xMarkcMLeft, yMarkcMLeft, y, x, dfMarkColorInternal,listOfdfMarkPoscMLeft, lwd.cM2,circularPlot,
+        cMLeftPlotMark(bannedMarkName,xMarkcMLeft, yMarkcMLeft, y, x, dfMarkColorInternal,listOfdfMarkPoscMLeft, lwd.cM2,circularPlot,
                    radius,circleCenter,circleCenterY,separFactor,markLabelSize,pattern,n,labelSpacing,chrWidth,
                    ylistTransChrSimple,rotation=rotation,labelOutwards)
 
@@ -3904,7 +5099,7 @@ if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
 
       if(booleanColorInternalMarkcMLeft)  {
 
-        textLabelLeft(xMarkcMLeft,yMarkcMLeft,listOfdfChromSize,listOfdfMarkPoscMLeft,specialChrSpacing,chrSpacing,markLabelSize,pattern)
+        textLabelLeft(xMarkcMLeft,yMarkcMLeft,listOfdfChromSize,listOfdfMarkPoscMLeft,specialChrSpacing,chrSpacing,markLabelSize,pattern,bannedMarkName)
       } # if
     } # if listOfdfMarkPosHolocen
 
@@ -3961,7 +5156,13 @@ if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
 
         xBoundaries<-xm[[corr_index]][listOfdfMarkPosCr[[k]][,"neworder"][i],3:2]
         xBoundariesQuar<-(xBoundaries[2]-xBoundaries[1])/4
-        xMarkCr1[[i]]<-c(list(xBoundaries[1]+xBoundariesQuar),list(xBoundaries[1]+3*xBoundariesQuar) )
+
+        if(chromatids & circularPlot==FALSE){
+          xMarkCr1[[i]]<-c(list(xBoundaries[1]+xBoundariesQuar - (xModifierMono/2) ), list(xBoundaries[1]+ 3*xBoundariesQuar + (xModifierMono/2) ) )
+        } else {
+          xMarkCr1[[i]]<-c(list(xBoundaries[1]+xBoundariesQuar),list(xBoundaries[1]+3*xBoundariesQuar) ) # default
+        }
+
         attr(xMarkCr1[[i]], "rowIndex")<- rowIndex
 
         rad1[[i]]<-rep(list(abs(ysupCr-yinfCr)/2 ),2)
@@ -3990,7 +5191,7 @@ if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
     #####################
 
     # plotDotMarks(xMarkCr,yMarkCr,rad,colCr,n,xfactor,colBorderCr)
-      plotDotMarks(xMarkCr,yMarkCr, rad, colCr,n,xfactor,colBorderCr,circularPlot, y,x,radius,circleCenter,circleCenterY,separFactor,
+      plotDotMarks(bannedMarkName,xMarkCr,yMarkCr, rad, colCr,n,xfactor,colBorderCr,circularPlot, y,x,radius,circleCenter,circleCenterY,separFactor,
                    chrWidth,listOfdfMarkPosCr,markLabelSize,pattern,labelSpacing,useOneDot,legend,ylistTransChrSimple,rotation=rotation,
                    labelOutwards)
 
@@ -4010,7 +5211,7 @@ if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
 
   if (booleanDotsLabels){
     textLabelDots(xMarkCr,yMarkCr,listOfdfChromSize,listOfdfMarkPosCr,specialChrSpacing,
-                  chrSpacing,markLabelSize,pattern,xBoundariesQuar)
+                  chrSpacing,markLabelSize,pattern,bannedMarkName,xBoundariesQuar)
   }
 
   ##############################################################################################################################
@@ -4059,7 +5260,14 @@ if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
 
         xBoundaries<-xm[[corr_index]][listOfdfMarkPosCr[[k]][,"neworder"][i],3:2]
         xBoundariesQuar<-(xBoundaries[2]-xBoundaries[1])/4
-        xMarkCr1[[i]]<-c(list(xBoundaries[1]+xBoundariesQuar),list(xBoundaries[1]+3*xBoundariesQuar) )
+         #xMarkCr1[[i]]<-c(list(xBoundaries[1]+xBoundariesQuar),list(xBoundaries[1]+3*xBoundariesQuar) )
+
+        if(chromatids & holocenNotAsChromatids==FALSE & circularPlot==FALSE){
+          xMarkCr1[[i]]<-c(list(xBoundaries[1]+xBoundariesQuar - (xModifierHolo/2) ), list(xBoundaries[1]+ 3*xBoundariesQuar + (xModifierHolo/2) ) )
+        } else {
+          xMarkCr1[[i]]<-c(list(xBoundaries[1]+xBoundariesQuar),list(xBoundaries[1]+3*xBoundariesQuar) ) # default
+        }
+
         attr(xMarkCr1[[i]], "rowIndex")<- rowIndex
 
         rad1[[i]]<-rep(list(abs(ysupCr-yinfCr)/2 ),2)
@@ -4088,7 +5296,7 @@ if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
     #   add to plot MarkCrs DOTS holocen
     #####################
 
-    plotDotMarks(xMarkCr,yMarkCr, rad, colCr,n,xfactor,colBorderCr,circularPlot, y,x,radius,circleCenter,circleCenterY,separFactor,
+    plotDotMarks(bannedMarkName,xMarkCr,yMarkCr, rad, colCr,n,xfactor,colBorderCr,circularPlot, y,x,radius,circleCenter,circleCenterY,separFactor,
     chrWidth,listOfdfMarkPosCr,markLabelSize,pattern,labelSpacing,useOneDot,legend,ylistTransChrSimple, rotation=rotation,
     labelOutwards)
 
@@ -4105,7 +5313,7 @@ if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
 
   if (booleanDotsLabels){
     textLabelDots(xMarkCr,yMarkCr,listOfdfChromSize,listOfdfMarkPosCr,specialChrSpacing,
-                            chrSpacing,markLabelSize,pattern,xBoundariesQuar)
+                            chrSpacing,markLabelSize,pattern,bannedMarkName,xBoundariesQuar)
   }
 
   ################################
@@ -4132,13 +5340,9 @@ if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
     ycoordCents <-list()
 
     for (i in 1:length(CentsList)){
-      corr_index<-which(names(listOfdfChromSize) %in% names(CentsList)[[i]] )
-      centromereSize2<-tryCatch(as.numeric(attr(listOfdfChromSize[[corr_index]],"centromere") ) , error=function(e) NA )
+      corr_index <- which(names(listOfdfChromSize) %in% names(CentsList)[[i]] )
+      centromereSize2 <- tryCatch(as.numeric(attr(listOfdfChromSize[[corr_index]],"centromere") ) , error=function(e) NA )
 
-      # ycoordCents[[i]] <- t(replicate(length(CentsList[[i]])*2, (c(rep(  karHeight+  (karHeiSpace*(i-1)),2  ),
-      #                                         rep(  karHeight+(centromereSize2*normalizeToOne)+(karHeiSpace*(i-1)),2  )
-      # )      )      ) # radius
-      # ) #t
       ycoordCents[[i]] <- t(replicate(length(CentsList[[i]])*1, (c(rep(  karHeight+  (karHeiSpace*(i-1)), 2  ),
                                                                    rep(  karHeight+(centromereSize2*normalizeToOne)+(karHeiSpace*(i-1)),2  )
       )      )      ) # radius
@@ -4149,20 +5353,18 @@ if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
 # ycoordCents[areNA]<-NA
 
 # suppressWarnings(
-if(is.na(addMissingOTUAfter[1])){
+if(is.na(addMissingOTUAfter[1])) {
     if(karSepar){
       for (s in 1:(length(ymCopyC)-1) ) {
         diffnext<-abs(min(ymCopyC[[s+1]] ) - max(ymCopyC[[s]]) )
         ymCopyC[[s+1]]=ymCopyC[[s+1]]-diffnext
 
-        # corrIndex<-which(names(ycoordCents) %in% names(ymCopyC[s]) )
-
-        ycoordCents[[s+1]] <-ycoordCents[[s+1]] -diffnext
+        ycoordCents[[s+1]] <- ycoordCents[[s+1]] - diffnext
 
         ifelse(amoSepar>diffnext,amoSepar2<-diffnext,amoSepar2<-amoSepar)
 
         ymCopyC[[s+1]]=ymCopyC[[s+1]]+amoSepar2
-        ycoordCents[[s+1]] <-ycoordCents[[s+1]] +amoSepar2
+        ycoordCents[[s+1]] <- ycoordCents[[s+1]] + amoSepar2
       } # for
     } # redu
 }
@@ -4179,23 +5381,20 @@ if(is.na(addMissingOTUAfter[1])){
     #
 
     ycoordCentsS<-tryCatch(ycoordCentsS[which(names(ycoordCentsS) %in% monocenNames)] , error=function(e) NA )
-    ycoordCents<-tryCatch(ycoordCents[which(names(ycoordCents) %in% monocenNames)] , error=function(e) NA )
+    ycoordCents <-tryCatch(ycoordCents[which(names(ycoordCents) %in% monocenNames)] , error=function(e) NA )
 
     ycoordCentsS<-ycoordCentsS[!is.na(ycoordCentsS)]
     ycoordCents<-ycoordCents[!is.na(ycoordCents)]
 
+    # modify cen. position to account for squareness of chr.
 
-
-    if (roundness<=20){
-      r3 <- chrWidth2/(roundness*3)
+    if (squareness<=20){
+      r3 <- chrWidth2/(squareness*3)
     } else {
       r3 <- 0
     }
 
     xcoordCents<-list()
-#    xmnoNAI<<-xmnoNA
-#    listOfdfChromSizenoNAI2<<-listOfdfChromSizenoNA
-#    monocenNamesI2<<-monocenNames
 
     for (s in 1:length(xmnoNA)){
       if(names(listOfdfChromSizenoNA[s]) %in% monocenNames ){
@@ -4204,11 +5403,7 @@ if(is.na(addMissingOTUAfter[1])){
         } else {
           chrWidth2<-chrWidth
         }
-#        chrWidth2I<<-chrWidth2
-#        r3I<<-r3
-        # xcoordCents[[s]] <-cbind(sweep(xmnoNA[[s]][,2:3], 2, c(-r3,r3), "+"),
-        #     sweep(xmnoNA[[s]][,2:3], 2, c(-r3,r3), "+")
-        #     ) #bind
+
         xmMatrix<-xmnoNA[[s]][1:(nrow(xmnoNA[[s]])/2),2:3]
         if(!inherits(xmMatrix, "matrix")) {
           xmMatrix<-  t(as.matrix(xmMatrix) )
@@ -4217,10 +5412,10 @@ if(is.na(addMissingOTUAfter[1])){
                                  sweep(xmMatrix, 2, c(-r3,r3), "+")
         ) #bind
 
-        # attr(xcoordCents[[s]], "spname")<-names(xmnoNA)[[s]]
         names(xcoordCents)[s] <- names(listOfdfChromSizenoNA[s])
         } # monocen
-    }
+    } # for
+
     xcoordCents<-Filter(function(x) {length(x) >= 1}, xcoordCents)
 
     xcoordCentsS<- lapply(1:length(xcoordCents), function(j) base::split(xcoordCents[[j]], row(xcoordCents[[j]]) ) )
@@ -4250,36 +5445,59 @@ if(is.na(addMissingOTUAfter[1])){
     #     plot centromeres
     #
 
-#    xcoordCentsSI<<-xcoordCentsS
-#    ycoordCentsSI<<-ycoordCentsS
+#    xcoordCentsS4249 <<- xcoordCentsS
+#    ycoordCentsS4250 <<- ycoordCentsS
+#    xcoordCents4251  <<- xcoordCents
+#    ycoordCents4252  <<- ycoordCents
+
+   ### generate newLongyCen for roundedCen
+if(roundedCen){
+   pts <- seq(-pi/2, pi*1.5, length.out = n*4)
+   ptsl <- split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
+
+   newLongyCen <- newLongxCen<-list()
+
+   for (s in 1:length(ycoordCentsS) ) {
+
+     xyCoordsCen<-mapXYCen(1 , (length(ycoordCentsS[[s]]) ) ,
+                        ycoordCentsS[[s]],
+                        xcoordCentsS[[s]] ,
+                        ptsl[[1]],ptsl[[2]],ptsl[[3]],ptsl[[4]]
+                        )
+
+     newLongxCen[[s]] <- xyCoordsCen$roundedX
+     newLongyCen[[s]] <- xyCoordsCen$roundedY
+
+     } # for s
+
+   # newLongyCen<-newLongyCen[!is.na(newLongyCen)]
+   # newLongxCen<-newLongxCen[!is.na(newLongxCen)]
+
+   for(s in 1: length(newLongyCen)) {
+     # attr(newLongyCen[[s]], "positionnoNA")<- attr(listOfdfChromSizenoNA[[s]],"positionnoNA")
+     for (a in 1: length(newLongyCen[[s]])){
+       # attr(newLongyCen[[s]][[a]],"chrName1")<- attr(y[[s]][[a]],"chrName1")
+       names(newLongyCen[[s]])[a]<- names(ycoordCentsS[[s]][a])
+       names(newLongxCen[[s]])[a]<- names(xcoordCentsS[[s]][a])
+     }
+   }
+
+   names(newLongyCen) <- names(ycoordCentsS)
+   names(newLongxCen) <- names(ycoordCentsS)
+
+#   newLongxCen91 <<- newLongxCen
+#   newLongyCen92 <<- newLongyCen
+
+} # roundedCen
+   ###
+
 #    cenBorderI<<-cenBorder
 
-
-
-      if(circularPlot){
+  if(circularPlot) {
 
         spnamexcoord<- names(xcoordCentsS)[1]
         corrSp<- which(names(x) %in% spnamexcoord)
         diffXRounded <- max(x[[corrSp]][[1]]) - max(xcoordCentsS[[1]][[1]]) # needed for all cen marks
-
-        if(roundness <= 20){
-#            xI<<-x
-#            diffXRoundedI<<-diffXRounded
-#            monocenNamesI<<-monocenNames
-
-            xRounded<-xForRounded(x,diffXRounded,monocenNames)
-
-            xlistNewChr<-xHortoVerRoundCen(xRounded,diffXRounded)
-
-        } else {
-
-          xlistNewChr<-xHortoVer(x)
-          # names(xlistNewChr)<-names(x)
-
-        } # roundness bool
-
-        xlistNewCen <- makeCenCoordsX(xlistNewChr,monocenNames)
-        names(xlistNewCen)<-monocenNames
 
         #
         #   y
@@ -4289,30 +5507,75 @@ if(is.na(addMissingOTUAfter[1])){
         names(yInterSimple)<-names(y)
 
         ylistNewChrSimple<-yVertoHor(yInterSimple, monocenNames = monocenNames)
-        names(ylistNewChrSimple)<-names(y)
+        names(ylistNewChrSimple) <- names(y)
 
         #
         #   x horizontal to vertical Y for cent. is same for rounded or squared
         #
 
-        ylistTransChrSimple<-transYList(ylistNewChrSimple,shrinkFactor,monocenNames)
+        ylistTransChrSimple <- transYList(ylistNewChrSimple,shrinkFactor,monocenNames)
         names(ylistTransChrSimple) <- names(ylistNewChrSimple)
-#        ylistTransChrSimpleI<<-ylistTransChrSimple
 
-        ylistNewCen <- makeCenCoordsY(ylistTransChrSimple,monocenNames)
+
+        if(roundedCen){
+
+          ### new way of making cen.
+
+          xlistNew <- xHortoVerRoundCen(newLongxCen,diffXRounded)
+          names(xlistNew) <- names(newLongxCen)
+#          xlistNew4332 <<- xlistNew
+
+          yMarkPer <- markMapPerCen(newLongyCen,y)
+          names(yMarkPer) <- names(newLongyCen)
+#          yMarkPer4335<<-yMarkPer
+# transyListMark corrindex error
+
+#          ylistTransChrSimple4371<<-ylistTransChrSimple
+          ylistTransMark<-transyListCen(yMarkPer,ylistTransChrSimple)
+          names(ylistTransMark) <- names(yMarkPer)
+#          ylistTransMark4338<<-ylistTransMark
+          ###
+
+        } else {  # ROUNDEDCEN FALSE
+
+
+
+        xlistNew <- xHortoVerRoundCen(xcoordCentsS,diffXRounded)
+        names(xlistNew) <- names(xcoordCentsS)
+#        xlistNew4389 <<- xlistNew
+# markMapPer corrIndex error
+        yMarkPer <- markMapPerCen(ycoordCentsS,y)
+        names(yMarkPer) <- names(ycoordCentsS)
+#        yMarkPer4367<<-yMarkPer
+# transyListMark corrIndex error
+#        ylistTransChrSimple4371<<-ylistTransChrSimple
+        ylistTransMark<-transyListCen(yMarkPer,ylistTransChrSimple)
+        names(ylistTransMark) <- names(yMarkPer)
+#        ylistTransMark4371<<-ylistTransMark
+
+        ###
+
+
+  } # roundedCen
+
         if(!is.null(cenColor2) ) {
-#        ylistNewCenI<<-ylistNewCen
-        circleMapsCen  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,ylistNewCen,xlistNewCen,n,0,chrWidth,rotation=rotation)
 
-        drawCen(circleMapsCen,cenColor2,cenBorder,lwd.chr)
-        }
+          circleMapsCen  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,ylistTransMark,xlistNew,n,0,chrWidth,
+                                           rotation=rotation)
 
-      } else if(circularPlot==FALSE) {
+          drawCen(circleMapsCen,cenColor2,cenBorder,lwd.chr)
 
-        if(!is.null(cenColor2) ) {
+        } # cenColor NULL
 
-      if(length(xcoordCentsS)>0){
-        lapply(1:length(xcoordCentsS), function(w) mapply(function(x,y,z) graphics::polygon(x=x, y=y,
+      } else if(circularPlot==FALSE) { # end cP ################################ cP FALSE
+
+      if(!is.null(cenColor2) ) {
+
+        if(length(xcoordCentsS)>0){
+
+          if(roundedCen==FALSE){
+
+             lapply(1:length(xcoordCentsS), function(w) mapply(function(x,y,z) graphics::polygon(x=x, y=y,
                                                                                             col=cenColor2,
                                                                                             lwd=lwd.chr,
                                                                                             border=z),
@@ -4320,11 +5583,21 @@ if(is.na(addMissingOTUAfter[1])){
                                                           y=ycoordCentsS[[w]],
                                                           z=cenBorder
                                                     ) #m
-        ) #l
+            ) #l
+          } else {
+            lapply(1:length(newLongyCen), function(s) mapply(function(x,y,z) graphics::polygon(x=x, y=y,
+                                                                                                col=cenColor2,
+                                                                                                lwd=lwd.chr,
+                                                                                                border=z),
+                                                              x=newLongxCen[[s]],
+                                                              y=newLongyCen[[s]],
+                                                              z=cenBorder
+            ) #m
+            ) #l
+          }
       } # if length xcoordCentsS
-    }
-    } # circular else not
-  # } # cenColor2 NULL
+    } # cencolor
+    } # circular Plot else not
 
   } # monocen exist listOfdfChromSizeMonocen
 
@@ -4355,6 +5628,7 @@ if(is.na(addMissingOTUAfter[1])){
         attr(xMarkCen1[[i]],"rowIndex")<-rowIndex
 
       } # each mark
+
       yMarkCen[[k]]<-yMarkCen1
       xMarkCen[[k]]<-xMarkCen1
       attr(yMarkCen[[k]], "spname") <- names(listOfdfDataCen)[[k]] # added 1.14
@@ -4371,6 +5645,49 @@ if(is.na(addMissingOTUAfter[1])){
       fixCenBorder2<-FALSE
     }
 
+    if(roundedCen){
+      # pts<- seq(-pi/2, pi*1.5, length.out = n*4)
+      # ptsl<-split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
+
+      newLongyCenMarks <- newLongxCenMarks<-list()
+
+      for (s in 1:length(yMarkCen) ) {
+
+        xyCoordsCenMarks <- mapXYCen(1 , (length(yMarkCen[[s]]) ) ,
+                              yMarkCen[[s]],
+                              xMarkCen[[s]] ,
+                              ptsl[[1]],ptsl[[2]],ptsl[[3]],ptsl[[4]]
+        )
+
+        newLongxCenMarks[[s]] <- xyCoordsCenMarks$roundedX
+        newLongyCenMarks[[s]] <- xyCoordsCenMarks$roundedY
+
+      } # for s
+
+      # newLongyCenMarks<-newLongyCenMarks[!is.na(newLongyCenMarks)]
+      # newLongxCenMarks<-newLongxCenMarks[!is.na(newLongxCenMarks)]
+
+      for(s in 1: length(newLongyCenMarks)) {
+        attr(newLongyCenMarks[[s]], "spname")<- attr(yMarkCen[[s]], "spname")
+        attr(newLongxCenMarks[[s]], "spname")<- attr(xMarkCen[[s]], "spname")
+
+        for (a in 1: length(newLongyCenMarks[[s]])){
+          attr(newLongyCenMarks[[s]][[a]],"rowIndex")<- attr(yMarkCen[[s]][[a]],"rowIndex")
+          attr(newLongxCenMarks[[s]][[a]],"rowIndex")<- attr(xMarkCen[[s]][[a]],"rowIndex")
+          # names(newLongyCenMarks[[s]])[a]<- names(y[[s]][a])
+          # names(newLongxCenMarks[[s]])[a]<- names(y[[s]][a])
+        }
+      }
+
+      # names(newLongyCenMarks)<-names(yMarkCen)
+      # names(newLongxCenMarks)<-names(yMarkCen)
+
+#      newLongxCenMI <<-newLongxCenMarks
+#      newLongyCenMI <<-newLongyCenMarks
+    } # rC
+
+
+
                                                     #####################
                                                     #   marks CENTROMERE
                                                     #####################
@@ -4381,254 +5698,93 @@ if(is.na(addMissingOTUAfter[1])){
 #    dfMarkColorInternalI<<-dfMarkColorInternal
 #    fixCenBorder2I<<-fixCenBorder2
 
-    if(circularPlot){
+    if(circularPlot) {
 
-      xlistMarkCen <- xHortoVerRoundCen(xMarkCen,diffXRounded)
-      names(xlistMarkCen)<-names(xMarkCen)
+      if (roundedCen==FALSE){
 
-      yMarkCenNew <- yVertoHorCenMarks(yMarkCen, ylistNewCen)
+        xlistNew <- xHortoVerRoundCen(xMarkCen,diffXRounded)
+        names(xlistNew) <- names(xMarkCen)
+#        xlistNew4544<<-xlistNew
 
-      circleMapsMarksCen  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,yMarkCenNew,xlistMarkCen,n,0,chrWidth,rotation=rotation)
+        yMarkPer <- markMapPer(yMarkCen,y)
+#        yMarkPer4542<<-yMarkPer
 
-      drawCenMarks(circleMapsMarksCen,dfMarkColorInternal,listOfdfDataCen,lwd.chr,fixCenBorder2,chrColor)
+        ylistTransMark<-transyListMark(yMarkPer,ylistTransChrSimple)
+#        ylistTransMark4545<<-ylistTransMark
+      } else {
+
+        xlistNew <- xHortoVerRoundCen(newLongxCenMarks,diffXRounded)
+        names(xlistNew) <- names(newLongxCenMarks)
+#        xlistNew4570<<-xlistNew
 
 
-      if(legend=="inline"){
-        circleMapsMarksLabelCen  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,yMarkCenNew,xlistMarkCen,n,
-                                                   labelSpacing ,chrWidth,rotation=rotation)
+        yMarkPer<-markMapPer(newLongyCenMarks,y)
+#        yMarkPer4553<<-yMarkPer
 
-        # circLabelMark(circleMaps,             listOfdfMarkPos, markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY,iscM=FALSE)
-        circLabelMark(circleMapsMarksLabelCen,listOfdfDataCen, markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY)
+        ylistTransMark<-transyListMark(yMarkPer,ylistTransChrSimple)
+#        ylistTransMark4556<<-ylistTransMark
       }
 
-    } else {
+      # from mimic
+      circleMapsMarksCen  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,ylistTransMark,xlistNew,n,0,chrWidth,
+                                         rotation=rotation)
+
+      # drawPlotMark(circleMapsMarksCen,dfMarkColorInternal,listOfdfDataCen,lwd.chr*3) # works
+      drawCenMarks(circleMapsMarksCen,dfMarkColorInternal,listOfdfDataCen,lwd.chr,fixCenBorder2,chrColor)
+
+      if(legend=="inline"){
+        circleMapsMarksLabelCen  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,ylistTransMark,xlistNew,n,
+                                                   labelSpacing ,chrWidth,rotation=rotation)
+        circLabelMark(bannedMarkName,circleMapsMarksLabelCen,listOfdfDataCen, markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY)
+      }
+
+    } else { # no circular
+
     # if(!is.null(cenColor) ){
-    lapply(1:length(xMarkCen), function(m) mapply(function(x,y,z)
-      graphics::polygon(
-        x=x,
-        y=y,
-        col = dfMarkColorInternal$markColor[match(z, dfMarkColorInternal$markName)] ,
-        lwd=lwd.chr,
-        border=ifelse(fixCenBorder2,
-                    chrColor,
-                    dfMarkColorInternal$markBorderColor[match(z, dfMarkColorInternal$markName)] # z outside
-                    ) # ifelse
-      ), # p
-       x=xMarkCen[[m]],
-       y=yMarkCen[[m]],
-       z=listOfdfDataCen[[m]]$markName # ifelse here gives error
-    ) # mapply
-    ) #l
+      if (roundedCen==FALSE){
+        lapply(1:length(xMarkCen), function(m) mapply(function(x,y,z)
+          graphics::polygon(
+            x=x,
+            y=y,
+            col = dfMarkColorInternal$markColor[match(z, dfMarkColorInternal$markName)] ,
+            lwd=lwd.chr,
+            border=ifelse(fixCenBorder2,
+                        chrColor,
+                        dfMarkColorInternal$markBorderColor[match(z, dfMarkColorInternal$markName)] # z outside
+                        ) # ifelse
+          ), # p
+           x=xMarkCen[[m]],
+           y=yMarkCen[[m]],
+           z=listOfdfDataCen[[m]]$markName # ifelse here gives error
+
+        ) # mapply
+        ) #l
+      } else {
+        lapply(1:length(newLongyCenMarks), function(m) mapply(function(x,y,z)
+          graphics::polygon(
+            x=x,
+            y=y,
+            col = dfMarkColorInternal$markColor[match(z, dfMarkColorInternal$markName)] ,
+            lwd=lwd.chr,
+            border=ifelse(fixCenBorder2,
+                          chrColor,
+                          dfMarkColorInternal$markBorderColor[match(z, dfMarkColorInternal$markName)] # z outside
+            ) # ifelse
+          ), # p
+          x=newLongxCenMarks[[m]],
+          y=newLongyCenMarks[[m]],
+          z=listOfdfDataCen[[m]]$markName # ifelse here gives error
+        ) # mapply
+        ) #l
+      } # rC
 
     } # circular bool
 
-  } # end centromeres with marks
-
-  ## begin                                            cenStyle
-
-  ##########################################################################################################3
-  #
-  #                           painting Marks monocen              cenStyle marks
-  #
-  ############################################################################################################
-
-  if (exists("listOfdfMarkPosMonocen") & exists("dfMarkColorInternal") ){
-    # message(crayon::green(paste0("monocen. marks section start" ) ) )
-
-    xMarkCenStyle<-yMarkCenStyle<-listOfdfMarkPosCenStyle<-list()
-
-    j<-1
-
-    for (k in 1:length(listOfdfMarkPosMonocen)) {
-      currName<-names(listOfdfMarkPosMonocen)[[k]]
-      if(nrow(listOfdfMarkPosMonocen[[k]][which(listOfdfMarkPosMonocen[[k]]$style=="cenStyle"),])>0){
-        listOfdfMarkPosCenStyle<-c(listOfdfMarkPosCenStyle,list(listOfdfMarkPosMonocen[[k]][which(listOfdfMarkPosMonocen[[k]]$style=="cenStyle"),]))
-        names(listOfdfMarkPosCenStyle)[[j]]<-currName
-        j<-j+1
-      }
-    }
-
-    if(length(listOfdfMarkPosCenStyle)>0){
-      for (sm in 1:length(listOfdfMarkPosCenStyle)) {
-        yMark1<-NULL
-        xMark1<-NULL
-        # which(names(listOfdfChromSize) %in% names(listOfdfMarkPosCenStyle)[[sm]] )
-
-        corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfMarkPosCenStyle)[[sm]] )
-
-        for (m in 1:nrow(listOfdfMarkPosCenStyle[[sm]]) ){
-          ifelse(listOfdfMarkPosCenStyle[[sm]][m,"chrRegion"]=="q",longORshort<- 0,longORshort<- 1) # ifelseinloop
-          ifelse(listOfdfMarkPosCenStyle[[sm]][m,"chrRegion"]=="q",column<- 1, column<- 2)
-          ifelse(listOfdfMarkPosCenStyle[[sm]][m,"chrRegion"]=="q",mySign<- -1,mySign<- 1)
-          rowIndex<- nrow(listOfdfChromSize[[corr_index]] ) * longORshort + (listOfdfMarkPosCenStyle[[sm]][,"neworder"][m])
-          armStart<-ym[[corr_index]][rowIndex,column]
-          yprox <- armStart +
-            (listOfdfMarkPosCenStyle[[sm]][m,"markDistCen"]                                                             *normalizeToOne*mySign)
-
-          yter <- armStart +
-            ( sum( listOfdfMarkPosCenStyle[[sm]][m,"markDistCen"] , listOfdfMarkPosCenStyle[[sm]][m,"markSize"], na.rm=TRUE ) *normalizeToOne*mySign )
-
-          # yMark1[[m]]<-if(longORshort==0) {c(yprox,yter,yter,yprox)} else {c(yter,yprox,yprox,yter)}
-          yMark1[[m]]<-if(longORshort==0) {c(yprox,yter,yprox,yter)} else {c(yter,yprox,yter,yprox)}
-
-          attr(yMark1[[m]],"arm")<-listOfdfMarkPosCenStyle[[sm]][m,"chrRegion"]
-          # attr(yMark1[[m]],"armStart")<-armStart
-          attr(yMark1[[m]],"rowIndex")<-rowIndex
-
-          xMark1[[m]]<-xm[[corr_index]][listOfdfMarkPosCenStyle[[sm]][,"neworder"][m],]
-          attr(xMark1[[m]],"rowIndex")<-rowIndex
-
-        }
-        yMarkCenStyle[[sm]]<-yMark1
-        attr(yMarkCenStyle[[sm]], "spname")<-names(listOfdfMarkPosCenStyle)[[sm]]
-        xMarkCenStyle[[sm]]<-xMark1
-        attr(xMarkCenStyle[[sm]], "spname")<-names(listOfdfMarkPosCenStyle)[[sm]]
-      } # end for
-
-      # markList<-addChrNameAttrMark(xMarkCenStyle,yMarkCenStyle,x)
-      #
-      # xMarkCenStyle<-markList$xMark
-      # yMarkCenStyle<-markList$yMark
-      ########################
-      #                      #
-      #   add marks to plot monocen #
-      #                      #
-      ########################
-      # if(circularPlot==FALSE){
-      mimicCenPlotMark(roundness, xMarkCenStyle, yMarkCenStyle,
-                       dfMarkColorInternal,
-                       listOfdfMarkPosCenStyle,
-                       chrWidth, #use for calc r2
-                       specialChrWidth,
-                       yfactor,
-                       n,
-                       lwd.chr,
-                       listOfdfChromSize,
-                       circularPlot,
-                       y,
-                       markLabelSize,
-
-                       separFactor,
-                       labelSpacing,circleCenter,circleCenterY,radius,
-                       ylistTransChrSimple,rotation=rotation,labelOutwards)
-
-    } #     if(length(listOfdfMarkPosCenStyle)>0)
-
-    else {remove(listOfdfMarkPosCenStyle)}
-
-    # cenStyle labels not cen (monocen.)
-    # booleanForCenStyleInlineLabelmimicCenPlotMark<- legend=="inline" & exists("dfMarkColorInternal") & exists("listOfdfMarkPosCenStyle") & circularPlot==FALSE
-    #
-    # if(booleanForCenStyleInlineLabelmimicCenPlotMark) {
-    #   textLabel(xMarkCenStyle,yMarkCenStyle,listOfdfChromSize,listOfdfMarkPosCenStyle,specialChrSpacing,chrSpacing,markLabelSize,pattern)
-    # }
-
-  } # if presence end painting marks
-
-  ##################################################################################################
-  #
-  #                                                 painting Marks cenStyle holocen
-  #
-  ##################################################################################################
-
-  if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
-    # message(crayon::green(paste0("holocen. marks section start" ) ) )
-    xMarkCenStyle<-yMarkCenStyle<-listOfdfMarkPosCenStyle<-list()
-
-    j<-1
-    for (k in 1:length(listOfdfMarkPosHolocen)) {
-      currName<-names(listOfdfMarkPosHolocen)[[k]]
-      if(nrow(listOfdfMarkPosHolocen[[k]][which(listOfdfMarkPosHolocen[[k]]$style=="cenStyle"),])>0){
-        listOfdfMarkPosCenStyle<-c(listOfdfMarkPosCenStyle,list(listOfdfMarkPosHolocen[[k]][which(listOfdfMarkPosHolocen[[k]]$style=="cenStyle"),]) )
-        names(listOfdfMarkPosCenStyle)[[j]]<-currName
-        j<-j+1
-      }
-    }
-
-    if(length(listOfdfMarkPosCenStyle)>0){
-      for (sm in 1:length(listOfdfMarkPosCenStyle)) {
-
-        yMark1<-NULL
-        xMark1<-NULL
-        corr_index<-which(names(ym) %in% names(listOfdfMarkPosCenStyle)[[sm]] )
-
-        for (m in 1:nrow(listOfdfMarkPosCenStyle[[sm]])){
-          rowIndex<-(listOfdfMarkPosCenStyle[[sm]][,"neworder"][m])
-          chrStart<-ym[[corr_index]][rowIndex ,2]
-          yinf <- chrStart +                        # was ysup
-            (listOfdfMarkPosCenStyle[[sm]][m,"markPos"]                                                          *normalizeToOne)
-
-          ysup <- chrStart +
-            (  sum(listOfdfMarkPosCenStyle[[sm]][m,"markPos"],listOfdfMarkPosCenStyle[[sm]][m,"markSize"],na.rm=TRUE ) *normalizeToOne )
-
-          yMark1[[m]]<-c(ysup,yinf,ysup,yinf)
-          attr(yMark1[[m]],"rowIndex")<-rowIndex
-
-          xMark1[[m]]<-xm[[corr_index]][listOfdfMarkPosCenStyle[[sm]][,"neworder"][m],]
-          attr(xMark1[[m]],"rowIndex")<-rowIndex
-
-        }
-        yMarkCenStyle[[sm]]<-yMark1
-        attr(yMarkCenStyle[[sm]], "spname")<-names(listOfdfMarkPosCenStyle)[[sm]]
-        xMarkCenStyle[[sm]]<-xMark1
-        attr(xMarkCenStyle[[sm]], "spname")<-names(listOfdfMarkPosCenStyle)[[sm]]
-      } # end for
-
-      # markList<-addChrNameAttrMark(xMarkCenStyle,yMarkCenStyle,x)
-
-      # xMarkCenStyle<-markList$xMark
-      # yMarkCenStyle<-markList$yMark
-
-      #####################
-      #   add marks to plot holocen
-      #####################
-
-      # if(roundness<20){
-      #   myY<- y #newLongy
-      # } else {
-      #   myY<-y
-      # }
-
-
-      mimicCenPlotMark(roundness, xMarkCenStyle, yMarkCenStyle,
-                       dfMarkColorInternal,
-                       listOfdfMarkPosCenStyle,
-                       chrWidth, #use for calc r2
-                       specialChrWidth,
-                       yfactor,
-                       n,
-                       lwd.chr,
-                       listOfdfChromSize,
-                       circularPlot,
-                       y,
-                       markLabelSize,
-
-                       separFactor,
-                       labelSpacing,circleCenter,circleCenterY,radius,
-                       ylistTransChrSimple,rotation=rotation,labelOutwards) #
-
-    } #     if(length(listOfdfMarkPosCenStyle)>0){
-
-    else {remove(listOfdfMarkPosCenStyle)}
-
-    #
-    #   inline legend holocen
-    #
-
-    # booleanForCenStyleInlineLabelmimicCenPlotMark<- legend=="inline" & exists("dfMarkColorInternal") & exists("listOfdfMarkPosCenStyle") & circularPlot==FALSE
-    #
-    # if(booleanForCenStyleInlineLabelmimicCenPlotMark) {
-    #   textLabel(xMarkCenStyle,yMarkCenStyle,listOfdfChromSize,listOfdfMarkPosCenStyle,specialChrSpacing,chrSpacing,markLabelSize,pattern)
-    # }
-
-  } #   if (exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal") )
-  # end cenStyle marks
-
-  ## end cenStyle
+  } #                                                    end centromeres with marks
 
   ###########################################
   #
-  #   plotting labels inline CENTR.
+  #   plotting labels inline CENTR. marks
   #
   ###########################################
 
@@ -4636,11 +5792,9 @@ if(is.na(addMissingOTUAfter[1])){
   booleanColorInternalMarkCen<- legend=="inline" & exists("dfMarkColorInternal") & exists("listOfdfDataCen") & circularPlot==FALSE
 
     if(booleanColorInternalMarkCen)  {
-
-      textLabel(xMarkCen,yMarkCen,listOfdfChromSize,listOfdfDataCen,specialChrSpacing,chrSpacing,markLabelSize,pattern,TRUE)
+      # textLabel(xMarkCen,yMarkCen,listOfdfChromSize,listOfdfDataCen,specialChrSpacing,chrSpacing,markLabelSize,pattern,TRUE)
+      textLabelCen(xMarkCen,yMarkCen,listOfdfChromSize,listOfdfDataCen,specialChrSpacing,chrSpacing,markLabelSize,pattern,bannedMarkName)
     } # if
-
-
 
   ##############################################
   #
@@ -4653,19 +5807,37 @@ if(is.na(addMissingOTUAfter[1])){
 
   if(legend=="aside" & exists("dfMarkColorInternal") ){
 
-    dfMarkColorInternalNocM<- dfMarkColorInternal[which(!dfMarkColorInternal$style %in% c("cM","cenStyle","cMLeft") ),]
+    dfMarkColorInternalNocM <- dfMarkColorInternal[which(!dfMarkColorInternal$style %in% c("cM","cMLeft") ),]
 
+    # remove bannedMarkNames with cenStyle style
+    if(exists("bannedMarkName")) {
+#      # bannedMarkName5624<<-bannedMarkName
+#      # dfMarkColorInternalNocM5625<<-dfMarkColorInternalNocM
+    # dfMarkColorInternalNocM <- dfMarkColorInternalNocM[which(! (dfMarkColorInternalNocM$style %in% "cenStyle" &
+                                                                  # dfMarkColorInternalNocM$markName %in% bannedMarkName) ) ,]
+    dfMarkColorInternalNocM <- dfMarkColorInternalNocM[which(! (dfMarkColorInternalNocM$markName %in% bannedMarkName) ) ,]
+    }
     if(length(dfMarkColorInternalNocM)==0){
       remove(dfMarkColorInternalNocM)
     }
 
+    #
+    # allow cM if cen. because they are not shown as cM , they must be aside if desired
+    #
+
     if(exists("cenMarkNames") ) {
-      dfMarkColorInternalcMnoCen <- dfMarkColorInternal[which(dfMarkColorInternal$style %in% c("cM","cenStyle","cMLeft") & dfMarkColorInternal$markName %in% cenMarkNames ) , ]
+      dfMarkColorInternalcMnoCen <- dfMarkColorInternal[which(dfMarkColorInternal$style    %in% c("cM","cMLeft") &
+                                                              dfMarkColorInternal$markName %in% cenMarkNames ) , ]
       if( exists("dfMarkColorInternalNocM") ) {
         dfMarkColorInternalNocM<-dplyr::bind_rows(dfMarkColorInternalNocM,dfMarkColorInternalcMnoCen)
       } else {
         dfMarkColorInternalNocM<-dfMarkColorInternalcMnoCen
       }
+    }
+
+    if(remSimiMarkLeg){
+      dfMarkColorInternalNocM$markName <- sub(pattern,"",dfMarkColorInternalNocM$markName )
+      dfMarkColorInternalNocM<-dfMarkColorInternalNocM[!duplicated(dfMarkColorInternalNocM$markName),]
     }
 
     if(nrow(dfMarkColorInternalNocM)>0 )  {

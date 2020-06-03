@@ -11,7 +11,8 @@
 \alias{dfAlloParentMarks}
 \alias{traspaMarks}
 \title{Mark Positional data - monocentrics}
-\format{bigdfOfMarks a data.frame with columns:
+\format{
+bigdfOfMarks a data.frame with columns:
 \describe{
 \item{OTU}{OTU, species, mandatory if in dfChrSize}
 \item{chrName}{name of chromosome}
@@ -19,7 +20,20 @@
 \item{chrRegion}{use p for short arm, q for long arm, and cen for centromeric}
 \item{markDistCen}{distance of mark to centromere (not for cen)}
 \item{markSize}{size of mark (not for cen)}
-}}
+}
+
+An object of class \code{data.frame} with 4 rows and 5 columns.
+
+An object of class \code{data.frame} with 6 rows and 5 columns.
+
+An object of class \code{data.frame} with 395 rows and 5 columns.
+
+An object of class \code{data.frame} with 43 rows and 6 columns.
+
+An object of class \code{data.frame} with 15 rows and 4 columns.
+
+An object of class \code{data.frame} with 18 rows and 7 columns.
+}
 \source{
 \href{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}{Washington U}
 }

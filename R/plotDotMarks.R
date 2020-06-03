@@ -34,7 +34,8 @@
 #' @importFrom graphics polygon text
 #'
 
-plotDotMarks <- function(xMarkCr,yMarkCr, rad, colCr,n,xfactor,colBorderCr,circularPlot, y, x ,radius,circleCenter,circleCenterY,separFactor,
+plotDotMarks <- function(bannedMarkName,xMarkCr,yMarkCr, rad, colCr,n,xfactor,colBorderCr,circularPlot, y, x ,
+                         radius,circleCenter,circleCenterY,separFactor,
                          chrWidth,listOfdfMarkPosCr,markLabelSize,pattern,labelSpacing,useOneDot,legend,ylistTransChr,rotation,
                          labelOutwards){
 
@@ -119,7 +120,7 @@ plotDotMarks <- function(xMarkCr,yMarkCr, rad, colCr,n,xfactor,colBorderCr,circu
 if(legend=="inline"){
     circleMapsLabelsCr <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,ylistTransMarkCr,xlistNewCr,n,labelSpacing,chrWidth,
                                          unlist=TRUE,mapCircle,rotation=rotation )
-    circLabelMark(circleMapsLabelsCr,listOfdfMarkPosCr,markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY)
+    circLabelMark(bannedMarkName,circleMapsLabelsCr,listOfdfMarkPosCr,markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY)
 }
 
   } # circ

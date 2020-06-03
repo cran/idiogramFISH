@@ -136,7 +136,7 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               dfMarkColor= dfMarkColor,  # df of mark style
               dfMarkPos  = monoholoMarks,# df of mark positions, includes cen. marks
 
-              roundness =5,              # vertices roundness
+              squareness =5,              # vertices squareness
               addOTUName = TRUE,         # add OTU names
               distTextChr = .5,          # separ. among chr. and text and among chr. name and indices
 
@@ -188,7 +188,7 @@ plotIdiograms(dfChrSize = listradfs$dfChrSize,  # d.f. of chr. sizes
               dfMarkPos = listradfs$dfMarkPos,  # d.f. of marks' positions
               dfMarkColor = dfMarkColor5S25S,   # d.f. of mark characteristics
               cenColor  = "black",              # cen. color 
-              roundness = 5,                    # corner roundness
+              squareness = 5,                    # corner squareness
               chrWidth = 1,                     # chr. width
               orderBySize = FALSE               # do not order chr. by size
 
@@ -316,7 +316,7 @@ plotIdiograms(dfChrSize = myPlasmiddf,  # plasmid size d.f.
               dfMarkPos = marksDfPlasCols,  # mark pos d.f.
               dfMarkColor = markStyle,  # mark style d.f.
               
-              roundness = 21,           # corners not rounded
+              squareness = 21,           # corners not rounded
               chrWidth = .1,            # chr. width
               chrId="",                 # no chr. name
               
@@ -498,7 +498,7 @@ plotIdiograms(dfChrSize = myProkaryotedf,  # chr. data d.f.
               dfMarkPos = marksDfChrCols,  # mark pos d.f.
               dfMarkColor = markStyle,     # mark style d.f. style cM
               
-              roundness = 21,           # corners not rounded
+              squareness = 21,           # corners not rounded
               n=100,                    # number of vertices in rounded items.
               chrWidth = .02,           # chr. width
               chrId="",                 # no chr. name

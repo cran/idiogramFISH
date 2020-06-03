@@ -18,7 +18,7 @@ makedfMarkColor<- function(dfMarkColor,markNames,colorstoremove=NA,defaultStyleM
   message(crayon::green(paste("By default 5S are plotted as dots, to change this behavior make your own dfMarkColor data.frame") ) )
 
   dfMarkColor[which(dfMarkColor$style %in% "square"),]$style<-defaultStyleMark
-  # dfMarkColor<-idiogramFISH::dfMarkColor
+
   manualcolors<-c('black','forestgreen', 'orange', 'cornflowerblue',
                     'magenta', 'darkolivegreen4',
                     'indianred1', 'tan4', 'darkblue', 'red2',
@@ -30,27 +30,28 @@ makedfMarkColor<- function(dfMarkColor,markNames,colorstoremove=NA,defaultStyleM
   manualcolors<-manualcolors[!manualcolors %in% colorstoremove]
 
   dfMarkColorNew<-data.frame(markName=markNames)
+
   dfMarkColorNew$markColor<-NA
 
-  lenmandf<-length(dfMarkColor$markColor[which(dfMarkColor$markColor %in% colorstoremove)])
+  # lenmandf <- length( dfMarkColor$markColor[which(dfMarkColor$markColor %in% colorstoremove)] )
+  # dfMarkColor$markColor[which(dfMarkColor$markColor %in% colorstoremove)]<-manualcolors[1:lenmandf]
 
-  if(length(manualcolors)<lenmandf){
-    message(crayon::red(paste("Not enough colors will be recycled - you can pass more colors with mycolors parameter") ) )
-    repF<-ceiling(lenmandf/length(manualcolors) )
-    manualcolors<-rep(manualcolors,repF)
-  }
-
-  dfMarkColor$markColor[which(dfMarkColor$markColor %in% colorstoremove)]<-manualcolors[1:lenmandf]
-
-  manualcolors<-manualcolors[!manualcolors %in% c(dfMarkColor$markColor)]
+  manualcolors <- manualcolors[!manualcolors %in% c(dfMarkColor$markColor)]
 
   dfMarkColorNew$markColor<-dfMarkColor$markColor[match(toupper(dfMarkColorNew$markName),toupper(dfMarkColor$markName) )]
 
-  lenman<-length(dfMarkColorNew$markColor[which(is.na(dfMarkColorNew$markColor))])
+  lenman <- length(dfMarkColorNew$markColor[which(is.na(dfMarkColorNew$markColor))])
 
-  dfMarkColorNew$markColor[which(is.na(dfMarkColorNew$markColor))]<-manualcolors[1:lenman]
+  if(length(manualcolors) < lenman){
+    message(crayon::red(paste("Not enough colors, will be recycled - you can pass more colors with mycolors parameter") ) )
+    repF<-ceiling(lenman/length(manualcolors) )
+    manualcolors<-rep(manualcolors,repF)
+  }
 
-  dfMarkColorNew$style<-dfMarkColor$style[match(toupper(dfMarkColorNew$markName),toupper(dfMarkColor$markName) )]
+  dfMarkColorNew$markColor[which(is.na(dfMarkColorNew$markColor))] <- manualcolors[1:lenman]
+
+  dfMarkColorNew$style <- dfMarkColor$style[match(toupper(dfMarkColorNew$markName),toupper(dfMarkColor$markName) )]
+
   dfMarkColorNew$style[which(is.na(dfMarkColorNew$style))]<-defaultStyleMark
 
   return(dfMarkColorNew)

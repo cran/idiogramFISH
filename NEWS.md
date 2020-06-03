@@ -1,6 +1,32 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 1.15.1
+
+02-06-2020
+
+  - introducing ‘chromatids’
+  - new rounded style of centromere added (default).
+  - better naming of `w` position marks when `inline`
+  - changed logic of `cenStyle` coloring
+
+param:
+
+  - `chromatids` show separated chromatids
+  - `holocenNotAsChromatids` do not use chromatids in holocen.
+  - `arrowsBothChrt` prints arrow marks in both chromatids
+  - `excHoloFrArrToSide` excludes holocentrics from arrowsToSide config.
+  - `xModifier` separation among chromatids
+  - `xModMonoHoloRate` shrink holocen. separ among chromatids with this
+    quotient.
+  - `remSimiMarkLeg` remove “duplicated” name of labels when presence of
+    pseudoduplicates arising from `pattern`
+  - `bannedMarkName` remove this mark name from labels (legends)
+  - `defCenStyleCol` color for external part of marks with `cenStyle`
+  - `roundedCen` rounded centromere
+  - `lwd.mimicCen` line width for `cenStyle` marks
+  - `squareness` new name for `roundness` (deprecated)
+
 # idiogramFISH 1.14.11
 
 23-04-2020

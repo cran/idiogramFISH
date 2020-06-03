@@ -6,7 +6,7 @@
 This is an internal function that plot marks}
 \usage{
 arrowPlotMark(
-  roundness,
+  squareness,
   xMark,
   yMark,
   dfMarkColorInternal,
@@ -29,7 +29,7 @@ arrowPlotMark(
 )
 }
 \arguments{
-\item{roundness}{roundness of vertices <}
+\item{squareness}{squareness of vertices <}
 
 \item{xMark}{x component of polygon}
 

@@ -10,26 +10,29 @@
  threshold = 35, MbUnit = "Mb", yTitle = "µm", specialyTitle = "cM",
  specialOTUNames = "", addOTUName = TRUE, OTUTextSize = 1, OTUfont, OTUfamily,
  OTUasNote = FALSE, orderBySize = TRUE, chrId = "original", indexIdTextSize = 1,
- distTextChr = 1, groupUp = FALSE, chrWidth = 0.5, chrSpacing = 0.5,
- specialChrWidth = 0.3, specialChrSpacing = 0.7, chrColor = "gray",
- chrBorderColor, centromereSize = NA, cenColor, fixCenBorder, roundness = 4,
+ distTextChr = 1, groupUp = FALSE, chromatids = TRUE, arrowsBothChrt = TRUE,
+ holocenNotAsChromatids = FALSE, excHoloFrArrToSide = FALSE, xModifier,
+ xModMonoHoloRate, chrWidth = 0.5, chrSpacing = 0.5, specialChrWidth = 0.3,
+ specialChrSpacing = 0.7, chrColor = "gray", chrBorderColor,
+ centromereSize = NA, cenColor, fixCenBorder, roundedCen = TRUE, squareness = 4,
  lwd.chr = 0.5, lwd.cM, dfMarkPos, dfCenMarks, defaultStyleMark = "square",
  markDistType = "beg", protruding = 0.2, origin = "b", cMBeginCenter = FALSE,
  arrowhead = 0.3, shrinkArrow = 0.3333, arrowheadWidthShrink = 0.1,
  arrowsToSide = TRUE, dfMarkColor, mycolors, borderOfWhiteMarks = TRUE,
- colorBorderMark, pattern = "", legend = "aside", legendWidth = 1.7,
- legendHeight = NA, markLabelSize = 1, markLabelSpacer = 1, legendYcoord = 0,
- chrIndex = "both", morpho = "both", nameChrIndexPos = 2, karIndex = TRUE,
- karIndexPos = 0.5, ruler = TRUE, rulerPos = 0, rulerPosMod = 0,
- ruler.tck = -0.02, rulerNumberPos = 0.5, rulerNumberSize = 1, rulerInterval,
- rulerIntervalcM, rulerIntervalMb, ceilingFactor = 0, ylabline = 0,
- rulerTitleSize = 1, xlimLeftMod = 1, xlimRightMod = 2, ylimBotMod = 0.2,
- ylimTopMod = 0.2, callPlot = TRUE, asp = 1, circularPlot = FALSE,
- shrinkFactor = 0.9, separFactor = 1.5, labelSpacing = 0.7,
- labelOutwards = FALSE, chrLabelSpacing = 0.5, radius = 0.5, rotation = 0.5,
- useOneDot = TRUE, circleCenter = 1, circleCenterY = 1, OTUlabelSpacing = 0.3,
- OTUsrt = 0, OTUplacing = "first", OTULabelSpacerx = 0, OTULabelSpacery = 0,
- OTUcentered = TRUE, OTUjustif = 0, OTUlegendHeight = NA, ... 
+ colorBorderMark, lwd.mimicCen, defCenStyleCol, pattern = "", legend = "aside",
+ remSimiMarkLeg = FALSE, bannedMarkName, legendWidth = 1.7, legendHeight = NA,
+ markLabelSize = 1, markLabelSpacer = 1, legendYcoord = 0, chrIndex = "both",
+ morpho = "both", nameChrIndexPos = 2, karIndex = TRUE, karIndexPos = 0.5,
+ ruler = TRUE, rulerPos = 0, rulerPosMod = 0, ruler.tck = -0.02,
+ rulerNumberPos = 0.5, rulerNumberSize = 1, rulerInterval, rulerIntervalcM,
+ rulerIntervalMb, ceilingFactor = 0, ylabline = 0, rulerTitleSize = 1,
+ xlimLeftMod = 1, xlimRightMod = 2, ylimBotMod = 0.2, ylimTopMod = 0.2,
+ callPlot = TRUE, asp = 1, circularPlot = FALSE, shrinkFactor = 0.9,
+ separFactor = 1.5, labelSpacing = 0.7, labelOutwards = FALSE,
+ chrLabelSpacing = 0.5, radius = 0.5, rotation = 0.5, useOneDot = TRUE,
+ circleCenter = 1, circleCenterY = 1, OTUlabelSpacing = 0.3, OTUsrt = 0,
+ OTUplacing = "first", OTULabelSpacerx = 0, OTULabelSpacery = 0,
+ OTUcentered = TRUE, OTUjustif = 0, OTUlegendHeight = NA, roundness, ... 
 )
 }
 \arguments{
@@ -103,6 +106,18 @@ also affects vertical separation of indices. Defaults to \code{1}}
 
 \item{groupUp}{boolean, when \code{TRUE} when groups present, they appear over the chr. name. Defaults to \code{FALSE}}
 
+\item{chromatids}{boolean, when \code{TRUE} shows separated chromatids. Defaults to \code{TRUE}}
+
+\item{arrowsBothChrt}{boolean, when \code{TRUE} (default) (for \code{chromatids=TRUE}) shows \code{upArrow, downArrow} styles of marks in both chromatids when \code{arrowsToSide=TRUE}.}
+
+\item{holocenNotAsChromatids}{boolean, when \code{TRUE} and \code{chromatids=TRUE} does not plot holocen kar. with chromatids. Defaults to \code{FALSE}. A value of \code{TRUE} modifies excHoloFrArrToSide to \code{TRUE} always.}
+
+\item{excHoloFrArrToSide}{boolean, when \code{arrowsToSide=TRUE}, excludes holocen. from this behaviour, plotting a centered arrow only.}
+
+\item{xModifier}{numeric, for \code{chromatids=TRUE}, separation among chromatids}
+
+\item{xModMonoHoloRate}{numeric, factor to shrink xModifier for holocen. 5 means 5 times smaller (quotient).}
+
 \item{chrWidth}{numeric, relative chromosome width. Defaults to \code{0.5}}
 
 \item{chrSpacing}{numeric, horizontal spacing among chromosomes, see also  \code{chrWidth}. Defaults to \code{0.5}}
@@ -122,7 +137,9 @@ also affects vertical separation of indices. Defaults to \code{1}}
 \item{fixCenBorder}{boolean, when \code{TRUE} uses \code{chrColor} as centromere (and cen. mark) border color. See also \code{cenColor},
 \code{chrColor}, \code{colorBorderMark}, \code{borderOfWhiteMarks}. No default value.}
 
-\item{roundness}{numeric, shape of vertices of chromosomes and square marks,
+\item{roundedCen}{boolean, when \code{FALSE}, cen has triangular aspect. When \code{TRUE}, it has rounded aspect (Default).}
+
+\item{squareness}{numeric, shape of vertices of chromosomes and square marks,
 higher values more squared. Defaults to \code{4}}
 
 \item{lwd.chr}{thickness of border of chr., marks; ruler. Also thick of cM marks if \code{lwd.cM} absent Defaults to \code{0.5}}
@@ -157,7 +174,7 @@ beginning of the mark (Default)}
 
 \item{arrowheadWidthShrink}{numeric, proportion, shrinks head of arrow. Defaults to \code{0.1}}
 
-\item{arrowsToSide}{boolean, when \code{FALSE} use a centered arrow, instead of an arrow next to chr. margins. Defaults to \code{TRUE}}
+\item{arrowsToSide}{boolean, when \code{FALSE} use a centered arrow, instead of an arrow next to chr. margins (\code{TRUE}, default)}
 
 \item{dfMarkColor}{data.frame, optional, specifying colors and style for marks (sites);
 columns: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: \code{square} or \code{dots} or \code{cM}.
@@ -170,10 +187,18 @@ order of your marks use something like: \code{unique(c(dfMarkPos$markName,dfCenM
 
 \item{colorBorderMark}{character, without default, pass a name of a color to use as border of marks. See \code{borderOfWhiteMarks}}
 
+\item{lwd.mimicCen}{thickness of lines of \code{cenStyle} marks; affects only lateral borders. Defaults to \code{lwd.chr}}
+
+\item{defCenStyleCol}{character, color of outer part of \code{cenStyle} marks. Defaults to \code{white}}
+
 \item{pattern}{REGEX pattern to remove from names of marks}
 
 \item{legend}{character, \code{""} for no legend; \code{"inline"} prints labels near
 chromosomes; \code{"aside"} prints legend to the right of karyotypes (default). See \code{markLabelSpacer}}
+
+\item{remSimiMarkLeg}{boolean, when \code{legend="aside"}, if you use \code{pattern}, you can have several marks with same name. When \code{TRUE} this remove this pseudoduplicates from legend. Be sure that this pseudoduplicates have the same color, otherwise you should use \code{FALSE} (default).}
+
+\item{bannedMarkName}{character, character string or vector with mark names to be removed from plot. Not the marks but the labels.}
 
 \item{legendWidth}{numeric, factor to increase width of squares and of legend. Defaults to \code{1.7}}
 
@@ -280,6 +305,8 @@ when \code{TRUE}, otherwise, to the right.}
 (Default); use \code{0.5} for centered. See \code{?text} -> \code{adj}}
 
 \item{OTUlegendHeight}{numeric, for \code{circularPlot=TRUE} and \code{OTUplacing="number" or "simple"}. Modifies y names separation}
+
+\item{roundness}{deprecated, use \code{squareness}}
 
 \item{...}{accepts other arguments for the plot, see, \code{?plot}}
 }
