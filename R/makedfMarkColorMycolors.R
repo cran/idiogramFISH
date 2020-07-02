@@ -1,13 +1,17 @@
 #' Function to automatically make a data.frame of Marks' characterisitcs
 #'
-#' @description This function reads character vector with marks names, a character vector of prohibited colors and a custom list of colors
+#' @description This function reads character vector with marks names, a 
+#' character vector of 
+#' prohibited colors and a custom list of colors
 #' to be associated with the mark names
 #' @description It returns a data.frame with color and style for each mark
 #'
 #' @param markNames names of marks
 #' @param colorstoremove character vector of colors to remove from mycolors
 #' @param mycolors character vector of names of colors
-#' @param defaultStyleMark character vector with default style \code{"square"} \code{"cM"} \code{"dots"}
+#' @param defaultStyleMark character vector with default style \code{"square"} 
+#' \code{"cM"} 
+#' \code{"dots"}
 #'
 #' @keywords mark
 #' @keywords internal

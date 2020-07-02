@@ -22,7 +22,9 @@ data.frame (armRatioCI)
 list of data.frames (swapChrRegionDfSizeAndMarks)
 }
 \description{
-armRatioCI: reads a data.frame and produces AR (radius), CI, Guerra and Levan classifications.
+armRatioCI: reads a data.frame and produces AR (radius), CI,
+Guerra and Levan
+classifications.
 
 swapChrRegionDfSizeAndMarks: reads data.frames to swap arms
 }

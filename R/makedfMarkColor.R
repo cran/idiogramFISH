@@ -6,7 +6,9 @@
 #' @param markNames names of marks
 #' @param dfMarkColor d.f of marks to use
 #' @param colorstoremove remove this colors from the result
-#' @param defaultStyleMark character vector with default style \code{"square"} \code{"cM"} \code{"dots"}
+#' @param defaultStyleMark character vector with default style \code{"square"} 
+#' \code{"cM"} 
+#' \code{"dots"}
 #'
 #' @keywords mark
 #' @keywords internal

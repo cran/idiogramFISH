@@ -1,6 +1,30 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 1.15.3
+
+01-07-2020
+
+main changes:
+
+  - Better plotting of GISH with chromatids
+  - change in messages when missing data
+  - chr. in groups are closer
+  - parsing of citrus names of chromosomes F<sub>L</sub><sup>+</sup> and
+    F<sub>L</sub><sup>0</sup> automatic
+  - helper functions for plotting Citrus karyotypes:
+      - `citrusSize`, `citrusMarkPos`, `markOverCMA`
+
+param: (`plotIdiograms`)
+
+  - `efZero` threshold for checking if \!= 0
+  - `orderChr`, order of chr. Replaces `orderBySize` - deprecated.
+    Values = `size`, `original`, `name`, `group`
+  - `orderBySize` - deprecated
+  - `notesLeft` note position to the left when `TRUE`
+  - `notesPosY` y axis modify notes position
+  - `chrIdPatternRem` regex pattern to remove from chr. names
+
 # idiogramFISH 1.15.1
 
 02-06-2020
@@ -89,6 +113,8 @@ params:
 
 26-02-2020
 
+  - Introducing circular plots `circularPlot=TRUE` and other params. for
+    circular plot
   - function `genBankReadIF` to read plasmid or prokaryote data. Uses
     tidyr.  
   - function `swapChrRegionDfSizeAndMarks` to swap arm size and marks
@@ -97,8 +123,10 @@ params:
 params:
 
   - `legendYcoord`: modify mark legend Y pos (for common plot also)
-  - Added circular plot `circularPlot=TRUE` and other params. for
-    circular plot
+  - `callPlot`: call plot.new or use your device (when FALSE)
+
+params: (circularPlot=TRUE)
+
   - `shrinkFactor`: size of chr. in fraction of circle
   - `separFactor`: separ among kar.
   - `labelSpacing`: among label and chr.
@@ -110,7 +138,6 @@ params:
   - `useOneDot`: one dot instead of two
   - `circleCenter`: X coordinate
   - `circleCenterY`: Y coordinate
-  - `callPlot`: call plot.new or use your device (when FALSE)
   - `OTULabelSpacerx`: modify OTU name pos.
   - `OTULabelSpacery`: modify OTU name pos.
   - `OTUcentered`: OTU name centered

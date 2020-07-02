@@ -1,18 +1,23 @@
 #' @title Mark Positional data - Holocen.
-#' @description When several OTUs, some can be monocen. and others holocen. Marks distance for monocen. are measured from cen. and for
-#' holocen. from top or bottom depending on \code{param} \code{origin}. See vignettes.
+#' @description When several OTUs, some can be monocen. and others holocen. 
+#' Marks distance for 
+#' monocen. are measured from cen. and for
+#' holocen. from top or bottom depending on \code{param} \code{origin}. See 
+#' vignettes.
 #'
 #' @docType data
 #' @name markdataholo
 NULL
-#' @description bigdfMarkPosHolo: Example data for mark position of holocentrics with column OTU
+#' @description bigdfMarkPosHolo: Example data for mark position of 
+#' holocentrics with column OTU
 #'
 #' @format data.frame with columns:
 #' \describe{
 #'   \item{OTU}{OTU, species, optional}
 #'   \item{chrName}{name of chromosome}
 #'   \item{markName}{name of mark}
-#'   \item{markPos}{position from bottom or top (see parameter \code{origin} in plotIdiograms)}
+#'   \item{markPos}{position from bottom or top (see parameter \code{origin} 
+#' in plotIdiograms)}
 #'   \item{markSize}{size of mark in micrometers or Mb}
 #' }
 #' @seealso \code{\link{markposDFs}}

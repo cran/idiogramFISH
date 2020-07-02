@@ -10,7 +10,8 @@
 #' column \code{OTU}.
 #' @description It returns a list with the A and A2 indices
 #'
-#' \deqn{A = \frac{\sum_{i=1}^{n} \frac{longArm_{i} - shortArm_{i}}{CL_{i}} }{n} }{%
+#' \deqn{A = \frac{\sum_{i=1}^{n} \frac{longArm_{i} - shortArm_{i}}{CL_{i}} 
+#' }{n} }{%
 #'      A = Sum (longArm - shortArm / CL) / n }
 #' @description A: Watanabe et al. (1999) asymmetry of karyotype ranging from 0
 #' (symmetric) to 1 (asymmetric)
@@ -41,7 +42,9 @@
 #' 10.1007/PL00013869
 #' @references A2: Romero-Zarco. 1986. A New Method for Estimating Karyotype
 #' Asymmetry. Taxon Vol. 35, No. 3  pp. 526-530
-#' @references Paszko B. 2006. A critical review and a new proposal of karyotype asymmetry indices. Plant Syst Evol 258:39–48.
+#' @references Paszko B. 2006. A critical review and a new proposal of 
+#' karyotype asymmetry 
+#' indices. Plant Syst Evol 258:39–48.
 #' @rdname asymmetry
 #' @export
 #' @return list

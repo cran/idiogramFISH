@@ -34,11 +34,11 @@ resource_files:
   - css/bootstrap.minO.css
   - js/bootstrap.min.js
   - js/pkgdown2.js
-  - fonts/fa-regular-400.svg
-  - fonts/fa-regular-400.eot
-  - fonts/fa-regular-400.ttf
-  - fonts/fa-regular-400.woff
-  - fonts/fa-regular-400.woff2
+  - css/fonts/fa-regular-400.svg
+  - css/fonts/fa-regular-400.eot
+  - css/fonts/fa-regular-400.ttf
+  - css/fonts/fa-regular-400.woff
+  - css/fonts/fa-regular-400.woff2
 vignette: >
   %\VignetteIndexEntry{1. Plotting chromosomes}
   %\VignetteEngine{knitr::rmarkdown}
@@ -334,7 +334,7 @@ v<-sub("Version: ","",readLines("../DESCRIPTION")[3])
 # v<-tryCatch(suppressWarnings(rvcheck:::check_github_gitlab("ferroao/idiogramFISH", "gitlab")$latest_version), error=function(e) NA )
 pkg<-"idiogramFISH"
 link<-tryCatch(suppressWarnings(badger::badge_custom("Documentation", paste(pkg,v), "cornflowerblue") ), error=function(e) NA )
-  if(!is.na(link)){
+  if(!is.na(link)) { 
   svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
   manual_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svglink) ), error=function(e) NA )
     if (!is.na(manual_cont)){
@@ -350,11 +350,14 @@ link<-tryCatch(suppressWarnings(badger::badge_custom("Documentation", paste(pkg,
 
 # Plotting chromosomes
 
-This guide shows the files to plot idiograms of measured karyotypes and optionally marks. 
+This guide shows how to plot idiograms of measured karyotypes and optionally marks. 
+
+For help on Citrus karyotypes, visit: 
+[https://ferroao.gitlab.io/idiogramfishhelppages/citrushelp.html](https://ferroao.gitlab.io/idiogramfishhelppages/citrushelp.html){target="_blank"}
 
 ## Load package
 
-visit gitlab for installation instructions https://gitlab.com/ferroao/idiogramFISH
+visit gitlab for installation instructions [https://gitlab.com/ferroao/idiogramFISH](https://gitlab.com/ferroao/idiogramFISH){target="_blank"}
 
 ```{r, results="hide", message=FALSE, warning=FALSE, eval=TRUE}
 
@@ -522,10 +525,10 @@ plotIdiograms(dfChrSize= mydfChrSize,     # chr. size data.frame
               dfMarkPos= mydfOfMarks,     # mark position data.frame (inc. cen.)
               dfMarkColor=mydfMarkColor,  # mark style d.f.
               
-              distTextChr = .7,           # separation among text and chr names and ind.        
-              orderBySize = FALSE,        # do not order chr. by size
-              karHeiSpace=1.6,             # vertical size of karyotype including spacer
-              chrSpacing=.6
+              chrSpacing=.6,              # separ. among chr.
+              distTextChr = .7,           # separation among text and chr. names and ind.        
+              orderChr = "name",        # order chr. by name
+              karHeiSpace=1.6             # vertical size of karyotype including spacer
               
               ,arrowhead = .5             # proportion of head of arrow
               
@@ -599,6 +602,7 @@ dev.off()
 
 ```{r, results="asis", comment=NA, echo=FALSE}
 cat(paste0("![](mydfChrSize2.png)" ) )
+# cat(paste0("![](mydfChrSize2.jpg)" ) )
 ```
   
 There is no need to add `dfMarkColor` and you can also use the parameter
@@ -1663,7 +1667,7 @@ plotIdiograms(dfChrSize=both,    # chr. sizes
               distTextChr = .8,          # distance from text to chr.
               
               markDistType="cen",        # mark position measured to center of mark
-              orderBySize = FALSE,       # do not order chr. by size
+              orderChr = "name",       # order chr. by name
               
               ruler=FALSE                # do not plot ruler
               
@@ -1725,7 +1729,7 @@ mergedChrSize<-plyr::rbind.fill(dfChrSizeHoloGroup,dfChrSizeHoloHetero)
 
 plotIdiograms(dfChrSize=mergedChrSize,      # data.frame of chr. sizes
               dfMarkPos=dfMarkPosHoloHetero,# d.f. of marks
-              orderBySize = FALSE,          # do not order chr. by size
+              orderChr = "name",          # order chr. by name
               karIndex = FALSE,             # do not add karyotype indices
               addOTUName = TRUE,            # add OTU name
               karHeiSpace = 4,              # height of kar. with spacing

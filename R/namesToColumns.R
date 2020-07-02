@@ -1,25 +1,50 @@
 #' FUNCTION that modifies marks' names into columns
 #'
-#' @description Reads a data.frame with marks' of styles \code{downArrow,upArrow,cM,cMLeft} positions. It separates names in columns, avoiding overlap when multiple close names
-#' @description Exceptionally this function requires the column style in the data.frame of marks' positions.
+#' @description Reads a data.frame with marks' of styles 
+#' \code{downArrow,upArrow,cM,cMLeft} 
+#' positions. It separates names in columns, avoiding overlap when multiple 
+#' close names
+#' @description Exceptionally this function requires the column style in the 
+#' data.frame of marks' 
+#' positions.
 #' @description Returns a data.frame
 #'
 #' @keywords data.frame marks
 #'
 #' @param marksDf data.frame with columns: \code{markName,style,markPos}
 #' @param dfChrSize data.frame, size of chr. Same of plot.
-#' @param markType character, use \code{c("downArrow","upArrow","cM","cMLeft")} or a subset
+#' @param markType character, use 
+#' \code{c("downArrow","upArrow","cM","cMLeft")} or a subset
 #' @param amountofSpaces numeric, number of spaces for each column
 #' @param colNumber numeric, number of columns
-#' @param protruding numeric, same as plot, minimal protruding for arrow marks, equivalent to cM protruding
-#' @param protrudingInt numeric, spacing of columns in terms of width of chr. percent 1 = 100%. Defaults to \code{0.5}
-#' @param circularPlot boolean, use \code{TRUE} for circular plots. Use \code{FALSE} otherwise
-#' @param rotation numeric, same as plot, anti-clockwise rotation, defaults to \code{0.5} which rotates chr. from top to -90 degrees. (-0.5*\eqn{\pi} )
-#' @param defaultStyleMark character, if some data in column style missing fill with this one. Defaults to \code{"square"}
+#' @param protruding numeric, same as plot, minimal protruding for arrow 
+#' marks, equivalent to cM 
+#' protruding
+#' @param protrudingInt numeric, spacing of columns in terms of width of chr. 
+#' percent 1 = 100%. 
+#' Defaults to \code{0.5}
+#' @param circularPlot boolean, use \code{TRUE} for circular plots. Use 
+#' \code{FALSE} otherwise
+#' @param rotation numeric, same as plot, anti-clockwise rotation, defaults to 
+#' \code{0.5} which 
+#' rotates chr. from top to -90 degrees. (-0.5*\eqn{\pi} )
+#' @param defaultStyleMark character, if some data in column style missing 
+#' fill with this one. 
+#' Defaults to \code{"square"}
 #' @param orderBySize boolean, use same as in plot. Defaults to \code{TRUE}
-#' @param halfModUp numeric, for circ. plots, when plotting several chromosomes in a circular plot, using a small value \code{0.05} corrects for alignment problems of \code{upArrows, cM} labels. Defaults to \code{NA}
-#' @param halfModDown numeric, for circ. plots, when plotting several chromosomes in a circular plot, using a small value \code{0.05} corrects for alignment problems of \code{downArrows, cMLeft} labels. Defaults to \code{NA}
-#' @param rotatMod numeric, for circ. plots, when rotation != 0 (diff.), corrects alignment of labels. Defaults to \code{0}
+#' @param halfModUp numeric, for circ. plots, when plotting several 
+#' chromosomes in a circular 
+#' plot, using a small value \code{0.05} corrects for alignment problems of 
+#' \code{upArrows, cM} 
+#' labels. Defaults to \code{NA}
+#' @param halfModDown numeric, for circ. plots, when plotting several 
+#' chromosomes in a circular 
+#' plot, using a small value \code{0.05} corrects for alignment problems of 
+#' \code{downArrows, 
+#' cMLeft} labels. Defaults to \code{NA}
+#' @param rotatMod numeric, for circ. plots, when rotation != 0 (diff.), 
+#' corrects alignment of 
+#' labels. Defaults to \code{0}
 #' @export
 #'
 #' @return data.frame

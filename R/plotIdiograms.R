@@ -18,21 +18,22 @@
 #' @param dfCenMarks data.frame, specific for centromeric marks. columns: \code{chrName}
 #'   and \code{markName}. See also \code{dfMarkPos} for another option to pass cen. marks
 #' @param dfMarkColor data.frame, optional, specifying colors and style for marks (sites);
-#'   columns: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: \code{square} or \code{dots} or \code{cM}.
-#'   (if column \code{style} missing all (except 5S) are plotted as in param. \code{defaultStyleMark}). \code{cM} introduced in 1.13
-#' @param mycolors character vector, optional, i.e. \code{c("blue","red","green")} for specifying color of marks in order of appearance. if diverges with number of marks will be recycled if \code{dfMarkColor} present, mycolors will be ignored. To know the
-#' order of your marks use something like: \code{unique(c(dfMarkPos$markName,dfCenMarks$markName) ) }
-#' @param addMissingOTUAfter character, when you want to add space (ghost OTUs) after one or several OTUs, pass the names of OTUs preceding the desired space in a character vector i.e. \code{c("species one","species five")}
+#'   columns: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: \code{square}, \code{dots}, \code{cM},
+#'    \code{"cMLeft"}, \code{"cenStyle"}, \code{"upArrow"}, \code{"downArrow"}.
+#'   (if column \code{style} missing all (except 5S) are plotted as in param. \code{defaultStyleMark}).
+#' @param mycolors character vector, optional, i.e. \code{c("blue",} \code{} \code{"red",} \code{} \code{"green")} for specifying color of marks in order of appearance. if diverges with number of marks will be recycled if \code{dfMarkColor} present, mycolors will be ignored. To know the order of your marks use something like: \code{unique(c(dfMarkPos$markName,} \code{dfCenMarks$markName) ) }
+#' @param addMissingOTUAfter character, when you want to add space (ghost OTUs) after one or several OTUs, pass the names of OTUs preceding the desired space in a character vector i.e. \code{c("species one",} \code{} \code{"species five")}
 #' @param missOTUspacings numeric, when you use \code{addMissingOTUAfter} this numeric vector should have the same length and corresponds to the number of free spaces (ghost OTUs) to add after each OTU respectively
-#' @param orderBySize logical value, when \code{TRUE}, sorts chromosomes by total
-#'   length from the largest to the smallest
+#' @param orderChr character, replaces \code{orderBySize - deprecated} when \code{"size"}, sorts chromosomes by total
+#'   length from the largest to the smallest. \code{"original"}: preserves d.f. order. \code{"name"}: sorts alphabetically; \code{"group"}: sorts by group name
 #' @param centromereSize numeric, optional, this establishes the apparent size of cen. in the plot in \eqn{\mu}m. Automatic when \code{NA}. Default: \code{NA}
 #' @param origin, For non-monocentric chr. (for holocentrics only) Use \code{"b"} (default) if distance to mark in (\code{"markPos"} column in \code{"dfMarkPos"}) data.frame measured from bottom of chromosome, use \code{"t"} for distance to mark from top of chr.
+#' @param efZero, numeric, numbers below this one will be considered as zero, for comparison purposes. Defaults to \code{1e-5}
 #' @param cMBeginCenter, boolean, start position of \code{cM} and \code{cMLeft} marks. If \code{TRUE}, starts in the center (width) of chr. . Defaults to \code{FALSE}
-#' @param arrowhead numeric, proportion of head of arrow (mark styles: \code{upArrow,downArrow}). Defaults to \code{0.3}
+#' @param arrowhead numeric, proportion of head of arrow (mark styles: \code{upArrow,} \code{} \code{downArrow}). Defaults to \code{0.3}
 #' @param shrinkArrow numeric, proportion, shrinks body of arrow. Defaults to \code{0.3333}
 #' @param arrowheadWidthShrink numeric, proportion, shrinks head of arrow. Defaults to \code{0.1}
-#' @param arrowsToSide boolean, when \code{FALSE} use a centered arrow, instead of an arrow next to chr. margins (\code{TRUE}, default)
+#' @param arrowsToSide boolean, when \code{FALSE} use a centered arrow, instead of an arrow next to chr. margins (\code{TRUE}, default). See \code{arrowsBothChrt}
 #' @param markDistType character, if \code{"cen"} = the distance you provided in data.frame (\code{dfMarkPos}) column \code{markDistCen}
 #' or \code{markPos}  is to the center of the mark, if \code{"beg"} = the distance you provided is to the
 #'   beginning of the mark (Default)
@@ -57,11 +58,12 @@
 #'   increase this and \code{karHeiSpace}
 #' @param chrId character, print name of chromosome, \code{"original"} uses the original
 #'   name in OTU column of dfChrSize, \code{"simple"} (just 1 to ...) or \code{""} (none).
+#' @param chrIdPatternRem character, regex pattern to remove from chr. names
 #' @param distTextChr numeric, distance from name of chromosome to chromosome,
 #'   also affects vertical separation of indices. Defaults to \code{1}
 #' @param groupUp boolean, when \code{TRUE} when groups present, they appear over the chr. name. Defaults to \code{FALSE}
 #' @param chromatids boolean, when \code{TRUE} shows separated chromatids. Defaults to \code{TRUE}
-#' @param arrowsBothChrt boolean, when \code{TRUE} (default) (for \code{chromatids=TRUE}) shows \code{upArrow, downArrow} styles of marks in both chromatids when \code{arrowsToSide=TRUE}.
+#' @param arrowsBothChrt boolean, when \code{TRUE} (default) (for \code{chromatids=TRUE}) shows \code{upArrow,} \code{} \code{ downArrow} styles of marks in both chromatids when \code{arrowsToSide=TRUE}.
 #' @param holocenNotAsChromatids boolean, when \code{TRUE} and \code{chromatids=TRUE} does not plot holocen kar. with chromatids. Defaults to \code{FALSE}. A value of \code{TRUE} modifies excHoloFrArrToSide to \code{TRUE} always.
 #' @param excHoloFrArrToSide boolean, when \code{arrowsToSide=TRUE}, excludes holocen. from this behaviour, plotting a centered arrow only.
 #' @param xModifier numeric, for \code{chromatids=TRUE}, separation among chromatids
@@ -75,7 +77,7 @@
 #' @param bannedMarkName character, character string or vector with mark names to be removed from plot. Not the marks but the labels.
 #' @param legendWidth numeric, factor to increase width of squares and of legend. Defaults to \code{1.7}
 #' @param legendHeight numeric, factor to increase height of squares and dots of legend. Automatic.
-#' @param defaultStyleMark character, default style of mark, only used when \code{style} column of \code{dfMarkColor} data.frame is missing or in absence of this data.frame. Use \code{"square"} (default) \code{"dots"} or \code{"cM"}. Introduced in 1.13
+#' @param defaultStyleMark character, default style of mark, only used when \code{style} column of \code{dfMarkColor} data.frame is missing or in absence of this data.frame. Use \code{"square"} (default), \code{"dots"}, \code{"cM"} \code{"cM"}, \code{"cMLeft"},\code{"cenStyle"}, \code{"upArrow"}, \code{"downArrow"}.
 #' @param colorBorderMark character, without default, pass a name of a color to use as border of marks. See \code{borderOfWhiteMarks}
 #' @param borderOfWhiteMarks boolean, if \code{TRUE} (Default) uses black border for white marks. See \code{dfMarkColor}. Does not apply to marks with style \code{cenStyle}
 #' @param lwd.mimicCen thickness of lines of \code{cenStyle} marks; affects only lateral borders. Defaults to \code{lwd.chr}
@@ -93,7 +95,9 @@
 #'   centromere pos.) and A2 (interchromosomal asymmetry, variation among
 #'   chromosome sizes)
 #' @param karIndexPos numeric, move karyotype index
-#' @param notesPos numeric, move notes to the right
+#' @param notesLeft boolean, position of notes starting at left side, \code{FALSE} (default)
+#' @param notesPos numeric, move notes to the right or left (x axis)
+#' @param notesPosY numeric, move notes to the down or up (y axis)
 #' @param morpho character, if \code{"both"} (default) prints the Guerra and Levan classif of cen. position, use also \code{"Guerra"} or  \code{"Levan"} or \code{""} for none. See also \code{?armRatioCI}.
 #' @param addOTUName boolean, if \code{TRUE} adds OTU (species) name to karyotype
 #' @param OTUfont numeric, \code{1} for normal,  \code{2} for bold,  \code{3} for italics,  \code{4} for bold-italics
@@ -128,7 +132,7 @@
 #' @param threshold, this is the max. value allowed for the main two significative digits, otherwise scale will shrink. For example, after 35 \eqn{\mu m} (Default), apparent size will be 3.5 and scale interval will change. See also \code{ceilingFactor}, you may have to use \code{-1}. Introduced in 1.13
 #' @param MbUnit, character, text of units of title when \code{MbThreshold} met and OTU not in \code{specialOTUNames}. See \code{specialyTitle}
 #' Defaults to \code{"Mb"}, but anything can be used. Introduced in 1.13. See \code{specialyTitle}
-#' @param ylabline, numeric, modify position of ruler title. See \code{yTitle, specialyTitle, MbUnit}
+#' @param ylabline, numeric, modify position of ruler title. See \code{yTitle,} \code{} \code{ specialyTitle,} \code{} \code{ MbUnit}
 #' @param rulerTitleSize, numeric font size of units of ruler. See also \code{ylabline}
 #' @param n, numeric vertices number for round corners
 #' @param notes, data.frame, optional, with columns \code{OTU} and \code{note} for adding notes to each OTU, they appear to the right of chromosomes
@@ -192,7 +196,10 @@ plotIdiograms <- function(dfChrSize, # karyotype
   karSepar=TRUE,amoSepar=9,
   addMissingOTUAfter=NA,missOTUspacings=0,
   n=50,
-  notes, notesTextSize=.4, notesPos=.5,
+  notes, notesTextSize=.4,
+  notesLeft=FALSE,
+  notesPos=.5,
+  notesPosY=0,
   propWidth=FALSE,
 
   # Units
@@ -213,9 +220,9 @@ plotIdiograms <- function(dfChrSize, # karyotype
   OTUasNote=FALSE,
 
   # chromosomes
-  orderBySize=TRUE,
-  # orderBySize=FALSE,
+  orderChr="size",
   chrId="original",
+  chrIdPatternRem,
   # chrId="simple",
   indexIdTextSize=1,
   distTextChr=1,
@@ -250,6 +257,7 @@ plotIdiograms <- function(dfChrSize, # karyotype
   protruding=0.2,
   # markDistType="cen",
   origin="b",
+  efZero=1e-5,
   # origin="t",
   cMBeginCenter=FALSE,
   arrowhead = .3,
@@ -509,8 +517,6 @@ listOfdfChromSize<-dfToListColumn(dfChrSizeInternal)
   #
   #   reconstitute dfChrSizeInternal OTU
   #
-
-# dfChrSizeInternal <- dplyr::bind_rows(listOfdfChromSize, .id = "OTU")
 
   #
   #   Classify data.frames from list as monocen or holocen Add attribute cenType
@@ -994,11 +1000,13 @@ is.na(listOfdfMarkPosMonocen[[i]]$markDistCen)
       else { # if no error
         message(crayon::black(paste("\nOK marks of OTU",names(listOfdfMarkPosHolocen)[[i]],"checked \n")
         ) ) #m
-
+        if(any(is.na(listOfdfMarkPosHolocen[[i]]$markPos))){
+          message(crayon::blue(paste("\nholocen. mark(s) without pos. might get unexpected results\n")
+          ))
+        }
         if(origin=="t"){
           listOfdfMarkPosHolocen[[i]]$markPos2<-listOfdfMarkPosHolocen[[i]]$markPos
           listOfdfMarkPosHolocen[[i]]$chrSize<-
-            #
             dfChrSizeInternal[match(interaction( listOfdfMarkPosHolocen[[i]][c("OTU", "chrName")]),
                                     interaction( dfChrSizeInternal[c("OTU", "chrName")] )
                                     ),]$chrSize
@@ -1116,7 +1124,10 @@ is.na(listOfdfMarkPosMonocen[[i]]$markDistCen)
   #
 
   if(exists("listOfdfMarkPosMonocen") ) {
+#    # listOfdfChromSize1120<<-listOfdfChromSize
+#    # listOfdfMarkPosMonocen1121<<-listOfdfMarkPosMonocen
     listOfChecksChr<-checkNameChrDfMarks(listOfdfChromSize,listOfdfMarkPosMonocen)
+#    # listOfChecksChr123<<-listOfChecksChr
     listOfdfChromSize<-listOfChecksChr[[1]]
     listOfdfMarkPosMonocen<-listOfChecksChr[[2]]
 
@@ -1241,9 +1252,10 @@ is.na(listOfdfMarkPosMonocen[[i]]$markDistCen)
       tryCatch(dfMarkColorInternal[which(is.na(dfMarkColorInternal$markColor) &
                      dfMarkColorInternal$style %in% "cenStyle"),]$markColor<-chrColor,
                error= function (e) NA )
-#      dfMarkColorInternal1218<<-dfMarkColorInternal
+#     dfMarkColorInternal1245<<-dfMarkColorInternal
 
       if(exists("allMarkNames")) {
+#        # allMarkNames1248<<-allMarkNames
         dfMarkColorInternal <- dfMarkColorInternal[which(dfMarkColorInternal$markName %in% allMarkNames) ,]
         if (nrow(dfMarkColorInternal)==0){
           message(crayon::red("\nError in dfMarkColor markNames respect to Marks pos. data.frames, dfMarkColor REMOVED\n")
@@ -1402,11 +1414,6 @@ is.na(listOfdfMarkPosMonocen[[i]]$markDistCen)
 
     } # for each monocen
 
-#    listOfdfMarkPosMonocen1376<<-listOfdfMarkPosMonocen
-#    listOfdfMarkPosMonocenArrowsLabels1 <<- listOfdfMarkPosMonocenArrowsLabels
-#    listOfdfMarkPosMonocen1 <<- listOfdfMarkPosMonocen
-
-
   } # fi exists monocen
 
   if(exists("listOfdfMarkPosHolocen") & exists("dfMarkColorInternal")  ) {
@@ -1558,12 +1565,19 @@ is.na(listOfdfMarkPosMonocen[[i]]$markDistCen)
   # order by size
   ##############################################################################
   #{ ord. chunk
-    if(orderBySize==TRUE) {
+    if(orderChr=="size") {
         orderlist<-lapply(totalLength, function(x) order(x, decreasing = TRUE) )
-    } else { # if not want to order by size, set order by name of chro
+    } else if(orderChr=="name"){
         orderlist<-lapply(listOfdfChromSize, function(x) tryCatch(order(x$chrName), error=function(e) NA ) )
-    } #else
-
+    } else if(orderChr=="original" | orderChr=="group") {
+        orderlist<-lapply(listOfdfChromSize, function(x) tryCatch(1:max(order(x$chrName) ), error=function(e) NA ) )
+    }
+  # else if(orderChr=="group") {
+        # orderlist<-lapply(listOfdfChromSize, function(x) tryCatch(1:max(order(x$group) ), error=function(e) {
+        # message("to order by group you need the group column")
+        # } )
+      # )
+    # }
     ##################################################
     #
     #   add column of new chro index to data.frames
@@ -1580,15 +1594,19 @@ is.na(listOfdfMarkPosMonocen[[i]]$markDistCen)
       message(crayon::blue("group column present - remove column if not using") )
       grouporderlist<-lapply(listOfdfChromSize, function(x) tryCatch(order(x$group), error=function(e) NA ) )
 
+      if(orderChr=="group") {
+
       for (s in 1:length(listOfdfChromSize)){
         if(class(listOfdfChromSize[[s]])=="data.frame") {
         listOfdfChromSize[[s]]<-listOfdfChromSize[[s]][grouporderlist[[s]], ]
         listOfdfChromSize[[s]]$neworder<-1:nrow(listOfdfChromSize[[s]])
         } #fi
       } # end for
-      # )
-      orderlist<-grouporderlist
-    } # if group
+
+      # orderlist<-grouporderlist
+
+      }
+    } # if group colname
 
     ##
     # order by group and chromosome
@@ -1697,12 +1715,27 @@ for (s in 1:num_species) {
 
       for (i in 1:length(armRepVector[[s]])){
         crox[i,] <- c(
-          rep( ( (chrSpacing2 * (i-0) + ( (i-0) * chrWidth2) ) + chrWidth2),2),
-          rep( ( (chrSpacing2 * (i-0) + ( (i-0) * chrWidth2) )     ),2)
+          rep( ( (chrSpacing2 * i + ( i * chrWidth2) ) + chrWidth2),2),
+          rep( ( (chrSpacing2 * i + ( i * chrWidth2) )  ),2)
         ) # c rox
       } # for
 
+      if(circularPlot==FALSE & "group" %in% colnames(listOfdfChromSize[[s]])  ){
+        lens <- rle(listOfdfChromSize[[s]]$group)$lengths
+        names(lens)<-rle(listOfdfChromSize[[s]]$group)$values
+#        lens1715<<-lens
+        clens<-cumsum(lens)
+        # groupSepar=.5
+#        crox1718<<-crox
+        if(length(clens)>1 ){
+          for (i in 1:(length(clens)-1) ){
+            crox[ (clens[[i]]+1):nrow(crox),] <-crox[ (clens[[i]]+1)  :nrow(crox),] + chrWidth2
+          }
+        }
+      }
+
       xm[[s]] <- rbind(crox,crox)
+
       x[[s]]  <- base::split(xm[[s]], row(xm[[s]]))
 
       ifelse(any(is.na(x[[s]]) ), x[[s]]<-NA,"") # ifelseinloop
@@ -1732,17 +1765,30 @@ for (s in 1:num_species) {
         ),error=function(e) NA)  # list
       } # for
 
-      crox<-matrix(rep(NA,length(chromRepVector[[s]])*4),ncol=4, nrow=length(chromRepVector[[s]]) )
+      crox <- matrix(rep(NA,length(chromRepVector[[s]])*4),ncol=4, nrow=length(chromRepVector[[s]]) )
 
       for (i in 1:length(chromRepVector[[s]])){
         crox[i,] <- c(
-                      rep( ( (chrSpacing2*(i-0)+((i-0)*chrWidth2))+chrWidth2),2),
-                      rep( ( (chrSpacing2*(i-0)+((i-0)*chrWidth2))     ),2)
+                      rep( ( (chrSpacing2*i+( i*chrWidth2))+chrWidth2),2),
+                      rep( ( (chrSpacing2*i+( i*chrWidth2))     ),2)
                     ) # c rox
       } # for
 
+      if(circularPlot==FALSE & "group" %in% colnames(listOfdfChromSize[[s]])  ){
+        lens <- rle(listOfdfChromSize[[s]]$group)$lengths
+        names(lens)<-rle(listOfdfChromSize[[s]]$group)$values
+
+        clens<-cumsum(lens)
+        # groupSepar=.5
+        if(length(clens)>1 ){
+          for (i in 1:(length(clens)-1) ){
+            crox[ (clens[[i]]+1):nrow(crox),] <-crox[ (clens[[i]]+1)  :nrow(crox),] + chrWidth2
+          }
+        }
+      }
+
       xm[[s]] <- crox
-      x[[s]] <- base::split(xm[[s]], row(xm[[s]]))
+      x[[s]]  <- base::split(xm[[s]], row(xm[[s]]))
       ifelse(any(is.na(x[[s]]) ),x[[s]]<-NA,"") # ifelseinloop
 
       # listOfdfChromSize[[s]]<-x[[s]]
@@ -2849,9 +2895,11 @@ if(circularPlot==FALSE){
 
  }   # end rulers if
 } # END     not    circular ruler
+
   #
-  #   groups line > 1.1.0
+  #   groups line
   #
+
 if(circularPlot==FALSE){
     if("group" %in% colnames(dfChrSizeInternal)){
 
@@ -2863,27 +2911,54 @@ if(circularPlot==FALSE){
       } else {
         chrWidth2<-chrWidth
       }
-      ngroup<-length(table(listOfdfChromSizenoNA[[s]]$group ) )
+
+      # allowing not organized groups
+      lens <- rle(listOfdfChromSizenoNA[[s]]$group)$lengths
+      names(lens)<-rle(listOfdfChromSizenoNA[[s]]$group)$values
+#      lens2879<<-lens
+
+      # ngroup<-length(table(listOfdfChromSizenoNA[[s]]$group ) )
+      ngroup<-length(lens)
       attr(listOfdfChromSizenoNA[[s]],"groupPresence") <- ngroup
-      for (g in 1: ngroup){
-        x0= xmnoNA[[s]][,3][ifelse(length(cumsum(table(listOfdfChromSizenoNA[[s]]$group))[g-1] )==0, # ifelseinloop
+#      xmnoNA2883<<-xmnoNA
+#      listOfdfChromSizenoNA2884<<-listOfdfChromSizenoNA
+
+      for (g in 1: ngroup) {
+        if(!is.na(names(lens)[g] ) ) {
+        # x0= xmnoNA[[s]][,3][ifelse(length(cumsum(table(listOfdfChromSizenoNA[[s]]$group))[g-1] )==0, # ifelseinloop
+        x0 <- xmnoNA[[s]][,3][ifelse(length(cumsum(lens)[g-1] )==0, # ifelseinloop
                                1,
-                               cumsum(table(listOfdfChromSizenoNA[[s]]$group) )[g-1]+1
-        )]
-        x1= xmnoNA[[s]][,3][cumsum(table(listOfdfChromSizenoNA[[s]]$group) )[g] ] + chrWidth2
-      segments(x0=x0,
-               y0=(min(ymnoNA[[s]])-((distTextChr/3)*groupSegmentDistance)),
-               x1=x1,
-               y1=(min(ymnoNA[[s]])-((distTextChr/3)*groupSegmentDistance) )
-      ) # seg
+                               # cumsum(table(listOfdfChromSizenoNA[[s]]$group) )[g-1]+1
+                               cumsum(lens )[g-1]+1
+        ) ]
+        x0 <- x0[!is.na(names(lens)[g])]
+        # x1= xmnoNA[[s]][,3][cumsum(table(listOfdfChromSizenoNA[[s]]$group) )[g] ] + chrWidth2
+        x1 <- xmnoNA[[s]][,3][cumsum(lens )[g] ] + chrWidth2
+        x1 <- x1[!is.na(names(lens)[g] ) ]
+
+        y01 <- min(ymnoNA[[s]]) - ((distTextChr/3)*groupSegmentDistance)
+        y01 <- y01[!is.na(names(lens)[g] ) ]
+
+        segments(x0=x0,
+                 # y0= min(ymnoNA[[s]]) - ((distTextChr/3)*groupSegmentDistance),
+                 y0=y01,
+                 x1=x1,
+                 y1=y01#(min(ymnoNA[[s]])-((distTextChr/3)*groupSegmentDistance) )
+        ) # seg
       ########################
-      #     group name, after 1.1.0
-      ########################3
-      text( (x0+x1)/2,
-            min(ymnoNA[[s]]) - ( ( (distTextChr/3)* groupSegmentDistance ) + (distTextChr/3) ),
-           labels = names( table(listOfdfChromSizenoNA[[s]]$group)[g] ),
-           cex=indexIdTextSize
-      )# text end
+      #     group name
+      ########################
+
+          ytext <- min(ymnoNA[[s]]) - ( ( (distTextChr/3)* groupSegmentDistance ) + (distTextChr/3) )
+          text( (x0+x1)/2,
+                ytext,
+                # min(ymnoNA[[s]]) - ( ( (distTextChr/3)* groupSegmentDistance ) + (distTextChr/3) ) ,
+                labels = names( lens[g] ),
+                # labels = names( table(listOfdfChromSizenoNA[[s]]$group)[g] ),
+               cex=indexIdTextSize
+          ) # text end
+        } # if not NA
+
       } # for group
     } # for sp
   } # if group column
@@ -2892,49 +2967,87 @@ if(circularPlot==FALSE){
 
 
   ###################################################################################################################
-  #                                                    chromosome names
+  #                                                    chromosome names non-Circular
   ###################################################################################################################
+
   chrNameDistance <-1
   # original
   if(circularPlot==FALSE){
-  if(chrId=="original"){
+
+    if(chrId=="original" | chrId=="simple"){
+
+
+
       for (s in 1:length(xmnoNA)){
+
         if(attr(xmnoNA[[s]],"cenType")=="monocen") {armFactor<-2} else {armFactor<-1}
+
+        if(chrId=="original"){
+          mylabels<-listOfdfChromSizenoNA[[s]][,"chrName"]
+
+          if(!missing(chrIdPatternRem)){
+            mylabels<- sub(chrIdPatternRem,"",mylabels )
+          }
+
+        } else if (chrId=="simple"){
+          mylabels <- 1:(nrow(xmnoNA[[s]])/armFactor)
+        }
+
         if(attr(listOfdfChromSizenoNA[[s]],"ytitle")=="cM"){
           chrWidth2  <-specialChrWidth
         } else {
           chrWidth2<-chrWidth
         }
+
         if(as.numeric(attr(listOfdfChromSizenoNA[[s]],"groupPresence") ) > 0 & groupUp ) {groupCount=2   } else{groupCount=0}
 
-      graphics::text(xmnoNA[[s]][,3][1:(nrow(xmnoNA[[s]])/armFactor)]+chrWidth2/2,
-                     rep( (min(ymnoNA[[s]])-(distTextChr/3) * (chrNameDistance + groupCount) ),(nrow(xmnoNA[[s]])/armFactor) ),
-                     # labels = listOfdfChromSize[[s]][,"chrName"][orderlist[[s]]],
-                     labels = listOfdfChromSizenoNA[[s]][,"chrName"],
 
-                     cex=indexIdTextSize
-      ) # end graphics::text
-      } # for
-  } # fi original
-  else if (chrId=="simple"){
-    # Simple numbering from 1 to ...
-      for (s in 1:length(xmnoNA)){
-        if(attr(xmnoNA[[s]],"cenType")=="monocen") {armFactor<-2} else {armFactor<-1}
-        if(attr(listOfdfChromSizenoNA[[s]],"ytitle")=="cM"){
-          chrWidth2  <-specialChrWidth
-        } else {
-          chrWidth2<-chrWidth
-        }
-        if(as.numeric(attr(listOfdfChromSizenoNA[[s]],"groupPresence") ) > 0 & groupUp ) {groupCount=2   } else{groupCount=0}
+        ybasic <- min(ymnoNA[[s]]) - (distTextChr/3) * (chrNameDistance + groupCount)
 
-        graphics::text(xmnoNA[[s]][,3][1:(nrow(xmnoNA[[s]])/armFactor)]+chrWidth2/2,
-                     rep( (min(ymnoNA[[s]])-(distTextChr/3)* ( chrNameDistance + groupCount) ),(nrow(xmnoNA[[s]])/armFactor) ),
-                     # rep( (min(ymnoNA[[s]])-.1),(nrow(xmnoNA[[s]])/2) ),
-                     labels = 1:(nrow(xmnoNA[[s]])/armFactor),
-                     cex=indexIdTextSize
-      ) # t
+        for( lab in 1:length(mylabels) ) {
+
+          # common  <- mylabels[lab][which(!mylabels[lab] %in% grep("FL0|FL+", mylabels[lab], value=TRUE) )]
+
+          uncommon<- mylabels[lab][which( mylabels[lab] %in% grep("FL0|FL+", mylabels[lab], value=TRUE) )]
+
+          if(length(uncommon)==1) {
+
+          splUncommon<-strsplit(uncommon,"")
+
+            splUncommon1<-splUncommon[[1]]
+            first<-splUncommon1[1]
+            sec  <-splUncommon1[2]
+            third<-splUncommon1[3]
+
+            graphics::text(xmnoNA[[s]][,3][lab] + chrWidth2/2 ,
+                           ybasic  ,
+                           labels = bquote(paste(
+                             .(first)[.(sec)]^.(third) )
+                           ),
+                           cex=indexIdTextSize
+            ) # text
+
+          } else {
+            # text(0.2, 0.6, cex = 1.5, mytext)
+            graphics::text(xmnoNA[[s]][,3][lab] + chrWidth2/2,
+                           ybasic ,
+                           labels = mylabels[lab],
+                           cex=indexIdTextSize
+            )
+          }
+        } # for mylabels[lab]
+
+        # graphics::text(xmnoNA[[s]][,3][1:(nrow(xmnoNA[[s]])/armFactor)]+chrWidth2/2,
+        #                rep( (min(ymnoNA[[s]])-(distTextChr/3) * (chrNameDistance + groupCount) ),(nrow(xmnoNA[[s]])/armFactor) ),
+        #                labels = labels,
+        #
+        #                cex=indexIdTextSize
+        # ) # end graphics::text
+
       } # for
-  } # elif simple
+
+    } # if chrId
+
 } # end names CIRCULAR FALSE
 
   #################################
@@ -3081,6 +3194,7 @@ if(circularPlot==FALSE){
 #################################
 # karyotype index (left side)
 #################################
+
 if(circularPlot==FALSE){
   if(karIndex){
     # message(crayon::green(paste0("karyotype indices section start" ) ) )
@@ -3099,13 +3213,15 @@ if(circularPlot==FALSE){
         }
 
         if(!is.null(ind)){
-            graphics::text( c( (xmnoNA[[i]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),
+            graphics::text( c( (xmnoNA[[i]][1,3]-(1*(karIndexPos/2) ) ) ),
+                            # c( (xmnoNA[[i]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),
+
                             rep( min(ymnoNA[[i]][,1]), 1 ), #2
                             labels = paste("A ",ind$A ),
                             cex=indexIdTextSize,
                             adj=c(1) # justif
             ) # end graphics::text
-            graphics::text(c( (xmnoNA[[i]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),
+            graphics::text(c( (xmnoNA[[i]][1,3]-(1*(karIndexPos/2) ) ) ),
                            rep( (min(ymnoNA[[i]][,1])-(distTextChr/3) ) , 1 ), # avoid overlap
                            labels = paste("A2",ind$A2 ),
                            cex=indexIdTextSize,
@@ -3122,7 +3238,7 @@ if(circularPlot==FALSE){
         }
         ind<-asymmetryA2(listOfdfChromSizenoNA[[i]])
         if(!is.null(ind)){
-        graphics::text(c( (xmnoNA[[i]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),
+        graphics::text(c( (xmnoNA[[i]][1,3]-(1*(karIndexPos/2) ) ) ), # xlimLeftMod
                        (max(ymnoNA[[i]]) + min(ymnoNA[[i]]) ) /2 #(distTextChr/3)   #[,1]  was /3
                        ,labels = ifelse(ind$A2=="NA","",paste("A2",ind$A2 ) ),
                        cex=indexIdTextSize,
@@ -3137,6 +3253,7 @@ if(circularPlot==FALSE){
   #########################################################################
   # add species names
   #########################################################################
+
 if (circularPlot==FALSE){
 if(OTUasNote){
     addOTUName<-FALSE
@@ -3167,7 +3284,7 @@ if(addOTUName){
         holocenDisCount <- 0
       } # ifelse holocen
 
-      graphics::text( c( (xmnoNA[[s]][1,3]-(xlimLeftMod*(karIndexPos/2) ) ) ),
+      graphics::text( c( (xmnoNA[[s]][1,3]-(1*(karIndexPos/2) ) ) ), # xlimLeftMod
                       ydistance <- (min(ymnoNA[[s]]) - ((distTextChr/3) * (chrIdCount + morphoCount2 + indexCount2 + groupCount + 3 - holocenDisCount) ) ),
                       # distVector[decVector] ),
                       labels = paste("",names(listOfdfChromSizenoNA)[[s]] ),
@@ -3185,9 +3302,6 @@ if(addOTUName){
                                                 ##########################
                                                 #       MARKS            #
                                                 ##########################
-
-
-
 
       ##########################################################################################################3
       #
@@ -3212,6 +3326,8 @@ if(addOTUName){
         }
 
         if(length(listOfdfMarkPosSq)>0){
+#          ym3213<<-ym
+#         # listOfdfMarkPosSq3208<<-listOfdfMarkPosSq
           for (sm in 1:length(listOfdfMarkPosSq)) {
             yMark1<-NULL
             xMark1<-NULL
@@ -3222,20 +3338,53 @@ if(addOTUName){
             for (m in 1:nrow(listOfdfMarkPosSq[[sm]]) ){
               ifelse(listOfdfMarkPosSq[[sm]][m,"chrRegion"]=="q",longORshort<- 0,longORshort<- 1) # ifelseinloop
               ifelse(listOfdfMarkPosSq[[sm]][m,"chrRegion"]=="q",column<- 1, column<- 2)
+              ifelse(listOfdfMarkPosSq[[sm]][m,"chrRegion"]=="q",endColumn<- 2, endColumn<- 1)
+              ifelse(listOfdfMarkPosSq[[sm]][m,"chrRegion"]=="q",whichArm<- "long", whichArm<- "short")
+
+
               ifelse(listOfdfMarkPosSq[[sm]][m,"chrRegion"]=="q",mySign<- -1,mySign<- 1)
-              rowIndex<- nrow(listOfdfChromSize[[corr_index]] ) * longORshort + (listOfdfMarkPosSq[[sm]][,"neworder"][m])
+              rowIndex <- nrow(listOfdfChromSize[[corr_index]] ) * longORshort + (listOfdfMarkPosSq[[sm]][,"neworder"][m] )
+
               armStart<-ym[[corr_index]][rowIndex,column]
+              armEnd  <-ym[[corr_index]][rowIndex,endColumn]
+#              armStart3228<<-armStart
+#              armEnd3229<<-armEnd
+              armLength <- max(armStart,armEnd) - min(armStart,armEnd)
+#              armLength3231<<-armLength
+              # detect if whole arm
+              mSize <- listOfdfMarkPosSq[[sm]][m,"markSize"]*normalizeToOne
+
+              if(is.na(mSize)) {
+                message(crayon::blue(paste0("you let square marks without size in a monocen. while using markDistCen (not NA)\n, maybe you want to mark all arm, use NA in markDistCen and use p|q|w in chrRegion. Now 0 will be used" ) ) )
+                # listOfdfMarkPosSq[[sm]][m,"markSize"]<-0
+                mSize<-0
+              }
+
+              # mSize <- listOfdfMarkPosSq[[sm]][m,"markSize"]*normalizeToOne
+
+#              mSize3234<<-mSize
+
+              if(abs(sum(armLength, - mSize) ) < efZero ) {
+                wholeArm <- 'true'
+              } else {
+                wholeArm <- 'false'
+              }
+              #
+
               yprox <- armStart +
                 (listOfdfMarkPosSq[[sm]][m,"markDistCen"]                                                             *normalizeToOne*mySign)
 
               yter <- armStart +
                 ( sum( listOfdfMarkPosSq[[sm]][m,"markDistCen"] , listOfdfMarkPosSq[[sm]][m,"markSize"], na.rm=TRUE ) *normalizeToOne*mySign )
 
-              yMark1[[m]]<-if(longORshort==0) {c(yprox,yter,yter,yprox)} else {c(yter,yprox,yprox,yter)}
+              yMark1[[m]] <- if(longORshort==0) {c(yprox,yter,yter,yprox)} else {c(yter,yprox,yprox,yter)}
 
-              attr(yMark1[[m]],"arm")<-listOfdfMarkPosSq[[sm]][m,"chrRegion"]
+              attr(yMark1[[m]],"arm") <- listOfdfMarkPosSq[[sm]][m,"chrRegion"]
+
               # attr(yMark1[[m]],"armStart")<-armStart
               attr(yMark1[[m]],"rowIndex")<-rowIndex
+              attr(yMark1[[m]],"wholeArm")<-wholeArm
+              attr(yMark1[[m]],"whichArm")<-whichArm
 
               xMark1[[m]]<-xm[[corr_index]][listOfdfMarkPosSq[[sm]][,"neworder"][m],]
               attr(xMark1[[m]],"rowIndex")<-rowIndex
@@ -3246,7 +3395,8 @@ if(addOTUName){
             xMarkSq[[sm]]<-xMark1
             attr(xMarkSq[[sm]], "spname")<-names(listOfdfMarkPosSq)[[sm]]
           } # end for
-
+#          yMarkSq3278<<-yMarkSq
+#          xMarkSq3278<<-xMarkSq
           # markList<-addChrNameAttrMark(xMarkSq,yMarkSq,x)
           #
           # xMarkSq<-markList$xMark
@@ -3327,6 +3477,27 @@ if(addOTUName){
             for (m in 1:nrow(listOfdfMarkPosSq[[sm]])){
               rowIndex<-(listOfdfMarkPosSq[[sm]][,"neworder"][m])
               chrStart<-ym[[corr_index]][rowIndex ,2]
+
+              if(!"markSize" %in% colnames(listOfdfMarkPosSq[[sm]])){
+                listOfdfMarkPosSq[[sm]]$markSize<-NA
+              }
+              if(!"markPos" %in% colnames(listOfdfMarkPosSq[[sm]])){
+                listOfdfMarkPosSq[[sm]]$markPos<-NA
+              }
+              mSize<-mPos<-NULL
+              mSize <- listOfdfMarkPosSq[[sm]][m,"markSize"]*normalizeToOne
+              mPos <- listOfdfMarkPosSq[[sm]][m,"markPos"]
+
+              if(is.na(mSize) ){
+                message(crayon::blue(paste0("mark without size, unexpected results possible")))
+              }
+              if(is.na(mSize) & is.na(mPos ) ) {
+                message(crayon::blue(paste0("\nyou let square marks without size nor pos. in holocen. Will use 0 as size\nand pos. maybe you want to add column chrRegion with w for whole chr. mark" ) )
+                        )
+                listOfdfMarkPosSq[[sm]][m,"markPos"] <-0
+                listOfdfMarkPosSq[[sm]][m,"markSize"]<-0
+              }
+
               yinf <- chrStart +                        # was ysup
                 (listOfdfMarkPosSq[[sm]][m,"markPos"]                                                          *normalizeToOne)
 
@@ -3335,6 +3506,7 @@ if(addOTUName){
 
               yMark1[[m]]<-c(ysup,yinf,yinf,ysup)
               attr(yMark1[[m]],"rowIndex")<-rowIndex
+              attr(yMark1[[m]],"wholeArm")<-'false' # this is to plot as mark not as arm see monocen.
 
               xMark1[[m]]<-xm[[corr_index]][listOfdfMarkPosSq[[sm]][,"neworder"][m],]
               attr(xMark1[[m]],"rowIndex")<-rowIndex
@@ -5692,12 +5864,6 @@ if(roundedCen){
                                                     #   marks CENTROMERE
                                                     #####################
 
-#    xMarkCenI<<-xMarkCen
-#    yMarkCen<<-yMarkCen
-
-#    dfMarkColorInternalI<<-dfMarkColorInternal
-#    fixCenBorder2I<<-fixCenBorder2
-
     if(circularPlot) {
 
       if (roundedCen==FALSE){
@@ -5875,40 +6041,101 @@ if(circularPlot==FALSE){
     } else {
       for (i in 1:length(listOfdfChromSizenoNA) ) {
         if(attr(listOfdfChromSizenoNA[[i]],"cenType")=="monocen"){
-          note<-notes[which(notes$OTU %in% names(listOfdfChromSizenoNA)[i] ), ]$note
-          if(!is.null(note) & length(note)>0 ){
-            graphics::text(
-              max(xmnoNA[[i]]) + (xlimLeftMod*(notesPos/2) )
-              ,min(ymnoNA[[i]][,1])
-              ,labels = paste(note ),
-              cex=notesTextSize,
-              adj=0
-              ,font=  ifelse(OTUasNote,ifelse( !missing(OTUfont),    OTUfont,   1),1),
-              family=ifelse(OTUasNote,ifelse( !missing(OTUfamily),  OTUfamily, defaultFontFamily2),defaultFontFamily2) # justif
-            ) # end graphics::text
+            yposNote<-min(ymnoNA[[i]][,1])
+        } else {
+            yposNote<-(max(ymnoNA[[i]]) + min(ymnoNA[[i]]) ) /2
+        }
+
+        if(notesLeft){
+          xposNote<-min(xmnoNA[[i]]) + (1*(notesPos/2) )
+        } else {
+          xposNote<-max(xmnoNA[[i]]) + (1*(notesPos/2) )
+        }
+
+        note <- notes[which(notes$OTU %in% names(listOfdfChromSizenoNA)[i] ), ]$note
+
+        if(!is.null(note) & length(note)>0 ) {
+
+            spl<-unlist(strsplit(note,"\\s\\+\\s") )
+
+            common<-spl[which(!spl %in% grep("FL0|FL+", spl, value=TRUE) )]
+
+            uncommon<-spl[which(spl %in% grep("FL0|FL+", spl, value=TRUE) )]
+
+            splUncommon<-strsplit(uncommon,"")
+
+            if(length(splUncommon)==1){
+              splUncommon1<-splUncommon[[1]]
+              first<-splUncommon1[1]
+              sec  <-splUncommon1[2]
+              third<-splUncommon1[3]
+              forth<-splUncommon1[4]
+
+              graphics::text(
+                xposNote# xlimLeftMod
+                ,yposNote + notesPosY/2
+                ,labels = bquote(paste(.(paste(common,"+", collapse=" ") )," ",
+                                       .(first),.(sec)[.(third)]^.(forth) )
+
+                ),
+                cex=notesTextSize,
+                adj=0
+                ,font =  ifelse(OTUasNote,ifelse( !missing(OTUfont),    OTUfont,   1),1),
+                family = ifelse(OTUasNote,ifelse( !missing(OTUfamily),  OTUfamily, defaultFontFamily2),defaultFontFamily2) # justif
+              ) # end graphics::text
+
+
+            } else if (length(splUncommon)==2) {
+              splUncommon1<-splUncommon[[1]]
+              first<-splUncommon1[1]
+              sec  <-splUncommon1[2]
+              third<-splUncommon1[3]
+              forth<-splUncommon1[4]
+              splUncommon2<-splUncommon[[2]]
+              first2<-splUncommon2[1]
+              sec2  <-splUncommon2[2]
+              third2<-splUncommon2[3]
+              forth2<-splUncommon2[4]
+
+              graphics::text(
+                # max(xmnoNA[[i]]) + (1*(notesPos/2) )
+                xposNote
+                ,yposNote + notesPosY/2
+                ,labels = bquote(paste(.(paste(common,"+", collapse=" ") )," ",
+                                       .(first),.(sec)[.(third)]^.(forth)  ,
+                                       " + ",
+                                       .(first2),.(sec2)[.(third2)]^.(forth2)
+                )
+                ),
+                cex=notesTextSize,
+                adj=0
+                ,font =  ifelse(OTUasNote,ifelse( !missing(OTUfont),    OTUfont,   1),1),
+                family = ifelse(OTUasNote,ifelse( !missing(OTUfamily),  OTUfamily, defaultFontFamily2),defaultFontFamily2) # justif
+              ) # end graphics::text
+
+            } else {
+              # text(0.2, 0.6, cex = 1.5, mytext)
+              graphics::text(
+                # max(xmnoNA[[i]]) + (1*(notesPos/2) )
+                xposNote
+                ,yposNote + notesPosY/2
+                ,labels = paste(note ),
+                cex=notesTextSize,
+                adj=0
+                ,font=  ifelse(OTUasNote,ifelse( !missing(OTUfont),    OTUfont,   1),1),
+                family = ifelse(OTUasNote,ifelse( !missing(OTUfamily),  OTUfamily, defaultFontFamily2),defaultFontFamily2) # justif
+              ) # end graphics::text
+            }
+            #
+
           } # null
 
-        } # if monocen
-        else if(attr(listOfdfChromSizenoNA[[i]],"cenType")=="holocen"){
-          note<-notes[which(notes$OTU %in% names(listOfdfChromSizenoNA)[i] ), ]$note
-
-          if(!is.null(note)  & length(note)>0 ){
-            graphics::text(
-              max(xmnoNA[[i]]) + ( xlimLeftMod*(notesPos/2) )
-              # ) ),
-              ,(max(ymnoNA[[i]]) + min(ymnoNA[[i]]) ) /2
-              ,labels = paste(note ),
-              cex=notesTextSize,
-              adj= 0 # 0.5 centered
-              ,font=  ifelse(OTUasNote,ifelse( !missing(OTUfont),    OTUfont,   1),1),
-              family=ifelse(OTUasNote,ifelse( !missing(OTUfamily),  OTUfamily, defaultFontFamily2),defaultFontFamily2) # justif
-            ) # end graphics::text
-          } # null
-        } # holocen
       } # for
+
       # message(crayon::green(paste0("notes section end" ) ) )
     } # exists d.f.
   } # fi notes
 
 } # CIRC false
+
 }

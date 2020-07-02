@@ -13,7 +13,9 @@ dfMarkColor a data.frame with columns:
 \item{markName}{name of mark}
 \item{markColor}{use R colors}
 \item{style}{character, use square or dots, optional}
-\item{protruding}{numeric, modifies aspect of cM/cMLeft marks, see parameter \code{protruding} in \code{\link{plotIdiograms}}, optional}
+\item{protruding}{numeric, modifies aspect of cM/cMLeft marks, see
+parameter
+\code{protruding} in \code{\link{plotIdiograms}}, optional}
 }
 
 An object of class \code{data.frame} with 395 rows and 3 columns.
@@ -40,7 +42,8 @@ humMarkColor: human bands' characteristics, from Adler (1994)
 mydfMaColor: mark characteristics used in vignette of phylogeny
 }
 \references{
-Adler 1994. Idiogram Album. URL: \url{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}
+Adler 1994. Idiogram Album. URL:
+\url{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}
 }
 \seealso{
 \code{\link{plotIdiograms}}

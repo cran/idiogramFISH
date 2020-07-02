@@ -18,7 +18,9 @@ makedfMarkColor(
 
 \item{colorstoremove}{remove this colors from the result}
 
-\item{defaultStyleMark}{character vector with default style \code{"square"} \code{"cM"} \code{"dots"}}
+\item{defaultStyleMark}{character vector with default style \code{"square"}
+\code{"cM"}
+\code{"dots"}}
 }
 \value{
 data.frame

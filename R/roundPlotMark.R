@@ -202,7 +202,8 @@ chrtSqMark<-function(squareness,yMarkSq,xMarkSq,xModifier,r2,dfMarkColorInternal
 
 XmarkChrt1<-XmarkChrt2<-YmarkChrt1<-YmarkChrt2<-list()
 
-if (squareness>20){
+if (squareness > 20 ) {
+
   for (s in 1:length(yMarkSq) ) {
     markXYSq<-mapXYchromatidHolo(1 ,
                                  (length(yMarkSq[[s]]) ) ,
@@ -217,32 +218,43 @@ if (squareness>20){
     YmarkChrt2[[s]]<-markXYSq$yCT2
 
   } # for s
-} else { # squareness
+} else { # squareness <20
   for (s in 1:length(yMarkSq) ) {
 
     pts<- seq(-pi/2, pi*1.5, length.out = n*4)
 
-    markXYSq<-mapXYchromatidHoloRo(1 ,
-                                   (length(yMarkSq[[s]]) ) ,
+    # markXYSq<-mapXYchromatidHoloRo(1 ,
+    # mapXYmarksRo <- function(start,end,y,x,r2, xModifier,pts
+    markXYSq<-mapXYmarksRo(1 ,
+                          length(yMarkSq[[s]])  ,
                                    yMarkSq[[s]],
                                    xMarkSq[[s]],
                                    r2,
                                    xModifier,
                                    pts
     )
-    XmarkChrt1[[s]]<-markXYSq$holoRightx # this has nothing to do with holo
-    XmarkChrt2[[s]]<-markXYSq$holoLeftx
-    YmarkChrt1[[s]]<-markXYSq$holoRighty
-    YmarkChrt2[[s]]<-markXYSq$holoLefty
+
+    # right or both:
+
+    XmarkChrt1[[s]]<-markXYSq$markRightx # was holoRightx this has nothing to do with holo
+    YmarkChrt1[[s]]<-markXYSq$markRighty
+
+    XmarkChrt2[[s]]<-markXYSq$markLeftx
+    YmarkChrt2[[s]]<-markXYSq$markLefty
+
   } # for
 } # squareness
 
-if(length(YmarkChrt1)>0) { # PLOT HOLOCEN SQ CHROMATID
+
+if(length(YmarkChrt1)>0) { # PLOT  SQ CHROMATID
 
   YmarkChrt1 <- YmarkChrt1[lengths(YmarkChrt1) != 0]
   XmarkChrt1 <- XmarkChrt1[lengths(XmarkChrt1) != 0]
-  YmarkChrt2 <- YmarkChrt2[lengths(YmarkChrt2) != 0]
-  XmarkChrt2 <- XmarkChrt2[lengths(XmarkChrt2) != 0]
+
+#  YmarkChrt1_247<<-YmarkChrt1
+#  XmarkChrt1_247<<-XmarkChrt1
+
+  if(length(YmarkChrt1)>0) {
 
   # LEFT CHROMATID
   lapply(1:length(YmarkChrt1), function(s) mapply(function(x,y,z)
@@ -256,8 +268,19 @@ if(length(YmarkChrt1)>0) { # PLOT HOLOCEN SQ CHROMATID
     z=listOfdfMarkPosSq[[s]]$markName
   ) #m
   ) #l
+  }
+}
+
+if(length(YmarkChrt2)>0) {
+  YmarkChrt2 <- YmarkChrt2[lengths(YmarkChrt2) != 0]
+  XmarkChrt2 <- XmarkChrt2[lengths(XmarkChrt2) != 0]
+
+#  YmarkChrt2_247<<-YmarkChrt2
+#  XmarkChrt2_247<<-XmarkChrt2
+  if(length(YmarkChrt2)>0) {
 
   # RIGHT CHROMATID
+
   lapply(1:length(YmarkChrt1), function(s) mapply(function(x,y,z)
     graphics::polygon(x=x, y=y,
                       col = dfMarkColorInternal$markColor[match(     z   , dfMarkColorInternal$markName)],
@@ -269,6 +292,8 @@ if(length(YmarkChrt1)>0) { # PLOT HOLOCEN SQ CHROMATID
     z=listOfdfMarkPosSq[[s]]$markName
   ) #m
   ) #l
-} # if
+  } # if
+}
+
 }
 

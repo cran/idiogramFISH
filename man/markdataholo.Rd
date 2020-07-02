@@ -14,7 +14,8 @@ data.frame with columns:
 \item{OTU}{OTU, species, optional}
 \item{chrName}{name of chromosome}
 \item{markName}{name of mark}
-\item{markPos}{position from bottom or top (see parameter \code{origin} in plotIdiograms)}
+\item{markPos}{position from bottom or top (see parameter \code{origin}
+in plotIdiograms)}
 \item{markSize}{size of mark in micrometers or Mb}
 }
 
@@ -34,10 +35,14 @@ dfAlloParentMarksHolo
 bigdfOfMarks3Mb
 }
 \description{
-When several OTUs, some can be monocen. and others holocen. Marks distance for monocen. are measured from cen. and for
-holocen. from top or bottom depending on \code{param} \code{origin}. See vignettes.
+When several OTUs, some can be monocen. and others holocen.
+Marks distance for
+monocen. are measured from cen. and for
+holocen. from top or bottom depending on \code{param} \code{origin}. See
+vignettes.
 
-bigdfMarkPosHolo: Example data for mark position of holocentrics with column OTU
+bigdfMarkPosHolo: Example data for mark position of
+holocentrics with column OTU
 
 dfMarkPosHolo: Example data for mark position of holocentrics
 

@@ -49,20 +49,28 @@ traspadf
 \description{
 dfOfChrSize: Example data for monocentrics
 
-bigdfOfChrSize: Example data for monocentrics for several species, OTU
+bigdfOfChrSize: Example data for monocentrics for several
+species, OTU
 
 humChr: Data for human karyotype, measured from Adler (1994)
 
-allChrSizeSample: Example data for monocentrics for several species, OTU
+allChrSizeSample: Example data for monocentrics for several
+species, OTU
 
 parentalAndHybChrSize: Example data for monocentrics for GISH
 
-traspadf: Example data for Tradescantia (Rhoeo) spathacea (Golczyk et al. 2005)
+traspadf: Example data for Tradescantia (Rhoeo) spathacea
+(Golczyk et al. 2005)
 }
 \references{
-Adler 1994. Idiogram Album. \url{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}
+Adler 1994. Idiogram Album.
+\url{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}
 
-Golczyk H, Hasterok R, Joachimiak AJ (2005) FISH-aimed karyotyping and characterization of Renner complexes in permanent heterozygote Rhoeo spathacea. Genome 48:145–153.
+Golczyk H, Hasterok R, Joachimiak AJ (2005) FISH-aimed
+karyotyping and
+characterization of Renner complexes in permanent heterozygote Rhoeo
+spathacea. Genome
+48:145–153.
 }
 \seealso{
 \code{\link{plotIdiograms}}

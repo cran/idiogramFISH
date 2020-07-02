@@ -273,7 +273,7 @@ v<-sub("Version: ","",readLines("../DESCRIPTION")[3])
 # v<-tryCatch(suppressWarnings(rvcheck:::check_github_gitlab("ferroao/idiogramFISH", "gitlab")$latest_version), error=function(e) NA )
 pkg<-"idiogramFISH"
 link<-tryCatch(suppressWarnings(badger::badge_custom("Documentation", paste(pkg,v), "cornflowerblue") ), error=function(e) NA )
-  if(!is.na(link)){
+  if(!is.na(link)) { 
   svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
   manual_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svglink) ), error=function(e) NA )
     if (!is.na(manual_cont)){
@@ -382,10 +382,10 @@ plotIdiograms(dfChrSize= mydfChrSize,     # chr. size data.frame
               dfMarkPos= mydfOfMarks,     # mark position data.frame (inc. cen.)
               dfMarkColor=mydfMarkColor,  # mark style d.f.
               
-              distTextChr = .7,           # separation among text and chr names and ind.        
-              orderBySize = FALSE,        # do not order chr. by size
-              karHeiSpace=1.6,             # vertical size of karyotype including spacer
-              chrSpacing=.6
+              chrSpacing=.6,              # separ. among chr.
+              distTextChr = .7,           # separation among text and chr. names and ind.        
+              orderChr = "name",        # order chr. by name
+              karHeiSpace=1.6             # vertical size of karyotype including spacer
               
               ,arrowhead = .5             # proportion of head of arrow
               
@@ -454,6 +454,7 @@ dev.off()
 
 ## ---- results="asis", comment=NA, echo=FALSE----------------------------------
 cat(paste0("![](mydfChrSize2.png)" ) )
+# cat(paste0("![](mydfChrSize2.jpg)" ) )
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  unique(mydfOfMarks$markName)
@@ -1218,7 +1219,7 @@ plotIdiograms(dfChrSize=both,    # chr. sizes
               distTextChr = .8,          # distance from text to chr.
               
               markDistType="cen",        # mark position measured to center of mark
-              orderBySize = FALSE,       # do not order chr. by size
+              orderChr = "name",       # order chr. by name
               
               ruler=FALSE                # do not plot ruler
               
@@ -1263,7 +1264,7 @@ mergedChrSize<-plyr::rbind.fill(dfChrSizeHoloGroup,dfChrSizeHoloHetero)
 
 plotIdiograms(dfChrSize=mergedChrSize,      # data.frame of chr. sizes
               dfMarkPos=dfMarkPosHoloHetero,# d.f. of marks
-              orderBySize = FALSE,          # do not order chr. by size
+              orderChr = "name",          # order chr. by name
               karIndex = FALSE,             # do not add karyotype indices
               addOTUName = TRUE,            # add OTU name
               karHeiSpace = 4,              # height of kar. with spacing

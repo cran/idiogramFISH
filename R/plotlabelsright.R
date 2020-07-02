@@ -1,5 +1,6 @@
 # plotlabelsright
-#' This is an internal function to plot labels to the right, when "aside" for its position
+#' This is an internal function to plot labels to the right, when "aside" for 
+#' its position
 #'
 #' It returns a graphic element with the legends
 #'

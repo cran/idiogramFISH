@@ -3,36 +3,131 @@
 \name{plotIdiograms}
 \alias{plotIdiograms}
 \title{FUNCTION to plot idiograms of karyotypes with and without centromere}
-\usage{ plotIdiograms( dfChrSize, defaultFontFamily, revOTUs = FALSE,
- karHeight = 2, karHeiSpace = 2.5, karSepar = TRUE, amoSepar = 9,
- addMissingOTUAfter = NA, missOTUspacings = 0, n = 50, notes,
- notesTextSize = 0.4, notesPos = 0.5, propWidth = FALSE, MbThreshold = 10000,
- threshold = 35, MbUnit = "Mb", yTitle = "µm", specialyTitle = "cM",
- specialOTUNames = "", addOTUName = TRUE, OTUTextSize = 1, OTUfont, OTUfamily,
- OTUasNote = FALSE, orderBySize = TRUE, chrId = "original", indexIdTextSize = 1,
- distTextChr = 1, groupUp = FALSE, chromatids = TRUE, arrowsBothChrt = TRUE,
- holocenNotAsChromatids = FALSE, excHoloFrArrToSide = FALSE, xModifier,
- xModMonoHoloRate, chrWidth = 0.5, chrSpacing = 0.5, specialChrWidth = 0.3,
- specialChrSpacing = 0.7, chrColor = "gray", chrBorderColor,
- centromereSize = NA, cenColor, fixCenBorder, roundedCen = TRUE, squareness = 4,
- lwd.chr = 0.5, lwd.cM, dfMarkPos, dfCenMarks, defaultStyleMark = "square",
- markDistType = "beg", protruding = 0.2, origin = "b", cMBeginCenter = FALSE,
- arrowhead = 0.3, shrinkArrow = 0.3333, arrowheadWidthShrink = 0.1,
- arrowsToSide = TRUE, dfMarkColor, mycolors, borderOfWhiteMarks = TRUE,
- colorBorderMark, lwd.mimicCen, defCenStyleCol, pattern = "", legend = "aside",
- remSimiMarkLeg = FALSE, bannedMarkName, legendWidth = 1.7, legendHeight = NA,
- markLabelSize = 1, markLabelSpacer = 1, legendYcoord = 0, chrIndex = "both",
- morpho = "both", nameChrIndexPos = 2, karIndex = TRUE, karIndexPos = 0.5,
- ruler = TRUE, rulerPos = 0, rulerPosMod = 0, ruler.tck = -0.02,
- rulerNumberPos = 0.5, rulerNumberSize = 1, rulerInterval, rulerIntervalcM,
- rulerIntervalMb, ceilingFactor = 0, ylabline = 0, rulerTitleSize = 1,
- xlimLeftMod = 1, xlimRightMod = 2, ylimBotMod = 0.2, ylimTopMod = 0.2,
- callPlot = TRUE, asp = 1, circularPlot = FALSE, shrinkFactor = 0.9,
- separFactor = 1.5, labelSpacing = 0.7, labelOutwards = FALSE,
- chrLabelSpacing = 0.5, radius = 0.5, rotation = 0.5, useOneDot = TRUE,
- circleCenter = 1, circleCenterY = 1, OTUlabelSpacing = 0.3, OTUsrt = 0,
- OTUplacing = "first", OTULabelSpacerx = 0, OTULabelSpacery = 0,
- OTUcentered = TRUE, OTUjustif = 0, OTUlegendHeight = NA, roundness, ... 
+\usage{
+plotIdiograms(
+  dfChrSize,
+  defaultFontFamily,
+  revOTUs = FALSE,
+  karHeight = 2,
+  karHeiSpace = 2.5,
+  karSepar = TRUE,
+  amoSepar = 9,
+  addMissingOTUAfter = NA,
+  missOTUspacings = 0,
+  n = 50,
+  notes,
+  notesTextSize = 0.4,
+  notesLeft = FALSE,
+  notesPos = 0.5,
+  notesPosY = 0,
+  propWidth = FALSE,
+  MbThreshold = 10000,
+  threshold = 35,
+  MbUnit = "Mb",
+  yTitle = "µm",
+  specialyTitle = "cM",
+  specialOTUNames = "",
+  addOTUName = TRUE,
+  OTUTextSize = 1,
+  OTUfont,
+  OTUfamily,
+  OTUasNote = FALSE,
+  orderChr = "size",
+  chrId = "original",
+  chrIdPatternRem,
+  indexIdTextSize = 1,
+  distTextChr = 1,
+  groupUp = FALSE,
+  chromatids = TRUE,
+  arrowsBothChrt = TRUE,
+  holocenNotAsChromatids = FALSE,
+  excHoloFrArrToSide = FALSE,
+  xModifier,
+  xModMonoHoloRate,
+  chrWidth = 0.5,
+  chrSpacing = 0.5,
+  specialChrWidth = 0.3,
+  specialChrSpacing = 0.7,
+  chrColor = "gray",
+  chrBorderColor,
+  centromereSize = NA,
+  cenColor,
+  fixCenBorder,
+  roundedCen = TRUE,
+  squareness = 4,
+  lwd.chr = 0.5,
+  lwd.cM,
+  dfMarkPos,
+  dfCenMarks,
+  defaultStyleMark = "square",
+  markDistType = "beg",
+  protruding = 0.2,
+  origin = "b",
+  efZero = 1e-05,
+  cMBeginCenter = FALSE,
+  arrowhead = 0.3,
+  shrinkArrow = 0.3333,
+  arrowheadWidthShrink = 0.1,
+  arrowsToSide = TRUE,
+  dfMarkColor,
+  mycolors,
+  borderOfWhiteMarks = TRUE,
+  colorBorderMark,
+  lwd.mimicCen,
+  defCenStyleCol,
+  pattern = "",
+  legend = "aside",
+  remSimiMarkLeg = FALSE,
+  bannedMarkName,
+  legendWidth = 1.7,
+  legendHeight = NA,
+  markLabelSize = 1,
+  markLabelSpacer = 1,
+  legendYcoord = 0,
+  chrIndex = "both",
+  morpho = "both",
+  nameChrIndexPos = 2,
+  karIndex = TRUE,
+  karIndexPos = 0.5,
+  ruler = TRUE,
+  rulerPos = 0,
+  rulerPosMod = 0,
+  ruler.tck = -0.02,
+  rulerNumberPos = 0.5,
+  rulerNumberSize = 1,
+  rulerInterval,
+  rulerIntervalcM,
+  rulerIntervalMb,
+  ceilingFactor = 0,
+  ylabline = 0,
+  rulerTitleSize = 1,
+  xlimLeftMod = 1,
+  xlimRightMod = 2,
+  ylimBotMod = 0.2,
+  ylimTopMod = 0.2,
+  callPlot = TRUE,
+  asp = 1,
+  circularPlot = FALSE,
+  shrinkFactor = 0.9,
+  separFactor = 1.5,
+  labelSpacing = 0.7,
+  labelOutwards = FALSE,
+  chrLabelSpacing = 0.5,
+  radius = 0.5,
+  rotation = 0.5,
+  useOneDot = TRUE,
+  circleCenter = 1,
+  circleCenterY = 1,
+  OTUlabelSpacing = 0.3,
+  OTUsrt = 0,
+  OTUplacing = "first",
+  OTULabelSpacerx = 0,
+  OTULabelSpacery = 0,
+  OTUcentered = TRUE,
+  OTUjustif = 0,
+  OTUlegendHeight = NA,
+  roundness,
+  ...
 )
 }
 \arguments{
@@ -55,7 +150,7 @@ sized karyotypes or \code{TRUE} = equally spaced karyotypes. Incompatible with \
 karyotypes will have no distance among them, if overlap,
 increase this and \code{karHeiSpace}}
 
-\item{addMissingOTUAfter}{character, when you want to add space (ghost OTUs) after one or several OTUs, pass the names of OTUs preceding the desired space in a character vector i.e. \code{c("species one","species five")}}
+\item{addMissingOTUAfter}{character, when you want to add space (ghost OTUs) after one or several OTUs, pass the names of OTUs preceding the desired space in a character vector i.e. \code{c("species one",} \code{} \code{"species five")}}
 
 \item{missOTUspacings}{numeric, when you use \code{addMissingOTUAfter} this numeric vector should have the same length and corresponds to the number of free spaces (ghost OTUs) to add after each OTU respectively}
 
@@ -65,7 +160,11 @@ increase this and \code{karHeiSpace}}
 
 \item{notesTextSize}{numeric, font size of notes, see \code{notes}}
 
-\item{notesPos}{numeric, move notes to the right}
+\item{notesLeft}{boolean, position of notes starting at left side, \code{FALSE} (default)}
+
+\item{notesPos}{numeric, move notes to the right or left (x axis)}
+
+\item{notesPosY}{numeric, move notes to the down or up (y axis)}
 
 \item{propWidth, }{boolean, defaults to \code{FALSE}. Diminishes chr. width with increasing number of OTUs}
 
@@ -92,11 +191,13 @@ Defaults to \code{"Mb"}, but anything can be used. Introduced in 1.13. See \code
 
 \item{OTUasNote}{boolean, if \code{TRUE} adds OTU (species) name to the right, see \code{notes}}
 
-\item{orderBySize}{logical value, when \code{TRUE}, sorts chromosomes by total
-length from the largest to the smallest}
+\item{orderChr}{character, replaces \code{orderBySize - deprecated} when \code{"size"}, sorts chromosomes by total
+length from the largest to the smallest. \code{"original"}: preserves d.f. order. \code{"name"}: sorts alphabetically; \code{"group"}: sorts by group name}
 
 \item{chrId}{character, print name of chromosome, \code{"original"} uses the original
 name in OTU column of dfChrSize, \code{"simple"} (just 1 to ...) or \code{""} (none).}
+
+\item{chrIdPatternRem}{character, regex pattern to remove from chr. names}
 
 \item{indexIdTextSize}{numeric, font size of chr. and kar. indices and
 chromosome name. Defaults to \code{1}}
@@ -108,7 +209,7 @@ also affects vertical separation of indices. Defaults to \code{1}}
 
 \item{chromatids}{boolean, when \code{TRUE} shows separated chromatids. Defaults to \code{TRUE}}
 
-\item{arrowsBothChrt}{boolean, when \code{TRUE} (default) (for \code{chromatids=TRUE}) shows \code{upArrow, downArrow} styles of marks in both chromatids when \code{arrowsToSide=TRUE}.}
+\item{arrowsBothChrt}{boolean, when \code{TRUE} (default) (for \code{chromatids=TRUE}) shows \code{upArrow,} \code{} \code{ downArrow} styles of marks in both chromatids when \code{arrowsToSide=TRUE}.}
 
 \item{holocenNotAsChromatids}{boolean, when \code{TRUE} and \code{chromatids=TRUE} does not plot holocen kar. with chromatids. Defaults to \code{FALSE}. A value of \code{TRUE} modifies excHoloFrArrToSide to \code{TRUE} always.}
 
@@ -156,7 +257,7 @@ centromere to mark, not necessary for cen. marks (cen), w, p, q (when whole arm)
 \item{dfCenMarks}{data.frame, specific for centromeric marks. columns: \code{chrName}
 and \code{markName}. See also \code{dfMarkPos} for another option to pass cen. marks}
 
-\item{defaultStyleMark}{character, default style of mark, only used when \code{style} column of \code{dfMarkColor} data.frame is missing or in absence of this data.frame. Use \code{"square"} (default) \code{"dots"} or \code{"cM"}. Introduced in 1.13}
+\item{defaultStyleMark}{character, default style of mark, only used when \code{style} column of \code{dfMarkColor} data.frame is missing or in absence of this data.frame. Use \code{"square"} (default), \code{"dots"}, \code{"cM"} \code{"cM"}, \code{"cMLeft"},\code{"cenStyle"}, \code{"upArrow"}, \code{"downArrow"}.}
 
 \item{markDistType}{character, if \code{"cen"} = the distance you provided in data.frame (\code{dfMarkPos}) column \code{markDistCen}
 or \code{markPos}  is to the center of the mark, if \code{"beg"} = the distance you provided is to the
@@ -166,22 +267,24 @@ beginning of the mark (Default)}
 
 \item{origin, }{For non-monocentric chr. (for holocentrics only) Use \code{"b"} (default) if distance to mark in (\code{"markPos"} column in \code{"dfMarkPos"}) data.frame measured from bottom of chromosome, use \code{"t"} for distance to mark from top of chr.}
 
+\item{efZero, }{numeric, numbers below this one will be considered as zero, for comparison purposes. Defaults to \code{1e-5}}
+
 \item{cMBeginCenter, }{boolean, start position of \code{cM} and \code{cMLeft} marks. If \code{TRUE}, starts in the center (width) of chr. . Defaults to \code{FALSE}}
 
-\item{arrowhead}{numeric, proportion of head of arrow (mark styles: \code{upArrow,downArrow}). Defaults to \code{0.3}}
+\item{arrowhead}{numeric, proportion of head of arrow (mark styles: \code{upArrow,} \code{} \code{downArrow}). Defaults to \code{0.3}}
 
 \item{shrinkArrow}{numeric, proportion, shrinks body of arrow. Defaults to \code{0.3333}}
 
 \item{arrowheadWidthShrink}{numeric, proportion, shrinks head of arrow. Defaults to \code{0.1}}
 
-\item{arrowsToSide}{boolean, when \code{FALSE} use a centered arrow, instead of an arrow next to chr. margins (\code{TRUE}, default)}
+\item{arrowsToSide}{boolean, when \code{FALSE} use a centered arrow, instead of an arrow next to chr. margins (\code{TRUE}, default). See \code{arrowsBothChrt}}
 
 \item{dfMarkColor}{data.frame, optional, specifying colors and style for marks (sites);
-columns: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: \code{square} or \code{dots} or \code{cM}.
-(if column \code{style} missing all (except 5S) are plotted as in param. \code{defaultStyleMark}). \code{cM} introduced in 1.13}
+columns: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: \code{square}, \code{dots}, \code{cM},
+\code{"cMLeft"}, \code{"cenStyle"}, \code{"upArrow"}, \code{"downArrow"}.
+(if column \code{style} missing all (except 5S) are plotted as in param. \code{defaultStyleMark}).}
 
-\item{mycolors}{character vector, optional, i.e. \code{c("blue","red","green")} for specifying color of marks in order of appearance. if diverges with number of marks will be recycled if \code{dfMarkColor} present, mycolors will be ignored. To know the
-order of your marks use something like: \code{unique(c(dfMarkPos$markName,dfCenMarks$markName) ) }}
+\item{mycolors}{character vector, optional, i.e. \code{c("blue",} \code{} \code{"red",} \code{} \code{"green")} for specifying color of marks in order of appearance. if diverges with number of marks will be recycled if \code{dfMarkColor} present, mycolors will be ignored. To know the order of your marks use something like: \code{unique(c(dfMarkPos$markName,} \code{dfCenMarks$markName) ) }}
 
 \item{borderOfWhiteMarks}{boolean, if \code{TRUE} (Default) uses black border for white marks. See \code{dfMarkColor}. Does not apply to marks with style \code{cenStyle}}
 
@@ -247,7 +350,7 @@ argument of \code{axis} R plot}
 
 \item{ceilingFactor}{numeric, affects number of decimals for ceiling. Affects max. value of ruler. Defaults to \code{0}. When \code{threshold} is greater than \code{35} this may have to be negative. Introduced in 1.13}
 
-\item{ylabline, }{numeric, modify position of ruler title. See \code{yTitle, specialyTitle, MbUnit}}
+\item{ylabline, }{numeric, modify position of ruler title. See \code{yTitle,} \code{} \code{ specialyTitle,} \code{} \code{ MbUnit}}
 
 \item{rulerTitleSize, }{numeric font size of units of ruler. See also \code{ylabline}}
 

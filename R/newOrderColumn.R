@@ -1,5 +1,6 @@
 #' newOrderColumn
-#' This is an internal function that adds neworder column to listOfdfChromSizeCenType
+#' This is an internal function that adds neworder column to 
+#' listOfdfChromSizeCenType
 #'
 #' It returns rulers (axis)
 #'

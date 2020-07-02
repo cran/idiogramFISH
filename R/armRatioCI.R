@@ -1,7 +1,9 @@
 #' @name armRatioCI
 #' @aliases swapChrRegionDfSizeAndMarks
 #' @title FUNCTIONS armRatioCI and swapChrRegionDfSizeAndMarks.
-#' @description armRatioCI: reads a data.frame and produces AR (radius), CI, Guerra and Levan classifications.
+#' @description armRatioCI: reads a data.frame and produces AR (radius), CI, 
+#' Guerra and Levan 
+#' classifications.
 #' @description swapChrRegionDfSizeAndMarks: reads data.frames to swap arms
 #'
 #' @param dfChrSize name of data.frame with columns: shortArmSize, longArmSize

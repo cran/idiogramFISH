@@ -1,9 +1,14 @@
 #' FUNCTION to produce a Robertsonian translocation
 #'
-#' @description This function reads a data.frame with chr. sizes \code{\link{chrbasicdatamono}} and another with marks' positions,
-#' \code{\link{markposDFs}} and gets as arguments two chr. names and two arms, respectively.
+#' @description This function reads a data.frame with chr. sizes 
+#' \code{\link{chrbasicdatamono}} 
+#' and another with marks' positions,
+#' \code{\link{markposDFs}} and gets as arguments two chr. names and two arms, 
+#' respectively.
 #'
-#' @description It returns a list with two data.frames. One with the chr. size of the resulting translocation
+#' @description It returns a list with two data.frames. One with the chr. size 
+#' of the resulting 
+#' translocation
 #' and another with the marks' positions for the derivative chr.
 #'
 #' @param dfChrSize name of data.frame of chr. sizes
@@ -20,7 +25,13 @@
 #' data(humMarkPos)
 #' chrt13q14q<-robert(humChr,humMarkPos,13,14,"q","q")
 #'
-#' @references Robertson, W. R. B. (1916). Chromosome studies. I. Taxonomic relationships shown in the chromosomes of Tettigidae and Acrididae: V-shaped chromosomes and their significance in Acrididae, Locustidae, and Gryllidae: chromosomes and variation. Journal of Morphology, 27(2), 179-331.
+#' @references Robertson, W. R. B. (1916). Chromosome studies. I. Taxonomic 
+#' relationships shown in 
+#' the chromosomes of Tettigidae and Acrididae: V-shaped chromosomes and their 
+#' significance in 
+#' Acrididae, Locustidae, and Gryllidae: chromosomes and variation. Journal of 
+#' Morphology, 27(2), 
+#' 179-331.
 #' @return list
 #'
 

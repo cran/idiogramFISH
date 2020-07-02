@@ -17,7 +17,8 @@ bigdfOfMarks a data.frame with columns:
 \item{OTU}{OTU, species, mandatory if in dfChrSize}
 \item{chrName}{name of chromosome}
 \item{markName}{name of mark}
-\item{chrRegion}{use p for short arm, q for long arm, and cen for centromeric}
+\item{chrRegion}{use p for short arm, q for long arm, and cen for
+centromeric}
 \item{markDistCen}{distance of mark to centromere (not for cen)}
 \item{markSize}{size of mark (not for cen)}
 }
@@ -53,8 +54,11 @@ dfAlloParentMarks
 traspaMarks
 }
 \description{
-When several OTUs, some can be monocen. and others holocen. Marks distance for monocen. are measured from cen. and for
-holocen. from top or bottom depending on \code{param} \code{origin}. See vignettes.
+When several OTUs, some can be monocen. and others holocen.
+Marks distance for
+monocen. are measured from cen. and for
+holocen. from top or bottom depending on \code{param} \code{origin}. See
+vignettes.
 
 bigdfOfMarks: Example data for mark position with column OTU
 
@@ -62,18 +66,26 @@ dfOfMarks: Example data for marks' position
 
 dfOfMarks2: Marks' position including cen. marks
 
-humMarkPos: human karyotype bands' (marks) positions, measured from Adler (1994)
+humMarkPos: human karyotype bands' (marks) positions, measured
+from Adler (1994)
 
 allMarksSample: Example data for marks' position
 
-dfAlloParentMarks: Example data for mark position of GISH of monocen.
+dfAlloParentMarks: Example data for mark position of GISH of
+monocen.
 
-traspaMarks: T. spathacea (Rhoeo) marks' positions, from Golczyk et al. (2005)
+traspaMarks: T. spathacea (Rhoeo) marks' positions, from
+Golczyk et al. (2005)
 }
 \references{
-Adler 1994. Idiogram Album. URL: \href{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}{Washington U.}
+Adler 1994. Idiogram Album. URL:
+\href{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}{Washington U.}
 
-Golczyk H, Hasterok R, Joachimiak AJ (2005) FISH-aimed karyotyping and characterization of Renner complexes in permanent heterozygote Rhoeo spathacea. Genome 48:145–153.
+Golczyk H, Hasterok R, Joachimiak AJ (2005) FISH-aimed
+karyotyping and
+characterization of Renner complexes in permanent heterozygote Rhoeo
+spathacea. Genome
+48:145–153.
 }
 \seealso{
 \code{\link{markdataholo}}

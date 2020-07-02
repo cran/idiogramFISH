@@ -18,13 +18,17 @@ makedfMarkColorMycolors(
 
 \item{colorstoremove}{character vector of colors to remove from mycolors}
 
-\item{defaultStyleMark}{character vector with default style \code{"square"} \code{"cM"} \code{"dots"}}
+\item{defaultStyleMark}{character vector with default style \code{"square"}
+\code{"cM"}
+\code{"dots"}}
 }
 \value{
 data.frame
 }
 \description{
-This function reads character vector with marks names, a character vector of prohibited colors and a custom list of colors
+This function reads character vector with marks names, a
+character vector of
+prohibited colors and a custom list of colors
 to be associated with the mark names
 
 It returns a data.frame with color and style for each mark

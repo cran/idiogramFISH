@@ -1,9 +1,12 @@
 #' @name genBankReadIF
 #' @title FUNCTION genBankReadIF
-#' @description genBankReadIF: creates a list of data.frames from a genbank format file or a rentrez object
+#' @description genBankReadIF: creates a list of data.frames from a genbank
+#' format file or a
+#' rentrez object
 #' @description Requires tidyr
 #'
-#' @param filename.gb name of file to read, downloaded from genBank, or, object from \code{rentrez::entrez_fetch(db="nuccore", id="theID", rettype="gbwithparts", retmode = "text")}
+#' @param filename.gb name of file to read, downloaded from genBank, or,
+#' object from \code{rentrez::entrez_fetch( db="nuccore",} \code{ id="theID",} \code{ rettype="gbwithparts",} \code{ retmode = "text" )}
 #'
 #' @keywords genBank
 #' @export

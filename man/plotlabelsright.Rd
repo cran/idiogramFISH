@@ -2,7 +2,8 @@
 % Please edit documentation in R/plotlabelsright.R
 \name{plotlabelsright}
 \alias{plotlabelsright}
-\title{This is an internal function to plot labels to the right, when "aside" for its position}
+\title{This is an internal function to plot labels to the right, when "aside" for
+its position}
 \usage{
 plotlabelsright(
   maxx,

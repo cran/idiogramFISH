@@ -2,7 +2,17 @@
 % Please edit documentation in R/orientation.R
 \name{yVertoHor}
 \alias{yVertoHor}
-\title{FUNCTIONS: yVertoHor, xHortoVer, xHortoVerRoundCen, xHortoVerDots, mapCircle, mapRadius, transYList, mapOTUnames, addOTUnames, applyMapCircle, intercalate, drawPlot, drawPlotMark, drawPlotMarkLine, drawCen, circLabelMark, circPlotDots, plotChrNames, addChrNameAttrMark, addChrNameAttrMarkDots, xMarkMap, xMarkMapLeft, markMapPer, markMapPercM, markMapPerDots, radDotsPer, centerMarkMapPer, transyListMark, transyListCen, transRadDots, transyListMarkDots, oneDot, OTUlabelsright}
+\title{FUNCTIONS: yVertoHor, xHortoVer, xHortoVerRoundCen, xHortoVerDots,
+mapCircle, mapRadius,
+transYList, mapOTUnames, addOTUnames, applyMapCircle, intercalate,
+drawPlot, drawPlotMark,
+drawPlotMarkLine, drawCen, circLabelMark, circPlotDots, plotChrNames,
+addChrNameAttrMark,
+addChrNameAttrMarkDots, xMarkMap, xMarkMapLeft, markMapPer, markMapPercM,
+markMapPerDots,
+radDotsPer, centerMarkMapPer, transyListMark, transyListCen, transRadDots,
+transyListMarkDots,
+oneDot, OTUlabelsright}
 \usage{
 yVertoHor(y, monocenNames)
 }
@@ -145,6 +155,16 @@ yVertoHor(y, monocenNames)
 plot
 }
 \description{
-FUNCTIONS: yVertoHor, xHortoVer, xHortoVerRoundCen, xHortoVerDots, mapCircle, mapRadius, transYList, mapOTUnames, addOTUnames, applyMapCircle, intercalate, drawPlot, drawPlotMark, drawPlotMarkLine, drawCen, circLabelMark, circPlotDots, plotChrNames, addChrNameAttrMark, addChrNameAttrMarkDots, xMarkMap, xMarkMapLeft, markMapPer, markMapPercM, markMapPerDots, radDotsPer, centerMarkMapPer, transyListMark, transyListCen, transRadDots, transyListMarkDots, oneDot, OTUlabelsright
+FUNCTIONS: yVertoHor, xHortoVer, xHortoVerRoundCen, xHortoVerDots,
+mapCircle, mapRadius,
+transYList, mapOTUnames, addOTUnames, applyMapCircle, intercalate,
+drawPlot, drawPlotMark,
+drawPlotMarkLine, drawCen, circLabelMark, circPlotDots, plotChrNames,
+addChrNameAttrMark,
+addChrNameAttrMarkDots, xMarkMap, xMarkMapLeft, markMapPer, markMapPercM,
+markMapPerDots,
+radDotsPer, centerMarkMapPer, transyListMark, transyListCen, transRadDots,
+transyListMarkDots,
+oneDot, OTUlabelsright
 }
 \keyword{internal}

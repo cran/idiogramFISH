@@ -739,7 +739,7 @@ plotIdiograms(dfChrSize  =dfChrSizeHolo, # data.frame of chr. size
               ylimBotMod=.2            # modify ylim bottom argument of plot
               ,legendHeight=.5         # height of legend labels
               ,legendWidth = 1.2       # width of legend labels
-              ,xModifier = .025         # separ. among chromatids
+              ,xModifier = .025        # separ. among chromatids
               )                  
 ```
 
@@ -1203,7 +1203,7 @@ monoholoMarks <- plyr::rbind.fill(dfOfMarks2,dfMarkPosHolo)
 ``` r
 library(idiogramFISH)
 
-# svg("testing.svg",width=14,height=10 )
+# svg("testing.svg",width=10,height=6 )
 par(mar=rep(0,4))
 plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               dfMarkColor= dfMarkColor,  # df of mark style
@@ -1242,7 +1242,7 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               
               # ,OTUsrt = 0                # angle for OTU name (or number)
               # ,OTUplacing = "number"     # Use number and legend instead of name
-              # ,OTULabelSpacerx = -1.5    # modify position of OTU label, when OTUplacing="number" or "simple"
+              # ,OTULabelSpacerx = -1.6    # modify position of OTU label, when OTUplacing="number" or "simple"
               # ,OTUlegendHeight = 1.5     # space among OTU names when in legend - OTUplacing
 )
 ```
@@ -1253,7 +1253,7 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
 #dev.off() # close svg()
 ```
 
-<img src="man/figures/README-unnamed-chunk-17-1.png" width="70%" />
+<img src="/home/fernando/GoogleDrive/gitlab/idiogramFISH/man/figures/circular.png" width="70%" />
 
 ## Citation
 
@@ -1261,7 +1261,7 @@ To cite idiogramFISH in publications, please use:
 
 Roa F, Telles MPC (2020) idiogramFISH: Idiograms with Marks and
 Karyotype Indices, Universidade Federal de Goiás. Brazil. R-package.
-version 1.15.1 <https://ferroao.gitlab.io/manualidiogramfish/>.
+version 1.15.3 <https://ferroao.gitlab.io/manualidiogramfish/>.
 doi:<!-- breaklink -->10.5281/zenodo.3579417
 
 To write citation to file:

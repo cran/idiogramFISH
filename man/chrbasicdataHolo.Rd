@@ -35,11 +35,14 @@ bigdfOfChrSize3Mb
 \description{
 dfChrSizeHolo: Example data for holocentrics for 1 species
 
-bigdfChrSizeHolo: Example data for holocentrics for several species, OTU
+bigdfChrSizeHolo: Example data for holocentrics for several
+species, OTU
 
-parentalAndHybHoloChrSize: Example data for holocentrics for several species, OTU
+parentalAndHybHoloChrSize: Example data for holocentrics for
+several species, OTU
 
-bigdfOfChrSize3Mb: Example data in Mb without chr. arms for three species, OTU
+bigdfOfChrSize3Mb: Example data in Mb without chr. arms for
+three species, OTU
 }
 \seealso{
 \code{\link{asymmetryA2}}

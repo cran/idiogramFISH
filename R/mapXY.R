@@ -444,3 +444,239 @@ mapXYchromatidHoloRo <- function(start,end,y,x,r2, xModifier,pts ){
   return(chrtXchrtYHoloRo)
 }
 
+
+
+mapXYmarksRo <- function(start,end,y,x,r2, xModifier,pts ) {
+
+  markRightx<-markLeftx<-markRighty<-markLefty<-list()
+
+  for (counter in start: end ) {
+
+    if( attr(y[[counter]],"wholeArm")=='false' ) {
+
+    maxX<-minX<-halfX<-halfXModMinus<-halfXModPlus<-NULL
+
+    maxX <- max(x[[counter]])
+    minX <- min(x[[counter]])
+
+    maxY <- max(y[[counter]])
+    minY <- min(y[[counter]])
+
+    r2backup<-r2
+
+    diffx<-maxX - minX
+    diffy<-maxY - minY
+    ratexy<-diffx/diffy
+
+    ifelse( (diffx/r2) * 2 < ratexy*4 ,  r2 <- diffx/(ratexy*2) ,r2 )
+
+    yMod<-y[[counter]]
+
+    yMod[which(yMod==max(yMod))] <- yMod[which(yMod==max(yMod))]-r2
+    yMod[which(yMod==min(yMod))] <- yMod[which(yMod==min(yMod))]+r2
+
+    halfX <- (maxX+minX)/2
+    halfXModPlus  <- halfX + xModifier
+    halfXModMinus <- halfX - xModifier
+
+    topBotline_x2 <- c(halfXModPlus + r2, maxX-r2, halfXModMinus-r2,minX+r2)
+    bottomline_y <-rep(minY,2)
+
+    ptsl<-split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
+
+    xy_1 <- cbind( (minX+r2) + r2 * sin(ptsl[[1]]), (maxY-r2) + r2 * cos(ptsl[[1]]))
+    xy_2 <- cbind( (maxX-r2) + r2 * sin(ptsl[[2]]), (maxY-r2) + r2 * cos(ptsl[[2]]))
+    xy_3 <- cbind( (maxX-r2) + r2 * sin(ptsl[[3]]), (minY+r2) + r2 * cos(ptsl[[3]]))
+    xy_4 <- cbind( (minX+r2) + r2 * sin(ptsl[[4]]), (minY+r2) + r2 * cos(ptsl[[4]]))
+
+    xy_5 <- cbind( (halfXModPlus +r2) + r2 * sin(ptsl[[4]]), (minY+r2) + r2 * cos(ptsl[[4]]))
+    xy_6 <- cbind( (halfXModMinus-r2) + r2 * sin(ptsl[[3]]), (minY+r2) + r2 * cos(ptsl[[3]]))
+    xy_7 <- cbind( (halfXModMinus-r2) + r2 * sin(ptsl[[2]]), (maxY-r2) + r2 * cos(ptsl[[2]]))
+    xy_8 <- cbind( (halfXModPlus +r2) + r2 * sin(ptsl[[1]]), (maxY-r2) + r2 * cos(ptsl[[1]]))
+
+    markRightx[[counter]]<-c(rep(maxX,2),xy_3[,1],topBotline_x2[1:2],xy_5[,1] # 3 5
+                             ,halfXModPlus,halfXModPlus
+                             ,xy_8[,1], topBotline_x2[2:1],xy_2[,1] # 8 2
+    )
+    markRighty[[counter]]<-c(yMod[1:2],xy_3[,2],bottomline_y,      xy_5[,2] # 3 5
+                             ,yMod[3:4]
+                             ,xy_8[,2], rep(maxY,2),xy_2[,2] # 8 2
+    )
+    markLeftx[[counter]]<-c(rep(halfXModMinus,2),xy_6[,1],topBotline_x2[3:4], # 6
+                            xy_4[,1],rep(minX,2), # 4
+                            xy_1[,1],topBotline_x2[4:3],xy_7[,1] # 1 7
+    )
+    markLefty[[counter]]<-c(yMod[1:2],           xy_6[,2],bottomline_y, # 6
+                            xy_4[,2],yMod[3:4], # 4
+                            xy_1[,2],rep(maxY,2),       xy_7[,2]# 1 7
+    )
+
+    r2<-r2backup
+
+    } else { # whole arm False True
+
+      if( attr(y[[counter]],"whichArm")=='short' ) {
+
+        maxX<-minX<-halfX<-halfXModMinus<-halfXModPlus<-NULL
+
+        maxX <- max(x[[counter]])
+        minX <- min(x[[counter]])
+
+        maxY <- max(y[[counter]])
+        minY <- min(y[[counter]])
+
+        halfX <- (maxX+minX)/2
+        halfXModPlus  <- halfX + xModifier
+        halfXModMinus <- halfX - xModifier
+
+        r2backup<-r2
+
+        diffx<-maxX - minX
+        diffy<-maxY - minY
+
+        ratexy<-diffx/diffy
+
+        ifelse( (diffx/r2) * 2 < ratexy*4 ,  r2 <- diffx/(ratexy*2) ,r2 )
+
+        yMod<-y[[counter]]
+
+        yMod[which(yMod==max(yMod))] <- yMod[which(yMod==max(yMod))]-r2
+        yMod[which(yMod==min(yMod))] <- yMod[which(yMod==min(yMod))]+r2
+
+        topBotline_x<-c(minX+r2, maxX-r2)
+
+        topBotline_x2 <- c(halfXModPlus + r2, maxX-r2, halfXModMinus-r2,minX+r2)
+
+        bottomline_y <-rep(minY,2)
+
+        # pts<- seq(-pi/2, pi*1.5, length.out = ver*4)
+        ptsl<-split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
+
+        xy_1 <- cbind( (minX+r2) + r2 * sin(ptsl[[1]]), (maxY-r2) + r2 * cos(ptsl[[1]]))
+        xy_2 <- cbind( (maxX-r2) + r2 * sin(ptsl[[2]]), (maxY-r2) + r2 * cos(ptsl[[2]]))
+        xy_3 <- cbind( (maxX-r2) + r2 * sin(ptsl[[3]]), (minY+r2) + r2 * cos(ptsl[[3]]))
+        xy_4 <- cbind( (minX+r2) + r2 * sin(ptsl[[4]]), (minY+r2) + r2 * cos(ptsl[[4]]))
+
+        # xy_5 <- cbind( (halfXModPlus +r2) + r2 * sin(ptsl[[4]]), (minY+r2) + r2 * cos(ptsl[[4]]))
+        # xy_6 <- cbind( (halfXModMinus-r2) + r2 * sin(ptsl[[3]]), (minY+r2) + r2 * cos(ptsl[[3]]))
+        xy_7 <- cbind( (halfXModMinus-r2) + r2 * sin(ptsl[[2]]), (maxY-r2) + r2 * cos(ptsl[[2]]))
+        xy_8 <- cbind( (halfXModPlus +r2) + r2 * sin(ptsl[[1]]), (maxY-r2) + r2 * cos(ptsl[[1]]))
+
+        # xy_9  <- cbind( (halfXModPlus - xModifier) + xModifier * sin(ptsl[[2]]), (maxY-(xModifier*2)) + xModifier * cos(ptsl[[2]]))
+        # xy_10 <- cbind( (halfXModMinus+ xModifier) + xModifier * sin(ptsl[[1]]), (maxY-(xModifier*2)) + xModifier * cos(ptsl[[1]]))
+        xy_11 <- cbind( (halfXModMinus+ xModifier) + xModifier * sin(ptsl[[4]]), (minY+(xModifier*2)) + xModifier * cos(ptsl[[4]]))
+        xy_12 <- cbind( (halfXModPlus - xModifier) + xModifier * sin(ptsl[[3]]), (minY+(xModifier*2)) + xModifier * cos(ptsl[[3]]))
+
+        # this is not only right but both chrtids
+
+        markRightx[[counter]] <-  c(rep(maxX,2),xy_3[,1] , topBotline_x[2:1],xy_4[,1],rep(minX,2),xy_1[,1],topBotline_x2[4:3] # 3 4 1
+                                        ,xy_7[,1], halfXModMinus,halfXModMinus # 7
+                                        ,rev(xy_11[,1]),rev(xy_12[,1]) # 11 12
+                                        , rep(halfXModPlus,2)
+                                        ,xy_8[,1], topBotline_x2[2:1],xy_2[,1] # 8 2
+        )
+
+        # this is not only right but both chrts
+
+        markRighty[[counter]] <-  c(yMod[1:2],  xy_3[,2] , bottomline_y,     xy_4[,2],yMod[2:1],xy_1[,2],rep(maxY,2)  # 3 4 1
+                                        ,xy_7[,2], yMod[1], minY+(xModifier*2) # 7
+                                        ,rev(xy_11[,2]),rev(xy_12[,2]) # 11 12
+                                        ,c(minY+(xModifier*2),yMod[1])
+                                        ,xy_8[,2], rep(maxY,2),xy_2[,2] # 8 2
+                                        #5 6 9 10
+        )
+
+        markLeftx[[counter]]<-NA
+        markLefty[[counter]]<-NA
+
+        r2<-r2backup
+
+      } else { # whichArm short else long
+
+        maxX<-minX<-halfX<-halfXModMinus<-halfXModPlus <- NULL
+
+        maxX <- max(x[[counter]])
+        minX <- min(x[[counter]])
+
+        maxY <- max(y[[counter]])
+        minY <- min(y[[counter]])
+
+        halfX <- (maxX+minX)/2
+        halfXModPlus  <- halfX + xModifier
+        halfXModMinus <- halfX - xModifier
+
+        r2backup<-r2
+
+        diffx<-maxX - minX
+        diffy<-maxY - minY
+        ratexy<-diffx/diffy
+        ifelse( (diffx/r2) * 2 < ratexy*4 ,  r2 <- diffx/(ratexy*2) ,r2 )
+
+        yMod<-y[[counter]]
+
+        yMod[which(yMod==max(yMod))] <- yMod[which(yMod==max(yMod))]-r2
+        yMod[which(yMod==min(yMod))] <- yMod[which(yMod==min(yMod))]+r2
+
+        topBotline_x <- c(minX+r2, maxX-r2)
+
+        topBotline_x2 <- c(halfXModPlus + r2, maxX-r2, halfXModMinus-r2,minX+r2)
+
+        bottomline_y <- rep(minY,2)
+
+        # pts<- seq(-pi/2, pi*1.5, length.out = ver*4)
+        ptsl<-split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
+
+        xy_1 <- cbind( (minX+r2) + r2 * sin(ptsl[[1]]), (maxY-r2) + r2 * cos(ptsl[[1]]))
+        xy_2 <- cbind( (maxX-r2) + r2 * sin(ptsl[[2]]), (maxY-r2) + r2 * cos(ptsl[[2]]))
+        xy_3 <- cbind( (maxX-r2) + r2 * sin(ptsl[[3]]), (minY+r2) + r2 * cos(ptsl[[3]]))
+        xy_4 <- cbind( (minX+r2) + r2 * sin(ptsl[[4]]), (minY+r2) + r2 * cos(ptsl[[4]]))
+
+        xy_5 <- cbind( (halfXModPlus +r2) + r2 * sin(ptsl[[4]]), (minY+r2) + r2 * cos(ptsl[[4]]))
+        xy_6 <- cbind( (halfXModMinus-r2) + r2 * sin(ptsl[[3]]), (minY+r2) + r2 * cos(ptsl[[3]]))
+        # xy_7 <- cbind( (halfXModMinus-r2) + r2 * sin(ptsl[[2]]), (maxY-r2) + r2 * cos(ptsl[[2]]))
+        # xy_8 <- cbind( (halfXModPlus +r2) + r2 * sin(ptsl[[1]]), (maxY-r2) + r2 * cos(ptsl[[1]]))
+
+        xy_9  <- cbind( (halfXModPlus - xModifier) + xModifier * sin(ptsl[[2]]), (maxY-(xModifier*2)) + xModifier * cos(ptsl[[2]]))
+        xy_10 <- cbind( (halfXModMinus+ xModifier) + xModifier * sin(ptsl[[1]]), (maxY-(xModifier*2)) + xModifier * cos(ptsl[[1]]))
+        # xy_11 <- cbind( (halfXModMinus+ xModifier) + xModifier * sin(ptsl[[4]]), (minY+(xModifier*2)) + xModifier * cos(ptsl[[4]]))
+        # xy_12 <- cbind( (halfXModPlus - xModifier) + xModifier * sin(ptsl[[3]]), (minY+(xModifier*2)) + xModifier * cos(ptsl[[3]]))
+
+
+        # this is not only right but both chrtids
+
+        markRightx[[counter]] <- c(rep(maxX,2),xy_3[,1] , topBotline_x2[1:2],xy_5[,1],halfXModPlus, # 2 5
+                                       rev(xy_9[,1]),rev(xy_10[,1]) # 9 10
+                                       ,halfXModMinus,         halfXModMinus
+                                       ,xy_6[,1], topBotline_x2[3:4],xy_4[,1],rep(minX,2),xy_1[,1],topBotline_x,xy_2[,1] # 6 4 1 2
+        )
+
+        # both:
+
+        markRighty[[counter]] <-  c(yMod[1:2],  xy_3[,2] , bottomline_y[1:2],xy_5[,2],maxY-(xModifier*2), # 3 5
+                                        rev(xy_9[,2]),rev(xy_10[,2]) # 9 10
+                                        ,maxY-(xModifier*2),          yMod[2]
+                                        ,xy_6[,2], rep(minY,2),       xy_4[,2], yMod[2:1], xy_1[,2],rep(maxY,2)  ,xy_2[,2] # 6 4 1 2
+        )
+        # 7 8 11 12
+
+        markLeftx[[counter]]<-NA
+        markLefty[[counter]]<-NA
+
+        r2<-r2backup
+
+      }
+    }
+  } # for
+
+  chrtXchrtYmarkRo<-list()
+
+  chrtXchrtYmarkRo$markRightx<-markRightx
+  chrtXchrtYmarkRo$markRighty<-markRighty
+
+  chrtXchrtYmarkRo$markLeftx <-markLeftx
+  chrtXchrtYmarkRo$markLefty <-markLefty
+
+  return(chrtXchrtYmarkRo)
+#  chrtXchrtYmarkRo665<<-chrtXchrtYmarkRo
+}
+

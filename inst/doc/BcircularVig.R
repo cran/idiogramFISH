@@ -65,7 +65,57 @@ link<-tryCatch(suppressWarnings(badger::badge_custom("Documentation", paste(pkg,
   }
 } # rcurl
 
-## ---- echo=TRUE, results="hide", fig.width=10, fig.height=7, message=FALSE,dev='png', eval=TRUE----
+## ---- echo=TRUE, results="hide", fig.width=10, fig.height=7, message=FALSE,dev='png', eval=FALSE----
+#  {
+#    require(idiogramFISH)
+#    require(plyr)
+#    dfOfChrSize$OTU   <- "Species mono"
+#    dfChrSizeHolo$OTU <- "Species holo"
+#  
+#    monoholoCS <- plyr::rbind.fill(dfOfChrSize,dfChrSizeHolo)
+#  
+#    dfOfMarks2$OTU     <-"Species mono"
+#    dfMarkPosHolo$OTU <-"Species holo"
+#  
+#    monoholoMarks <- plyr::rbind.fill(dfOfMarks2,dfMarkPosHolo)
+#    monoholoMarks[which(monoholoMarks$markName=="5S"),]$markSize<-.5
+#  }
+#  
+#  plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
+#                dfMarkColor= dfMarkColor,  # df of mark style
+#                dfMarkPos  = monoholoMarks,# df of mark positions, includes cen. marks
+#  
+#                squareness =5,             # vertices squareness
+#                addOTUName = TRUE,         # add OTU names
+#                distTextChr = .5,          # separ. among chr. and text and among chr. name and indices
+#  
+#                chrId="original",          # use original name of chr.
+#                OTUTextSize = .7,          # size of OTU name
+#  
+#                legendHeight= 1,           # height of legend labels
+#                legendWidth = 1,           # width of legend labels
+#                # ,legend="inline"
+#                fixCenBorder = TRUE,       # use chrColor as border color of cen. or cen. marks
+#  
+#                xlimLeftMod=1,             # modify xlim left argument of plot
+#                xlimRightMod=2,            # modify xlim right argument of plot
+#                ylimBotMod= .2             # modify ylim bottom argument of plot
+#  
+#                # GRAPHICAL PARAMETERS FOR CIRCULAR PLOT
+#  
+#                ,circularPlot = TRUE       # circularPlot
+#                ,shrinkFactor = .9         # percentage 1 = 100% of circle with chr.
+#                ,circleCenter = 3          # X coordinate of circleCenter (affects legend pos.)
+#                ,chrLabelSpacing = .9      # chr. names spacing
+#  
+#                ,OTUsrt = 0                # angle for OTU name (or number)
+#                ,OTUplacing = "number"     # Use number and legend instead of name. See OTUcentered
+#                ,OTUjustif = 0             # OTU names justif. left.
+#                ,OTULabelSpacerx = -1.5    # modify position of OTU label, when OTUplacing="number" or "simple"
+#                ,OTUlegendHeight = 1.5     # space among OTU names when in legend - OTUplacing
+#  )
+
+## ---- echo=FALSE, results="hide", fig.width=10, fig.height=7, message=FALSE,dev='png', eval=TRUE----
 {
   require(idiogramFISH)
   require(plyr)
@@ -82,12 +132,15 @@ link<-tryCatch(suppressWarnings(badger::badge_custom("Documentation", paste(pkg,
 }
 
 library(idiogramFISH)
+circularpng <- "../man/figures/circular.png"
+png(circularpng, width=550, height=400)
+par(mar=rep(0,4))
 
 plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               dfMarkColor= dfMarkColor,  # df of mark style
               dfMarkPos  = monoholoMarks,# df of mark positions, includes cen. marks
 
-              squareness =5,              # vertices squareness
+              squareness =5,             # vertices squareness
               addOTUName = TRUE,         # add OTU names
               distTextChr = .5,          # separ. among chr. and text and among chr. name and indices
 
@@ -105,7 +158,7 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               
               # GRAPHICAL PARAMETERS FOR CIRCULAR PLOT
   
-              ,circularPlot = T          # circularPlot
+              ,circularPlot = TRUE       # circularPlot
               ,shrinkFactor = .9         # percentage 1 = 100% of circle with chr.
               ,circleCenter = 3          # X coordinate of circleCenter (affects legend pos.)
               ,chrLabelSpacing = .9      # chr. names spacing
@@ -116,6 +169,11 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               ,OTULabelSpacerx = -1.5    # modify position of OTU label, when OTUplacing="number" or "simple"
               ,OTUlegendHeight = 1.5     # space among OTU names when in legend - OTUplacing
 )
+dev.off()
+
+## ---- results="asis", comment=NA, echo=FALSE, eval=TRUE-----------------------
+circularpng <- normalizePath(circularpng)
+knitr::include_graphics(circularpng)
 
 ## ---- echo=TRUE, results="hide", fig.width=10, fig.height=7, message=FALSE,dev='png', eval=TRUE----
 
@@ -133,9 +191,9 @@ plotIdiograms(dfChrSize = listradfs$dfChrSize,  # d.f. of chr. sizes
               dfMarkPos = listradfs$dfMarkPos,  # d.f. of marks' positions
               dfMarkColor = dfMarkColor5S25S,   # d.f. of mark characteristics
               cenColor  = "black",              # cen. color 
-              squareness = 5,                    # corner squareness
+              squareness = 5,                   # corner squareness
               chrWidth = 1,                     # chr. width
-              orderBySize = FALSE               # do not order chr. by size
+              orderChr = "name"               # order chr. by name
 
               ,addOTUName = FALSE               # do not add OTU name
               ,legendHeight = 2.5               # labels separ. y axis
@@ -253,7 +311,7 @@ plotIdiograms(dfChrSize = myPlasmiddf,  # plasmid size d.f.
               dfMarkPos = marksDfPlasCols,  # mark pos d.f.
               dfMarkColor = markStyle,  # mark style d.f.
               
-              squareness = 21,           # corners not rounded
+              squareness = 21,          # corners not rounded
               chrWidth = .1,            # chr. width
               chrId="",                 # no chr. name
               
@@ -418,7 +476,6 @@ plotIdiograms(dfChrSize = myPlasmiddf,  # plasmid size d.f.
 #  mypattern<-sub("([[:alnum:]]+_).*","\\1",trimws(marksDfChrCols$markName[1]) )
 #  }
 #  
-#  
 #  # png("NOSTOC.png", width=9500, height=9500) #  14 Mbytes
 #  pdf("NOSTOC.pdf",   width=130,  height=130)  #  20 Mb with arrows
 #  # svg("NOSTOC.svg", width=130,  height=130)  # 140 Mb with arrows
@@ -429,7 +486,7 @@ plotIdiograms(dfChrSize = myPlasmiddf,  # plasmid size d.f.
 #                dfMarkPos = marksDfChrCols,  # mark pos d.f.
 #                dfMarkColor = markStyle,     # mark style d.f. style cM
 #  
-#                squareness = 21,           # corners not rounded
+#                squareness = 21,          # corners not rounded
 #                n=100,                    # number of vertices in rounded items.
 #                chrWidth = .02,           # chr. width
 #                chrId="",                 # no chr. name
@@ -460,8 +517,11 @@ plotIdiograms(dfChrSize = myPlasmiddf,  # plasmid size d.f.
 
 ## ---- results="asis", comment=NA, echo=FALSE, eval=TRUE-----------------------
     nostocFile1 <- "../man/figures/nostoc.jpg"
-    nostocFile1 <- normalizePath(nostocFile1)
-    knitr::include_graphics(nostocFile1)  
+
+    if(file.exists(nostocFile1)) {
+      nostocFile1 <- normalizePath(nostocFile1)
+      knitr::include_graphics(nostocFile1)  
+    }
     nostocFile2 <- "../man/figures/nostocSmall.jpg"
     nostocFile2 <- normalizePath(nostocFile2)
     knitr::include_graphics(nostocFile2)

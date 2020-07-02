@@ -3,7 +3,8 @@
 \name{newOrderColumn}
 \alias{newOrderColumn}
 \title{newOrderColumn
-This is an internal function that adds neworder column to listOfdfChromSizeCenType}
+This is an internal function that adds neworder column to
+listOfdfChromSizeCenType}
 \usage{
 newOrderColumn(listOfdfChromSize, listOfdfChromSizeCenType)
 }

@@ -142,9 +142,9 @@ plotIdiograms(dfChrSize = allChrSizeSample,    # data.frame of Chr. Sizes
               dfMarkPos = allMarksSample,      # d.f. of Marks (inc. cen. marks) 
               dfMarkColor =  mydfMaColor,      # d.f. of mark characteristics
               
-              squareness = 4,                   # squareness of vertices
+              squareness = 4,                  # squareness of vertices
               lwd.chr=.5,                      # width of lines
-              orderBySize = FALSE,             # don't order chr. by size
+              orderChr = "name",             # order chr. by name
               centromereSize = 1.3,            # apparent cen. size
               chrWidth =.75,                   # width of chr.
               chrSpacing = .25,                # horizontal spacing of chr.
@@ -271,7 +271,7 @@ plotIdiograms(allChrSizeSampleHolo,               # chr. size data.frame
               dfMarkPos = allMarksSampleHolo,     # data.frame of marks' positions
               dfMarkColor =  mydfMaColor,         # d.f. of mark characteristics
               
-              squareness = 4,                      # vertices squareness
+              squareness = 4,                     # vertices squareness
               karHeight = 2.8,                    # karyotype height
               karHeiSpace = 4.5,                  # vertical size of kar. including spacing
               yTitle="",
@@ -378,7 +378,7 @@ plotIdiograms(mixChrSize,                         # chr. size data.frame
               
               karHeight = 2.8,                    # vertical size of kar. including spacing
               karHeiSpace = 4.5,                  # vertical size of kar. including spacing
-              squareness = 5,                      # vertices squareness
+              squareness = 5,                     # vertices squareness
               chrSpacing = .25,                   # horizontal spacing among chr.
               yTitle = "",
               

@@ -1,4 +1,14 @@
-#' FUNCTIONS: yVertoHor, xHortoVer, xHortoVerRoundCen, xHortoVerDots, mapCircle, mapRadius, transYList, mapOTUnames, addOTUnames, applyMapCircle, intercalate, drawPlot, drawPlotMark, drawPlotMarkLine, drawCen, circLabelMark, circPlotDots, plotChrNames, addChrNameAttrMark, addChrNameAttrMarkDots, xMarkMap, xMarkMapLeft, markMapPer, markMapPercM, markMapPerDots, radDotsPer, centerMarkMapPer, transyListMark, transyListCen, transRadDots, transyListMarkDots, oneDot, OTUlabelsright
+#' FUNCTIONS: yVertoHor, xHortoVer, xHortoVerRoundCen, xHortoVerDots, 
+#' mapCircle, mapRadius, 
+#' transYList, mapOTUnames, addOTUnames, applyMapCircle, intercalate, 
+#' drawPlot, drawPlotMark, 
+#' drawPlotMarkLine, drawCen, circLabelMark, circPlotDots, plotChrNames, 
+#' addChrNameAttrMark, 
+#' addChrNameAttrMarkDots, xMarkMap, xMarkMapLeft, markMapPer, markMapPercM, 
+#' markMapPerDots, 
+#' radDotsPer, centerMarkMapPer, transyListMark, transyListCen, transRadDots, 
+#' transyListMarkDots, 
+#' oneDot, OTUlabelsright
 #'
 # grep -oP '^\K\w+(?=<-function)' ../R/orientation.R | sed ':a;N;s/\n/, /;ba'
 #'

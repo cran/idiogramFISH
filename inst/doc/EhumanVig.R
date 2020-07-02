@@ -122,6 +122,7 @@ plotIdiograms(humChr,                     # data.frame of chromosome size (in pa
               karHeiSpace = 7,            # vertical spacing among OTU
               chrWidth = .4,              # chr. width
               chrSpacing = .6,            # space among chr.
+              orderChr = "group",          # order chr. by group name
               
               amoSepar = 2,               # reduce distance among OTUs
               karIndex = FALSE,           # do not add karyotype indices
@@ -133,7 +134,7 @@ plotIdiograms(humChr,                     # data.frame of chromosome size (in pa
 
               centromereSize = 0,         # apparent centromere size
               
-              squareness = 10,             # squareness of chr. and marks
+              squareness = 10,            # squareness of chr. and marks
               legend = "inline",          # mark labels next to chr.
               markLabelSize = .5,         # size of legend font
               colorBorderMark = "black",  # force color of border of marks 
@@ -185,7 +186,7 @@ plotIdiograms(dfChrSizeDer,               # data.frame of chromosome size
               chrWidth = 1,               # chromosome width
               karHeight = 9,              # kar. height without space
               centromereSize = 0,         # apparent centromere size
-              squareness = 7,              # squareness of chr. and marks
+              squareness = 7,             # squareness of chr. and marks
 
               markLabelSize = .5,         # size of legend font
               legend = "inline",          # mark labels next to chr.
