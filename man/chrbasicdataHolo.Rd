@@ -15,6 +15,8 @@ data.frame with columns:
 \item{chrName}{name of chromosome}
 \item{chrSize}{size of chromosome, micrometers or Mb}
 \item{group}{chromosome group, optional}
+\item{chrNameUp}{optional name over kar.}
+\item{Mbp}{optional name to show size in Mbp, use only when chrSize is not in Mbp}
 }
 
 An object of class \code{data.frame} with 12 rows and 3 columns.

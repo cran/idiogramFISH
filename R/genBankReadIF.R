@@ -25,12 +25,14 @@ genBankReadIF <- function(filename.gb) {
   # require("tidyr")
 
   requireNamespace("dplyr")
+
   if(requireNamespace("tidyr")==FALSE){
     message(crayon::red("You need to install tidyr"))
     return(NULL)
   } else {
     requireNamespace("tidyr")
   }
+
   if( nchar(filename.gb)>300 ){
     # filename.gb<-nostoc_seqs
     readed <- unlist(strsplit(filename.gb,"\n") )

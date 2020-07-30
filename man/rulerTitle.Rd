@@ -6,17 +6,24 @@
 This is an internal function that plots rulers}
 \usage{
 rulerTitle(
-  ycoord,
+  xmnoNA,
+  ymnoNA,
+  chrSpacing,
+  yPosRulerTitle,
   listOfdfChromSizeCenType,
   MbUnit,
   specialyTitle,
   yTitle,
-  ylabline,
+  xPosRulerTitle,
   rulerTitleSize
 )
 }
 \arguments{
-\item{ycoord}{y coords}
+\item{xmnoNA}{x coords}
+
+\item{ymnoNA}{y coords}
+
+\item{chrSpacing}{chr. spacing}
 
 \item{listOfdfChromSizeCenType}{only d.f. of this cen. type}
 
@@ -26,7 +33,9 @@ rulerTitle(
 
 \item{yTitle}{pos. of ruler}
 
-\item{ylabline}{font}
+\item{xPosRulerTitle}{font}
+
+\item{rulerTitleSize}{font size}
 }
 \value{
 plot

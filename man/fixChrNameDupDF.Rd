@@ -2,7 +2,7 @@
 % Please edit documentation in R/fixChrNameDupDF.R
 \name{fixChrNameDupDF}
 \alias{fixChrNameDupDF}
-\title{This is an internal function fixes duplicated names when no marks}
+\title{This function fixes duplicated names when no marks}
 \usage{
 fixChrNameDupDF(list1dfChromSize, mybooleanChrName)
 }

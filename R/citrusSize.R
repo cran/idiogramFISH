@@ -4,6 +4,12 @@
 #' @description Helper function to create data.frames with
 #' chr. size and mark size data for Citrus
 #' based on categories in Carvalho et al. (2005)
+#' @description Special behaviour while plotting:
+#' normally you will get chr. names as: B_1, B_2, etc.
+#' to remove _*, use \code{chrIdPatternRem='_.*'} in
+#' \code{plotIdiograms}. However, for FL+ and FL0,
+#' this conversion is automatic. So, in plot you will
+#' never see FL0_1, FL0_2, for example.
 #'
 #' @param A number of A to calculate (citrusSize)
 #' @param B number of B to calculate (citrusSize)
@@ -12,7 +18,7 @@
 #' @param E number of E to calculate (citrusSize)
 #' @param F number of F to calculate (citrusSize)
 #' @param G number of G to calculate (citrusSize)
-#' @param FL number of FL to calculate (citrusSize)
+#' @param FL number of FL+ to calculate (citrusSize)
 #' @param FL0 number of FL0 to calculate (citrusSize)
 #' @param shortArm for A to G (not FL) (citrusSize)
 #' @param longArm for A to G (not FL) (citrusSize)
@@ -33,6 +39,31 @@
 #' @keywords size arm
 #' @examples
 #' citrusSizeDF <- citrusSize(B=1,D=11,F=4,FL0=2,OTU="C. jambhiri")
+#' suppressMessages(
+#' plotIdiograms(citrusSizeDF,
+#'               indexIdTextSize=.4,# font size
+#'               rulerNumberSize=.4,# font size
+#'               rulerTitleSize=.4, # font size
+#'               rulerPos =-.5,     # ruler pos.
+#'               xPosRulerTitle =1.5,     # ruler title pos.
+#'               orderChr="original"# order of chr. as in d.f.
+#'               )
+#'               )
+#' citrusSizeDF2 <- citrusSize(B=2,D=10,F=4,FL0=1,
+#' FL=1,         # equivalent to FL+
+#' OTU="C. limettioides")
+#'
+#'
+#'suppressMessages(
+#'  plotIdiograms(citrusSizeDF2,     # FL^NA error corrected in 1.15.4
+#'                indexIdTextSize=.4,# font size
+#'                rulerNumberSize=.4,# font size
+#'                rulerTitleSize=.4, # font size
+#'                rulerPos =-.5,     # ruler pos.
+#'                xPosRulerTitle =1.5,     # ruler title pos.
+#'                orderChr="original"# order of chr. as in d.f.
+#'  )
+#')
 #'
 #' @references Carvalho, R., Soares Filho, W. S., Brasileiro-Vidal, A. C., & Guerra, M. (2005). The relationships among lemons, limes and citron: A chromosomal comparison. Cytogenetic and Genome Research, 109(1–3), 276–282. https://doi.org/10.1159/000082410
 #'
@@ -59,7 +90,7 @@ chrSizeCitrusNonFL$OTU<-OTU
 # chrSizeCitrusNonFL <- chrSizeCitrusNonFL[order(chrSizeCitrusNonFL$chrName),]
 }
 if(FLsum>0){
-  chrNamesFL <- c(rep("FL",FL),rep("FL0",FL0))
+  chrNamesFL <- c(rep("FL+",FL),rep("FL0",FL0))
   chrNamesFL <- make.uniqueIF(chrNamesFL)
 chrSizeCitrusFL   <- data.frame(chrName=chrNamesFL,shortArmSize=shortArmFL,longArmSize=longArmFL)
 chrSizeCitrusFL$OTU<-OTU
@@ -71,9 +102,7 @@ chrSizeCitrus <- dplyr::bind_rows(
                                        , value=TRUE)
                                 )]
 )
-# if(nrow(chrSizeCitrus)>0){
-# chrSizeCitrus <- chrSizeCitrus[order(chrSizeCitrus$chrName),]
-# }
+
 return(chrSizeCitrus)
 } # fun
 
@@ -82,6 +111,20 @@ return(chrSizeCitrus)
 #' @return data.frame
 #' @examples
 #' citrusMarkPosDF <- citrusMarkPos(citrusSizeDF)
+#' suppressMessages(
+#' plotIdiograms(dfChrSize= citrusSizeDF,      # chr. size data.frame
+#'               dfMarkPos= citrusMarkPosDF,# mark position data.frame (inc. cen.)
+#'               ruler=FALSE,               # remove
+#'               chrIndex=FALSE,            # remove
+#'               morpho=FALSE,              # remove
+#'               karIndex=FALSE,            # remove
+#'               indexIdTextSize=.4,        # font size
+#'               xlimRightMod=4,            # xlim mod.
+#'               orderChr="original",       # order chr. as in d.f.
+#'               chrColor="blue",           # chr. color
+#'               legendHeight=3             # legend item height
+#'               )
+#'               )
 #' @export
 #'
 citrusMarkPos<-function(chrSizeDf,mSizePter=.25,mSizeQter=.35,mSizePprox=.35,mOther=.25,markName="CMA"){
@@ -159,7 +202,7 @@ citrusMarkPos<-function(chrSizeDf,mSizePter=.25,mSizeQter=.35,mSizePprox=.35,mOt
     markPosEtwo$markSize <- rep(c(mOther),numberOfE)
   }
 
-  getMarkPosFL<-chrSizeDf[which(chrSizeDf$chrName %in% grep("^FL$",chrSizeDf$chrName, value=T )),]
+  getMarkPosFL<-chrSizeDf[which(chrSizeDf$chrName %in% grep("^FL\\+",chrSizeDf$chrName, value=T )),]
 
   numberOfFL<-nrow(getMarkPosFL)
 
@@ -203,15 +246,52 @@ citrusMarkPos<-function(chrSizeDf,mSizePter=.25,mSizeQter=.35,mSizePprox=.35,mOt
 #' @return data.frame
 #' @examples
 #' citrusMarkPosDF45S<-markOverCMA(citrusMarkPosDF, chrType="B", chrRegion="p", markName="45S")
+#' suppressMessages(
+#' plotIdiograms(dfChrSize= citrusSizeDF, # chr. size data.frame
+#'               dfMarkPos= citrusMarkPosDF45S,# mark position data.frame (inc. cen.)
+#'               ruler=FALSE,             # remove ruler
+#'               chrIndex=FALSE,          # remove index
+#'               morpho=FALSE,            # remove morphol.
+#'               karIndex=FALSE,          # remove
+#'               indexIdTextSize=.4,      # font size chr.
+#'               xlimRightMod=4,          # modify xlim
+#'               orderChr="original",     # as in d.f.
+#'               chrColor="blue",
+#'               legendHeight=5,          # height of legend item
+#'               colorBorderMark="black", # mark border color
+#'               OTUfont=3                # italics
+#'               )
+#'               )
 #' @export
 #'
 markOverCMA <- function(citrusMarkPosDF,chrType="B", chrName, chrRegion="p", markName="45S"){
+
 if(!missing(chrName)){
-  smallDF<-citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% grep(paste0("^",chrName,"$"), citrusMarkPosDF$chrName, value=TRUE) &
-                                 citrusMarkPosDF$chrRegion %in% chrRegion),]
+  if(chrName=="A"){
+    minMDC<-min(citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% grep(paste0("^",chrName,"$"), citrusMarkPosDF$chrName, value=TRUE) &
+                                citrusMarkPosDF$chrRegion %in% chrRegion),]$markDistCen)
+    smallDF<-citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% grep(paste0("^",chrName,"$"), citrusMarkPosDF$chrName, value=TRUE) &
+                                 citrusMarkPosDF$chrRegion %in% chrRegion &
+                                   citrusMarkPosDF$markDistCen %in% minMDC ),]
+  } else {
+    smallDF<-citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% grep(paste0("^",chrName,"$"), citrusMarkPosDF$chrName, value=TRUE) &
+                                     citrusMarkPosDF$chrRegion %in% chrRegion),]
+  }
 } else {
-  smallDF<-citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% grep(chrType, citrusMarkPosDF$chrName, value=TRUE) &
-                                   citrusMarkPosDF$chrRegion %in% chrRegion),]
+  if(chrType=="A"){
+    Anames <- grep(chrType, citrusMarkPosDF$chrName, value=TRUE)
+    minMDC<-numeric()
+    for (i in 1:length(Anames)){
+      minMDC[i] <- min(citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% Anames[i] &
+                                        citrusMarkPosDF$chrRegion %in% chrRegion),]$markDistCen)
+    }
+    smallDF<-citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% grep(chrType, citrusMarkPosDF$chrName, value=TRUE) &
+                                     citrusMarkPosDF$chrRegion %in% chrRegion &
+                                     citrusMarkPosDF$markDistCen %in% minMDC ),]
+  } else {
+    smallDF<-citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% grep(chrType, citrusMarkPosDF$chrName, value=TRUE) &
+                                     citrusMarkPosDF$chrRegion %in% chrRegion),]
+  }
 }
   if(nrow(smallDF)==0){
     return(message("no bands found"))

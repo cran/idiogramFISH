@@ -1,8 +1,8 @@
 #' @name armRatioCI
 #' @aliases swapChrRegionDfSizeAndMarks
 #' @title FUNCTIONS armRatioCI and swapChrRegionDfSizeAndMarks.
-#' @description armRatioCI: reads a data.frame and produces AR (radius), CI, 
-#' Guerra and Levan 
+#' @description armRatioCI: reads a data.frame and produces AR (radius), CI,
+#' Guerra and Levan
 #' classifications.
 #' @description swapChrRegionDfSizeAndMarks: reads data.frames to swap arms
 #'
@@ -28,6 +28,8 @@
 armRatioCI<- function(dfChrSize){
   # message(crayon::black("\nCalculating chromosome indexes\n") )
   dfChrSize$smallest<-pmin(dfChrSize$shortArmSize, dfChrSize$longArmSize)
+  dfChrSize$largest <-pmax(dfChrSize$shortArmSize, dfChrSize$longArmSize)
+  dfChrSize$chrSize<-dfChrSize$smallest+dfChrSize$largest
 
   if(!identical(dfChrSize$smallest,dfChrSize$shortArmSize) ){
     dfChrSize$diffSmallShort<-dfChrSize$shortArmSize-dfChrSize$smallest
@@ -38,7 +40,6 @@ armRatioCI<- function(dfChrSize){
 
   if("OTU" %in% colnames(dfChrSize)){message(crayon::black(paste("\nCalculating chromosome indexes in",unique(dfChrSize$OTU) ))) }
 
-  dfChrSize$largest <-pmax(dfChrSize$shortArmSize, dfChrSize$longArmSize)
   dfChrSize$AR<-format(round(dfChrSize$largest/dfChrSize$smallest,1),nsmall = 1)
   dfChrSize$CI<-format(round(dfChrSize$smallest*100/(dfChrSize$longArmSize+dfChrSize$shortArmSize),1),nsmall = 1)
   dfChrSize$ARnum<-as.numeric(dfChrSize$AR)

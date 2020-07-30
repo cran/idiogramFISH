@@ -1,11 +1,11 @@
 #' FUNCTION that modifies marks' names into columns
 #'
-#' @description Reads a data.frame with marks' of styles 
-#' \code{downArrow,upArrow,cM,cMLeft} 
-#' positions. It separates names in columns, avoiding overlap when multiple 
+#' @description Reads a data.frame with marks' of styles
+#' \code{downArrow,upArrow,cM,cMLeft}
+#' positions. It separates names in columns, avoiding overlap when multiple
 #' close names
-#' @description Exceptionally this function requires the column style in the 
-#' data.frame of marks' 
+#' @description Exceptionally this function requires the column style in the
+#' data.frame of marks'
 #' positions.
 #' @description Returns a data.frame
 #'
@@ -13,37 +13,38 @@
 #'
 #' @param marksDf data.frame with columns: \code{markName,style,markPos}
 #' @param dfChrSize data.frame, size of chr. Same of plot.
-#' @param markType character, use 
+#' @param markType character, use
 #' \code{c("downArrow","upArrow","cM","cMLeft")} or a subset
 #' @param amountofSpaces numeric, number of spaces for each column
 #' @param colNumber numeric, number of columns
-#' @param protruding numeric, same as plot, minimal protruding for arrow 
-#' marks, equivalent to cM 
+#' @param protruding numeric, same as plot, minimal protruding for arrow
+#' marks, equivalent to cM
 #' protruding
-#' @param protrudingInt numeric, spacing of columns in terms of width of chr. 
-#' percent 1 = 100%. 
+#' @param protrudingInt numeric, spacing of columns in terms of width of chr.
+#' percent 1 = 100%.
 #' Defaults to \code{0.5}
-#' @param circularPlot boolean, use \code{TRUE} for circular plots. Use 
+#' @param circularPlot boolean, use \code{TRUE} for circular plots. Use
 #' \code{FALSE} otherwise
-#' @param rotation numeric, same as plot, anti-clockwise rotation, defaults to 
-#' \code{0.5} which 
+#' @param rotation numeric, same as plot, anti-clockwise rotation, defaults to
+#' \code{0.5} which
 #' rotates chr. from top to -90 degrees. (-0.5*\eqn{\pi} )
-#' @param defaultStyleMark character, if some data in column style missing 
-#' fill with this one. 
+#' @param defaultStyleMark character, if some data in column style missing
+#' fill with this one.
 #' Defaults to \code{"square"}
-#' @param orderBySize boolean, use same as in plot. Defaults to \code{TRUE}
-#' @param halfModUp numeric, for circ. plots, when plotting several 
-#' chromosomes in a circular 
-#' plot, using a small value \code{0.05} corrects for alignment problems of 
-#' \code{upArrows, cM} 
+#' @param orderChr character, replaces \code{orderBySize - deprecated} when \code{"size"}, sorts chromosomes by total
+#'   length from the largest to the smallest. \code{"original"}: preserves d.f. order. \code{"name"}: sorts alphabetically; \code{"group"}: sorts by group name
+#' @param halfModUp numeric, for circ. plots, when plotting several
+#' chromosomes in a circular
+#' plot, using a small value \code{0.05} corrects for alignment problems of
+#' \code{upArrows, cM}
 #' labels. Defaults to \code{NA}
-#' @param halfModDown numeric, for circ. plots, when plotting several 
-#' chromosomes in a circular 
-#' plot, using a small value \code{0.05} corrects for alignment problems of 
-#' \code{downArrows, 
+#' @param halfModDown numeric, for circ. plots, when plotting several
+#' chromosomes in a circular
+#' plot, using a small value \code{0.05} corrects for alignment problems of
+#' \code{downArrows,
 #' cMLeft} labels. Defaults to \code{NA}
-#' @param rotatMod numeric, for circ. plots, when rotation != 0 (diff.), 
-#' corrects alignment of 
+#' @param rotatMod numeric, for circ. plots, when rotation != 0 (diff.),
+#' corrects alignment of
 #' labels. Defaults to \code{0}
 #' @export
 #'
@@ -52,7 +53,7 @@
 namesToColumns <- function(marksDf, dfChrSize, markType=c("downArrow","upArrow","cMLeft","cM"),
                            amountofSpaces=13,colNumber=2,protruding=0.5,
                            protrudingInt=0.5,circularPlot=TRUE,rotation=0.5,
-                           defaultStyleMark = "square",orderBySize=TRUE,
+                           defaultStyleMark = "square",orderChr="size",
                            halfModDown=NA,halfModUp=NA, rotatMod=0
                            ) {
 
@@ -94,14 +95,34 @@ if(! "chrName" %in% colnames(marksDf) ) {
       ,NA
   )
 
-  if(orderBySize==TRUE) {
+  if(orderChr=="size") {
     orderlist<-lapply(totalLength, function(x) order(x, decreasing = TRUE) )
-  } else { # if not want to order by size, set order by name of chro
+  } else if(orderChr=="name"){
     orderlist<-lapply(listOfdfChromSize, function(x) tryCatch(order(x$chrName), error=function(e) NA ) )
-  } # else
+  } else if(orderChr=="original" | orderChr=="group") {
+    orderlist<-lapply(listOfdfChromSize, function(x) tryCatch(1:max(order(x$chrName) ), error=function(e) NA ) )
+  }
 
   #   add column of new chro index to data.frames and order !!
   listOfdfChromSize <- addNeworderColumn(listOfdfChromSize,orderlist)
+
+    grouporderlist<-lapply(listOfdfChromSize, function(x) tryCatch(order(x$group), error=function(e) NA ) )
+
+    if(orderChr=="group") {
+
+      for (s in 1:length(listOfdfChromSize)){
+
+        if("group" %in% colnames(listOfdfChromSize[[s]])) {
+          message(crayon::blue("group column present - remove column if not using") )
+
+          if(class(listOfdfChromSize[[s]])=="data.frame") {
+            listOfdfChromSize[[s]]<-listOfdfChromSize[[s]][grouporderlist[[s]], ]
+            listOfdfChromSize[[s]]$neworder<-1:nrow(listOfdfChromSize[[s]])
+          } #fi
+        }
+      } # s end for
+
+    } # order
 
   # markPos d.f. to List
   listOfdfMarks <- dfToListColumn(marksDf)

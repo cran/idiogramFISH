@@ -12,19 +12,19 @@
 
 markDistCenGISHfix<-function(dfArmGISHInternalMonocen,dfChrSizeInternal,columnArmSize,markDistType){
 
-  # dfChrSizeInternal <- dplyr::bind_rows(listOfdfChromSize, .id = "OTU")
-
-    dfArmGISHInternalMonocen$markSize<-dfChrSizeInternal[match(interaction(dfArmGISHInternalMonocen[c("OTU","chrName")] ),
+    dfArmGISHInternalMonocen$markSize <- dfChrSizeInternal[match(interaction(dfArmGISHInternalMonocen[c("OTU","chrName")] ),
                                                              interaction(dfChrSizeInternal[c("OTU","chrName") ] )
-    ),][,columnArmSize] #$longArmSize
+    ),][,columnArmSize]
 
     dfArmGISHInternalMonocen$markDistCen<-0
 
 
     if(markDistType=="cen") { # center
+
       dfArmGISHInternalMonocen$markDistCen <- dfChrSizeInternal[match(interaction(dfArmGISHInternalMonocen[c("OTU","chrName")] ),
                                                                     interaction(dfChrSizeInternal[c("OTU","chrName") ] )
-      ),][,columnArmSize]/2 #$longArmSize/2
+      ),][,columnArmSize]/2
+
     } # if cen
 
     return(dfArmGISHInternalMonocen)

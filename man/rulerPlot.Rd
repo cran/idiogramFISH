@@ -11,10 +11,13 @@ rulerPlot(
   listOfdfChromSizeCenType,
   fromZerotoMax,
   rulerNumberSize,
-  rulerPosMod,
   rulerPos,
   ruler.tck,
-  lwd.chr
+  lwd.chr,
+  moveKarHor2,
+  mkhValue,
+  useMinorTicks,
+  miniTickFactor
 )
 }
 \arguments{
@@ -27,8 +30,6 @@ rulerPlot(
 \item{fromZerotoMax}{intervals}
 
 \item{rulerNumberSize}{font}
-
-\item{rulerPosMod}{modifier of pos.}
 
 \item{rulerPos}{pos. of ruler}
 

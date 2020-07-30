@@ -71,7 +71,7 @@ yVertoHor(y, monocenNames)
 
 \item{labelSpacing}{numeric, spacing of labels to chr. or mark.}
 
-\item{listOfdfDataCen}{list, of d.f.s of marks}
+\item{parparlistOfdfMarkPosDataCen}{list, of d.f.s of marks}
 
 \item{listOfdfMarkPos}{list, of d.f.s of marks}
 

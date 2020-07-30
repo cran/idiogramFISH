@@ -1,6 +1,69 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 1.16.1
+
+29-07-2020
+
+  - `squareLeft` new style of mark. as `square` but with legend to the
+    left when inline.
+  - minor ticks possible
+  - add mark % of chr. and position to plot.
+  - additional column `chrNameUp` for name over kar.
+  - show chr. sizes in um and Mbp under kar.
+  - when `OTUfont=3` (italics), var. name present inside `'` is not
+    shown in italics
+  - added anchor structure for progenies, see GISH
+  - `notesLeft` deprecated pass data.frame to `leftNotes`
+  - Better separation of groups
+  - F<sub>L</sub><sup>+</sup> chr. name now corrected in plot,
+    previously F<sub>L</sub><sup>NA</sup>
+  - `ylabline` renamed to `xPosRulerTitle`
+
+param:
+
+  - `groupSepar`: numeric, factor for affecting chr. spacing
+    `chrSpacing` among groups. Defaults to `0.5`
+  - `useMinorTicks`: boolean, display minor ticks between labeled ticks
+    in ruler. See `miniTickFactor`. Defaults to `FALSE`. (ticks without
+    label)
+  - `miniTickFactor`: numeric, number of minor ticks for each labeled
+    tick. See `useMinorTicks`. Defaults to `10`
+  - `xPosRulerTitle`: (`2.6`) Modifies the horizontal position of the
+    title of rulers (Mb, etc). Moves to left from 1st chr. in
+    `chrSpacing` times
+  - `yPosRulerTitle`: numeric, affects vertical position of ruler title.
+    Defaults to \`0}
+  - `markPer`: character, name of mark to calculate % of mark in chr.
+    and add it to plot. See `perAsFraction`
+  - `perAsFraction`: boolean, when `TRUE` % is shown as fraction.
+    Defaults to `FALSE`. See `markPer`
+  - `showMarkPos`: boolean, adds position of marks under karyotype
+    (fraction 0-1) when `TRUE`. Defaults to `FALSE`
+  - `bToRemove`: character, bands to remove from calc. of pos.
+  - `chrSize` show chr. size under karyo.
+  - `chrNameUp` use col. of the same name to add secondary name over
+    kar.
+  - `classMbName` “chromosome” name when in Mbp
+  - `classcMName` “chromosome” name when in cM
+  - `classChrName` “chromosome” name when in um
+  - `classChrNameUp` “chromosome” name `chrNameUp`
+  - `classGroupName` name of title of groups
+  - `nsmall` digits for rounding of `chrSize`
+  - `chrSizeMbp` show chr. size Mbp requires col. `Mbp`
+  - `groupName`, hide or show group name
+  - `leftNotes`, similar to notes
+  - `leftNotesPos`, x
+  - `leftNotesPosY`, y
+  - `moveKarHor`, move kar. to right
+  - `mkhValue`, amount to move to right
+  - `anchor`, display anchor for moveKarHor OTUs
+  - `anchorVsizeF` factor to modify vertical size of anchor
+  - `moveAnchorV`, move anchor vertical portion
+  - `moveAnchorH`, move anchor horizontal portion
+  - `pchAnchor`, symbol in anchor
+  - `rulerPosMod` deprecated
+
 # idiogramFISH 1.15.3
 
 01-07-2020

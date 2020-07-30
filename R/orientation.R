@@ -49,7 +49,7 @@
 #' @param fixCenBorder2 boolean, change cen border
 #' @param indexIdTextSize numeric, text size
 #' @param labelSpacing numeric, spacing of labels to chr. or mark.
-#' @param listOfdfDataCen list, of d.f.s of marks
+#' @param parparlistOfdfMarkPosDataCen list, of d.f.s of marks
 #' @param listOfdfMarkPos list, of d.f.s of marks
 #' @param listOfdfMarkPosSq list, of d.f.s of marks
 #' @param mapCircle function name
@@ -1043,17 +1043,17 @@ oneDot<-function(xMarkCr){
   return(oneDotXList)
 }
 
-drawCenMarks <- function(circleMaps,dfMarkColorInternal,listOfdfDataCen,lwd.chr,fixCenBorder2,chrColor) {
+drawCenMarks <- function(circleMaps,dfMarkColorInternal,parparlistOfdfMarkPosDataCen,lwd.chr,fixCenBorder2,chrColor) {
   for (s in 1:length(circleMaps)){
     for (m in 1:length(circleMaps[[s]] ) ) {
       graphics::polygon(x=circleMaps[[s]][[m]]$x,
                         y=circleMaps[[s]][[m]]$y,
-                        col = dfMarkColorInternal$markColor[match(listOfdfDataCen[[s]]$markName[[m]],
+                        col = dfMarkColorInternal$markColor[match(parparlistOfdfMarkPosDataCen[[s]]$markName[[m]],
                                                                   dfMarkColorInternal$markName)] ,
                         lwd=lwd.chr,
                         border = ifelse(fixCenBorder2,
                                         chrColor,
-                                        dfMarkColorInternal$markBorderColor[match(listOfdfDataCen[[s]]$markName[[m]],
+                                        dfMarkColorInternal$markBorderColor[match(parparlistOfdfMarkPosDataCen[[s]]$markName[[m]],
                                                                                   dfMarkColorInternal$markName)] # z outside
                         ) # ifelse
       ) # polygon

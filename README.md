@@ -13,7 +13,7 @@ idiogramFISH
 
 ![<https://cran.r-project.org/web/packages/idiogramFISH/>](man/figures/cranversion.svg) [![downloads](man/figures/realdownloads.svg)](https://ferroao.gitlab.io/idiogramfishhelppages/downloads.png) [![10.5281/zenodo.3579417](man/figures/doibadge.svg)](https://doi.org/10.5281/zenodo.3579417)
  ![gitlab.com/ferroao/idiogramFISH](man/figures/gitbadge.svg)
-<br></br><br></br><a href='https://ko-fi.com/X7X71PZZG' target='_blank'><img height='36' style='border:0px;height:36px;' src='man/figures/kofi1.png' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+<br></br><br></br><a href='https://ko-fi.com/X7X71PZZG' target='_blank'><img height='30' style='border:0px;height:30px;' src='man/figures/kofi1.png' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 <!-- badges: end -->
 
 The goal of idiogramFISH is to plot idiograms of karyotypes, plasmids
@@ -21,10 +21,10 @@ and circ. chr. having a set of data.frames for chromosome data and
 optionally marks’ data (`plotIdiograms` function) (Roa and PC Telles,
 [2020](#ref-Roa2020)). Idiograms can also be plotted in concentric
 circles. Separated chromatids can be visible when not in a circular
-plot.<br> <br>Seven styles of marks are available: square, dots, cM,
-cMLeft, cenStyle, upArrow, downArrow; its legend (label) can be drawn
-inline or to the right of karyotypes. It is possible to calculate also
-chromosome and karyotype indexes (Romero-Zarco,
+plot.<br> <br>Six styles of marks are available: square (squareLeft),
+dots, cM (cMLeft), cenStyle, upArrow, downArrow; its legend (label) can
+be drawn inline or to the right of karyotypes. It is possible to
+calculate also chromosome and karyotype indexes (Romero-Zarco,
 [1986](#ref-Zarco1986new); Watanabe *et al.*, [1999](#ref-Watanabe1999))
 and classify chromosome morphology in the categories of Levan
 ([1964](#ref-Levan1964)), and
@@ -42,13 +42,14 @@ R-packages roxygen2 (Wickham *et al.*, [2018](#ref-R-roxygen2)), usethis
 al.*, [2018](#ref-rmarkdown2018)), rvcheck (Yu,
 [2019](#ref-R-rvcheck)[a](#ref-R-rvcheck)), badger (Yu,
 [2019](#ref-R-badger)[b](#ref-R-badger)), kableExtra (Zhu,
-[2019](#ref-R-kableExtra)), prettydoc (Qiu, [2019](#ref-R-prettydoc))
-and RCurl (Temple Lang and CRAN team, [2019](#ref-R-RCurl)). For some
-vignette figures, packages rentrez (Winter, [2017](#ref-rentrez2017)),
-plyr (Wickham, [2011](#ref-plyr2011)), phytools (Revell,
-[2012](#ref-phytools2012)), ggtree (Yu *et al.*,
-[2018](#ref-ggtree2018)), ggplot2 (Wickham, [2016](#ref-ggplot22016))
-and ggpubr (Kassambara, [2019](#ref-R-ggpubr)) were used.
+[2019](#ref-R-kableExtra)), rmdformats (Barnier,
+[2020](#ref-R-rmdformats)) and RCurl (Temple Lang and CRAN team,
+[2019](#ref-R-RCurl)). For some vignette figures, packages rentrez
+(Winter, [2017](#ref-rentrez2017)), plyr (Wickham,
+[2011](#ref-plyr2011)), phytools (Revell, [2012](#ref-phytools2012)),
+ggtree (Yu *et al.*, [2018](#ref-ggtree2018)), ggplot2 (Wickham,
+[2016](#ref-ggplot22016)) and ggpubr (Kassambara, [2019](#ref-R-ggpubr))
+were used.
 
 <!-- badger -->
 
@@ -83,7 +84,7 @@ list.of.packages <- c(
     "plyr",
     "knitr",
     "kableExtra",
-    "prettydoc",
+    "rmdformats",
     "rmarkdown",
     "RCurl",
     "rvcheck",
@@ -167,12 +168,16 @@ data(dfOfMarks2)  # mark position data (inc. cen.)
 
 dfOfMarks2[which(dfOfMarks2$markName=="5S"),]$markSize<-0.8 # modif. of mark size
 
+# column Mbp not for plotting purposes
+dfOfChrSize$Mbp<-(dfOfChrSize$shortArmSize+dfOfChrSize$longArmSize)*100
+
 # svg("testing.svg",width=11,height=4.5 )
 
 opar <- par(no.readonly = TRUE)      # make a copy of current settings if you want to restore them later
 #par(opar) # recover par
 
 par(mar=rep(0,4))
+
 plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
               dfMarkColor=dfMarkColor,  # d.f of mark style <- Optional
               dfMarkPos=dfOfMarks2,     # df of mark positions (includes cen. marks)
@@ -183,20 +188,21 @@ plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
               
               morpho="Guerra",          # chr. morpho. classif. (Guerra, Levan, both, "" ) ver. >= 1.12 only
               chrIndex="CI",            # cen. pos. (CI, AR, both, "" ) ver. >= 1.12 only
+              chrSize = TRUE,           # add chr. sizes under chr.
+              chrSizeMbp = TRUE,        # add Mbp sizes under chr. (see above)
               
               rulerPos= 0,              # position of ruler
               ruler.tck=-0.01,          # size and orientation of ruler ticks
               rulerNumberSize=.8        # font size of rulers
-              ,ylabline= -6             # ruler units (title) pos.
+              ,xPosRulerTitle = 3             # ruler units (title) pos.
               
               ,legendWidth=1            # width of legend items
               ,fixCenBorder = TRUE      # use chrColor as border color of cen. or cen. marks
               ,distTextChr = 1.2        # chr. text separation
               
               ,xlimLeftMod = 2          # xlim left param.
-              ,ylimBotMod = -1          # modify ylim bottom argument
+              ,ylimBotMod = 0           # modify ylim bottom argument
               ,ylimTopMod = 0           # modify ylim top argument
-              # ,asp=1                  # y/x aspect, see ?plot
 )
 ```
 
@@ -234,6 +240,12 @@ longArmSize
 
 </th>
 
+<th style="text-align:right;">
+
+Mbp
+
+</th>
+
 </tr>
 
 </thead>
@@ -260,6 +272,12 @@ longArmSize
 
 </td>
 
+<td style="text-align:right;">
+
+700
+
+</td>
+
 </tr>
 
 <tr>
@@ -282,6 +300,12 @@ longArmSize
 
 </td>
 
+<td style="text-align:right;">
+
+900
+
+</td>
+
 </tr>
 
 <tr>
@@ -301,6 +325,12 @@ longArmSize
 <td style="text-align:right;">
 
 3
+
+</td>
+
+<td style="text-align:right;">
+
+500
 
 </td>
 
@@ -323,6 +353,12 @@ X
 <td style="text-align:right;">
 
 2
+
+</td>
+
+<td style="text-align:right;">
+
+300
 
 </td>
 
@@ -713,34 +749,34 @@ NA
 
 #### 2 How to plot a karyotype of holocentrics:
 
-function `plotIdiogramsHolo` deprecated after ver. \> 1.5.1
-
 ``` r
 library(idiogramFISH)
 
-# load some package data.frames - optional
-data(dfChrSizeHolo, dfMarkColor, dfMarkPosHolo)
+# column Mbp not for plotting purposes
+dfChrSizeHolo$Mbp<-dfChrSizeHolo$chrSize*100
 
 # svg("testing.svg",width=14,height=8 )
+par(mar = c(0, 0, 0, 0), omi=rep(0,4) )
 
-par(mar = c(0, 0, 0, 0), omi=rep(0,4), oma=rep(0,4) )
 plotIdiograms(dfChrSize  =dfChrSizeHolo, # data.frame of chr. size
               dfMarkColor=dfMarkColor,   # df of mark style
               dfMarkPos  =dfMarkPosHolo, # df of mark positions
               
               addOTUName=FALSE,        # do not add OTU names
-              distTextChr = .5,        # chr. name distance to chr.
+              distTextChr = 1,         # chr. name distance to chr.
+              chrSize = TRUE,          # show chr. size under chr.
+              chrSizeMbp = TRUE,       # show chr. size in Mbp under chr. requires Mbp column
               
               rulerPos=-.4,            # position of ruler
               rulerNumberPos=.9,       # position of numbers of rulers
-              ylabline=-3,             # ruler units (title) pos.
+              xPosRulerTitle= 4.5            # ruler units (title) horizon. pos. 
               
-              xlimLeftMod=2,           # modify xlim left argument of plot
-              ylimBotMod=.2            # modify ylim bottom argument of plot
+              ,xlimLeftMod=2           # modify xlim left argument of plot
+              ,ylimBotMod=.2           # modify ylim bottom argument of plot
               ,legendHeight=.5         # height of legend labels
               ,legendWidth = 1.2       # width of legend labels
               ,xModifier = .025        # separ. among chromatids
-              )                  
+)                      
 ```
 
 <img src="man/figures/README-example2-1.png" width="70%" />
@@ -771,6 +807,18 @@ chrSize
 
 </th>
 
+<th style="text-align:right;">
+
+Mbp
+
+</th>
+
+<th style="text-align:left;">
+
+OTU
+
+</th>
+
 </tr>
 
 </thead>
@@ -791,6 +839,18 @@ chrSize
 
 </td>
 
+<td style="text-align:right;">
+
+300
+
+</td>
+
+<td style="text-align:left;">
+
+Species holo
+
+</td>
+
 </tr>
 
 <tr>
@@ -804,6 +864,18 @@ chrSize
 <td style="text-align:right;">
 
 4
+
+</td>
+
+<td style="text-align:right;">
+
+400
+
+</td>
+
+<td style="text-align:left;">
+
+Species holo
 
 </td>
 
@@ -823,6 +895,18 @@ chrSize
 
 </td>
 
+<td style="text-align:right;">
+
+200
+
+</td>
+
+<td style="text-align:left;">
+
+Species holo
+
+</td>
+
 </tr>
 
 <tr>
@@ -836,6 +920,18 @@ chrSize
 <td style="text-align:right;">
 
 5
+
+</td>
+
+<td style="text-align:right;">
+
+500
+
+</td>
+
+<td style="text-align:left;">
+
+Species holo
 
 </td>
 
@@ -1001,6 +1097,12 @@ markSize
 
 </th>
 
+<th style="text-align:left;">
+
+OTU
+
+</th>
+
 </tr>
 
 </thead>
@@ -1033,6 +1135,12 @@ markSize
 
 </td>
 
+<td style="text-align:left;">
+
+Species holo
+
+</td>
+
 </tr>
 
 <tr>
@@ -1058,6 +1166,12 @@ DAPI
 <td style="text-align:right;">
 
 0.5
+
+</td>
+
+<td style="text-align:left;">
+
+Species holo
 
 </td>
 
@@ -1089,6 +1203,12 @@ DAPI
 
 </td>
 
+<td style="text-align:left;">
+
+Species holo
+
+</td>
+
 </tr>
 
 <tr>
@@ -1114,6 +1234,12 @@ DAPI
 <td style="text-align:right;">
 
 0.5
+
+</td>
+
+<td style="text-align:left;">
+
+Species holo
 
 </td>
 
@@ -1145,6 +1271,12 @@ CMA
 
 </td>
 
+<td style="text-align:left;">
+
+Species holo
+
+</td>
+
 </tr>
 
 <tr>
@@ -1170,6 +1302,12 @@ CMA
 <td style="text-align:right;">
 
 0.5
+
+</td>
+
+<td style="text-align:left;">
+
+Species holo
 
 </td>
 
@@ -1209,13 +1347,15 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               dfMarkColor= dfMarkColor,  # df of mark style
               dfMarkPos  = monoholoMarks,# df of mark positions, includes cen. marks
               
+              chrSize = TRUE,            # show chr. size under chr.
+              
               squareness = 4,            # vertices squareness
               roundedCen = FALSE,        # triangular cen.
               addOTUName = TRUE,         # add OTU names
               OTUTextSize = .7,          # font size of OTU
-              distTextChr = .5,          # separ. among chr. and text and among chr. name and indices
+              distTextChr = 0.7,         # separ. among chr. and text and among chr. name and indices
               
-              karHeiSpace = 3,           # karyotype height inc. spacing
+              karHeiSpace = 4,           # karyotype height inc. spacing
               karIndexPos = .2,          # move karyotype index
               
               legendHeight= 1,           # height of legend labels
@@ -1225,7 +1365,7 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               rulerPos= 0,               # position of ruler
               ruler.tck=-0.02,           # size and orientation of ruler ticks
               rulerNumberPos=.9,         # position of numbers of rulers
-              ylabline=-6,               # ruler units (title) pos.
+              xPosRulerTitle= 4,               # ruler units (title) pos.
               
               xlimLeftMod=1,             # modify xlim left argument of plot
               xlimRightMod=3,            # modify xlim right argument of plot
@@ -1247,13 +1387,13 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-16-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-17-1.png" width="70%" />
 
 ``` r
 #dev.off() # close svg()
 ```
 
-<img src="/home/fernando/GoogleDrive/gitlab/idiogramFISH/man/figures/circular.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-18-1.png" width="70%" />
 
 ## Citation
 
@@ -1261,7 +1401,7 @@ To cite idiogramFISH in publications, please use:
 
 Roa F, Telles MPC (2020) idiogramFISH: Idiograms with Marks and
 Karyotype Indices, Universidade Federal de Goiás. Brazil. R-package.
-version 1.15.3 <https://ferroao.gitlab.io/manualidiogramfish/>.
+version 1.16.1 <https://ferroao.gitlab.io/manualidiogramfish/>.
 doi:<!-- breaklink -->10.5281/zenodo.3579417
 
 To write citation to file:
@@ -1320,6 +1460,14 @@ phylogenetic information *Journal of Plant Research*, 112: 145–161.
 ## R-packages references
 
 <div id="refs_software">
+
+<div id="ref-R-rmdformats">
+
+Barnier J. 2020. *Rmdformats: HTML output formats and templates for
+’rmarkdown’ documents*. R package version 0.3.7.
+<https://CRAN.R-project.org/package=rmdformats> 
+
+</div>
 
 <div id="ref-R-crayon">
 
@@ -1421,13 +1569,6 @@ Biology and Evolution*, 35(2): 3041–3043.
 ## Documentation references
 
 <div id="refs_docs">
-
-<div id="ref-R-prettydoc">
-
-Qiu Y. 2019. *Prettydoc: Creating pretty documents from r markdown*. R
-package version 0.3.0. <https://CRAN.R-project.org/package=prettydoc> 
-
-</div>
 
 <div id="ref-R-RCurl">
 

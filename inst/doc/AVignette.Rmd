@@ -1,0 +1,88 @@
+---
+title: "idiogramFISH"
+author: "Fernando Roa"
+date: "29 07 2019"
+
+output:
+  html_document
+    
+vignette: >
+  %\VignetteIndexEntry{idiogramFISH}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  
+---
+<!--<a name="top"></a> -->
+
+```{r, echo=F, warning=FALSE, error=FALSE, comment=NA}
+if(Sys.info()['sysname']=="Darwin") {
+      # system("rm index.Rmd")
+      # system("rm DphylogenyVig.Rmd")
+      # system("rm EhumanVig.Rmd")         
+      # system("rm AplotIdiogramsVig.Rmd")
+      # system("rm BcircularVig.Rmd")
+    
+      system('echo "---" > index.Rmd')
+      system('echo "title: \'idiogramFISH\'" >> index.Rmd')
+      system('echo "author: \'Fernando Roa\'" >> index.Rmd')
+      system('echo "date: \'23 08 2019\'" >> index.Rmd')
+      system('echo "output:" >> index.Rmd')
+      system('echo "  html_document" >> index.Rmd')
+      system('echo "vignette: >" >> index.Rmd')
+      system('echo "  %\\VignetteIndexEntry{idiogramFISH}" >> index.Rmd')
+      system('echo "  %\\VignetteEngine{knitr::rmarkdown}" >> index.Rmd')
+      system('echo "  %\\VignetteEncoding{UTF-8}" >> index.Rmd')
+      system('echo "---" >> index.Rmd')
+      system('echo ""    >> index.Rmd')
+      system('echo "visit https://ferroao.gitlab.io/idiogramfishhelppages" >> index.Rmd')
+      
+}
+if(length(rmarkdown::pandoc_version()<2)>0) { # solaris workaround
+  
+if(rmarkdown::pandoc_version()<2) {
+  
+  message(crayon::red("\nMissing pandoc version > 2. Vignette may fail because it uses lua filter for multiple bibliographies
+                      \nMore info:
+                      \nhttps://stat.ethz.ch/pipermail/r-package-devel/2019q2/004127.html
+                      \nhttps://stat.ethz.ch/pipermail/r-package-devel/2020q1/004814.html
+                      \nLua filters are supported by rmarkdown
+                      \nhttps://cran.r-project.org/web/packages/rmarkdown/vignettes/lua-filters.html
+                      \nLua filters are an old characteristic of pandoc
+                      \nhttps://pandoc.org/lua-filters.html
+                      \nInstall pandoc >2 or try with package installr (if in Windows):
+                      \nhttps://github.com/jgm/pandoc/releases")
+          )# me
+  if(Sys.info()['sysname']=="Windows"){
+    message("pandoc > 2 not available, see online vignettes")
+    # system("powershell -Command \"$pwd.Path\" ")
+    # shell("powershell -Command \"(gc index.Rmd) -replace 'pandoc_args', '#pandoc_args' | Out-File -encoding ASCII index.Rmd ")
+    # shell("powershell -Command \"(gc DphylogenyVig.Rmd) -replace 'pandoc_args', '#pandoc_args' | Out-File -encoding ASCII DphylogenyVig.Rmd ")
+    
+    # remove vignettes with lua filter
+    shell("del index.Rmd")
+    
+    #
+    #    create new index.Rmd
+    #
+      shell("@echo off")
+      shell('@echo --- > index.Rmd')
+      shell('@echo title: "idiogramFISH" >> index.Rmd')
+      shell('@echo author: "Fernando Roa" >> index.Rmd')
+      shell('@echo date: "23 08 2019" >> index.Rmd')
+      shell('@echo output: >> index.Rmd')
+      shell('@echo   html_document >> index.Rmd')
+      shell('@echo vignette: ^> >> index.Rmd')
+      shell("@echo   %\\VignetteIndexEntry{idiogramFISH} >> index.Rmd")
+      shell('@echo   %\\VignetteEngine{knitr::rmarkdown} >> index.Rmd')
+      shell('@echo   %\\VignetteEncoding{UTF-8} >> index.Rmd')
+      shell('@echo --- >> index.Rmd')
+      shell('@echo(     >> index.Rmd')
+      shell('@echo pandoc ^> 2 not available, visit https://ferroao.gitlab.io/idiogramfishhelppages >> index.Rmd')
+   
+    } # if windows
+  } # pandoc < 2
+} # len
+```
+  
+Vignette [idiogramFISH vignette](index.html)
+

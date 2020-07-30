@@ -18,6 +18,8 @@ data.frame with columns:
 \item{shortArmSize}{size of short arm, micrometers }
 \item{longArmSize}{size of long arm, micrometers }
 \item{group}{chr group, optional}
+\item{chrNameUp}{optional name over kar.}
+\item{Mbp}{optional name to show size in Mbp, use only when shortArmSize is not in Mbp}
 }
 
 An object of class \code{data.frame} with 50 rows and 4 columns.

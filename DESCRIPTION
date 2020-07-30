@@ -1,7 +1,7 @@
 Package: idiogramFISH
 Title: Idiograms with Marks and Karyotype Indices
-Version: 1.15.3
-Date: 2020-06-30
+Version: 1.16.1
+Date: 2020-07-29
 Authors@R: c(person("Fernando", "Roa", email = "froao@unal.edu.co", role = c("aut", "cre") ), 
              person(given="Mariana PC Telles", email = "", role = c("ctb")) 
              )
@@ -9,7 +9,7 @@ Description: Plot idiograms of karyotypes, plasmids, circular chr. having a set 
     for chromosome data and optionally mark data. Two styles of chromosomes can be used: without or with 
     visible chromatids (when not circular).
     Supports micrometers, cM and Mb or any unit. Two styles of centromeres are available: triangular and rounded; 
-    and seven styles of marks: square, dots, cM, cMLeft, cenStyle, upArrow, downArrow; 
+    and six styles of marks: square (squareLeft), dots, cM (cMLeft), cenStyle, upArrow, downArrow; 
     its legend (label) can be drawn inline or to the right of karyotypes. Idiograms can also be plotted in 
     concentric circles. It is possible to calculate chromosome indices by Levan et al. (1964) 
     <doi:10.1111/j.1601-5223.1964.tb01953.x>, karyotype indices of Watanabe et al. (1999) 
@@ -20,10 +20,10 @@ Imports: crayon, dplyr, tidyr
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
-Suggests: plyr, ggpubr, ggtree, phytools, ggplot2, treeio, knitr,
-        kableExtra, prettydoc, rvcheck, badger, rmarkdown, RCurl,
+Suggests: plyr, rmdformats, knitr, kableExtra, rvcheck, badger,
+        rmarkdown, RCurl, ggpubr, ggtree, phytools, ggplot2, treeio,
         rentrez
-VignetteBuilder: plyr, knitr, kableExtra, prettydoc, rmarkdown, RCurl,
+VignetteBuilder: plyr, rmdformats, knitr, kableExtra, rmarkdown, RCurl,
         rvcheck, badger, rentrez
 SystemRequirements: pandoc (>= 2.0)
 URL: https://ferroao.gitlab.io/manualidiogramfish/,
@@ -31,9 +31,9 @@ URL: https://ferroao.gitlab.io/manualidiogramfish/,
 BugReports: https://gitlab.com/ferroao/idiogramFISH/issues
 RoxygenNote: 7.1.0
 NeedsCompilation: no
-Packaged: 2020-07-02 00:27:47 UTC; fernando
+Packaged: 2020-07-30 03:23:22 UTC; fernando
 Author: Fernando Roa [aut, cre],
   Mariana PC Telles [ctb]
 Maintainer: Fernando Roa <froao@unal.edu.co>
 Repository: CRAN
-Date/Publication: 2020-07-02 04:40:06 UTC
+Date/Publication: 2020-07-30 08:20:03 UTC

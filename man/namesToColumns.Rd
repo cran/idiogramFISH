@@ -3,22 +3,11 @@
 \name{namesToColumns}
 \alias{namesToColumns}
 \title{FUNCTION that modifies marks' names into columns}
-\usage{
-namesToColumns(
-  marksDf,
-  dfChrSize,
-  markType = c("downArrow", "upArrow", "cMLeft", "cM"),
-  amountofSpaces = 13,
-  colNumber = 2,
-  protruding = 0.5,
-  protrudingInt = 0.5,
-  circularPlot = TRUE,
-  rotation = 0.5,
-  defaultStyleMark = "square",
-  orderBySize = TRUE,
-  halfModDown = NA,
-  halfModUp = NA,
-  rotatMod = 0
+\usage{ namesToColumns( marksDf, dfChrSize, markType = c("downArrow", "upArrow",
+ "cMLeft", "cM"), amountofSpaces = 13, colNumber = 2, protruding = 0.5,
+ protrudingInt = 0.5, circularPlot = TRUE, rotation = 0.5,
+ defaultStyleMark = "square", orderChr = "size", halfModDown = NA,
+ halfModUp = NA, rotatMod = 0 
 )
 }
 \arguments{
@@ -52,12 +41,13 @@ rotates chr. from top to -90 degrees. (-0.5*\eqn{\pi} )}
 fill with this one.
 Defaults to \code{"square"}}
 
-\item{orderBySize}{boolean, use same as in plot. Defaults to \code{TRUE}}
+\item{orderChr}{character, replaces \code{orderBySize - deprecated} when \code{"size"}, sorts chromosomes by total
+length from the largest to the smallest. \code{"original"}: preserves d.f. order. \code{"name"}: sorts alphabetically; \code{"group"}: sorts by group name}
 
 \item{halfModDown}{numeric, for circ. plots, when plotting several
 chromosomes in a circular
 plot, using a small value \code{0.05} corrects for alignment problems of
-\code{downArrows, 
+\code{downArrows,
 cMLeft} labels. Defaults to \code{NA}}
 
 \item{halfModUp}{numeric, for circ. plots, when plotting several

@@ -34,18 +34,45 @@ textLabel<-function(xMark,yMark,listOfdfChromSize,listOfdfMarkPos,specialChrSpac
 
         if( !listOfdfMarkPos[[s]]$markName[m] %in% bannedMarkName ){
 
-        x = xMark[[s]][[m]][1]+chrSpacing2*.1
-        y = ( yMark[[s]][[m]][1] + yMark[[s]][[m]][component] ) /2
-        z=sub(pattern,"",listOfdfMarkPos[[s]]$markName[m])
-        w=tryCatch(listOfdfMarkPos[[s]]$chrRegionOrig[m], error=function(e) {NA} )
+          squareSide<-attr(yMark[[s]][[m]],"squareSide")
 
-        graphics::text(x=x,
-                       y=y,
-                        label=ifelse(any(is.na(w),is.null(w) ),z,"") #ifelse(is.na(w),z,"")
-                        ,cex=markLabelSize
-                        # pos=4,
-                        ,adj=0
-        )
+          if(is.null(squareSide) ) {
+            x = xMark[[s]][[m]][1] + chrSpacing2*.1
+            y = ( yMark[[s]][[m]][1] + yMark[[s]][[m]][component] ) /2
+            z=sub(pattern,"",listOfdfMarkPos[[s]]$markName[m])
+            w=tryCatch(listOfdfMarkPos[[s]]$chrRegionOrig[m], error=function(e) {NA} )
+            graphics::text(x=x,
+                           y=y,
+                           label=ifelse(any(is.na(w),is.null(w) ),z,"") #ifelse(is.na(w),z,"")
+                           ,cex=markLabelSize
+                           ,adj=0
+            )
+
+          } else if (attr(yMark[[s]][[m]],"squareSide") =="right"){
+            x = xMark[[s]][[m]][1] + chrSpacing2*.1
+            y = ( yMark[[s]][[m]][1] + yMark[[s]][[m]][component] ) /2
+            z=sub(pattern,"",listOfdfMarkPos[[s]]$markName[m])
+            w=tryCatch(listOfdfMarkPos[[s]]$chrRegionOrig[m], error=function(e) {NA} )
+            graphics::text(x=x,
+                           y=y,
+                           label=ifelse(any(is.na(w),is.null(w) ),z,"") #ifelse(is.na(w),z,"")
+                           ,cex=markLabelSize
+                           ,adj=0
+            )
+
+          } else if (attr(yMark[[s]][[m]],"squareSide") =="left"){
+            x = min(xMark[[s]][[m]]) - chrSpacing2*.1
+            y = ( yMark[[s]][[m]][1] + yMark[[s]][[m]][component] ) /2
+            z=sub(pattern,"",listOfdfMarkPos[[s]]$markName[m])
+            w=tryCatch(listOfdfMarkPos[[s]]$chrRegionOrig[m], error=function(e) {NA} )
+
+            graphics::text(x=x,
+                           y=y,
+                           label=ifelse(any(is.na(w),is.null(w) ),z,"") #ifelse(is.na(w),z,"")
+                           ,cex=markLabelSize
+                           ,adj=1
+            )
+          }
         } # if
     } # for m
   } # for s )# l
@@ -89,6 +116,7 @@ textLabelLeft<-function(xMark,yMark,listOfdfChromSize,listOfdfMarkPos,specialChr
   component<-ifelse(isCentromeric,3,2)
   for (s in 1:length(xMark) ){
     corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfMarkPos)[[s]] )
+
     if(attr(listOfdfChromSize[[corr_index]],"ytitle")=="cM"){
       chrSpacing2<-specialChrSpacing
     } else {
@@ -97,12 +125,10 @@ textLabelLeft<-function(xMark,yMark,listOfdfChromSize,listOfdfMarkPos,specialChr
     for ( m in 1:length(xMark[[s]] ) ) {
 
       if( !listOfdfMarkPos[[s]]$markName[m] %in% bannedMarkName ){
-    # lapply(1:length(xMark[[s]]), function (m)
       mapply(function(x,y,z) graphics::text(x=x,
                                               y=y,
                                               label=z,
                                               cex=markLabelSize,
-                                              # pos=4,
                                               adj=1 # left
         ),
         x=  xMark[[s]][[m]][2] - chrSpacing2*.1, # left

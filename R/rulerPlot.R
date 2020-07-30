@@ -10,18 +10,27 @@
 #' @param listOfdfChromSizeCenType only d.f. of this cen. type
 #' @param fromZerotoMax intervals
 #' @param rulerNumberSize font
-#' @param rulerPosMod modifier of pos.
 #' @param rulerPos pos. of ruler
 #' @param ruler.tck tick size and orient.
 #'
 #' @return axis
-#' @importFrom graphics axis
+#' @importFrom graphics axis rug
 #'
 
-rulerPlot<-function(ycoord,listOfdfChromSize,listOfdfChromSizeCenType,fromZerotoMax,rulerNumberSize,rulerPosMod,rulerPos,ruler.tck,lwd.chr){
+rulerPlot<-function(ycoord,listOfdfChromSize,listOfdfChromSizeCenType,fromZerotoMax,rulerNumberSize,rulerPos,ruler.tck,lwd.chr,
+                    moveKarHor2,mkhValue,useMinorTicks,miniTickFactor){
+
   for (i in 1:length(ycoord) ) {
+
     corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfChromSizeCenType)[[i]] )
     divisor2<-as.numeric(attr(listOfdfChromSize[[corr_index]],"divisor"))
+
+    if(names(listOfdfChromSize)[corr_index] %in% moveKarHor2 ) {
+      rulerPos2<-rulerPos+mkhValue
+    } else {
+      rulerPos2 <- rulerPos
+    }
+
     if ( attr(listOfdfChromSizeCenType[[i]], "ytitle" )=="cM" ) {
       labels<-unlist(fromZerotoMax[[i]] )*divisor2
     } else if( attr(listOfdfChromSizeCenType[[i]], "ytitle" )=="Mb" ) {
@@ -34,16 +43,24 @@ rulerPlot<-function(ycoord,listOfdfChromSize,listOfdfChromSizeCenType,fromZeroto
     #     long tick and labels
     #
 
-    graphics::axis(side=2, at=unlist(ycoord[[i]]),
+    locations<-unlist(ycoord[[i]])
+    miniInterval  <-(locations[2]-locations[1] ) / miniTickFactor
+    locationsMinor<-seq(locations[1], locations[length(locations)] , miniInterval)
+
+    graphics::axis(side=2,
+                   at = locations,
                    labels = labels
-                   ,cex.axis=rulerNumberSize
+                   ,cex.axis = rulerNumberSize
                    ,las=1
-                   ,line=rulerPosMod
-                   ,pos= rulerPos
+                   ,pos= rulerPos2
                    ,tck=ruler.tck
                    ,lwd=lwd.chr
                    ,lwd.ticks = lwd.chr
     )
+    if(useMinorTicks){
+    rug(x = locationsMinor, ticksize = ruler.tck/2, side = 2, pos=rulerPos2)
+    }
+
     # ) # l
   } # FOR
 }
