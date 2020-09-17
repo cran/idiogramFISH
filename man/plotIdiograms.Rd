@@ -5,42 +5,47 @@
 \title{FUNCTION to plot idiograms of karyotypes with and without centromere}
 \usage{ plotIdiograms( dfChrSize, defaultFontFamily, revOTUs = FALSE,
  karHeight = 2, karHeiSpace = 2.5, karSepar = TRUE, amoSepar = 10,
- addMissingOTUAfter = NA, missOTUspacings = 0, moveKarHor, anchor,
- anchorVsizeF = 0.5, pchAnchor = 23, moveAnchorV = 0, moveAnchorH = 0,
- mkhValue = 0.5, n = 50, notes, leftNotes, notesTextSize = 0.4, notesLeft,
- notesPos = 0.5, notesPosY = 0, leftNotesPos = 0.5, leftNotesPosY = 0,
- propWidth = FALSE, MbThreshold = 10000, threshold = 35, MbUnit = "Mb",
- yTitle = "µm", specialyTitle = "cM", specialOTUNames = "", addOTUName = TRUE,
- OTUTextSize = 1, OTUfont, OTUfamily, OTUasNote = FALSE, orderChr = "size",
- chrId = "original", classMbName = "Pm.", classcMName = "L.G.",
- classChrName = "Chr.", classChrNameUp = "Type", classGroupName = "",
- chrNameUp = FALSE, chrIdPatternRem, indexIdTextSize = 1, distTextChr = 1,
- groupUp = FALSE, groupName = TRUE, groupSepar = 0.5, chromatids = TRUE,
- arrowsBothChrt = TRUE, holocenNotAsChromatids = FALSE,
- excHoloFrArrToSide = FALSE, xModifier, xModMonoHoloRate, chrWidth = 0.5,
- chrSpacing = 0.5, specialChrWidth = 0.3, specialChrSpacing = 0.7,
- chrColor = "gray", chrBorderColor, centromereSize = NA, cenColor, fixCenBorder,
- roundedCen = TRUE, squareness = 4, lwd.chr = 0.5, lwd.cM, dfMarkPos,
- dfCenMarks, defaultStyleMark = "square", markDistType = "beg",
- protruding = 0.2, origin = "b", efZero = 1e-05, cMBeginCenter = FALSE,
- arrowhead = 0.3, shrinkArrow = 0.3333, arrowheadWidthShrink = 0.1,
- arrowsToSide = TRUE, dfMarkColor, mycolors, borderOfWhiteMarks = TRUE,
+ addMissingOTUAfter = NA, missOTUspacings = 0, moveKarHor, moveAllKarValueHor,
+ moveAllKarValueY, karAnchorLeft, anchor, anchorVsizeF = 0.5, pchAnchor = 23,
+ moveAnchorV = 0, moveAnchorH = 0, mkhValue = 0.5, n = 50, notes, leftNotes,
+ leftNotesUp, notesTextSize = 0.4, notesLeft, notesPosX = 0.5, notesPosY = 0,
+ leftNotesPosX = 0.5, leftNotesPosY = 0, leftNoteFont = 1, leftNoteFontUp = 1,
+ noteFont = 1, parseTypes = TRUE, parseStr2lang = FALSE, propWidth = FALSE,
+ MbThreshold = 10000, threshold = 35, MbUnit = "Mb", yTitle = "µm",
+ specialyTitle = "cM", specialOTUNames = "", addOTUName = TRUE, OTUTextSize = 1,
+ OTUfont, OTUfamily, OTUasNote = FALSE, orderChr = "size", chrId = "original",
+ classMbName = "Pm.", classcMName = "L.G.", classChrName = "Chr.",
+ classChrNameUp = "Type", classGroupName = "", chrNameUp = FALSE,
+ chrIdPatternRem, indexIdTextSize = 1, distTextChr = 1, groupUp = FALSE,
+ groupName = TRUE, groupSepar = 0.5, chromatids = TRUE, arrowsBothChrt = TRUE,
+ holocenNotAsChromatids = FALSE, excHoloFrArrToSide = FALSE, xModifier,
+ xModMonoHoloRate, chrWidth = 0.5, chrSpacing = 0.5, specialChrWidth = 0.3,
+ specialChrSpacing = 0.7, chrColor = "gray", chrBorderColor,
+ centromereSize = NA, cenColor, fixCenBorder, gishCenBorder,
+ hideCenLines = 1.75, roundedCen = TRUE, squareness = 4, lwd.chr = 0.5, lwd.cM,
+ lwd.marks, dfMarkPos, dfCenMarks, defaultStyleMark = "square",
+ markDistType = "beg", protruding = 0.2, origin = "b", efZero = 1e-05,
+ cMBeginCenter = FALSE, arrowhead = 0.3, shrinkArrow = 0.3333,
+ arrowheadWidthShrink = 0.1, arrowsToSide = TRUE, useOneDot = FALSE,
+ dotsAsOval = FALSE, dfMarkColor, mycolors, borderOfWhiteMarks = TRUE,
  colorBorderMark, lwd.mimicCen, defCenStyleCol, pattern = "", legend = "aside",
- remSimiMarkLeg = FALSE, bannedMarkName, legendWidth = 1.7, legendHeight = NA,
- markLabelSize = 1, markLabelSpacer = 1, legendYcoord = 0, chrSize = FALSE,
- nsmall = 1, chrSizeMbp = FALSE, markPer = "", showMarkPos = FALSE,
- bToRemove = "", perAsFraction = FALSE, chrIndex = "both", morpho = "both",
- nameChrIndexPos = 2, karIndex = TRUE, karIndexPos = 0.5, ruler = TRUE,
- useMinorTicks = FALSE, miniTickFactor = 10, rulerPos = 0, ruler.tck = -0.02,
- rulerNumberPos = 0.5, rulerNumberSize = 1, rulerInterval, rulerIntervalcM,
- rulerIntervalMb, ceilingFactor = 0, xPosRulerTitle = 2.6, yPosRulerTitle = 0,
- rulerTitleSize = 1, xlimLeftMod = 1, xlimRightMod = 2, ylimBotMod = 0.2,
- ylimTopMod = 0.2, callPlot = TRUE, asp = 1, circularPlot = FALSE,
- shrinkFactor = 0.9, separFactor = 1.5, labelSpacing = 0.7,
- labelOutwards = FALSE, chrLabelSpacing = 0.5, radius = 0.5, rotation = 0.5,
- useOneDot = TRUE, circleCenter = 1, circleCenterY = 1, OTUlabelSpacing = 0.3,
- OTUsrt = 0, OTUplacing = "first", OTULabelSpacerx = 0, OTULabelSpacery = 0,
- OTUcentered = TRUE, OTUjustif = 0, OTUlegendHeight = NA, roundness, ... 
+ remSimiMarkLeg = FALSE, bannedMarkName, bannedMarkNameAside = FALSE,
+ forbiddenMark, legendWidth = 1.7, legendHeight = NA, markLabelSize = 1,
+ markLabelSpacer = 1, legendYcoord = 0, markNewLine = NA, mylheight = 0.7,
+ chrSize = FALSE, nsmall = 1, chrSizeMbp = FALSE, markPer = "",
+ showMarkPos = FALSE, bToRemove = "", perAsFraction = FALSE, chrIndex = "both",
+ morpho = "both", nameChrIndexPos = 2, karIndex = TRUE, karIndexPos = 0.5,
+ ruler = TRUE, useMinorTicks = FALSE, miniTickFactor = 10, rulerPos = 0,
+ ruler.tck = -0.02, rulerNumberPos = 0.5, rulerNumberSize = 1, rulerInterval,
+ rulerIntervalcM, rulerIntervalMb, ceilingFactor = 0, xPosRulerTitle = 2.6,
+ yPosRulerTitle = 0, rulerTitleSize = 1, xlimLeftMod = 1, xlimRightMod = 2,
+ ylimBotMod = 0.2, ylimTopMod = 0.2, callPlot = TRUE, asp = 1,
+ circularPlot = FALSE, verticalPlot = TRUE, karSpaceHor = 0, shrinkFactor = 0.9,
+ separFactor = 1.5, labelSpacing = 0.7, labelOutwards = FALSE,
+ chrLabelSpacing = 0.5, radius = 0.5, rotation = 0.5, circleCenter = 1,
+ circleCenterY = 1, OTUlabelSpacing = 0.3, OTUsrt = 0, OTUplacing = "first",
+ OTULabelSpacerx = 0, OTULabelSpacery = 0, OTUcentered = TRUE, OTUjustif = 0,
+ OTUlegendHeight = NA, roundness, ... 
 )
 }
 \arguments{
@@ -69,7 +74,14 @@ increase this and \code{karHeiSpace}}
 
 \item{moveKarHor}{character, OTUs' names of karyotypes that should be moved horizontally. See \code{mkhValue}}
 
-\item{anchor}{boolean, when TRUE, plots a parent progeny structure in karyotypes in \code{moveKarHor}}
+\item{moveAllKarValueHor}{numeric, similar to \code{mkhValue}, but affects all karyotypes.}
+
+\item{moveAllKarValueY}{numeric, similar to \code{moveAllKarValueHor}, but affects y axis.}
+
+\item{karAnchorLeft}{character, OTUs' names of karyotypes to the right of your desired anchor. For \code{verticalPlot=FALSE}}
+
+\item{anchor}{boolean, when \code{TRUE}, plots a parent progeny structure in karyotypes in \code{moveKarHor}. Or a horizontal anchor to the right
+of \code{karAnchorLeft} when \code{verticalPlot=FALSE}}
 
 \item{anchorVsizeF}{numeric, factor to modify vertical size of anchor \code{0.5} (default). Size itself is equal to \code{karHeiSpace}}
 
@@ -87,17 +99,29 @@ increase this and \code{karHeiSpace}}
 
 \item{leftNotes, }{data.frame, (to the left), with columns \code{OTU} and \code{note} for adding notes to each OTU, they appear to the left of chromosomes}
 
+\item{leftNotesUp, }{data.frame, (to the left), similar to \code{leftNotes}, but intended for placement over chr.}
+
 \item{notesTextSize}{numeric, font size of notes, see \code{notes}}
 
 \item{notesLeft}{deprecated, use a data.frame for \code{leftNotes}}
 
-\item{notesPos}{numeric, move right notes to the right or left (x axis)}
+\item{notesPosX}{numeric, move right notes to the right or left (x axis)}
 
 \item{notesPosY}{numeric, move right notes to the down or up (y axis)}
 
-\item{leftNotesPos}{numeric, move left notes to the right or left (x axis)}
+\item{leftNotesPosX}{numeric, move left notes to the right or left (x axis)}
 
 \item{leftNotesPosY}{numeric, move left notes to the down or up (y axis)}
+
+\item{leftNoteFont, }{numeric  \code{1} for normal,  \code{2} for bold,  \code{3} for italics,  \code{4} for bold-italics. See \code{leftNotes}}
+
+\item{leftNoteFontUp, }{numeric  \code{1} for normal,  \code{2} for bold,  \code{3} for italics,  \code{4} for bold-italics. See \code{leftNotesUp}}
+
+\item{noteFont, }{numeric  \code{1} for normal,  \code{2} for bold,  \code{3} for italics,  \code{4} for bold-italics. See \code{notes}}
+
+\item{parseTypes, }{boolean, parse in \code{notes} the \emph{Citrus} chr. types names. Creates subindex pos. for FL. Defaults to \code{TRUE}. Incompatible with \code{parseStr2lang}}
+
+\item{parseStr2lang, }{bolean, parse string in \code{notes} with function \code{str2lang(paste0("paste(",note,")") )} for ex: \code{"italic('C. sinensis'), ' Author'"}. See \code{notes}, \code{leftNotes},\code{leftNotesUp}.}
 
 \item{propWidth, }{boolean, defaults to \code{FALSE}. Diminishes chr. width with increasing number of OTUs}
 
@@ -185,16 +209,22 @@ also affects vertical separation of indices. Defaults to \code{1}}
 \item{cenColor}{character, color for centromeres, if GISH use \code{NULL} or \code{NA}. Defaults to \code{chrColor}}
 
 \item{fixCenBorder}{boolean, when \code{TRUE} uses \code{chrColor} as centromere (and cen. mark) border color. See also \code{cenColor},
-\code{chrColor}, \code{colorBorderMark}, \code{borderOfWhiteMarks}. No default value.}
+\code{chrColor}, \code{colorBorderMark}, \code{borderOfWhiteMarks}. No default value. When \code{chrColor} is \code{"white"} this turns insto \code{"black"}.}
+
+\item{gishCenBorder}{boolean, when \code{TRUE}, cen. mark border color is the same as mark color, ignoring \code{colorBorderMark}. No default.}
+
+\item{hideCenLines}{numeric, factor to multiply line width (lwd) used for covering cen. border, when \code{chrColor} is \code{white} or when \code{gishCenBorder=TRUE}}
 
 \item{roundedCen}{boolean, when \code{FALSE}, cen has triangular aspect. When \code{TRUE}, it has rounded aspect (Default).}
 
 \item{squareness}{numeric, shape of vertices of chromosomes and square marks,
 higher values more squared. Defaults to \code{4}}
 
-\item{lwd.chr}{thickness of border of chr., marks; ruler. Also thick of cM marks if \code{lwd.cM} absent Defaults to \code{0.5}}
+\item{lwd.chr}{thickness of border of chr., some marks and ruler. Thick of \code{cM} marks when \code{lwd.cM} absent and other marks when \code{lwd.marks} absent. Defaults to \code{0.5}}
 
 \item{lwd.cM}{thickness of cM marks. Defaults to \code{lwd.chr}}
+
+\item{lwd.marks}{thickness of most marks. Except \code{cM} marks and centr. related marks. See \code{lwd.chr}, \code{lwd.cM}. Defaults to \code{lwd.chr}}
 
 \item{dfMarkPos}{data.frame of marks (sites): columns: \code{OTU} (opt), \code{chrName},
 \code{markName} (name of site), \code{chrRegion} (for monocen. and opt for whole arm (w) in holocen.), \code{markDistCen} (for monocen.),
@@ -228,6 +258,10 @@ beginning of the mark (Default)}
 
 \item{arrowsToSide}{boolean, when \code{FALSE} use a centered arrow, instead of an arrow next to chr. margins (\code{TRUE}, default). See \code{arrowsBothChrt}}
 
+\item{useOneDot}{boolean, use one dot instead of two in style of marks \code{dots}. Defaults to \code{FALSE}. Not useful for \code{chromatids=TRUE}}
+
+\item{dotsAsOval}{boolean, use oval instead of two dots in style of marks \code{dots}. Defaults to \code{FALSE}. See \code{useOneDot}. Not useful for \code{chromatids=TRUE} or \code{circularPlot=TRUE}}
+
 \item{dfMarkColor}{data.frame, optional, specifying colors and style for marks (sites);
 columns: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: \code{square}, \code{squareLeft}, \code{dots}, \code{cM},
 \code{"cMLeft"}, \code{"cenStyle"}, \code{"upArrow"}, \code{"downArrow"}.
@@ -250,7 +284,11 @@ chromosomes; \code{"aside"} prints legend to the right of karyotypes (default). 
 
 \item{remSimiMarkLeg}{boolean, when \code{legend="aside"}, if you use \code{pattern}, you can have several marks with same name. When \code{TRUE} this remove this pseudoduplicates from legend. Be sure that this pseudoduplicates have the same color, otherwise you should use \code{FALSE} (default).}
 
-\item{bannedMarkName}{character, character string or vector with mark names to be removed from plot. Not the marks but the labels.}
+\item{bannedMarkName}{character, character string or vector with mark names to be removed from plot. Not the marks but the labels. Except when \code{bannedMarkNameAside} is used.}
+
+\item{bannedMarkNameAside}{boolean, when \code{TRUE} and \code{legend="inline"}, shows marks in \code{bannedMarkName} as \code{legend="aside"}.}
+
+\item{forbiddenMark, }{character, character string or vector with mark names to be removed from plot. Not the marks but the labels.}
 
 \item{legendWidth}{numeric, factor to increase width of squares and of legend. Defaults to \code{1.7}}
 
@@ -263,6 +301,10 @@ labels of marks (legend). Defaults to \code{1}}
 rightmost chr. to legend. Defaults to \code{1}}
 
 \item{legendYcoord}{numeric, modify Y position of legend when \code{legend="aside"}}
+
+\item{markNewLine, }{character, character to split mark Names into different lines. Applies to \code{square} marks. Defaults to \code{NA}}
+
+\item{mylheight, }{numeric, for \code{markNewLine!=NA}; is equivalent to \code{lheight} of \code{par}: "The line height multiplier. The height of a line of text (used to vertically space multi-line text) is found by multiplying the character height both by the current character expansion and by the line height multiplier." Defaults to \code{0.7}.}
 
 \item{chrSize}{boolean, when \code{TRUE} adds total chr size under each chr. Defaults to \code{FALSE}}
 
@@ -333,7 +375,11 @@ of idiograms. Defaults to \code{2}}
 
 \item{asp, }{numeric, y x aspect of plot. Defaults to \code{1}}
 
-\item{circularPlot}{boolean, if \code{TRUE} chromosomes are plotted in concentric circles. Defaults to \code{FALSE}}
+\item{circularPlot}{boolean, if \code{TRUE} chromosomes/karyotypes are plotted in concentric circles. Defaults to \code{FALSE}}
+
+\item{verticalPlot}{boolean, when \code{TRUE} karyotypes are plotted vertically, otherwise, horizontally Defaults to \code{TRUE}}
+
+\item{karSpaceHor}{numeric, separation among horizontal karyotypes. When \code{verticalPlot=FALSE}. Defaults to \code{0}}
 
 \item{shrinkFactor}{numeric, for \code{circularPlot=TRUE} percentage of usage of circle. Defaults to \code{0.9}}
 
@@ -348,8 +394,6 @@ of idiograms. Defaults to \code{2}}
 \item{radius}{numeric, for \code{circularPlot=TRUE}. Affects radius of karyotypes. Defaults to \code{0.5}}
 
 \item{rotation}{numeric, anti-clockwise rotation, defaults to \code{0.5} which rotates chr. from top to -90 degrees. (-0.5*\eqn{\pi} )}
-
-\item{useOneDot}{boolean, for \code{circularPlot=TRUE}. use one dot instead of two in style of marks \code{dots}. Defaults to \code{TRUE}}
 
 \item{circleCenter}{numeric, for \code{circularPlot=TRUE}. Coordinate X of center of circles. Affects \code{legend="aside"} position. Defaults to \code{1}}
 

@@ -23,10 +23,11 @@ rulerPlot<-function(ycoord,listOfdfChromSize,listOfdfChromSizeCenType,fromZeroto
   for (i in 1:length(ycoord) ) {
 
     corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfChromSizeCenType)[[i]] )
-    divisor2<-as.numeric(attr(listOfdfChromSize[[corr_index]],"divisor"))
+
+    divisor2 <- as.numeric(attr(listOfdfChromSize[[corr_index]],"divisor"))
 
     if(names(listOfdfChromSize)[corr_index] %in% moveKarHor2 ) {
-      rulerPos2<-rulerPos+mkhValue
+      rulerPos2 <- rulerPos+mkhValue
     } else {
       rulerPos2 <- rulerPos
     }

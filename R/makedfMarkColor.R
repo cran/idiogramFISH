@@ -6,8 +6,8 @@
 #' @param markNames names of marks
 #' @param dfMarkColor d.f of marks to use
 #' @param colorstoremove remove this colors from the result
-#' @param defaultStyleMark character vector with default style \code{"square"} 
-#' \code{"cM"} 
+#' @param defaultStyleMark character vector with default style \code{"square"}
+#' \code{"cM"}
 #' \code{"dots"}
 #'
 #' @keywords mark
@@ -34,9 +34,6 @@ makedfMarkColor<- function(dfMarkColor,markNames,colorstoremove=NA,defaultStyleM
   dfMarkColorNew<-data.frame(markName=markNames)
 
   dfMarkColorNew$markColor<-NA
-
-  # lenmandf <- length( dfMarkColor$markColor[which(dfMarkColor$markColor %in% colorstoremove)] )
-  # dfMarkColor$markColor[which(dfMarkColor$markColor %in% colorstoremove)]<-manualcolors[1:lenmandf]
 
   manualcolors <- manualcolors[!manualcolors %in% c(dfMarkColor$markColor)]
 

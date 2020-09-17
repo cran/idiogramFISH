@@ -1,6 +1,75 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 1.16.6
+
+16-09-2020
+
+  - Support for F<sup>+</sup> chr. types in citrus functions
+  - Horizontal arrange introduced `verticalPlot=FALSE`
+  - Horizontal anchor for karyotypes in `karAnchorLeft`
+  - Move all karyotypes `moveAllKarValueY`, `moveAllKarValueHor`
+  - Introducing more notes, over kar., `leftNotesUp`
+  - `dotsAsOval` convert dots style to one oval. not for circ. plots.
+  - `useOneDot` now for regular plots (non-circular) also.
+  - better plotting of white chr. in circular plots
+  - Fixed bug of dots size in circular plots
+  - Fixed bug of ruler of long arm.
+  - Fixed bug when chr. name F<sub>L</sub>
+  - Fixed bug when calculating mark size when NA - GISH
+  - Better plotting of white chr.
+  - square marks name splitting
+
+param:
+
+  - `verticalPlot`: boolean, when `TRUE` karyotypes are plotted
+    vertically, otherwise, horizontally. Defaults to `TRUE`
+  - `karSpaceHor`: numeric, separation among horizontal karyotypes. When
+    `verticalPlot=FALSE`. Defaults to `0`
+  - `karAnchorLeft`: character, OTUs’ names of karyotypes to the right
+    of your desired anchor. For `verticalPlot=FALSE`
+  - `moveAllKarValueHor`: numeric, similar to `mkhValue`, but affects
+    all karyotypes.
+  - `moveAllKarValueY`: numeric, similar to `moveAllKarValueHor`, but
+    affects y axis.
+  - `leftNotesUp`: data.frame, (to the left), similar to `leftNotes`,
+    but intended for placement over kar.
+  - `leftNotesPosX`: (`0.5`) numeric, moves left notes in the x axis
+  - `notesPosX`: (`0.5`) numeric, moves right notes in the x axis
+  - `noteFont`: numeric `1` for normal, `2` for bold, `3` for italics,
+    `4` for bold-italics. See `notes`
+  - `leftNoteFont`: numeric `1` for normal, `2` for bold, `3` for
+    italics, `4` for bold-italics. See `leftNotes`
+  - `leftNoteFontUp`: numeric `1` for normal, `2` for bold, `3` for
+    italics, `4` for bold-italics. See `leftNotesUp`
+  - `parseTypes`: boolean, parse in `notes` the Citrus chr. types names.
+    Creates subindex pos. for FL.
+  - `parseStr2lang`: bolean, parse string in `notes` with function
+    `str2lang(paste0("paste(",note,")") )` for ex: `"italic('C.
+    sinensis'), ' Author'"`. See `notes`, `leftNotes`,`leftNotesUp`.
+  - `gishCenBorder`: boolean, when `TRUE`, cen. mark border color is the
+    same as mark color, ignoring `colorBorderMark`. No default.
+  - `hideCenLines`: numeric, factor to multiply line width (lwd) used
+    for covering cen. border, when `chrColor` is `white` or when
+    `gishCenBorder=TRUE`
+  - `markNewLine`, character, character to split mark Names into
+    different text lines. Applies to `square` marks. Defaults to `NA`
+  - `mylheight`, numeric, for `markNewLine!=NA`; is equivalent to
+    `lheight` of `par`: “The line height multiplier. The height of a
+    line of text (used to vertically space multi-line text) is found by
+    multiplying the character height both by the current character
+    expansion and by the line height multiplier.” Defaults to `0.7`.
+  - `bannedMarkNameAside`: boolean, when `TRUE` and `legend="inline"`,
+    shows marks in `bannedMarkName` as `legend="aside"` would do. See
+    `bannedMarkName`
+  - `forbiddenMark`: character, character string or vector with mark
+    names to be removed from plot. Not the marks but the labels.
+  - `lwd.marks`: thickness of most marks. Except `cM` marks and centr.
+    related marks. See `lwd.chr`, `lwd.cM`
+  - `dotsAsOval`: boolean, use oval instead of two dots in style of
+    marks `dots`. Defaults to `FALSE`. See `useOneDot`. Not useful for
+    `chromatids=TRUE` or `circularPlot=TRUE`
+
 # idiogramFISH 1.16.1
 
 29-07-2020
@@ -10,7 +79,7 @@
   - minor ticks possible
   - add mark % of chr. and position to plot.
   - additional column `chrNameUp` for name over kar.
-  - show chr. sizes in um and Mbp under kar.
+  - show chr. sizes in μm and Mbp under kar.
   - when `OTUfont=3` (italics), var. name present inside `'` is not
     shown in italics
   - added anchor structure for progenies, see GISH
@@ -33,7 +102,7 @@ param:
     title of rulers (Mb, etc). Moves to left from 1st chr. in
     `chrSpacing` times
   - `yPosRulerTitle`: numeric, affects vertical position of ruler title.
-    Defaults to \`0}
+    Defaults to `0`
   - `markPer`: character, name of mark to calculate % of mark in chr.
     and add it to plot. See `perAsFraction`
   - `perAsFraction`: boolean, when `TRUE` % is shown as fraction.
@@ -46,7 +115,7 @@ param:
     kar.
   - `classMbName` “chromosome” name when in Mbp
   - `classcMName` “chromosome” name when in cM
-  - `classChrName` “chromosome” name when in um
+  - `classChrName` “chromosome” name when in μm
   - `classChrNameUp` “chromosome” name `chrNameUp`
   - `classGroupName` name of title of groups
   - `nsmall` digits for rounding of `chrSize`

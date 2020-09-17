@@ -15,7 +15,9 @@ textLabel(
   markLabelSize,
   pattern,
   bannedMarkName,
-  isCentromeric = FALSE
+  isCentromeric = FALSE,
+  markNewLine2,
+  mylheight2
 )
 }
 \arguments{

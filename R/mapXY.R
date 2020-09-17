@@ -99,7 +99,6 @@ mapXYCen <- function(start,end,ycoordCentsS,xcoordCentsS,pts_1,pts_2,pts_3,pts_4
     minY<-min(ycoordCentsS[[counter]])
     maxY<-max(ycoordCentsS[[counter]])
 
-
     xy_1[[counter]] <- cbind( min(xcoordCentsS[[counter]])+halfmaxX + halfmaxX * sin(pts_1), min(ycoordCentsS[[counter]]) + halfmaxY * cos(pts_1) )
 
     xy_2[[counter]] <- cbind( min(xcoordCentsS[[counter]])+halfmaxX + halfmaxX * sin(pts_2), min(ycoordCentsS[[counter]]) + halfmaxY * cos(pts_2))
@@ -108,7 +107,7 @@ mapXYCen <- function(start,end,ycoordCentsS,xcoordCentsS,pts_1,pts_2,pts_3,pts_4
 
     xy_4[[counter]] <- cbind( min(xcoordCentsS[[counter]])+halfmaxX + halfmaxX * sin(pts_4), max(ycoordCentsS[[counter]]) + halfmaxY * cos(pts_4 ) )
 
-    if(mimic==FALSE){
+    if(mimic==FALSE) {
     roundedX[[counter]] <-c(minX+halfmaxX, xy_4[[counter]][,1],minX  ,maxX , (xy_3[[counter]][,1]),
                             minX+halfmaxX,xy_2[[counter]][,1],maxX , minX, xy_1[[counter]][,1])
     roundedY[[counter]] <-c(minY+halfmaxY, xy_4[[counter]][,2],maxY,  maxY , (xy_3[[counter]][,2]),
@@ -126,6 +125,126 @@ mapXYCen <- function(start,end,ycoordCentsS,xcoordCentsS,pts_1,pts_2,pts_3,pts_4
   roundXroundY<-list()
   roundXroundY$roundedX<-roundedX
   roundXroundY$roundedY<-roundedY
+  return(roundXroundY)
+}
+
+
+mapXYCenLines <- function(start,end,ycoordCentsS,xcoordCentsS ){
+
+  X1<-Y1<-X2<-Y2<-list()
+
+  for (counter in start: end ) {
+
+    diffx<-max(xcoordCentsS[[counter]]) - min(xcoordCentsS[[counter]])
+    diffy<-max(ycoordCentsS[[counter]]) - min(ycoordCentsS[[counter]])
+
+    halfmaxX <- diffx/2
+    halfmaxY <- diffy/2
+
+    minX<-min(xcoordCentsS[[counter]])
+    maxX<-max(xcoordCentsS[[counter]])
+    minY<-min(ycoordCentsS[[counter]])
+    maxY<-max(ycoordCentsS[[counter]])
+
+    xy_1 <- cbind( minX, minY )
+    xy_2 <- cbind( minX+halfmaxX, minY+halfmaxY )
+    xy_3 <- cbind( minX, maxY )
+
+    xy_4 <- cbind( maxX, minY )
+    xy_5 <- cbind( maxX-halfmaxX, maxY-halfmaxY )
+    xy_6 <- cbind( maxX, maxY )
+
+    X1[[counter]]<-c(xy_1[,1],xy_2[,1],xy_3[,1]
+    )
+    Y1[[counter]]<-c(xy_1[,2],xy_2[,2],xy_3[,2]
+    )
+
+    X2[[counter]]<-c(xy_4[,1],xy_5[,1],xy_6[,1]
+    )
+    Y2[[counter]]<-c(xy_4[,2],xy_5[,2],xy_6[,2]
+    )
+  } # for
+
+  XY<-list()
+  XY$X1<-X1
+  XY$Y1<-Y1
+  XY$X2<-X2
+  XY$Y2<-Y2
+
+  return(XY)
+}
+
+mapxyRoundCenLines <- function(start,end,ycoordCentsS,xcoordCentsS,pts_1,pts_2,pts_3,pts_4,mimic=FALSE ){
+
+  # xy_1<-xy_2<-list()
+  # xy_3<-xy_4<-list() #
+
+  roundedX1<-roundedY1<-roundedX2<-roundedY2<-list()
+
+  for (counter in start: end ) {
+
+    diffx<-max(xcoordCentsS[[counter]]) - min(xcoordCentsS[[counter]])
+    diffy<-max(ycoordCentsS[[counter]]) - min(ycoordCentsS[[counter]])
+
+    halfmaxX <- diffx/2
+    halfmaxY <- diffy/2
+
+    minX<-min(xcoordCentsS[[counter]])
+    maxX<-max(xcoordCentsS[[counter]])
+    minY<-min(ycoordCentsS[[counter]])
+    maxY<-max(ycoordCentsS[[counter]])
+
+    xy_1 <- cbind( min(xcoordCentsS[[counter]])+halfmaxX + halfmaxX * sin(pts_1), min(ycoordCentsS[[counter]]) + halfmaxY * cos(pts_1) )
+
+    xy_2 <- cbind( min(xcoordCentsS[[counter]])+halfmaxX + halfmaxX * sin(pts_2), min(ycoordCentsS[[counter]]) + halfmaxY * cos(pts_2))
+
+    xy_3 <- cbind( min(xcoordCentsS[[counter]])+halfmaxX + halfmaxX * sin(pts_3), max(ycoordCentsS[[counter]]) + halfmaxY * cos(pts_3))
+
+    xy_4 <- cbind( min(xcoordCentsS[[counter]])+halfmaxX + halfmaxX * sin(pts_4), max(ycoordCentsS[[counter]]) + halfmaxY * cos(pts_4 ) )
+
+    # if(mimic==FALSE) {
+    #   roundedX[[counter]] <-c(minX+halfmaxX, xy_4[[counter]][,1],minX  ,maxX , (xy_3[[counter]][,1]),
+    #                           minX+halfmaxX,xy_2[[counter]][,1],maxX , minX, xy_1[[counter]][,1])
+    #   roundedY[[counter]] <-c(minY+halfmaxY, xy_4[[counter]][,2],maxY,  maxY , (xy_3[[counter]][,2]),
+    #                           minY+halfmaxY,xy_2[[counter]][,2],minY ,minY, xy_1[[counter]][,2])
+    # } else {
+
+      roundedX1[[counter]]<-c(#minX,xy_1[[counter]][,1],minX+halfmaxX,
+                              rev(xy_2[,1] )
+                              # maxX, (xy_3[[counter]][,1] ),minX+halfmaxX,
+                              ,xy_4[,1]
+                              ) # opposite of cen.
+
+      roundedY1[[counter]]<-c(#minY,xy_1[[counter]][,2],minY+halfmaxY,
+                              rev(xy_2[,2])
+                             #maxY, (xy_3[[counter]][,2] ),minY+halfmaxY,
+                             ,xy_4[,2]
+                             )
+
+      roundedX2[[counter]]<-c(#minX,
+                              xy_1[,1]
+                              #,minX+halfmaxX,(xy_2[[counter]][,1]),
+                              #maxX,
+                              ,rev(xy_3[,1] )
+                              #,minX+halfmaxX,xy_4[[counter]][,1]
+                              ) # opposite of cen.
+
+      roundedY2[[counter]]<-c(#minY,
+                               xy_1[,2]
+                               #,minY+halfmaxY,(xy_2[[counter]][,2]),
+                              #maxY,
+                              ,rev(xy_3[,2] )
+                              #,minY+halfmaxY,xy_4[[counter]][,2]
+                              )
+    # }
+  } # for
+
+  roundXroundY<-list()
+  roundXroundY$roundedX1<-roundedX1
+  roundXroundY$roundedY1<-roundedY1
+  roundXroundY$roundedX2<-roundedX2
+  roundXroundY$roundedY2<-roundedY2
+
   return(roundXroundY)
 }
 

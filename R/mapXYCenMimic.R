@@ -32,8 +32,6 @@ mapXYCenMimic <- function(start,end,y,x,yfactor,r2,pts,roundedCen=FALSE){
     diffx<-max(x[[counter]]) - min(x[[counter]])
     diffy<-max(y[[counter]]) - min(y[[counter]])
     ratexy<-diffx/diffy
-    # max<-max(c(diffx,diffy))
-    # r2 <- max(x)/number*2
     ifelse( (diffx/r2) * 2 < ratexy*4 ,  r2 <- diffx/(ratexy*2) ,r2 )
 
     ptsl<-split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
@@ -101,7 +99,7 @@ mapXYCenMimic <- function(start,end,y,x,yfactor,r2,pts,roundedCen=FALSE){
 
 mapXYCenMimicInside <- function(start,end,y,x,yfactor,r2,pts
                                 ,roundedCen=FALSE
-                                ){
+                                ) {
 
   x2_1<-list()
   x2_2<-list()
@@ -120,8 +118,6 @@ mapXYCenMimicInside <- function(start,end,y,x,yfactor,r2,pts
     diffx<-max(x[[counter]]) - min(x[[counter]])
     diffy<-max(y[[counter]]) - min(y[[counter]])
     ratexy<-diffx/diffy
-    # max<-max(c(diffx,diffy))
-    # r2 <- max(x)/number*2
     ifelse( (diffx/r2) * 2 < ratexy*4 ,  r2 <- diffx/(ratexy*2) ,r2 )
 
     ptsl<-split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
@@ -177,14 +173,14 @@ mapXYCenMimicInside <- function(start,end,y,x,yfactor,r2,pts
 
         xy_4b <- cbind( minXmod+halfmaxXMod + halfmaxXMod * sin(ptsl[[4]]), maxYmod + halfmaxYMod * cos(ptsl[[4]] ) )
 
-        roundedX[[counter]]<-c(maxX, (xy_3[,1] )           ,  (xy_3b[,1] )
+        roundedX[[counter]]<-c(maxX, (xy_3[,1] )  ,  (xy_3b[,1] )
                     ,rev(xy_1b[,1]) #,minXmod
                     ,rev(xy_1[,1]) # down left
                     ,maxX
                     ,rev(xy_2[,1]),rev(xy_2b[,1]) # down right
                     ,xy_4b[,1],xy_4[,1] #top left
         ) # opposite of cen.
-        roundedY[[counter]] <-c(maxY,(xy_3[,2] )             ,  (xy_3b[,2] )
+        roundedY[[counter]] <-c(maxY,(xy_3[,2] )  ,  (xy_3b[,2] )
                     ,rev(xy_1b[,2]) # ,minYmod
                     ,rev(xy_1[,2])
                     ,minY

@@ -1,23 +1,22 @@
-#' Function to automatically make a data.frame of Marks' characterisitcs
+#' @name makedfMarkColorMycolors
+#' @title FUNCTION to make a data.frame of Marks' characterisitcs
 #'
-#' @description This function reads character vector with marks names, a 
-#' character vector of 
+#' @description This function reads character vector with marks names, a
+#' character vector of
 #' prohibited colors and a custom list of colors
 #' to be associated with the mark names
 #' @description It returns a data.frame with color and style for each mark
 #'
 #' @param markNames names of marks
-#' @param colorstoremove character vector of colors to remove from mycolors
+#' @param colorstoremove character vector of colors to remove from mycolors. Default \code{NULL}
 #' @param mycolors character vector of names of colors
-#' @param defaultStyleMark character vector with default style \code{"square"} 
-#' \code{"cM"} 
-#' \code{"dots"}
+#' @param defaultStyleMark character vector with default style \code{"square"}. Other options:  \code{"squareLeft"}, \code{"cM"}
+#' \code{"cMLeft"}, \code{"dots"}, \code{"upArrow"}, \code{"downArrow"}, \code{"cenStyle"}
 #'
-#' @keywords mark
-#' @keywords internal
-#' @return data.frame
+#' @keywords mark create
 #' @importFrom grDevices col2rgb
-
+#' @export
+#' @return data.frame
 makedfMarkColorMycolors<- function(markNames, mycolors, colorstoremove=NULL, defaultStyleMark="square"){
   dfMarkColor<-idiogramFISH::dfMarkColor
   message(crayon::green(paste("By default 5S are plotted as dots, to change this behavior make your own dfMarkColor data.frame") )

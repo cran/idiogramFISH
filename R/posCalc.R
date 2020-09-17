@@ -57,7 +57,7 @@
 #'
 #' posCalc(dfMarkPosHolo,listOfdfChrHolo, result="list")
 #'
-#' as.list(ti[[1]][,1] )
+#' as.list(ti2[[1]][,1] )
 #'
 #' @return list, tibble
 #' @rdname posCalc

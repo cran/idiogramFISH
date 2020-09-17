@@ -1,5 +1,5 @@
 # plotlabelsright
-#' This is an internal function to plot labels to the right, when "aside" for 
+#' This is an internal function to plot labels to the right, when "aside" for
 #' its position
 #'
 #' It returns a graphic element with the legends
@@ -20,6 +20,7 @@
 #' @param n numeric, vertices for round parts
 #' @param pattern, character, regex to remove from markNames
 #' @param legendYcoord numeric modify Y position of legend
+#' @param useOneDot boolean, when \code{TRUE} plots only one dot
 
 #' @importFrom graphics polygon text
 #'
@@ -27,7 +28,7 @@
 #'
 
 plotlabelsright<-function(maxx,y, markLabelSpacer,chrWidth,dfMarkColorInternal,allMarkMaxSize,normalizeToOne,
-                          markLabelSize,xfactor,legendWidth,legendHeight,n,pattern,legendYcoord) {
+                          markLabelSize,xfactor,legendWidth,legendHeight,n,pattern,legendYcoord,useOneDot,dotsAsOval,circularPlot) {
 
 
   miny<-(min(unlist(y)) )
@@ -40,6 +41,8 @@ plotlabelsright<-function(maxx,y, markLabelSpacer,chrWidth,dfMarkColorInternal,a
 
   if(is.na(legendHeight)){
     if(exists("allMarkMaxSize")){
+#      allMarkMaxSize43<<-allMarkMaxSize
+#      normalizeToOne44<<-normalizeToOne
       legendHeight<-allMarkMaxSize*normalizeToOne
     } else {
       legendHeight<-1*normalizeToOne
@@ -48,10 +51,11 @@ plotlabelsright<-function(maxx,y, markLabelSpacer,chrWidth,dfMarkColorInternal,a
     legendHeight<-legendHeight*normalizeToOne
   }
   # message(crayon::green(paste0("legend right section part 3 " ) ) )
+#  legendHeight51<<-legendHeight
 
   labely<- sapply( c(0,0,legendHeight,legendHeight), function(x) x + ( (0:(nrow(dfMarkColorInternal)-1) ) * (legendHeight*2) )
                    ) + miny + legendYcoord
-  # remove the dot ones
+
 
   #
   #   labelx and y to matrix
@@ -64,7 +68,9 @@ plotlabelsright<-function(maxx,y, markLabelSpacer,chrWidth,dfMarkColorInternal,a
   if(!inherits(labelx,"matrix") ) {
     labelx<-t(as.matrix(labelx) )
   }
-
+  #
+  # remove dots
+  #
   labelytoplot<-labely[which(dfMarkColorInternal$style!="dots"),]
   labelxtoplot<-labelx[which(dfMarkColorInternal$style!="dots"),]
 
@@ -117,32 +123,48 @@ plotlabelsright<-function(maxx,y, markLabelSpacer,chrWidth,dfMarkColorInternal,a
   } # if len
 
 
-  ##################
-  # circular labels to the right
-  ##################
+  ##########################################
+  # circular labels to the right DOTS
+  ##########################################
 
   {
-    labelxdiff<- (max(labelx) - min(labelx) )
-    diffxQuar<-labelxdiff/4
-    xcenters<- c((min(labelx)+diffxQuar),(min(labelx)+3*diffxQuar) )
+    labelxdiff <- (max(labelx) - min(labelx) )
 
-    listOfxcenters<-rep(list(xcenters), nrow(dfMarkColorInternal[which(dfMarkColorInternal$style=="dots"),] ) )
+
+    if(useOneDot==FALSE){
+      diffxQuar<-labelxdiff/4
+      xcenters<- c( ( min(labelx) + diffxQuar), (min(labelx)+3*diffxQuar) )
+    } else {
+      diffxHalf<-labelxdiff/2
+      xcenters<- ( min(labelx) + diffxHalf)
+    }
+    listOfxcenters <- rep(list(xcenters), nrow(dfMarkColorInternal[which(dfMarkColorInternal$style=="dots"),] ) )
 
     labelydiffs<-labely[which(dfMarkColorInternal$style=="dots"),3]-labely[which(dfMarkColorInternal$style=="dots"),2]
     labelydiffhalf<-labelydiffs[1]/2
 
     ycenters<-labely[which(dfMarkColorInternal$style=="dots"),2]+labelydiffhalf
-    listOfycenters<-lapply(ycenters, function(x) rep(x,2) )
+
+    if(useOneDot==FALSE){
+      listOfycenters<-lapply(ycenters, function(x) rep(x,2) )
+    } else {
+      listOfycenters<-lapply(ycenters, function(x) rep(x,1) )
+    }
 
     rad<-labelydiffhalf
+    radX <- labelxdiff/2
+
+    if(circularPlot | dotsAsOval==FALSE){
+      radX<-rad
+    }
 
     yfactor<-1
 
     if(length(listOfxcenters)>0){
       lapply(1:length(listOfxcenters), function(u) {
-        mapply(function(x,y,radius,z,w) {
+        mapply(function(x,y,radiusX,radius,z,w) {
           pts2=seq(0, 2 * pi, length.out = n)
-          xy2 <- cbind(x + (radius * sin(pts2)*xfactor) , y + (radius * cos(pts2)*yfactor ) )
+          xy2 <- cbind(x + (radiusX * sin(pts2)*xfactor) , y + (radius * cos(pts2)*yfactor ) )
           graphics::polygon(xy2[,1],
                             xy2[,2],
                             col=z,
@@ -150,7 +172,9 @@ plotlabelsright<-function(maxx,y, markLabelSpacer,chrWidth,dfMarkColorInternal,a
         },
         x= listOfxcenters[[u]],
         y= listOfycenters[[u]],
+        radiusX= radX,
         radius= rad,
+
         z= dfMarkColorInternal$markColor[which(dfMarkColorInternal$style=="dots")][[u]]
         , w=  dfMarkColorInternal$markBorderColor[which(dfMarkColorInternal$style=="dots")][[u]]
         ) # mapply

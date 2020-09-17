@@ -10,6 +10,7 @@ plotDotMarks(
   xMarkCr,
   yMarkCr,
   rad,
+  radX,
   colCr,
   n,
   xfactor,
@@ -30,7 +31,8 @@ plotDotMarks(
   legend,
   ylistTransChr,
   rotation,
-  labelOutwards
+  labelOutwards,
+  dotsAsOval
 )
 }
 \arguments{

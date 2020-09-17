@@ -19,7 +19,10 @@ plotlabelsright(
   legendHeight,
   n,
   pattern,
-  legendYcoord
+  legendYcoord,
+  useOneDot,
+  dotsAsOval,
+  circularPlot
 )
 }
 \arguments{
@@ -48,6 +51,8 @@ plotlabelsright(
 \item{pattern, }{character, regex to remove from markNames}
 
 \item{legendYcoord}{numeric modify Y position of legend}
+
+\item{useOneDot}{boolean, when \code{TRUE} plots only one dot}
 
 \item{x}{The x axis coordinates of chromosomes}
 }

@@ -1,13 +1,13 @@
-#' FUNCTIONS: yVertoHor, xHortoVer, xHortoVerRoundCen, xHortoVerDots, 
-#' mapCircle, mapRadius, 
-#' transYList, mapOTUnames, addOTUnames, applyMapCircle, intercalate, 
-#' drawPlot, drawPlotMark, 
-#' drawPlotMarkLine, drawCen, circLabelMark, circPlotDots, plotChrNames, 
-#' addChrNameAttrMark, 
-#' addChrNameAttrMarkDots, xMarkMap, xMarkMapLeft, markMapPer, markMapPercM, 
-#' markMapPerDots, 
-#' radDotsPer, centerMarkMapPer, transyListMark, transyListCen, transRadDots, 
-#' transyListMarkDots, 
+#' FUNCTIONS: yVertoHor, xHortoVer, xHortoVerRoundCen, xHortoVerDots,
+#' mapCircle, mapRadius,
+#' transYList, mapOTUnames, addOTUnames, applyMapCircle, intercalate,
+#' drawPlot, drawPlotMark,
+#' drawPlotMarkLine, drawCen, circLabelMark, circPlotDots, plotChrNames,
+#' addChrNameAttrMark,
+#' addChrNameAttrMarkDots, xMarkMap, xMarkMapLeft, markMapPer, markMapPercM,
+#' markMapPerDots,
+#' radDotsPer, centerMarkMapPer, transyListMark, transyListCen, transRadDots,
+#' transyListMarkDots,
 #' oneDot, OTUlabelsright
 #'
 # grep -oP '^\K\w+(?=<-function)' ../R/orientation.R | sed ':a;N;s/\n/, /;ba'
@@ -159,6 +159,26 @@ xHortoVer<-function(xlist,shrink=0){
   return(xlistNew)
 } # fun
 
+xHortoVerMid<-function(xlist,shrink=0){
+  xlistNew<-list()
+
+  for (s in 1:length(xlist)){
+    xlistNew[[s]]<-xlist[[s]]
+
+    for (i in 1:length(xlist[[s]])){
+      minChro <- min(xlistNew[[s]][[i]], na.rm=T)
+      maxChro <- max(xlistNew[[s]][[i]], na.rm=T)
+
+      xlistNew[[s]][[i]] <- xlistNew[[s]][[i]] - minChro + (shrink * (maxChro-minChro) )
+
+      attr(xlistNew[[s]][[i]],"rowIndex") <- attr(xlist[[s]][[i]],"rowIndex")          # i
+    }
+    names(xlistNew)[s] <- names(xlist[s])
+    attr(xlistNew[[s]],"spname") <- attr(xlist[[s]],"spname")
+  } # for
+  return(xlistNew)
+} # fun
+
 xHortoVerRoundCen<-function(xlist,diffXRounded){
   xlistNew<-list()
 
@@ -167,6 +187,23 @@ xHortoVerRoundCen<-function(xlist,diffXRounded){
     for (i in 1:length(xlist[[s]])){
       minSpecies<-min(xlistNew[[s]][[i]], na.rm=T)
       xlistNew[[s]][[i]] <- xlistNew[[s]][[i]]-minSpecies + diffXRounded
+    }
+    names(xlistNew)[s] <- names(xlist[s])
+  } # for
+
+  return(xlistNew)
+} # fun
+
+xHortoVerRoundCenExt<-function(xlist,diffXRounded){
+  xlistNew<-list()
+
+  for (s in 1:length(xlist)){
+    xlistNew[[s]]<-xlist[[s]]
+    for (i in 1:length(xlist[[s]])){
+      minSpecies <- min(xlistNew[[s]][[i]], na.rm=T)
+      maxX<-max(xlistNew[[s]][[i]]-minSpecies + diffXRounded, na.rm=T)
+      xlistNew[[s]][[i]] <- xlistNew[[s]][[i]]-minSpecies +  maxX
+
     }
     names(xlistNew)[s] <- names(xlist[s])
   } # for
@@ -417,14 +454,14 @@ intercalate<-function(y,monocenNames){
   return(newOrder)
 } # fun
 
-drawPlot<-function(circleMaps,chrColor,lwd.chr) {
+drawPlot<-function(circleMaps,chrColor,lwd.chr,chrBorderColor2) {
   for (s in 1:length(circleMaps)){
     for (i in 1:length(circleMaps[[s]] ) ) {
       graphics::polygon(x=circleMaps[[s]][[i]]$x,
                         y=circleMaps[[s]][[i]]$y,
                         col=chrColor,
                         lwd=lwd.chr,
-                        border=chrColor
+                        border=chrBorderColor2
 
       ) # polygon
     } # for
@@ -570,10 +607,14 @@ circLabelMark<-function(bannedMarkName,circleMaps,listOfdfMarkPos,markLabelSize,
   } # for
 } # fun
 
-circPlotDots<-function(circleMapsMarksCr,xfactor,radiusMap,colCr,colBorderCr,n){
+circPlotDots <- function(circleMapsMarksCr,xfactor,radiusMap,
+                         # radiusMapX,
+                         colCr,colBorderCr,n){
 lapply(1:length(circleMapsMarksCr), function(m)
   lapply(1:length(circleMapsMarksCr[[m]] ), function(u)
-    mapply(function(x,y,radius,z,w) {
+    mapply(function(x,y,
+                    # radiusX,
+                    radius,z,w) {
       pts2=seq(0, 2 * pi, length.out = n*4)
       xy2 <- cbind(x + radius * sin(pts2)*xfactor , y + radius * cos(pts2) )
 
@@ -585,6 +626,7 @@ lapply(1:length(circleMapsMarksCr), function(m)
     }, # f
     x=circleMapsMarksCr[[m]][[u]]$x,
     y=circleMapsMarksCr[[m]][[u]]$y,
+    # radiusX=radiusMapX[[m]][[u]],
     radius=radiusMap[[m]][[u]],
     z=colCr[[m]][[u]],
     w=colBorderCr[[m]][[u]]
@@ -710,9 +752,6 @@ xMarkMapLeft<-function(xMark,x) {
 
     for ( m in 1:length(xMark[[s]] ) ){
       name <- attr(xMark[[s]][[m]],"rowIndex")
-
-      minMark <- min(xMark[[s]][[m]], na.rm=T)
-      maxMark <- max(xMark[[s]][[m]], na.rm=T)
 
       xMarkList[[s]][[m]] <- xMarkList[[s]][[m]] - min(unlist(x[[corrIndex]][name])  )
 
@@ -844,11 +883,11 @@ radDotsPer<-function(rad,y) {
 
   for( s in 1:length(rad) ){
     radPer[[s]]<-list()
-    # corrIndex <- which( names(y) %in% attr(rad[[s]],"spname")  )
+    corrIndex <- which( names(y) %in% attr(rad[[s]],"spname")  )
 
     for ( m in 1:length(rad[[s]] ) ){
-      # name <- attr(rad[[s]][[m]],"rowIndex")
-      chrSize <- max(unlist(y[[1]][1] ) ) - min(unlist(y[[1]][1])  )
+      name <- attr(rad[[s]][[m]],"rowIndex")
+      chrSize <- max(unlist(y[[corrIndex]][name] ) ) - min(unlist(y[[corrIndex]][name])  )
       radSize <- rad[[s]][[m]][[1]]
       radPerC<- radSize/chrSize
       radPer[[s]][[m]]<-list()
@@ -956,21 +995,38 @@ transyListCen<-function(yMarkPer,ylistTransChr){
   return(ylistTransMark)
 }
 
-transRadDots<-function(radPerCr,yMarkPer,ylistTransChr){
+
+# radPerCr<-radPerCr125
+# yMarkPerCr<-yMarkPerCr116
+# ylistTransChr<-ylistTransChr135
+
+transRadDots<-function(radPerCr,yMarkPerCr,ylistTransChr){
   radTrans<-list()
+  # s<-1
   for (s in 1:length(radPerCr) ){
     radTrans[[s]]<-list()
-    corrIndex <- which( names(ylistTransChr) %in% attr(yMarkPer[[s]],"spname") )
+    corrIndex <- which( names(ylistTransChr) %in% attr(yMarkPerCr[[s]],"spname") )
     for (m in 1:length(radPerCr[[s]])) {
-      chrSize <- max(unlist(ylistTransChr[[1]][1] ) ) - min(unlist(ylistTransChr[[1]][1])  )
+
+      name<-NULL
+      name<-attr(yMarkPerCr[[s]][[m]],"rowIndex")
+      corrIndexMark<-NULL
+      corrIndexMark <- which( names(ylistTransChr[[corrIndex]]) %in% name )
+
+      # m<-1
+      # chrSize <- max(unlist(ylistTransChr[[1]][1] ) ) - min(unlist(ylistTransChr[[1]][1])  )
+
+      chrSize <- max(unlist(ylistTransChr[[corrIndex]][corrIndexMark] ) ) - min(unlist(ylistTransChr[[corrIndex]][corrIndexMark])  )
+#      chrSize1018 <<- chrSize
+
       radTrans[[s]][[m]]<-list()
       if(length(radPerCr[[s]][[m]])>1){
-       radTrans[[s]][[m]][1:2] <- radPerCr[[s]][[m]][[1]] * chrSize
+        radTrans[[s]][[m]][1:2] <- radPerCr[[s]][[m]][[1]] * chrSize
       } else {
         radTrans[[s]][[m]]<- radPerCr[[s]][[m]] * chrSize
       }
     }
-    attr(radTrans[[s]],"spname")<-attr(yMarkPer[[s]],"spname")
+    attr(radTrans[[s]],"spname")<-attr(yMarkPerCr[[s]],"spname")
     attr(radTrans[[s]],"positionnoNA")<-attr(ylistTransChr[[corrIndex]],"positionnoNA")
   } # for
   return(radTrans)
@@ -992,7 +1048,9 @@ transyListMarkDots<-function(yMarkPer,ylistTransChr){
 
 
       chrSize <- max(unlist(ylistTransChr[[corrIndex]][corrIndexMark] ) ) - min(unlist(ylistTransChr[[corrIndex]][corrIndexMark])  )
+
       ylistTransMark[[s]][[m]]<-list()
+
       if (length(yMarkPer[[s]][[m]])>1 ){
         ylistTransMark[[s]][[m]][1:2] <- yMarkPer[[s]][[m]][[1]] * chrSize
         ylistTransMark[[s]][[m]][1:2] <- ylistTransMark[[s]][[m]][[1]] + min(unlist(ylistTransChr[[corrIndex]][corrIndexMark] ) )

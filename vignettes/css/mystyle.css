@@ -15,9 +15,13 @@ font-size: 1.0em;
 }
 
 .btn-copy-ex {
+  /*position: relative;*/
+
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 60px;
+  /*float: right;*/
+
+  top: 7px;
   visibility: hidden;
 }
 

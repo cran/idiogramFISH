@@ -21,7 +21,7 @@
 
 textLabel<-function(xMark,yMark,listOfdfChromSize,listOfdfMarkPos,specialChrSpacing,
                     chrSpacing,markLabelSize,pattern,bannedMarkName,
-                    isCentromeric=FALSE) {
+                    isCentromeric=FALSE,markNewLine2,mylheight2) {
   component<-ifelse(isCentromeric,3,2)
   for (s in 1:length(xMark) ) {
     corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfMarkPos)[[s]] )
@@ -41,38 +41,38 @@ textLabel<-function(xMark,yMark,listOfdfChromSize,listOfdfMarkPos,specialChrSpac
             y = ( yMark[[s]][[m]][1] + yMark[[s]][[m]][component] ) /2
             z=sub(pattern,"",listOfdfMarkPos[[s]]$markName[m])
             w=tryCatch(listOfdfMarkPos[[s]]$chrRegionOrig[m], error=function(e) {NA} )
-            graphics::text(x=x,
-                           y=y,
-                           label=ifelse(any(is.na(w),is.null(w) ),z,"") #ifelse(is.na(w),z,"")
-                           ,cex=markLabelSize
-                           ,adj=0
-            )
+            v=0
+
 
           } else if (attr(yMark[[s]][[m]],"squareSide") =="right"){
             x = xMark[[s]][[m]][1] + chrSpacing2*.1
             y = ( yMark[[s]][[m]][1] + yMark[[s]][[m]][component] ) /2
             z=sub(pattern,"",listOfdfMarkPos[[s]]$markName[m])
             w=tryCatch(listOfdfMarkPos[[s]]$chrRegionOrig[m], error=function(e) {NA} )
-            graphics::text(x=x,
-                           y=y,
-                           label=ifelse(any(is.na(w),is.null(w) ),z,"") #ifelse(is.na(w),z,"")
-                           ,cex=markLabelSize
-                           ,adj=0
-            )
+            v=0
+
 
           } else if (attr(yMark[[s]][[m]],"squareSide") =="left"){
             x = min(xMark[[s]][[m]]) - chrSpacing2*.1
             y = ( yMark[[s]][[m]][1] + yMark[[s]][[m]][component] ) /2
             z=sub(pattern,"",listOfdfMarkPos[[s]]$markName[m])
             w=tryCatch(listOfdfMarkPos[[s]]$chrRegionOrig[m], error=function(e) {NA} )
+            v=1
 
-            graphics::text(x=x,
-                           y=y,
-                           label=ifelse(any(is.na(w),is.null(w) ),z,"") #ifelse(is.na(w),z,"")
-                           ,cex=markLabelSize
-                           ,adj=1
-            )
           }
+          label=ifelse(any(is.na(w),is.null(w) ),z,"")
+
+          if(!is.na(markNewLine2) ){
+          label <- gsub(markNewLine2,"\n",label)
+          par(lheight=mylheight2) # closer together
+          }
+          graphics::text(x=x,
+                         y=y,
+                         label= label #ifelse(is.na(w),z,"")
+                         ,cex=markLabelSize
+                         ,adj=v
+          )
+
         } # if
     } # for m
   } # for s )# l

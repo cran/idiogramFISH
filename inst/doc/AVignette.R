@@ -21,7 +21,7 @@ if(Sys.info()['sysname']=="Darwin") {
       system('echo "visit https://ferroao.gitlab.io/idiogramfishhelppages" >> index.Rmd')
       
 }
-if(length(rmarkdown::pandoc_version()<2)>0) { # solaris workaround
+if(length( rmarkdown::pandoc_version()<2 )>0) { # solaris workaround
   
 if(rmarkdown::pandoc_version()<2) {
   

@@ -2,7 +2,7 @@
 % Please edit documentation in R/makedfMarkColorMycolors.R
 \name{makedfMarkColorMycolors}
 \alias{makedfMarkColorMycolors}
-\title{Function to automatically make a data.frame of Marks' characterisitcs}
+\title{FUNCTION to make a data.frame of Marks' characterisitcs}
 \usage{
 makedfMarkColorMycolors(
   markNames,
@@ -16,11 +16,10 @@ makedfMarkColorMycolors(
 
 \item{mycolors}{character vector of names of colors}
 
-\item{colorstoremove}{character vector of colors to remove from mycolors}
+\item{colorstoremove}{character vector of colors to remove from mycolors. Default \code{NULL}}
 
-\item{defaultStyleMark}{character vector with default style \code{"square"}
-\code{"cM"}
-\code{"dots"}}
+\item{defaultStyleMark}{character vector with default style \code{"square"}. Other options:  \code{"squareLeft"}, \code{"cM"}
+\code{"cMLeft"}, \code{"dots"}, \code{"upArrow"}, \code{"downArrow"}, \code{"cenStyle"}}
 }
 \value{
 data.frame
@@ -33,5 +32,5 @@ to be associated with the mark names
 
 It returns a data.frame with color and style for each mark
 }
-\keyword{internal}
+\keyword{create}
 \keyword{mark}

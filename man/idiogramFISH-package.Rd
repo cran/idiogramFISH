@@ -24,7 +24,7 @@ Useful links:
 \itemize{
   \item \url{https://ferroao.gitlab.io/manualidiogramfish/}
   \item \url{https://ferroao.gitlab.io/idiogramFISH}
-  \item Report bugs at \url{https://gitlab.com/ferroao/idiogramFISH/issues}
+  \item Report bugs at \url{https://gitlab.com/ferroao/idiogramFISH/-/issues}
 }
 
 }

@@ -15,8 +15,13 @@ citrusMarkPos( chrSizeDf, mSizePter = 0.25, mSizeQter = 0.35, mSizePprox = 0.35,
  mOther = 0.25, markName = "CMA" 
 )
 
-markOverCMA( citrusMarkPosDF, chrType = "B", chrName, chrRegion = "p",
- markName = "45S" 
+markOverCMA(
+citrusMarkPosDF,
+chrType = "B",
+chrName,
+chrRegion = "p",
+markName = "45S",
+shrinkMark = TRUE
 )
 }
 \arguments{
@@ -64,9 +69,11 @@ markOverCMA( citrusMarkPosDF, chrType = "B", chrName, chrRegion = "p",
 
 \item{chrType}{character, defaults to "B", chr. type to duplicate mark (markOverCMA)}
 
-\item{chrName}{character, defaults to "B", chr. name to duplicate mark (markOverCMA)}
+\item{chrName}{character, defaults to "B", chr. name(s) to duplicate mark (markOverCMA)}
 
 \item{chrRegion}{character, arm, defaults to "p". for mark duplication (markOverCMA)}
+
+\item{shrinkMark}{boolean, shrink new mark to be created (markOverCMA)}
 }
 \value{
 data.frame

@@ -82,15 +82,15 @@ arrowPlotMark<-function(squareness, xMark, yMark,
 #        # xlistNewOrig1<<-xlistNewOrig
 #      # x1 <<- x
 
-        yMarkPer<-markMapPer(yMark,y)
+        yMarkPer <- markMapPer(yMark,y)
 
         xlistNew <- xMarkMap(xMark,x, arrowheadWidthShrink)
 
-        textyMarkPer<-centerMarkMapPer(yMark,y)
-
         ylistTransMark<-transyListMark(yMarkPer,ylistTransChr)
 
-        textylistTransMark<-transyListMark(textyMarkPer,ylistTransChr)
+        # textyMarkPer<-centerMarkMapPer(yMark,y)
+
+        # textylistTransMark<-transyListMark(textyMarkPer,ylistTransChr)
 
         circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,    ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
 

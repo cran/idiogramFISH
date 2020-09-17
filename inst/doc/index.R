@@ -1,76 +1,7 @@
-## ---- echo=F, warning=FALSE, error=FALSE, comment=NA--------------------------
-
-if(Sys.info()['sysname']=="Darwin") {
-
-      system('echo "---" > index.Rmd')
-      system('echo "title: \'Credits\'" >> index.Rmd')
-      system('echo "author: \'Fernando Roa\'" >> index.Rmd')
-      system('echo "date: \'23 08 2019\'" >> index.Rmd')
-      system('echo "output:" >> index.Rmd')
-      system('echo "  html_document" >> index.Rmd')
-      system('echo "    highlight: github" >> index.Rmd')
-      system('echo "    toc: true" >> index.Rmd')
-      system('echo "    toc_depth: 1" >> index.Rmd')
-      system('echo "    number_sections: true" >> index.Rmd')
-      system('echo "vignette: >" >> index.Rmd')
-      system('echo "  %\\VignetteIndexEntry{Credits}" >> index.Rmd')
-      system('echo "  %\\VignetteEngine{knitr::rmarkdown}" >> index.Rmd')
-      system('echo "  %\\VignetteEncoding{UTF-8}" >> index.Rmd')
-      system('echo "---" >> index.Rmd')
-      system('echo ""    >> index.Rmd')
-      system('echo "visit https://ferroao.gitlab.io/idiogramfishhelppages" >> index.Rmd')
-}
-
-if( length(rmarkdown::pandoc_version()<2) > 0 ) { # solaris workaround
-  
-if(rmarkdown::pandoc_version() < 2 ) {
-  message(crayon::red("\nMissing pandoc version > 2. Vignette may fail because it uses lua filter for multiple bibliographies
-                      \nMore info:
-                      \nhttps://stat.ethz.ch/pipermail/r-package-devel/2019q2/004127.html
-                      \nhttps://stat.ethz.ch/pipermail/r-package-devel/2020q1/004814.html
-                      \nLua filters are supported by rmarkdown
-                      \nhttps://cran.r-project.org/web/packages/rmarkdown/vignettes/lua-filters.html
-                      \nLua filters are an old characteristic of pandoc
-                      \nhttps://pandoc.org/lua-filters.html
-                      \nInstall pandoc >2 or try with package installr (if in Windows):
-                      \nhttps://github.com/jgm/pandoc/releases")
-          ) # me
-  if(Sys.info()['sysname']=="Windows" ) {
-    message("pandoc > 2 not available, see online vignettes")
-    
-    # remove vignettes with lua filter
-    shell("del index.Rmd")
-  
-    #
-    #    create new index.Rmd
-    #
-    
-      shell("@echo off")
-      shell('@echo --- > index.Rmd')
-      shell('@echo title: "idiogramFISH: Idiograms with Marks and Karyotype Indices" >> index.Rmd')
-      shell('@echo author: "Fernando Roa" >> index.Rmd')
-      shell('@echo date: "23 08 2019" >> index.Rmd')
-      shell('@echo output: >> index.Rmd')
-      shell('@echo   html_document >> index.Rmd')
-      shell('@echo     highlight: github >> index.Rmd')
-      shell('@echo     toc: true >> index.Rmd')
-      shell('@echo     toc_depth: 1 >> index.Rmd')
-      shell('@echo     number_sections: true >> index.Rmd')
-      shell('@echo vignette: ^> >> index.Rmd')
-      shell("@echo   %\\VignetteIndexEntry{Credits} >> index.Rmd")
-      shell('@echo   %\\VignetteEngine{knitr::rmarkdown} >> index.Rmd')
-      shell('@echo   %\\VignetteEncoding{UTF-8} >> index.Rmd')
-      shell('@echo --- >> index.Rmd')
-      shell('@echo(     >> index.Rmd')
-      shell('@echo pandoc ^> 2 not available, visit https://ferroao.gitlab.io/idiogramfishhelppages >> index.Rmd')
-
-    } # if windows
-  } # pandoc < 2
-} # len
-
 ## ----cssjs, results="asis", echo=FALSE, message=FALSE, eval=TRUE--------------
 # <!-- pkgdown --> 
 # <!-- jquery --><script src="js/jquery.min.js" crossorigin="anonymous"></script>
+
 myfile<-"js/jquery.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
@@ -78,7 +9,11 @@ cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # --
 # <!-- clipboard.js --><script src="js/clipboard.min.js"  crossorigin="anonymous"></script>
 myfile<-"js/clipboard.min.js"
 if(file.exists(myfile)){
-cat(paste0('<script src="',myfile,'"crossorigin="anonymous"></script>'))
+cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script>'))
+}
+myfile<-"js/hideOutput.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script>'))
 }
 # <!-- Font Awesome icons --><link rel="stylesheet" href="css/all.minMod.css"  crossorigin="anonymous">
 myfile<-"css/all.minMod.css"
@@ -101,29 +36,29 @@ cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 }
 
 ## ----setup, include=FALSE, eval=T---------------------------------------------
+
 #Create myheader.html
+
+  line1<-'<script src="https://kit.fontawesome.com/af0a13599b.js" crossorigin="anonymous"></script>'
+  line2<-'<link rel="shortcut icon" href="../man/figures/logo2.png" />'
+  file <- "myheader.html"
+
 if(Sys.info()['sysname']=="Windows"){
-res<-!as.logical(system(paste("ping", "www.google.com")) )
-  if(res){
-  fileConn <- file("myheader.html")
-  writeLines('<script src="https://kit.fontawesome.com/af0a13599b.js" crossorigin="anonymous"></script>', fileConn)
-  close(fileConn)
-  }
+  
+  #check internet response
+  res<-!as.logical(system(paste("ping", "www.google.com")) )
+    if(res){
+      write(line1,file=file)
+      write(line2,file=file,append=TRUE)
+    }
 } else {
-  fileConn <- file("myheader.html")
-  writeLines('<script src="https://kit.fontawesome.com/af0a13599b.js" crossorigin="anonymous"></script>', fileConn)
-  close(fileConn)
+  write(line1,file=file)
+  write(line2,file=file,append=TRUE)
 }
+
 require(idiogramFISH)
+
 knitr::opts_chunk$set(eval = TRUE)
-# knitr::opts_chunk$set(eval = FALSE)
-
-# badge_devel_gitlab<-function(pkg, color){
-#     v <- rvcheck:::check_github_gitlab(pkg, "gitlab")$latest_version
-#     url <- paste0("https://gitlab.com/", pkg)
-#     badger::badge_custom("devel version", v, color, url)
-# }
-
 
 ## ---- echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"----
 if (requireNamespace("RCurl", quietly = TRUE)  ) {
@@ -263,7 +198,7 @@ archive_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svgnewdownlink) )
 if (!is.na(archive_cont)){
       archive_contFile <- "../man/figures/archive.svg"
       writeLines(archive_cont, con = archive_contFile)
-      cat(paste0("[![archive](",knitr::include_graphics(archive_contFile),")](https://cran.r-project.org/src/contrib/Archive/idiogramFISH){target='_blank'}" ) )
+      cat(paste0("[![archive](",knitr::include_graphics(archive_contFile),")](https://cran.r-project.org/src/contrib/Archive/idiogramFISH/){target='_blank'}" ) )
 }
 } # rcurl
 
@@ -443,8 +378,7 @@ plotIdiograms(dfChrSize  =dfChrSizeHolo, # data.frame of chr. size
               ,legendHeight=.5         # height of legend labels
               ,legendWidth = 1.2       # width of legend labels
               ,xModifier = .025        # separ. among chromatids
-              )                  
-# dev.off() # close svg()
+              ); #dev.off() # close svg()
 
 ## ---- results="hide"----------------------------------------------------------
 dfChrSizeHolo
@@ -571,8 +505,7 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               ,OTULabelSpacerx = -1.5    # modify position of OTU label, when OTUplacing="number" or "simple"
               ,OTUlegendHeight = 1.5     # space among OTU names when in legend - OTUplacing
               ,OTUTextSize = .7          # font size of OTU
-)
-#dev.off() # close svg()
+); #dev.off() # close svg()
 
 ## ----citation, echo=FALSE, comment=NA,results='asis'--------------------------
 print(citation("idiogramFISH"),bibtex=FALSE )
@@ -612,8 +545,6 @@ if(file.exists(chapterFile_plotting)){
 }
 
 ## ---- results="hide", message=FALSE, warning=FALSE----------------------------
-
-#load package
 library(idiogramFISH) 
 
 ## -----------------------------------------------------------------------------
@@ -643,17 +574,42 @@ kableExtra::kable_styling(knitr::kable(mydfChrSize) , full_width = F
 #  colnames(mydfChrSize)<-c("OTU", "chrName","shortArmSize","longArmSize")
 
 ## -----------------------------------------------------------------------------
+# We will use column OTU if data.frame because chromosome size df has it
+mydfOfMarks<-read.table(text=
+"            OTU chrName markName chrRegion markSize markDistCen
+\"Species one\"      1      45S       p       NA         NA     # no measure (NA) means whole arm
+\"Species one\"      1       5S       q      0.5         0.5
+\"Species one\"      B  \"B mark\"    w       NA         NA     # w for whole chromosome
+\"Species one\"      B  \"cB mark\"   q       NA         1.0    
+\"Species one\"      2     45S        p        1         1.0
+\"Species one\"      2     gene1      q      0.5         1.0
+\"Species one\"      2     gene2      q      0.5         2.0
+\"Species one\"      3     DAPI       q       NA         1
+\"Species one\"      3     gene3      p       NA         0.5 
+\"Species one\"      1     DAPI       cen
+\"Species one\"      3      CMA       cen", header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
+
+## ---- echo=F------------------------------------------------------------------
+kableExtra::kable_styling(knitr::kable(mydfOfMarks) , full_width = F
+                           , font_size = 10
+                          , bootstrap_options = c("striped", "hover", "condensed")
+                          )
+
+## ---- eval=FALSE--------------------------------------------------------------
+#  colnames(mydfMarkColor)<-c("OTU", "chrName","markName","chrRegion","markSize","markDistCen")
+
+## -----------------------------------------------------------------------------
 # From scratch:
 mydfMarkColor<-read.table(text=
 " markName markColor  style
         5S      red       dots
-       45S      green     square
-     gene1      orange    upArrow    
+       45S      chartreuse3     square
+     gene1      chocolate    upArrow    
      gene2      salmon    downArrow
      gene3      \"#056522\" cMLeft    
-      DAPI      blue      cM   
+      DAPI      dodgerblue      cM   
 \"cB mark\"     black     cenStyle   
-       CMA      yellow    square
+       CMA      darkgoldenrod1    square
 \"B mark\"      black     square"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
 ## ---- echo=F------------------------------------------------------------------
@@ -668,32 +624,8 @@ kableExtra::kable_styling(knitr::kable(mydfMarkColor) , full_width = F
 #  # if style column is not present it will be filled with "square"
 
 ## -----------------------------------------------------------------------------
-# We will use column OTU if data.frame because chromosome size df has it
-mydfOfMarks<-read.table(text=
-"            OTU chrName markName chrRegion markSize markDistCen
-\"Species one\"      1      45S       p       NA         NA     # no measure means whole arm for square marks
-\"Species one\"      1       5S       q      0.5         0.5
-\"Species one\"      B  \"B mark\"    w       NA         NA     # w for whole chromosome for square marks
-\"Species one\"      B  \"cB mark\"   q       NA         1.0    
-\"Species one\"      2     45S        p        1         1.0
-\"Species one\"      2     gene1      q      0.5         1.0
-\"Species one\"      2     gene2      q      0.5         2.0
-\"Species one\"      3     DAPI       q       NA          1
-\"Species one\"      3     gene3      p       NA         .5 
-\"Species one\"      1     DAPI       cen
-\"Species one\"      3      CMA       cen", header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
-
-## ---- echo=F------------------------------------------------------------------
-kableExtra::kable_styling(knitr::kable(mydfOfMarks) , full_width = F
-                           , font_size = 10
-                          , bootstrap_options = c("striped", "hover", "condensed")
-                          )
-
-## ---- eval=FALSE--------------------------------------------------------------
-#  colnames(mydfMarkColor)<-c("OTU", "chrName","markName","chrRegion","markSize","markDistCen")
-
-## -----------------------------------------------------------------------------
-# We will use column note to add a note to the right of the karyotype of the OTU in column OTU
+# We will use column note to add a note to the right of the karyotype of the 
+# OTU in column OTU
 notesdf<-read.table(text=
 "            OTU    note
 \"Species one\"   \"Author notes\"  ", header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
@@ -722,15 +654,15 @@ plotIdiograms(dfChrSize= mydfChrSize,     # chr. size data.frame
               
               ,rulerPos=0                 # ruler position
               ,ruler.tck=-0.01            # ticks of ruler size and orientation
-              ,xPosRulerTitle = 2.5             # ruler units pos.
+              ,xPosRulerTitle = 2.5       # ruler units pos.
               
-              ,markPer = "45S"           # show mark % of chr.  under kar.
+              ,markPer = "45S"            # show mark % of chr.  under kar.
               ,showMarkPos = TRUE         # show position of marks under kar. See bToRemove
               ,bToRemove = c("B mark","cB mark") # bands to remove from pos. calc. See showMarkPos
               
               ,notes=notesdf              # data.frame with notes 
               ,notesTextSize = 1.3        # font size of notes
-              ,notesPos = .2              # space from chr. (right) to note
+              ,notesPosX = .2              # space from chr. (right) to note
               
               ,ylimBotMod = 2             # modify ylim bottom argument
               ,ylimTopMod = 0             # modify ylim top argument
@@ -741,8 +673,7 @@ plotIdiograms(dfChrSize= mydfChrSize,     # chr. size data.frame
               ,remSimiMarkLeg=TRUE        # remove pseudoduplicated mark names from legend (same after pattern removal)
               # ,legend="inline"            # legend next to chr.
               # ,bannedMarkName = "cB mark" # remove from legends
-)
-# dev.off()
+); # dev.off()
 
 ## ---- results="asis", comment=NA, echo=FALSE----------------------------------
 # cat(paste0("![](mydfChrSize.png)" ) )
@@ -772,7 +703,7 @@ plotIdiograms(dfChrSize= mydfChrSize,     # chr. size data.frame
 #  
 #                rulerPos= 0,                # ruler position
 #                ruler.tck=-0.01,            # ticks of ruler size and orientation
-#                xPosRulerTitle = 2.6,              # ruler units pos.
+#                xPosRulerTitle = 2.6,       # ruler units pos.
 #  
 #                xlimLeftMod = 2,            # modify xlim left argument
 #                ylimBotMod = 0.4,           # modify ylim bottom argument
@@ -805,7 +736,7 @@ plotIdiograms(dfChrSize   = bigdfOfChrSize[1:8,],  # chr. size data.frame
               
               rulerPos= 0,                # ruler position
               ruler.tck=-0.01,            # ticks of ruler size and orientation
-              xPosRulerTitle = 2.6,              # ruler units pos.
+              xPosRulerTitle = 2.6,       # ruler units pos.
               
               xlimLeftMod = 2,            # modify xlim left argument 
               ylimBotMod = 0.4,           # modify ylim bottom argument
@@ -824,7 +755,7 @@ cat(paste0("![](",mydfChrSize2.png,")" ) )
 
 ## ---- echo=TRUE, results="hide", fig.width=10, fig.height=4.5, message=FALSE,dev="png", eval=FALSE----
 #  
-#  charVectorCol <- c("tomato3","darkolivegreen4","dfsd","blue","green")
+#  charVectorCol <- c("tomato3","darkolivegreen4","dfsd","dodgerblue","chartreuse3")
 #  
 #  # Modify size of kar. to use rulerInterval and ceilingFactor (>= 1.13)
 #  quo<-9
@@ -843,7 +774,7 @@ cat(paste0("![](",mydfChrSize2.png,")" ) )
 #  
 #                mycolors = charVectorCol,    # colors to use
 #  
-#                distTextChr = .5,            # separ. text and chr.
+#                distTextChr = 0.5,           # separ. text and chr.
 #  
 #                markLabelSize=.7,            # font size for labels (legend)
 #                lwd.cM=2,                    # width of cM marks
@@ -853,7 +784,7 @@ cat(paste0("![](",mydfChrSize2.png,")" ) )
 #                rulerPos= 0,                 # ruler position
 #                ruler.tck=-0.01,             # ruler tick orientation and length
 #                rulerNumberSize=.5           # ruler font size
-#                ,xPosRulerTitle = 2.8              # ruler units pos.
+#                ,xPosRulerTitle = 2.8        # ruler units pos.
 #  
 #                ,xlimRightMod = 1            # modify xlim right arg.
 #  )
@@ -861,7 +792,7 @@ cat(paste0("![](",mydfChrSize2.png,")" ) )
 
 ## ---- echo=FALSE, results="hide", fig.width=10, fig.height=4.5, message=FALSE,dev="png", eval=TRUE, include=FALSE----
 
-charVectorCol <- c("tomato3","darkolivegreen4","dfsd","blue","green")
+charVectorCol <- c("tomato3","darkolivegreen4","dfsd","dodgerblue","chartreuse3")
 
 # Modify size of kar. to use rulerInterval and ceilingFactor (>= 1.13)  
 quo<-9
@@ -890,7 +821,7 @@ plotIdiograms(dfChrSize = dfOfChrSize2,    # d.f. of chr. sizes
               rulerPos= 0,                 # ruler position
               ruler.tck=-0.01,             # ruler tick orientation and length
               rulerNumberSize=.5           # ruler font size
-              ,xPosRulerTitle = 2.8               # ruler units pos.
+              ,xPosRulerTitle = 2.8        # ruler units pos.
               
               ,xlimRightMod = 1            # modify xlim right arg.
 )
@@ -933,9 +864,9 @@ kableExtra::kable_styling(knitr::kable(mydfChrSizeHolo) , full_width = F
 mydfMarkColor<-read.table(text=
 "  markName markColor  style
 1       5S       red   dots
-2      45S     green square
-3     DAPI      blue square
-4      CMA    yellow square"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
+2      45S     chartreuse3 square
+3     DAPI      dodgerblue square
+4      CMA    darkgoldenrod1 square"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
 
 ## ---- echo=F------------------------------------------------------------------
 # just to show it here
@@ -949,8 +880,8 @@ kableExtra::kable_styling(knitr::kable(mydfMarkColor) , full_width = F
 ## -----------------------------------------------------------------------------
 # We will use column OTU if data.frame because chromosome size df has it
 mydfMarkPosHolo<-read.table(text=
-"             OTU  chrName markName markPos markSize chrRegion
-\"Species one\"       4        B      NA       NA        w           # whole chromosome mark, use 'w' in col. chrRegion 
+"           OTU  chrName markName markPos markSize chrRegion
+\"Species one\"       4        B      NA       NA        w    # w = whole chromosome mark 
 \"Species one\"       3     DAPI     2.0      0.5
 \"Species one\"       1      45S     2.0      0.5
 \"Species one\"       2     DAPI     2.0      0.5
@@ -992,8 +923,7 @@ plotIdiograms(dfChrSize  = mydfChrSizeHolo,# data.frame of chr. sizes
               ,legendWidth=1               # width of legend
               ,legendHeight=.7             # height of legend item 
               ,xModifier=0.01              # separation among chromatids
-)
-# dev.off() # closes png or svg
+); # dev.off() # closes png or svg
 
 ## ---- results="asis", comment=NA, echo=FALSE----------------------------------
 # cat(paste0("![](mydChrSizeHolo.png)" ) )
@@ -1001,10 +931,13 @@ plotIdiograms(dfChrSize  = mydfChrSizeHolo,# data.frame of chr. sizes
 
 ## ---- echo=TRUE, comment="#", fig.width=6, fig.height=3, message=FALSE,dev='png', collapse=TRUE----
 unique(dfMarkPosHolo$markName)
+
 par(mar=rep(0,4)) 
-plotIdiograms(dfChrSize = dfChrSizeHolo, # d.f. of chr. size
+
+plotIdiograms(dfChrSize = dfChrSizeHolo,  # d.f. of chr. size
               dfMarkPos  = dfMarkPosHolo, # d.f. of marks' positions
-              mycolors   = c("green","yellow","blue","red"),  # colors for marks
+              
+              mycolors   = c("red","dodgerblue","fdsjkfds","chartreuse3","darkgoldenrod1"),  # colors for marks
 
               addOTUName=FALSE,           # do not add OTU name
               ruler=FALSE,                # do not add ruler
@@ -1019,10 +952,10 @@ plotIdiograms(dfChrSize = dfChrSizeHolo, # d.f. of chr. size
 mydfMarkColor2<-read.table(text=
 "  markName markColor  style
 1       5S       red   dots
-2      45S     green   square
-3     DAPI      blue   square
-4      CMA    yellow   square
-5     c45S     green   cenStyle # <- simulate Cen.
+2      45S     chartreuse3   square
+3     DAPI      dodgerblue   square
+4      CMA    darkgoldenrod1   square
+5     c45S     chartreuse3   cenStyle # <- simulate Cen.
 6      c5S       red   cenStyle
 7       cB     black   cenStyle
 8   constr        NA   cenStyle
@@ -1060,8 +993,8 @@ plotIdiograms(dfChrSize  = mydfChrSizeHolo, # data.frame of chr. sizes
               ,remSimiMarkLeg = TRUE       # remove pseudoduplicated mark names (got equal after pattern removal)
               # ,legend="inline"           # legends inline
               # ,bannedMarkName = c("c45S","cB") # do not use this names from labels
-)
-# dev.off() # closes png or svg
+); # dev.off() closes png or svg
+
 
 ## ---- results="asis", eval=!childExists_plotting, echo=FALSE------------------
 #  cat("# Plotting chromosomes")
@@ -1214,7 +1147,23 @@ cat("# Functions")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#functions)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile_news<- "../chaptersBLOCK/11-news.Rmd"
+chapterFile_data<- "../chaptersBLOCK/11-datasets.Rmd"
+if(file.exists(chapterFile_data)){
+  childExists_data<-TRUE
+  child_docs_data <- chapterFile_data
+} else {
+  childExists_data<-FALSE
+  child_docs_data<-""
+}
+
+## ---- results="asis", eval=!childExists_data, echo=FALSE----------------------
+cat("# Datasets")
+
+## ---- results="asis", eval=!childExists_data, echo=FALSE----------------------
+cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#datasets)")
+
+## ---- echo=F------------------------------------------------------------------
+chapterFile_news<- "../chaptersBLOCK/12-news.Rmd"
 if(file.exists(chapterFile_news)){
   childExists_news<-TRUE
   child_docs_news <- chapterFile_news

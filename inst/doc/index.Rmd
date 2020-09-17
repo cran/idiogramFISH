@@ -15,7 +15,7 @@ output:
     
 #bibliography: [refs/allrefs.bib,refs/iqtree.bib,refs/revbayes.bib,refs/packages.bib, refs/idiogramFISH.bib, refs/Rrefs.bib]
 
-bibliography_normal: [refs/allrefs.bib,refs/iqtree.bib,refs/revbayes.bib,refs/library.bib,refs/costa2015.bib,refs/aurantiumMendes.bib]
+bibliography_normal: [refs/allrefs.bib,refs/iqtree.bib,refs/revbayes.bib,refs/library.bib,refs/costa2015.bib,refs/costa2019.bib,refs/aurantiumMendes.bib,refs/yasuda.bib, refs/yi2018.bib]
 bibliography_software: [refs/packages.bib, refs/idiogramFISH.bib]
 bibliography_docs: [refs/docPackages.bib, refs/Rrefs.bib, refs/docPackages2.bib, refs/rmdformats.bib]
 
@@ -38,6 +38,7 @@ resource_files:
   - ../man/figures/gitbadge.svg
   - ../man/figures/doibadge.svg
   - ../man/figures/logo.png
+  - ../man/figures/logo2.png
   - ../man/figures/realdownloads.svg
   - ../man/figures/NEWS.svg
   
@@ -73,16 +74,21 @@ resource_files:
   - refs/library.bib
   - refs/rmdformats.bib
   - refs/costa2015.bib
+  - refs/costa2019.bib
   - refs/aurantiumMendes.bib
-  
+  - refs/yasuda.bib
+  - refs/yi2018.bib
   
   - js/jquery.min.js
   - js/clipboard.min.js
-  - css/mystyle.css
-  - css/all.minMod.css
-  - css/bootstrap.minO.css
   - js/bootstrap.min.js
   - js/pkgdown2.js
+
+  - css/mystyle.css
+
+  - css/all.minMod.css
+  - css/bootstrap.minO.css
+  
   - css/fonts/fa-regular-400.svg
   - css/fonts/fa-regular-400.eot
   - css/fonts/fa-regular-400.ttf
@@ -96,83 +102,45 @@ vignette: >
   
 ---
 
-<link rel="stylesheet" href="css/mystyle.css">
-<link rel="stylesheet" href="css/mystyle2.css">
+<!-- centering rmdformats in mystyle2 -->
 
-```{r, echo=F, warning=FALSE, error=FALSE, comment=NA}
+<!-- button show hide in mystyle3 -->
 
-if(Sys.info()['sysname']=="Darwin") {
+<!-- <link rel="stylesheet" href="css/mystyle3.css"> -->
 
-      system('echo "---" > index.Rmd')
-      system('echo "title: \'Credits\'" >> index.Rmd')
-      system('echo "author: \'Fernando Roa\'" >> index.Rmd')
-      system('echo "date: \'23 08 2019\'" >> index.Rmd')
-      system('echo "output:" >> index.Rmd')
-      system('echo "  html_document" >> index.Rmd')
-      system('echo "    highlight: github" >> index.Rmd')
-      system('echo "    toc: true" >> index.Rmd')
-      system('echo "    toc_depth: 1" >> index.Rmd')
-      system('echo "    number_sections: true" >> index.Rmd')
-      system('echo "vignette: >" >> index.Rmd')
-      system('echo "  %\\VignetteIndexEntry{Credits}" >> index.Rmd')
-      system('echo "  %\\VignetteEngine{knitr::rmarkdown}" >> index.Rmd')
-      system('echo "  %\\VignetteEncoding{UTF-8}" >> index.Rmd')
-      system('echo "---" >> index.Rmd')
-      system('echo ""    >> index.Rmd')
-      system('echo "visit https://ferroao.gitlab.io/idiogramfishhelppages" >> index.Rmd')
+```{css, echo=FALSE, eval=T}
+body {
+  counter-reset: counter-rchunks;
 }
 
-if( length(rmarkdown::pandoc_version()<2) > 0 ) { # solaris workaround
-  
-if(rmarkdown::pandoc_version() < 2 ) {
-  message(crayon::red("\nMissing pandoc version > 2. Vignette may fail because it uses lua filter for multiple bibliographies
-                      \nMore info:
-                      \nhttps://stat.ethz.ch/pipermail/r-package-devel/2019q2/004127.html
-                      \nhttps://stat.ethz.ch/pipermail/r-package-devel/2020q1/004814.html
-                      \nLua filters are supported by rmarkdown
-                      \nhttps://cran.r-project.org/web/packages/rmarkdown/vignettes/lua-filters.html
-                      \nLua filters are an old characteristic of pandoc
-                      \nhttps://pandoc.org/lua-filters.html
-                      \nInstall pandoc >2 or try with package installr (if in Windows):
-                      \nhttps://github.com/jgm/pandoc/releases")
-          ) # me
-  if(Sys.info()['sysname']=="Windows" ) {
-    message("pandoc > 2 not available, see online vignettes")
-    
-    # remove vignettes with lua filter
-    shell("del index.Rmd")
-  
-    #
-    #    create new index.Rmd
-    #
-    
-      shell("@echo off")
-      shell('@echo --- > index.Rmd')
-      shell('@echo title: "idiogramFISH: Idiograms with Marks and Karyotype Indices" >> index.Rmd')
-      shell('@echo author: "Fernando Roa" >> index.Rmd')
-      shell('@echo date: "23 08 2019" >> index.Rmd')
-      shell('@echo output: >> index.Rmd')
-      shell('@echo   html_document >> index.Rmd')
-      shell('@echo     highlight: github >> index.Rmd')
-      shell('@echo     toc: true >> index.Rmd')
-      shell('@echo     toc_depth: 1 >> index.Rmd')
-      shell('@echo     number_sections: true >> index.Rmd')
-      shell('@echo vignette: ^> >> index.Rmd')
-      shell("@echo   %\\VignetteIndexEntry{Credits} >> index.Rmd")
-      shell('@echo   %\\VignetteEngine{knitr::rmarkdown} >> index.Rmd')
-      shell('@echo   %\\VignetteEncoding{UTF-8} >> index.Rmd')
-      shell('@echo --- >> index.Rmd')
-      shell('@echo(     >> index.Rmd')
-      shell('@echo pandoc ^> 2 not available, visit https://ferroao.gitlab.io/idiogramfishhelppages >> index.Rmd')
+#header {
+  padding-left: 3em;
+}
 
-    } # if windows
-  } # pandoc < 2
-} # len
+#main {
+  padding-left: 3em;
+}
+
+div.sourceCode {
+  counter-increment: counter-rchunks;
+  position: relative;
+  overflow: visible;
+}
+
+div.sourceCode::before {
+  content: 'Code [' counter(counter-rchunks) ']: ';
+  display: inline;
+  position: absolute;
+  left: -5em;
+  font-size: 0.7em;    
+  color: rgb(48, 63, 159);
+}
 ```
-  
+
 ``` {r cssjs, results="asis", echo=FALSE, message=FALSE, eval=TRUE}
 # <!-- pkgdown --> 
 # <!-- jquery --><script src="js/jquery.min.js" crossorigin="anonymous"></script>
+
 myfile<-"js/jquery.min.js"
 if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # -->'))
@@ -180,7 +148,11 @@ cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script> <!-- # --
 # <!-- clipboard.js --><script src="js/clipboard.min.js"  crossorigin="anonymous"></script>
 myfile<-"js/clipboard.min.js"
 if(file.exists(myfile)){
-cat(paste0('<script src="',myfile,'"crossorigin="anonymous"></script>'))
+cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script>'))
+}
+myfile<-"js/hideOutput.js"
+if(file.exists(myfile)){
+cat(paste0('<script src="',myfile,'" crossorigin="anonymous"></script>'))
 }
 # <!-- Font Awesome icons --><link rel="stylesheet" href="css/all.minMod.css"  crossorigin="anonymous">
 myfile<-"css/all.minMod.css"
@@ -202,31 +174,35 @@ if(file.exists(myfile)){
 cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 }
 ```
+<link rel="stylesheet" href="css/mystyle.css">
+<link rel="stylesheet" href="css/mystyle2.css">
+<link rel="stylesheet" href="css/mystyle3.css">
+
 
 ```{r setup, include=FALSE, eval=T}
+
 #Create myheader.html
+
+  line1<-'<script src="https://kit.fontawesome.com/af0a13599b.js" crossorigin="anonymous"></script>'
+  line2<-'<link rel="shortcut icon" href="../man/figures/logo2.png" />'
+  file <- "myheader.html"
+
 if(Sys.info()['sysname']=="Windows"){
-res<-!as.logical(system(paste("ping", "www.google.com")) )
-  if(res){
-  fileConn <- file("myheader.html")
-  writeLines('<script src="https://kit.fontawesome.com/af0a13599b.js" crossorigin="anonymous"></script>', fileConn)
-  close(fileConn)
-  }
+  
+  #check internet response
+  res<-!as.logical(system(paste("ping", "www.google.com")) )
+    if(res){
+      write(line1,file=file)
+      write(line2,file=file,append=TRUE)
+    }
 } else {
-  fileConn <- file("myheader.html")
-  writeLines('<script src="https://kit.fontawesome.com/af0a13599b.js" crossorigin="anonymous"></script>', fileConn)
-  close(fileConn)
+  write(line1,file=file)
+  write(line2,file=file,append=TRUE)
 }
+
 require(idiogramFISH)
+
 knitr::opts_chunk$set(eval = TRUE)
-# knitr::opts_chunk$set(eval = FALSE)
-
-# badge_devel_gitlab<-function(pkg, color){
-#     v <- rvcheck:::check_github_gitlab(pkg, "gitlab")$latest_version
-#     url <- paste0("https://gitlab.com/", pkg)
-#     badger::badge_custom("devel version", v, color, url)
-# }
-
 ```
 
 ``` {r, echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"}
@@ -311,6 +287,7 @@ doibadge_cont      <- tryCatch(suppressWarnings(RCurl::getURLContent(doibadge)  
 } # rcurl
 ```
 
+
 You can install idiogramFISH from [CRAN](https://cran.r-project.org/package=idiogramFISH) with:
 
 ``` r
@@ -343,6 +320,7 @@ Attention windows users, please install [Rtools](https://cran.r-project.org/bin/
 
 Vignettes use a lua filter, so you would need [pandoc](https://pandoc.org/installing.html){target="_blank"} ver. > 2. `rmarkdown::pandoc_version()`
 
+<div class="fold s">
 ``` {r, eval=FALSE}
 # This installs package devtools, necessary for installing the dev version
 install.packages("devtools")
@@ -370,9 +348,11 @@ devtools::install_git(url = url,build_vignettes = TRUE, force=TRUE)
 # Mac with vignettes
 devtools::install_git(url = url, build_opts=c("--no-resave-data","--no-manual") )
 ```
+</div>
 
 #### Or install it in terminal: {-}
 
+<div class="fold s">
 ``` {r, eval=FALSE}
 # clone repository:
 git clone "https://gitlab.com/ferroao/idiogramFISH"
@@ -381,6 +361,8 @@ R CMD build idiogramFISH
 # install
 R CMD INSTALL idiogramFISH_*.tar.gz
 ```
+</div>
+
 <div class="goright95">
 <a href="#header">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
 </div>
@@ -417,7 +399,7 @@ archive_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svgnewdownlink) )
 if (!is.na(archive_cont)){
       archive_contFile <- "../man/figures/archive.svg"
       writeLines(archive_cont, con = archive_contFile)
-      cat(paste0("[![archive](",knitr::include_graphics(archive_contFile),")](https://cran.r-project.org/src/contrib/Archive/idiogramFISH){target='_blank'}" ) )
+      cat(paste0("[![archive](",knitr::include_graphics(archive_contFile),")](https://cran.r-project.org/src/contrib/Archive/idiogramFISH/){target='_blank'}" ) )
 }
 } # rcurl
 ```
@@ -539,6 +521,7 @@ browseVignettes("idiogramFISH")
 Define your plotting window size with something like `par(pin=c(10,6))`, or with `svg()`, `png()`, etc.
 Add chromosome morphology according to [Guerra](https://ferroao.gitlab.io/guerra1986/Guerra1986.pdf) [-@Guerra1986d] or [@Levan1964]
 
+<div class="fold s">
 ```{r , echo=TRUE, results="hide", message=FALSE}
 library(idiogramFISH)
 
@@ -579,6 +562,7 @@ plotIdiograms(dfChrSize  =dfOfChrSize,  # data.frame of chr. size
 )
 dev.off() # close svg()
 ```
+</div>
 
 ```{r, results="asis", comment=NA, echo=FALSE}
 # cat(paste0("![](dfOfChrSize.png)" ) )
@@ -632,6 +616,7 @@ kableExtra::kable_styling(knitr::kable(dfOfMarks2) , full_width = F)
   
 ### Holocentrics: {-}
 
+<div class="fold s">
 ```{r example2, echo=TRUE, results="hide", fig.width=10, fig.height=6, message=FALSE}
 library(idiogramFISH)
 
@@ -662,9 +647,9 @@ plotIdiograms(dfChrSize  =dfChrSizeHolo, # data.frame of chr. size
               ,legendHeight=.5         # height of legend labels
               ,legendWidth = 1.2       # width of legend labels
               ,xModifier = .025        # separ. among chromatids
-              )                  
-# dev.off() # close svg()
+              ); #dev.off() # close svg()
 ```
+</div>
 
 ### Let's explore the data.frames for holocentrics: {-}
 
@@ -712,10 +697,9 @@ kableExtra::kable_styling(knitr::kable(dfMarkPosHolo) , full_width = F)
 
 ### Plotting both mono. and holo. {-}
 
-Available only for ver. > 1.5.1  
-
 Merge data.frames with `plyr` [@plyr2011]
 
+<div class="fold s">
 ```{r, echo=T,  comment=NA, results="hide", message=FALSE}
 # chromosome data, if only 1 species, column OTU is optional
 require(plyr)
@@ -730,7 +714,11 @@ dfMarkPosHolo$OTU <-"Species holo"
 
 monoholoMarks <- plyr::rbind.fill(dfOfMarks2,dfMarkPosHolo)
 ```
+</div>
 
+Plot
+
+<div class="fold s">
 ```{r, echo=T, results="hide", fig.width=10, fig.height=6, message=FALSE}
 library(idiogramFISH)
 
@@ -781,6 +769,7 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
 )
 dev.off() # close png
 ```
+</div>
 
 ```{r, results="asis", comment=NA, echo=FALSE}
 # cat(paste0("![](dfOfChrSize.png)" ) )
@@ -825,8 +814,7 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               ,OTULabelSpacerx = -1.5    # modify position of OTU label, when OTUplacing="number" or "simple"
               ,OTUlegendHeight = 1.5     # space among OTU names when in legend - OTUplacing
               ,OTUTextSize = .7          # font size of OTU
-)
-#dev.off() # close svg()
+); #dev.off() # close svg()
 ```
 
 ## Citation {-}
@@ -1099,7 +1087,28 @@ cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io
 
 
 ```{r, echo=F}
-chapterFile_news<- "../chaptersBLOCK/11-news.Rmd"
+chapterFile_data<- "../chaptersBLOCK/11-datasets.Rmd"
+if(file.exists(chapterFile_data)){
+  childExists_data<-TRUE
+  child_docs_data <- chapterFile_data
+} else {
+  childExists_data<-FALSE
+  child_docs_data<-""
+}
+```
+
+```{r, child = child_docs_data, eval=childExists_data}
+```
+
+```{r, results="asis", eval=!childExists_data, echo=FALSE}
+cat("# Datasets")
+```
+```{r, results="asis", eval=!childExists_data, echo=FALSE}
+cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#datasets)")
+```
+
+```{r, echo=F}
+chapterFile_news<- "../chaptersBLOCK/12-news.Rmd"
 if(file.exists(chapterFile_news)){
   childExists_news<-TRUE
   child_docs_news <- chapterFile_news
@@ -1118,6 +1127,8 @@ cat("# News {-}")
 ```{r, results="asis", eval=!childExists_news, echo=FALSE}
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#news)")
 ```
+
+
 
 
 # References {-}
