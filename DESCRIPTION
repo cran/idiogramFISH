@@ -1,7 +1,7 @@
 Package: idiogramFISH
 Title: Idiograms with Marks and Karyotype Indices
-Version: 1.16.6
-Date: 2020-09-16
+Version: 1.16.7
+Date: 2020-10-15
 Authors@R: c(person("Fernando", "Roa", email = "froao@unal.edu.co", role = c("aut", "cre") ), 
              person(given="Mariana PC Telles", email = "", role = c("ctb")) 
              )
@@ -20,9 +20,9 @@ Imports: crayon, dplyr, tidyr
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
-Suggests: plyr, rmdformats, knitr, kableExtra, rvcheck, badger,
-        rmarkdown, RCurl, ggpubr, ggtree, phytools, ggplot2, treeio,
-        rentrez
+Suggests: plyr, rentrez, ggplot2, ggpubr, ggtree, phytools, treeio,
+        rmdformats, knitr, kableExtra, rvcheck, badger, rmarkdown,
+        RCurl
 VignetteBuilder: plyr, rmdformats, knitr, kableExtra, rmarkdown, RCurl,
         rvcheck, badger, rentrez
 SystemRequirements: pandoc (>= 2.0)
@@ -31,9 +31,9 @@ URL: https://ferroao.gitlab.io/manualidiogramfish/,
 BugReports: https://gitlab.com/ferroao/idiogramFISH/-/issues
 RoxygenNote: 7.1.0
 NeedsCompilation: no
-Packaged: 2020-09-17 12:11:30 UTC; fernando
+Packaged: 2020-10-15 20:42:48 UTC; fernando
 Author: Fernando Roa [aut, cre],
   Mariana PC Telles [ctb]
 Maintainer: Fernando Roa <froao@unal.edu.co>
 Repository: CRAN
-Date/Publication: 2020-09-17 13:10:02 UTC
+Date/Publication: 2020-10-15 21:30:03 UTC

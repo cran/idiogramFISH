@@ -23,14 +23,21 @@
 #'   (if column \code{style} missing all (except 5S) are plotted as in param. \code{defaultStyleMark}).
 #' @param mycolors character vector, optional, i.e. \code{c("blue",} \code{} \code{"red",} \code{} \code{"green")} for specifying color of marks in order of appearance. if diverges with number of marks will be recycled if \code{dfMarkColor} present, mycolors will be ignored. To know the order of your marks use something like: \code{unique(c(dfMarkPos$markName,} \code{dfCenMarks$markName) ) }
 #' @param addMissingOTUAfter character, when you want to add space (ghost OTUs) after one or several OTUs, pass the names of OTUs preceding the desired space in a character vector i.e. \code{c("species one",} \code{} \code{"species five")}
+#' @param addMissingOTUBefore character, when you want to add space (ghost OTUs) before one or several OTUs, pass the names of OTUs after the desired space in a character vector i.e. \code{c("species one",} \code{} \code{"species five")}
 #' @param missOTUspacings numeric, when you use \code{addMissingOTUAfter} this numeric vector should have the same length and corresponds to the number of free spaces (ghost OTUs) to add after each OTU respectively
 #' @param moveKarHor character, OTUs' names of karyotypes that should be moved horizontally. See \code{mkhValue}
 #' @param mkhValue numeric, value to move kar. hor. See \code{moveKarHor}
-#' @param karAnchorLeft character, OTUs' names of karyotypes to the right of your desired anchor. For \code{verticalPlot=FALSE}
+#' @param karAnchorLeft character, OTUs' add anchor to the left of this OTU names of karyotypes. For \code{verticalPlot=FALSE}
+#' @param karAnchorRight character, OTUs' add anchor to the right of this OTU names of karyotypes. For \code{verticalPlot=FALSE}
 #' @param moveAllKarValueHor numeric, similar to \code{mkhValue}, but affects all karyotypes.
 #' @param moveAllKarValueY numeric, similar to \code{moveAllKarValueHor}, but affects y axis.
-#' @param anchor boolean, when \code{TRUE}, plots a parent progeny structure in karyotypes in \code{moveKarHor}. Or a horizontal anchor to the right
-#' of \code{karAnchorLeft} when \code{verticalPlot=FALSE}
+#' @param anchor boolean, when \code{TRUE}, plots a parent progeny structure in karyotypes in \code{moveKarHor}. Or a horizontal anchor to the left/right
+#' of \code{karAnchorLeft, karAnchorRight} when \code{verticalPlot=FALSE}
+#' @param anchorText character, text to add to \code{anchor} structure near symbol. See \code{anchor}. Defaults to \code{""}
+#' @param anchorTextMParental character, designed to fill with a character object the space left of a missing parental in the \code{anchor} structure.
+#' @param anchorTextMoveX numeric, for vertical plots with \code{anchorText} move text in X axis. Defaults to \code{0.5}
+#' @param anchorTextMoveY numeric, for horizontal plots with \code{anchorText} move text in Y axis. Defaults to \code{1}
+#' @param anchorLineLty numeric, type of line in \code{anchor}, corresponds to \code{lty}. Defaults to \code{1}
 #' @param anchorVsizeF numeric, factor to modify vertical size of anchor \code{0.5} (default). Size itself is equal to \code{karHeiSpace}
 #' @param moveAnchorV numeric, displace anchor vertical portion to right or left. See \code{anchor}
 #' @param moveAnchorH numeric, displace anchor horizontal portion to right or left. See \code{anchor}
@@ -242,12 +249,20 @@ plotIdiograms <- function(dfChrSize, # karyotype
   karHeight=2,karHeiSpace=2.5,
   karSepar=TRUE,
   amoSepar=10,
-  addMissingOTUAfter=NA,missOTUspacings=0,
+  addMissingOTUAfter=NA,
+  addMissingOTUBefore=NA,
+  missOTUspacings=0,
   moveKarHor,
   moveAllKarValueHor,
   moveAllKarValueY,
   karAnchorLeft,
+  karAnchorRight,
   anchor,
+  anchorLineLty=1,
+  anchorText="",
+  anchorTextMParental,
+  anchorTextMoveX=0.5,
+  anchorTextMoveY=1,
   anchorVsizeF=.5,
   pchAnchor=23,
   moveAnchorV=0,
@@ -690,7 +705,7 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
           if("OTU" %in% colnames(listOfdfChromSize[[i]])){
             message(crayon::red(paste("in",unique(listOfdfChromSize[[i]]$OTU) ) ) )
           } # otu
-          message(crayon::red("\nFix measures or use chrIndex=\"\", and morpho=\"\" ")
+            message(crayon::red("\nFix measures or use chrIndex=\"\", and morpho=\"\" ")
           ) #m
         } # if failure
       } # monocen
@@ -936,7 +951,8 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
 
     dfMarkPosInternal <- unique(dfMarkPosInternal)
 
-    listOfdfMarkPosInternal<-dfToListColumn(dfMarkPosInternal)
+    listOfdfMarkPosInternal <- dfToListColumn(dfMarkPosInternal)
+
 #    listOfdfMarkPosInternal932<<-listOfdfMarkPosInternal
 #    monocenNames933<<-monocenNames
     #
@@ -1059,7 +1075,8 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
       else { # if no error
 
         corr_index<-which(names(listOfdfChromSize) %in% names(parlistOfdfMarkPosMonocen)[[i]] )
-        divisor2<-as.numeric(attr(listOfdfChromSize[[corr_index]],"divisor"))
+
+        divisor2 <- as.numeric(attr(listOfdfChromSize[[corr_index]],"divisor"))
 
         #
         #   careful divisor applied
@@ -1653,8 +1670,20 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
     for (i in 1:length(addMissingOTUAfter)){
     listOfdfChromSize <- append(listOfdfChromSize,
                                 rep(NA,missOTUspacings[[i]]),
-                                (which(names(listOfdfChromSize)==addMissingOTUAfter[[i]]) )
+                                which(names(listOfdfChromSize)==addMissingOTUAfter[[i]])
                                 ) # append
+    }
+  } # fi
+
+  if(!is.na(addMissingOTUBefore[1]) ){
+    if (length(missOTUspacings) != length(addMissingOTUBefore) ){
+      missOTUspacings<-rep(missOTUspacings, abs(length(addMissingOTUBefore)/length(missOTUspacings)) ) [1:length(addMissingOTUBefore)]
+    }
+    for (i in 1:length(addMissingOTUBefore)){
+      listOfdfChromSize <- append(listOfdfChromSize,
+                                  rep(NA,missOTUspacings[[i]]),
+                                  which(names(listOfdfChromSize)==addMissingOTUBefore[[i]] )-1
+      ) # append
     }
   } # fi
 
@@ -1746,7 +1775,7 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
     #
     ##################################################
 
-  listOfdfChromSize <- addNeworderColumn(listOfdfChromSize,orderlist)
+  listOfdfChromSize <- addNeworderColumn(listOfdfChromSize, orderlist)
 
     ###################################################
     #     groups
@@ -1819,22 +1848,25 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
     # Monocen
 {
     rownumber<-2
-    chromosome_ns<-sapply(listOfdfChromSize, function(x) nrow(x) )
+
+    chromosome_ns <- sapply(listOfdfChromSize, function(x) nrow(x) )
 
     # listOfdfChromSize ->     chromosome_ns ->     arms_number ->     armRepVector
 
-    arms_number<-sapply(chromosome_ns, function(x) x*2)
+    arms_number <- sapply(chromosome_ns, function(x) x*2)
 
     armRepVector<-lapply(arms_number, function(x) return(tryCatch( c(rep(rownumber,ceiling(x/rownumber) ) ), error=function(e) NA ) ))
 
     rownumber<-1
-    chromRepVector<-lapply(chromosome_ns, function(x) return(tryCatch( c(rep(rownumber,ceiling(x/rownumber) ) ), error=function(e) NA ) ))
+
+    chromRepVector <- lapply(chromosome_ns, function(x) return(tryCatch( c(rep(rownumber,ceiling(x/rownumber) ) ), error=function(e) NA ) ))
 
     #
     #   creating x y main coords fro chr.
     #
 
-    ym<-xm<-y<-x<-list()
+    ym <- xm <-  x <- list()
+    # y <- list()
     segX0<-segX1<-segY0<-segY1<-list()
 }
 ########################################################################################################################################
@@ -1848,6 +1880,11 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
   } else {# if
     karAnchorLeft2 <- ""
   }
+  if(!missing(karAnchorRight)) {
+    karAnchorRight2 <- karAnchorRight
+  } else {# if
+    karAnchorRight2 <- ""
+  }
 
   if(!missing(moveAllKarValueY)){
     if(is.numeric(moveAllKarValueY)) {
@@ -1857,7 +1894,8 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
     }
   }
 
-  for (s in 1:num_species) {
+for (s in 1:num_species) {
+
       if(class(listOfdfChromSize[[s]])=="data.frame"){
         #######################################################################################################
 
@@ -1876,7 +1914,7 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
 
       for (i in 1:length(armRepVector[[s]] )) {
 
-        centromereSize3<-as.numeric(attr(listOfdfChromSize[[s]],"centromere"))
+        centromereSize3 <- as.numeric(attr(listOfdfChromSize[[s]],"centromere"))
 
 
         croybot[i]<-tryCatch(list(c(karHeight,
@@ -1892,7 +1930,7 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
         ), error=function(e) NA) # list
       } # for
 
-      crox<-matrix(rep(NA,length(armRepVector[[s]])*4),ncol=4, nrow=length(armRepVector[[s]]) )
+      crox <- matrix(rep(NA,length(armRepVector[[s]])*4),ncol=4, nrow=length(armRepVector[[s]]) )
 
 #      listOfdfChromSize1715<<-listOfdfChromSize
 
@@ -1930,28 +1968,6 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
       }
 
       #
-      #   horizontal anchor
-      #
-
-      if(names(listOfdfChromSize)[s] %in% karAnchorLeft2 ) {
-        # crox <- crox + mkhValue
-        if(!missing(anchor) & verticalPlot==FALSE) {
-          if(anchor){
-
-            x2 <- max(xm[[s-1]]) + karSpaceHor + chrWidth2
-            x1 <- max(xm[[s-1]]) + chrWidth2
-            x0 <- (x2+x1)/2 # dont use x
-            yh <- ( (min(unlist(croytop) ) + max(unlist(croybot)) ) /2 )
-            yl <- yh - karHeiSpace * anchorVsizeF * 2
-            segX0[[s]]<-c(x1+moveAnchorH,x0+moveAnchorH)
-            segY0[[s]]<-c(yh,yh)
-            segX1[[s]]<-c(x2+moveAnchorH,x0+moveAnchorH)
-            segY1[[s]]<-c(yh,yl)
-          }
-        }
-      }
-
-      #
       #   groups
       #
 
@@ -1982,12 +1998,52 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
       } # group
 
 #      crox1964<<-crox
-
       xm[[s]] <- rbind(crox,crox)
 
       if(verticalPlot==FALSE & s>1){
         # if(s>1){
-        xm[[s]] <- xm[[s]] + max(xm[[s-1]]) + karSpaceHor
+        xm[[s]] <- xm[[s]] + tryCatch(max(xm[[s-1]]),warning=function(w){0},error=function(e){0} )  + karSpaceHor
+      }
+
+
+      #
+      #   horizontal anchor monocen
+      #
+
+      if(names(listOfdfChromSize)[s] %in% karAnchorLeft2 ) {
+        # crox <- crox + mkhValue
+        if(!missing(anchor) & verticalPlot==FALSE) {
+          if(anchor){
+
+            x2 <- tryCatch(max(xm[[s-1]]),warning=function(w){0},error=function(e){0} ) + karSpaceHor + chrWidth2
+            x1 <- tryCatch(max(xm[[s-1]]),warning=function(w){0},error=function(e){0} ) + chrWidth2
+            x0 <- (x2+x1)/2 # dont use x
+            yh <- ( (min(unlist(croytop) ) + max(unlist(croybot)) ) /2 )
+            yl <- yh - karHeiSpace * anchorVsizeF * 2
+            segX0[[s]]<-c(x1+moveAnchorH,x0+moveAnchorH)
+            segY0[[s]]<-c(yh,yh)
+            segX1[[s]]<-c(x2+moveAnchorH,x0+moveAnchorH)
+            segY1[[s]]<-c(yh,yl)
+          }
+        }
+      }
+
+      if(names(listOfdfChromSize)[s] %in% karAnchorRight2 ) {
+        # crox <- crox + mkhValue
+        if(!missing(anchor) & verticalPlot==FALSE) {
+          if(anchor){
+
+            x2 <- max(xm[[s]]) + karSpaceHor + chrWidth2
+            x1 <- max(xm[[s]]) + chrWidth2
+            x0 <- (x2+x1)/2 # dont use x
+            yh <- ( (min(unlist(croytop) ) + max(unlist(croybot)) ) /2 )
+            yl <- yh - karHeiSpace * anchorVsizeF * 2
+            segX0[[s]]<-c(x1+moveAnchorH,x0+moveAnchorH)
+            segY0[[s]]<-c(yh,yh)
+            segX1[[s]]<-c(x2+moveAnchorH,x0+moveAnchorH)
+            segY1[[s]]<-c(yh,yl)
+          }
+        }
       }
 
       #
@@ -2000,20 +2056,21 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
 
       ifelse(any(is.na(x[[s]]) ), x[[s]]<-NA,"") # ifelseinloop
 
-      if(verticalPlot | circularPlot) {
-        ym[[s]] <- t(sapply (c(croybot,croytop ), function (x) {length (x) ; return (x)} ) ) + karHeiSpace*(s-1)
-      } else if (verticalPlot==FALSE) {
-        ym[[s]] <- t(sapply (c(croybot,croytop ), function (x) {length (x) ; return (x)} ) )
-      }
+        if(verticalPlot | circularPlot) {
+          ym[[s]] <- t(sapply (c(croybot,croytop ), function (x) {length (x) ; return (x)} ) ) + karHeiSpace*(s-1)
+        } else if (verticalPlot==FALSE) {
+          ym[[s]] <- t(sapply (c(croybot,croytop ), function (x) {length (x) ; return (x)} ) )
+        }
       } # fi is monocen
-        ########################################################################################### HOLOCEN
+        ###########################################################################################              HOLOCEN
 
       if (attr(listOfdfChromSize[[s]], "cenType")=="holocen" ) {
+
         if(attr(listOfdfChromSize[[s]],"ytitle")=="cM"){
           chrWidth2  <-specialChrWidth
           chrSpacing2<-specialChrSpacing
         } else {
-          chrWidth2<-chrWidth
+          chrWidth2  <-chrWidth
           chrSpacing2<-chrSpacing
         }
 
@@ -2066,7 +2123,7 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
         }
 
       #
-      #   horizontal anchor
+      #   horizontal anchor holocen
       #
 
       if(names(listOfdfChromSize)[s] %in% karAnchorLeft2 ) {
@@ -2074,11 +2131,29 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
         if(!missing(anchor) & verticalPlot==FALSE) {
           if(anchor){
 
-            x2 <- max(xm[[s-1]]) + karSpaceHor + chrWidth2
-            x1 <- max(xm[[s-1]]) + chrWidth2
+            x2 <- tryCatch(max(xm[[s-1]]),warning=function(w){0},error=function(e){0} ) + karSpaceHor + chrWidth2
+            x1 <- tryCatch(max(xm[[s-1]]),warning=function(w){0},error=function(e){0} ) + chrWidth2
             x0 <- (x2+x1)/2
             yh<- ( (min(unlist(croytop) ) + max(unlist(croybot)) ) /2 )
             yl<-yh - karHeiSpace * anchorVsizeF * 2
+            segX0[[s]]<-c(x1+moveAnchorH,x0+moveAnchorH)
+            segY0[[s]]<-c(yh,yh)
+            segX1[[s]]<-c(x2+moveAnchorH,x0+moveAnchorH)
+            segY1[[s]]<-c(yh,yl)
+          }
+        }
+      }
+
+      if(names(listOfdfChromSize)[s] %in% karAnchorRight2 ) {
+        # crox <- crox + mkhValue
+        if(!missing(anchor) & verticalPlot==FALSE) {
+          if(anchor){
+
+            x2 <- max(xm[[s]]) + karSpaceHor + chrWidth2
+            x1 <- max(xm[[s]]) + chrWidth2
+            x0 <- (x2+x1)/2 # dont use x
+            yh <- ( (min(unlist(croytop) ) + max(unlist(croybot)) ) /2 )
+            yl <- yh - karHeiSpace * anchorVsizeF * 2
             segX0[[s]]<-c(x1+moveAnchorH,x0+moveAnchorH)
             segY0[[s]]<-c(yh,yh)
             segX1[[s]]<-c(x2+moveAnchorH,x0+moveAnchorH)
@@ -2120,18 +2195,21 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
 
         } # if
 #       crox1739<<-crox
-      }
+      } # group
+
       xm[[s]] <- crox
 
-      if(verticalPlot==FALSE & s>1){
+      if(verticalPlot==FALSE & s > 1){
         # if(s>1){
-        xm[[s]] <- xm[[s]] + max(xm[[s-1]])
+        xm[[s]] <- xm[[s]] + tryCatch(max(xm[[s-1]]),warning=function(w){0},error=function(e){0}) + karSpaceHor
       }
 
       #
       #   creation of x from xm
       #
+
 #xm2113<<-xm
+
       x[[s]]  <- base::split(xm[[s]], row(xm[[s]]))
 
       ifelse(any(is.na(x[[s]]) ),x[[s]]<-NA,"") # ifelseinloop
@@ -2148,7 +2226,11 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
   # message(crayon::green(paste0("main plot calc section end" ) ) )
 
 } # for species
-    ###################################################################################################
+
+###################################################################################################
+
+#  x2186 <<-x
+#  xm2187 <<-xm
 
    if (length(ym)==1){
       karSepar=FALSE
@@ -2158,12 +2240,20 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
     #	reducing distance among OTUs
     #
 
-  names(ym)<-names(listOfdfChromSize) # important here
+#ym2236 <<- ym
+
+#listOfdfChromSize2237<<-listOfdfChromSize
+
+  names(ym) <- names(listOfdfChromSize)[1:length(ym)] # important here
 
 
     ymCopyC<-ymCopy2<-ymCopy<-ym # important must stay here before modifying ym
+#
+    #
+    # not useful when addMiss... present
+    #
 
-    if(is.na(addMissingOTUAfter[1])){
+    if(is.na(addMissingOTUAfter[1]) & is.na(addMissingOTUBefore[1])  ){
       if(karSepar){
         for (s in 1:(length(ym)-1)) {
           diffnext<-abs( min(ym[[s+1]] ) - max(ym[[s]]) )
@@ -2194,6 +2284,8 @@ for (s in 1:length(ym)) {
 {
   areNA<-which(is.na(ym))
 
+#ym2279 <<- ym
+
   listOfdfChromSizenoNA <- removeNAFromList(listOfdfChromSize,areNA)
 
   xmnoNA <- removeNAFromList(xm,areNA)
@@ -2210,11 +2302,19 @@ for (s in 1:length(ym)) {
   #
   #######################################################
 
-  x<-removeNAFromList(x,areNA)
+  #
+  #   xNoNA
+  #
 
-  y<-lapply(1:length(ymnoNA), function(s) base::split(ymnoNA[[s]], row(ymnoNA[[s]] )) )
+  x <- removeNAFromList(x,areNA)
 
-  names(xm)<-names(listOfdfChromSize)
+  #
+  # yNoNA
+  #
+
+  y <- lapply(1:length(ymnoNA), function(s) base::split(ymnoNA[[s]], row(ymnoNA[[s]] )) )
+
+  names(xm)<-names(listOfdfChromSize)[1:length(xm)]
 
   names(x)<-names(listOfdfChromSizenoNA)
   names(y)<-names(listOfdfChromSizenoNA)
@@ -2222,7 +2322,7 @@ for (s in 1:length(ym)) {
 #  yInternalbefore<<-y
 #  listOfdfChromSizeI1<<-listOfdfChromSize
 
-for (s in 1:length(y) ){
+for (s in 1:length(y) ) {
     # lenYS<-length(y[[s]] )
    # if (names(listOfdfChromSizenoNA[s]) %in% c(monocenNames,holocenNames)){
 
@@ -2362,12 +2462,14 @@ for (s in 1:length(y) ){
                        )
              }
         ######################################################################################################################
-          refKar<- !missing(moveKarHor) | !missing(karAnchorLeft)
+          horizPlot <- !missing(karAnchorLeft) | !missing(karAnchorRight)  & verticalPlot==FALSE
+          refKar<- !missing(moveKarHor) | horizPlot
           if(!missing(anchor) & refKar  ) {
             lapply(1:length(segX0), function(s) mapply(function(w,x,y,z) graphics::segments(w,
                                                                                    x,
                                                                                    y,
                                                                                    z
+                                                                                   ,lty=anchorLineLty
                                                                                    ),
                                                    w=segX0[[s]],
                                                    x=segY0[[s]],
@@ -2376,6 +2478,7 @@ for (s in 1:length(y) ){
                   ) #m
             ) # l
             myI<-ifelse(!missing(moveKarHor),1,2)
+
             lapply(1:length(segX0), function(s) mapply(function(x,y) graphics::points(x,
                                                                                       y,
                                                                                       pch=pchAnchor,
@@ -2386,9 +2489,45 @@ for (s in 1:length(y) ){
                 ) #m
             ) # l
 
+            moveX <- ifelse(!missing(moveKarHor),anchorTextMoveX,0)
+            moveY <- ifelse(!missing(moveKarHor),0,anchorTextMoveY)
+            adj <- ifelse(!missing(moveKarHor),1,0.5) # 1 right(vert. anchor), 0.5= centered (hor. anchor)
+
+            lapply(1:length(segX0), function(s) mapply(function(x,y) graphics::text(x,
+                                                                                      y,
+                                                                                      labels=anchorText
+                                                                                    ,adj=adj
+                ),
+              y=segY0[[s]][myI]+moveY,
+              x=segX0[[s]][myI]-moveX
+              ) #m
+            ) # l
+
+            sign1 <- ifelse(!is.na(addMissingOTUAfter[1]), 1,-1)
+
+            if(!missing(anchorTextMParental)) {
+              posSegX<-ifelse(!missing(moveKarHor),
+                              min(unlist(segX0) ),
+                              ifelse(!is.na(addMissingOTUAfter[1]),
+                                     max(unlist(segX1)  )
+                                     ,min(unlist(segX0) )
+                              )
+              )
+              posSegY<-ifelse(!missing(moveKarHor), min(unlist(segY1) ), max(unlist(segY0)  ) )
+
+              adj2 <- ifelse(!is.na(addMissingOTUAfter[1]), 0,1)
+
+              graphics::text(posSegX + (anchorTextMoveX*sign1),
+                             posSegY,
+                             labels=anchorTextMParental
+                             ,adj=adj2 # 0 left
+              )
+            }
+
+
           } # anchor
 
-          if(chromatids==FALSE){
+          if(chromatids==FALSE) {
 
           lapply(1:length(y), function(s) mapply(function(x,y) graphics::polygon(x=x,
                                                                                  y=y,
@@ -2401,6 +2540,7 @@ for (s in 1:length(y) ){
                  ) # l
 
           } # ct FALSE
+
           if (chromatids & holocenNotAsChromatids) {
             for (s in 1:length(y) ) {
               if(attr(listOfdfChromSizenoNA[[s]],"cenType")=="holocen"){
@@ -2812,13 +2952,17 @@ for (s in 1:length(y) ){
                    xlab="", yaxt='n',main = NULL, frame.plot = FALSE, asp=asp, ...)
     }
     ######################################################################################################################
-    refKar<- !missing(moveKarHor) | !missing(karAnchorLeft)
+    horizPlot <- !missing(karAnchorLeft) | !missing(karAnchorRight)  & verticalPlot==FALSE
+    # horizPlot <- !missing(karAnchorLeft) & verticalPlot==FALSE
+    refKar<- !missing(moveKarHor) | horizPlot
+    # refKar<- !missing(moveKarHor) | !missing(karAnchorLeft)
     if(!missing(anchor) & refKar  ) {
     # if(!missing(anchor) & !missing(moveKarHor) & verticalPlot ){
       lapply(1:length(segX0), function(s) mapply(function(w,x,y,z) graphics::segments(w,
                                                                                       x,
                                                                                       y,
                                                                                       z
+                                                                                      ,lty=anchorLineLty
       ),
       w=segX0[[s]],
       x=segY0[[s]],
@@ -2836,6 +2980,41 @@ for (s in 1:length(y) ){
       x=segX0[[s]][myI]
       ) #m
       ) # l
+
+      moveX <- ifelse(!missing(moveKarHor),anchorTextMoveX,0)
+      moveY <- ifelse(!missing(moveKarHor),0,anchorTextMoveY)
+      adj <- ifelse(!missing(moveKarHor),1,0.5)
+
+      lapply(1:length(segX0), function(s) mapply(function(x,y) graphics::text(x,
+                                                                              y,
+                                                                              labels=anchorText
+                                                                              ,adj=adj
+      ),
+      y=segY0[[s]][myI]+moveY,
+      x=segX0[[s]][myI]-moveX
+      ) #m
+      ) # l
+
+      sign1 <- ifelse(!is.na(addMissingOTUAfter[1]), 1,-1)
+
+      if(!missing(anchorTextMParental)) {
+        posSegX<-ifelse(!missing(moveKarHor),
+                        min(unlist(segX0) ),
+                        ifelse(!is.na(addMissingOTUAfter[1]),
+                               max(unlist(segX1)  )
+                               ,min(unlist(segX0) )
+                        )
+        )
+        posSegY<-ifelse(!missing(moveKarHor), min(unlist(segY1) ), max(unlist(segY0)  ) )
+
+        adj2 <- ifelse(!is.na(addMissingOTUAfter[1]), 0,1) # adj2 <- 0
+
+        graphics::text(posSegX + (anchorTextMoveX*sign1),
+                       posSegY,
+                       labels=anchorTextMParental
+                       ,adj=adj2 # 0 left
+        )
+      }
 
     } # anchor
 
@@ -3011,6 +3190,7 @@ for (s in 1:length(y) ){
   #                                                ruler calculate
   #
   ####################################################################################
+
     # listOfdfChromSize<-rev(listOfdfChromSize)
 
 
@@ -3144,7 +3324,7 @@ if(circularPlot==FALSE){
 
     names(ycoordShortRound)<-(monocenNames2)
 
-    if(is.na(addMissingOTUAfter[1])){
+    if(is.na(addMissingOTUAfter[1] ) &  is.na(addMissingOTUBefore[1]) ){
       if(karSepar){
         for (s in 1:(length(ymCopy)-1) ) {
 
@@ -3278,7 +3458,7 @@ if(circularPlot==FALSE){
 
     names(ycoordChrRound)<-holocenNames2
 
-      if(is.na(addMissingOTUAfter[1])){
+      if(is.na(addMissingOTUAfter[1]) & is.na(addMissingOTUBefore[1])){
         if(karSepar){
           for (s in 1:(length(ymCopy2)-1) ) {
 
@@ -4113,7 +4293,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
         # ycoordCents[areNA]<-NA
 
         # suppressWarnings(
-        if(is.na(addMissingOTUAfter[1])) {
+        if(is.na(addMissingOTUAfter[1] ) &  is.na(addMissingOTUBefore[1] )) {
           if(karSepar){
             for (s in 1:(length(ymCopyC)-1) ) {
               diffnext<-abs(min(ymCopyC[[s+1]] ) - max(ymCopyC[[s]]) )
@@ -4632,10 +4812,10 @@ if(exists("listOfdfChromSizeMonocen") ) {
 
         j<-1
         for (k in 1:length(parlistOfdfMarkPosMonocen)) {
-          currName<-names(parlistOfdfMarkPosMonocen)[[k]]
-          if(nrow(parlistOfdfMarkPosMonocen[[k]][which(parlistOfdfMarkPosMonocen[[k]]$style %in% c("square","squareLeft") ) , ] ) >0 ){
+          currName <- names(parlistOfdfMarkPosMonocen)[[k]]
+          if( nrow(parlistOfdfMarkPosMonocen[[k]][which(parlistOfdfMarkPosMonocen[[k]]$style %in% c("square","squareLeft") ) , ] ) > 0 ){
             listOfdfMarkPosSq<-c(listOfdfMarkPosSq,list(parlistOfdfMarkPosMonocen[[k]][which(parlistOfdfMarkPosMonocen[[k]]$style %in% c("square","squareLeft") ),]))
-            names(listOfdfMarkPosSq)[[j]]<-currName
+            names(listOfdfMarkPosSq)[[j]] <- currName
             j<-j+1
           }
         }
@@ -4780,22 +4960,25 @@ if(exists("listOfdfChromSizeMonocen") ) {
         for (k in 1:length(parlistOfdfMarkPosHolocen)) {
           currName<-names(parlistOfdfMarkPosHolocen)[[k]]
           if(nrow(parlistOfdfMarkPosHolocen[[k]][which(parlistOfdfMarkPosHolocen[[k]]$style %in% c("square","squareLeft") ),])>0){
-            listOfdfMarkPosSq<-c(listOfdfMarkPosSq,list(parlistOfdfMarkPosHolocen[[k]][which(parlistOfdfMarkPosHolocen[[k]]$style %in% c("square","squareLeft")  ),]) )
+            listOfdfMarkPosSq <- c(listOfdfMarkPosSq,
+                                   list(parlistOfdfMarkPosHolocen[[k]][which(parlistOfdfMarkPosHolocen[[k]]$style %in% c("square","squareLeft")  ),])
+                                   )
             names(listOfdfMarkPosSq)[[j]]<-currName
             j<-j+1
           }
         }
 
-        if(length(listOfdfMarkPosSq)>0){
+        if(length(listOfdfMarkPosSq)>0) {
           for (sm in 1:length(listOfdfMarkPosSq)) {
 
             yMark1<-NULL
             xMark1<-NULL
+
             corr_index<-which(names(ym) %in% names(listOfdfMarkPosSq)[[sm]] )
 
             for (m in 1:nrow(listOfdfMarkPosSq[[sm]])){
               rowIndex<-(listOfdfMarkPosSq[[sm]][,"neworder"][m])
-              chrStart<-ym[[corr_index]][rowIndex ,2]
+              chrStart <- ym[[corr_index]][rowIndex ,2]
 
               if(!"markSize" %in% colnames(listOfdfMarkPosSq[[sm]])){
                 listOfdfMarkPosSq[[sm]]$markSize<-NA
@@ -7070,8 +7253,14 @@ if (exists("parlistOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
   #
   ##############################################
 
-  xNoNA <- removeNAFromList(x,areNA)
+  #
+  # xnona was wrong
+  #
+  xNoNA <- x # removeNAFromList(x,areNA)
+#  xNoNA7235<<-xNoNA
+
   yNoNA <- removeNAFromList(y,areNA)
+#  yNoNA7235<<-yNoNA
 
   if(exists("dfMarkColorInternal") ){
 
@@ -7115,6 +7304,7 @@ if (exists("parlistOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
         allMarkMaxSize<-1
       }
 
+#xNoNA7214<<-xNoNA
 
       if(circularPlot){
         maxx<-max(unlist(circleMaps), na.rm=TRUE )

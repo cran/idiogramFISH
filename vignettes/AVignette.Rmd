@@ -84,5 +84,7 @@ if(rmarkdown::pandoc_version()<2) {
 } # len
 ```
   
-Vignette [idiogramFISH vignette](index.html)
+[Local/CRAN idiogramFISH vignette](index.html)
+
+[Online/Complete gitlab idiogramFISH vignette](https://ferroao.gitlab.io/idiogramfishhelppages)
 

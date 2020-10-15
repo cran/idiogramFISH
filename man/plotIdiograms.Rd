@@ -5,12 +5,15 @@
 \title{FUNCTION to plot idiograms of karyotypes with and without centromere}
 \usage{ plotIdiograms( dfChrSize, defaultFontFamily, revOTUs = FALSE,
  karHeight = 2, karHeiSpace = 2.5, karSepar = TRUE, amoSepar = 10,
- addMissingOTUAfter = NA, missOTUspacings = 0, moveKarHor, moveAllKarValueHor,
- moveAllKarValueY, karAnchorLeft, anchor, anchorVsizeF = 0.5, pchAnchor = 23,
- moveAnchorV = 0, moveAnchorH = 0, mkhValue = 0.5, n = 50, notes, leftNotes,
- leftNotesUp, notesTextSize = 0.4, notesLeft, notesPosX = 0.5, notesPosY = 0,
- leftNotesPosX = 0.5, leftNotesPosY = 0, leftNoteFont = 1, leftNoteFontUp = 1,
- noteFont = 1, parseTypes = TRUE, parseStr2lang = FALSE, propWidth = FALSE,
+ addMissingOTUAfter = NA, addMissingOTUBefore = NA, missOTUspacings = 0,
+ moveKarHor, moveAllKarValueHor, moveAllKarValueY, karAnchorLeft,
+ karAnchorRight, anchor, anchorLineLty = 1, anchorText = "",
+ anchorTextMParental, anchorTextMoveX = 0.5, anchorTextMoveY = 1,
+ anchorVsizeF = 0.5, pchAnchor = 23, moveAnchorV = 0, moveAnchorH = 0,
+ mkhValue = 0.5, n = 50, notes, leftNotes, leftNotesUp, notesTextSize = 0.4,
+ notesLeft, notesPosX = 0.5, notesPosY = 0, leftNotesPosX = 0.5,
+ leftNotesPosY = 0, leftNoteFont = 1, leftNoteFontUp = 1, noteFont = 1,
+ parseTypes = TRUE, parseStr2lang = FALSE, propWidth = FALSE,
  MbThreshold = 10000, threshold = 35, MbUnit = "Mb", yTitle = "µm",
  specialyTitle = "cM", specialOTUNames = "", addOTUName = TRUE, OTUTextSize = 1,
  OTUfont, OTUfamily, OTUasNote = FALSE, orderChr = "size", chrId = "original",
@@ -70,6 +73,8 @@ increase this and \code{karHeiSpace}}
 
 \item{addMissingOTUAfter}{character, when you want to add space (ghost OTUs) after one or several OTUs, pass the names of OTUs preceding the desired space in a character vector i.e. \code{c("species one",} \code{} \code{"species five")}}
 
+\item{addMissingOTUBefore}{character, when you want to add space (ghost OTUs) before one or several OTUs, pass the names of OTUs after the desired space in a character vector i.e. \code{c("species one",} \code{} \code{"species five")}}
+
 \item{missOTUspacings}{numeric, when you use \code{addMissingOTUAfter} this numeric vector should have the same length and corresponds to the number of free spaces (ghost OTUs) to add after each OTU respectively}
 
 \item{moveKarHor}{character, OTUs' names of karyotypes that should be moved horizontally. See \code{mkhValue}}
@@ -78,10 +83,22 @@ increase this and \code{karHeiSpace}}
 
 \item{moveAllKarValueY}{numeric, similar to \code{moveAllKarValueHor}, but affects y axis.}
 
-\item{karAnchorLeft}{character, OTUs' names of karyotypes to the right of your desired anchor. For \code{verticalPlot=FALSE}}
+\item{karAnchorLeft}{character, OTUs' add anchor to the left of this OTU names of karyotypes. For \code{verticalPlot=FALSE}}
 
-\item{anchor}{boolean, when \code{TRUE}, plots a parent progeny structure in karyotypes in \code{moveKarHor}. Or a horizontal anchor to the right
-of \code{karAnchorLeft} when \code{verticalPlot=FALSE}}
+\item{karAnchorRight}{character, OTUs' add anchor to the right of this OTU names of karyotypes. For \code{verticalPlot=FALSE}}
+
+\item{anchor}{boolean, when \code{TRUE}, plots a parent progeny structure in karyotypes in \code{moveKarHor}. Or a horizontal anchor to the left/right
+of \code{karAnchorLeft, karAnchorRight} when \code{verticalPlot=FALSE}}
+
+\item{anchorLineLty}{numeric, type of line in \code{anchor}, corresponds to \code{lty}. Defaults to \code{1}}
+
+\item{anchorText}{character, text to add to \code{anchor} structure near symbol. See \code{anchor}. Defaults to \code{""}}
+
+\item{anchorTextMParental}{character, designed to fill with a character object the space left of a missing parental in the \code{anchor} structure.}
+
+\item{anchorTextMoveX}{numeric, for vertical plots with \code{anchorText} move text in X axis. Defaults to \code{0.5}}
+
+\item{anchorTextMoveY}{numeric, for horizontal plots with \code{anchorText} move text in Y axis. Defaults to \code{1}}
 
 \item{anchorVsizeF}{numeric, factor to modify vertical size of anchor \code{0.5} (default). Size itself is equal to \code{karHeiSpace}}
 

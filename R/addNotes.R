@@ -61,12 +61,12 @@ if(rightN==FALSE){
   } # ifelse holocen
 
 
-  # distTextChr<<-distTextChr
-  # chrIdCount<<-chrIdCount
-  # morphoCount2<<-morphoCount2
-  # indexCount2<<-indexCount2
-  # groupCount<<-groupCount
-  # holocenDisCount<<-holocenDisCount
+#  # distTextChr<<-distTextChr
+#  # chrIdCount<<-chrIdCount
+#  # morphoCount2<<-morphoCount2
+#  # indexCount2<<-indexCount2
+#  # groupCount<<-groupCount
+#  # holocenDisCount<<-holocenDisCount
 
       if(downNote){
         yposNote <- min(ymnoNA[[i]]) - ( (distTextChr/3) * (chrIdCount + morphoCount2 + indexCount2 + groupCount + 3 - holocenDisCount) )

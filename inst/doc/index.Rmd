@@ -16,7 +16,7 @@ output:
 #bibliography: [refs/allrefs.bib,refs/iqtree.bib,refs/revbayes.bib,refs/packages.bib, refs/idiogramFISH.bib, refs/Rrefs.bib]
 
 bibliography_normal: [refs/allrefs.bib,refs/iqtree.bib,refs/revbayes.bib,refs/library.bib,refs/costa2015.bib,refs/costa2019.bib,refs/aurantiumMendes.bib,refs/yasuda.bib, refs/yi2018.bib]
-bibliography_software: [refs/packages.bib, refs/idiogramFISH.bib]
+bibliography_software: [refs/packages.bib, refs/idiogramFISH.bib, refs/ggplotreshape.bib]
 bibliography_docs: [refs/docPackages.bib, refs/Rrefs.bib, refs/docPackages2.bib, refs/rmdformats.bib]
 
 csl: refs/clima5.csl
@@ -41,6 +41,7 @@ resource_files:
   - ../man/figures/logo2.png
   - ../man/figures/realdownloads.svg
   - ../man/figures/NEWS.svg
+  - ../man/figures/ggplot.svg
   
   - ../man/figures/dfOfChrSize.svg
   - ../man/figures/nostoc.jpg
@@ -78,6 +79,7 @@ resource_files:
   - refs/aurantiumMendes.bib
   - refs/yasuda.bib
   - refs/yi2018.bib
+  - refs/ggplotreshape.bib
   
   - js/jquery.min.js
   - js/clipboard.min.js
@@ -867,7 +869,7 @@ knitr::write_bib(c(
 
 
 ```{r, echo=F}
-chapterFile_plotting<- "../chapters/01-plotting.Rmd"
+chapterFile_plotting<- "../chaptersBLOCK/01-plotting.Rmd"
 if(file.exists(chapterFile_plotting)){
   childExists_plotting<-TRUE
   child_docs_plotting <- chapterFile_plotting
@@ -1037,10 +1039,10 @@ if(file.exists(chapterFile)){
 ```
 
 ```{r, results="asis", eval=!childExists, echo=FALSE}
-cat("# *Citrus* - helper functions")
+cat("# *Citrus*")
 ```
 ```{r, results="asis", eval=!childExists, echo=FALSE}
-cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#citrus---helper-functions)")
+cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#citrus)")
 ```
 
 ```{r, echo=F}

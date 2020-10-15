@@ -17,12 +17,8 @@
 #' @return list
 #'
 genBankReadIF <- function(filename.gb) {
-  value <- field <- NULL
-  # @importFrom magrittr %>%
 
-  # filename.gb<-nostoc_seqs
-  # require("dplyr")
-  # require("tidyr")
+  value <- field <- NULL
 
   requireNamespace("dplyr")
 

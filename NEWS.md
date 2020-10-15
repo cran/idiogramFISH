@@ -1,6 +1,34 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 1.16.7
+
+15-10-2020
+
+  - Helper functions for simple plots with ggplot `mapGGChr` and
+    `mapGGChrMark`
+  - Better customization of `anchor`
+
+param:
+
+  - `addMissingOTUBefore`: character, when you want to add space (ghost
+    OTUs) before one or several OTUs, pass the names of OTUs after the
+    desired space in a character vector i.e. `c("species one","species
+    five")`
+  - `karAnchorRight`: character, OTUs’ add anchor to the right of this
+    OTU (names of karyotypes). For `verticalPlot=FALSE`
+  - `anchorText`: character, text to add to `anchor` structure near
+    symbol. See `anchor`. Defaults to `""`
+  - `anchorTextMParental`: character, designed to fill with a character
+    object the space left of a missing parental in the `anchor`
+    structure.
+  - `anchorTextMoveX`: numeric, for vertical plots with `anchorText`
+    move text in X axis. Defaults to `0.5`
+  - `anchorTextMoveY`: numeric, for horizontal plots with `anchorText`
+    move text in Y axis. Defaults to `1`
+  - `anchorLineLty`: numeric, type of line in `anchor`, corresponds to
+    `lty`. Defaults to `1`
+
 # idiogramFISH 1.16.6
 
 16-09-2020

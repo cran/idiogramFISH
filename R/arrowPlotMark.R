@@ -42,14 +42,6 @@ arrowPlotMark<-function(squareness, xMark, yMark,
                         circleCenter,circleCenterY,radius,
                         ylistTransChr,rotation,arrowheadWidthShrink) {
 
-#  xMarkSq<<-xMark
-#  yMarkSq<<-yMark
-
-#  listOfdfMarkPosArrowInternal<<-listOfdfMarkPosArrow
-#  dfMarkColorInternal2<<-dfMarkColorInternal
-
-  # if(squareness>20) {
-
     if(circularPlot==FALSE) {
 
             lapply(1:length(xMark), function(w) mapply(function(x,y,z)
@@ -77,25 +69,13 @@ arrowPlotMark<-function(squareness, xMark, yMark,
       #   x to vertical
       #
 
-#       # xMarkArr<<-xMark
-        # xlistNewOrig<-xHortoVer(xMark,arrowheadWidthShrink)
-#        # xlistNewOrig1<<-xlistNewOrig
-#      # x1 <<- x
-
         yMarkPer <- markMapPer(yMark,y)
 
         xlistNew <- xMarkMap(xMark,x, arrowheadWidthShrink)
 
         ylistTransMark<-transyListMark(yMarkPer,ylistTransChr)
 
-        # textyMarkPer<-centerMarkMapPer(yMark,y)
-
-        # textylistTransMark<-transyListMark(textyMarkPer,ylistTransChr)
-
         circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,    ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
-
-        # circleMapsLabels <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,textylistTransMark,xlistNew,n,
-                                           # labelSpacing,chrWidth,rotation=rotation)
 
         drawPlotMark(circleMapsMarks,dfMarkColorInternal,listOfdfMarkPosArrow,lwd.chr)
 
