@@ -42,8 +42,8 @@
 #' @param moveAnchorV numeric, displace anchor vertical portion to right or left. See \code{anchor}
 #' @param moveAnchorH numeric, displace anchor horizontal portion to right or left. See \code{anchor}
 #' @param pchAnchor numeric, symbol for anchor, see \code{?points} and \code{anchor}
-#' @param orderChr character, replaces \code{orderBySize - deprecated} when \code{"size"}, sorts chromosomes by total
-#'   length from the largest to the smallest. \code{"original"}: preserves d.f. order. \code{"name"}: sorts alphabetically; \code{"group"}: sorts by group name
+#' @param orderChr character, when \code{"size"}, sorts chromosomes by total
+#'   length from the largest to the smallest. \code{"original"}: preserves d.f. order. \code{"name"}: sorts alphabetically; \code{"group"}: sorts by group name; \code{"chrNameUp"}: sorts according to column \code{chrNameUp}. See \code{chrNameUp}
 #' @param centromereSize numeric, optional, this establishes the apparent size of cen. in the plot in \eqn{\mu}m. Automatic when \code{NA}. Default: \code{NA}
 #' @param origin, For non-monocentric chr. (for holocentrics only) Use \code{"b"} (default) if distance to mark in (\code{"markPos"} column in \code{"dfMarkPos"}) data.frame measured from bottom of chromosome, use \code{"t"} for distance to mark from top of chr.
 #' @param efZero, numeric, numbers below this one will be considered as zero, for comparison purposes. Defaults to \code{1e-5}
@@ -136,11 +136,12 @@
 #' @param karIndexPos numeric, move karyotype index
 #' @param notesLeft deprecated, use a data.frame for \code{leftNotes}
 #' @param notesPosX numeric, move right notes to the right or left (x axis)
-#' @param notesPosY numeric, move right notes to the down or up (y axis)
+#' @param notesPosY numeric, move right notes down or up (y axis)
 #' @param leftNotesPosX numeric, move left notes to the right or left (x axis)
-#' @param leftNotesPosY numeric, move left notes to the down or up (y axis)
-#' @param morpho character, if \code{"both"} (default) prints the Guerra and Levan classif of cen. position, use also \code{"Guerra"} or  \code{"Levan"} or \code{""} for none. See also \code{?armRatioCI}.
-#' @param addOTUName boolean, if \code{TRUE} adds OTU (species) name to karyotype
+#' @param leftNotesPosY numeric, move left notes (\code{leftNotes}) down or up (y axis)
+#' @param leftNotesUpPosY numeric, move up left notes (\code{leftNotesUp}) down or up (y axis)
+#' @param morpho character, when \code{"both"} (default) prints the Guerra and Levan classif of cen. position, use also \code{"Guerra"} or  \code{"Levan"} or \code{""} for none. See also \code{?armRatioCI}.
+#' @param addOTUName boolean, when \code{TRUE} adds OTU (species) name to karyotype
 #' @param OTUfont numeric, \code{1} for normal,  \code{2} for bold,  \code{3} for italics,  \code{4} for bold-italics
 #' @param OTUfamily character, font family for OTU name.
 #' @param OTUasNote boolean, if \code{TRUE} adds OTU (species) name to the right, see \code{notes}
@@ -278,6 +279,7 @@ plotIdiograms <- function(dfChrSize, # karyotype
   notesPosY=0,
   leftNotesPosX=.5,
   leftNotesPosY=0,
+  leftNotesUpPosY=0,
   leftNoteFont=1,
   leftNoteFontUp=1,
   noteFont=1,
@@ -523,7 +525,7 @@ plotIdiograms <- function(dfChrSize, # karyotype
     lwd.mimicCen2 <- lwd.chr*4
   }
 
-  OTUfont2<-ifelse( !missing(OTUfont),   OTUfont,   1)
+  OTUfont2 <- ifelse( !missing(OTUfont),   OTUfont,   1)
   OTUfamily2<-ifelse( !missing(OTUfamily), OTUfamily, defaultFontFamily2)
 
   if(!missing(dfChrSize)){
@@ -1765,7 +1767,7 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
         orderlist<-lapply(totalLength, function(x) order(x, decreasing = TRUE) )
     } else if(orderChr=="name"){
         orderlist<-lapply(listOfdfChromSize, function(x) tryCatch(order(x$chrName), error=function(e) NA ) )
-    } else if(orderChr=="original" | orderChr=="group") {
+    } else if(orderChr=="original" | orderChr=="group" | orderChr=="chrNameUp") {
         orderlist<-lapply(listOfdfChromSize, function(x) tryCatch(1:max(order(x$chrName) ), error=function(e) NA ) )
     }
 
@@ -1789,14 +1791,44 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
 
         for (s in 1:length(listOfdfChromSize)){
           if(class(listOfdfChromSize[[s]])=="data.frame") {
-          listOfdfChromSize[[s]]<-listOfdfChromSize[[s]][grouporderlist[[s]], ]
-          listOfdfChromSize[[s]]$neworder<-1:nrow(listOfdfChromSize[[s]])
-          } #fi
+            if(!anyNA(grouporderlist[[s]] ) ) {
+              listOfdfChromSize[[s]]<-listOfdfChromSize[[s]][grouporderlist[[s]], ]
+              listOfdfChromSize[[s]]$neworder<-1:nrow(listOfdfChromSize[[s]])
+            } else {
+              message(crayon::blue(paste("Ordering by group was not possible for", names(listOfdfChromSize)[s],"check that column") )
+                      )
+            }
+          } # df
         } # end for
 
       } # order
 
     } # if group colname
+
+  ###################################################
+  #     order by chrNameUp
+  ###################################################
+
+  if("chrNameUp" %in% colnames(dfChrSizeInternalDivisor)) {
+    chrNameUpOrderlist<-lapply(listOfdfChromSize, function(x) tryCatch(order(x$chrNameUp), error=function(e) NA ) )
+
+    if(orderChr=="chrNameUp") {
+
+      for (s in 1:length(listOfdfChromSize)){
+        if(class(listOfdfChromSize[[s]])=="data.frame") {
+          if( !anyNA(chrNameUpOrderlist[[s]] ) ){
+            listOfdfChromSize[[s]]<-listOfdfChromSize[[s]][chrNameUpOrderlist[[s]], ]
+            listOfdfChromSize[[s]]$neworder<-1:nrow(listOfdfChromSize[[s]])
+          } else {
+            message(crayon::blue(paste("Ordering by chrNameUp was not possible for", names(listOfdfChromSize)[s],"check that column") )
+                    )
+          }
+        } #fi
+      } # end for
+
+    } # order
+
+  } # if group colname
 
     ##
     # order by group and chromosome
@@ -1896,7 +1928,8 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
 
 for (s in 1:num_species) {
 
-      if(class(listOfdfChromSize[[s]])=="data.frame"){
+      if(class(listOfdfChromSize[[s]])=="data.frame") {
+
         #######################################################################################################
 
       if(attr(listOfdfChromSize[[s]], "cenType")=="monocen") {       # monocen
@@ -1932,7 +1965,7 @@ for (s in 1:num_species) {
 
       crox <- matrix(rep(NA,length(armRepVector[[s]])*4),ncol=4, nrow=length(armRepVector[[s]]) )
 
-#      listOfdfChromSize1715<<-listOfdfChromSize
+#      listOfdfChromSize1715 <<- listOfdfChromSize
 
       for (i in 1:length(armRepVector[[s]])) {
         crox[i,] <- c(
@@ -2464,7 +2497,12 @@ for (s in 1:length(y) ) {
         ######################################################################################################################
           horizPlot <- !missing(karAnchorLeft) | !missing(karAnchorRight)  & verticalPlot==FALSE
           refKar<- !missing(moveKarHor) | horizPlot
-          if(!missing(anchor) & refKar  ) {
+
+          #
+          #   anchor
+          #
+
+          if(!missing(anchor) & refKar  ) if(anchor) {
             lapply(1:length(segX0), function(s) mapply(function(w,x,y,z) graphics::segments(w,
                                                                                    x,
                                                                                    y,
@@ -2523,9 +2561,11 @@ for (s in 1:length(y) ) {
                              ,adj=adj2 # 0 left
               )
             }
-
-
           } # anchor
+
+          #
+          #   simplest plot
+          #
 
           if(chromatids==FALSE) {
 
@@ -2542,6 +2582,7 @@ for (s in 1:length(y) ) {
           } # ct FALSE
 
           if (chromatids & holocenNotAsChromatids) {
+
             for (s in 1:length(y) ) {
               if(attr(listOfdfChromSizenoNA[[s]],"cenType")=="holocen"){
 
@@ -2557,6 +2598,7 @@ for (s in 1:length(y) ) {
               } # holocen
             } # for
           } # if
+
           if (chromatids) { # CHROMAT TRUE
 
             XSA<-YSA<-XLA<-YLA<-list()
@@ -2760,12 +2802,12 @@ for (s in 1:length(y) ) {
 
       } else {         # if squareness > 20 ###########         else             ########          squareness <= 20
 
-        pts<- seq(-pi/2, pi*1.5, length.out = n*4)
-        ptsl<-split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
+        pts <- seq(-pi/2, pi*1.5, length.out = n*4)
+        ptsl<- split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
 
-        yMod<-y
+        yMod <- y
 
-        roundedY<-roundedX<-list()
+        roundedY <- roundedX <- list()
 
         XSARO<-YSARO<-XLARO<-YLARO<-list()
 
@@ -2811,6 +2853,7 @@ for (s in 1:length(y) ) {
                                  # this is not short only
                   roundedX[[s]]<-shortxyCoords$roundedX
                   roundedY[[s]]<-shortxyCoords$roundedY
+
                   attr(roundedY[[s]], "positionnoNA")<- attr(listOfdfChromSizenoNA[[s]],"positionnoNA")
                   attr(roundedY[[s]], "cenType")<- attr(listOfdfChromSizenoNA[[s]],"cenType")
 
@@ -2868,39 +2911,40 @@ for (s in 1:length(y) ) {
 
             } # chromatids TRUE
 
-    } else if (attr(listOfdfChromSizenoNA[[s]], "cenType")=="holocen") { # if monocen else  holocen #########################
+          } else if (attr(listOfdfChromSizenoNA[[s]], "cenType")=="holocen") { # if monocen else  holocen #########################
 
             if(attr(listOfdfChromSizenoNA[[s]],"ytitle")=="cM"){
-              chrWidth2  <-specialChrWidth
+              chrWidth2 <- specialChrWidth
             } else {
-              chrWidth2<-chrWidth
+              chrWidth2 <- chrWidth
             }
 
             r2<- chrWidth2/(squareness*2)
 
             if(chromatids==FALSE | holocenNotAsChromatids | circularPlot==TRUE) {
 
-            xyCoords<-mapXY(1 , (length(yMod[[s]]) ) ,
-                                y[[s]], yMod[[s]] ,
+            xyCoords <- mapXY(1 , (length(yMod[[s]]) ) ,
+                                y[[s]],
+                                yMod[[s]] ,
                                 x[[s]],
                                 yfactor,r2,
-                                # pts_1,pts_2,pts_3,pts_4
-                            ptsl[[1]],ptsl[[2]],ptsl[[4]],ptsl[[3]]
+                                ptsl[[1]],ptsl[[2]],ptsl[[4]],ptsl[[3]]
                             )
 
-            roundedX[[s]]<-xyCoords$roundedX
-            roundedY[[s]]<-xyCoords$roundedY
+            roundedX[[s]] <- xyCoords$roundedX
+            roundedY[[s]] <- xyCoords$roundedY
+
             attr(roundedY[[s]], "positionnoNA")<- attr(listOfdfChromSizenoNA[[s]],"positionnoNA")
-            attr(roundedY[[s]], "cenType")<- attr(listOfdfChromSizenoNA[[s]],"cenType")
+            attr(roundedY[[s]], "cenType")     <- attr(listOfdfChromSizenoNA[[s]],"cenType")
 
             for (a in 1: length(roundedY[[s]])){
-              # attr(roundedY[[s]][[a]],"chrName1")<- attr(y[[s]][[a]],"chrName1")
-              names(roundedY[[s]])[a]<- names(y[[s]][a])
-              names(roundedX[[s]])[a]<- names(y[[s]][a])
+              names(roundedY[[s]])[a] <- names(y[[s]][a])
+              names(roundedX[[s]])[a] <- names(y[[s]][a])
             }
-            names(roundedX)[s]<-names(roundedY)[s]<-names(y[s])
 
-            } else if( chromatids==TRUE & holocenNotAsChromatids==FALSE | circularPlot==FALSE) { # chromatids FALSE TRUE
+            names(roundedX)[s] <- names(roundedY)[s] <- names(y[s])
+
+            } else if ( chromatids==TRUE & holocenNotAsChromatids==FALSE | circularPlot==FALSE) { # chromatids FALSE TRUE
 
               pts<- seq(-pi/2, pi*1.5, length.out = n*4)
 
@@ -2943,7 +2987,7 @@ for (s in 1:length(y) ) {
     roundedX<-roundedX[!is.na(roundedX)]
   }
 
-  if(circularPlot==FALSE){
+  if(circularPlot==FALSE) {
 
     ##################################################################################################################### <20
     if(callPlot){
@@ -2956,7 +3000,7 @@ for (s in 1:length(y) ) {
     # horizPlot <- !missing(karAnchorLeft) & verticalPlot==FALSE
     refKar<- !missing(moveKarHor) | horizPlot
     # refKar<- !missing(moveKarHor) | !missing(karAnchorLeft)
-    if(!missing(anchor) & refKar  ) {
+    if(!missing(anchor) & refKar) if(anchor) {
     # if(!missing(anchor) & !missing(moveKarHor) & verticalPlot ){
       lapply(1:length(segX0), function(s) mapply(function(w,x,y,z) graphics::segments(w,
                                                                                       x,
@@ -3015,7 +3059,6 @@ for (s in 1:length(y) ) {
                        ,adj=adj2 # 0 left
         )
       }
-
     } # anchor
 
       if (chromatids==FALSE ) {
@@ -4124,47 +4167,29 @@ if(circularPlot==FALSE) {
             } # ifelse holocen
 
             OTUcurrent<-names(listOfdfChromSizenoNA)[[s]]
-            hasQuotes<-grepl("'.*'",OTUcurrent)
+            # hasQuotes<-grepl("'.*'",OTUcurrent)
+            hasQuotes<-grepl("\\((.*?)\\)|'(.*?)'",OTUcurrent)
+            hasF<-grepl("FL|FL\\+|FL0|F\\+",OTUcurrent)
 
             if(!missing(OTUfont) ) {
 
-              if(OTUfont==3 & hasQuotes){
-
-                # begin <- sub("\\'.*", "", OTUcurrent)
-                # varNames <- unlist(regmatches(OTUcurrent,gregexpr("'(.*?)'",OTUcurrent) ) )
-                # varConcat<-paste(varNames, collapse=" ")
-                # nameWithVar<- bquote(paste(italic(.(begin)),.(varConcat)  ) )
-                note<-OTUcurrent
-                pattern1<-"\\s?\\((.*?)\\)\\s?|\\s?'(.*?)'\\s?"
-                posPattern <- gregexpr(pattern1, note)
-
-                notInParOrig <-   unlist(regmatches(note, posPattern, invert=T ) )
-                notInPar <- notInParOrig[notInParOrig!=""]
-
-                pattern2<-"\\((.*?)\\)|'(.*?)'"
-                varNames    <- unlist(regmatches(note,gregexpr(pattern2,note ) ) ) # "\\((.*?)\\)|'(.*?)'"
-                #
-                # non pat to X
-                #
-                regmatches(note, posPattern, invert=T) <- Map(blanks2, lapply(regmatches(note, posPattern, invert = T), nchar) )
-                #
-                # add
-                #
-                regmatches(note, posPattern, invert=F) <-  list(paste0(',\"',varNames," \"")  )
-                #
-                # add
-                #
-                posXNotPattern2 <- gregexpr("[\u0168]+", note)
-                regmatches(note, posXNotPattern2, invert=F) <-  list(paste0(',italic(\"',notInPar," \")" ) )
-                #
-                #   end
-                #
-                # nameWithVar<-paste0("paste(",note,")")
-                nameWithVar<-str2lang(paste0("paste(",note,")") )
-              } else {
-                nameWithVar<- OTUcurrent
+              if(OTUfont==3 & hasQuotes & parseTypes){
+                if(hasF){
+                  message(crayon::blue("patterns FL FL+ FL0 or F+ detected and processed, avoid this using parseTypes=FALSE"))
+                }
+                nameWithVar <- processNameVarAndFormula(OTUcurrent)
+              } else if (OTUfont==3 & hasQuotes & parseTypes==FALSE) {
+                nameWithVar <- processNameVar(OTUcurrent)
               }
-            } else {
+            }  # missing OTUfont
+
+            if(OTUfont2 != 3 & parseTypes & hasF & !exists("nameWithVar") ) {
+                message(crayon::blue("patterns FL FL+ FL0 or F+ detected and processed, avoid this using parseTypes=FALSE"))
+                noteLang <- formatFs(OTUcurrent,"FL|FL\\+|FL0|F\\+")
+                nameWithVar<-str2lang(paste0("paste(",noteLang,")") )
+            }
+
+            if(!exists("nameWithVar")) {
               nameWithVar<- OTUcurrent
             }
 
@@ -4182,6 +4207,7 @@ if(circularPlot==FALSE) {
                             ,font=   ifelse( !missing(OTUfont),   OTUfont,   1)
                             ,family= ifelse( !missing(OTUfamily), OTUfamily, defaultFontFamily2)
             ) # end graphics::text
+            remove(nameWithVar)
           } # for
 
         } # fi add OTU name
@@ -7445,7 +7471,7 @@ if(circularPlot==FALSE) {
   if(!missing(leftNotesUp)){
 
     addNotes(leftNotesUp,listOfdfChromSizenoNA, groupName,indexCount,morphoCount,
-             xmnoNA,ymnoNA,distTextChr,chrIdCount, leftNotesPosX,leftNotesPosY,
+             xmnoNA,ymnoNA,distTextChr,chrIdCount, leftNotesPosX,leftNotesUpPosY,
              notesTextSize,defaultFontFamily2,
              FALSE, NA, NA,
              downNote=FALSE,rightN=FALSE,

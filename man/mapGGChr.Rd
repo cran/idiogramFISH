@@ -5,14 +5,18 @@
 \alias{mapGGChrMark}
 \title{FUNCTIONS mapGGChr and mapGGChrMark (for ggplot)}
 \usage{
-mapGGChr(dfChrSize, chrSpacing = 0.5)
+mapGGChr(dfChrSize, chrSpacing = 0.5, squareness = 4, n = 50)
 
-mapGGChrMark(dfChrSize, dfMarkPos, chrSpacing = 0.5)
+mapGGChrMark(dfChrSize, dfMarkPos, chrSpacing = 0.5, squareness = 4, n = 50)
 }
 \arguments{
 \item{dfChrSize}{character, name of data.frame with columns: chrSize}
 
 \item{chrSpacing}{numeric, \code{1 - chrSpacing} will be the width of chr.}
+
+\item{squareness}{numeric, squareness}
+
+\item{n}{numeric, vertices number for rounded portions}
 
 \item{dfMarkPos}{(\code{mapGGChrMark}) name of data.frame of marks}
 }

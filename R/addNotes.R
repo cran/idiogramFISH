@@ -61,22 +61,15 @@ if(rightN==FALSE){
   } # ifelse holocen
 
 
-#  # distTextChr<<-distTextChr
-#  # chrIdCount<<-chrIdCount
-#  # morphoCount2<<-morphoCount2
-#  # indexCount2<<-indexCount2
-#  # groupCount<<-groupCount
-#  # holocenDisCount<<-holocenDisCount
-
       if(downNote){
         yposNote <- min(ymnoNA[[i]]) - ( (distTextChr/3) * (chrIdCount + morphoCount2 + indexCount2 + groupCount + 3 - holocenDisCount) )
-        mySign<-1
+        mySign <- -1
       } else {
         yposNote <- max(ymnoNA[[i]])
-        mySign<- -1
+        mySign <- 1
       }
 
-      xposNote <- min(xmnoNA[[i]]) + ((notesPosX/2) )
+  xposNote <- min(xmnoNA[[i]]) + ((notesPosX/2) )
 
 } else { # RIGHT NOTE TRUE
 
@@ -85,9 +78,9 @@ if(rightN==FALSE){
   mySign <- 1
 
    if(attr(listOfdfChromSizenoNA[[i]],"cenType")=="monocen"){
-      yposNote<-min(ymnoNA[[i]][,1])
+      yposNote <- min(ymnoNA[[i]][,1])
     } else {
-      yposNote<-(max(ymnoNA[[i]]) + min(ymnoNA[[i]]) ) /2
+      yposNote <- (max(ymnoNA[[i]]) + min(ymnoNA[[i]]) ) /2
     }
     xposNote<-max(xmnoNA[[i]]) + (notesPosX/2)
 }
@@ -98,10 +91,9 @@ if(rightN==FALSE){
 
  if(!is.null(note) & length(note)>0 ) {
 
-        hasQuotes<-grepl("\\((.*?)\\)|'(.*?)'",note)
 
         #
-        # CHECK  for need for italics
+        # CHECK  for need of italics
         #
 
         fbool<- rightN==FALSE & downNote & leftNoteFont==3
@@ -109,148 +101,40 @@ if(rightN==FALSE){
         tbool<- rightN        & downNote==FALSE & noteFont==3
         f2bool<- rightN        & downNote==FALSE & OTUfont==3 & OTUasNote
 
-        if( fbool | sbool | tbool | f2bool ) if(parseStr2lang==FALSE) if(hasQuotes) {
+        hasF<-grepl("FL|FL\\+|FL0|F\\+",note)
+        hasQuotes<-grepl("\\((.*?)\\)|'(.*?)'",note)
 
-              pattern1<-"\\s?\\((.*?)\\)\\s?|\\s?'(.*?)'\\s?"
-              posPattern <- gregexpr(pattern1, note)
-
-              notInParOrig <-   unlist(regmatches(note, posPattern, invert=T ) )
-              notInPar <- notInParOrig[notInParOrig!=""]
-
-              pattern2<-"\\((.*?)\\)|'(.*?)'"
-              varNames    <- unlist(regmatches(note,gregexpr(pattern2,note ) ) ) # "\\((.*?)\\)|'(.*?)'"
-              #
-              # non pat to X
-              #
-              regmatches(note, posPattern, invert=T) <- Map(blanks2, lapply(regmatches(note, posPattern, invert = T), nchar) )
-              #
-              # add
-              #
-              regmatches(note, posPattern, invert=F) <-  list(paste0(',\"',varNames," \"")  )
-              #
-              # add
-              #
-              posXNotPattern2 <- gregexpr("[\u0168]+", note)
-              regmatches(note, posXNotPattern2, invert=F) <-  list(paste0(',italic(\"',notInPar," \")" ) )
-              #
-              #   end
-              #
-              # nameWithVar<-paste0("paste(",note,")")
-              nameWithVar<-str2lang(paste0("paste(",note,")") )
-
+        if( fbool | sbool | tbool | f2bool ) if(parseStr2lang==FALSE) if(hasQuotes & parseTypes) {
+          # note<-"C. maxima 'Pink' (1A + 1B + 1C + 8D + 1F+ + 4F + 2FL)"
+          if(hasF){
+            message(crayon::blue("patterns FL FL+ FL0 or F+ detected and processed, avoid this using parseTypes=FALSE"))
+          }
+          nameWithVar <- processNameVarAndFormula(note)
+        } else if (hasQuotes & parseTypes==FALSE) {
+          nameWithVar <- processNameVar(note)
         }
+
+        # if(T) if(T) if(F) {"b"} else if (T) {"a"}
 
         #
         #   type patterns
         #
 
-        if( parseTypes & parseStr2lang==FALSE ) {
-          if(exists("nameWithVar") ){
-            italics1<-TRUE
-          } else {
-            italics1<-FALSE
-          }
+        if(!any(fbool,sbool,tbool,f2bool) ) { # if all false
+        if( parseTypes & parseStr2lang==FALSE & !exists("nameWithVar") & hasF ) {
 
-        # note<- "2A + 1C + 8D + 2F+ + 3F + 2FL+ [2A/35S + 1D/35S]"
+          message(crayon::blue("patterns FL FL+ FL0 or F+ detected and processed, avoid this using parseTypes=FALSE"))
 
-        pattern1 <- "\\s?[0-9]{1,2}[A-Za-z]{1,2}[0+]{0,1}\\s?"
-        posPattern <- gregexpr(pattern1, note)
+          noteLang <- formatFs(note,"FL|FL\\+|FL0|F\\+")
+          nameWithVar<-str2lang(paste0("paste(",noteLang,")") )
 
-        notInParOrig <-   unlist(regmatches(note, posPattern, invert=T ) )
-        notInPar <- notInParOrig[notInParOrig!=""]
-        notInPar <- sub("^\\["," [", notInPar)
-
-        if(italics1==FALSE){
-          notInParPl<-paste0(",plain(\"",notInPar,"\"),")
-        } else {
-          notInParPl<-paste0(",\"",notInPar,"\",")
-          notInParPl<-gsub("^,\",ita",",ita",notInParPl)
+        } # parsetypes TRUE
         }
-
-        #
-        #   types
-        #
-
-        pattern2<-"[0-9]{1,2}[A-Za-z]{1,2}[0+]{0,1}"
-
-        varNames    <- unlist(regmatches(note,gregexpr(pattern2,note ) ) ) # "\\((.*?)\\)|'(.*?)'"
-
-        common  <- varNames[which(!varNames %in% grep("FL|F\\+", varNames, value=TRUE) )]
-
-        # common  <- varNames[which(!varNames %in% grep("FL", varNames, value=TRUE) )]
-
-        uncommon  <- varNames[which(varNames %in% grep("FL",   varNames, value=TRUE) )]
-
-        uncommonF <- varNames[which(varNames %in% grep("F\\+", varNames, value=TRUE) )]
-
-        commonPos    <- grep("FL|F\\+", varNames, invert = T)
-
-        uncommonPos  <- grep("FL",   varNames)
-
-        uncommonPosF <- grep("F\\+", varNames)
-
-        if( length(uncommonPos) | length(uncommonPosF) ) {
-
-        splUncommon <- strsplit(uncommon,"")
-
-        splUncommonF <- strsplit(uncommonF,"")
-
-        vecFL<-character()
-        for (sp in splUncommon){
-          vecFL<-c(vecFL,paste0(",\" ",sp[1],"\",","\"",sp[2],"\"","[","\"",sp[3],"\"","]^\"",ifelse(sp[4]==" "|is.na(sp[4]),"",sp[4] ),"\"" )  )
-        }
-
-        vecF<-character()
-        for (sp in splUncommonF){
-          vecF<-c(vecF,paste0(",\" ",sp[1],"\",","\"",sp[2],"\"","^\"",ifelse(sp[3]==" "|is.na(sp[3]),"",sp[3] ),"\"" )  )
-        }
-
-        #
-        # non pattern to X
-        #
-        regmatches(note, posPattern, invert=T) <- Map(blanks2, lapply(regmatches(note, posPattern, invert = T), nchar) )
-        #
-        # replace with mod
-        #
-        common<-gsub("^","\" ",common)
-        common<-gsub("$"," \"",common)
-
-        # newVarNames<-c(common,vecFL)
-
-        # newVarNames <- vector(mode="character",length(common)+length(vecFL) )
-        newVarNames <- vector(mode="character",length(common)+length(vecFL)+length(vecF) )
-
-        # newVarNames[-uncommonPos] <- common
-
-        newVarNames[commonPos] <- common
-        newVarNames[uncommonPos] <- vecFL
-        newVarNames[uncommonPosF] <- vecF
-
-        newVarNames<-gsub("^"," ",newVarNames)
-        newVarNames<-gsub("$"," ",newVarNames)
-
-        regmatches(note, posPattern, invert=F) <-  list(newVarNames  )
-
-        #
-        # add
-        #
-        posXNotPattern2 <- gregexpr("[\u0168]+", note)
-        regmatches(note, posXNotPattern2, invert=F) <-  list(notInParPl)
-        #
-        #   end
-        #
-        note<-sub("\",$","",note)
-        # note
-        nameWithVar <- str2lang(paste0("paste(",note,")") )
-
-        } # len uncommon
-
-        } # pT
 
         if(!exists("nameWithVar")) {
           if(parseStr2lang==FALSE){
             nameWithVar<- note
-          } else {
+          } else { # parseStr2lang TRUE
             nameWithVar<- str2lang(paste0("paste(",note,")") )
           }
         }
@@ -264,9 +148,147 @@ if(rightN==FALSE){
                               ,font=  font1
                               ,family = family1
                     ) # end graphics::text
-         } # null
-       } # for
-     } # inherits d.f.
+               remove(nameWithVar)
+         } # null note
+       } # for sp
+     } # inherits d.f. notes
 } # fun
 
 blanks2 <- function(n) strrep("\u0168", n)
+
+blanks3 <- function(n) strrep("\u0169", n)
+
+processNameVarAndFormula <- function(string, pattern="\\((.*?)\\)\\s?|\\s?'(.*?)'") {
+
+  insideQuotesOrPar <- gregexpr(pattern, string)
+
+  # not italics
+  inQPOrig <-  unlist(regmatches(string, insideQuotesOrPar, invert=F ) )
+  inQPOrig <- inQPOrig[inQPOrig!=""]
+
+  # italics
+  outQPOrig <-  unlist(regmatches(string, insideQuotesOrPar, invert=T ) )
+  outQPOrig <- outQPOrig[outQPOrig!=""]
+
+  regmatches(string, insideQuotesOrPar, invert=T) <- Map(blanks3, lapply(regmatches(string, insideQuotesOrPar, invert = T), nchar) )
+
+  regmatches(string, insideQuotesOrPar, invert=F) <- Map(blanks2, lapply(regmatches(string, insideQuotesOrPar, invert = F), nchar) )
+
+  posOfMatches <- gregexpr("[\u0168]+", string)
+
+  inQPOrigLang <- formatFs(inQPOrig,"FL|FL\\+|FL0|F\\+")
+
+  regmatches(string, posOfMatches, invert=F) <-  list(inQPOrigLang) #ok
+
+  posOfNonMatches <- gregexpr("[\u0169]+", string)
+
+  regmatches(string, posOfNonMatches, invert=F) <-  list(paste0(',italic(\"',outQPOrig," \")" ) )
+
+  nameWithVar<-str2lang(paste0("paste(",string,")") )
+  return(nameWithVar)
+}
+
+processNameVar <- function(string, pattern="\\((.*?)\\)\\s?|\\s?'(.*?)'") {
+  insideQuotesOrPar <- gregexpr(pattern, string)
+
+  # not italics
+  inQPOrig <-  unlist(regmatches(string, insideQuotesOrPar, invert=F ) )
+  inQPOrig <- inQPOrig[inQPOrig!=""]
+
+  # italics
+  outQPOrig <-  unlist(regmatches(string, insideQuotesOrPar, invert=T ) )
+  outQPOrig <- outQPOrig[outQPOrig!=""]
+
+  regmatches(string, insideQuotesOrPar, invert=T) <- Map(blanks3, lapply(regmatches(string, insideQuotesOrPar, invert = T), nchar) )
+
+  regmatches(string, insideQuotesOrPar, invert=F) <- Map(blanks2, lapply(regmatches(string, insideQuotesOrPar, invert = F), nchar) )
+
+  posOfMatches <- gregexpr("[\u0168]+", string)
+
+  # inQPOrigLang <- formatFs(inQPOrig,"FL|FL\\+|FL0|F\\+")
+
+  regmatches(string, posOfMatches, invert=F) <-  list(paste0(',plain(\"',inQPOrig," \")" ) )
+
+  posOfNonMatches <- gregexpr("[\u0169]+", string)
+
+  regmatches(string, posOfNonMatches, invert=F) <-  list(paste0(',italic(\"',outQPOrig," \")" ) )
+
+  nameWithVar<-str2lang(paste0("paste(",string,")") )
+  return(nameWithVar)
+}
+
+formatFs <- function(string,pattern){
+  i<-0
+  for (str in string){
+    # str<-string
+    i<-i+1
+    strOrig <- str
+    {
+      posPattern <- gregexpr(pattern, str)
+
+      regmatches(str, posPattern, invert=T) <- Map(blanks3, lapply(regmatches(str, posPattern, invert = T), nchar) )
+
+      regmatches(str, posPattern, invert=F) <- Map(blanks2, lapply(regmatches(str, posPattern, invert = F), nchar) )
+
+      #
+      # change pattern match
+      #
+
+      patternMatch  <- unlist(regmatches(strOrig,gregexpr(pattern,strOrig ) ) ) # "\\((.*?)\\)|'(.*?)'"
+
+      nonPatternMatch  <- unlist(regmatches(strOrig,gregexpr(pattern,strOrig ), invert = T ) ) # "\\((.*?)\\)|'(.*?)'"
+      tryCatch(remove(FLmatches), warning=function(w) {""} )
+      FLmatches  <- patternMatch[which(patternMatch %in% grep("FL",   patternMatch, value=TRUE) )]
+      tryCatch(remove(F_matches), warning=function(w) {""} )
+      F_matches  <- patternMatch[which(patternMatch %in% grep("F\\+", patternMatch, value=TRUE) )]
+
+      FLmatchesPos  <- grep("FL",   patternMatch)
+
+      F_matchesPos <- grep("F\\+", patternMatch)
+    }
+
+    if( length(FLmatchesPos) | length(F_matchesPos) ) {
+
+      splFLmatches <- strsplit(FLmatches,"")
+
+      splF_matches <- strsplit(F_matches,"")
+
+      vecFL<-character()
+      for (sp in splFLmatches){
+        vecFL<-c(vecFL,paste0(#",\" ",sp[1],"\",",
+          ",\"", sp[1],"\"",       # normal F
+          "[","\"",sp[2],"\"","]", # subscript L
+          ifelse(is.na(sp[3]),
+                 paste0(",plain(\"\")"),   # empty
+                 paste0("^\"",sp[3],"\""))# plus or zero superscript
+        )
+        )
+      }
+      vecFL
+      vecF<-character()
+      for (sp in splF_matches){
+        vecF<-c(vecF,paste0(#",\" ",sp[1],"\",",
+          ",\"",sp[1],"\"", # normal F
+          "^\"",sp[2],"\"" # superscript plus
+        )  )
+      }
+      vecF
+
+      patternMatchLang <- vector(mode="character",length(vecFL)+length(vecF) )
+
+      patternMatchLang[FLmatchesPos] <- vecFL
+      patternMatchLang[F_matchesPos] <- vecF
+
+      posOfMatches <- gregexpr("[\u0168]+", str)
+      regmatches(str, posOfMatches, invert=F) <-  list(patternMatchLang  ) #ok
+    }
+
+    posOfNonMatches <- gregexpr("[\u0169]+", str)
+    regmatches(str, posOfNonMatches, invert=F) <-  list(paste0(',plain(\"',nonPatternMatch,"\")," ) )
+
+    string[i] <- str
+  } # for str
+  return(string)
+}
+
+

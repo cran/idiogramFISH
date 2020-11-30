@@ -16,6 +16,8 @@ mapXY(start, end, y, yMod, x, yfactor, r2, pts_1, pts_2, pts_3, pts_4)
 
 \item{yMod}{y coords modified because of squareness}
 
+\item{x}{x coords}
+
 \item{yfactor}{y x factor}
 
 \item{r2}{radius}
@@ -27,6 +29,8 @@ mapXY(start, end, y, yMod, x, yfactor, r2, pts_1, pts_2, pts_3, pts_4)
 \item{pts_3}{points of squareness}
 
 \item{pts_4}{points of squareness}
+
+\item{n}{number of edges in rounded vertices}
 }
 \value{
 list

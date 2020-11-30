@@ -1,6 +1,20 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 1.16.8
+
+30-11-2020
+
+  - Added rounded vertices for ggplot related functions
+  - Better parsing of F<sub>L</sub> (chr. name formatting) and similar
+    text in notes
+  - Sorting of chr. by `chrNameUp` column added.
+
+param:
+
+  - `leftNotesUpPosY` numeric, move up-left-notes `leftNotesUp` down or
+    up (y axis)
+
 # idiogramFISH 1.16.7
 
 15-10-2020

@@ -5,6 +5,8 @@
 #'
 #' @param start 1st index
 #' @param end last index
+#' @param n number of edges in rounded vertices
+#' @param x x coords
 #' @param y y coords
 #' @param yMod y coords modified because of squareness
 #' @param yfactor y x factor
@@ -17,6 +19,7 @@
 #' @return list
 
 mapXY <- function(start,end,y,yMod,x,yfactor,r2,pts_1,pts_2,pts_3,pts_4 ){
+
   topBotline_x <- list()
 
   x2_1<-x2_2<-list()
@@ -799,3 +802,16 @@ mapXYmarksRo <- function(start,end,y,x,r2, xModifier,pts ) {
 #  chrtXchrtYmarkRo665<<-chrtXchrtYmarkRo
 }
 
+makeRoundCoordXY <- function(r2, yfactor, x, y, start, end, n) {
+
+  pts <- seq(-pi/2, pi*1.5, length.out = n*4)
+  ptsl<- split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
+
+  xyCoords <- mapXY(1 , (length(y) ) ,
+                    y, y ,
+                    x,
+                    yfactor,r2,
+                    ptsl[[1]],ptsl[[2]],ptsl[[4]],ptsl[[3]]
+  )
+  return(xyCoords)
+}

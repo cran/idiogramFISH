@@ -12,8 +12,8 @@
  anchorVsizeF = 0.5, pchAnchor = 23, moveAnchorV = 0, moveAnchorH = 0,
  mkhValue = 0.5, n = 50, notes, leftNotes, leftNotesUp, notesTextSize = 0.4,
  notesLeft, notesPosX = 0.5, notesPosY = 0, leftNotesPosX = 0.5,
- leftNotesPosY = 0, leftNoteFont = 1, leftNoteFontUp = 1, noteFont = 1,
- parseTypes = TRUE, parseStr2lang = FALSE, propWidth = FALSE,
+ leftNotesPosY = 0, leftNotesUpPosY = 0, leftNoteFont = 1, leftNoteFontUp = 1,
+ noteFont = 1, parseTypes = TRUE, parseStr2lang = FALSE, propWidth = FALSE,
  MbThreshold = 10000, threshold = 35, MbUnit = "Mb", yTitle = "µm",
  specialyTitle = "cM", specialOTUNames = "", addOTUName = TRUE, OTUTextSize = 1,
  OTUfont, OTUfamily, OTUasNote = FALSE, orderChr = "size", chrId = "original",
@@ -124,11 +124,13 @@ of \code{karAnchorLeft, karAnchorRight} when \code{verticalPlot=FALSE}}
 
 \item{notesPosX}{numeric, move right notes to the right or left (x axis)}
 
-\item{notesPosY}{numeric, move right notes to the down or up (y axis)}
+\item{notesPosY}{numeric, move right notes down or up (y axis)}
 
 \item{leftNotesPosX}{numeric, move left notes to the right or left (x axis)}
 
-\item{leftNotesPosY}{numeric, move left notes to the down or up (y axis)}
+\item{leftNotesPosY}{numeric, move left notes (\code{leftNotes}) down or up (y axis)}
+
+\item{leftNotesUpPosY}{numeric, move up left notes (\code{leftNotesUp}) down or up (y axis)}
 
 \item{leftNoteFont, }{numeric  \code{1} for normal,  \code{2} for bold,  \code{3} for italics,  \code{4} for bold-italics. See \code{leftNotes}}
 
@@ -155,7 +157,7 @@ Defaults to \code{"Mb"}, but anything can be used. Introduced in 1.13. See \code
 
 \item{specialOTUNames}{character vector, normally title of ruler is micrometer or Mb (big numbers). Use this param. to be able to put a different unit in ruler title. See \code{"specialyTitle"}}
 
-\item{addOTUName}{boolean, if \code{TRUE} adds OTU (species) name to karyotype}
+\item{addOTUName}{boolean, when \code{TRUE} adds OTU (species) name to karyotype}
 
 \item{OTUTextSize}{numeric, font size of OTU name (species). Defaults to \code{1}. When \code{OTUasNote} is \code{TRUE}, use  \code{notesTextSize} instead}
 
@@ -165,8 +167,8 @@ Defaults to \code{"Mb"}, but anything can be used. Introduced in 1.13. See \code
 
 \item{OTUasNote}{boolean, if \code{TRUE} adds OTU (species) name to the right, see \code{notes}}
 
-\item{orderChr}{character, replaces \code{orderBySize - deprecated} when \code{"size"}, sorts chromosomes by total
-length from the largest to the smallest. \code{"original"}: preserves d.f. order. \code{"name"}: sorts alphabetically; \code{"group"}: sorts by group name}
+\item{orderChr}{character, when \code{"size"}, sorts chromosomes by total
+length from the largest to the smallest. \code{"original"}: preserves d.f. order. \code{"name"}: sorts alphabetically; \code{"group"}: sorts by group name; \code{"chrNameUp"}: sorts according to column \code{chrNameUp}. See \code{chrNameUp}}
 
 \item{chrId}{character, print name of chromosome, \code{"original"} uses the original
 name in OTU column of dfChrSize, \code{"simple"} (just 1 to ...) or \code{""} (none).}
@@ -339,7 +341,7 @@ rightmost chr. to legend. Defaults to \code{1}}
 
 \item{chrIndex}{character, add arm ratio with \code{"AR"} and centromeric index with \code{"CI"}, or \code{"both"} (Default), or \code{""} for none}
 
-\item{morpho}{character, if \code{"both"} (default) prints the Guerra and Levan classif of cen. position, use also \code{"Guerra"} or  \code{"Levan"} or \code{""} for none. See also \code{?armRatioCI}.}
+\item{morpho}{character, when \code{"both"} (default) prints the Guerra and Levan classif of cen. position, use also \code{"Guerra"} or  \code{"Levan"} or \code{""} for none. See also \code{?armRatioCI}.}
 
 \item{nameChrIndexPos}{numeric, modify position of name of chr. indices}
 
