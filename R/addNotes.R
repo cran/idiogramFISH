@@ -39,10 +39,10 @@ if(!inherits(notes, "data.frame") ) {
 
 for (i in 1:length(listOfdfChromSizenoNA) ) {
 
-if(rightN==FALSE){
+if(rightN==FALSE) {
 
-  font1   <- ifelse(downNote, leftNoteFont,leftNoteFontUp)
-  family1 <- defaultFontFamily2
+  font1   <- ifelse(OTUasNote, OTUfont, ifelse(downNote, leftNoteFont,leftNoteFontUp))
+  family1 <- ifelse(OTUasNote, ifelse( !is.na(OTUfamily),  OTUfamily, defaultFontFamily2),defaultFontFamily2) # justif
 
   if(as.numeric(attr(listOfdfChromSizenoNA[[i]],"groupPresence") ) > 0 ) {
       ifelse(groupName,groupCount<-2,groupCount<-1)
@@ -75,6 +75,7 @@ if(rightN==FALSE){
 
   font1   <- ifelse(OTUasNote, OTUfont, noteFont)
   family1 <- ifelse(OTUasNote, ifelse( !is.na(OTUfamily),  OTUfamily, defaultFontFamily2),defaultFontFamily2) # justif
+
   mySign <- 1
 
    if(attr(listOfdfChromSizenoNA[[i]],"cenType")=="monocen"){
@@ -96,15 +97,16 @@ if(rightN==FALSE){
         # CHECK  for need of italics
         #
 
-        fbool<- rightN==FALSE & downNote & leftNoteFont==3
-        sbool<- rightN==FALSE & downNote==FALSE & leftNoteFontUp==3
-        tbool<- rightN        & downNote==FALSE & noteFont==3
+        fbool <- rightN==FALSE & downNote & leftNoteFont==3
+        sbool <- rightN==FALSE & downNote==FALSE & leftNoteFontUp==3
+        tbool <- rightN        & downNote==FALSE & noteFont==3
         f2bool<- rightN        & downNote==FALSE & OTUfont==3 & OTUasNote
+        f3bool<- rightN==FALSE & downNote==FALSE & OTUfont==3 & OTUasNote
 
         hasF<-grepl("FL|FL\\+|FL0|F\\+",note)
         hasQuotes<-grepl("\\((.*?)\\)|'(.*?)'",note)
 
-        if( fbool | sbool | tbool | f2bool ) if(parseStr2lang==FALSE) if(hasQuotes & parseTypes) {
+        if( fbool | sbool | tbool | f2bool | f3bool ) if(parseStr2lang==FALSE) if(hasQuotes & parseTypes) {
           # note<-"C. maxima 'Pink' (1A + 1B + 1C + 8D + 1F+ + 4F + 2FL)"
           if(hasF){
             message(crayon::blue("patterns FL FL+ FL0 or F+ detected and processed, avoid this using parseTypes=FALSE"))

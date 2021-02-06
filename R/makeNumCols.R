@@ -18,6 +18,9 @@ makeNumCols<-function(df){
   })
   numeric_cols <- names(df)[cond]
   df[,numeric_cols] <- sapply(df[,numeric_cols], as.numeric)
+  # if("chrName" %in% colnames(df)) {
+    # df$chrName<-as.character(df$chrName)
+  # }
   return(df)
 }
 

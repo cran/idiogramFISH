@@ -15,6 +15,7 @@
 #'
 #' @return list
 #' @rdname mapGGChr
+#' @importFrom tidyr pivot_longer
 #' @export
 #'
 mapGGChr <- function(dfChrSize,chrSpacing=0.5,squareness=4, n= 50) {
@@ -28,12 +29,12 @@ if(chrSpacing > 0.95){
   # chrSpacing <-.5
 chrWidth   <- 1 - chrSpacing
 
-  if(requireNamespace("tidyr")==FALSE){
-    message(crayon::red("You need to install tidyr"))
-    return(NULL)
-  } else {
-    requireNamespace("tidyr")
-  }
+  # if(requireNamespace("tidyr")==FALSE){
+  #   message(crayon::red("You need to install tidyr"))
+  #   return(NULL)
+  # } else {
+  #   requireNamespace("tidyr")
+  # }
 
 chromosome_ns  <- nrow(dfChrSize)
 chromRepVector <- rep(1,chromosome_ns)

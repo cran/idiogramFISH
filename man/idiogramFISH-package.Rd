@@ -4,7 +4,7 @@
 \name{idiogramFISH-package}
 \alias{idiogramFISH}
 \alias{idiogramFISH-package}
-\title{idiogramFISH: Idiograms with Marks and Karyotype Indices}
+\title{idiogramFISH: Shiny App. Idiograms with Marks and Karyotype Indices}
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 

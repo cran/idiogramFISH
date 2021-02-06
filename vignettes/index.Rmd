@@ -1,7 +1,7 @@
 ---
-title: "idiogramFISH: Idiograms with Marks and Karyotype Indices"
+title: "idiogramFISH: Shiny App. Idiograms with Marks and Karyotype Indices"
 author: "Fernando Roa"
-date: "03 07 2020"
+date: "03 02 2021"
 pkgdown:
   as_is: true
 output:
@@ -13,11 +13,10 @@ output:
     number_sections: true
     pandoc_args: ["--lua-filter=refs/multiple-bibliographies.lua"]
     
-#bibliography: [refs/allrefs.bib,refs/iqtree.bib,refs/revbayes.bib,refs/packages.bib, refs/idiogramFISH.bib, refs/Rrefs.bib]
-
 bibliography_normal: [refs/allrefs.bib,refs/iqtree.bib,refs/revbayes.bib,refs/library.bib,refs/costa2015.bib,refs/costa2019.bib,refs/aurantiumMendes.bib,refs/yasuda.bib, refs/yi2018.bib]
 bibliography_software: [refs/packages.bib, refs/idiogramFISH.bib, refs/ggplotreshape.bib]
 bibliography_docs: [refs/docPackages.bib, refs/Rrefs.bib, refs/docPackages2.bib, refs/rmdformats.bib]
+bibliography_shiny: [refs/shinyApp.bib]
 
 csl: refs/clima5.csl
 link-citations: yes
@@ -32,6 +31,7 @@ resource_files:
   - ../man/figures/cranversion.svg
   - ../man/figures/archive.svg
   - ../man/figures/pkgdownver.svg
+  - ../man/figures/shiny.jpg
   
   - ../man/figures/kofi1.svg
   
@@ -80,6 +80,7 @@ resource_files:
   - refs/yasuda.bib
   - refs/yi2018.bib
   - refs/ggplotreshape.bib
+  - refs/shinyApp.bib
   
   - js/jquery.min.js
   - js/clipboard.min.js
@@ -240,15 +241,12 @@ cat(paste0("<img src=",img1_path,">") )
 ```
 </div>
 
-The goal of idiogramFISH is to plot idiograms of karyotypes, plasmids and circular chr. having a set of data.frames for chromosome data
-    and optionally marks' data (`plotIdiograms` function) [@Roa2020]. Idiograms can also be plotted in 
-    concentric circles. Separated chromatids can be visible when not in a circular plot.<br>
-    <br>Six styles of marks are available: square (squareLeft), dots, cM (cMLeft), cenStyle, upArrow, downArrow; its legend (label) can be drawn inline 
-    or to the right of karyotypes. It is possible to calculate
-    also chromosome and karyotype indexes [@Watanabe1999;@Zarco1986new] and classify chromosome morphology in the categories of
-    Levan [-@Levan1964], and [Guerra](https://ferroao.gitlab.io/guerra1986/Guerra1986.pdf) [-@Guerra1986d].
+The goal of idiogramFISH is to plot idiograms of karyotypes, plasmids and circular chr. having a set of data.frames for chromosome data and optionally marks' data (`?plotIdiograms` function) [@Roa2021]. Idiograms can also be plotted in concentric circles. Separated chromatids can be visible when not in a circular plot.<br>
+    <br>Six styles of marks are available: square (squareLeft), dots, cM (cMLeft), cenStyle, upArrow, downArrow; its legend (label) can be drawn inline or to the right of karyotypes. It is possible to calculate also chromosome and karyotype indexes [@Watanabe1999;@Zarco1986new] and classify chromosome morphology in the categories of Levan [-@Levan1964], and [Guerra](https://ferroao.gitlab.io/guerra1986/Guerra1986.pdf) [-@Guerra1986d].
 
 IdiogramFISH was written in R [@R-base] and also uses crayon [@R-crayon], tidyr [@R-tidyr] and dplyr packages [@R-dplyr]. Documentation was written with R-packages roxygen2 [@R-roxygen2], usethis [@R-usethis], bookdown [@bookdown2016], knitr [@Xie2015], pkgdown [@R-pkgdown], Rmarkdown [@rmarkdown2018], rvcheck [@R-rvcheck], badger [@R-badger], kableExtra [@R-kableExtra], rmdformats [@R-rmdformats] and RCurl [@R-RCurl]. For some vignette figures, packages rentrez [@rentrez2017], plyr [@plyr2011], phytools [@phytools2012], ggtree [@ggtree2018], ggplot2 [@ggplot22016] and ggpubr [@R-ggpubr] were used. 
+
+In addition, the shiny app `runBoard()` uses shiny [@R-shiny], shinydashboard [@R-shinydashboard], rhandsontable [@R-rhandsontable], gtools [@R-gtools], rclipboard [@R-rclipboard] and bib2df [@R-bib2df].
 
 <div class="goright95">
 <a href="#header">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
@@ -295,7 +293,17 @@ You can install idiogramFISH from [CRAN](https://cran.r-project.org/package=idio
 ``` r
 install.packages("idiogramFISH")
 ```
-### Or the devel. version {-}
+
+Windows users: To avoid installation of packages in OneDrive  
+``` r
+.libPaths("D:R/lib") # or any folder
+.libPaths()
+```
+
+or something in the line of [this](https://bit.ly/2YLNo4u)
+
+
+### Devel. version {-}
 
 ``` {r, echo=F, message=FALSE, warning=FALSE, include=TRUE, fig.show = "hold", fig.align = "default", results="asis"}
 if (requireNamespace("RCurl", quietly = TRUE)  ) {
@@ -318,9 +326,9 @@ if (requireNamespace("RCurl", quietly = TRUE)  ) {
 
 Install Gitlab dev. ver. with devtools [@R-devtools]:
 
-Attention windows users, please install [Rtools](https://cran.r-project.org/bin/windows/Rtools/){target="_blank"} and [git](https://git-scm.com/download/win)
+Attention windows users, please install [Rtools](https://cran.r-project.org/bin/windows/Rtools/){target="_blank"} and [git](https://git-scm.com/download/win) (compilation tools).
 
-Vignettes use a lua filter, so you would need [pandoc](https://pandoc.org/installing.html){target="_blank"} ver. > 2. `rmarkdown::pandoc_version()`
+Vignettes (optional) use a lua filter, so you would need [pandoc](https://pandoc.org/installing.html){target="_blank"} ver. > 2. and `pandoc-citeproc` or `citeproc`. RStudio comes with pandoc. `rmarkdown::pandoc_version()` 
 
 <div class="fold s">
 ``` {r, eval=FALSE}
@@ -329,7 +337,7 @@ install.packages("devtools")
 
 url <- "https://gitlab.com/ferroao/idiogramFISH"
 
-# Necessary packages for vignettes:
+# Packages for vignettes: (optional)
 list.of.packages <- c(
     "plyr",
     "knitr",
@@ -352,7 +360,7 @@ devtools::install_git(url = url, build_opts=c("--no-resave-data","--no-manual") 
 ```
 </div>
 
-#### Or install it in terminal: {-}
+#### Installing in system terminal {-}
 
 <div class="fold s">
 ``` {r, eval=FALSE}
@@ -508,6 +516,7 @@ link<-tryCatch(suppressWarnings(badger::badge_custom("vignettes", paste(pkg,v), 
 
 Launch vignettes from R for the installed version:
 ``` r
+library(idiogramFISH)
 packageVersion("idiogramFISH")
 browseVignettes("idiogramFISH")
 ```
@@ -515,10 +524,68 @@ browseVignettes("idiogramFISH")
 <a href="#header">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
 </div>
 
+## Citation {-}
 
-## Minimal examples {-}
+```{r citation, echo=FALSE, comment=NA,results='asis'} 
+print(citation("idiogramFISH"),bibtex=FALSE )
+```
 
-### Monocentrics: {-}
+To write citation to file:
+```{r, echo=TRUE, results=FALSE, eval=FALSE}
+sink("idiogramFISH.bib")
+toBibtex(citation("idiogramFISH"))
+sink()
+```
+<div class="goright95">
+<a href="#header">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
+</div>
+
+## Authors {-}
+
+```{r, echo=F,  results="asis", eval=T}
+img1_path <- "../man/figures/kofi1.png"
+img1_path <- normalizePath(img1_path)
+
+if(file.exists(img1_path)) {
+  cat(paste0("[Fernando Roa](https://ferroao.gitlab.io/curriculumpu/){target='_blank'}&nbsp;&nbsp;<a href='https://ko-fi.com/X7X71PZZG' target='_blank'><img src=",img1_path," width=\"10%\">") )
+} else {
+  cat(paste0("[Fernando Roa](https://ferroao.gitlab.io/curriculumpu/){target='_blank'}"))  
+}
+```
+
+``` {r, echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis", eval=FALSE}
+cat("<a href='https://ko-fi.com/X7X71PZZG' target='_blank'><img height='12' style='border:0px;height:12px;' src='../man/figures/kofi1.png' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>")
+```
+
+[Mariana PC Telles](http://lattes.cnpq.br/4648436798023532)  
+
+```{r include=FALSE,eval=FALSE}
+# automatically create a bib database for R packages, this is currently not used by vignette refs/packages2.bib
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","pkgdown","crayon","ggtree","ggplot2","ggpubr","phytools","plyr","dplyr","tidyr","rentrez"
+), 'refs/packages2.bib')
+```
+<div class="goright95">
+<a href="#header">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
+</div>
+
+# Shiny App
+
+```{r , echo=TRUE, eval=FALSE, message=FALSE}
+library(idiogramFISH)
+runBoard()
+```
+
+```{r, echo=F,  results="asis", eval=T}
+shiny_path <- "../man/figures/shiny.jpg"
+if(file.exists(shiny_path)) {
+cat(paste0("<img src=",shiny_path,">") )
+}
+```
+
+# Minimal examples
+
+## Monocentrics
 
 Define your plotting window size with something like `par(pin=c(10,6))`, or with `svg()`, `png()`, etc.
 Add chromosome morphology according to [Guerra](https://ferroao.gitlab.io/guerra1986/Guerra1986.pdf) [-@Guerra1986d] or [@Levan1964]
@@ -616,7 +683,7 @@ kableExtra::kable_styling(knitr::kable(dfOfMarks2) , full_width = F)
 ```
 </div>
   
-### Holocentrics: {-}
+## Holocentrics
 
 <div class="fold s">
 ```{r example2, echo=TRUE, results="hide", fig.width=10, fig.height=6, message=FALSE}
@@ -818,55 +885,6 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               ,OTUTextSize = .7          # font size of OTU
 ); #dev.off() # close svg()
 ```
-
-## Citation {-}
-
-```{r citation, echo=FALSE, comment=NA,results='asis'} 
-print(citation("idiogramFISH"),bibtex=FALSE )
-```
-
-To write citation to file:
-```{r, echo=TRUE, results=FALSE, eval=FALSE}
-sink("idiogramFISH.bib")
-toBibtex(citation("idiogramFISH"))
-sink()
-```
-<div class="goright95">
-<a href="#header">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
-</div>
-
-## Authors {-}
-
-
-```{r, echo=F,  results="asis", eval=T}
-img1_path <- "../man/figures/kofi1.png"
-img1_path <- normalizePath(img1_path)
-
-if(file.exists(img1_path)) {
-  cat(paste0("[Fernando Roa](https://ferroao.gitlab.io/curriculumpu/){target='_blank'}&nbsp;&nbsp;<a href='https://ko-fi.com/X7X71PZZG' target='_blank'><img src=",img1_path," width=\"10%\">") )
-} else {
-  cat(paste0("[Fernando Roa](https://ferroao.gitlab.io/curriculumpu/){target='_blank'}"))  
-}
-```
-
-``` {r, echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis", eval=FALSE}
-cat("<a href='https://ko-fi.com/X7X71PZZG' target='_blank'><img height='12' style='border:0px;height:12px;' src='../man/figures/kofi1.png' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>")
-```
-  
-  
-  
-[Mariana PC Telles](http://lattes.cnpq.br/4648436798023532)  
-
-```{r include=FALSE,eval=FALSE}
-# automatically create a bib database for R packages, this is currently not used by vignette refs/packages2.bib
-knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","pkgdown","crayon","ggtree","ggplot2","ggpubr","phytools","plyr","dplyr","tidyr","rentrez"
-), 'refs/packages2.bib')
-```
-<div class="goright95">
-<a href="#header">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
-</div>
-
 
 ```{r, echo=F}
 chapterFile_plotting<- "../chaptersBLOCK/01-plotting.Rmd"
@@ -1141,6 +1159,11 @@ cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io
 ## R-packages {-}
 
 ::: {#refs_software}
+:::
+
+## Shiny App {-}
+
+::: {#refs_shiny}
 :::
 
 ## Documentation {-}

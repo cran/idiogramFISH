@@ -5,11 +5,7 @@ idiogramFISH
 
 <img src=man/figures/logo.png align="right" width="12%" hspace="50">
 
-# Idiograms with Marks and Karyotype Indices<br></br><br></br><br></br><br></br>
-
-<!-- <img src='' align="right" width=20% margin=150px /> -->
-
-<!-- height="120" -->
+# Shiny App. Idiograms with Marks and Karyotype Indices<br></br><br></br><br></br><br></br>
 
 ![<https://cran.r-project.org/web/packages/idiogramFISH/>](man/figures/cranversion.svg) [![downloads](man/figures/realdownloads.svg)](https://ferroao.gitlab.io/idiogramfishhelppages/downloads.png) [![10.5281/zenodo.3579417](man/figures/doibadge.svg)](https://doi.org/10.5281/zenodo.3579417)
  ![gitlab.com/ferroao/idiogramFISH](man/figures/gitbadge.svg)
@@ -18,8 +14,8 @@ idiogramFISH
 
 The goal of idiogramFISH is to plot idiograms of karyotypes, plasmids
 and circ. chr. having a set of data.frames for chromosome data and
-optionally marks’ data (`plotIdiograms` function) (Roa and Telles,
-[2020](#ref-Roa2020)). Idiograms can also be plotted in concentric
+optionally marks’ data (`plotIdiograms` function) (Roa and PC Telles,
+[2021](#ref-Roa2021)). Idiograms can also be plotted in concentric
 circles. Separated chromatids can be visible when not in a circular
 plot.<br> <br>Six styles of marks are available: square (squareLeft),
 dots, cM (cMLeft), cenStyle, upArrow, downArrow; its legend (label) can
@@ -51,6 +47,13 @@ ggtree (Yu *et al.*, [2018](#ref-ggtree2018)), ggplot2 (Wickham,
 [2016](#ref-ggplot22016)) and ggpubr (Kassambara, [2019](#ref-R-ggpubr))
 were used.
 
+In addition, the shiny app `runBoard()` uses shiny (Chang *et al.*,
+[2021](#ref-R-shiny)), shinydashboard (Chang and Borges Ribeiro,
+[2018](#ref-R-shinydashboard)), rhandsontable (Owen,
+[2018](#ref-R-rhandsontable)), gtools (Warnes *et al.*,
+[2020](#ref-R-gtools)), rclipboard (Bihorel, [2021](#ref-R-rclipboard))
+and bib2df (Ottolinger, [2019](#ref-R-bib2df)).
+
 <!-- badger -->
 
 ## Installation
@@ -61,16 +64,26 @@ were used.
 install.packages("idiogramFISH")
 ```
 
-#### Or the devel version of idiogramFISH
+Windows users: To avoid installation of packages in OneDrive
+
+``` r
+.libPaths("D:R/lib") # or any folder
+.libPaths()
+```
+
+or something in the line of [this](https://bit.ly/2YLNo4u)
+
+#### Devel. version of idiogramFISH
 
 ##### From gitlab with devtools (Wickham *et al.*, [2019](#ref-R-devtools)[b](#ref-R-devtools))
 
 Attention windows users, please install
 [Rtools](https://cran.r-project.org/bin/windows/Rtools/) and
-[git](https://git-scm.com/download/win).
+[git](https://git-scm.com/download/win) (compilation tools).
 
-Vignettes use a lua filter, so you need
-[pandoc](https://pandoc.org/installing.html) ver. \> 2.
+Vignettes (optional) use a lua filter, so you would need
+[pandoc](https://pandoc.org/installing.html) ver. \> 2. and
+`pandoc-citeproc` or `citeproc`. RStudio comes with pandoc.
 `rmarkdown::pandoc_version()`
 
 ``` r
@@ -79,7 +92,7 @@ install.packages("devtools")
 
 url <- "https://gitlab.com/ferroao/idiogramFISH"
 
-# Necessary packages for vignettes:
+# Packages for vignettes: (optional)
 list.of.packages <- c(
     "plyr",
     "knitr",
@@ -93,19 +106,15 @@ list.of.packages <- c(
     )
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
-```
 
-``` r
 # Linux with vignettes and Windows
 devtools::install_git(url = url,build_vignettes = TRUE, force=TRUE)
-```
 
-``` r
 # Mac with vignettes
 devtools::install_git(url = url, build_opts=c("--no-resave-data","--no-manual") )
 ```
 
-##### Or install it in terminal:
+##### Installing in system terminal
 
 ``` r
 # clone repository:
@@ -145,11 +154,44 @@ Online:
 Launch vignettes from R for the installed version:
 
 ``` r
+library(idiogramFISH)
 packageVersion("idiogramFISH")
 browseVignettes("idiogramFISH")
 ```
 
-## Basic examples
+## Citation
+
+To cite idiogramFISH in publications, please use:
+
+Roa F, Telles MPC (2020) idiogramFISH: Shiny app. Idiograms with Marks
+and Karyotype Indices, Universidade Federal de Goiás. Brazil. R-package.
+version 2.0.0 <https://ferroao.gitlab.io/manualidiogramfish/>.
+doi:<!-- breaklink
+  -->10.5281/zenodo.3579417
+
+To write citation to file:
+
+``` r
+sink("idiogramFISH.bib")
+toBibtex(citation("idiogramFISH"))
+sink()
+```
+
+## Authors
+
+[Fernando Roa](https://ferroao.gitlab.io/curriculumpu/)  
+[Mariana PC Telles](http://lattes.cnpq.br/4648436798023532)
+
+# Shiny App
+
+``` r
+library(idiogramFISH)
+runBoard()
+```
+
+<img src=man/figures/shiny.jpg>
+
+# Basic examples
 
 #### 1 How to plot a karyotype:
 
@@ -170,8 +212,6 @@ dfOfMarks2[which(dfOfMarks2$markName=="5S"),]$markSize<-0.8 # modif. of mark siz
 
 # column Mbp not for plotting purposes
 dfOfChrSize$Mbp<-(dfOfChrSize$shortArmSize+dfOfChrSize$longArmSize)*100
-
-# svg("testing.svg",width=11,height=4.5 )
 
 opar <- par(no.readonly = TRUE)      # make a copy of current settings if you want to restore them later
 #par(opar) # recover par
@@ -805,6 +845,12 @@ Mbp
 
 </th>
 
+<th style="text-align:left;">
+
+OTU
+
+</th>
+
 </tr>
 
 </thead>
@@ -831,6 +877,12 @@ Mbp
 
 </td>
 
+<td style="text-align:left;">
+
+Species holo
+
+</td>
+
 </tr>
 
 <tr>
@@ -850,6 +902,12 @@ Mbp
 <td style="text-align:right;">
 
 400
+
+</td>
+
+<td style="text-align:left;">
+
+Species holo
 
 </td>
 
@@ -875,6 +933,12 @@ Mbp
 
 </td>
 
+<td style="text-align:left;">
+
+Species holo
+
+</td>
+
 </tr>
 
 <tr>
@@ -894,6 +958,12 @@ Mbp
 <td style="text-align:right;">
 
 500
+
+</td>
+
+<td style="text-align:left;">
+
+Species holo
 
 </td>
 
@@ -1059,6 +1129,12 @@ markSize
 
 </th>
 
+<th style="text-align:left;">
+
+OTU
+
+</th>
+
 </tr>
 
 </thead>
@@ -1091,6 +1167,12 @@ markSize
 
 </td>
 
+<td style="text-align:left;">
+
+Species holo
+
+</td>
+
 </tr>
 
 <tr>
@@ -1116,6 +1198,12 @@ DAPI
 <td style="text-align:right;">
 
 0.5
+
+</td>
+
+<td style="text-align:left;">
+
+Species holo
 
 </td>
 
@@ -1147,6 +1235,12 @@ DAPI
 
 </td>
 
+<td style="text-align:left;">
+
+Species holo
+
+</td>
+
 </tr>
 
 <tr>
@@ -1172,6 +1266,12 @@ DAPI
 <td style="text-align:right;">
 
 0.5
+
+</td>
+
+<td style="text-align:left;">
+
+Species holo
 
 </td>
 
@@ -1203,6 +1303,12 @@ CMA
 
 </td>
 
+<td style="text-align:left;">
+
+Species holo
+
+</td>
+
 </tr>
 
 <tr>
@@ -1228,6 +1334,12 @@ CMA
 <td style="text-align:right;">
 
 0.5
+
+</td>
+
+<td style="text-align:left;">
+
+Species holo
 
 </td>
 
@@ -1321,31 +1433,9 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
 ); # dev.off() # close svg()
 ```
 
-<img src="man/figures/README-unnamed-chunk-17-1.png" width="70%" />
-
 <img src="man/figures/README-unnamed-chunk-18-1.png" width="70%" />
 
-## Citation
-
-To cite idiogramFISH in publications, please use:
-
-Roa F, Telles MPC (2020) idiogramFISH: Idiograms with Marks and
-Karyotype Indices, Universidade Federal de Goiás. Brazil. R-package.
-version 1.16.8 <https://ferroao.gitlab.io/manualidiogramfish/>.
-doi:<!-- breaklink -->10.5281/zenodo.3579417
-
-To write citation to file:
-
-``` r
-sink("idiogramFISH.bib")
-toBibtex(citation("idiogramFISH"))
-sink()
-```
-
-## Authors
-
-[Fernando Roa](https://ferroao.gitlab.io/curriculumpu/)  
-[Mariana PC Telles](http://lattes.cnpq.br/4648436798023532)
+<img src="man/figures/README-unnamed-chunk-19-1.png" width="70%" />
 
 ## References
 
@@ -1387,7 +1477,7 @@ phylogenetic information *Journal of Plant Research*, 112: 145–161.
 
 </div>
 
-## R-packages references
+## R-packages
 
 <div id="refs_software">
 
@@ -1430,11 +1520,11 @@ biology (and other things). *Methods in Ecology and Evolution*, 3:
 
 </div>
 
-<div id="ref-Roa2020">
+<div id="ref-Roa2021">
 
-Roa F, Telles MPC. 2020. *idiogramFISH: Idiograms with Marks and
-Karyotype Indices* Universidade Federal de Goiás, UFG, Goiânia.
-<https://doi.org/10.5281/zenodo.3579417>.
+Roa F, PC Telles M. 2021. *idiogramFISH: Shiny app. Idiograms with marks
+and karyotype indices* Universidade Federal de Goiás, UFG, Goiânia.
+R-package. version 2.0.0. <https://doi.org/10.5281/zenodo.3579417>.
 <https://ferroao.gitlab.io/manualidiogramfish/> 
 
 </div>
@@ -1496,7 +1586,57 @@ Biology and Evolution*, 35(2): 3041–3043.
 
 </div>
 
-## Documentation references
+## Shiny App
+
+<div id="refs_shiny">
+
+<div id="ref-R-rclipboard">
+
+Bihorel S. 2021. *Rclipboard: Shiny/r wrapper for clipboard.js*. R
+package version 0.1.3. <https://github.com/sbihorel/rclipboard/> 
+
+</div>
+
+<div id="ref-R-shinydashboard">
+
+Chang W, Borges Ribeiro B. 2018. *Shinydashboard: Create dashboards with
+shiny*. R package version 0.7.1.
+<http://rstudio.github.io/shinydashboard/> 
+
+</div>
+
+<div id="ref-R-shiny">
+
+Chang W, Cheng J, Allaire J, Sievert C, Schloerke B, Xie Y, Allen J,
+McPherson J, Dipert A, Borges B. 2021. *Shiny: Web application framework
+for r*. R package version 1.6.0. <https://shiny.rstudio.com/> 
+
+</div>
+
+<div id="ref-R-bib2df">
+
+Ottolinger P. 2019. *Bib2df: Parse a bibtex file to a data frame*. R
+package version 1.1.1. <https://github.com/ropensci/bib2df> 
+
+</div>
+
+<div id="ref-R-rhandsontable">
+
+Owen J. 2018. *Rhandsontable: Interface to the handsontable.js library*.
+R package version 0.3.7. <http://jrowen.github.io/rhandsontable/> 
+
+</div>
+
+<div id="ref-R-gtools">
+
+Warnes GR, Bolker B, Lumley T. 2020. *Gtools: Various r programming
+tools*. R package version 3.8.2. <https://github.com/r-gregmisc/gtools> 
+
+</div>
+
+</div>
+
+## Documentation
 
 <div id="refs_docs">
 
@@ -1548,7 +1688,7 @@ markdown* Chapman; Hall/CRC, Boca Raton, Florida. ISBN 978-1138700109.
 
 <div id="ref-rmarkdown2018">
 
-Xie Y, Allaire JJ, Grolemund G. 2018. *R markdown: The definitive guide*
+Xie Y, Allaire J, Grolemund G. 2018. *R markdown: The definitive guide*
 Chapman; Hall/CRC, Boca Raton, Florida. ISBN 9781138359338.
 <https://bookdown.org/yihui/rmarkdown> 
 

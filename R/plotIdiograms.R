@@ -37,6 +37,9 @@
 #' @param anchorTextMParental character, designed to fill with a character object the space left of a missing parental in the \code{anchor} structure.
 #' @param anchorTextMoveX numeric, for vertical plots with \code{anchorText} move text in X axis. Defaults to \code{0.5}
 #' @param anchorTextMoveY numeric, for horizontal plots with \code{anchorText} move text in Y axis. Defaults to \code{1}
+#' @param anchorTextMoveParenX numeric, for plots with \code{anchorTextMParental} move text in X axis. Defaults to \code{0}
+#' @param anchorTextMoveParenY numeric, for plots with \code{anchorTextMParental} move text in Y axis. Defaults to \code{0}
+#'
 #' @param anchorLineLty numeric, type of line in \code{anchor}, corresponds to \code{lty}. Defaults to \code{1}
 #' @param anchorVsizeF numeric, factor to modify vertical size of anchor \code{0.5} (default). Size itself is equal to \code{karHeiSpace}
 #' @param moveAnchorV numeric, displace anchor vertical portion to right or left. See \code{anchor}
@@ -101,13 +104,13 @@
 #' @param forbiddenMark, character, character string or vector with mark names to be removed from plot. Not the marks but the labels.
 #' @param legendWidth numeric, factor to increase width of squares and of legend. Defaults to \code{1.7}
 #' @param legendHeight numeric, factor to increase height of squares and dots of legend. Automatic.
-#' @param defaultStyleMark character, default style of mark, only used when \code{style} column of \code{dfMarkColor} data.frame is missing or in absence of this data.frame. Use \code{"square"} (default), \code{"squareLeft"}, \code{"dots"}, \code{"cM"} \code{"cM"}, \code{"cMLeft"},\code{"cenStyle"}, \code{"upArrow"}, \code{"downArrow"}.
+#' @param defaultStyleMark character, default style of mark, only used when \code{style} column of \code{dfMarkColor} data.frame is missing or in absence of this data.frame. Use \code{"square"} (default), \code{"squareLeft"}, \code{"dots"}, \code{"cM"}, \code{"cMLeft"},\code{"cenStyle"}, \code{"upArrow"}, \code{"downArrow"}.
 #' @param colorBorderMark character, without default, pass a name of a color to use as border of marks. See \code{borderOfWhiteMarks}
 #' @param borderOfWhiteMarks boolean, if \code{TRUE} (Default) uses black border for white marks. See \code{dfMarkColor}. Does not apply to marks with style \code{cenStyle}
 #' @param lwd.mimicCen thickness of lines of \code{cenStyle} marks; affects only lateral borders. Defaults to \code{lwd.chr}
 #' @param defCenStyleCol character, color of outer part of \code{cenStyle} marks. Defaults to \code{white}
 #' @param protruding numeric, when style of mark is \code{"cM"}, fraction of chrWidth to stretch marker. Defaults to \code{0.2}. Introduced in 1.13
-#' @param markLabelSize numeric, only if legend != (not) "", size of the text of
+#' @param markLabelSize numeric, only if legend != (not) "", size of the font of
 #'   labels of marks (legend). Defaults to \code{1}
 #' @param markLabelSpacer numeric, only if \code{legend="aside"}, space from the
 #'   rightmost chr. to legend. Defaults to \code{1}
@@ -144,7 +147,8 @@
 #' @param addOTUName boolean, when \code{TRUE} adds OTU (species) name to karyotype
 #' @param OTUfont numeric, \code{1} for normal,  \code{2} for bold,  \code{3} for italics,  \code{4} for bold-italics
 #' @param OTUfamily character, font family for OTU name.
-#' @param OTUasNote boolean, if \code{TRUE} adds OTU (species) name to the right, see \code{notes}
+#' @param OTUasNote boolean, when \code{TRUE} adds OTU (species) name to the right, see \code{notes}
+#' @param OTUasLeftNote boolean, when \code{TRUE} adds OTU (species) name to the left-up, see \code{leftNotesUp}
 #' @param revOTUs boolean, The order of species is the one in the main
 #'   data.frame, use \code{TRUE} to reverse
 #' @param ruler boolean, display ruler to the left of karyotype, when \code{FALSE} no ruler
@@ -227,6 +231,7 @@
 #' @importFrom graphics par plot segments mtext
 #' @importFrom dplyr bind_rows
 #' @importFrom grDevices col2rgb
+#' @importFrom utils read.csv
 #'
 #' @export
 #'
@@ -264,6 +269,10 @@ plotIdiograms <- function(dfChrSize, # karyotype
   anchorTextMParental,
   anchorTextMoveX=0.5,
   anchorTextMoveY=1,
+
+  anchorTextMoveParenX=0,
+  anchorTextMoveParenY=0,
+
   anchorVsizeF=.5,
   pchAnchor=23,
   moveAnchorV=0,
@@ -304,6 +313,7 @@ plotIdiograms <- function(dfChrSize, # karyotype
   OTUfamily,
   # OTUasNote=TRUE,
   OTUasNote=FALSE,
+  OTUasLeftNote=FALSE,
 
   # chromosomes
   orderChr="size",
@@ -338,7 +348,7 @@ plotIdiograms <- function(dfChrSize, # karyotype
   chrBorderColor,
   centromereSize=NA,
   cenColor,
-  fixCenBorder,
+  fixCenBorder=NULL,
   gishCenBorder,
   hideCenLines=1.75,
   roundedCen=TRUE,
@@ -528,28 +538,57 @@ plotIdiograms <- function(dfChrSize, # karyotype
   OTUfont2 <- ifelse( !missing(OTUfont),   OTUfont,   1)
   OTUfamily2<-ifelse( !missing(OTUfamily), OTUfamily, defaultFontFamily2)
 
-  if(!missing(dfChrSize)){
+  if(!missing(dfChrSize)) {
+    if(inherits(dfChrSize, "data.frame") ) {
     dfChrSizeInternal<-makeNumCols(dfChrSize)
+    } else if (inherits(dfChrSize, "character") ) {
+      if (file.exists(dfChrSize) ) {
+        dfChrSize <-read.csv(dfChrSize, header = TRUE)
+        dfChrSizeInternal<-makeNumCols(dfChrSize)
+      }
+    } else {
+      message(crayon::red("dfChrSize is not a data.frame or .csv file") )
+    }
   } else {
-    message(crayon::red("Missing mandatory dfChrSize data.frame"))
+    message(crayon::red("Missing mandatory dfChrSize data.frame or .csv file"))
     return(NA)
   }
 #  dfChrSizeInternal467<<-dfChrSizeInternal
 
   if(!missing(dfMarkPos) ) {
 
+    if (inherits(dfMarkPos, "character")) {
+      if (file.exists(dfMarkPos)) {
+        tryCatch(dfMarkPosInternal<-read.csv(dfMarkPos, header = TRUE), error = function(e){"invalid dfMarkPos file"} )
+      }
+    } else if ( !inherits(dfMarkPos, "data.frame") ) {
+      message(crayon::red("dfMarkPos is not a data.frame object or .csv filename in quotes") )
+    }
+    if(inherits(dfMarkPos, "data.frame") ) {
+      if(!nrow(dfMarkPos)>0){
+        remove(dfMarkPos)
+      } else {
+       dfMarkPosInternal <- dfMarkPos
+      }
+    } else {
+      remove(dfMarkPos)
+    }
+  }
+
+  if(exists("dfMarkPosInternal") ) { # is a d.f and has >0 rows
+
     #
     #   rename column markArm if necessary
     #
 
-    if("markArm" %in% colnames(dfMarkPos)  ){
+    if("markArm" %in% colnames(dfMarkPosInternal)  ){
       message(crayon::red(paste(c("Column markArm in d.f. of marks renamed to chrRegion")))
       ) # mess
-      colnames(dfMarkPos)[which(names(dfMarkPos)=="markArm")]<-"chrRegion"
+      colnames(dfMarkPosInternal)[which(names(dfMarkPosInternal)=="markArm")]<-"chrRegion"
     }
 
-    dfMarkPos[dfMarkPos==""]<-NA
-    copyDfMarkPosInternal1 <- dfMarkPosInternal <- makeNumCols(dfMarkPos)
+    dfMarkPosInternal[dfMarkPosInternal==""]<-NA
+    copyDfMarkPosInternal1 <- dfMarkPosInternal <- makeNumCols(dfMarkPosInternal)
 
     tryCatch(initialMarkNames <- unique(as.character(copyDfMarkPosInternal1$markName) ), error=function(e) {} )
 
@@ -562,6 +601,11 @@ plotIdiograms <- function(dfChrSize, # karyotype
     if(is.null(copyDfMarkPosInternal1$markDistCen)){
       copyDfMarkPosInternal1$markDistCen<-NA
     }
+
+    #
+    # requires chrRegion
+
+    if("chrRegion" %in% colnames(copyDfMarkPosInternal1) ) {
 
     dfCenMarksInternal <- copyDfMarkPosInternal1[which(copyDfMarkPosInternal1$chrRegion=="cen"),]
 
@@ -593,8 +637,12 @@ plotIdiograms <- function(dfChrSize, # karyotype
     if(nrow(dfwholeGISHInternal)==0 ){
       remove(dfwholeGISHInternal)
     }
+    } else {
+      remove(copyDfMarkPosInternal1) # absence of chrRegion
+    }
 
 } # df mark pos
+
 #  dfChrSizeInternal525<<-dfChrSizeInternal
   ##############################################################################
   #
@@ -635,8 +683,18 @@ plotIdiograms <- function(dfChrSize, # karyotype
   #   mark style
   #
 
-  if(!missing(dfMarkColor)){
-    dfMarkColorInternal<-makeNumCols(dfMarkColor)
+  if(!missing(dfMarkColor)) {
+
+    if(inherits(dfMarkColor, "data.frame") ) {
+      tryCatch(dfMarkColorInternal<-makeNumCols(dfMarkColor), error=function(e){"empty data.frame"} )
+    } else if (inherits(dfMarkColor, "character")) {
+      if (file.exists(dfMarkColor)) {
+        tryCatch(dfMarkColor<-read.csv(dfMarkColor, header = TRUE), error = function(e){"invalid dfMarkColor file"} )
+        tryCatch(dfMarkColorInternal<-makeNumCols(dfMarkColor), error = function(e){""} )
+      }
+    } else {
+      message(crayon::red("dfMarkColor is not a data.frame or .csv file") )
+    }
   }
 
   message(crayon::black(paste("Making checks\n")) )
@@ -655,6 +713,7 @@ plotIdiograms <- function(dfChrSize, # karyotype
   if (!"OTU" %in% colnames(dfChrSizeInternal) ) {
     addOTUName<-FALSE
     OTUasNote <-FALSE
+    OTUasLeftNote <- FALSE
   }
 #  dfChrSizeInternal586<<-dfChrSizeInternal
   listOfdfChromSize <- dfToListColumn(dfChrSizeInternal)
@@ -949,7 +1008,7 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
   #
 
   if (exists("dfMarkPosInternal")) {
-#    dfMarkPosInternal927<<-dfMarkPosInternal
+#   dfMarkPosInternal927<<-dfMarkPosInternal
 
     dfMarkPosInternal <- unique(dfMarkPosInternal)
 
@@ -962,16 +1021,35 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
     #
 
     parlistOfdfMarkPosMonocen<-listOfdfMarkPosInternal[which(names(listOfdfMarkPosInternal) %in% monocenNames)]
-#    parlistOfdfMarkPosMonocen908<<-parlistOfdfMarkPosMonocen
+#   parlistOfdfMarkPosMonocen908<<-parlistOfdfMarkPosMonocen
 
     if(length(parlistOfdfMarkPosMonocen)==0){
       remove(parlistOfdfMarkPosMonocen)
     } else {
       for (i in 1:length(parlistOfdfMarkPosMonocen)){
-      parlistOfdfMarkPosMonocen[[i]]  <- parlistOfdfMarkPosMonocen[[i]][which(parlistOfdfMarkPosMonocen[[i]]$chrRegion!="cen"),]
+        #
+        #   requires chrRegion
+        #
+        missingCol <-setdiff(c("chrRegion"),
+                            colnames(parlistOfdfMarkPosMonocen[[i]]) )
+        if(length (missingCol )==0 ) {
+           parlistOfdfMarkPosMonocen[[i]]  <- parlistOfdfMarkPosMonocen[[i]][which(parlistOfdfMarkPosMonocen[[i]]$chrRegion!="cen"),]
+        } #if
+        else {
+          message(crayon::red("missing column chrRegion in dfMarkPos, unable to plot monocen. marks"
+                              ))
+        }
       } # for
+
       parlistOfdfMarkPosMonocen<-Filter(function(x) {nrow(x) >= 1}, parlistOfdfMarkPosMonocen)
-    }# else
+
+      if(length(parlistOfdfMarkPosMonocen)==0){
+        remove(parlistOfdfMarkPosMonocen)
+      }
+    } # else
+
+    # if(exists("parlistOfdfMarkPosMonocen")) {
+    # }
 
     #
     #                holocen marks list
@@ -1017,7 +1095,9 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
   #
 
   if(exists("parlistOfdfMarkPosMonocen")){
-    message(crayon::black("\nChecking mandatory columns from dfMarkPos: chrName, markName, chrRegion,markDistCen\n (column OTU  is necessary if more than one species)\nmarkSize can be absent when cM style"
+#    parlistOfdfMarkPosMonocen1076<<-parlistOfdfMarkPosMonocen
+    message(crayon::black(
+      "\nChecking mandatory columns from dfMarkPos: chrName, markName, chrRegion,markDistCen\n (column OTU  is necessary if more than one species)\nmarkSize can be absent when cM style"
     ) )# cat
 
     for (i in 1:length(parlistOfdfMarkPosMonocen ) ) {
@@ -1030,7 +1110,9 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
       #
 
       if(!"markDistCen" %in% colnames(parlistOfdfMarkPosMonocen[[i]]) & "markPos" %in% colnames(parlistOfdfMarkPosMonocen[[i]])  ){
-        message(crayon::red(paste(c("Columns markPos in d.f. of marks of OTU",names(parlistOfdfMarkPosMonocen)[[i]] ,"renamed to markDistCen")))
+        message(crayon::red(
+          paste(c("Column markPos in d.f. of marks of OTU",names(parlistOfdfMarkPosMonocen)[[i]]
+                  ,"renamed to markDistCen")))
         ) # mess
         colnames(parlistOfdfMarkPosMonocen[[i]])[which(names(parlistOfdfMarkPosMonocen[[i]])=="markPos")]<-"markDistCen"
       }
@@ -1059,16 +1141,19 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
       #   column error check
       #
 
-      # if(length (setdiff(c("chrName", "markName", "chrRegion","markDistCen","markSize"),
-      if(length (setdiff(c("chrName", "markName", "chrRegion","markDistCen"),
-                         colnames(parlistOfdfMarkPosMonocen[[i]]) ) )>0 ) {
-        message(crayon::red(paste(c("ERROR Missing columns in d.f. of marks of OTU",names(parlistOfdfMarkPosMonocen)[[i]] ,":",
-                                setdiff(c("chrName", "markName", "chrRegion","markDistCen"), # rem markSize
-                                        colnames(parlistOfdfMarkPosMonocen[[i]]) ) ) , sep="\n", collapse = " " )
+      missingCol<-setdiff(c("chrName", "markName", "chrRegion","markDistCen"),
+                    colnames(parlistOfdfMarkPosMonocen[[i]]) )
+      if(length (missingCol )>0 ) {
+        message(crayon::red(paste(c("ERROR Missing columns in d.f. of marks of OTU"
+                                    ,names(parlistOfdfMarkPosMonocen)[[i]] ,":"
+                                    ,missingCol) , sep="\n", collapse = " "
+                                  )
         )
         ) # cat
-        message(crayon::red(paste("\nERRORS PRESENT, see above, dfMarksPos of OTU", names(parlistOfdfMarkPosMonocen)[[i]] ,"REMOVED\n")
-        ) )#m
+        message(crayon::red(paste("\nERRORS PRESENT, see above, dfMarksPos of OTU"
+                                  , names(parlistOfdfMarkPosMonocen)[[i]]
+                                  ,"REMOVED\n")
+        ) ) #m
         parlistOfdfMarkPosMonocen[[i]]<-NA
       } # fi setdiff
       #
@@ -1293,8 +1378,9 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
   #
 
   if(exists("parlistOfdfMarkPosMonocen") ) {
-#    # listOfdfChromSize1120<<-listOfdfChromSize
-#   parlistOfdfMarkPosMonocen1197<<-parlistOfdfMarkPosMonocen
+#   listOfdfChromSize1120<<-listOfdfChromSize
+#  parlistOfdfMarkPosMonocen1353<<-parlistOfdfMarkPosMonocen
+
     listOfChecksChr<-checkNameChrDfMarks(listOfdfChromSize,parlistOfdfMarkPosMonocen)
 #    # listOfChecksChr123<<-listOfChecksChr
     listOfdfChromSize<-listOfChecksChr[[1]]
@@ -1377,18 +1463,53 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
   #
 
   if(!missing(cenColor)) {
-    cenColor2<-cenColor
-
-    if( is.null(cenColor)  ){
+    #
+    if(length(is.na(cenColor)) ) {
+      if (is.na(cenColor) ){
+        cenColor2<-NULL
+      } else if (cenColor==""){
+        cenColor2<-chrColor
+      } else if (cenColor=="NULL"){
+        cenColor2<-NULL
+      } else {
+        cenColor2<-cenColor
+      }
+    } else if( is.null(cenColor) ){
       cenColor2<-NULL
     }
-
   } else {
     cenColor2<-chrColor
   }
 
 
   {
+
+    if(exists("allMarkNames") & exists("dfMarkColorInternal") ) {
+      dfMarkColorInternal <- dfMarkColorInternal[which(dfMarkColorInternal$markName %in% allMarkNames) ,]
+      if (nrow(dfMarkColorInternal)==0) {
+        message(crayon::red("\nError in dfMarkColor markNames respect to Marks pos. data.frames, dfMarkColor REMOVED\n")
+        )#cat
+        remove(dfMarkColorInternal)
+      }
+    }
+
+    if (!missing(mycolors) ) {
+
+      mycolors2 <- mycolors[mycolors!=""]
+
+      mycolors2<-tryCatch(mycolors2[sapply(mycolors2, function(X) {
+        tryCatch(is.matrix(col2rgb(X)),
+                 error = function(e) {
+                   message(crayon::red(paste("Color",X,"invalid, removed")
+                                       ) ); return(FALSE)
+                   })
+      } )],error=function(e) {character(0) } )
+
+      if(length(mycolors2)==0){
+        remove(mycolors2)
+      }
+    }
+
   if(exists("dfMarkColorInternal") ) {
 
 #   dfMarkColorInternal1311<<-dfMarkColorInternal
@@ -1433,12 +1554,7 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
 
       if(exists("allMarkNames")) {
 #        # allMarkNames1248<<-allMarkNames
-        dfMarkColorInternal <- dfMarkColorInternal[which(dfMarkColorInternal$markName %in% allMarkNames) ,]
-        if (nrow(dfMarkColorInternal)==0){
-          message(crayon::red("\nError in dfMarkColor markNames respect to Marks pos. data.frames, dfMarkColor REMOVED\n")
-          )#cat
-          remove(dfMarkColorInternal)
-        } else if ( length(setdiff(allMarkNames,unique(dfMarkColorInternal$markName) ) )>0) { # nrow not 0
+        if ( length(setdiff(allMarkNames,unique(dfMarkColorInternal$markName) ) )>0 ) { # nrow not 0
           message(crayon::black("\nColors provided in to dfMarkColor are not enough, internal colors will be used.\n") )
           dfMarkColorInternal <- makedfMarkColor(dfMarkColorInternal,allMarkNames, c(chrColor,cenColor2) )
         } else { # nrow not 0
@@ -1454,11 +1570,12 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
       } # else
     } # else column names ok
   } #fi exists dfMarkColor ... continues
-  else if (missing(mycolors) ) { # if dfMarkColor not exist and missing mycolors
+  else if (!exists("mycolors2") ) { # if dfMarkColor not exist and missing mycolors
       if(exists("allMarkNames")){
         dfMarkColorInternal<-makedfMarkColor(idiogramFISH::dfMarkColor,allMarkNames,c(chrColor,cenColor2),defaultStyleMark )
         } # allmarknames
-  } else if (!missing(mycolors) ) { # if dfMarkColor not exist , mycolors exist
+  } else if (exists("mycolors2") ) { # if dfMarkColor not exist , mycolors exist
+#    mycolors1535 <<- mycolors2
 #      # allMarkNames1443<<-allMarkNames
       if(exists("initialMarkNames") & exists("allMarkNames")) {
 #        initialMarkNames1445<<-initialMarkNames
@@ -1475,13 +1592,13 @@ listOfdfChromSize <- addAttributesDfChrSize(listOfdfChromSize,threshold,specialO
 
       }
       if(exists("allMarkNames") ) {
-        dfMarkColorInternal <- makedfMarkColorMycolors(allMarkNames, mycolors, c(chrColor,cenColor2),defaultStyleMark )
+        dfMarkColorInternal <- makedfMarkColorMycolors(allMarkNames, mycolors2, c(chrColor,cenColor2),defaultStyleMark )
       }
   } # elif
 
 } # chunk
 
-  if(exists("dfMarkColorInternal")){
+  if(exists("dfMarkColorInternal")) {
 
     dfMarkColorInternal$markBorderColor<-dfMarkColorInternal$markColor
 
@@ -2457,7 +2574,15 @@ for (s in 1:length(y) ) {
     }
 
     if(!missing(chrBorderColor)) {
+      if (is.na(chrBorderColor) | chrBorderColor=="" ){
+        if(chrColor=="white"){
+          chrBorderColor2 <- "black"
+        } else {
+          chrBorderColor2 <- chrColor
+        }
+      } else {
       chrBorderColor2<-chrBorderColor
+      }
     } else {
       if(chrColor=="white"){
         chrBorderColor2 <- "black"
@@ -2529,6 +2654,7 @@ for (s in 1:length(y) ) {
 
             moveX <- ifelse(!missing(moveKarHor),anchorTextMoveX,0)
             moveY <- ifelse(!missing(moveKarHor),0,anchorTextMoveY)
+
             adj <- ifelse(!missing(moveKarHor),1,0.5) # 1 right(vert. anchor), 0.5= centered (hor. anchor)
 
             lapply(1:length(segX0), function(s) mapply(function(x,y) graphics::text(x,
@@ -2541,7 +2667,7 @@ for (s in 1:length(y) ) {
               ) #m
             ) # l
 
-            sign1 <- ifelse(!is.na(addMissingOTUAfter[1]), 1,-1)
+            sign1 <- ifelse(verticalPlot, 1,-1)
 
             if(!missing(anchorTextMParental)) {
               posSegX<-ifelse(!missing(moveKarHor),
@@ -2550,15 +2676,21 @@ for (s in 1:length(y) ) {
                                      max(unlist(segX1)  )
                                      ,min(unlist(segX0) )
                               )
-              )
-              posSegY<-ifelse(!missing(moveKarHor), min(unlist(segY1) ), max(unlist(segY0)  ) )
+              ) + anchorTextMoveParenX
 
-              adj2 <- ifelse(!is.na(addMissingOTUAfter[1]), 0,1)
+              posSegY <- ifelse(!missing(moveKarHor), min(unlist(segY1) ), max(unlist(segY0)  )
+                              ) - anchorTextMoveParenY
+
+
+              adj2 <- ifelse(verticalPlot, 0,1)
 
               graphics::text(posSegX + (anchorTextMoveX*sign1),
                              posSegY,
                              labels=anchorTextMParental
                              ,adj=adj2 # 0 left
+                             ,cex=OTUTextSize
+                             ,font=   ifelse( !missing(OTUfont),   OTUfont,   1)
+                             ,family= ifelse( !missing(OTUfamily), OTUfamily, defaultFontFamily2)
               )
             }
           } # anchor
@@ -2800,7 +2932,7 @@ for (s in 1:length(y) ) {
 
         } # cP true if else
 
-      } else {         # if squareness > 20 ###########         else             ########          squareness <= 20
+      } else {  # if squareness > 20 ###########         else             ########                                squareness <= 20
 
         pts <- seq(-pi/2, pi*1.5, length.out = n*4)
         ptsl<- split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
@@ -2989,7 +3121,7 @@ for (s in 1:length(y) ) {
 
   if(circularPlot==FALSE) {
 
-    ##################################################################################################################### <20
+    ##################################################################################################################### < 20
     if(callPlot){
     graphics::plot("",xlim=c( (min(unlist(x), na.rm=TRUE)-xlimLeftMod),(max(unlist(x), na.rm=TRUE)+xlimRightMod ) ),
                    ylim = c( ylimBotMod*-1 ,( (max(unlist(y), na.rm = TRUE) )+ylimTopMod) ) , ylab = "", xaxt='n',
@@ -3039,24 +3171,31 @@ for (s in 1:length(y) ) {
       ) #m
       ) # l
 
-      sign1 <- ifelse(!is.na(addMissingOTUAfter[1]), 1,-1)
+      sign1 <- ifelse(verticalPlot, 1,-1)
 
       if(!missing(anchorTextMParental)) {
-        posSegX<-ifelse(!missing(moveKarHor),
+        posSegX <- ifelse(!missing(moveKarHor),
                         min(unlist(segX0) ),
                         ifelse(!is.na(addMissingOTUAfter[1]),
                                max(unlist(segX1)  )
                                ,min(unlist(segX0) )
                         )
-        )
-        posSegY<-ifelse(!missing(moveKarHor), min(unlist(segY1) ), max(unlist(segY0)  ) )
+        ) + anchorTextMoveParenX
 
-        adj2 <- ifelse(!is.na(addMissingOTUAfter[1]), 0,1) # adj2 <- 0
+        posSegY <- ifelse(!missing(moveKarHor), min(unlist(segY1) ), max(unlist(segY0)  )
+                          ) - anchorTextMoveParenY
+
+        adj2 <- ifelse(verticalPlot, 0,1) # adj2 <- 0
 
         graphics::text(posSegX + (anchorTextMoveX*sign1),
                        posSegY,
                        labels=anchorTextMParental
                        ,adj=adj2 # 0 left
+                       ,cex=OTUTextSize
+                       ,font=   ifelse( !missing(OTUfont),   OTUfont,   1
+                                        )
+                       ,family= ifelse( !missing(OTUfamily), OTUfamily, defaultFontFamily2
+                                        )
         )
       }
     } # anchor
@@ -4131,9 +4270,19 @@ if(circularPlot==FALSE) {
           addOTUName<-FALSE
 
           if(!missing(notes)){
-            message(crayon::blurred("Error: OTUasNote is TRUE, other notes will be removed"))
+            message(crayon::blurred("Error: OTUasNote is TRUE, notes data.frame will be removed"))
           }
-          notes<-data.frame(OTU=unique(dfChrSizeInternalDivisor$OTU), note=unique(dfChrSizeInternalDivisor$OTU) )
+          notes <- data.frame(OTU=unique(dfChrSizeInternalDivisor$OTU), note=unique(dfChrSizeInternalDivisor$OTU) )
+        }
+
+        if(OTUasLeftNote){
+
+          addOTUName<-FALSE
+
+          if(!missing(leftNotesUp)){
+            message(crayon::blurred("Error: OTUasLeftNote is TRUE, leftNotesUp data.frame will be removed"))
+          }
+          leftNotesUp <- data.frame(OTU=unique(dfChrSizeInternalDivisor$OTU), note=unique(dfChrSizeInternalDivisor$OTU) )
         }
 
         #
@@ -4181,7 +4330,7 @@ if(circularPlot==FALSE) {
               } else if (OTUfont==3 & hasQuotes & parseTypes==FALSE) {
                 nameWithVar <- processNameVar(OTUcurrent)
               }
-            }  # missing OTUfont
+            }  # !missing OTUfont
 
             if(OTUfont2 != 3 & parseTypes & hasF & !exists("nameWithVar") ) {
                 message(crayon::blue("patterns FL FL+ FL0 or F+ detected and processed, avoid this using parseTypes=FALSE"))
@@ -4203,7 +4352,7 @@ if(circularPlot==FALSE) {
                             ,labels = nameWithVar
                             # labels = paste("",names(listOfdfChromSizenoNA)[[s]] ),
                             ,cex=OTUTextSize
-                            ,adj=c(0) # justif 0 =left
+                            ,adj= 0 # justif 0 =left
                             ,font=   ifelse( !missing(OTUfont),   OTUfont,   1)
                             ,family= ifelse( !missing(OTUfamily), OTUfamily, defaultFontFamily2)
             ) # end graphics::text
@@ -4403,7 +4552,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
         if(!missing(chrBorderColor) ) {
           if(length(cenColor2!="white")) {
             if (cenColor2!="white") {
-              cenBorder<-chrBorderColor
+              cenBorder<-chrBorderColor2
             } else {
               cenBorder<-chrColor
             }
@@ -4415,15 +4564,10 @@ if(exists("listOfdfChromSizeMonocen") ) {
         }
 
         # this protects for weak colors, adds strong border
-        if(!missing(fixCenBorder)){
+        if(!is.null(fixCenBorder)){
 
           if (fixCenBorder){
-            # if (chrColor != cenColor2){
               cenBorder <- chrBorderColor2
-            # } else {
-              # when chrColor == cenColor
-              # cenBorder <- cenColor2
-            # }
           }
         }
 
@@ -5131,7 +5275,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
           attr(xMarkCen[[k]], "spname") <- names(parlistOfdfMarkPosDataCen)[[k]] # added 1.14
         } # each df
 
-        if(!missing(fixCenBorder)){
+        if(!is.null(fixCenBorder)){
           if (fixCenBorder){
             fixCenBorder2<-TRUE
           } else {
@@ -7429,7 +7573,7 @@ if (exists("parlistOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
 
 if(circularPlot==FALSE) {
 
-  if(!missing(notes)){
+  if(!missing(notes)) {
 
     if(missing(OTUfont)){
       OTUfont<-1
@@ -7441,7 +7585,8 @@ if(circularPlot==FALSE) {
              listOfdfChromSizenoNA, groupName,indexCount,morphoCount,
              xmnoNA,ymnoNA,distTextChr,chrIdCount, notesPosX,notesPosY,
              notesTextSize,defaultFontFamily2,
-             OTUasNote, OTUfont, OTUfamily,
+             OTUasNote,
+             OTUfont, OTUfamily,
              downNote=FALSE,rightN=TRUE,
              leftNoteFont,
              leftNoteFontUp,
@@ -7460,7 +7605,8 @@ if(circularPlot==FALSE) {
     addNotes(leftNotes,listOfdfChromSizenoNA, groupName,indexCount,morphoCount,
                  xmnoNA,ymnoNA,distTextChr,chrIdCount, leftNotesPosX,leftNotesPosY,
                  notesTextSize,defaultFontFamily2,
-                 FALSE, NA, NA,
+                 FALSE,
+                 NA, NA,
                  downNote=TRUE,rightN=FALSE,
              leftNoteFont,
              leftNoteFontUp,
@@ -7470,10 +7616,18 @@ if(circularPlot==FALSE) {
 
   if(!missing(leftNotesUp)){
 
+    if(missing(OTUfont)){
+      OTUfont<-1
+    }
+    if(missing(OTUfamily)){
+      OTUfamily<-NA
+    }
+
     addNotes(leftNotesUp,listOfdfChromSizenoNA, groupName,indexCount,morphoCount,
              xmnoNA,ymnoNA,distTextChr,chrIdCount, leftNotesPosX,leftNotesUpPosY,
              notesTextSize,defaultFontFamily2,
-             FALSE, NA, NA,
+             OTUasLeftNote,
+             OTUfont, OTUfamily,
              downNote=FALSE,rightN=FALSE,
              leftNoteFont,
              leftNoteFontUp,

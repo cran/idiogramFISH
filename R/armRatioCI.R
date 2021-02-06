@@ -85,6 +85,7 @@ swapChrRegionDfSizeAndMarks<- function(dfChrSize,dfMarkPos,chrNamesToSwap){
       dfChrSize$shortArmSize2<-dfChrSize$longArmSize
       dfChrSize[index,]$longArmSize<-dfChrSize[index,]$shortArmSize
       dfChrSize[index,]$shortArmSize<-dfChrSize[index,]$shortArmSize2
+      dfChrSize$shortArmSize2<-NULL
     }
     if(!missing(dfMarkPos)){
       markIndex<-which(dfMarkPos$chrName %in% c)
@@ -93,6 +94,7 @@ swapChrRegionDfSizeAndMarks<- function(dfChrSize,dfMarkPos,chrNamesToSwap){
         dfMarkPos[markIndex,]$chrRegion2[dfMarkPos[markIndex,]$chrRegion %in% "p"]<-"q"
         dfMarkPos[markIndex,]$chrRegion2[dfMarkPos[markIndex,]$chrRegion %in% "q"]<-"p"
         dfMarkPos[markIndex,]$chrRegion <- dfMarkPos[markIndex,]$chrRegion2
+        dfMarkPos$chrRegion2<-NULL
       }
     }
   }

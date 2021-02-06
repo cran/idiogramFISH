@@ -1,6 +1,22 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 2.0.0
+
+05-02-2021
+
+  - Added Shiny app, run with `runBoard()`
+  - Added option to add OTU name as `leftNotesUp` (`OTUasLeftNote`)
+
+param:
+
+  - `anchorTextMoveParenX` numeric, for plots with `anchorTextMParental`
+    move text in X axis. Defaults to `0`
+  - `anchorTextMoveParenY` numeric, for plots with `anchorTextMParental`
+    move text in Y axis. Defaults to `0`
+  - `OTUasLeftNote` boolean, when `TRUE` adds OTU (species) name to the
+    left-up
+
 # idiogramFISH 1.16.8
 
 30-11-2020

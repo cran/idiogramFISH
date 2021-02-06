@@ -142,7 +142,7 @@ if (requireNamespace("RCurl", quietly = TRUE)  ) {
 #  
 #  url <- "https://gitlab.com/ferroao/idiogramFISH"
 #  
-#  # Necessary packages for vignettes:
+#  # Packages for vignettes: (optional)
 #  list.of.packages <- c(
 #      "plyr",
 #      "knitr",
@@ -282,6 +282,43 @@ link<-tryCatch(suppressWarnings(badger::badge_custom("vignettes", paste(pkg,v), 
     }
   }
 } # rcurl
+
+## ----citation, echo=FALSE, comment=NA,results='asis'--------------------------
+print(citation("idiogramFISH"),bibtex=FALSE )
+
+## ---- echo=TRUE, results=FALSE, eval=FALSE------------------------------------
+#  sink("idiogramFISH.bib")
+#  toBibtex(citation("idiogramFISH"))
+#  sink()
+
+## ---- echo=F,  results="asis", eval=T-----------------------------------------
+img1_path <- "../man/figures/kofi1.png"
+img1_path <- normalizePath(img1_path)
+
+if(file.exists(img1_path)) {
+  cat(paste0("[Fernando Roa](https://ferroao.gitlab.io/curriculumpu/){target='_blank'}&nbsp;&nbsp;<a href='https://ko-fi.com/X7X71PZZG' target='_blank'><img src=",img1_path," width=\"10%\">") )
+} else {
+  cat(paste0("[Fernando Roa](https://ferroao.gitlab.io/curriculumpu/){target='_blank'}"))  
+}
+
+## ---- echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis", eval=FALSE----
+#  cat("<a href='https://ko-fi.com/X7X71PZZG' target='_blank'><img height='12' style='border:0px;height:12px;' src='../man/figures/kofi1.png' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>")
+
+## ----include=FALSE,eval=FALSE-------------------------------------------------
+#  # automatically create a bib database for R packages, this is currently not used by vignette refs/packages2.bib
+#  knitr::write_bib(c(
+#    .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","pkgdown","crayon","ggtree","ggplot2","ggpubr","phytools","plyr","dplyr","tidyr","rentrez"
+#  ), 'refs/packages2.bib')
+
+## ---- echo=TRUE, eval=FALSE, message=FALSE------------------------------------
+#  library(idiogramFISH)
+#  runBoard()
+
+## ---- echo=F,  results="asis", eval=T-----------------------------------------
+shiny_path <- "../man/figures/shiny.jpg"
+if(file.exists(shiny_path)) {
+cat(paste0("<img src=",shiny_path,">") )
+}
 
 ## ---- echo=TRUE, results="hide", message=FALSE--------------------------------
 library(idiogramFISH)
@@ -506,33 +543,6 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               ,OTUlegendHeight = 1.5     # space among OTU names when in legend - OTUplacing
               ,OTUTextSize = .7          # font size of OTU
 ); #dev.off() # close svg()
-
-## ----citation, echo=FALSE, comment=NA,results='asis'--------------------------
-print(citation("idiogramFISH"),bibtex=FALSE )
-
-## ---- echo=TRUE, results=FALSE, eval=FALSE------------------------------------
-#  sink("idiogramFISH.bib")
-#  toBibtex(citation("idiogramFISH"))
-#  sink()
-
-## ---- echo=F,  results="asis", eval=T-----------------------------------------
-img1_path <- "../man/figures/kofi1.png"
-img1_path <- normalizePath(img1_path)
-
-if(file.exists(img1_path)) {
-  cat(paste0("[Fernando Roa](https://ferroao.gitlab.io/curriculumpu/){target='_blank'}&nbsp;&nbsp;<a href='https://ko-fi.com/X7X71PZZG' target='_blank'><img src=",img1_path," width=\"10%\">") )
-} else {
-  cat(paste0("[Fernando Roa](https://ferroao.gitlab.io/curriculumpu/){target='_blank'}"))  
-}
-
-## ---- echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis", eval=FALSE----
-#  cat("<a href='https://ko-fi.com/X7X71PZZG' target='_blank'><img height='12' style='border:0px;height:12px;' src='../man/figures/kofi1.png' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>")
-
-## ----include=FALSE,eval=FALSE-------------------------------------------------
-#  # automatically create a bib database for R packages, this is currently not used by vignette refs/packages2.bib
-#  knitr::write_bib(c(
-#    .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","pkgdown","crayon","ggtree","ggplot2","ggpubr","phytools","plyr","dplyr","tidyr","rentrez"
-#  ), 'refs/packages2.bib')
 
 ## ---- echo=F------------------------------------------------------------------
 chapterFile_plotting<- "../chaptersBLOCK/01-plotting.Rmd"

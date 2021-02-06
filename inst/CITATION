@@ -5,7 +5,7 @@ note <- sprintf("R-package. version %s", meta$Version)
 
 citEntry(entry = "manual",
     key = paste0("Roa",year),
-    title = "{idiogramFISH}: {I}diograms with Marks and Karyotype Indices",
+    title = "{idiogramFISH}: Shiny app. {I}diograms with Marks and Karyotype Indices",
     author = c(person("Fernando", "Roa"),
                person("Mariana", c("PC","Telles") ) ),
     organization = "Universidade Federal de Goiás",
@@ -14,5 +14,5 @@ citEntry(entry = "manual",
     year = year,
     url = "https://ferroao.gitlab.io/manualidiogramfish/",
     DOI = "10.5281/zenodo.3579417",
-    textVersion  = paste0("Roa F, Telles MPC (", year ,") idiogramFISH: Idiograms with Marks and Karyotype Indices, Universidade Federal de Goiás. Brazil. ",note," https://ferroao.gitlab.io/manualidiogramfish/. doi:<!-- breaklink -->10.5281/zenodo.3579417" )
+    textVersion  = paste0("Roa F, Telles MPC (", year ,") idiogramFISH: Shiny app. Idiograms with Marks and Karyotype Indices, Universidade Federal de Goiás. Brazil. ",note," https://ferroao.gitlab.io/manualidiogramfish/. doi:<!-- breaklink -->10.5281/zenodo.3579417" )
 )
