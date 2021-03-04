@@ -6,6 +6,7 @@
 \alias{dfMarkColor}
 \alias{humMarkColor}
 \alias{mydfMaColor}
+\alias{dfMarkColor5S25S}
 \title{Mark characteristics}
 \format{
 dfMarkColor a data.frame with columns:
@@ -21,6 +22,8 @@ parameter
 An object of class \code{data.frame} with 395 rows and 3 columns.
 
 An object of class \code{data.frame} with 6 rows and 3 columns.
+
+An object of class \code{data.frame} with 2 rows and 3 columns.
 }
 \source{
 \url{http://www.pathology.washington.edu/research/cytopages/idiograms/human/}
@@ -31,6 +34,8 @@ dfMarkColor
 humMarkColor
 
 mydfMaColor
+
+dfMarkColor5S25S
 }
 \description{
 style column does not apply to cen. marks, only color.
@@ -40,6 +45,8 @@ dfMarkColor: Example General data for marks NOT position
 humMarkColor: human bands' characteristics, from Adler (1994)
 
 mydfMaColor: mark characteristics used in vignette of phylogeny
+
+dfMarkColor5S25S: mark characteristics used in circular plot vignette
 }
 \references{
 Adler 1994. Idiogram Album. URL:

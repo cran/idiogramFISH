@@ -14,45 +14,45 @@ idiogramFISH
 
 The goal of idiogramFISH is to plot idiograms of karyotypes, plasmids
 and circ. chr. having a set of data.frames for chromosome data and
-optionally marks’ data (`plotIdiograms` function) (Roa and PC Telles,
-[2021](#ref-Roa2021)). Idiograms can also be plotted in concentric
+optionally marks’ data (`plotIdiograms` function) ([Roa and PC Telles,
+2021](#ref-Roa2021)). Idiograms can also be plotted in concentric
 circles. Separated chromatids can be visible when not in a circular
 plot.<br> <br>Six styles of marks are available: square (squareLeft),
-dots, cM (cMLeft), cenStyle, upArrow, downArrow; its legend (label) can
-be drawn inline or to the right of karyotypes. It is possible to
-calculate also chromosome and karyotype indexes (Romero-Zarco,
-[1986](#ref-Zarco1986new); Watanabe *et al.*, [1999](#ref-Watanabe1999))
-and classify chromosome morphology in the categories of Levan
-([1964](#ref-Levan1964)), and
+dots, cM (cMLeft), cenStyle, upArrow (downArrow), exProtein (inProtein);
+its legend (label) can be drawn inline or to the right of karyotypes.
+Three styles of centromere are available: rounded, triangular and
+internal (inProtein). It is possible to calculate also chromosome and
+karyotype indexes ([Romero-Zarco, 1986](#ref-Zarco1986new); [Watanabe
+*et al.*, 1999](#ref-Watanabe1999)) and classify chromosome morphology
+in the categories of Levan ([1964](#ref-Levan1964)), and
 [Guerra](https://ferroao.gitlab.io/guerra1986/Guerra1986.pdf)
 ([1986](#ref-Guerra1986d)).
 
-IdiogramFISH was written in R (R Core Team, [2020](#ref-R-base)) and
-also uses crayon (Csárdi, [2017](#ref-R-crayon)), tidyr (Wickham and
-Henry, [2020](#ref-R-tidyr)) and dplyr packages (Wickham *et al.*,
-[2019](#ref-R-dplyr)[a](#ref-R-dplyr)). Documentation was written with
-R-packages roxygen2 (Wickham *et al.*, [2018](#ref-R-roxygen2)), usethis
-(Wickham and Bryan, [2019](#ref-R-usethis)), bookdown (Xie,
-[2016](#ref-bookdown2016)), knitr (Xie, [2015](#ref-Xie2015)), pkgdown
-(Wickham and Hesselberth, [2019](#ref-R-pkgdown)), Rmarkdown (Xie *et
-al.*, [2018](#ref-rmarkdown2018)), rvcheck (Yu,
-[2019](#ref-R-rvcheck)[a](#ref-R-rvcheck)), badger (Yu,
-[2019](#ref-R-badger)[b](#ref-R-badger)), kableExtra (Zhu,
-[2019](#ref-R-kableExtra)), rmdformats (Barnier,
-[2020](#ref-R-rmdformats)) and RCurl (Temple Lang and CRAN team,
-[2019](#ref-R-RCurl)). For some vignette figures, packages rentrez
-(Winter, [2017](#ref-rentrez2017)), plyr (Wickham,
-[2011](#ref-plyr2011)), phytools (Revell, [2012](#ref-phytools2012)),
-ggtree (Yu *et al.*, [2018](#ref-ggtree2018)), ggplot2 (Wickham,
-[2016](#ref-ggplot22016)) and ggpubr (Kassambara, [2019](#ref-R-ggpubr))
-were used.
+IdiogramFISH was written in R ([R Core Team, 2019](#ref-R-base)) and
+also uses crayon ([Csárdi, 2017](#ref-R-crayon)), tidyr ([Wickham and
+Henry, 2020](#ref-R-tidyr)), plyr ([Wickham, 2011](#ref-plyr2011)) and
+dplyr packages ([Wickham *et al.*, 2019a](#ref-R-dplyr)). Documentation
+was written with R-packages roxygen2 ([Wickham *et al.*,
+2018](#ref-R-roxygen2)), usethis ([Wickham and Bryan,
+2019](#ref-R-usethis)), bookdown ([Xie, 2016](#ref-bookdown2016)), knitr
+([Xie, 2015](#ref-Xie2015)), pkgdown ([Wickham and Hesselberth,
+2019](#ref-R-pkgdown)), Rmarkdown ([Xie *et al.*,
+2018](#ref-rmarkdown2018)), rvcheck ([Yu, 2019a](#ref-R-rvcheck)),
+badger ([Yu, 2019b](#ref-R-badger)), kableExtra ([Zhu,
+2019](#ref-R-kableExtra)), rmdformats ([Barnier,
+2020](#ref-R-rmdformats)) and RCurl ([Temple Lang and CRAN team,
+2019](#ref-R-RCurl)). For some vignette figures, packages rentrez
+([Winter, 2017](#ref-rentrez2017)), phytools ([Revell,
+2012](#ref-phytools2012)), ggtree ([Yu *et al.*,
+2018](#ref-ggtree2018)), ggplot2 ([Wickham, 2016](#ref-ggplot22016)) and
+ggpubr ([Kassambara, 2019](#ref-R-ggpubr)) were used.
 
-In addition, the shiny app `runBoard()` uses shiny (Chang *et al.*,
-[2021](#ref-R-shiny)), shinydashboard (Chang and Borges Ribeiro,
-[2018](#ref-R-shinydashboard)), rhandsontable (Owen,
-[2018](#ref-R-rhandsontable)), gtools (Warnes *et al.*,
-[2020](#ref-R-gtools)), rclipboard (Bihorel, [2021](#ref-R-rclipboard))
-and bib2df (Ottolinger, [2019](#ref-R-bib2df)).
+In addition, the shiny app `runBoard()` uses shiny ([Chang *et al.*,
+2021](#ref-R-shiny)), shinydashboard ([Chang and Borges Ribeiro,
+2018](#ref-R-shinydashboard)), rhandsontable ([Owen,
+2018](#ref-R-rhandsontable)), gtools ([Warnes *et al.*,
+2020](#ref-R-gtools)), rclipboard ([Bihorel, 2021](#ref-R-rclipboard))
+and bib2df ([Ottolinger, 2019](#ref-R-bib2df)).
 
 <!-- badger -->
 
@@ -71,20 +71,21 @@ Windows users: To avoid installation of packages in OneDrive
 .libPaths()
 ```
 
-or something in the line of [this](https://bit.ly/2YLNo4u)
+Or something in the line of
+[this](https://answers.microsoft.com/en-us/windows/forum/all/removing-onedrive-from-default-filefolder-location/7d3c0dd0-3af5-414a-adf4-364dc28f3148?auth=1)
 
 #### Devel. version of idiogramFISH
 
-##### From gitlab with devtools (Wickham *et al.*, [2019](#ref-R-devtools)[b](#ref-R-devtools))
+##### From gitlab with devtools ([Wickham *et al.*, 2019b](#ref-R-devtools))
 
 Attention windows users, please install
 [Rtools](https://cran.r-project.org/bin/windows/Rtools/) and
 [git](https://git-scm.com/download/win) (compilation tools).
 
 Vignettes (optional) use a lua filter, so you would need
-[pandoc](https://pandoc.org/installing.html) ver. \> 2. and
-`pandoc-citeproc` or `citeproc`. RStudio comes with pandoc.
-`rmarkdown::pandoc_version()`
+<a href="https://pandoc.org/installing.html" target="_blank">pandoc</a>
+ver. &gt; 2. and `pandoc-citeproc` or `citeproc`. RStudio comes with
+pandoc. `rmarkdown::pandoc_version()`
 
 ``` r
 # This installs package devtools, necessary for installing the dev version
@@ -94,7 +95,6 @@ url <- "https://gitlab.com/ferroao/idiogramFISH"
 
 # Packages for vignettes: (optional)
 list.of.packages <- c(
-    "plyr",
     "knitr",
     "kableExtra",
     "rmdformats",
@@ -163,11 +163,10 @@ browseVignettes("idiogramFISH")
 
 To cite idiogramFISH in publications, please use:
 
-Roa F, Telles MPC (2020) idiogramFISH: Shiny app. Idiograms with Marks
+Roa F, Telles MPC (2021) idiogramFISH: Shiny app. Idiograms with Marks
 and Karyotype Indices, Universidade Federal de Goiás. Brazil. R-package.
-version 2.0.0 <https://ferroao.gitlab.io/manualidiogramfish/>.
-doi:<!-- breaklink
-  -->10.5281/zenodo.3579417
+version 2.0.2 <https://ferroao.gitlab.io/manualidiogramfish/>.
+doi:<!-- breaklink -->10.5281/zenodo.3579417
 
 To write citation to file:
 
@@ -198,10 +197,9 @@ runBoard()
 Define your plotting window size with something like `par(pin=c(10,6))`,
 or with `svg()`, `png()`, etc. Add chromosome morphology according to
 [Guerra](https://ferroao.gitlab.io/guerra1986/Guerra1986.pdf)
-([1986](#ref-Guerra1986d)) or (Levan *et al.*, [1964](#ref-Levan1964))
+([1986](#ref-Guerra1986d)) or ([Levan *et al.*, 1964](#ref-Levan1964))
 
 ``` r
-
 library(idiogramFISH)
 
 data(dfOfChrSize) # chromsome data
@@ -253,279 +251,144 @@ plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
     dfOfChrSize
 
 <table>
-
 <thead>
-
 <tr>
-
 <th style="text-align:left;">
-
 chrName
-
 </th>
-
 <th style="text-align:right;">
-
 shortArmSize
-
 </th>
-
 <th style="text-align:right;">
-
 longArmSize
-
 </th>
-
 <th style="text-align:right;">
-
 Mbp
-
 </th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
 <tr>
-
 <td style="text-align:left;">
-
 1
-
 </td>
-
 <td style="text-align:right;">
-
 3
-
 </td>
-
 <td style="text-align:right;">
-
 4
-
 </td>
-
 <td style="text-align:right;">
-
 700
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 2
-
 </td>
-
 <td style="text-align:right;">
-
 4
-
 </td>
-
 <td style="text-align:right;">
-
 5
-
 </td>
-
 <td style="text-align:right;">
-
 900
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 3
-
 </td>
-
 <td style="text-align:right;">
-
 2
-
 </td>
-
 <td style="text-align:right;">
-
 3
-
 </td>
-
 <td style="text-align:right;">
-
 500
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 X
-
 </td>
-
 <td style="text-align:right;">
-
 1
-
 </td>
-
 <td style="text-align:right;">
-
 2
-
 </td>
-
 <td style="text-align:right;">
-
 300
-
 </td>
-
 </tr>
-
 </tbody>
-
 </table>
 
     dfMarkColor
 
 <table>
-
 <thead>
-
 <tr>
-
 <th style="text-align:left;">
-
 markName
-
 </th>
-
 <th style="text-align:left;">
-
 markColor
-
 </th>
-
 <th style="text-align:left;">
-
 style
-
 </th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
 <tr>
-
 <td style="text-align:left;">
-
 5S
-
 </td>
-
 <td style="text-align:left;">
-
 red
-
 </td>
-
 <td style="text-align:left;">
-
 dots
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 45S
-
 </td>
-
 <td style="text-align:left;">
-
 chartreuse3
-
 </td>
-
 <td style="text-align:left;">
-
 square
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 DAPI
-
 </td>
-
 <td style="text-align:left;">
-
 blue
-
 </td>
-
 <td style="text-align:left;">
-
 square
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 CMA
-
 </td>
-
 <td style="text-align:left;">
-
 darkgoldenrod1
-
 </td>
-
 <td style="text-align:left;">
-
 square
-
 </td>
-
 </tr>
-
 </tbody>
-
 </table>
 
 `p, q` and `w` marks can have empty columns `markDistCen` and `markSize`
@@ -534,253 +397,129 @@ since v. 1.9.1 to plot whole arms (`p`, `q`) and whole chr. `w`.
     dfOfMarks2
 
 <table>
-
 <thead>
-
 <tr>
-
 <th style="text-align:left;">
-
 chrName
-
 </th>
-
 <th style="text-align:left;">
-
 markName
-
 </th>
-
 <th style="text-align:left;">
-
 chrRegion
-
 </th>
-
 <th style="text-align:right;">
-
 markSize
-
 </th>
-
 <th style="text-align:right;">
-
 markDistCen
-
 </th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
 <tr>
-
 <td style="text-align:left;">
-
 1
-
 </td>
-
 <td style="text-align:left;">
-
 5S
-
 </td>
-
 <td style="text-align:left;">
-
 p
-
 </td>
-
 <td style="text-align:right;">
-
 0.8
-
 </td>
-
 <td style="text-align:right;">
-
 0.5
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 1
-
 </td>
-
 <td style="text-align:left;">
-
 45S
-
 </td>
-
 <td style="text-align:left;">
-
 q
-
 </td>
-
 <td style="text-align:right;">
-
 1.0
-
 </td>
-
 <td style="text-align:right;">
-
 0.5
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 X
-
 </td>
-
 <td style="text-align:left;">
-
 45S
-
 </td>
-
 <td style="text-align:left;">
-
 p
-
 </td>
-
 <td style="text-align:right;">
-
 NA
-
 </td>
-
 <td style="text-align:right;">
-
 NA
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 3
-
 </td>
-
 <td style="text-align:left;">
-
 DAPI
-
 </td>
-
 <td style="text-align:left;">
-
 q
-
 </td>
-
 <td style="text-align:right;">
-
 1.0
-
 </td>
-
 <td style="text-align:right;">
-
 1.0
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 1
-
 </td>
-
 <td style="text-align:left;">
-
 DAPI
-
 </td>
-
 <td style="text-align:left;">
-
 cen
-
 </td>
-
 <td style="text-align:right;">
-
 NA
-
 </td>
-
 <td style="text-align:right;">
-
 NA
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 X
-
 </td>
-
 <td style="text-align:left;">
-
 CMA
-
 </td>
-
 <td style="text-align:left;">
-
 cen
-
 </td>
-
 <td style="text-align:right;">
-
 NA
-
 </td>
-
 <td style="text-align:right;">
-
 NA
-
 </td>
-
 </tr>
-
 </tbody>
-
 </table>
 
 #### 2 How to plot a karyotype of holocentrics:
@@ -811,7 +550,7 @@ plotIdiograms(dfChrSize  =dfChrSizeHolo, # data.frame of chr. size
               ,ylimBotMod=.2           # modify ylim bottom argument of plot
               ,legendHeight=.5         # height of legend labels
               ,legendWidth = 1.2       # width of legend labels
-              ,xModifier = .025        # separ. among chromatids
+              ,xModifier = 20        # separ. among chromatids
 ); # dev.off() # close svg()
 ```
 
@@ -822,538 +561,279 @@ plotIdiograms(dfChrSize  =dfChrSizeHolo, # data.frame of chr. size
     dfChrSizeHolo
 
 <table>
-
 <thead>
-
 <tr>
-
 <th style="text-align:right;">
-
 chrName
-
 </th>
-
 <th style="text-align:right;">
-
 chrSize
-
 </th>
-
 <th style="text-align:right;">
-
 Mbp
-
 </th>
-
 <th style="text-align:left;">
-
 OTU
-
 </th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
 <tr>
-
 <td style="text-align:right;">
-
 1
-
 </td>
-
 <td style="text-align:right;">
-
 3
-
 </td>
-
 <td style="text-align:right;">
-
 300
-
 </td>
-
 <td style="text-align:left;">
-
 Species holo
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:right;">
-
 2
-
 </td>
-
 <td style="text-align:right;">
-
 4
-
 </td>
-
 <td style="text-align:right;">
-
 400
-
 </td>
-
 <td style="text-align:left;">
-
 Species holo
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:right;">
-
 3
-
 </td>
-
 <td style="text-align:right;">
-
 2
-
 </td>
-
 <td style="text-align:right;">
-
 200
-
 </td>
-
 <td style="text-align:left;">
-
 Species holo
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:right;">
-
 4
-
 </td>
-
 <td style="text-align:right;">
-
 5
-
 </td>
-
 <td style="text-align:right;">
-
 500
-
 </td>
-
 <td style="text-align:left;">
-
 Species holo
-
 </td>
-
 </tr>
-
 </tbody>
-
 </table>
 
     dfMarkColor
 
 <table>
-
 <thead>
-
 <tr>
-
 <th style="text-align:left;">
-
 markName
-
 </th>
-
 <th style="text-align:left;">
-
 markColor
-
 </th>
-
 <th style="text-align:left;">
-
 style
-
 </th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
 <tr>
-
 <td style="text-align:left;">
-
 5S
-
 </td>
-
 <td style="text-align:left;">
-
 red
-
 </td>
-
 <td style="text-align:left;">
-
 dots
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 45S
-
 </td>
-
 <td style="text-align:left;">
-
 chartreuse3
-
 </td>
-
 <td style="text-align:left;">
-
 square
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 DAPI
-
 </td>
-
 <td style="text-align:left;">
-
 blue
-
 </td>
-
 <td style="text-align:left;">
-
 square
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 CMA
-
 </td>
-
 <td style="text-align:left;">
-
 darkgoldenrod1
-
 </td>
-
 <td style="text-align:left;">
-
 square
-
 </td>
-
 </tr>
-
 </tbody>
-
 </table>
 
     dfMarkPosHolo
 
 <table>
-
 <thead>
-
 <tr>
-
 <th style="text-align:right;">
-
 chrName
-
 </th>
-
 <th style="text-align:left;">
-
 markName
-
 </th>
-
 <th style="text-align:right;">
-
 markPos
-
 </th>
-
 <th style="text-align:right;">
-
 markSize
-
 </th>
-
 <th style="text-align:left;">
-
 OTU
-
 </th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
 <tr>
-
 <td style="text-align:right;">
-
 3
-
 </td>
-
 <td style="text-align:left;">
-
 5S
-
 </td>
-
 <td style="text-align:right;">
-
 1.0
-
 </td>
-
 <td style="text-align:right;">
-
 0.5
-
 </td>
-
 <td style="text-align:left;">
-
 Species holo
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:right;">
-
 3
-
 </td>
-
 <td style="text-align:left;">
-
 DAPI
-
 </td>
-
 <td style="text-align:right;">
-
 1.5
-
 </td>
-
 <td style="text-align:right;">
-
 0.5
-
 </td>
-
 <td style="text-align:left;">
-
 Species holo
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:right;">
-
 1
-
 </td>
-
 <td style="text-align:left;">
-
 45S
-
 </td>
-
 <td style="text-align:right;">
-
 2.0
-
 </td>
-
 <td style="text-align:right;">
-
 0.5
-
 </td>
-
 <td style="text-align:left;">
-
 Species holo
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:right;">
-
 2
-
 </td>
-
 <td style="text-align:left;">
-
 DAPI
-
 </td>
-
 <td style="text-align:right;">
-
 2.0
-
 </td>
-
 <td style="text-align:right;">
-
 0.5
-
 </td>
-
 <td style="text-align:left;">
-
 Species holo
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:right;">
-
 4
-
 </td>
-
 <td style="text-align:left;">
-
 CMA
-
 </td>
-
 <td style="text-align:right;">
-
 2.0
-
 </td>
-
 <td style="text-align:right;">
-
 0.5
-
 </td>
-
 <td style="text-align:left;">
-
 Species holo
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:right;">
-
 4
-
 </td>
-
 <td style="text-align:left;">
-
 5S
-
 </td>
-
 <td style="text-align:right;">
-
 0.5
-
 </td>
-
 <td style="text-align:right;">
-
 0.5
-
 </td>
-
 <td style="text-align:left;">
-
 Species holo
-
 </td>
-
 </tr>
-
 </tbody>
-
 </table>
 
-#### 3\. Plotting both mono. and holo.
+#### 3. Plotting both mono. and holo.
 
 See vignettes for a circular version.
 
-Merge data.frames with plyr (Wickham, [2011](#ref-plyr2011))
+Merge data.frames with plyr ([Wickham, 2011](#ref-plyr2011))
 
 ``` r
 # chromsome data, if only 1 species, column OTU is optional
@@ -1421,6 +901,8 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               
               # for Circular Plot, add:
               
+              # ,useOneDot=TRUE
+              
               # ,circularPlot = TRUE       # circularPlot
               # ,shrinkFactor = .9         # percentage 1 = 100% of circle with chr.
               # ,circleCenter = 3          # X coordinate of circleCenter (affects legend pos.)
@@ -1428,8 +910,9 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               
               # ,OTUsrt = 0                # angle for OTU name (or number)
               # ,OTUplacing = "number"     # Use number and legend instead of name
-              # ,OTULabelSpacerx = -1.6    # modify position of OTU label, when OTUplacing="number" or "simple"
+              # ,OTULabelSpacerx = -0.6    # modify position of OTU label, when OTUplacing="number" or "simple"
               # ,OTUlegendHeight = 1.5     # space among OTU names when in legend - OTUplacing
+              # ,separFactor = 0.75        # alter separ. of kar.
 ); # dev.off() # close svg()
 ```
 
@@ -1441,37 +924,39 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
 
 <div id="refs_normal">
 
-<div id="ref-Guerra1986d">
+<div id="ref-Guerra1986d" class="csl-entry">
 
-Guerra M. 1986. Reviewing the chromosome nomenclature of Levan et al.
-*Brazilian Journal of Genetics*, 9(4): 741–743 
+Guerra M. 1986. <span class="nocase">Reviewing the chromosome
+nomenclature of Levan et al.</span> *Brazilian Journal of Genetics*,
+9(4): 741–743
 
 </div>
 
-<div id="ref-Levan1964">
+<div id="ref-Levan1964" class="csl-entry">
 
-Levan A, Fredga K, Sandberg AA. 1964. Nomenclature for centromeric
-position on chromosomes *Hereditas*, 52(2): 201–220.
-<https://doi.org/10.1111/j.1601-5223.1964.tb01953.x>.
+Levan A, Fredga K, Sandberg AA. 1964. <span class="nocase">Nomenclature
+for centromeric position on chromosomes</span> *Hereditas*, 52(2):
+201–220. <https://doi.org/10.1111/j.1601-5223.1964.tb01953.x>.
 <https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1601-5223.1964.tb01953.x>
 
 </div>
 
-<div id="ref-Zarco1986new">
+<div id="ref-Zarco1986new" class="csl-entry">
 
-Romero-Zarco C. 1986. A new method for estimating karyotype asymmetry
-*Taxon*, 35(3): 526–530.
-<https://onlinelibrary.wiley.com/doi/abs/10.2307/1221906> 
+Romero-Zarco C. 1986. <span class="nocase">A new method for estimating
+karyotype asymmetry</span> *Taxon*, 35(3): 526–530.
+<https://onlinelibrary.wiley.com/doi/abs/10.2307/1221906>
 
 </div>
 
-<div id="ref-Watanabe1999">
+<div id="ref-Watanabe1999" class="csl-entry">
 
-Watanabe K, Yahara T, Denda T, Kosuge K. 1999. Chromosomal evolution in
-the genus Brachyscome (Asteraceae, Astereae): statistical tests
-regarding correlation between changes in karyotype and habit using
-phylogenetic information *Journal of Plant Research*, 112: 145–161.
-<https://link.springer.com/article/10.1007/PL00013869> 
+Watanabe K, Yahara T, Denda T, Kosuge K. 1999. <span
+class="nocase">Chromosomal evolution in the genus Brachyscome
+(Asteraceae, Astereae): statistical tests regarding correlation between
+changes in karyotype and habit using phylogenetic information</span>
+*Journal of Plant Research*, 112: 145–161.
+<https://link.springer.com/article/10.1007/PL00013869>
 
 </div>
 
@@ -1481,37 +966,29 @@ phylogenetic information *Journal of Plant Research*, 112: 145–161.
 
 <div id="refs_software">
 
-<div id="ref-R-rmdformats">
-
-Barnier J. 2020. *Rmdformats: HTML output formats and templates for
-’rmarkdown’ documents*. R package version 0.3.7.
-<https://CRAN.R-project.org/package=rmdformats> 
-
-</div>
-
-<div id="ref-R-crayon">
+<div id="ref-R-crayon" class="csl-entry">
 
 Csárdi G. 2017. *Crayon: Colored terminal output*. R package version
-1.3.4. <https://CRAN.R-project.org/package=crayon> 
+1.3.4. <https://CRAN.R-project.org/package=crayon>
 
 </div>
 
-<div id="ref-R-ggpubr">
+<div id="ref-R-ggpubr" class="csl-entry">
 
-Kassambara A. 2019. *Ggpubr: ’Ggplot2’ based publication ready plots*. R
-package version 0.2.3. <https://CRAN.R-project.org/package=ggpubr> 
+Kassambara A. 2019. *Ggpubr: ’ggplot2’ based publication ready plots*. R
+package version 0.2.3. <https://CRAN.R-project.org/package=ggpubr>
 
 </div>
 
-<div id="ref-R-base">
+<div id="ref-R-base" class="csl-entry">
 
-R Core Team. 2020. *R: A language and environment for statistical
+R Core Team. 2019. *R: A language and environment for statistical
 computing* R Foundation for Statistical Computing, Vienna, Austria.
-<https://www.R-project.org/> 
+<https://www.R-project.org/>
 
 </div>
 
-<div id="ref-phytools2012">
+<div id="ref-phytools2012" class="csl-entry">
 
 Revell LJ. 2012. Phytools: An r package for phylogenetic comparative
 biology (and other things). *Methods in Ecology and Evolution*, 3:
@@ -1520,67 +997,68 @@ biology (and other things). *Methods in Ecology and Evolution*, 3:
 
 </div>
 
-<div id="ref-Roa2021">
+<div id="ref-Roa2021" class="csl-entry">
 
-Roa F, PC Telles M. 2021. *idiogramFISH: Shiny app. Idiograms with marks
-and karyotype indices* Universidade Federal de Goiás, UFG, Goiânia.
-R-package. version 2.0.0. <https://doi.org/10.5281/zenodo.3579417>.
-<https://ferroao.gitlab.io/manualidiogramfish/> 
+Roa F, PC Telles M. 2021. *<span class="nocase">idiogramFISH</span>:
+Shiny app. Idiograms with marks and karyotype indices* Universidade
+Federal de Goiás, UFG, Goiânia. R-package. version 2.0.0.
+<https://doi.org/10.5281/zenodo.3579417>.
+<https://ferroao.gitlab.io/manualidiogramfish/>
 
 </div>
 
-<div id="ref-plyr2011">
+<div id="ref-plyr2011" class="csl-entry">
 
 Wickham H. 2011. The split-apply-combine strategy for data analysis
 *Journal of Statistical Software*, 40(1): 1–29.
-<https://www.jstatsoft.org/article/view/v040i01> 
+<https://www.jstatsoft.org/article/view/v040i01>
 
 </div>
 
-<div id="ref-ggplot22016">
+<div id="ref-ggplot22016" class="csl-entry">
 
-Wickham H. 2016. *Ggplot2: Elegant graphics for data analysis*
-Springer-Verlag New York. <https://ggplot2.tidyverse.org> 
+Wickham H. 2016. *ggplot2: Elegant graphics for data analysis*
+Springer-Verlag New York. <https://ggplot2.tidyverse.org>
 
 </div>
 
-<div id="ref-R-dplyr">
+<div id="ref-R-dplyr" class="csl-entry">
 
 Wickham H, François R, Henry L, Müller K. 2019a. *Dplyr: A grammar of
 data manipulation*. R package version 0.8.3.
-<https://CRAN.R-project.org/package=dplyr> 
+<https://CRAN.R-project.org/package=dplyr>
 
 </div>
 
-<div id="ref-R-tidyr">
+<div id="ref-R-tidyr" class="csl-entry">
 
 Wickham H, Henry L. 2020. *Tidyr: Tidy messy data*. R package version
-1.0.2. <https://CRAN.R-project.org/package=tidyr> 
+1.0.2. <https://CRAN.R-project.org/package=tidyr>
 
 </div>
 
-<div id="ref-R-devtools">
+<div id="ref-R-devtools" class="csl-entry">
 
 Wickham H, Hester J, Chang W. 2019b. *Devtools: Tools to make developing
 r packages easier*. R package version 2.2.1.
-<https://CRAN.R-project.org/package=devtools> 
+<https://CRAN.R-project.org/package=devtools>
 
 </div>
 
-<div id="ref-rentrez2017">
+<div id="ref-rentrez2017" class="csl-entry">
 
-Winter DJ. 2017. rentrez: An r package for the ncbi eUtils api *The R
-Journal*, 9(2): 520–526 
+Winter DJ. 2017. <span class="nocase">rentrez</span>: An r package for
+the NCBI eUtils API *The R Journal*, 9: 520–526
 
 </div>
 
-<div id="ref-ggtree2018">
+<div id="ref-ggtree2018" class="csl-entry">
 
 Yu G, Lam TT-Y, Zhu H, Guan Y. 2018. Two methods for mapping and
 visualizing associated data on phylogeny using ggtree. *Molecular
-Biology and Evolution*, 35(2): 3041–3043.
+Biology and Evolution*, 35: 3041–3043.
 <https://doi.org/10.1093/molbev/msy194>.
-<https://academic.oup.com/mbe/article/35/12/3041/5142656> 
+<https://academic.oup.com/mbe/article/35/12/3041/5142656>
 
 </div>
 
@@ -1590,47 +1068,47 @@ Biology and Evolution*, 35(2): 3041–3043.
 
 <div id="refs_shiny">
 
-<div id="ref-R-rclipboard">
+<div id="ref-R-rclipboard" class="csl-entry">
 
 Bihorel S. 2021. *Rclipboard: Shiny/r wrapper for clipboard.js*. R
-package version 0.1.3. <https://github.com/sbihorel/rclipboard/> 
+package version 0.1.3. <https://github.com/sbihorel/rclipboard/>
 
 </div>
 
-<div id="ref-R-shinydashboard">
+<div id="ref-R-shinydashboard" class="csl-entry">
 
 Chang W, Borges Ribeiro B. 2018. *Shinydashboard: Create dashboards with
 shiny*. R package version 0.7.1.
-<http://rstudio.github.io/shinydashboard/> 
+<http://rstudio.github.io/shinydashboard/>
 
 </div>
 
-<div id="ref-R-shiny">
+<div id="ref-R-shiny" class="csl-entry">
 
 Chang W, Cheng J, Allaire J, Sievert C, Schloerke B, Xie Y, Allen J,
 McPherson J, Dipert A, Borges B. 2021. *Shiny: Web application framework
-for r*. R package version 1.6.0. <https://shiny.rstudio.com/> 
+for r*. R package version 1.6.0. <https://shiny.rstudio.com/>
 
 </div>
 
-<div id="ref-R-bib2df">
+<div id="ref-R-bib2df" class="csl-entry">
 
-Ottolinger P. 2019. *Bib2df: Parse a bibtex file to a data frame*. R
-package version 1.1.1. <https://github.com/ropensci/bib2df> 
+Ottolinger P. 2019. *bib2df: Parse a BibTeX file to a data frame*. R
+package version 1.1.1. <https://github.com/ropensci/bib2df>
 
 </div>
 
-<div id="ref-R-rhandsontable">
+<div id="ref-R-rhandsontable" class="csl-entry">
 
 Owen J. 2018. *Rhandsontable: Interface to the handsontable.js library*.
-R package version 0.3.7. <http://jrowen.github.io/rhandsontable/> 
+R package version 0.3.7. <http://jrowen.github.io/rhandsontable/>
 
 </div>
 
-<div id="ref-R-gtools">
+<div id="ref-R-gtools" class="csl-entry">
 
 Warnes GR, Bolker B, Lumley T. 2020. *Gtools: Various r programming
-tools*. R package version 3.8.2. <https://github.com/r-gregmisc/gtools> 
+tools*. R package version 3.8.2. <https://github.com/r-gregmisc/gtools>
 
 </div>
 
@@ -1640,79 +1118,87 @@ tools*. R package version 3.8.2. <https://github.com/r-gregmisc/gtools>
 
 <div id="refs_docs">
 
-<div id="ref-R-RCurl">
+<div id="ref-R-rmdformats" class="csl-entry">
 
-Temple Lang D, CRAN team. 2019. *RCurl: General network (http/ftp/...)
-client interface for r*. R package version 1.95-4.12.
-<https://CRAN.R-project.org/package=RCurl> 
+Barnier J. 2020. *Rmdformats: HTML output formats and templates for
+’rmarkdown’ documents*. R package version 0.3.7.
+<https://CRAN.R-project.org/package=rmdformats>
 
 </div>
 
-<div id="ref-R-usethis">
+<div id="ref-R-RCurl" class="csl-entry">
+
+Temple Lang D, CRAN team the. 2019. *RCurl: General network
+(HTTP/FTP/...) Client interface for r*. R package version 1.95-4.12.
+<https://CRAN.R-project.org/package=RCurl>
+
+</div>
+
+<div id="ref-R-usethis" class="csl-entry">
 
 Wickham H, Bryan J. 2019. *Usethis: Automate package and project setup*.
-R package version 1.5.1. <https://CRAN.R-project.org/package=usethis> 
+R package version 1.5.1. <https://CRAN.R-project.org/package=usethis>
 
 </div>
 
-<div id="ref-R-roxygen2">
+<div id="ref-R-roxygen2" class="csl-entry">
 
-Wickham H, Danenberg P, Eugster M. 2018. *Roxygen2: In-line
+Wickham H, Danenberg P, Eugster M. 2018. *roxygen2: In-line
 documentation for r*. R package version 6.1.1.
-<https://CRAN.R-project.org/package=roxygen2> 
+<https://CRAN.R-project.org/package=roxygen2>
 
 </div>
 
-<div id="ref-R-pkgdown">
+<div id="ref-R-pkgdown" class="csl-entry">
 
-Wickham H, Hesselberth J. 2019. *Pkgdown: Make static html documentation
+Wickham H, Hesselberth J. 2019. *Pkgdown: Make static HTML documentation
 for a package*. R package version 1.4.1.
-<https://CRAN.R-project.org/package=pkgdown> 
+<https://CRAN.R-project.org/package=pkgdown>
 
 </div>
 
-<div id="ref-Xie2015">
+<div id="ref-Xie2015" class="csl-entry">
 
 Xie Y. 2015. *Dynamic documents with R and knitr* Chapman; Hall/CRC,
-Boca Raton, Florida. ISBN 978-1498716963. <https://yihui.org/knitr/> 
+Boca Raton, Florida. ISBN 978-1498716963. <https://yihui.org/knitr/>
 
 </div>
 
-<div id="ref-bookdown2016">
+<div id="ref-bookdown2016" class="csl-entry">
 
 Xie Y. 2016. *Bookdown: Authoring books and technical documents with R
 markdown* Chapman; Hall/CRC, Boca Raton, Florida. ISBN 978-1138700109.
-<https://github.com/rstudio/bookdown> 
+<https://github.com/rstudio/bookdown>
 
 </div>
 
-<div id="ref-rmarkdown2018">
+<div id="ref-rmarkdown2018" class="csl-entry">
 
-Xie Y, Allaire J, Grolemund G. 2018. *R markdown: The definitive guide*
+Xie Y, Allaire JJ, Grolemund G. 2018. *R markdown: The definitive guide*
 Chapman; Hall/CRC, Boca Raton, Florida. ISBN 9781138359338.
-<https://bookdown.org/yihui/rmarkdown> 
+<https://bookdown.org/yihui/rmarkdown>
 
 </div>
 
-<div id="ref-R-rvcheck">
-
-Yu G. 2019a. *Rvcheck: R/package version check*. R package version
-0.1.6. <https://CRAN.R-project.org/package=rvcheck> 
-
-</div>
-
-<div id="ref-R-badger">
+<div id="ref-R-badger" class="csl-entry">
 
 Yu G. 2019b. *Badger: Badge for r package*. R package version 0.0.6.
-<https://CRAN.R-project.org/package=badger> 
+<https://CRAN.R-project.org/package=badger>
 
 </div>
 
-<div id="ref-R-kableExtra">
+<div id="ref-R-rvcheck" class="csl-entry">
 
-Zhu H. 2019. *KableExtra: Construct complex table with ’kable’ and pipe
+Yu G. 2019a. *Rvcheck: R/package version check*. R package version
+0.1.6. <https://CRAN.R-project.org/package=rvcheck>
+
+</div>
+
+<div id="ref-R-kableExtra" class="csl-entry">
+
+Zhu H. 2019. *kableExtra: Construct complex table with ’kable’ and pipe
 syntax*. R package version 1.1.0.
-<https://CRAN.R-project.org/package=kableExtra> 
+<https://CRAN.R-project.org/package=kableExtra>
 
 </div>
 

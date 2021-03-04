@@ -41,8 +41,6 @@ plotlabelsright<-function(maxx,y, markLabelSpacer,chrWidth,dfMarkColorInternal,a
 
   if(is.na(legendHeight)){
     if(exists("allMarkMaxSize")){
-#      allMarkMaxSize43<<-allMarkMaxSize
-#      normalizeToOne44<<-normalizeToOne
       legendHeight<-allMarkMaxSize*normalizeToOne
     } else {
       legendHeight<-1*normalizeToOne
@@ -50,10 +48,9 @@ plotlabelsright<-function(maxx,y, markLabelSpacer,chrWidth,dfMarkColorInternal,a
   } else {
     legendHeight<-legendHeight*normalizeToOne
   }
-  # message(crayon::green(paste0("legend right section part 3 " ) ) )
-#  legendHeight51<<-legendHeight
 
-  labely<- sapply( c(0,0,legendHeight,legendHeight), function(x) x + ( (0:(nrow(dfMarkColorInternal)-1) ) * (legendHeight*2) )
+  labely<- sapply( c(0,0,legendHeight,legendHeight)
+                   , function(x) x + ( (0:(nrow(dfMarkColorInternal)-1) ) * (legendHeight*2) )
                    ) + miny + legendYcoord
 
 
@@ -68,9 +65,11 @@ plotlabelsright<-function(maxx,y, markLabelSpacer,chrWidth,dfMarkColorInternal,a
   if(!inherits(labelx,"matrix") ) {
     labelx<-t(as.matrix(labelx) )
   }
+
   #
   # remove dots
   #
+
   labelytoplot<-labely[which(dfMarkColorInternal$style!="dots"),]
   labelxtoplot<-labelx[which(dfMarkColorInternal$style!="dots"),]
 

@@ -13,9 +13,9 @@ output:
     number_sections: true
     pandoc_args: ["--lua-filter=refs/multiple-bibliographies.lua"]
     
-bibliography_normal: [refs/allrefs.bib,refs/iqtree.bib,refs/revbayes.bib,refs/library.bib,refs/costa2015.bib,refs/costa2019.bib,refs/aurantiumMendes.bib,refs/yasuda.bib, refs/yi2018.bib]
-bibliography_software: [refs/packages.bib, refs/idiogramFISH.bib, refs/ggplotreshape.bib]
-bibliography_docs: [refs/docPackages.bib, refs/Rrefs.bib, refs/docPackages2.bib, refs/rmdformats.bib]
+bibliography_normal: [refs/normal.bib]
+bibliography_software: [refs/software.bib]
+bibliography_docs: [refs/docs.bib]
 bibliography_shiny: [refs/shinyApp.bib]
 
 csl: refs/clima5.csl
@@ -61,26 +61,11 @@ resource_files:
   - bigdfChrSizeHolo2.png
   - mydfChrSize2.png
   
-  - refs/clima5.csl
-  - refs/multiple-bibliographies.lua
-  - refs/allrefs.bib
-  - refs/iqtree.bib
-  - refs/revbayes.bib
-  - refs/packages.bib
-  - refs/idiogramFISH.bib
-  - refs/Rrefs.bib
-  - refs/docPackages.bib
-  - refs/docPackages2.bib
-  - refs/clima5.csl
-  - refs/library.bib
-  - refs/rmdformats.bib
-  - refs/costa2015.bib
-  - refs/costa2019.bib
-  - refs/aurantiumMendes.bib
-  - refs/yasuda.bib
-  - refs/yi2018.bib
-  - refs/ggplotreshape.bib
   - refs/shinyApp.bib
+  - refs/normal.bib
+  - refs/software.bib
+  - refs/docs.bib
+  - refs/multiple-bibliographies.lua
   
   - js/jquery.min.js
   - js/clipboard.min.js
@@ -187,10 +172,10 @@ cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 #Create myheader.html
 
   line1<-'<script src="https://kit.fontawesome.com/af0a13599b.js" crossorigin="anonymous"></script>'
-  line2<-'<link rel="shortcut icon" href="../man/figures/logo2.png" />'
+  line2<-'<link rel="shortcut icon" href="../man/figures/logo.png" />'
   file <- "myheader.html"
 
-if(Sys.info()['sysname']=="Windows"){
+if(Sys.info()['sysname']=="Windows") {
   
   #check internet response
   res<-!as.logical(system(paste("ping", "www.google.com")) )
@@ -242,9 +227,9 @@ cat(paste0("<img src=",img1_path,">") )
 </div>
 
 The goal of idiogramFISH is to plot idiograms of karyotypes, plasmids and circular chr. having a set of data.frames for chromosome data and optionally marks' data (`?plotIdiograms` function) [@Roa2021]. Idiograms can also be plotted in concentric circles. Separated chromatids can be visible when not in a circular plot.<br>
-    <br>Six styles of marks are available: square (squareLeft), dots, cM (cMLeft), cenStyle, upArrow, downArrow; its legend (label) can be drawn inline or to the right of karyotypes. It is possible to calculate also chromosome and karyotype indexes [@Watanabe1999;@Zarco1986new] and classify chromosome morphology in the categories of Levan [-@Levan1964], and [Guerra](https://ferroao.gitlab.io/guerra1986/Guerra1986.pdf) [-@Guerra1986d].
+    <br>Six styles of marks are available: square (squareLeft), dots, cM (cMLeft), cenStyle, upArrow (downArrow), exProtein (inProtein); its legend (label) can be drawn inline or to the right of karyotypes. Three styles of centromere are available: rounded, triangular and internal (inProtein). It is possible to calculate also chromosome and karyotype indexes [@Watanabe1999;@Zarco1986new] and classify chromosome morphology in the categories of Levan [-@Levan1964], and [Guerra](https://ferroao.gitlab.io/guerra1986/Guerra1986.pdf) [-@Guerra1986d].
 
-IdiogramFISH was written in R [@R-base] and also uses crayon [@R-crayon], tidyr [@R-tidyr] and dplyr packages [@R-dplyr]. Documentation was written with R-packages roxygen2 [@R-roxygen2], usethis [@R-usethis], bookdown [@bookdown2016], knitr [@Xie2015], pkgdown [@R-pkgdown], Rmarkdown [@rmarkdown2018], rvcheck [@R-rvcheck], badger [@R-badger], kableExtra [@R-kableExtra], rmdformats [@R-rmdformats] and RCurl [@R-RCurl]. For some vignette figures, packages rentrez [@rentrez2017], plyr [@plyr2011], phytools [@phytools2012], ggtree [@ggtree2018], ggplot2 [@ggplot22016] and ggpubr [@R-ggpubr] were used. 
+IdiogramFISH was written in R [@R-base] and also uses crayon [@R-crayon], tidyr [@R-tidyr], plyr [@plyr2011] and dplyr packages [@R-dplyr]. Documentation was written with R-packages roxygen2 [@R-roxygen2], usethis [@R-usethis], bookdown [@bookdown2016], knitr [@Xie2015], pkgdown [@R-pkgdown], Rmarkdown [@rmarkdown2018], rvcheck [@R-rvcheck], badger [@R-badger], kableExtra [@R-kableExtra], rmdformats [@R-rmdformats] and RCurl [@R-RCurl]. For some vignette figures, packages rentrez [@rentrez2017], phytools [@phytools2012], ggtree [@ggtree2018], ggplot2 [@ggplot22016] and ggpubr [@R-ggpubr] were used. 
 
 In addition, the shiny app `runBoard()` uses shiny [@R-shiny], shinydashboard [@R-shinydashboard], rhandsontable [@R-rhandsontable], gtools [@R-gtools], rclipboard [@R-rclipboard] and bib2df [@R-bib2df].
 
@@ -339,7 +324,6 @@ url <- "https://gitlab.com/ferroao/idiogramFISH"
 
 # Packages for vignettes: (optional)
 list.of.packages <- c(
-    "plyr",
     "knitr",
     "kableExtra",
     "rmdformats",
@@ -715,7 +699,7 @@ plotIdiograms(dfChrSize  =dfChrSizeHolo, # data.frame of chr. size
               ,ylimBotMod=.2           # modify ylim bottom argument of plot
               ,legendHeight=.5         # height of legend labels
               ,legendWidth = 1.2       # width of legend labels
-              ,xModifier = .025        # separ. among chromatids
+              ,xModifier = 20        # separ. among chromatids
               ); #dev.off() # close svg()
 ```
 </div>
@@ -824,7 +808,7 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               
               ,chromatids=FALSE          # do not show separ. chromatids
               
-              # for Circular Plot, add:
+              # ,useOneDot=TRUE
               
               # ,circularPlot = TRUE       # circularPlot
               # ,shrinkFactor = .9         # percentage 1 = 100% of circle with chr.
@@ -833,8 +817,9 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               
               # ,OTUsrt = 0                # angle for OTU name (or number)
               # ,OTUplacing = "number"     # Use number and legend instead of name
-              # ,OTULabelSpacerx = -1.5    # modify position of OTU label, when OTUplacing="number" or "simple"
+              # ,OTULabelSpacerx = -0.6    # modify position of OTU label, when OTUplacing="number" or "simple"
               # ,OTUlegendHeight = 1.5     # space among OTU names when in legend - OTUplacing
+              # ,separFactor = 0.75        # alter separ. of kar.
 )
 dev.off() # close png
 ```
@@ -874,20 +859,24 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               xlimRightMod=3,            # modify xlim right argument of plot
               ylimBotMod= .2             # modify ylim bottom argument of plot
               
-              ,circularPlot = T          # circularPlot
+              ,useOneDot=TRUE
+
+              ,circularPlot = TRUE       # circularPlot
               ,shrinkFactor = .9         # percentage 1 = 100% of circle with chr.
               ,circleCenter = 3          # X coordinate of circleCenter (affects legend pos.)
+              ,chrLabelSpacing = .9      # chr. names spacing
+
               ,OTUsrt = 0                # angle for OTU name (or number)
               ,OTUplacing = "number"     # Use number and legend instead of name
-              ,chrLabelSpacing = .9      # chr. names spacing
-              ,OTULabelSpacerx = -1.5    # modify position of OTU label, when OTUplacing="number" or "simple"
+              ,OTULabelSpacerx = -0.6    # modify position of OTU label, when OTUplacing="number" or "simple"
               ,OTUlegendHeight = 1.5     # space among OTU names when in legend - OTUplacing
-              ,OTUTextSize = .7          # font size of OTU
+              ,separFactor = 0.75        # alter separ. of kar.
+              
 ); #dev.off() # close svg()
 ```
 
 ```{r, echo=F}
-chapterFile_plotting<- "../chaptersBLOCK/01-plotting.Rmd"
+chapterFile_plotting<- "../chaptersBLOCK/03-plotting.Rmd"
 if(file.exists(chapterFile_plotting)){
   childExists_plotting<-TRUE
   child_docs_plotting <- chapterFile_plotting
@@ -909,7 +898,7 @@ cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io
 
 
 ```{r, echo=F}
-chapterFile_multiple<- "../chaptersBLOCK/02-multiple.Rmd"
+chapterFile_multiple<- "../chaptersBLOCK/04-multiple.Rmd"
 if(file.exists(chapterFile_multiple)){
   childExists_multiple<-TRUE
   child_docs_multiple <- chapterFile_multiple
@@ -932,7 +921,7 @@ cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io
 
 
 ```{r, echo=F}
-chapterFile_units<- "../chaptersBLOCK/03-units.Rmd"
+chapterFile_units<- "../chaptersBLOCK/05-units.Rmd"
 if(file.exists(chapterFile_units)){
   childExists_units<-TRUE
   child_docs_units <- chapterFile_units
@@ -954,7 +943,7 @@ cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io
 
 
 ```{r, echo=F}
-chapterFile0<- "../chaptersBLOCK/04-gish.Rmd"
+chapterFile0<- "../chaptersBLOCK/06-gish.Rmd"
 if(file.exists(chapterFile0)){
   childExists0<-TRUE
   child_docs0 <- chapterFile0
@@ -977,7 +966,7 @@ cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io
 
 
 ```{r, echo=F}
-chapterFile1<- "../chaptersBLOCK/05-groups.Rmd"
+chapterFile1<- "../chaptersBLOCK/07-groups.Rmd"
 if(file.exists(chapterFile1)){
   childExists1<-TRUE
   child_docs1 <- chapterFile1
@@ -999,7 +988,7 @@ cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io
 
 
 ```{r, echo=F}
-chapterFile2<- "../chaptersBLOCK/06-circular.Rmd"
+chapterFile2<- "../chaptersBLOCK/08-circular.Rmd"
 if(file.exists(chapterFile2)){
   childExists2<-TRUE
   child_docs2 <- chapterFile2
@@ -1021,7 +1010,7 @@ cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io
 
 
 ```{r, echo=F}
-chapterFile3<- "../chaptersBLOCK/07-phylogeny.Rmd"
+chapterFile3<- "../chaptersBLOCK/09-phylogeny.Rmd"
 if(file.exists(chapterFile3)){
   childExists3<-TRUE
   child_docs3 <- chapterFile3
@@ -1043,7 +1032,7 @@ cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io
 
 
 ```{r, echo=F}
-chapterFile<- "../chaptersBLOCK/08-citrushelp.Rmd"
+chapterFile<- "../chaptersBLOCK/10-citrushelp.Rmd"
 if(file.exists(chapterFile)){
   childExists<-TRUE
   child_docs <- chapterFile
@@ -1064,7 +1053,7 @@ cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io
 ```
 
 ```{r, echo=F}
-chapterFile4<- "../chaptersBLOCK/09-human.Rmd"
+chapterFile4<- "../chaptersBLOCK/11-human.Rmd"
 if(file.exists(chapterFile4)){
   childExists4<-TRUE
   child_docs4 <- chapterFile4
@@ -1085,7 +1074,7 @@ cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io
 ```
 
 ```{r, echo=F}
-chapterFile_param<- "../chaptersBLOCK/10-functions.Rmd"
+chapterFile_param<- "../chaptersBLOCK/12-functions.Rmd"
 if(file.exists(chapterFile_param)){
   childExists_param<-TRUE
   child_docs_param <- chapterFile_param
@@ -1107,7 +1096,7 @@ cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io
 
 
 ```{r, echo=F}
-chapterFile_data<- "../chaptersBLOCK/11-datasets.Rmd"
+chapterFile_data<- "../chaptersBLOCK/13-datasets.Rmd"
 if(file.exists(chapterFile_data)){
   childExists_data<-TRUE
   child_docs_data <- chapterFile_data
@@ -1128,7 +1117,7 @@ cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io
 ```
 
 ```{r, echo=F}
-chapterFile_news<- "../chaptersBLOCK/12-news.Rmd"
+chapterFile_news<- "../chaptersBLOCK/14-news.Rmd"
 if(file.exists(chapterFile_news)){
   childExists_news<-TRUE
   child_docs_news <- chapterFile_news

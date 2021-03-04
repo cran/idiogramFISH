@@ -15,11 +15,14 @@
 #' @return data.frame
 #' @importFrom grDevices col2rgb
 
-makedfMarkColor<- function(dfMarkColor,markNames,colorstoremove=NA,defaultStyleMark="square"){
+makedfMarkColor<- function(dfMarkColor,markNames,colorstoremove=NA
+                           ,defaultStyleMark="square"
+                           ,reserveDF
+                           ) {
 
   message(crayon::green(paste("By default 5S are plotted as dots, to change this behavior make your own dfMarkColor data.frame") ) )
 
-  dfMarkColor[which(dfMarkColor$style %in% "square"),]$style<-defaultStyleMark
+  tryCatch(dfMarkColor[which(dfMarkColor$style %in% "square"),]$style <- defaultStyleMark,error=function(e) "")
 
   manualcolors<-c('black','forestgreen', 'orange', 'cornflowerblue',
                     'magenta', 'darkolivegreen4',
@@ -31,13 +34,33 @@ makedfMarkColor<- function(dfMarkColor,markNames,colorstoremove=NA,defaultStyleM
 
   manualcolors<-manualcolors[!manualcolors %in% colorstoremove]
 
-  dfMarkColorNew<-data.frame(markName=markNames)
+  dfMarkColorNew <- data.frame(markName=markNames)
 
-  dfMarkColorNew$markColor<-NA
+  dfMarkColorNew$markNameNP<- gsub("^inProtein","",dfMarkColorNew$markName)
+
+  dfMarkColor$markNameNP<- gsub("^inProtein","",dfMarkColor$markName)
+
+  dfMarkColorNew$markColor <- NA
 
   manualcolors <- manualcolors[!manualcolors %in% c(dfMarkColor$markColor)]
 
-  dfMarkColorNew$markColor<-dfMarkColor$markColor[match(toupper(dfMarkColorNew$markName),toupper(dfMarkColor$markName) )]
+  dfMarkColorNew$markColor<-dfMarkColor$markColor[
+    match(toupper(dfMarkColorNew$markNameNP),toupper(dfMarkColor$markNameNP) )]
+
+  areNA<-which(is.na(dfMarkColorNew$markColor) )
+
+  if(length(areNA)){
+  dfMarkColorNew[areNA,]$markColor<- dfMarkColor$markColor[match(toupper(dfMarkColorNew[areNA,]$markNameNP),toupper(dfMarkColor$markName) )]
+  }
+
+  if(!missing(reserveDF)) {
+  dfMarkColorNew$markColor2 <- reserveDF$markColor[match(toupper(dfMarkColorNew$markName)
+                                                      ,toupper(paste0("inProtein",reserveDF$markName)  )
+                                                      )]
+  dfMarkColorNew[which(!is.na(dfMarkColorNew$markColor2)),]$markColor<-
+    dfMarkColorNew[which(!is.na(dfMarkColorNew$markColor2)),]$markColor2
+
+  }
 
   lenman <- length(dfMarkColorNew$markColor[which(is.na(dfMarkColorNew$markColor))])
 
@@ -49,12 +72,17 @@ makedfMarkColor<- function(dfMarkColor,markNames,colorstoremove=NA,defaultStyleM
 
   dfMarkColorNew$markColor[which(is.na(dfMarkColorNew$markColor))] <- manualcolors[1:lenman]
 
-  dfMarkColorNew$style <- dfMarkColor$style[match(toupper(dfMarkColorNew$markName),toupper(dfMarkColor$markName) )]
+  dfMarkColorNew$style <- dfMarkColor$style[match(toupper(dfMarkColorNew$markNameNP),toupper(dfMarkColor$markName) )]
 
-  dfMarkColorNew$style[which(is.na(dfMarkColorNew$style))]<-defaultStyleMark
+  tryCatch(dfMarkColorNew[which(dfMarkColorNew$markName %in%
+                         grep("inProtein",dfMarkColorNew$markName,value=TRUE) ),]$style<-"inProtein"
+           ,error= function(e){""} )
+
+  dfMarkColorNew$style[which(is.na(dfMarkColorNew$style))] <- defaultStyleMark
 
   return(dfMarkColorNew)
 }
+
 
 
 

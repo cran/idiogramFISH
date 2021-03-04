@@ -39,15 +39,7 @@ plotDotMarks <- function(bannedMarkName,xMarkCr,yMarkCr, rad, radX, colCr,n,xfac
                          chrWidth,listOfdfMarkPosCr,markLabelSize,pattern,labelSpacing,useOneDot,legend,ylistTransChr,rotation,
                          labelOutwards,dotsAsOval){
 
-# xMarkCrInternal42<<-xMarkCr
-# yMarkCrInternal43<<-yMarkCr
-#  # radInternal<<-rad
-#  # colCrInternal<<-colCr
-#  # nInternal<<-n
-#  # xfactorInternal<<-xfactor
-#  # colBorderCrInternal<<-colBorderCr
 
-#  rad59<<-rad
 
   if(circularPlot==FALSE){
 
@@ -117,27 +109,22 @@ plotDotMarks <- function(bannedMarkName,xMarkCr,yMarkCr, rad, radX, colCr,n,xfac
       rad<-oneDot(rad)
       # radX<-oneDot(radX)
     }
-#    rad105<<-rad
 
     xlistNewCr<-xHortoVerDots(xMarkCr,x)
 
     #
     # transform position of mark to percentage of chr.
     #
-#    yMarkCr114<<-yMarkCr
     yMarkPerCr<-markMapPerDots(yMarkCr,y)
-#    yMarkPerCr116<<-yMarkPerCr
 
     #
     #   radius size as percentage of chr.
     #
 
-#    y117<<-y
 
     radPerCr<-radDotsPer(rad,y)
     # radPerCrX<-radDotsPer(radX,y)
 
-#    radPerCr125<<-radPerCr
     #
     # chr positions
     #
@@ -148,13 +135,11 @@ plotDotMarks <- function(bannedMarkName,xMarkCr,yMarkCr, rad, radX, colCr,n,xfac
 
     ylistTransMarkCr<-transyListMarkDots(yMarkPerCr,ylistTransChr)
 
-#    ylistTransChr135<<-ylistTransChr
 
     radTransCr <- transRadDots(radPerCr,yMarkPerCr,ylistTransChr)
     # radTransCrX <- transRadDots(radPerCrX,yMarkPerCr,ylistTransChr)
 
 
-#    radTransCr136<<-radTransCr
 
     circleMapsMarksCr<- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,ylistTransMarkCr,
                                        xlistNewCr,2,0,chrWidth,unlist=TRUE, mapCircle,rotation=rotation)

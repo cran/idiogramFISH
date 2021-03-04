@@ -3,188 +3,53 @@
 \name{plotIdiograms}
 \alias{plotIdiograms}
 \title{FUNCTION to plot idiograms of karyotypes with and without centromere}
-\usage{
-plotIdiograms(
-  dfChrSize,
-  defaultFontFamily,
-  revOTUs = FALSE,
-  karHeight = 2,
-  karHeiSpace = 2.5,
-  karSepar = TRUE,
-  amoSepar = 10,
-  addMissingOTUAfter = NA,
-  addMissingOTUBefore = NA,
-  missOTUspacings = 0,
-  moveKarHor,
-  moveAllKarValueHor,
-  moveAllKarValueY,
-  karAnchorLeft,
-  karAnchorRight,
-  anchor,
-  anchorLineLty = 1,
-  anchorText = "",
-  anchorTextMParental,
-  anchorTextMoveX = 0.5,
-  anchorTextMoveY = 1,
-  anchorTextMoveParenX = 0,
-  anchorTextMoveParenY = 0,
-  anchorVsizeF = 0.5,
-  pchAnchor = 23,
-  moveAnchorV = 0,
-  moveAnchorH = 0,
-  mkhValue = 0.5,
-  n = 50,
-  notes,
-  leftNotes,
-  leftNotesUp,
-  notesTextSize = 0.4,
-  notesLeft,
-  notesPosX = 0.5,
-  notesPosY = 0,
-  leftNotesPosX = 0.5,
-  leftNotesPosY = 0,
-  leftNotesUpPosY = 0,
-  leftNoteFont = 1,
-  leftNoteFontUp = 1,
-  noteFont = 1,
-  parseTypes = TRUE,
-  parseStr2lang = FALSE,
-  propWidth = FALSE,
-  MbThreshold = 10000,
-  threshold = 35,
-  MbUnit = "Mb",
-  yTitle = "µm",
-  specialyTitle = "cM",
-  specialOTUNames = "",
-  addOTUName = TRUE,
-  OTUTextSize = 1,
-  OTUfont,
-  OTUfamily,
-  OTUasNote = FALSE,
-  OTUasLeftNote = FALSE,
-  orderChr = "size",
-  chrId = "original",
-  classMbName = "Pm.",
-  classcMName = "L.G.",
-  classChrName = "Chr.",
-  classChrNameUp = "Type",
-  classGroupName = "",
-  chrNameUp = FALSE,
-  chrIdPatternRem,
-  indexIdTextSize = 1,
-  distTextChr = 1,
-  groupUp = FALSE,
-  groupName = TRUE,
-  groupSepar = 0.5,
-  chromatids = TRUE,
-  arrowsBothChrt = TRUE,
-  holocenNotAsChromatids = FALSE,
-  excHoloFrArrToSide = FALSE,
-  xModifier,
-  xModMonoHoloRate,
-  chrWidth = 0.5,
-  chrSpacing = 0.5,
-  specialChrWidth = 0.3,
-  specialChrSpacing = 0.7,
-  chrColor = "gray",
-  chrBorderColor,
-  centromereSize = NA,
-  cenColor,
-  fixCenBorder = NULL,
-  gishCenBorder,
-  hideCenLines = 1.75,
-  roundedCen = TRUE,
-  squareness = 4,
-  lwd.chr = 0.5,
-  lwd.cM,
-  lwd.marks,
-  dfMarkPos,
-  dfCenMarks,
-  defaultStyleMark = "square",
-  markDistType = "beg",
-  protruding = 0.2,
-  origin = "b",
-  efZero = 1e-05,
-  cMBeginCenter = FALSE,
-  arrowhead = 0.3,
-  shrinkArrow = 0.3333,
-  arrowheadWidthShrink = 0.1,
-  arrowsToSide = TRUE,
-  useOneDot = FALSE,
-  dotsAsOval = FALSE,
-  dfMarkColor,
-  mycolors,
-  borderOfWhiteMarks = TRUE,
-  colorBorderMark,
-  lwd.mimicCen,
-  defCenStyleCol,
-  pattern = "",
-  legend = "aside",
-  remSimiMarkLeg = FALSE,
-  bannedMarkName,
-  bannedMarkNameAside = FALSE,
-  forbiddenMark,
-  legendWidth = 1.7,
-  legendHeight = NA,
-  markLabelSize = 1,
-  markLabelSpacer = 1,
-  legendYcoord = 0,
-  markNewLine = NA,
-  mylheight = 0.7,
-  chrSize = FALSE,
-  nsmall = 1,
-  chrSizeMbp = FALSE,
-  markPer = "",
-  showMarkPos = FALSE,
-  bToRemove = "",
-  perAsFraction = FALSE,
-  chrIndex = "both",
-  morpho = "both",
-  nameChrIndexPos = 2,
-  karIndex = TRUE,
-  karIndexPos = 0.5,
-  ruler = TRUE,
-  useMinorTicks = FALSE,
-  miniTickFactor = 10,
-  rulerPos = 0,
-  ruler.tck = -0.02,
-  rulerNumberPos = 0.5,
-  rulerNumberSize = 1,
-  rulerInterval,
-  rulerIntervalcM,
-  rulerIntervalMb,
-  ceilingFactor = 0,
-  xPosRulerTitle = 2.6,
-  yPosRulerTitle = 0,
-  rulerTitleSize = 1,
-  xlimLeftMod = 1,
-  xlimRightMod = 2,
-  ylimBotMod = 0.2,
-  ylimTopMod = 0.2,
-  callPlot = TRUE,
-  asp = 1,
-  circularPlot = FALSE,
-  verticalPlot = TRUE,
-  karSpaceHor = 0,
-  shrinkFactor = 0.9,
-  separFactor = 1.5,
-  labelSpacing = 0.7,
-  labelOutwards = FALSE,
-  chrLabelSpacing = 0.5,
-  radius = 0.5,
-  rotation = 0.5,
-  circleCenter = 1,
-  circleCenterY = 1,
-  OTUlabelSpacing = 0.3,
-  OTUsrt = 0,
-  OTUplacing = "first",
-  OTULabelSpacerx = 0,
-  OTULabelSpacery = 0,
-  OTUcentered = TRUE,
-  OTUjustif = 0,
-  OTUlegendHeight = NA,
-  roundness,
-  ...
+\usage{ plotIdiograms( dfChrSize, defaultFontFamily, revOTUs = FALSE,
+ karHeight = 2, karHeiSpace = 2.5, karSepar = TRUE, amoSepar = 10,
+ addMissingOTUAfter = NA, addMissingOTUBefore = NA, missOTUspacings = 0,
+ moveKarHor, moveAllKarValueHor, moveAllKarValueY, karAnchorLeft,
+ karAnchorRight, anchor, anchorLineLty = 1, anchorText = "",
+ anchorTextMParental, anchorTextMoveX = 0.5, anchorTextMoveY = 1,
+ anchorTextMoveParenX = 0, anchorTextMoveParenY = 0, anchorVsizeF = 0.5,
+ pchAnchor = 23, moveAnchorV = 0, moveAnchorH = 0, mkhValue = 0.5, n = 50,
+ notes, leftNotes, leftNotesUp, notesTextSize = 0.4, notesLeft, notesPosX = 0.5,
+ notesPosY = 0, leftNotesPosX = 0.5, leftNotesPosY = 0, leftNotesUpPosY = 0,
+ leftNoteFont = 1, leftNoteFontUp = 1, noteFont = 1, parseTypes = TRUE,
+ parseStr2lang = FALSE, propWidth = FALSE, MbThreshold = 10000, threshold = 35,
+ MbUnit = "Mb", yTitle = "µm", specialyTitle = "cM", specialOTUNames = "",
+ addOTUName = TRUE, OTUTextSize = 1, OTUfont, OTUfamily, OTUasNote = FALSE,
+ OTUasLeftNote = FALSE, orderChr = "size", chrId = "original",
+ classMbName = "Pm.", classcMName = "L.G.", classChrName = "Chr.",
+ classChrNameUp = "Type", classGroupName = "", chrNameUp = FALSE,
+ chrIdPatternRem, indexIdTextSize = 1, distTextChr = 1, groupUp = FALSE,
+ groupName = TRUE, groupSepar = 0.5, chromatids = TRUE, arrowsBothChrt = TRUE,
+ holocenNotAsChromatids = FALSE, excHoloFrArrToSide = FALSE, xModifier = 12,
+ xModMonoHoloRate, chrWidth = 0.5, chrSpacing = 0.5, specialChrWidth = 0.3,
+ specialChrSpacing = 0.7, chrColor = "gray", chrBorderColor,
+ centromereSize = NA, cenColor, fixCenBorder = NULL, gishCenBorder,
+ hideCenLines = 1.75, roundedCen, cenFormat = "rounded", cenFactor = 1,
+ squareness = 4, lwd.chr = 0.5, lwd.cM, lwd.marks, dfMarkPos, dfCenMarks,
+ defaultStyleMark = "square", markDistType = "beg", protruding = 0.2,
+ startPos = 0, pMarkFac = 0.25, origin = "b", efZero = 1e-05,
+ cMBeginCenter = FALSE, arrowhead = 0.3, shrinkArrow = 0.3333,
+ arrowheadWidthShrink = 0.1, arrowsToSide = TRUE, useOneDot = FALSE,
+ dotsAsOval = FALSE, dfMarkColor, mycolors, borderOfWhiteMarks = TRUE,
+ colorBorderMark, lwd.mimicCen, defCenStyleCol, pattern = "", legend = "aside",
+ remSimiMarkLeg = TRUE, bannedMarkName, bMarkNameAside = FALSE, forbiddenMark,
+ legendWidth = 1.7, legendHeight = NA, markLabelSize = 1, markLabelSpacer = 1,
+ legendYcoord = 0, markNewLine = NA, mylheight = 0.7, chrSize = FALSE,
+ nsmall = 1, chrSizeMbp = FALSE, markPer = "", showMarkPos = FALSE,
+ bToRemove = "", perAsFraction = FALSE, chrIndex = "both", morpho = "both",
+ nameChrIndexPos = 2, karIndex = TRUE, karIndexPos = 0.5, ruler = TRUE,
+ useMinorTicks = FALSE, miniTickFactor = 10, rulerPos = 0, ruler.tck = -0.02,
+ rulerNumberPos = 0.5, rulerNumberSize = 1, rulerInterval, rulerIntervalcM,
+ rulerIntervalMb, ceilingFactor = 0, xPosRulerTitle = 2.6, yPosRulerTitle = 0,
+ rulerTitleSize = 1, xlimLeftMod = 1, xlimRightMod = 2, ylimBotMod = 0.2,
+ ylimTopMod = 0.2, callPlot = TRUE, asp = 1, circularPlot = FALSE,
+ verticalPlot = TRUE, karSpaceHor = 0, shrinkFactor = 0.9, separFactor = 1.5,
+ labelSpacing = 0.7, labelOutwards = FALSE, chrLabelSpacing = 0.5, radius = 0.5,
+ rotation = 0.5, circleCenter = 1, circleCenterY = 1, OTUlabelSpacing = 0.3,
+ OTUsrt = 0, OTUplacing = "first", OTULabelSpacerx = 0, OTULabelSpacery = 0,
+ OTUcentered = TRUE, OTUjustif = 0, OTUlegendHeight = NA, roundness, ... 
 )
 }
 \arguments{
@@ -198,7 +63,7 @@ data.frame, use \code{TRUE} to reverse}
 
 \item{karHeight}{numeric, vertical size of karyotypes. See also  \code{karHeiSpace}. Defaults to \code{2}}
 
-\item{karHeiSpace}{numeric, vertical size of karyotypes including spacing. Proportional to \code{karHeight}, if overlap, increase. Defautl value \code{2.5}}
+\item{karHeiSpace}{numeric, vertical size of karyotypes including spacing. Use with \code{karSepar=FALSE}. Proportional to \code{karHeight}, if overlap, increase. Defautl value \code{2.5}}
 
 \item{karSepar}{boolean, reduce distance among karyotypes \code{FALSE} = equally
 sized karyotypes or \code{TRUE} = equally spaced karyotypes. Incompatible with \code{addMissingOTUAfter}}
@@ -349,9 +214,9 @@ also affects vertical separation of indices. Defaults to \code{1}}
 
 \item{excHoloFrArrToSide}{boolean, when \code{arrowsToSide=TRUE}, excludes holocen. from this behaviour, plotting a centered arrow only.}
 
-\item{xModifier}{numeric, for \code{chromatids=TRUE}, separation among chromatids}
+\item{xModifier}{numeric, for \code{chromatids=TRUE}, separation among chromatids. Quotient for \code{chrWidth}. Defaults to \code{12 : chrWidth/12}}
 
-\item{xModMonoHoloRate}{numeric, factor to shrink xModifier for holocen. 5 means 5 times smaller (quotient).}
+\item{xModMonoHoloRate}{numeric, factor to shrink chromatid separ. for holocen. 5 means 5 times smaller (quotient).}
 
 \item{chrWidth}{numeric, relative chromosome width. Defaults to \code{0.5}}
 
@@ -370,13 +235,17 @@ also affects vertical separation of indices. Defaults to \code{1}}
 \item{cenColor}{character, color for centromeres, if GISH use \code{NULL} or \code{NA}. Defaults to \code{chrColor}}
 
 \item{fixCenBorder}{boolean, when \code{TRUE} uses \code{chrColor} as centromere (and cen. mark) border color. See also \code{cenColor},
-\code{chrColor}, \code{colorBorderMark}, \code{borderOfWhiteMarks}. No default value. When \code{chrColor} is \code{"white"} this turns insto \code{"black"}.}
+\code{chrColor}, \code{colorBorderMark}, \code{borderOfWhiteMarks}. No default value. When \code{chrColor} is \code{"white"} this turns into \code{"black"}.}
 
 \item{gishCenBorder}{boolean, when \code{TRUE}, cen. mark border color is the same as mark color, ignoring \code{colorBorderMark}. No default.}
 
 \item{hideCenLines}{numeric, factor to multiply line width (lwd) used for covering cen. border, when \code{chrColor} is \code{white} or when \code{gishCenBorder=TRUE}}
 
-\item{roundedCen}{boolean, when \code{FALSE}, cen has triangular aspect. When \code{TRUE}, it has rounded aspect (Default).}
+\item{roundedCen}{deprecated, see cenFormat}
+
+\item{cenFormat}{boolean, when \code{"triangle"}, cen. has triangular aspect. When \code{"rounded"}, it has rounded aspect (Default). \code{"inProtein"} for using the mark with style of same name.}
+
+\item{cenFactor}{numeric, modifies any cen. mark and cen. size. Defaults to \code{1}}
 
 \item{squareness}{numeric, shape of vertices of chromosomes and square marks,
 higher values more squared. Defaults to \code{4}}
@@ -405,6 +274,10 @@ beginning of the mark (Default)}
 
 \item{protruding}{numeric, when style of mark is \code{"cM"}, fraction of chrWidth to stretch marker. Defaults to \code{0.2}. Introduced in 1.13}
 
+\item{startPos}{numeric, factor to increase separation of \code{exProtein} marks to chromosome. Defaults to \code{0}}
+
+\item{pMarkFac}{numeric, fraction of chr. size for \code{exProtein} style marks. Defaults to \code{0.25}}
+
 \item{origin, }{For non-monocentric chr. (for holocentrics only) Use \code{"b"} (default) if distance to mark in (\code{"markPos"} column in \code{"dfMarkPos"}) data.frame measured from bottom of chromosome, use \code{"t"} for distance to mark from top of chr.}
 
 \item{efZero, }{numeric, numbers below this one will be considered as zero, for comparison purposes. Defaults to \code{1e-5}}
@@ -425,7 +298,7 @@ beginning of the mark (Default)}
 
 \item{dfMarkColor}{data.frame, optional, specifying colors and style for marks (sites);
 columns: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: \code{square}, \code{squareLeft}, \code{dots}, \code{cM},
-\code{"cMLeft"}, \code{"cenStyle"}, \code{"upArrow"}, \code{"downArrow"}.
+\code{"cMLeft"}, \code{"cenStyle"}, \code{"upArrow"}, \code{"downArrow"}, \code{"exProtein"}.
 (if column \code{style} missing all (except 5S) are plotted as in param. \code{defaultStyleMark}).}
 
 \item{mycolors}{character vector, optional, i.e. \code{c("blue",} \code{} \code{"red",} \code{} \code{"green")} for specifying color of marks in order of appearance. if diverges with number of marks will be recycled if \code{dfMarkColor} present, mycolors will be ignored. To know the order of your marks use something like: \code{unique(c(dfMarkPos$markName,} \code{dfCenMarks$markName) ) }}
@@ -443,11 +316,11 @@ columns: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: 
 \item{legend}{character, \code{""} for no legend; \code{"inline"} prints labels near
 chromosomes; \code{"aside"} prints legend to the right of karyotypes (default). See \code{markLabelSpacer}}
 
-\item{remSimiMarkLeg}{boolean, when \code{legend="aside"}, if you use \code{pattern}, you can have several marks with same name. When \code{TRUE} this remove this pseudoduplicates from legend. Be sure that this pseudoduplicates have the same color, otherwise you should use \code{FALSE} (default).}
+\item{remSimiMarkLeg}{boolean, when \code{legend="aside"}, if you use \code{pattern}, you can have several marks with same name. When \code{TRUE} this remove this pseudoduplicates from legend. Be sure that this pseudoduplicates have the same color, otherwise you should use \code{TRUE} (default).}
 
-\item{bannedMarkName}{character, character string or vector with mark names to be removed from plot. Not the marks but the labels. Except when \code{bannedMarkNameAside} is used.}
+\item{bannedMarkName}{character, character string or vector with mark names to be removed from plot. Not the marks but the labels. Except when \code{bMarkNameAside} is used.}
 
-\item{bannedMarkNameAside}{boolean, when \code{TRUE} and \code{legend="inline"}, shows marks in \code{bannedMarkName} as \code{legend="aside"}.}
+\item{bMarkNameAside}{boolean, when \code{TRUE} and \code{legend="inline"}, shows marks in \code{bannedMarkName} as \code{legend="aside"}.}
 
 \item{forbiddenMark, }{character, character string or vector with mark names to be removed from plot. Not the marks but the labels.}
 

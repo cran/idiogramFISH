@@ -9,7 +9,8 @@ markDistCenGISHfix(
   dfArmGISHInternalMonocen,
   dfChrSizeInternal,
   columnArmSize,
-  markDistType
+  markDistType,
+  listOfdfChromSize
 )
 }
 \arguments{

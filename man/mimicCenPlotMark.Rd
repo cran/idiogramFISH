@@ -32,7 +32,7 @@ mimicCenPlotMark(
   xMarkRightLine,
   xMarkLeftLine,
   x,
-  roundedCen = FALSE
+  cenFormat = "triangle"
 )
 }
 \arguments{

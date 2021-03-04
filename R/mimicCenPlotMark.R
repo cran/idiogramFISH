@@ -47,7 +47,7 @@ mimicCenPlotMark<-function(squareness, xMark, yMark,
                         ylistTransChr,rotation,labelOutwards,
                         yMarkLine,xMarkRightLine,xMarkLeftLine,
                         x,
-                        roundedCen=FALSE) {
+                        cenFormat="triangle") {
 
 if (squareness <= 20) {
 
@@ -73,7 +73,7 @@ if (squareness <= 20) {
                             xMark[[s]],
                             yfactor,r2,
                             pts,
-                            roundedCen)
+                            cenFormat)
 
     roundedX[[s]]<-xyCoords$roundedX
     roundedY[[s]]<-xyCoords$roundedY
@@ -145,7 +145,7 @@ if (squareness <= 20) {
     } else { # circ true
 
       #
-      #   x to vertical - roundedCen where
+      #   x to vertical - cenFormat where
       #
 
         xlistNew<-xHortoVer(xMark)
@@ -159,7 +159,6 @@ if (squareness <= 20) {
         drawCenStyle(circleMapsMarks,defCenStyleCol,.05)
 
         #############
-#        xMarkLeftLine154<<-xMarkLeftLine
         xlistNew<-xHortoVer(xMarkLeftLine)
 
         yMarkPer <- markMapPer(yMarkLine,y)
@@ -170,7 +169,6 @@ if (squareness <= 20) {
 
         drawPlotMarkLine(circleMapsMarks,defCenStyleCol,lwd.mimicCen)
         #############
-#        xMarkRightLine165 <<-xMarkRightLine
         xlistNew<-xHortoVerDots(xMarkRightLine,x)
 
         yMarkPer <- markMapPer(yMarkLine,y)
@@ -203,7 +201,7 @@ mimicCenPlotMarkInside<-function(pattern,bannedMarkName,squareness, xMarkCenStyl
                            x,
                            lwd.chr, # new
                            legend,
-                           roundedCen=FALSE) {
+                           cenFormat="triangle") {
 
 
   if(squareness <= 20 ) { # squareness
@@ -236,7 +234,7 @@ mimicCenPlotMarkInside<-function(pattern,bannedMarkName,squareness, xMarkCenStyl
                                     yfactor,
                                     r2,
                                     pts,
-                                    roundedCen)
+                                    cenFormat)
 
       roundedXInside[[s]]<-xyCoords$roundedX
       roundedYInside[[s]]<-xyCoords$roundedY
@@ -276,9 +274,7 @@ mimicCenPlotMarkInside<-function(pattern,bannedMarkName,squareness, xMarkCenStyl
     #
     #   x to vertical original as mark
     #
-#    xMarkCenStyleBody279<<-xMarkCenStyleBody
     xlistNew<-xHortoVer(xMarkCenStyleBody)
-#    xlistNew281<<-xlistNew
     yMarkPer <- markMapPer(yMarkCenStyleBody,y)
 
     ylistTransMark <- transyListMark(yMarkPer, ylistTransChr)

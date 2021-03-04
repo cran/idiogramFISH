@@ -2,15 +2,15 @@
 #'
 #' This function reads two data.frames the one with chromosome sizes, and one df
 #' with data of marks (sites) both have to have the column \code{chrName} and if
-#' several species, \code{OTU}. The functions returns a filtered list with 1. 
-#' data.frame of 
+#' several species, \code{OTU}. The functions returns a filtered list with 1.
+#' data.frame of
 #' chrSizes,
 #' 2. data.frame of marks, 3. mark names 4. max mark size.
 #'
-#' @param listOfdfChromSize list of data.frames, with columns: OTU (optional), 
+#' @param listOfdfChromSize list of data.frames, with columns: OTU (optional),
 #' chrName, for chr.
 #'   with cen.: shortArmSize, longArmSize, for holoc.: chrSize
-#' @param listOfdfMarks list of data.frames of marks (sites): OTU (opt / 
+#' @param listOfdfMarks list of data.frames of marks (sites): OTU (opt /
 #' mandat. if in
 #'   dfChrSize), chrName markName markSize, for chr. with cen.:  chrRegion (p,q)
 #'   markDistCen, for holoc: markPos
@@ -30,15 +30,13 @@ checkNameChrDfMarks<- function(listOfdfChromSize,listOfdfMarks){
   markSize <-numeric()
 
   for (s in 1:length(listOfdfChromSize)) {
+
     name<-names(listOfdfChromSize)[[s]]
+
     if(length(listOfdfChromSize[[s]]$chrName)!=length(unique(listOfdfChromSize[[s]]$chrName) ) ) {
       message(crayon::yellow(
         paste("\nWARNING Chromosome Names in data.frame",name,"duplicated - Error when d.f. of marks present")
       )) #m
-      # message(crayon::red(
-      #   paste("\ndata of OTU",name,"removed")
-      # ) ) #m
-      # listOfdfChromSize[s]<-NA
     } # duplicated chr. names fi
 
       if (length(which(names(listOfdfMarks)==name) )!=0 ) {
@@ -77,15 +75,20 @@ checkNameChrDfMarks<- function(listOfdfChromSize,listOfdfMarks){
             message(crayon::black(paste("\n No divergence"))
             )#m
 
-          if(class(listOfdfMarks[[which(names(listOfdfMarks)==name)]])=="data.frame"){
+          if(class(listOfdfMarks[[which(names(listOfdfMarks)==name)]])=="data.frame") {
             markNames   <- c(markNames,unique(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$markName) )
 
             if(length(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$markSize)>0){
-              markSize <- c(markSize,max(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$markSize, na.rm=TRUE) )
+              markSize <- c(markSize
+                            , tryCatch(max(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$markSize, na.rm=TRUE)
+                                       ,error=function(e){NA},warning=function(w){NA}
+                                       )
+              )
             } # length > 0
           } # is data.frame
 
         } # else
+
     } # if chr. with mark present
   } # for
 

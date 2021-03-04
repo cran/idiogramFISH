@@ -8,7 +8,8 @@ makedfMarkColor(
   dfMarkColor,
   markNames,
   colorstoremove = NA,
-  defaultStyleMark = "square"
+  defaultStyleMark = "square",
+  reserveDF
 )
 }
 \arguments{

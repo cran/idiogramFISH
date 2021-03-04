@@ -340,10 +340,8 @@ for ( k in 1:length(listOfdfChromSize ) ) {
             if(nrow(listOfdfMarks[[spindex]][[chrIndex]][subset2,] ) >= colNumber){
                 toMod <- which(listOfdfMarks[[spindex]][[chrIndex]][subset2,]$newPos > half2 )
                 if(length(toMod)>0){
-#                  ini<<-listOfdfMarks[[spindex]][[chrIndex]][subset2,][toMod,]
                   listOfdfMarks[[spindex]][[chrIndex]][subset2,][toMod,]$markName <-
                     sub("(\\s+)?([[:alnum:]_]+)(\\s+)?","\\3\\2\\1",listOfdfMarks[[spindex]][[chrIndex]][subset2,][toMod,]$markName)
-#                  fini<<-listOfdfMarks[[spindex]][[chrIndex]][subset2,][toMod,]
                 }
             }
             # sub("(\\s+)?([[:alnum:]_]+)(\\s+)?","\\3\\2\\1","ini   ")

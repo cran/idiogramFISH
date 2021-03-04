@@ -47,11 +47,7 @@ roundPlotMark<-function(bannedMarkName,squareness, xMark, yMark,
                         circleCenter,circleCenterY,radius,
                         legend,ylistTransChr,rotation,labelOutwards) {
 
-#  xMarkSq<<-xMark
-#  yMarkSq<<-yMark
 
-#  listOfdfMarkPosSqInternal<<-listOfdfMarkPosSq
-#  dfMarkColorInternal2<<-dfMarkColorInternal
 
   if(squareness>20) {
 
@@ -82,9 +78,6 @@ roundPlotMark<-function(bannedMarkName,squareness, xMark, yMark,
       #   x to vertical
       #
 
-#      xMarkSq<<-xMark
-#      yMarkSq<<-yMark
-#      yInternalSq<<-y
 
 
         xlistNew<-xHortoVer(xMark)
@@ -151,8 +144,6 @@ if(legend=="inline"){
     } # for
     names(roundedY)<-names(yMark)
 
-#    newLongyMarks<<-roundedY
-#    newLongxMarks<<-roundedX
 
     if(circularPlot==FALSE) {
 
@@ -251,8 +242,6 @@ if(length(YmarkChrt1)>0) { # PLOT  SQ CHROMATID
   YmarkChrt1 <- YmarkChrt1[lengths(YmarkChrt1) != 0]
   XmarkChrt1 <- XmarkChrt1[lengths(XmarkChrt1) != 0]
 
-#  YmarkChrt1_247<<-YmarkChrt1
-#  XmarkChrt1_247<<-XmarkChrt1
 
   if(length(YmarkChrt1)>0) {
 
@@ -275,8 +264,6 @@ if(length(YmarkChrt2)>0) {
   YmarkChrt2 <- YmarkChrt2[lengths(YmarkChrt2) != 0]
   XmarkChrt2 <- XmarkChrt2[lengths(XmarkChrt2) != 0]
 
-#  YmarkChrt2_247<<-YmarkChrt2
-#  XmarkChrt2_247<<-XmarkChrt2
   if(length(YmarkChrt2)>0) {
 
   # RIGHT CHROMATID

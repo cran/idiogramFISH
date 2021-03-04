@@ -17,7 +17,8 @@ textLabel(
   bannedMarkName,
   isCentromeric = FALSE,
   markNewLine2,
-  mylheight2
+  mylheight2,
+  xsize = 0
 )
 }
 \arguments{

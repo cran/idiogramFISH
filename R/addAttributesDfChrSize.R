@@ -5,7 +5,10 @@
 #' @return list of data.frames
 #' @import crayon
 
-addAttributesDfChrSize<-function(listOfdfChromSize,threshold,specialOTUNames,centromereSize,MbThreshold){
+addAttributesDfChrSize<-function(listOfdfChromSize,threshold,specialOTUNames
+                                 ,centromereSize,MbThreshold,cenFactor
+                                 ,chrWidth,specialChrWidth,squareness){
+
 for (i in 1:length(listOfdfChromSize)) {
 
   #
@@ -66,8 +69,17 @@ for (i in 1:length(listOfdfChromSize)) {
       centromereSize2<-divisor2
     }
 
-    attr(listOfdfChromSize[[i]],"centromere") <- centromereSize2/divisor2
-    listOfdfChromSize[[i]]$centromereSize     <- centromereSize2/divisor2
+    if(attr(listOfdfChromSize[[i]],"ytitle")=="cM"){
+      chrWidth2  <-specialChrWidth
+    } else {
+      chrWidth2 <- chrWidth
+    }
+    r2 <- chrWidth2/(squareness*2)
+
+    attr(listOfdfChromSize[[i]],"r2") <- r2
+
+    attr(listOfdfChromSize[[i]],"centromere") <- (centromereSize2/divisor2)*cenFactor
+    listOfdfChromSize[[i]]$centromereSize     <- (centromereSize2/divisor2)*cenFactor
 
   } # if monocen success
 
@@ -117,8 +129,17 @@ for (i in 1:length(listOfdfChromSize)) {
       centromereSize2<-divisor2
     }
 
-    attr(listOfdfChromSize[[i]],"centromere") <- centromereSize2/divisor2
-    listOfdfChromSize[[i]]$centromereSize     <- centromereSize2/divisor2
+    if(attr(listOfdfChromSize[[i]],"ytitle")=="cM"){
+      chrWidth2  <-specialChrWidth
+    } else {
+      chrWidth2 <- chrWidth
+    }
+    r2 <- chrWidth2/(squareness*2)
+
+    attr(listOfdfChromSize[[i]],"r2") <- r2
+
+    attr(listOfdfChromSize[[i]],"centromere") <- (centromereSize2/divisor2)*cenFactor
+    listOfdfChromSize[[i]]$centromereSize     <- (centromereSize2/divisor2)*cenFactor
 
   } # if holocen success
 

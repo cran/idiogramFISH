@@ -21,7 +21,7 @@
 
 textLabel<-function(xMark,yMark,listOfdfChromSize,listOfdfMarkPos,specialChrSpacing,
                     chrSpacing,markLabelSize,pattern,bannedMarkName,
-                    isCentromeric=FALSE,markNewLine2,mylheight2) {
+                    isCentromeric=FALSE,markNewLine2,mylheight2,xsize=0) {
   component<-ifelse(isCentromeric,3,2)
   for (s in 1:length(xMark) ) {
     corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfMarkPos)[[s]] )
@@ -38,7 +38,8 @@ textLabel<-function(xMark,yMark,listOfdfChromSize,listOfdfMarkPos,specialChrSpac
 
           if(is.null(squareSide) ) {
             x = xMark[[s]][[m]][1] + chrSpacing2*.1
-            y = ( yMark[[s]][[m]][1] + yMark[[s]][[m]][component] ) /2
+            # y = ( yMark[[s]][[m]][1] + yMark[[s]][[m]][component] ) /2
+            y = ( max(unlist(yMark[[s]][[m]])) + min(unlist(yMark[[s]][[m]])) )/2
             z=sub(pattern,"",listOfdfMarkPos[[s]]$markName[m])
             w=tryCatch(listOfdfMarkPos[[s]]$chrRegionOrig[m], error=function(e) {NA} )
             v=0
@@ -46,7 +47,8 @@ textLabel<-function(xMark,yMark,listOfdfChromSize,listOfdfMarkPos,specialChrSpac
 
           } else if (attr(yMark[[s]][[m]],"squareSide") =="right"){
             x = xMark[[s]][[m]][1] + chrSpacing2*.1
-            y = ( yMark[[s]][[m]][1] + yMark[[s]][[m]][component] ) /2
+            # y = ( yMark[[s]][[m]][1] + yMark[[s]][[m]][component] ) /2
+            y = ( max(unlist(yMark[[s]][[m]])) + min(unlist(yMark[[s]][[m]])) )/2
             z=sub(pattern,"",listOfdfMarkPos[[s]]$markName[m])
             w=tryCatch(listOfdfMarkPos[[s]]$chrRegionOrig[m], error=function(e) {NA} )
             v=0
@@ -54,13 +56,28 @@ textLabel<-function(xMark,yMark,listOfdfChromSize,listOfdfMarkPos,specialChrSpac
 
           } else if (attr(yMark[[s]][[m]],"squareSide") =="left"){
             x = min(xMark[[s]][[m]]) - chrSpacing2*.1
-            y = ( yMark[[s]][[m]][1] + yMark[[s]][[m]][component] ) /2
+            # y = ( yMark[[s]][[m]][1] + yMark[[s]][[m]][component] ) /2
+            y = ( max(unlist(yMark[[s]][[m]])) + min(unlist(yMark[[s]][[m]])) )/2
             z=sub(pattern,"",listOfdfMarkPos[[s]]$markName[m])
             w=tryCatch(listOfdfMarkPos[[s]]$chrRegionOrig[m], error=function(e) {NA} )
             v=1
 
+          } else if (attr(yMark[[s]][[m]],"squareSide") =="exProtein"){
+            x = max(unlist(xMark[[s]][[m]])) + chrSpacing2*.15
+            y = ( max(unlist(yMark[[s]][[m]])) + min(unlist(yMark[[s]][[m]])) )/2
+            z=sub(pattern,"",listOfdfMarkPos[[s]]$markName[m])
+            w=tryCatch(listOfdfMarkPos[[s]]$chrRegionOrig[m], error=function(e) {NA} )
+            v=0
+
+          } else if (attr(yMark[[s]][[m]],"squareSide") =="inProtein"){
+            x = max(unlist(xMark[[s]][[m]])) + xsize + chrSpacing2*.15
+            y = ( max(unlist(yMark[[s]][[m]])) + min(unlist(yMark[[s]][[m]])) )/2
+            z=sub(pattern,"",listOfdfMarkPos[[s]]$markName[m])
+            w=tryCatch(listOfdfMarkPos[[s]]$chrRegionOrig[m], error=function(e) {NA} )
+            v=0
           }
-          label=ifelse(any(is.na(w),is.null(w) ),z,"")
+
+          label=tryCatch(ifelse(any(is.na(w),is.null(w) ),z,""), error=function(e){""} )
 
           if(!is.na(markNewLine2) ){
           label <- gsub(markNewLine2,"\n",label)
@@ -89,10 +106,8 @@ textLabelCen<-function(xMark,yMark,listOfdfChromSize,listOfdfMarkPos,specialChrS
       chrSpacing2<-chrSpacing
     }
 
-#    # mark61<<-listOfdfMarkPos[[s]]$markName
 
     for ( m in 1:length(xMark[[s]] ) ) {
-#      # bannedMarkName62<<-bannedMarkName
       if( !listOfdfMarkPos[[s]]$markName[m] %in% bannedMarkName ){
 
       x = max(xMark[[s]][[m]])+chrSpacing2*.1

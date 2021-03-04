@@ -9,7 +9,11 @@ addAttributesDfChrSize(
   threshold,
   specialOTUNames,
   centromereSize,
-  MbThreshold
+  MbThreshold,
+  cenFactor,
+  chrWidth,
+  specialChrWidth,
+  squareness
 )
 }
 \value{

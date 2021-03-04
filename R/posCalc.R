@@ -137,9 +137,9 @@ posCalc <- function(dfMarkPos,listOfdfChromSize,bToRemove="",markDistType="beg",
             # print(chrName)
             # posList[[s]][[as.character(chrName)]]$chrSize <- chrSize
             posList[[s]][[as.character(chrName)]][[1]] <- markPos
-            names(posList[[s]][[as.character(chrName)]])[1]<-paste0(bandListUpdate, collapse=",")
+            names(posList[[s]][[as.character(chrName)]])[1] <- paste0(bandListUpdate, collapse=",")
             posList[[s]][[as.character(chrName)]][[2]] <- markPos/chrSize
-            names(posList[[s]][[as.character(chrName)]])[2]<-paste0("frac",bandListUpdate, collapse=",")
+            names(posList[[s]][[as.character(chrName)]])[2] <- paste0("frac",bandListUpdate, collapse=",")
 
             # posListTibb[[s]][1,as.character(chrName)][[1]] <- list(chrSize)
             posListTibb[[s]][1,as.character(chrName)][[1]]<-list(markPos/chrSize)

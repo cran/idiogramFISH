@@ -27,7 +27,7 @@
 #'
 
 perMark<-function(dfMarkPos,listOfdfChromSize) {
-
+  message(crayon::blue("\nCalculating position of each mark in terms of % of chromosome"))
 bandList <- unique(dfMarkPos$markName) # 1247
 perList<-list()
 
@@ -65,10 +65,12 @@ for (i in 1:length(listOfdfChromSize)) { # 1223
                                            dfMarkPos$markName %in% band),]$chrRegion
       if (length(markSize) ) {
         if(any(is.na(allMarks)) ){
-          message(crayon::blue( "In Monocen. kar. (columns shortArmSize etc) cen. marks do not have size, see ruler" ) )
-
-          message(crayon::blue(paste(spname,"- No data of size, for mark", band ,"chr",chrName,"region",chrRegion[is.na(allMarks)] ))
-          )
+          if(chrRegion[is.na(allMarks)]=="cen"){
+            message(crayon::blue( "mark's style 'cen' does not have size, no % calculated, see ruler") )
+          } else {
+            message(crayon::blue(paste(spname,"- No data of size, for mark", band ,"chr",chrName,"region",chrRegion[is.na(allMarks)] ))
+            )
+          }
         }
         perList[[i]][as.character(band),as.character(chrName)] <- markSize
       }

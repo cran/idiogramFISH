@@ -11,6 +11,7 @@
 #'
 makeNumCols<-function(df){
   df<-as.data.frame(df)
+  if(nrow(df)>0){
   df[] <- lapply(df, as.character)
   cond <- apply(df, 2, function(x) {
     x <- x[!is.na(x)]
@@ -22,6 +23,7 @@ makeNumCols<-function(df){
     # df$chrName<-as.character(df$chrName)
   # }
   return(df)
+  }
 }
 
 makeCharCols<-function(df){

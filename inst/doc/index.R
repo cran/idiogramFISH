@@ -40,10 +40,10 @@ cat(paste0('<script src="',myfile,'"></script> <!-- # -->'))
 #Create myheader.html
 
   line1<-'<script src="https://kit.fontawesome.com/af0a13599b.js" crossorigin="anonymous"></script>'
-  line2<-'<link rel="shortcut icon" href="../man/figures/logo2.png" />'
+  line2<-'<link rel="shortcut icon" href="../man/figures/logo.png" />'
   file <- "myheader.html"
 
-if(Sys.info()['sysname']=="Windows"){
+if(Sys.info()['sysname']=="Windows") {
   
   #check internet response
   res<-!as.logical(system(paste("ping", "www.google.com")) )
@@ -144,7 +144,6 @@ if (requireNamespace("RCurl", quietly = TRUE)  ) {
 #  
 #  # Packages for vignettes: (optional)
 #  list.of.packages <- c(
-#      "plyr",
 #      "knitr",
 #      "kableExtra",
 #      "rmdformats",
@@ -414,7 +413,7 @@ plotIdiograms(dfChrSize  =dfChrSizeHolo, # data.frame of chr. size
               ,ylimBotMod=.2           # modify ylim bottom argument of plot
               ,legendHeight=.5         # height of legend labels
               ,legendWidth = 1.2       # width of legend labels
-              ,xModifier = .025        # separ. among chromatids
+              ,xModifier = 20        # separ. among chromatids
               ); #dev.off() # close svg()
 
 ## ---- results="hide"----------------------------------------------------------
@@ -486,7 +485,7 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               
               ,chromatids=FALSE          # do not show separ. chromatids
               
-              # for Circular Plot, add:
+              # ,useOneDot=TRUE
               
               # ,circularPlot = TRUE       # circularPlot
               # ,shrinkFactor = .9         # percentage 1 = 100% of circle with chr.
@@ -495,8 +494,9 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               
               # ,OTUsrt = 0                # angle for OTU name (or number)
               # ,OTUplacing = "number"     # Use number and legend instead of name
-              # ,OTULabelSpacerx = -1.5    # modify position of OTU label, when OTUplacing="number" or "simple"
+              # ,OTULabelSpacerx = -0.6    # modify position of OTU label, when OTUplacing="number" or "simple"
               # ,OTUlegendHeight = 1.5     # space among OTU names when in legend - OTUplacing
+              # ,separFactor = 0.75        # alter separ. of kar.
 )
 dev.off() # close png
 
@@ -533,19 +533,23 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               xlimRightMod=3,            # modify xlim right argument of plot
               ylimBotMod= .2             # modify ylim bottom argument of plot
               
-              ,circularPlot = T          # circularPlot
+              ,useOneDot=TRUE
+
+              ,circularPlot = TRUE       # circularPlot
               ,shrinkFactor = .9         # percentage 1 = 100% of circle with chr.
               ,circleCenter = 3          # X coordinate of circleCenter (affects legend pos.)
+              ,chrLabelSpacing = .9      # chr. names spacing
+
               ,OTUsrt = 0                # angle for OTU name (or number)
               ,OTUplacing = "number"     # Use number and legend instead of name
-              ,chrLabelSpacing = .9      # chr. names spacing
-              ,OTULabelSpacerx = -1.5    # modify position of OTU label, when OTUplacing="number" or "simple"
+              ,OTULabelSpacerx = -0.6    # modify position of OTU label, when OTUplacing="number" or "simple"
               ,OTUlegendHeight = 1.5     # space among OTU names when in legend - OTUplacing
-              ,OTUTextSize = .7          # font size of OTU
+              ,separFactor = 0.75        # alter separ. of kar.
+              
 ); #dev.off() # close svg()
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile_plotting<- "../chaptersBLOCK/01-plotting.Rmd"
+chapterFile_plotting<- "../chaptersBLOCK/03-plotting.Rmd"
 if(file.exists(chapterFile_plotting)){
   childExists_plotting<-TRUE
   child_docs_plotting <- chapterFile_plotting
@@ -561,7 +565,7 @@ cat("# Plotting chromosomes")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#plotting-chromosomes)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile_multiple<- "../chaptersBLOCK/02-multiple.Rmd"
+chapterFile_multiple<- "../chaptersBLOCK/04-multiple.Rmd"
 if(file.exists(chapterFile_multiple)){
   childExists_multiple<-TRUE
   child_docs_multiple <- chapterFile_multiple
@@ -577,7 +581,7 @@ cat("# Several OTUs")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#multiple-otus)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile_units<- "../chaptersBLOCK/03-units.Rmd"
+chapterFile_units<- "../chaptersBLOCK/05-units.Rmd"
 if(file.exists(chapterFile_units)){
   childExists_units<-TRUE
   child_docs_units <- chapterFile_units
@@ -593,7 +597,7 @@ cat("# Changing Units")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#changing-units)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile0<- "../chaptersBLOCK/04-gish.Rmd"
+chapterFile0<- "../chaptersBLOCK/06-gish.Rmd"
 if(file.exists(chapterFile0)){
   childExists0<-TRUE
   child_docs0 <- chapterFile0
@@ -609,7 +613,7 @@ cat("# GISH")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#gish)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile1<- "../chaptersBLOCK/05-groups.Rmd"
+chapterFile1<- "../chaptersBLOCK/07-groups.Rmd"
 if(file.exists(chapterFile1)){
   childExists1<-TRUE
   child_docs1 <- chapterFile1
@@ -625,7 +629,7 @@ cat("# Using groups")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#groups)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile2<- "../chaptersBLOCK/06-circular.Rmd"
+chapterFile2<- "../chaptersBLOCK/08-circular.Rmd"
 if(file.exists(chapterFile2)){
   childExists2<-TRUE
   child_docs2 <- chapterFile2
@@ -641,7 +645,7 @@ cat("# Circular plots")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#circular-plots)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile3<- "../chaptersBLOCK/07-phylogeny.Rmd"
+chapterFile3<- "../chaptersBLOCK/09-phylogeny.Rmd"
 if(file.exists(chapterFile3)){
   childExists3<-TRUE
   child_docs3 <- chapterFile3
@@ -657,7 +661,7 @@ cat("# Plotting alongside phylogeny")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#plotting-alongside-phylogeny)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile<- "../chaptersBLOCK/08-citrushelp.Rmd"
+chapterFile<- "../chaptersBLOCK/10-citrushelp.Rmd"
 if(file.exists(chapterFile)){
   childExists<-TRUE
   child_docs <- chapterFile
@@ -673,7 +677,7 @@ cat("# *Citrus*")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#citrus)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile4<- "../chaptersBLOCK/09-human.Rmd"
+chapterFile4<- "../chaptersBLOCK/11-human.Rmd"
 if(file.exists(chapterFile4)){
   childExists4<-TRUE
   child_docs4 <- chapterFile4
@@ -689,7 +693,7 @@ cat("# Human karyotype")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#human-karyotype)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile_param<- "../chaptersBLOCK/10-functions.Rmd"
+chapterFile_param<- "../chaptersBLOCK/12-functions.Rmd"
 if(file.exists(chapterFile_param)){
   childExists_param<-TRUE
   child_docs_param <- chapterFile_param
@@ -705,7 +709,7 @@ cat("# Functions")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#functions)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile_data<- "../chaptersBLOCK/11-datasets.Rmd"
+chapterFile_data<- "../chaptersBLOCK/13-datasets.Rmd"
 if(file.exists(chapterFile_data)){
   childExists_data<-TRUE
   child_docs_data <- chapterFile_data
@@ -721,7 +725,7 @@ cat("# Datasets")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#datasets)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile_news<- "../chaptersBLOCK/12-news.Rmd"
+chapterFile_news<- "../chaptersBLOCK/14-news.Rmd"
 if(file.exists(chapterFile_news)){
   childExists_news<-TRUE
   child_docs_news <- chapterFile_news

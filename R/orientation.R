@@ -250,7 +250,8 @@ mapCircle<-function(x,y,n,radius,circleCenter,circleCenterY,position,separFactor
 
   yValue2<-list()
   xValue2<-list()
-  if (length(y)>1){
+
+  if (length(y)>1) {
     for (i in 1:(length(y)-1) ){
       yValue2[[i]] <- seq(y[i],y[i+1], length.out=n) * 2 # stands for 2pi = 360 degrees
       xValue2[[i]] <- seq(x[i],x[i+1], length.out=n)
@@ -259,15 +260,15 @@ mapCircle<-function(x,y,n,radius,circleCenter,circleCenterY,position,separFactor
     yValue2[[1]] <- y[1] * 2 # stands for 2pi = 360 degrees
     xValue2[[1]] <- x[1]
   }
-  x1b<- ( r2+unlist(xValue2)  ) * sin(unlist(yValue2)*pi -(rotation*pi) ) + circleCenter #0
-  y1b<- ( r2+unlist(xValue2)  ) * cos(unlist(yValue2)*pi -(rotation*pi) ) + circleCenterY #1
+
+  x1b <- ( r2+unlist(xValue2)  ) * sin(unlist(yValue2)*pi -(rotation*pi) ) + circleCenter #0
+  y1b <- ( r2+unlist(xValue2)  ) * cos(unlist(yValue2)*pi -(rotation*pi) ) + circleCenterY #1
+
   xyCircle<-list()
   xyCircle$x<-x1b
   xyCircle$y<-y1b
 
   attr(xyCircle, "chrName1") <- attr(y, "chrName1")
-
-  # attr(xyCircle,"positionB")
   return(xyCircle)
 }
 
@@ -383,7 +384,6 @@ addOTUnames<-function(circleMapsOTUname,OTUTextSize,OTUsrt=0,OTUplacing="first",
 applyMapCircle<-function(radius,circleCenter,circleCenterY,separFactor,ylistTrans,xlistNew,n=NA,labelSpacing,
                          chrWidth,unlist=FALSE,cfunction=mapCircle,specialOTUNames=NA,chrWFactor=NA,rotation) {
   circleMaps<-list()
-  # radius <- r3 + separFactor
 
   for (s in 1:length(ylistTrans)) { # for spescies
     circleMaps[[s]]<-list()
@@ -392,7 +392,6 @@ applyMapCircle<-function(radius,circleCenter,circleCenterY,separFactor,ylistTran
     if(!is.na(specialOTUNames[1]) & specialOTUNames[1]!=""){
       if(names(ylistTrans[s]) %in%  specialOTUNames){
         labelSpacing2<-labelSpacing*chrWFactor
-#        labelSpacing2I<<-labelSpacing2
       }
     }
 
@@ -781,10 +780,11 @@ markMapPer<-function(yMark,y){
 
       diffReal<-distEnd-distBeg
 
-      fac<-diffPer/diffReal
-      fac<-ifelse(is.na(fac),0,fac)
+      fac <-diffPer/diffReal
+      fac <-ifelse(is.na(fac),0,fac)
 
-        yMarkPer[[s]][[m]]<-  psum( ( ( yMark[[s]][[m]]  -  min(unlist(y[[corrIndex]][name] ) ) ) - distBeg ) * fac  , disBegPer, na.rm=T)
+      yMarkPer[[s]][[m]] <-  psum( ( ( yMark[[s]][[m]]  -  min(unlist(y[[corrIndex]][name] ) ) ) - distBeg ) * fac
+                                   , disBegPer, na.rm=T)
 
       attr(yMarkPer[[s]][[m]],"rowIndex")<-name
     }
@@ -792,6 +792,14 @@ markMapPer<-function(yMark,y){
   } # for
   return(yMarkPer)
 } # fun
+#
+# if(!is.null(attr(yMark[[s]][[m]],"squareSide") ) &  !is.null(attr(yMark[[s]][[m]],"arm") ) ) {
+#   if (attr(yMark[[s]][[m]],"squareSide") =="exProtein"  & attr(yMark[[s]][[m]],"arm") =="q" ) {
+#     yMark[[s]][[m]]<- sort(yMark[[s]][[m]],decreasing = F)[c(1,3,4,5,2)]
+#   } else if (attr(yMark[[s]][[m]],"squareSide") =="exProtein"  & attr(yMark[[s]][[m]],"arm") =="p") {
+#     yMark[[s]][[m]]<- sort(yMark[[s]][[m]],decreasing = T)[c(1,3,4,5,2)]
+#   }
+# }
 
 markMapPerCen <- function(yMark,y){ # use y
   yMarkPer<-list()
@@ -815,7 +823,8 @@ markMapPerCen <- function(yMark,y){ # use y
       fac<-diffPer/diffReal
       fac<-ifelse(is.na(fac),0,fac)
 
-      yMarkPer[[s]][[m]] <-  psum( ( ( yMark[[s]][[m]]  -  min(unlist(y[[corrIndex]][[m]] ) ) ) - distBeg ) * fac  , disBegPer , na.rm=T)
+      yMarkPer[[s]][[m]] <-  psum( ( ( yMark[[s]][[m]]  -  min(unlist(y[[corrIndex]][[m]] ) ) ) - distBeg ) * fac
+                                   , disBegPer , na.rm=T)
       attr(yMarkPer[[s]][[m]],"rowIndex")<-m
     }
     names(yMarkPer[[s]]) <- 1: (length(yMarkPer[[s]]) ) # was len y but 4 != 8
@@ -1017,7 +1026,6 @@ transRadDots<-function(radPerCr,yMarkPerCr,ylistTransChr){
       # chrSize <- max(unlist(ylistTransChr[[1]][1] ) ) - min(unlist(ylistTransChr[[1]][1])  )
 
       chrSize <- max(unlist(ylistTransChr[[corrIndex]][corrIndexMark] ) ) - min(unlist(ylistTransChr[[corrIndex]][corrIndexMark])  )
-#      chrSize1018 <<- chrSize
 
       radTrans[[s]][[m]]<-list()
       if(length(radPerCr[[s]][[m]])>1){
@@ -1101,7 +1109,8 @@ oneDot<-function(xMarkCr){
   return(oneDotXList)
 }
 
-drawCenMarks <- function(circleMaps,dfMarkColorInternal,parparlistOfdfMarkPosDataCen,lwd.chr,fixCenBorder2,chrColor) {
+drawCenMarks <- function(circleMaps,dfMarkColorInternal
+                         ,parparlistOfdfMarkPosDataCen,lwd.chr,fixCenBorder2,chrColor) {
   for (s in 1:length(circleMaps)){
     for (m in 1:length(circleMaps[[s]] ) ) {
       graphics::polygon(x=circleMaps[[s]][[m]]$x,
@@ -1121,7 +1130,6 @@ drawCenMarks <- function(circleMaps,dfMarkColorInternal,parparlistOfdfMarkPosDat
 
 OTUlabelsright<-function(y, circleCenter,OTULabelSpacerx,circleCenterY,OTULabelSpacery,OTUlegendHeight,radius,
                          chrWidth,font,family,OTUTextSize,normalizeToOne,OTUplacing,OTUcentered,OTUjustif,maxPos,separFactor,labelSpacing) {
-#  yLabel<<-y
   if (OTUcentered){
     labelx1 <- circleCenter + OTULabelSpacerx
   } else {

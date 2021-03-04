@@ -1,4 +1,5 @@
 server <- function(input, output, session) {
+  source(file.path("local.R"), local = TRUE, chdir = TRUE)
 
   output$tabsetpanel1UI<-renderUI({
     tabsetPanel(id="tabsetpanel1"
@@ -110,13 +111,55 @@ server <- function(input, output, session) {
   )
 
   observeEvent(
+    input[["jumpToPrevMenu2"]],
+    {
+      tab_id_position <- match(CurrentM$menu, menulist) - 1
+      if (tab_id_position == 0) tab_id_position <- length(menulist)
+      CurrentM$menu <- menulist[tab_id_position]
+      updateTabItems(session, "tabs", menulist[tab_id_position])
+    }
+  )
+
+  observeEvent(
+    input[["jumpToPrevMenu3"]],
+    {
+      tab_id_position <- match(CurrentM$menu, menulist) - 1
+      if (tab_id_position == 0) tab_id_position <- length(menulist)
+      CurrentM$menu <- menulist[tab_id_position]
+      updateTabItems(session, "tabs", menulist[tab_id_position])
+    }
+  )
+
+  observeEvent(
     input[["jumpToNextMenu"]],
     {
       tab_id_position <- match(CurrentM$menu, menulist) + 1
       if (tab_id_position > length(menulist)) tab_id_position <- 1
       CurrentM$menu <- menulist[tab_id_position]
       updateTabItems(session, "tabs", menulist[tab_id_position])
+      updateTabItems(session, "tabsetpanel2", tablist2[1]) # avoids log error
+    }
+  )
 
+  observeEvent(
+    input[["jumpToNextMenu2"]],
+    {
+      tab_id_position <- match(CurrentM$menu, menulist) + 1
+      if (tab_id_position > length(menulist)) tab_id_position <- 1
+      CurrentM$menu <- menulist[tab_id_position]
+      updateTabItems(session, "tabs", menulist[tab_id_position])
+      updateTabItems(session, "tabsetpanel2", tablist2[1]) # avoids log error
+
+    }
+  )
+
+  observeEvent(
+    input[["jumpToNextMenu3"]],
+    {
+      tab_id_position <- match(CurrentM$menu, menulist) + 1
+      if (tab_id_position > length(menulist)) tab_id_position <- 1
+      CurrentM$menu <- menulist[tab_id_position]
+      updateTabItems(session, "tabs", menulist[tab_id_position])
       updateTabItems(session, "tabsetpanel2", tablist2[1]) # avoids log error
 
     }
@@ -162,727 +205,13 @@ server <- function(input, output, session) {
     }
   )
 
-  #
-  #   objects to load
-  #
-{
-  chrDataVec <- c("dfOfChrSize",
-                   "dfChrSizeHolo",
-                   "bigdfOfChrSize",
-                   "bigdfChrSizeHolo"
-
-                  ,"dfChrSizeHolo"
-                  ,"parentalAndHybChrSize"
-                  ,"parentalAndHybHoloChrSize"
-                  ,"traspadf"
-                  )
-
-  markDataVec <- c("dfOfMarks2",
-                  "dfMarkPosHolo",
-                  "bigdfOfMarks",
-                  "bigdfMarkPosHolo"
-
-                  ,"dfMarkPosHolo"
-                  ,"dfAlloParentMarks"
-                  ,"dfAlloParentMarksHolo"
-                  ,"traspaMarks")
-
-  dfMarkColor5S25S<-read.table(text="    markName markColor  style
-        5S       black dots
-       25S       white dots"  ,  header=TRUE, stringsAsFactors=FALSE,fill=TRUE)
-
-  MStyleDataVec <- c("dfMarkColor",
-                   "dfMarkColor",
-                   "dfMarkColor",
-                   "dfMarkColor"
-                   ,"no"
-                   ,"no"
-                   ,"no"
-                   ,"dfMarkColor5S25S")
-
-  widFactorVec <- c("80",
-                "80",
-                "70",
-                "80",
-                "80"
-                ,"80"
-                ,"55"
-                ,"80")
-
-  heiFactorVec <- c("0.5",
-                   "0.5",
-                   "2.5",
-                   "1",
-                   "0.5"
-                   ,"1"
-                   ,"1"
-                   ,"1"
-
-                   )
-
-  karHeightDefault <- 2
-  karHeightVec <- c(5,
-                    karHeightDefault,
-                    2.5,
-                    karHeightDefault,
-                    karHeightDefault
-                    ,karHeightDefault
-                    ,3
-                    ,karHeightDefault
-
-  )
-
-  karHeiSpaceDefault <- 2.5
-  karHeiSpaceVec <- c(karHeiSpaceDefault,
-                      karHeiSpaceDefault,
-                    6,
-                    4,
-                    karHeiSpaceDefault
-                    ,5
-                    ,5
-                    ,karHeiSpaceDefault
-
-  )
-
-  amoSeparDefault <- 10
-
-  amoSeparVec <- c(amoSeparDefault,
-                   amoSeparDefault,
-                      2,
-                      1,
-                   amoSeparDefault
-                   ,amoSeparDefault
-                   ,amoSeparDefault
-                   ,amoSeparDefault
-
-  )
-
-  karSeparDefault <- TRUE
-  karSeparVec <- c(karSeparDefault,
-                   karSeparDefault,
-                   karSeparDefault,
-                   karSeparDefault,
-                   karSeparDefault
-                   ,FALSE
-                   ,karSeparDefault
-                   ,karSeparDefault
-  )
-
-  OTUasNoteDefault <- FALSE
-  OTUasNoteVec <- c(OTUasNoteDefault,
-                   OTUasNoteDefault,
-                   OTUasNoteDefault,
-                   OTUasNoteDefault,
-                   OTUasNoteDefault
-                   ,TRUE
-                   ,OTUasNoteDefault
-                   ,OTUasNoteDefault
-  )
-
-  legendDefault <- "aside"
-  legendVec <- c(legendDefault,
-                   legendDefault,
-                   legendDefault,
-                   legendDefault,
-                   legendDefault
-                   ,"none"
-                 ,"none"
-                 ,legendDefault
-  )
-
-
-  chrWidthDefault <- 0.5
-  chrWidthVec <- c(1.2,
-                   chrWidthDefault,
-                    0.35,
-                   chrWidthDefault,
-                   chrWidthDefault
-                   ,chrWidthDefault
-                   ,chrWidthDefault
-                   ,1
-  )
-
-  squarenessDefault <- 4
-  squarenessVec <- c(squarenessDefault,
-                   squarenessDefault,
-                   squarenessDefault,
-                   squarenessDefault,
-                   squarenessDefault
-                   ,squarenessDefault
-                   ,squarenessDefault
-                   ,5
-  )
-  # not exclusive of cP
-  useOneDotDefault <- FALSE
-  useOneDotVec <- c(useOneDotDefault,
-                     useOneDotDefault,
-                     useOneDotDefault,
-                     useOneDotDefault,
-                     useOneDotDefault
-                     ,useOneDotDefault
-                     ,useOneDotDefault
-                     ,useOneDotDefault
-  )
-  chrLabelSpacingDefault <- 0.5
-  chrLabelSpacingVec <- c(chrLabelSpacingDefault,
-                    chrLabelSpacingDefault,
-                    chrLabelSpacingDefault,
-                    chrLabelSpacingDefault,
-                    chrLabelSpacingDefault
-                    ,chrLabelSpacingDefault
-                    ,chrLabelSpacingDefault
-                    ,1
-  )
-
-  rotationDefault <- 0.5
-  rotationVec <- c(rotationDefault,
-                          rotationDefault,
-                          rotationDefault,
-                          rotationDefault,
-
-                          rotationDefault
-                          ,rotationDefault
-                          ,rotationDefault
-                          ,0.1
-  )
-
-  shrinkFactorDefault <- 0.9
-  shrinkFactorVec <- c(shrinkFactorDefault,
-                   shrinkFactorDefault,
-                   shrinkFactorDefault,
-                   shrinkFactorDefault,
-
-                   shrinkFactorDefault
-                   ,shrinkFactorDefault
-                   ,shrinkFactorDefault
-                   ,.95
-  )
-
-  radiusDefault <- 0.5
-  radiusVec <- c(radiusDefault,
-                     radiusDefault,
-                     radiusDefault,
-                     radiusDefault,
-
-                     radiusDefault
-                     ,radiusDefault
-                     ,radiusDefault
-                     ,5
-  )
-
-  circleCenterDefault <- 1
-  circleCenterVec <- c(circleCenterDefault,
-                 circleCenterDefault,
-                 circleCenterDefault,
-                 circleCenterDefault,
-                 circleCenterDefault
-                 ,circleCenterDefault
-                 ,circleCenterDefault
-                 ,3
-  )
-
-  OTUsrtDefault <- 0
-  OTUsrtVec <- c(OTUsrtDefault,
-                       OTUsrtDefault,
-                       OTUsrtDefault,
-                       OTUsrtDefault,
-                       OTUsrtDefault
-                       ,OTUsrtDefault
-                       ,OTUsrtDefault
-                       ,0
-  )
-
-  OTUplacingDefault <- "first"
-  OTUplacingVec <- c(OTUplacingDefault,
-                 OTUplacingDefault,
-                 OTUplacingDefault,
-                 OTUplacingDefault,
-
-                 OTUplacingDefault
-                 ,OTUplacingDefault
-                 ,OTUplacingDefault
-                 ,"simple"
-  )
-
-  OTUjustifDefault <- 0
-  OTUjustifVec <- c(OTUjustifDefault,
-                     OTUjustifDefault,
-                     OTUjustifDefault,
-                     OTUjustifDefault,
-                     OTUjustifDefault
-                     ,OTUjustifDefault
-                     ,OTUjustifDefault
-                     ,0
-  )
-
-  OTULabelSpacerxDefault <- 0
-  OTULabelSpacerxVec <- c(OTULabelSpacerxDefault,
-                    OTULabelSpacerxDefault,
-                    OTULabelSpacerxDefault,
-                    OTULabelSpacerxDefault,
-
-                    OTULabelSpacerxDefault
-                    ,OTULabelSpacerxDefault
-                    ,OTULabelSpacerxDefault
-                    ,-8
-  )
-
-
-  OTUlegendHeightDefault <- NA
-  OTUlegendHeightVec <- c(OTUlegendHeightDefault,
-                          OTUlegendHeightDefault,
-                          OTUlegendHeightDefault,
-                          OTUlegendHeightDefault,
-                          OTUlegendHeightDefault
-                          ,OTUlegendHeightDefault
-                          ,OTUlegendHeightDefault
-                          ,1.5
-  )
-
-  orderChrDefault<-"size"
-  orderChrVec <- c(orderChrDefault,
-                     orderChrDefault,
-                     orderChrDefault,
-                     orderChrDefault,
-
-                     orderChrDefault
-                     ,orderChrDefault
-                     ,orderChrDefault
-                     ,"name"
-  )
-
-  chrSpacingDefault <- "0.5"
-  chrSpacingVec <- c("1",
-                   chrSpacingDefault,
-                   chrSpacingDefault,
-                   chrSpacingDefault
-
-                   ,chrSpacingDefault
-                   ,chrSpacingDefault
-                   ,chrSpacingDefault
-                   ,chrSpacingDefault
-  )
-  # names(chrSpacingVec)[which(names(chrSpacingVec)=="chrSpacingDefault" )]<- chrSpacingDefault
-
-  morphoDefault <- "both"
-  morphoVec <- c("Guerra",
-                     morphoDefault,
-                     "Guerra",
-                     morphoDefault,
-                 morphoDefault
-                 ,morphoDefault
-                 ,morphoDefault
-                 ,morphoDefault
-
-  )
-  # names(morphoVec)[which(names(morphoVec)=="morphoDefault" )]<- morphoDefault
-
-  chrColorDefault <- "gray"
-  chrColorVec <- c(chrColorDefault
-                   ,chrColorDefault
-                   ,chrColorDefault
-                   ,chrColorDefault
-                   ,chrColorDefault
-                   ,chrColorDefault
-                   ,chrColorDefault
-                   ,chrColorDefault
-
-  )
-
-  cenColorDefault <- ""
-  cenColorVec <- c(cenColorDefault
-                   ,cenColorDefault
-                   ,cenColorDefault
-                   ,cenColorDefault
-
-                   ,cenColorDefault
-                   ,cenColorDefault
-                   ,NA
-                   ,"black"
-  )
-
-
-  chrIndexDefault <- "both"
-  chrIndexVec <- c("CI",
-                 chrIndexDefault,
-                 "AR",
-                 chrIndexDefault,
-                 chrIndexDefault
-                 ,chrIndexDefault
-                 ,chrIndexDefault
-                 ,chrIndexDefault
-
-  )
-  # names(chrIndexVec)[which(names(chrIndexVec)=="chrIndexDefault" )]<- chrIndexDefault
-
-  chrSizeDefault <- "FALSE"
-
-  chrSizeVec <- c( "TRUE",
-                   "TRUE",
-                   chrSizeDefault,
-                   chrSizeDefault,
-                   chrSizeDefault,
-                   chrSizeDefault
-                   ,chrSizeDefault
-                   ,chrSizeDefault #8
-
-  )
-  # names(chrSizeVec)[which(names(chrSizeVec)=="chrSizeDefault" )]<- chrSizeDefault
-
-  chromatidsDefault <- TRUE
-  chromatidsVec <- c( chromatidsDefault,
-                      chromatidsDefault,
-                      chromatidsDefault,
-                      chromatidsDefault,
-                      FALSE
-                      ,chromatidsDefault
-                      ,chromatidsDefault
-                      ,chromatidsDefault
-
-  )
-
-  circularPlotDefault <- FALSE
-  circularPlotVec <- c( circularPlotDefault,
-                      circularPlotDefault,
-                      circularPlotDefault,
-                      circularPlotDefault,
-                      circularPlotDefault
-                      ,circularPlotDefault
-                      ,circularPlotDefault
-                      ,TRUE
-  )
-
-  chrSizeMbpDefault <- "FALSE"
-  chrSizeMbpVec <- c( chrSizeMbpDefault,
-                      chrSizeMbpDefault,
-                   chrSizeMbpDefault,
-                   chrSizeMbpDefault,
-
-                   chrSizeMbpDefault
-                   ,chrSizeMbpDefault
-                   ,chrSizeMbpDefault
-                   ,chrSizeMbpDefault
-
-  )
-  # names(chrSizeMbpVec)[which(names(chrSizeMbpVec)=="chrSizeMbpDefault" )]<- chrSizeMbpDefault
-
-  distTextChrDefault <- "1"
-  distTextChrVec <- c( "1.2",
-                      distTextChrDefault,
-                      "0.8",
-                      "0.5",
-
-                      distTextChrDefault
-                      ,distTextChrDefault
-                      ,"0.8"
-                      ,distTextChrDefault
-  )
-  # names(distTextChrVec)[which(names(distTextChrVec)=="distTextChrDefault" )]<- distTextChrDefault
-
-  rulerDefault <- TRUE
-  rulerVec <- c( rulerDefault,
-                 rulerDefault,
-                 rulerDefault,
-                    rulerDefault,
-                    FALSE,
-                 FALSE
-                 ,FALSE
-                 ,   rulerDefault
-  )
-
-  rulerPosDefault <- "0"
-  rulerPosVec <- c( rulerPosDefault,
-                       "-0.1",
-                       "-0.4",
-                    rulerPosDefault,
-                    rulerPosDefault
-                    ,rulerPosDefault
-                    ,rulerPosDefault
-                    ,rulerPosDefault
-  )
-  # names(rulerPosVec)[which(names(rulerPosVec)=="rulerPosDefault" )]<- rulerPosDefault
-
-  ruler.tckDefault <- "-0.02"
-  ruler.tckVec <- c("-0.01",
-                     "-0.02",
-                    "-0.005",
-                    "-0.005",
-                    ruler.tckDefault
-                    ,ruler.tckDefault
-                    ,ruler.tckDefault
-                    ,ruler.tckDefault
-  )
-  # names(ruler.tckVec)[which(names(ruler.tckVec)=="ruler.tckDefault" )] <- ruler.tckDefault
-
-  rulerNumberSizeDefault <- "1"
-  rulerNumberSizeVec <- c("0.8",
-                    rulerNumberSizeDefault,
-                    "0.4",
-                    "0.9",
-                    rulerNumberSizeDefault
-                    ,rulerNumberSizeDefault
-                    ,rulerNumberSizeDefault
-                    ,rulerNumberSizeDefault
-  )
-  # names(rulerNumberSizeVec)[which(names(rulerNumberSizeVec)=="rulerNumberSizeDefault" )] <- rulerNumberSizeDefault
-
-  xPosRulerTitleDefault <- "1"
-  xPosRulerTitleVec <- c("3",
-                          "3",
-                          "3.5",
-                          "2.8",
-                         xPosRulerTitleDefault
-                         ,xPosRulerTitleDefault
-                         ,xPosRulerTitleDefault
-                         ,xPosRulerTitleDefault
-
-  )
-  # names(xPosRulerTitleVec)[which(names(xPosRulerTitleVec)=="xPosRulerTitleDefault" )] <- xPosRulerTitleDefault
-
-  legendWidthDefault <- "1.7"
-  legendWidthVec <- c("1",
-                      "1.2",
-                      legendWidthDefault,
-                      "1",
-                      legendWidthDefault
-                      ,legendWidthDefault
-                      ,legendWidthDefault
-                      ,legendWidthDefault
-
-  )
-
-  legendHeightDefault <- NA
-  legendHeightVec <- c(legendHeightDefault,
-                       legendHeightDefault,
-                      legendHeightDefault,
-                      legendHeightDefault,
-                      legendHeightDefault
-                      ,legendHeightDefault
-                      ,legendHeightDefault
-                      ,2.5
-  )
-
-  # names(legendWidthVec)[which(names(legendWidthVec)=="legendWidthDefault" )] <- legendWidthDefault
-
-  fixCenBorderDefault <- "FALSE"
-  fixCenBorderVec <- c("TRUE",
-                       fixCenBorderDefault,
-                      "TRUE",
-                      fixCenBorderDefault,
-                      fixCenBorderDefault
-                      ,fixCenBorderDefault
-                      ,fixCenBorderDefault
-                      ,fixCenBorderDefault
-
-  )
-
-  chrBorderColorDefault <- NA
-  chrBorderColorVec <- c(chrBorderColorDefault,
-                       chrBorderColorDefault,
-                       chrBorderColorDefault,
-                       chrBorderColorDefault,
-
-                       chrBorderColorDefault
-                       ,chrBorderColorDefault
-                       ,chrBorderColorDefault
-                       ,chrBorderColorDefault
-  )
-
-  lwd.chrDefault <- 0.5
-  lwd.chrVec <- c(lwd.chrDefault,
-                         lwd.chrDefault,
-                         lwd.chrDefault,
-                         lwd.chrDefault,
-
-                         lwd.chrDefault
-                         ,lwd.chrDefault
-                         ,lwd.chrDefault
-                         ,lwd.chrDefault
-  )
-
-  xlimLeftModDefault <- "1"
-  xlimLeftModVec <- c("2",
-                       "2",
-                       "2",
-                      xlimLeftModDefault,
-
-                      xlimLeftModDefault
-                      ,xlimLeftModDefault
-                      ,xlimLeftModDefault
-                      ,-5
-  )
-  # names(xlimLeftModVec)[which(names(xlimLeftModVec)=="xlimLeftModDefault" )] <- xlimLeftModDefault
-
-  xlimRightModDefault <- 2
-  xlimRightModVec <- c(xlimRightModDefault,
-                       xlimRightModDefault,
-                       xlimRightModDefault,
-                      xlimRightModDefault,
-
-                      3
-                      ,4
-                      ,0
-                      ,5
-                      )
-
-  ylimBotModDefault <- 0.2
-  ylimBotModVec <- c(0,
-                     -0.5,
-                     0,
-                     0.4,
-                     ylimBotModDefault
-                     ,1
-                     ,ylimBotModDefault
-                     ,ylimBotModDefault
-  )
-
-  ylimTopModDefault <- "0.2"
-  ylimTopModVec <- c("0",
-                     "0",
-                     "-0.4",
-                     ylimTopModDefault,
-                     ylimTopModDefault
-                     ,ylimTopModDefault
-                     ,ylimTopModDefault
-                     ,ylimTopModDefault
-  )
-  # names(ylimTopModVec)[which(names(ylimTopModVec)=="ylimTopModDefault" )] <- ylimTopModDefault
-
-  mycolorsDefault <- ""
-  mycolorsVec<- c(""
-                  ,""
-                  ,""
-                  ,""
-
-                  ,"red,dodgerblue,fdsjkfds,chartreuse3,darkgoldenrod1"
-                  ,""
-                  ,mycolorsDefault
-                  ,mycolorsDefault
-                  )
-
-  chrNamesToSwapDefault <- ""
-  chrNamesToSwapVec<- c(""
-                  ,""
-                  ,""
-                  ,""
-
-                  ,""
-                  ,""
-                  ,chrNamesToSwapDefault
-                  ,"3,6,7,9,12" #8
-  )
-
-  addOTUNameDefault <- TRUE
-  addOTUNameVec <- c(addOTUNameDefault
-                  ,addOTUNameDefault
-                  ,addOTUNameDefault
-                  ,addOTUNameDefault
-
-                  ,addOTUNameDefault
-                  ,FALSE
-                  ,addOTUNameDefault
-                  ,addOTUNameDefault
-                  )
-
-  OTUfontDefault <- 1
-  OTUfontVec <- c(OTUfontDefault
-                     ,OTUfontDefault
-                     ,OTUfontDefault
-                     ,OTUfontDefault
-
-                     ,OTUfontDefault
-                     ,OTUfontDefault
-                     ,OTUfontDefault
-                     ,3
-  )
-  OTUfontVec<-as.character(OTUfontVec)
-
-  moveKarHorDefault<- ""
-  moveKarHorVec<- c(moveKarHorDefault
-                    ,moveKarHorDefault
-                    ,moveKarHorDefault
-                    ,moveKarHorDefault
-                    ,moveKarHorDefault
-                    ,"Allopolyploid"
-                    ,moveKarHorDefault
-                    ,moveKarHorDefault
-  )
-
-  mkhValueDefault<- 0.5
-  mkhValueVec<- c(mkhValueDefault
-                    ,mkhValueDefault
-                    ,mkhValueDefault
-                    ,mkhValueDefault
-                    ,mkhValueDefault
-                    ,7
-                  ,mkhValueDefault
-                  ,mkhValueDefault
-  )
-
-  anchorDefault<- FALSE
-  anchorVec<- c(anchorDefault
-                  ,anchorDefault
-                  ,anchorDefault
-                  ,anchorDefault
-                  ,anchorDefault
-                  ,TRUE
-                ,anchorDefault
-                ,anchorDefault
-  )
-
-  moveAnchorVDefault<- 0
-  moveAnchorVVec <- c(moveAnchorVDefault
-                ,moveAnchorVDefault
-                ,moveAnchorVDefault
-                ,moveAnchorVDefault
-                ,moveAnchorVDefault
-                ,4
-                ,moveAnchorVDefault
-                ,moveAnchorVDefault
-                )
-
-  moveAnchorHDefault<- 0
-  moveAnchorHVec<- c(moveAnchorHDefault
-                     ,moveAnchorHDefault
-                     ,moveAnchorHDefault
-                     ,moveAnchorHDefault
-                     ,moveAnchorHDefault
-                     ,-1.5
-                     ,moveAnchorHDefault
-                     ,moveAnchorHDefault
-  )
-
-  notesTextSizeDefault <- 0.4
-  notesTextSizeVec<- c(notesTextSizeDefault
-                    ,notesTextSizeDefault
-                    ,notesTextSizeDefault
-                    ,notesTextSizeDefault
-                    ,notesTextSizeDefault
-                    ,1.3
-                    ,notesTextSizeDefault
-                    ,notesTextSizeDefault
-  )
-
-  notesPosXDefault <- 0.5
-  notesPosXVec<- c(notesPosXDefault
-                       ,notesPosXDefault
-                       ,notesPosXDefault
-                       ,notesPosXDefault
-
-                       ,notesPosXDefault
-                       ,1.5
-                   ,notesPosXDefault
-                   ,notesPosXDefault
-  )
-
-  }
+# objects in global
 
   #
   # param presets
   #
 
-  # observeEvent(input$exampleId, {
-  observeEvent(input$exampleId, {
+  observeEvent(input$exampleButton, {
 
     updateNumericInput(session, "karHeight", value = karHeightVec[as.numeric(input$exampleId)]  )
     updateNumericInput(session, "karHeiSpace", value = karHeiSpaceVec[as.numeric(input$exampleId)] )
@@ -893,6 +222,8 @@ server <- function(input, output, session) {
     updateNumericInput(session, "squareness",  value = squarenessVec[as.numeric(input$exampleId)] )
     updateRadioButtons(session, "orderChr",  selected = ((orderChrVec[as.numeric(input$exampleId)] ) ) )
     updateCheckboxInput(session, "useOneDot",  value = useOneDotVec[as.numeric(input$exampleId)] )
+    updateNumericInput(session, "pMarkFac",  value = pMarkFacVec[as.numeric(input$exampleId)] )
+
 
     #circularPlot
     updateNumericInput(session, "chrLabelSpacing",  value = chrLabelSpacingVec[as.numeric(input$exampleId)] )
@@ -915,10 +246,14 @@ server <- function(input, output, session) {
 
     updateRadioButtons(session, "chrIndex",  selected = ((chrIndexVec[as.numeric(input$exampleId)] ) ) )
     updateCheckboxInput(session, "chrSize",  value = as.logical((chrSizeVec[as.numeric(input$exampleId)] ) ) )
+    updateNumericInput(session, "indexIdTextSize",  value = as.numeric((indexIdTextSizeVec[as.numeric(input$exampleId)] ) ) )
+
     updateCheckboxInput(session, "chrSizeMbp",  value = as.logical((chrSizeMbpVec[as.numeric(input$exampleId)] ) ) )
     updateNumericInput(session, "distTextChr",  value = as.numeric((distTextChrVec[as.numeric(input$exampleId)] ) ) )
 
     updateCheckboxInput(session, "chromatids",  value = chromatidsVec[as.numeric(input$exampleId)] )
+    updateNumericInput(session, "xModifier",  value = as.numeric(xModifierVec[as.numeric(input$exampleId)] ) )
+
     updateCheckboxInput(session, "circularPlot",  value = circularPlotVec[as.numeric(input$exampleId)] )
 
     updateCheckboxInput(session, "ruler",  value = rulerVec[as.numeric(input$exampleId)] )
@@ -928,6 +263,9 @@ server <- function(input, output, session) {
     updateNumericInput(session, "xPosRulerTitle",  value = as.numeric((xPosRulerTitleVec[as.numeric(input$exampleId)] ) ) )
 
     updateRadioButtons(session, "legend",  selected = legendVec[as.numeric(input$exampleId)] )
+    updateRadioButtons(session, "cenFormat",  selected = cenFormatVec[as.numeric(input$exampleId)] )
+    updateNumericInput(session, "cenFactor",  value = cenFactorVec[as.numeric(input$exampleId)] )
+
     updateNumericInput(session, "legendWidth",  value = as.numeric((legendWidthVec[as.numeric(input$exampleId)] ) ) )
     updateNumericInput(session, "legendHeight", value = as.numeric((legendHeightVec[as.numeric(input$exampleId)] ) ) )
 
@@ -971,7 +309,7 @@ server <- function(input, output, session) {
   #   update chr. data.frame
   #
 
-  observeEvent(input$exampleId, {
+  observeEvent(input$exampleButton, {
     values[["df1"]] <- get((chrDataVec[as.numeric(input$exampleId)] ) )
     values[["df1Name"]] <- (chrDataVec[as.numeric(input$exampleId)] )
     values[["df1Origin"]] <- "data.frame was loaded from package"
@@ -988,7 +326,7 @@ server <- function(input, output, session) {
   #   update mark pos data.frame
   #
 
-  observeEvent(input$exampleId, {
+  observeEvent(input$exampleButton, {
     values[["df1Mark"]] <- get((markDataVec[as.numeric(input$exampleId)] ) )
     values[["df1MarkName"]] <- (markDataVec[as.numeric(input$exampleId)] )
     values[["df1MarkOrigin"]] <- "data.frame was loaded from package"
@@ -1005,7 +343,7 @@ server <- function(input, output, session) {
   #   update mark style data.frame
   #
 
-  observeEvent(input$exampleId, {
+  observeEvent(input$exampleButton, {
     values[["df1MStyle"]] <- tryCatch(get((MStyleDataVec[as.numeric(input$exampleId)] ) ), error=function(e){data.frame()} )
     values[["df1MStyleName"]] <- tryCatch( (MStyleDataVec[as.numeric(input$exampleId)] ), error=function(e){"no"} )
     values[["df1MStyleOrigin"]] <- "data.frame was loaded from package"
@@ -1025,10 +363,30 @@ server <- function(input, output, session) {
   observeEvent(input$addColumn,{
 
     final <- values[["df1"]]
+    if(inherits(final,"data.frame")) {
+    if(nrow(final)>0) {
     if(input$colType=="character"){
       final[,input$col] <- as.character(NA)
     } else {
       final[,input$col] <- as.numeric(NA)
+    }
+    } else {
+      final <- data.frame(chrName="chrName"
+                          ,shortArmSize="shortArmSize"
+                          ,longArmSize="longArmSize"
+                          ,chrSize="chrSize"
+                          ,OTU="1"
+      )
+    }
+    } else {
+
+      final <- data.frame(chrName="chrName"
+                          ,shortArmSize="shortArmSize"
+                          ,longArmSize="longArmSize"
+                          ,chrSize="chrSize"
+                          ,OTU=1
+                          )
+
     }
     values[["df1"]] <- final
 })
@@ -1053,7 +411,8 @@ server <- function(input, output, session) {
   observeEvent(input$addColumnMark,{
 
     final <- values[["df1Mark"]]
-    if(nrow(final)>0){
+    if(inherits(final,"data.frame")){
+    if(nrow(final)>0) {
       if(input$colTypeMark=="character"){
         final[,input$colMark] <- as.character(NA)
       } else {
@@ -1066,7 +425,21 @@ server <- function(input, output, session) {
                           ,chrRegion="chrRegion"
                           ,markPos="pos."
                           ,markSize="markSize")
-      if("OTU" %in% colnames( values[["df1"]] )) {#wdf
+
+      if("OTU" %in% colnames( values[["df1"]] )) {
+        final$OTU <-as.character(NA)
+      }
+    }
+
+    } else {
+
+      final <- data.frame(chrName="chrName"
+                          ,markName="markName"
+                          ,chrRegion="chrRegion"
+                          ,markPos="pos."
+                          ,markSize="markSize")
+
+      if("OTU" %in% colnames( values[["df1"]] )) {
         final$OTU <-as.character(NA)
       }
     }
@@ -1088,12 +461,16 @@ server <- function(input, output, session) {
   observeEvent(input$addColumnMStyle,{
 
     final <- values[["df1MStyle"]]
+    if(inherits(final,"data.frame")){
     if(nrow(final)>0){
       if(input$colTypeMStyle=="character"){
         final[,input$colMStyle] <- as.character(NA)
       } else {
         final[,input$colMStyle] <- as.numeric(NA)
       }
+    } else {
+      final <- data.frame(markName="markName",markColor="colorName",style="dots")
+    }
     } else {
       final <- data.frame(markName="markName",markColor="colorName",style="dots")
     }
@@ -1150,7 +527,7 @@ server <- function(input, output, session) {
   #   to reactive
   #
 
-  observeEvent(input$exampleId,{
+  observeEvent(input$exampleButton,{
     values[["dfList"]] <- list()
   })
 
@@ -1169,7 +546,11 @@ server <- function(input, output, session) {
     validate(
       need(try(values[["df1"]]), "") #wdf
     )
-    downloadButton('downloadCsv2', 'Download table as .csv')
+    if(input$saveType=="csv"){
+      downloadButton('downloadCsv2', 'Download table as .csv')
+    } else {
+      downloadButton('downloadRds2', 'Download table as .rds')
+    }
   })
 
   #
@@ -1180,14 +561,22 @@ server <- function(input, output, session) {
     validate(
       need(try(values[["df1Mark"]]), "")
     )
+    if (nrow(values[["df1Mark"]]) > 0 ) {
     downloadButton('downloadCsvMark', 'Download table as .csv')
+    }
   })
 
   output$buttontableMark2 <-  renderUI({
     validate(
       need(try(values[["df1Mark"]]), "")
     )
-    downloadButton('downloadCsvMark2', 'Download table as .csv')
+    if (nrow(values[["df1Mark"]]) > 0 ) {
+    if(input$saveType=="csv"){
+      downloadButton('downloadCsvMark2', 'Download table as .csv')
+    } else {
+      downloadButton('downloadRdsMark2', 'Download table as .rds')
+    }
+    }
   })
 
   #
@@ -1198,14 +587,22 @@ server <- function(input, output, session) {
     validate(
       need(try(values[["df1MStyle"]]), "")
     )
+    if (nrow(values[["df1MStyle"]]) > 0 ) {
     downloadButton('downloadCsvMStyle', 'Download table as .csv')
+    }
   })
 
   output$buttontableMStyle2 <-  renderUI({
     validate(
       need(try(values[["df1MStyle"]]), "")
     )
-    downloadButton('downloadCsvMStyle2', 'Download table as .csv')
+    if (nrow(values[["df1MStyle"]]) > 0 ) {
+      if(input$saveType=="csv"){
+        downloadButton('downloadCsvMStyle2', 'Download table as .csv')
+      } else {
+        downloadButton('downloadRdsMStyle2', 'Download table as .rds')
+      }
+    }
   })
 
   #
@@ -1214,7 +611,8 @@ server <- function(input, output, session) {
 
   output$downloadCsv <- downloadHandler(
     filename = function() {
-      paste0(input$chrfilename)
+      # paste0(input$chrfilename)
+      paste0(input$chrfilename,".csv")
     },
     content = function(file) {
       write.csv(values[["df1"]], file, na="", # wdf
@@ -1224,11 +622,21 @@ server <- function(input, output, session) {
 
   output$downloadCsv2 <- downloadHandler(
     filename = function() {
-      paste0(input$chrfilename2)
+      paste0(input$chrfilename2,".csv")
     },
     content = function(file) {
       write.csv(values[["df1"]], file, na="", # wdf
                 row.names = FALSE, quote = TRUE)
+    }
+  )
+
+  output$downloadRds2 <- downloadHandler(
+    filename = function() {
+      paste0(input$chrfilename2,".rds")
+    },
+    content = function(file) {
+      saveRDS(values[["df1"]], file,
+                )
     }
   )
 
@@ -1255,7 +663,8 @@ server <- function(input, output, session) {
 
   output$downloadCsvMark <- downloadHandler(
     filename = function() {
-      paste0(input$markfilename)
+      # paste0(input$markfilename)
+      paste0(input$markfilename,".csv")
     },
     content = function(file) {
       write.csv(values[["df1Mark"]], file, na="",
@@ -1265,11 +674,22 @@ server <- function(input, output, session) {
 
   output$downloadCsvMark2 <- downloadHandler(
     filename = function() {
-      paste0(input$markfilename2)
+      # paste0(input$markfilename2)
+      paste0(input$markfilename2,".csv")
     },
     content = function(file) {
       write.csv(values[["df1Mark"]], file, na="",
                 row.names = FALSE, quote = TRUE)
+    }
+  )
+
+  output$downloadRdsMark2 <- downloadHandler(
+    filename = function() {
+      paste0(input$markfilename2,".rds")
+    },
+    content = function(file) {
+      saveRDS(values[["df1Mark"]], file,
+      )
     }
   )
 
@@ -1296,7 +716,8 @@ server <- function(input, output, session) {
 
   output$downloadCsvMStyle <- downloadHandler(
     filename = function() {
-      paste0(input$MStylefilename)
+      # paste0(input$MStylefilename)
+      paste0(input$MStylefilename,".csv")
     },
     content = function(file) {
       write.csv(values[["df1MStyle"]], file, na="",
@@ -1306,13 +727,25 @@ server <- function(input, output, session) {
 
   output$downloadCsvMStyle2 <- downloadHandler(
     filename = function() {
-      paste0(input$MStylefilename2)
+      # paste0(input$MStylefilename2)
+      paste0(input$MStylefilename2,".csv")
     },
     content = function(file) {
       write.csv(values[["df1MStyle"]], file, na="",
                 row.names = FALSE, quote = TRUE)
     }
   )
+
+  output$downloadRdsMStyle2 <- downloadHandler(
+    filename = function() {
+      paste0(input$MStylefilename2,".rds")
+    },
+    content = function(file) {
+      saveRDS(values[["df1MStyle"]], file,
+      )
+    }
+  )
+
 
   observeEvent(input$MStylefilename,
                {
@@ -1336,11 +769,11 @@ server <- function(input, output, session) {
   #
 
   output$out <- renderRHandsontable({
-    if(invalid(values[["df1"]])) { #wdf
+    validate(need(try(values[["df1"]]),"Hint: Start in previous tab (left) loading example" ))
+    if(invalid(values[["df1"]])) {
       return()
     } else {
-      # hot <- rhandsontable(df())
-      hot <- rhandsontable(values[["df1"]])
+      hot <- rhandsontable(values[["df1"]], width = 700)
       hot
     }
   })
@@ -1350,10 +783,11 @@ server <- function(input, output, session) {
   #
 
   output$outMark <- renderRHandsontable({
+    validate(need(try(values[["df1Mark"]]),"Hint: Start in first tab (left) loading example" ))
     if(invalid(values[["df1Mark"]])) {
       return()
     } else {
-      hot <- rhandsontable(values[["df1Mark"]])
+      hot <- rhandsontable(values[["df1Mark"]], width = 700)
       hot
     }
   })
@@ -1363,12 +797,13 @@ server <- function(input, output, session) {
   #
 
   output$outMStyle <- renderRHandsontable({
-    # if(length(invalid(values[["df1MStyle"]] ) ) > 0 ) {
+    validate(need(try(values[["df1MStyle"]] ),"Hint: Colors can be added in next page under 'Color' (optional)" ))
     if(invalid(values[["df1MStyle"]] ) ) {
       return(data.frame())
     } else if(nrow(values[["df1MStyle"]])>0 & "style" %in% colnames(values[["df1MStyle"]] ) ) {
 
-      Options<-c("dots","square","squareLeft", "cM","cMLeft","cenStyle", "upArrow", "downArrow")
+      Options<-c("dots","square","squareLeft", "cM","cMLeft","cenStyle", "upArrow", "downArrow"
+                 ,"exProtein","inProtein")
 
       tmpExampleTable <- rhandsontable(values[["df1MStyle"]],
                                        rowHeaders = NULL,
@@ -1422,6 +857,9 @@ server <- function(input, output, session) {
                               )
                             ,selected = 1
                             )
+               ,actionButton("exampleButton",
+                             "Load Example",
+                             class = "btn-success")
              ) # wP
       ) # c
     ) # fR
@@ -1436,15 +874,13 @@ server <- function(input, output, session) {
     fluidRow(
       column(width=2
              ,br()
-                  ,wellPanel(
+                ,wellPanel(
                 h4("Save data")
                 ,helpText("optional")
                 ,textInput("chrfilename",
                            "File name",
-                           value = "chrData.csv"
+                           value = "chrData"
                            ,width = "50%")
-                # ,actionButton("saveChrData",
-                # "Save")
                 ,uiOutput("buttontable")
               ) # end wellpanel
               ,wellPanel(
@@ -1461,10 +897,8 @@ server <- function(input, output, session) {
       ,column(width=2,
              br()
              ,wellPanel(
-               # h2("Chr. data data.frame"),
                h4("Add/Remove Row")
                ,helpText(""
-                        # , p("by pressing \"Generate table\" button.")
                         , p("Right-click inside the table to delete/insert rows.")
                )
              )
@@ -1473,7 +907,7 @@ server <- function(input, output, session) {
                h4("Add/Remove Column")
                ,helpText("Use unique names")
                ,textInput("col",
-                          "New Col. Name",
+                          "Col. name",
                           value = "newCol"
                           ,width = "50%")
                ,radioButtons("colType","Col. data type",c("character","numeric") )
@@ -1485,7 +919,7 @@ server <- function(input, output, session) {
              # br()
       ) # c
 
-      ,column(width=8,
+      ,column(width=5,
               br()
               ,fluidRow(
                 column(width=6
@@ -1513,7 +947,7 @@ server <- function(input, output, session) {
                ,helpText("optional")
                ,textInput("markfilename",
                           "File name",
-                          value = "markData.csv"
+                          value = "markData"
                           ,width = "50%")
                # ,actionButton("saveChrData",
                # "Save")
@@ -1543,7 +977,7 @@ server <- function(input, output, session) {
                 h4("Add/Remove Column")
                 ,helpText("Use unique names")
                 ,textInput("colMark",
-                           "New Col. Name",
+                           "Col. name",
                            value = "newCol"
                            ,width = "50%")
                 ,radioButtons("colTypeMark","Col. data type",c("character","numeric") )
@@ -1555,7 +989,7 @@ server <- function(input, output, session) {
               # br()
       ) # c
 
-      ,column(width=8,
+      ,column(width=5,
               br()
               ,wellPanel(
                 h2("Mark pos. data.frame")
@@ -1584,7 +1018,7 @@ server <- function(input, output, session) {
                ,helpText("optional")
                ,textInput("MStylefilename",
                           "File name",
-                          value = "MStyleData.csv"
+                          value = "MStyleData"
                           ,width = "50%")
                # ,actionButton("saveChrData",
                # "Save")
@@ -1614,7 +1048,7 @@ server <- function(input, output, session) {
                 h4("Add/Remove Column")
                 ,helpText("Use unique names")
                 ,textInput("colMStyle",
-                           "New Col. Name",
+                           "Col. name",
                            value = "newCol"
                            ,width = "50%")
                 ,radioButtons("colTypeMStyle","Col. data type",c("character","numeric") )
@@ -1626,7 +1060,7 @@ server <- function(input, output, session) {
               # br()
       ) # c
 
-      ,column(width=8,
+      ,column(width=5,
               br()
               ,wellPanel(
                 h2("Mark style data.frame")
@@ -1639,12 +1073,12 @@ server <- function(input, output, session) {
 
 #
   #
-  #   parameters ###################3
+  #   parameters ###################
   #
 
   output$circParam = renderUI({
       wellPanel(
-        h4("circular plot p."),
+        h4("circular plot param."),
         splitLayout(
           div(
             title="`chrLabelSpacing`: numeric, for `circularPlot=TRUE`. Spacing of chr. labels. Defaults to `0.5`",
@@ -1697,12 +1131,21 @@ server <- function(input, output, session) {
   output$circParamOTU = renderUI({
     # if(input$circularPlot) {
       wellPanel(
-        h4("OTU circular plot p."),
-        splitLayout(
-          div(title="`OTUsrt`: numeric, for `circularPlot=TRUE`. Angle to use for OTU names. Defaults to `0`. See `OTUplacing`"
+        h3("OTU name"),
+        h5("(circ. plot)")
+        ,fluidRow(
+          column(6
+                 ,div(title='`OTUplacing`:	character, for `circularPlot=TRUE`. location of OTU name. Defaults to `"first"`, which plots name of OTU near first chr. `"number"` places number near 1st chr. and index and name of OTU to the right or center. `"simple"` places name of OTU to the right or center without numbering. See also `OTUcentered`'
+                      ,radioButtons("OTUplacing","position"
+                                    ,c("first","number","simple")
+                                    ,selected=OTUplacingDefault
+                      )
+                 )
+          ),column(6,
+                  div(title="`OTUsrt`: numeric, for `circularPlot=TRUE` and `OTUplacing='first'` Angle to use for OTU names. Defaults to `0`. See `OTUplacing`"
 
           ,numericInput("OTUsrt"
-                       ,"OTU name angle"
+                       ,"Angle"
                        ,OTUsrtDefault
                        , min = -360, max = 360, step=1
           )
@@ -1710,29 +1153,24 @@ server <- function(input, output, session) {
           ,div(title='`OTUjustif`: numeric, for `circularPlot=TRUE` and `OTUplacing="number"` or `"simple"`. Justification of OTU name. `0` = left (Default); use `0.5` for centered. See `?text` -> `adj`
 '
           , numericInput("OTUjustif"
-                                  ,"OTU name justif."
+                                  ,"Justif."
                                   ,OTUjustifDefault
                                   , min = 0, max = 1, step=0.5
           )
           )
-        ) # sL
-        ,div(title='`OTUplacing`:	character, for `circularPlot=TRUE`. location of OTU name. Defaults to `"first"`, which plots name of OTU near first chr. `"number"` places number near 1st chr. and index and name of OTU to the right or center. `"simple"` places name of OTU to the right or center without numbering. See also `OTUcentered`'
-        ,radioButtons("OTUplacing","OTU name loc."
-                      ,c("first","number","simple")
-                      ,selected=OTUplacingDefault
-                      )
+        )
         )
         ,splitLayout(
           div(title='`OTULabelSpacerx`: numeric, for `circularPlot=TRUE` and `OTUplacing="number"` or `"simple"`. Modifies x names position'
           ,numericInput("OTULabelSpacerx"
-                       ,"OTU name position X-axis"
-                       ,OTULabelSpacerxDefault
-                       , min = -10, max = 10, step=.5
+                        ,HTML(paste("position X-axis") )
+                        ,OTULabelSpacerxDefault
+                        , min = -10, max = 10, step=.5
           )
           )
           ,div(title='`OTUlegendHeight`: numeric, for `circularPlot=TRUE` and `OTUplacing="number"` or `"simple"`. Modifies y names separation'
           , numericInput("OTUlegendHeight"
-                         ,"OTU name vert. size"
+                         ,HTML(paste("vert. size") )
                          ,OTUlegendHeightDefault
                          , min = 0.5, max = 10, step=0.5
           )
@@ -1744,370 +1182,19 @@ server <- function(input, output, session) {
 
   # "",
 
-  output$parameterPanel = renderUI({
-    fluidRow(
-      column(width=2
-             ,br()
-             ,wellPanel(
-               h4("Layout"),
-               splitLayout(
-                 div(title='`circularPlot`:	boolean, if `TRUE` chromosomes are plotted in concentric circles. Defaults to `FALSE`. See `verticalPlot`'
-                 ,checkboxInput("circularPlot",
-                               HTML(paste("Circular", "Plot", sep = "<br/>") )
-                               ,FALSE)
-               )
-               )
-
-               #
-               #    circ. plot
-               #
-               ,uiOutput("circParam")
-               ,uiOutput("circParamOTU")
-             )
-
-
-,wellPanel(
-  h4("Anchor")
-  ,splitLayout(
-    div(title="`moveKarHor`: character, OTUs' names of karyotypes that should be moved horizontally. See `mkhValue`
-"
-    ,textInput("moveKarHor",
-              "kar. to move",
-              value = ""
-              ,width = "100%")
-    )
-    ,div(title="`mkhValue`: numeric, value to move kar. hor. See `moveKarHor`
-"
-    ,numericInput("mkhValue", "move kar.", mkhValueDefault, min = -10, max = 10, step=0.25)
-  )
-  ) #sL
-  ,div(title='`anchor`: boolean, when TRUE, plots a parent progeny structure in karyotypes in `moveKarHor`
-'
-  ,checkboxInput("anchor", "Show anchor", anchorDefault)
-)
-  ,splitLayout(
-    div(title='`moveAnchorV`: numeric, displace anchor vertical portion to right or left. See `anchor`
-'
-    ,numericInput("moveAnchorV", "move anchor ver.", moveAnchorVDefault, min = -10, max = 10, step=0.25)
-  )
-,div(title='`moveAnchorH`: numeric, displace anchor horizontal portion to right or left. See `anchor`
-'    ,numericInput("moveAnchorH", "move anchor hor.", moveAnchorHDefault, min = -10, max = 10, step=0.25)
-  )
-)
-) #wp
-      ), # col
-      column(width=2
-             ,br()
-        ,wellPanel(
-          h4("Marks")
-          ,div(title="`mycolors`: optional, character vector with colors' names, which are associated automatically with marks according to their order in the data.frame of position of marks. See this ordering with `unique(dfMarkPos$markName)`. Argument example: `mycolors = c(\"red\",\"chartreuse3\",\"dodgerblue\")`. Not mandatory for plotting marks, package has default colors.
-          "
-          ,textInput('mycolors'
-                     ,HTML(paste("Colors", '(optional, see data.frame page)', sep = "<br/>") )
-                     , "red,blue")
-        )
-        ,div(title='`useOneDot`: boolean, use one dot instead of two in style of marks dots. Defaults to `FALSE`
-'          ,checkboxInput("useOneDot",
-                          "one dot only",
-                          useOneDotDefault
-)
-        )
-        )
-        ,wellPanel(
-          h4("chr. color")
-          ,splitLayout(
-            div(title='`chrColor`: (`"gray"`) Determines the color of chromosomes
-'
-          ,textInput('chrColor', 'chr.', "gray")
-            )
-          ,div(title='`cenColor`: Determines the color of centromeres. if GISH use `NULL`. Defaults to `chrColor`
-'
-          ,textInput('cenColor', 'cen.', "")
-          )
-          ) # sL
-            ,h4("Borders"),
-          div(title='`fixCenBorder`: boolean, when `TRUE` uses `chrColor` as centromere (and cen. mark) border color. See also `cenColor`, `chrColor`, `colorBorderMark`, `borderOfWhiteMarks`. No default value.
-'
-           , checkboxInput("fixCenBorder","chr. color as border color of cen.",TRUE)
-          )
-          ,splitLayout(
-            div(title='`chrBorderColor`: character, color for border of chromosomes, defaults to `chrColor`'
-            ,textInput("chrBorderColor","border color",NA)
-            )
-            ,div(title='`lwd.chr`: (`0.5`) width of border lines for chr. and marks when related param. absent.
-'
-          ,numericInput("lwd.chr","width",lwd.chrDefault,min=0,max=4,step=0.25)
-          )
-          ) # sL
-        ) # wP
-        ,wellPanel(
-          h4("Legend"),
-          div(title='`legend`: (`"aside"`) If you wanto to plot the names of marks near each chromosome use `legend = "inline"`, to the right of karyotypes use `legend = "aside"`, otherwise use `legend = ""` for no legend. See `markLabelSpacer`'
-          ,radioButtons("legend","leg. Pos.",c("aside","inline","none") )
-          )
-          ,splitLayout(
-            div(title='`legendWidth`: (`1.7`) numeric, factor to modify the width of the square and dots of legend. For `legend="aside"`.'
-        ,numericInput("legendWidth", "width", 1, min = 0.25, max = 5, step=0.05)
-            )
-        ,div(title='`legendHeight`: (`NA`) numeric, factor to modify the height of the square and dots of legend. For `legend="aside"`.'
-        ,numericInput("legendHeight", "height", 1, min = 0.25, max = 5, step=0.05)
-        )
-          ) # sL
-        )
-        ,wellPanel(
-          h4("Info"),
-          splitLayout(
-            div(title='`chrSize`: boolean, when `TRUE` adds total chr size under each chr. Defautls to `FALSE`
-'
-            ,checkboxInput("chrSize",
-                          HTML(paste("Show Chrom.", "size", sep = "<br/>") )
-                          ,TRUE)
-            ),
-            div(title="`chrSizeMbp`: boolean, when `TRUE` adds total Mbp chr. size to each chr. provided, there is a `Mbp` column in `dfChrSize` data.frame. Defaults to `FALSE`. If data in columns `shortArmSize`, or col. `chrSize` is in millions ('Mbp'). Use `chrSize=TRUE` not this one (not column `Mbp`, you don't need this).
-"
-            ,checkboxInput("chrSizeMbp",
-                          HTML(paste("Show Chr. Size", "in Mbp",tags$p("(column required)", style = "font-size: 80%;")
-                                     , sep = "<br/>") )
-                          # "Show Chr. Size in Mbp (column required)"
-                          ,FALSE)
-            )
-          ) # sL
-          ,div(title='`distTextChr`: Vertical distance from indices (text) to the chromosome.
-'
-          , numericInput("distTextChr", "chr. to text separation", 1.2, min = 0.2, max = 5, step=0.1)
-        )
-        ,div(title='`addOTUName`: (`TRUE`) If `TRUE` adds name of species (OTU) under karyotype
-'
-          , checkboxInput("addOTUName",
-                          "Show OTU name"
-                          ,FALSE)
-        )
-        ,div(title='`OTUfont`: numeric, `1` for normal, `2` for bold, `3` for italics, `4` for bold-italics
-'
-          ,radioButtons("OTUfont","OTU font type",
-                        c("normal"="1","bold"="2","italics"="3","bold italics"="4"),
-                        selected="1")
-        )
-          ) #wP
-      ) # col
-      ,column(
-        width=8
-        ,br()
-        ,fluidRow(
-          column(3
-        ,wellPanel(
-          h4("width % and height proportion"),
-            numericInput("widFactor", "width %",
-                         80, min = 5, max = 100, step=5)
-            ,          textOutput("imageWidth")
-            ,numericInput("heiFactor", "height ratio",
-                         0.5, min = 0.05, max = 20, step=0.05)
-            ,          textOutput("imageHeight")
-        ) # wP
-        ,wellPanel("Aspect",
-                   div(title='`chromatids`: boolean, when `TRUE` shows separated chromatids. Defaults to `TRUE`
-'
-                   ,checkboxInput("chromatids",
-                                 HTML(paste("Show separ.", "chromatids", sep = "<br/>") )
-                                 ,TRUE)
-                   ),
-                   splitLayout(
-                     div(title='`squareness`: (`4`) Squared or rounded vertices when marks of the "square" style (defined in data.frame passed to `dfMarkColor`). Affects chromosomes also. Smaller numbers = more rounded
-'
-                     ,numericInput("squareness","Vertices squareness"
-                                  ,squarenessDefault
-                                  , min = 1, max = 21, step=0.5)
-                     )
-                     ,div(title='`orderChr`: (`size`) character, use same as plot.
-'
-                     ,radioButtons(
-                       "orderChr",
-                       "chr. order by:"
-                       ,c("size"="size","as in d.f."="original", "alphab."="name"
-                          ,"group"="group"
-                          ,"col. chrNameUp"="chrNameUp")
-                       ,selected = orderChrDefault )
-                     )
-                   ) # sL
-        ) # wP
-        ) #c
-        ,column(3
-                ,wellPanel(
-                  h4("Ruler")
-                  ,div(title='`ruler`: (`TRUE`) When `TRUE` displays ruler to the left of karyotype, when `FALSE` shows no ruler
-'
-                  ,checkboxInput("ruler",
-                                "Show ruler",TRUE)
-                                )
-                  ,splitLayout(
-                    div(title='`rulerPos`: (`-0.5`) Absolute position of ruler, corresponds to "pos" argument of the function `axis` of R plots'
-                    ,numericInput("rulerPos", "modify ruler pos.", 0, min = -5, max = 5, step=0.1) ,
-                    )
-                    ,div(title='`ruler.tck`: (`-0.02`) tick size of ruler, corresponds to "tck" argument of `axis` function
-'
-                    ,numericInput("ruler.tck", "modify ruler ticks", -0.01, min = -5, max = 5, step=0.005)
-                  )
-                  ),
-                  splitLayout(
-                    div(title="`rulerNumberSize`: (`1`) Size of number's font in ruler
-"
-                    ,numericInput("rulerNumberSize", "font size of rulers", 0.8, min = .1, max = 5, step=0.1) ,
-                    )
-                    ,div(title="
-`xPosRulerTitle`: (`2.6`) Modifies the horizontal position of the title of rulers (Mb, etc). Moves to left from 1st chr. in `chrSpacing` times
-"
-                         ,numericInput("xPosRulerTitle", "pos. of ruler title", 3, min = -5, max = 5, step=0.1)
-                  )
-                  )
-                ) #wp
-                ,wellPanel(
-                  h4("Notes")
-                  ,splitLayout(
-                    div(title="`OTUasNote`: (`FALSE`) See also `notes`. If `TRUE` OTU name is written to the right, as `notes`.
-"
-                    ,checkboxInput("OTUasNote",
-                                  HTML(paste("OTU as note", "(right)", sep = "<br/>") )
-                                  ,FALSE)
-                    )
-                    ,div(title="`notesTextSize`: (`0.4`) numeric, font size of notes, see `notes`
-"
-                    ,numericInput("notesTextSize", "font size of notes",
-                                  notesTextSizeDefault, min = 0.1, max = 10, step=0.1)
-                    )
-                  ) # sL
-                  ,div(title="`notesPosX`: (`0.5`) numeric, moves right notes in the x axis
-"
-                  ,numericInput("notesPosX", "pos. right notes hor.",
-                                notesPosXDefault, min = -20, max = 20, step=0.1
-                  )
-                  )
-
-                ) # wP
-
-                )
-        ,column(3
-               ,wellPanel(
-                  h4("Horizontal Margins"),
-                  splitLayout(
-                    div(title='`xlimLeftMod`: (`1`) modifies `xlim` left (first) component of the plot as in any "R-plot"
-'
-                    ,numericInput("xlimLeftMod", "left",
-                                 2, min = -5, max = 5, step=0.5)
-                    )
-,div(title='`xlimRightMod`:	(`2`) `xlim` (right) modification by adding space to the right of idiograms
-'
-                    ,numericInput("xlimRightMod", "right",
-                                 xlimRightModDefault, min = -5, max = 5, step=0.5)
-                  )
-) # sL
-                ) # wp
-
-        ,wellPanel(
-          h4("Horizontal separ.")
-          ,        splitLayout(
-            div(title='`chrWidth`: (`0.5`) Determines the width of chromosomes
-'
-            ,numericInput("chrWidth", "Chr. width", 1.2, min = 0.1, max = 5, step=0.1)
-            )
-            ,div(title='`chrSpacing`: (`0.5`) Determines the horizontal spacing among chromosomes
-'
-            ,numericInput("chrSpacing", "horiz. spacing chr.", 1, min = 0.1, max = 5, step=0.1)
-            )
-          )
-        ) # wP
-        ,wellPanel(
-          h4("Indices"),
-          splitLayout(
-            div(title='`morpho`: (`"both"`) character, if `"both"` (default) prints the Guerra (1986) and Levan (1964) classif. of cen. position.  , use also `"Guerra"` or `"Levan"` or `""` for none. See `?armRatioCI` also (function).
-'
-            ,radioButtons("morpho","Morphology",c("Guerra (1986)"="Guerra","Levan (1974)"="Levan", "both"="both","none"="")
-                          )
-            ),
-            div(title='`chrIndex`: (`"both"`) character, add arm ratio with `"AR"` and centromeric index with `"CI"`, or `"both"` (Default), or `""` for none to each chromosome [@Levan1964]. See `armRatioCI`also.
-'
-            ,radioButtons("chrIndex","Add AR & CI"
-                         ,c("Chr. Index"="CI","Arm Ratio"="AR", "both"="both","none"="")
-                         ,selected = "CI" )
-            )
-          ) # sL
-        ) #wp
-        )
-        ,column(3
-                ,wellPanel(
-                  h4("Vertical Margins"),
-                  splitLayout(
-                    div(title='`ylimBotMod`:	(`0.2`) modify `ylim` bottom component of plot adding more space
-'
-                    ,numericInput("ylimBotMod", "bottom",
-                                 ylimBotModDefault, min = -5, max = 5, step=0.5)
-                    )
-                    ,div(title='`ylimTopMod`: (`0.2`) modify `ylim` top component of plot adding more space.
-'
-                    ,numericInput("ylimTopMod", "top"
-                                  , 0, min = -5, max = 5, step=0.2)
-                    )
-                  ) #sL
-                ) #wp
-                ,wellPanel(
-                  h4("Vertical separ."),
-                  splitLayout(
-                    div(title='`karHeight`: (`2`) Vertical size of karyotypes considering only chromosomes. for ex `karHeight = 1`
-'
-                    ,numericInput("karHeight", HTML(paste("Karyotype","height", sep = "<br/>") )
-                                 ,5, min = 0.5, max = 50, step=0.5)
-                    )
-                    ,
-                    div(title='`karHeiSpace`: (`2.5`) Vertical size of karyotypes including spacer. for ex `karHeiSpace = 1.2`
-'
-                    ,numericInput("karHeiSpace", HTML(paste("kar. vert. size","with space", sep = "<br/>") )
-                                 , 2.5, min = 2, max = 150, step=0.5)
-                    )
-                  ) # sL
-                  ,splitLayout(
-                    div(title='`karSepar`: (`TRUE`) If `TRUE` reduces the space among karyotypes. `FALSE` = equally sized karyotypes or `TRUE` = equally spaced karyotypes. Incompatible with `addMissingOTUAfter`
-'
-                    ,checkboxInput("karSepar"
-                                  ,HTML(paste("equally spaced","kar.", sep = "<br/>") )
-                                  ,FALSE)
-                    )
-                    ,div(title='`amoSepar`: (`9`) For `karSepar = TRUE`, if zero, no space among karyotypes. Amount of separation.  if overlap, increase this and `karHeiSpace`
-'
-                    ,numericInput("amoSepar", "kar. vert. separ", 10, min = 0, max = 15, step=0.5)
-                    )
-                  ) # sL
-                ) #Wp
-        ) # c
-        ) #fr
-        ,fluidRow(
-     wellPanel(style = "overflow-y:auto;text-align:center;"
-
-        # ,actionButton("goButton", "Go!", class = "btn-success")
-
-        ,div(style = 'overflow-y:auto;overflow-x:auto;min-width:1030px;'
-        ,plotOutput("idiogramPlot"
-                    ,height = "auto"
-        )
-      ) #d
-      ) # wp
-        )
-
-     ) #c
-    ) # fR
-  })
-
-  output$imageWidth<- renderText({
+  output$imageWidth<- renderUI({
     px<-session$clientData$output_idiogramPlot_width*(as.numeric(input$widFactor)/100)
-    paste("Width:",px,"px;",px/80,"in")
+    HTML(paste(paste("Width:",px,"px"),paste(px/80,"in"), sep ="<br/>" ) )
   })
 
-  output$imageHeight<- renderText({
+  output$imageHeight<- renderUI({
     px <-session$clientData$output_idiogramPlot_width*(as.numeric(input$heiFactor)*(as.numeric(input$widFactor)/100)
     )
-    paste("Heigth:"
-          ,px,"px;",px/80,"in")
+    HTML(paste(paste("Heigth:"
+          ,px,"px"),paste(px/80,"in"), sep ="<br/>" ) )
   })
 
-observeEvent(input$exampleId,{
+observeEvent(input$exampleButton,{
   filename <- tempfile(fileext=".txt")
   # filename <- "mylog.txt"
   filenamePath <- normalizePath(filename, mustWork = F)
@@ -2153,24 +1240,52 @@ df1<-values[["dfList"]]$dfChrSize
 })
 
 observe({
-
   values[["mycolors"]] <- tryCatch(unlist(strsplit(input$mycolors,",") )
                                    , error=function(e){NULL} )
 
+  dfChrSizeName<- ifelse(invalid(values[["df1"]] )
+                         ,shQuote("")
+                         ,ifelse(input$saveType=="rds"
+                         ,input$chrfilename2
+                   ,shQuote(paste0(isolate(input$chrfilename2),".csv" ) )
+                   )
+  )
+
+  dfMarkPosName<- ifelse(invalid(values[["df1Mark"]] )
+                          ,shQuote("")
+                         ,ifelse(input$saveType=="rds"
+                                 ,input$markfilename2
+                          ,shQuote(paste0(isolate(input$markfilename2),".csv" ) )
+                  )
+  )
+
+  dfMarkColorName<-  ifelse(invalid(values[["df1MStyle"]] )
+                          ,shQuote("")
+                          ,ifelse(input$saveType=="rds"
+                            ,input$MStylefilename2
+                            ,shQuote(paste0(isolate(input$MStylefilename2),".csv" ) )
+                         )
+  )
+
   mc <- match.call(plotIdiograms,
                  call("plotIdiograms",
-                      dfChrSize  = shQuote(input$chrfilename2)
-                      ,dfMarkPos = ifelse(invalid(values[["df1Mark"]] ),shQuote(""),shQuote(input$markfilename2) )
-                      ,dfMarkColor= ifelse(invalid(values[["df1MStyle"]] ),shQuote(""),shQuote(input$MStylefilename2) )
-
+                      dfChrSize  = dfChrSizeName
+                      ,dfMarkPos = dfMarkPosName
+                      ,dfMarkColor= dfMarkColorName
                       ,karHeight=input$karHeight,             # kar. height
                       karHeiSpace = input$karHeiSpace,        # kar. height
                       amoSepar = input$amoSepar,
                       karSepar = input$karSepar,
                       legend = shQuote(input$legend),
-                      mycolors = if(length( values[["mycolors"]] )==0){shQuote("")
-                        } else{values[["mycolors"]]
-                          },
+                      mycolors = if(length( values[["mycolors"]] )==0){
+                          shQuote("")
+                        } else if (length( values[["mycolors"]] )==1) {
+                          shQuote(values[["mycolors"]])
+                        } else {
+                          values[["mycolors"]]
+                        },
+                      cenFormat = shQuote(input$cenFormat),
+                      cenFactor = input$cenFactor,
 
                       chrColor = shQuote(input$chrColor),
                       cenColor = shQuote(input$cenColor),
@@ -2181,6 +1296,7 @@ observe({
                       squareness = input$squareness
                       ,orderChr = shQuote(input$orderChr)
                       ,useOneDot = input$useOneDot
+                      ,pMarkFac = input$pMarkFac
 
                       ,chrLabelSpacing = input$chrLabelSpacing
                         ,rotation = input$rotation
@@ -2197,8 +1313,11 @@ observe({
                       ,morpho=shQuote(input$morpho),          # chr. morpho. classif. (Guerra, Levan, both, "" ) ver. >= 1.12 only
                       chrIndex=shQuote(input$chrIndex),            # cen. pos. (CI, AR, both, "" ) ver. >= 1.12 only
                       chrSize = input$chrSize,           # add chr. sizes under chr.
+                      indexIdTextSize = input$indexIdTextSize,
                       chrSizeMbp = input$chrSizeMbp,        # add Mbp sizes under chr. (see above)
                       chromatids = input$chromatids,
+                      xModifier = input$xModifier,
+
                       circularPlot = input$circularPlot,
 
                       addOTUName = input$addOTUName,
@@ -2237,26 +1356,109 @@ observe({
                       )
                  )
   mclist <- as.list( mc )
-  mclist[1]<-NULL
-  seq<-paste(names(mclist ),mclist  , sep="=", collapse = ",\n")
-  add3<-paste0('svg("dfOfChrSize.svg",width=',values[["mysvgwidth"]],", height=",values[["mysvgheight"]],')')
+  mclist[1] <- NULL
+
+  if (!invalid(!as.logical(input$keepDefault) ) ) {
+    if ( !as.logical(input$keepDefault) )  {
+
+  paramVec<-gsub("Default","",names(paramValues) )
+
+  for (i in 1:length(paramVec)) {
+
+    myl <- unlist(mclist[which(names(mclist)==paramVec[i])] )
+
+    myDef<-paste0(paramVec[i],"Default" )
+
+    if(!invalid(myl) ) {
+    if(!invalid(get(myDef) ) ) {
+      if (length( setequal(myl,get(myDef) ) ) ) {
+        if( setequal(myl,get(myDef) ) ) {
+          mclist[which(names(mclist)==paramVec[i])]<-NA
+        }
+      }
+      if (length( setequal(myl,paste0("'",get(myDef),"'" ) ) ) ) {
+        if( setequal(myl,paste0("'",get(myDef),"'" ) ) ) {
+          mclist[which(names(mclist)==paramVec[i])]<-NA
+        }
+      }
+
+    }
+      if(length(setequal(myl,"") ) ) {
+        if(setequal(myl,"") ){
+          mclist[which(names(mclist)==paramVec[i])]<-NA
+        }
+      }
+      if(length(setequal(myl,"''") ) ) {
+        if( setequal(myl,"''") ) {
+          mclist[which(names(mclist)==paramVec[i])]<-NA
+        }
+      }
+    } # myl mydf
+  } # for
+
+  mclist<-mclist[which(sapply(mclist, unlist) != "''")]
+  mclist<-mclist[which(!is.na(sapply(mclist, unlist) ) ) ]
+  # mclist<-mclist[which(!is.na(sapply(names(mclist), unlist) ) ) ]
+  # mclist<-mclist[which(!is.null(sapply(mclist, unlist) ) ) ]
+
+
+    } # if
+  } #  keep Default
+
+  seq <- paste(names(mclist), mclist  , sep="=", collapse = ",\n")
+  # print(str(mclist))
+
+  if(!"dfChrSize" %in% names(mclist) ){
+    seq<-character()
+  } else if (mclist$dfChrSize=="''"){
+    seq<-character()
+  }
+
+
+  # print(seq)
+
+  add3 <- paste0('svg("dfOfChrSize.svg",width=',values[["mysvgwidth"]],", height=",values[["mysvgheight"]],')')
+
+  chrRds   <-paste0("chrData    <- readRDS('",input$chrfilename2,".rds')\n")
+
+  markRds<- ifelse(invalid(values[["df1Mark"]] )
+                         ,""
+                         ,paste0("markData   <- readRDS('",input$markfilename2,".rds')\n")
+                         )
+
+
+  mstyleRds<-  ifelse(invalid(values[["df1MStyle"]] )
+                            ,""
+                             ,paste0("MStyleData <- readRDS('",input$MStylefilename2,".rds')\n")
+                            )
+  rdsAdd  <- ifelse(input$saveType=="rds",chrRds,"")
+  mrdsAdd <- ifelse(input$saveType=="rds",markRds,"")
+  msrdsAdd<- ifelse(input$saveType=="rds",mstyleRds,"")
+
   block<-ifelse(input$asSvg,"","#")
+
   values[["strFun"]] <- paste0(add0,"\n"
                                ,add1,"\n"
                                ,block
                                ,add2,"\n"
                                ,add2b,"\n"
                                ,block
-                               ,add3,"\n"
-                               ,"plotIdiograms(",seq,")"
+                               ,ifelse(length(values[["mysvgwidth"]]),add3,"")
+                               # ,add3
+                               ,"\n"
+                               ,rdsAdd
+                               ,mrdsAdd
+                               ,msrdsAdd
+                               ,ifelse(length(seq),paste0("plotIdiograms(",seq,")"),"")
                                ,"\n"
                                ,block
-                               ,"dev.off()"
+                               ,ifelse(length(values[["mysvgwidth"]]),"dev.off()","")
                                ,"\n}")
 
 
 
-}) # observe
+}
+) # observe
 
 output$downloadR <- downloadHandler(
 
@@ -2276,7 +1478,7 @@ output$buttonScript <-  renderUI({
   validate(
     need(try(scriptR()), "")
   )
-  downloadButton('downloadR', 'Download script as .R')
+  downloadButton('downloadR', 'Download R-script')
 })
 
 
@@ -2286,8 +1488,9 @@ output$idiogramPlot <- renderImage( {
 
   # isolate ({
 
-# validate(need(try(df()),"Start in previous page (left) with data.frames" ))
 validate(need(try(values[["df1"]]),"Start in previous page (left) with data.frames" ))
+validate(need(try(inherits(values[["df1"]],"data.frame") ),"Start in previous page (left) with data.frames" ))
+validate(need(try(nrow(values[["df1"]])>0 ),"Start in previous page (left) with data.frames" ))
 
       width  <- session$clientData$output_idiogramPlot_width*(as.numeric(input$widFactor)/100 )
       height <- session$clientData$output_idiogramPlot_width*(as.numeric(input$heiFactor)*(as.numeric(input$widFactor)/100)
@@ -2307,82 +1510,85 @@ validate(need(try(values[["df1"]]),"Start in previous page (left) with data.fram
 capture.output (
     # isolate(
       plotIdiograms(
-      # dfChrSize  =df(),
-      dfChrSize  =values[["df1"]],# data.frame of chr. size
-                  dfMarkColor=values[["df1MStyle"]],  # d.f of mark style <- Optional
-                  dfMarkPos  =values[["df1Mark"]],     # df of mark positions (includes cen. marks)
+                  dfChrSize  = values[["df1"]],# data.frame of chr. size
+                  dfMarkColor= values[["df1MStyle"]],  # d.f of mark style <- Optional
+                  dfMarkPos  = values[["df1Mark"]],     # df of mark positions (includes cen. marks)
 
-                  karHeight=input$karHeight,              # kar. height
-                  karHeiSpace = input$karHeiSpace,              # kar. height
-                  amoSepar = input$amoSepar,
-                  karSepar = input$karSepar,
-                  legend = as.character(input$legend),
+                  karHeight  = input$karHeight,              # kar. height
+                  karHeiSpace= input$karHeiSpace,              # kar. height
+                  amoSepar   = input$amoSepar,
+                  karSepar   = input$karSepar,
+                  legend     = as.character(input$legend),
 
-                  mycolors = if(length( values[["mycolors"]] )==0 ){""} else { values[["mycolors"]]}
-                                     ,
+                  mycolors   = if(length( values[["mycolors"]] )==0 ){""} else { values[["mycolors"]]}
+                  ,
+                  cenFormat = input$cenFormat,
+                  cenFactor = input$cenFactor,
 
-                  chrColor = input$chrColor,
-                  cenColor = input$cenColor,
+                  chrColor   = input$chrColor,
+                  cenColor   = input$cenColor,
 
-                  chrWidth = input$chrWidth,           # chr. width
+                  chrWidth   = input$chrWidth,           # chr. width
                   chrSpacing = input$chrSpacing,           # space among chr.
 
                   squareness = input$squareness
-                  ,orderChr = input$orderChr
+                  ,orderChr  = input$orderChr
                   ,useOneDot = input$useOneDot
+                  ,pMarkFac = input$pMarkFac
 
                   ,chrLabelSpacing = input$chrLabelSpacing
-                  ,rotation = input$rotation
-                  ,shrinkFactor  = input$shrinkFactor
-                  ,radius   = input$radius
-                  ,circleCenter  = input$circleCenter
-                  ,OTUsrt = input$OTUsrt
-                  ,OTUjustif  = input$OTUjustif
-                  ,OTULabelSpacerx= input$OTULabelSpacerx
-                  ,OTUlegendHeight= input$OTUlegendHeight
-                  ,OTUplacing  = input$OTUplacing
+                  ,rotation        = input$rotation
+                  ,shrinkFactor    = input$shrinkFactor
+                  ,radius          = input$radius
+                  ,circleCenter    = input$circleCenter
+                  ,OTUsrt          = input$OTUsrt
+                  ,OTUjustif       = input$OTUjustif
+                  ,OTULabelSpacerx = input$OTULabelSpacerx
+                  ,OTUlegendHeight = input$OTUlegendHeight
+                  ,OTUplacing      = input$OTUplacing
 
-                  ,morpho=input$morpho,          # chr. morpho. classif. (Guerra, Levan, both, "" ) ver. >= 1.12 only
-                  chrIndex=input$chrIndex,            # cen. pos. (CI, AR, both, "" ) ver. >= 1.12 only
-                  chrSize = input$chrSize,           # add chr. sizes under chr.
-                  chrSizeMbp = input$chrSizeMbp,        # add Mbp sizes under chr. (see above)
-                  chromatids = input$chromatids,
-                  circularPlot = input$circularPlot,
+                  ,morpho       = input$morpho,          # chr. morpho. classif. (Guerra, Levan, both, "" ) ver. >= 1.12 only
+                  chrIndex      = input$chrIndex,            # cen. pos. (CI, AR, both, "" ) ver. >= 1.12 only
+                  chrSize       = input$chrSize,           # add chr. sizes under chr.
+                  indexIdTextSize= input$indexIdTextSize,
+                  chrSizeMbp    = input$chrSizeMbp,        # add Mbp sizes under chr. (see above)
+                  chromatids    = input$chromatids,
+                  xModifier     = input$xModifier,
+                  circularPlot  = input$circularPlot,
 
                   addOTUName = input$addOTUName,
-                  OTUfont = as.numeric(input$OTUfont),
+                  OTUfont    = as.numeric(input$OTUfont),
                   moveKarHor = as.character(input$moveKarHor),
-                  mkhValue = input$mkhValue,
-                  anchor = input$anchor,
+                  mkhValue   = input$mkhValue,
+                  anchor     = input$anchor,
                   moveAnchorV = input$moveAnchorV,
                   moveAnchorH = input$moveAnchorH,
 
-                  OTUasNote = input$OTUasNote,
+                  OTUasNote     = input$OTUasNote,
                   notesTextSize = input$notesTextSize,
-                  notesPosX = input$notesPosX ,
+                  notesPosX     = input$notesPosX ,
 
-                  ruler =input$ruler,
-                  rulerPos = input$rulerPos,              # position of ruler
-                  ruler.tck= input$ruler.tck,          # size and orientation of ruler ticks
-                  rulerNumberSize=input$rulerNumberSize        # font size of rulers
-                  ,xPosRulerTitle = input$xPosRulerTitle             # pos of ruler title
+                  ruler          = input$ruler,
+                  rulerPos       = input$rulerPos,              # position of ruler
+                  ruler.tck      = input$ruler.tck,          # size and orientation of ruler ticks
+                  rulerNumberSize= input$rulerNumberSize        # font size of rulers
+                  ,xPosRulerTitle= input$xPosRulerTitle             # pos of ruler title
 
-                  ,legendWidth=input$legendWidth            # width of legend items
-                  ,legendHeight=input$legendHeight
+                  ,legendWidth     = input$legendWidth            # width of legend items
+                  ,legendHeight    = input$legendHeight
 
-                  ,fixCenBorder = input$fixCenBorder      # use chrColor as border color of cen. or cen. marks
-      ,chrBorderColor = input$chrBorderColor
-      ,lwd.chr = input$lwd.chr
-      ,distTextChr = input$distTextChr        # chr. text separation
+                  ,fixCenBorder    = input$fixCenBorder      # use chrColor as border color of cen. or cen. marks
+                  , chrBorderColor = input$chrBorderColor
+                  ,lwd.chr         = input$lwd.chr
+                  ,distTextChr     = input$distTextChr        # chr. text separation
 
-                  ,xlimLeftMod = input$xlimLeftMod          # xlim left param.
-                  ,xlimRightMod = input$xlimRightMod          # xlim left param.
+                  ,xlimLeftMod     = input$xlimLeftMod          # xlim left param.
+                  ,xlimRightMod    = input$xlimRightMod          # xlim left param.
 
                   ,ylimBotMod = input$ylimBotMod           # modify ylim bottom argument
                   ,ylimTopMod = input$ylimTopMod           # modify ylim top argument
     ) # plot
-    # )
-    ,    file= (outfile <- file(values[["outfile"]],"w")),type="message"
+    ,    file = (outfile <- file(values[["outfile"]],"w")),type="message" #"output"
  ) # capture
 # message(values[["outfile"]])
 close(outfile)
@@ -2399,17 +1605,86 @@ list(src = normalizePath(outfileSvg),
 } , deleteFile = T
 ) # end plot or image^
 
-  filenameR <- eventReactive(input$exampleId,{
+  filenameR <- eventReactive({input$exampleButton
+    values[["df1"]]# data.frame of chr. s
+    values[["df1MStyle"]]  # d.f of mark
+    values[["df1Mark"]]     # df of mark
+    input$karHeight              # kar. h
+    input$karHeiSpace              # kar.
+    input$amoSepar
+    input$karSepar
+    input$cenFormat
+    input$cenFactor
+
+    as.character(input$legend)
+    values[["mycolors"]]
+
+    input$chrColor
+    input$cenColor
+    input$chrWidth           # chr. width
+    input$chrSpacing           # space am
+    input$squareness
+    input$orderChr
+    input$useOneDot
+    input$pMarkFac
+    input$chrLabelSpacing
+    input$rotation
+    input$shrinkFactor
+    input$radius
+    input$circleCenter
+    input$OTUsrt
+    input$OTUjustif
+    input$OTULabelSpacerx
+    input$OTUlegendHeight
+    input$OTUplacing
+    input$morpho          # chr. morpho
+    input$chrIndex            # cen. po
+    input$chrSize           # add chr.
+    input$indexIdTextSize
+    input$chrSizeMbp        # add Mbp
+    input$chromatids
+    input$xModifier
+    input$circularPlot
+    input$addOTUName
+    as.numeric(input$OTUfont)
+    as.character(input$moveKarHor)
+    input$mkhValue
+    input$anchor
+    input$moveAnchorV
+    input$moveAnchorH
+    input$OTUasNote
+    input$notesTextSize
+    input$notesPosX
+    input$ruler
+    input$rulerPos              # pos
+    input$ruler.tck          # size a
+    input$rulerNumberSize        # fon
+    input$xPosRulerTitle             #
+    input$legendWidth            # w
+    input$legendHeight
+    input$fixCenBorder      # use ch
+    input$chrBorderColor
+    input$lwd.chr
+    input$distTextChr        # chr.
+    input$xlimLeftMod          # xli
+    input$xlimRightMod          # xl
+    input$ylimBotMod           # modify y
+    input$ylimTopMod           # modify y
+                             }
+                             ,{
     f<-values[["outfile"]]
   })
 
 output$log <- renderText({
     rawText <- filenameR()
-    validate(need(try(readLines(rawText) ), message = FALSE) )
-    replacedText <- paste(readLines(rawText ), collapse = "\n")
+    validate(need(try(readLines(rawText),TRUE ), message = FALSE) )
+
+      replacedText <- paste(tryCatch(readLines(rawText ),error=function(e){"nothing to write"} )
+                                     , collapse = "\n")
       replacedText <- gsub("\\\033\\[[[:digit:]]{2}m","",replacedText )
       return(replacedText)
-  }
+    }
+
 )
 
 output$code <- renderText({
@@ -2428,7 +1703,8 @@ output$code <- renderText({
   })
 
   output$markdown <- renderUI({
-    HTML(markdown::markdownToHTML(knit('about.Rmd', quiet = TRUE)))
+    htmltools::tags$iframe(src = "README2.html", width = '100%',  height = 1000,  style = "border:none;")
+    # HTML(markdown::markdownToHTML(knit('about.Rmd', quiet = TRUE)))
   })
 
   output$strpanel = renderUI({ # was treechar2
@@ -2438,44 +1714,527 @@ output$code <- renderText({
       rclipboardSetup()
       ,splitLayout(
       uiOutput("clip")
+      ,div(style = 'max-width:100px;'
       ,uiOutput("buttonScript")
+      )
       ,checkboxInput("asSvg","to .svg (keeps size)",TRUE)
+      ,checkboxInput("keepDefault","keep default values",FALSE)
+      ,radioButtons("saveType","download format",c("csv","rds"),"csv",inline = T)
       )
       ,verbatimTextOutput("code")
 
     ) # end
       ),
-    column(width=3
+    column(width=2
            ,wellPanel(
              h4("Save chr. data")
-             ,helpText("optional")
+             ,helpText("")
              ,textInput("chrfilename2",
                         "File name",
-                        value = "chrData.csv"
+                        value = "chrData"
                         ,width = "50%")
              ,uiOutput("buttontable2")
            ) # end wellpanel
            ,wellPanel(
              h4("Save mark pos. data")
-             ,helpText("optional")
+             ,helpText("")
              ,textInput("markfilename2",
                         "File name",
-                        value = "markData.csv"
+                        value = "markData"
                         ,width = "50%")
              ,uiOutput("buttontableMark2")
            ) # end wellpanel
            ,wellPanel(
              h4("Save mark style data")
-             ,helpText("optional")
+             ,helpText("")
              ,textInput("MStylefilename2",
                         "File name",
-                        value = "MStyleData.csv"
+                        value = "MStyleData"
                         ,width = "50%")
              ,uiOutput("buttontableMStyle2")
            ) # end wellpanel
            )
+    # ,column(3
+    #         ,wellPanel(
+    #           h4("Save chr. data")
+    #           ,helpText("optional")
+    #           ,textInput("",
+    #                      "File name",
+    #                      value = ""
+    #                      ,width = "50%")
+    #
+    #         ) # wP
+    # )
     ) # fR
   }) # end output
+
+  output$parameterPanel = renderUI({
+    fluidRow(
+      column(width=2
+             ,br()
+             ,wellPanel(
+               fluidRow(
+                 column(6
+                        ,h4("Notes")
+                        ,div(style= "margin-top: 15px;margin-bottom:-10px"
+                             ,title="`notesTextSize`: (`0.4`) numeric, font size of notes, see `notes`"
+                             ,numericInput("notesTextSize"
+                                           ,HTML(paste("font", "size", sep = "<br/>") )
+                                           ,notesTextSizeDefault, min = 0.1, max = 10, step=0.1)
+                        )
+                 ),column(6
+                          ,div(style= "margin-top: -15px; margin-bottom:0px"
+                               ,title="`OTUasNote`: (`FALSE`) See also `notes`. If `TRUE` OTU name is written to the right, as `notes`."
+                               ,checkboxInput("OTUasNote",
+                                              HTML(paste("OTU as note", "(right)", sep = "<br/>") )
+                                              ,OTUasNoteDefault)
+                          )
+                          ,div(style= "margin-top:-10px;margin-bottom:-15px"
+                               ,title="`notesPosX`: (`0.5`) numeric, moves right notes in the x axis"
+                               ,numericInput("notesPosX"
+                                             ,HTML(paste("right notes", "horiz. pos.", sep = "<br/>") )
+                                             ,notesPosXDefault, min = -20, max = 20, step=0.1
+                               )
+                          )
+                 )
+               )
+             ) # wP
+
+             ,wellPanel(style= "margin-top: -10px"
+               ,splitLayout(
+                 h4("Layout"),
+                 div(title='`circularPlot`:	boolean, if `TRUE` chromosomes are plotted in concentric circles. Defaults to `FALSE`. See `verticalPlot`'
+                     ,checkboxInput("circularPlot",
+                                    HTML(paste("Circular", "Plot", sep = "<br/>") )
+                                    ,circularPlotDefault)
+                 )
+               )
+
+               #
+               #    circ. plot
+               #
+               ,uiOutput("circParam")
+               ,uiOutput("circParamOTU")
+             )
+
+
+             ,wellPanel(
+               splitLayout(
+                 h4("Anchor")
+                 ,  div(title='`anchor`: boolean, when TRUE, plots a parent progeny structure in karyotypes in `moveKarHor`
+'
+                        ,checkboxInput("anchor", "Show anchor", anchorDefault)
+                 )
+               )
+               ,splitLayout(
+                 div(title="`moveKarHor`: character, OTUs' names of karyotypes that should be moved horizontally. See `mkhValue`
+"
+                     ,textInput("moveKarHor",
+                                "kar. to move",
+                                value = moveKarHorDefault
+                                ,width = "100%")
+                 )
+                 ,div(title="`mkhValue`: numeric, value to move kar. hor. See `moveKarHor`
+"
+                      ,numericInput("mkhValue", "move kar.", mkhValueDefault, min = -10, max = 10, step=0.25)
+                 )
+               ) #sL
+               ,splitLayout(
+                 div(title='`moveAnchorV`: numeric, displace anchor vertical portion to right or left. See `anchor`
+'
+                     ,numericInput("moveAnchorV", "move anchor ver.", moveAnchorVDefault, min = -10, max = 10, step=0.25)
+                 )
+                 ,div(title='`moveAnchorH`: numeric, displace anchor horizontal portion to right or left. See `anchor`'
+                      ,numericInput("moveAnchorH", "move anchor hor.", moveAnchorHDefault, min = -10, max = 10, step=0.25)
+                 )
+               )
+             ) #wp
+      ), # col
+      column(width=2
+             ,br()
+             ,wellPanel(style = "padding: 10px 5px 0px 5px;margin-bottom: 20px" # trbl
+               ,fluidRow(
+                 column(6
+                       , h4("Marks")
+                 ,div(title='`useOneDot`: boolean, use one dot instead of two in style of marks dots. Defaults to `FALSE`
+'          ,checkboxInput("useOneDot",
+                          "one dot only",
+                          useOneDotDefault
+)
+                 )
+),column(6,
+div(style= "margin-bottom:-5px"
+  ,title="`pMarkFac` numeric, fraction of chr. size for `exProtein` style marks. Defaults to `0.25`"
+    ,numericInput("pMarkFac"
+                  ,HTML(paste("exProtein"
+                              ,"mark size", sep = "<br/>") )
+                  ,pMarkFacDefault,min=0.05,max=1,step=0.05)
+)
+               )
+             )
+)
+,wellPanel(style = "background: #F7DCDA; margin-top:-15px; padding: 0px 5px 0px 5px"
+           ,h4("Colors")
+           ,splitLayout(
+             div(title='`chrColor`: (`"gray"`) Determines the color of chromosomes
+'
+                 ,textInput('chrColor', 'chrom.', chrColorDefault)
+             )
+             ,div(title='`cenColor`: Determines the color of centromeres. if GISH use `NULL`. Defaults to `chrColor`
+'
+                  ,textInput('cenColor', 'centrom.', cenColorDefault)
+             )
+           ) # sL
+           ,splitLayout(
+             div(title='`fixCenBorder`: boolean, when `TRUE` uses `chrColor` as centromere (and cen. mark) border color. See also `cenColor`, `chrColor`, `colorBorderMark`, `borderOfWhiteMarks`. No default value.
+'
+                 , checkboxInput("fixCenBorder"
+                                 ,HTML(paste("chr. color as", "border color","of cen.", sep = "<br/>") )
+                                 ,fixCenBorderDefault)
+             )
+             ,div(title='`chrBorderColor`: character, color for border of chromosomes, defaults to `chrColor`'
+                  ,textInput("chrBorderColor","border",chrBorderColorDefault)
+             )
+           ) # sL
+           ,div(style= "margin-bottom:-5px"
+           ,title="`mycolors`: optional, character vector with colors' names, which are associated automatically with marks according to their order in the data.frame of position of marks. See this ordering with `unique(dfMarkPos$markName)`. Argument example: `mycolors = c(\"red\",\"chartreuse3\",\"dodgerblue\")`. Not mandatory for plotting marks, package has default colors.
+          "
+                ,textInput('mycolors'
+                           ,HTML(paste("Marks"
+                                       ,tags$p("(optional, see data.frame page)", style = "font-size: 80%; font-weight: normal;")
+                                       ,tags$p("here, only comma separated", style = "font-size: 80%;")
+                                       # , sep = "<br/>"
+                           ) )
+                           , mycolorsDefault)
+           )
+) # wP
+,wellPanel(style="margin-top:-15px;"
+    ,h4("Indices & Info.")
+    ,splitLayout(
+    div(title='`morpho`: (`"both"`) character, if `"both"` (default) prints the Guerra (1986) and Levan (1964) classif. of cen. position.  , use also `"Guerra"` or `"Levan"` or `""` for none. See `?armRatioCI` also (function).
+'
+        ,radioButtons("morpho","Morphology"
+                      ,c("Guerra (1986)"="Guerra","Levan (1974)"="Levan"
+                         , "both"="both","none"="")
+                      ,selected = morphoDefault
+        )
+    ),
+    div(title='`chrIndex`: (`"both"`) character, add arm ratio with `"AR"` and centromeric index with `"CI"`, or `"both"` (Default), or `""` for none to each chromosome [@Levan1964]. See `armRatioCI`also.
+'
+        ,radioButtons("chrIndex","Add AR & CI"
+                      ,c("Chr. Index"="CI","Arm Ratio"="AR", "both"="both","none"="")
+                      ,selected = chrIndexDefault )
+    )
+  ) # sL
+  , fluidRow(
+    column(6
+           ,div(title='`indexIdTextSize`: numeric, font size of chr. and kar. indices and
+                   chromosome name. Defaults to `1`'
+               ,numericInput("indexIdTextSize",
+                             HTML(paste("font","size",sep = "<br/>") )
+                             ,indexIdTextSizeDefault
+                             , min = 0.05, max = 5, step=0.05)
+           )
+           ,div(style="margin-top:-10px;"
+           ,title='`chrSize`: boolean, when `TRUE` adds total chr size under each chr. Defautls to `FALSE`
+'
+                ,checkboxInput("chrSize",
+                               HTML(paste("Show Chrom.", "size", sep = "<br/>") )
+                               ,chrSizeDefault)
+           ),
+           div(style="margin-top:-15px;"
+           ,title="`chrSizeMbp`: boolean, when `TRUE` adds total Mbp chr. size to each chr. provided, there is a `Mbp` column in `dfChrSize` data.frame. Defaults to `FALSE`. If data in columns `shortArmSize`, or col. `chrSize` is in millions ('Mbp'). Use `chrSize=TRUE` not this one (not column `Mbp`, you don't need this).
+"
+               ,checkboxInput("chrSizeMbp",
+                              HTML(paste("Show Chr. Size"
+                                         , "in Mbp"
+                                         ,tags$p("(column required)", style = "font-size: 80%;")
+                                         , sep = "<br/>") )
+                              ,chrSizeMbpDefault)
+           )
+    )
+
+    ,column(6
+            ,div(title='`distTextChr`: Vertical distance from indices (text) to the chromosome.
+'
+                 , numericInput("distTextChr"
+                                ,HTML(paste("chr. to text", "separation"
+                                            , sep = "<br/>") )
+                                , distTextChrDefault, min = 0.2, max = 5, step=0.1)
+            )
+            ,div(style="margin-top:-10px;"
+                 ,title='`addOTUName`: (`TRUE`) If `TRUE` adds name of species (OTU) under karyotype
+'
+                 , checkboxInput("addOTUName"
+                                 ,HTML(paste("Show OTU", "name"
+                                             , sep = "<br/>") )
+                                 ,addOTUNameDefault)
+            )
+            ,div(title='`OTUfont`: numeric, `1` for normal, `2` for bold, `3` for italics, `4` for bold-italics
+'
+                 ,radioButtons("OTUfont","OTU font type",
+                               c("normal"="1","bold"="2","italics"="3","bold italics"="4"),
+                               selected=OTUfontDefault)
+            )
+    )
+  )
+) #wP
+      ) # col2
+,column(width=8
+        ,br()
+        ,fluidRow(
+          # wellPanel( #style = "background: #FAFAFA",
+            div(
+              style = "margin-bottom:-20px"
+            ,fluidRow(
+              column(3
+                  ,wellPanel(style = "padding: 0px 5px 0px 5px"
+                    ,fluidRow(
+                      column(6,
+                             h4("Ruler")
+                             ,div(
+                               title='`rulerPos`: (`-0.5`) Absolute position of ruler, corresponds to "pos" argument of the function `axis` of R plots'
+                               ,numericInput("rulerPos", "modify pos.", rulerPosDefault, min = -5, max = 5, step=0.1) ,
+                             )
+                             ,div(style = "margin-top:-15px;margin-bottom:-10px",
+                                  title='`ruler.tck`: (`-0.02`) tick size of ruler, corresponds to "tck" argument of `axis` function
+'
+                                  ,numericInput("ruler.tck", "modify ticks", ruler.tckDefault, min = -5, max = 5, step=0.005)
+                             )
+                      ) #c
+                      ,
+                      column(6
+                             ,div(title='`ruler`: (`TRUE`) When `TRUE` displays ruler to the left of karyotype, when `FALSE` shows no ruler
+'
+                                  ,checkboxInput("ruler",
+                                                 "Show ruler",rulerDefault)
+                             )
+                             ,div(style = "margin-top:-12px",
+                                  title="`rulerNumberSize`: (`1`) Size of number's font in ruler
+"
+                                  ,numericInput("rulerNumberSize"
+                                                , "font size", rulerNumberSizeDefault, min = .1, max = 5, step=0.1) ,
+                             )
+                             ,div(style = "margin-top:-15px;margin-bottom:-10px",
+                                  title="`xPosRulerTitle`: (`2.6`) Modifies the horizontal position of the title of rulers (Mb, etc). Moves to left from 1st chr. in `chrSpacing` times"
+                                  ,numericInput("xPosRulerTitle"
+                                                , "pos. of title", xPosRulerTitleDefault, min = -5, max = 5, step=0.1)
+                             )
+                      ) # c6
+                    ) # fR
+                  ) #wp
+                  ,fluidRow(
+                    column(6
+                           ,wellPanel(style = "margin-top:-15px;padding: 0px 5px 0px 5px"
+                             ,h4("Chromatids")
+                             ,div(title='`chromatids`: boolean, when `TRUE` shows separated chromatids. Defaults to `TRUE`'
+                                  ,checkboxInput("chromatids",
+                                                 HTML(paste("Show separ.") )
+                                                 ,chromatidsDefault)
+                             )
+                             ,div(title='`xModifier`: numeric, for `chromatids=TRUE`, separation among chromatids.
+                   Quotient for `chrWidth`. Defaults to `12 = chrWidth/12`'
+                                  ,numericInput("xModifier"
+                                                ,HTML(paste("Separation") )
+                                                ,xModifierDefault
+                                                ,min = 2, max = 25, step=0.5)
+                             )
+                           ) # wP
+                    )
+                    ,column(6
+                            ,wellPanel(style = "margin-top:-15px;padding: 0px 5px 0px 5px"
+                                       ,h4("Centromere")
+                                       ,div(style = "margin-top:-25px"
+                                            ,title='`cenFormat`: boolean, when "triangle", cen. has triangular aspect. When "rounded", it has rounded aspect (Default). "inProtein" for using the mark with style of same name.'
+                                            ,radioButtons("cenFormat","",c("rounded","triangle","inProtein")
+                                                          ,selected=cenFormatDefault)
+                                       )
+                                       ,div(style = "margin-top:-15px;margin-bottom:-10px",
+                                            title='`cenFactor`: numeric, modifies any cen. mark and cen. size. Defaults to `1`'
+                                            ,numericInput("cenFactor", "modify size"
+                                                          , cenFactorDefault, min = 0, max = 10, step=0.25)
+                                       )
+                            ) # wP
+                    ) # c
+                  ) # fR
+          ) # c3
+          ,column(3
+                  ,wellPanel(
+                    h4("Chromosomes")
+                    ,fluidRow(
+                      column(6
+                             ,div(title='`orderChr`: (`size`) character, when `"size"`, sorts chromosomes by total length from the largest to the smallest. `"original"`: preserves d.f. order. `"name"`: sorts alphabetically; `"group"`: sorts by group name; `"chrNameUp"`: sorts according to column `chrNameUp`. See `chrNameUp`'
+                                  ,radioButtons(
+                                    "orderChr",
+                                    "order by:"
+                                    ,c("size"="size","as in d.f."="original", "alphab."="name"
+                                       ,"group"="group"
+                                       ,"col. chrNameUp"="chrNameUp")
+                                    ,selected = orderChrDefault )
+                             )
+                             ,div(style="margin-bottom:-20px;"
+                             ,title='`squareness`: (`4`) Squared or rounded vertices when marks of the "square" style (defined in data.frame passed to `dfMarkColor`). Affects chromosomes also. Smaller numbers = more rounded
+'
+                                  ,numericInput("squareness",
+                                                HTML(paste("Vertices", "squareness", sep = "<br/>") )
+                                                ,squarenessDefault
+                                                , min = 1, max = 21, step=0.5)
+                             )
+                      )
+                      ,column(6
+                              , div(title='`lwd.chr`: (`0.5`) width of border lines for chr. and marks when related param. absent.
+'
+                                    ,numericInput("lwd.chr","border width",lwd.chrDefault,min=0,max=4,step=0.25)
+                              )
+                              ,div(title='`chrWidth`: (`0.5`) Determines the width of chromosomes
+'
+                                   ,numericInput("chrWidth", "Width", chrWidthDefault, min = 0.1, max = 5, step=0.05)
+                              )
+                              ,div(title='`chrSpacing`: (`0.5`) Determines the horizontal spacing among chromosomes
+'
+                                   ,numericInput("chrSpacing", "horiz. spacing", chrSpacingDefault, min = 0.1, max = 5, step=0.1)
+                              )
+                      ) #c6
+                    ) # fR
+                  ) # wP
+          ) # c3
+          ,column(3
+                  ,wellPanel(style = "padding: 0px 5px 0px 5px"
+                             ,fluidRow(
+                               column(6
+                                      ,h4("Karyotypes")
+                                      ,div(style="margin-top:-10px;"
+                                           ,title='`karHeight`: (`2`) Vertical size of karyotypes considering only chromosomes. for ex `karHeight = 1`
+'
+                                           ,numericInput("karHeight"
+                                                         , HTML(paste("Height") )
+                                                         ,karHeightDefault, min = 0.5, max = 50, step=0.5)
+                                      )
+                                      ,
+                                      div(style="margin-top:-12px;margin-bottom:-10px"
+                                          ,title='`karHeiSpace`: (`2.5`) Vertical size of karyotypes including spacer. for ex `karHeiSpace = 1.2`. Use with `karSepar=FALSE`
+'
+                                          ,numericInput("karHeiSpace"
+                                                        , HTML(paste("Height with","space", sep = "<br/>") )
+                                                        , karHeiSpaceDefault, min = 2, max = 150, step=0.5)
+                                      )
+                               )
+                               ,column(6,
+                                       div(title='`karSepar`: (`TRUE`) If `TRUE` reduces the space among karyotypes. `FALSE` = equally sized karyotypes or `TRUE` = equally spaced karyotypes. Incompatible with `addMissingOTUAfter`'
+                                           ,checkboxInput("karSepar"
+                                                          ,HTML(paste("equally spaced","kar.", sep = "<br/>") )
+                                                          ,karSeparDefault)
+                                       )
+                                       ,div(style= "margin-bottom:-10px"
+                                         ,title='`amoSepar`: (`9`) For `karSepar = TRUE`, if zero, no space among karyotypes. Amount of separation.  if overlap, increase this and `karHeiSpace`'
+                                         ,numericInput("amoSepar"
+                                                       ,HTML(paste("Vert.","separ.", sep = "<br/>") )
+                                                       , amoSeparDefault, min = 0, max = 15, step=0.5)
+                                       )
+                               )
+                             )
+                  ) #Wp
+                  ,wellPanel(style = "margin-top:-15px;padding: 0px 5px 0px 5px"
+                             ,fluidRow(
+                               column(6
+                                      ,h4("Legend")
+                                      ,div(
+                                        title='`legend`: (`"aside"`) If you wanto to plot the names of marks near each chromosome use `legend = "inline"`, to the right of karyotypes use `legend = "aside"`, otherwise use `legend = ""` for no legend. See `markLabelSpacer`'
+                                           ,radioButtons("legend","Pos.",c("aside","inline","none"),selected = legendDefault )
+                                      )
+                               )
+                               ,column(6
+                                       ,div(#style = "margin-top:-8px"
+                                            title='`legendWidth`: (`1.7`) numeric, factor to modify the width of the square and dots of legend. For `legend="aside"`.'
+                                            ,numericInput("legendWidth", "width", legendWidthDefault, min = 0.25, max = 5, step=0.05)
+                                       )
+                                       ,div(style = "margin-top:-12px"
+                                            ,title='`legendHeight`: (`NA`) numeric, factor to modify the height of the square and dots of legend. For `legend="aside"`.'
+                                            ,numericInput("legendHeight", "height"
+                                                          , legendHeightDefault
+                                                          , min = 0.25, max = 5, step=0.05)
+                                       )
+                               )
+                             ) # fR
+                  ) #wP
+          ) # c3
+          ,column(3
+                  ,wellPanel(
+                    h4("Plot dimensions"),
+                    fluidRow(
+                      column(6
+                             ,div(style="margin-bottom:-10px"
+                             ,numericInput("widFactor", "width %",
+                                           80, min = 5, max = 100, step=5)
+                             )
+                             ,          uiOutput("imageWidth")
+                      )
+                      ,column(6
+                              ,div(style="margin-bottom:-10px"
+                                   ,numericInput("heiFactor", "height ratio",
+                                            0.5, min = 0.05, max = 20, step=0.05)
+                              )
+                              ,          uiOutput("imageHeight")
+                      )
+                    )
+                  ) # wP
+
+                  ,wellPanel(style="margin-top:-15px;padding: 0px 5px 0px 5px"
+                    ,h4("Margins"),
+                    fluidRow(
+                      column(6,
+                             div(style = "margin-top:-10px",
+                                 title='`ylimBotMod`:	(`0.2`) modify `ylim` bottom component of plot adding more space
+'
+                                 ,numericInput("ylimBotMod", "bottom",
+                                               ylimBotModDefault, min = -5, max = 5, step=0.5)
+                             )
+                             ,div(style = "margin-top:-15px",
+                                  title='`ylimTopMod`: (`0.2`) modify `ylim` top component of plot adding more space.
+'
+                                  ,numericInput("ylimTopMod", "top"
+                                                , ylimTopModDefault, min = -5, max = 5, step=0.2)
+                             )
+                      ) #sL
+
+                      , column(6,
+                               div(style = "margin-top:-10px",
+                                   title='`xlimLeftMod`: (`1`) modifies `xlim` left (first) component of the plot as in any "R-plot"
+'
+                                   ,numericInput("xlimLeftMod", "left",
+                                                 xlimLeftModDefault, min = -5, max = 5, step=0.5)
+                               )
+                               ,div(style = "margin-top:-15px",
+                                    title='`xlimRightMod`:	(`2`) `xlim` (right) modification by adding space to the right of idiograms
+'
+                                    ,numericInput("xlimRightMod", "right",
+                                                  xlimRightModDefault, min = -5, max = 5, step=0.5)
+                               )
+                      ) #
+                    ) # fR
+                  ) #wp
+          ) #c3
+
+        ) #fr
+          )
+          ) #div
+        ) # fR
+        ,fluidRow(
+          wellPanel(
+            style = "overflow-y:auto;text-align:center;" # margin-top:-12px;
+
+            # ,actionButton("goButton", "Go!", class = "btn-success")
+
+            ,div(style = 'overflow-y:auto;overflow-x:auto;min-width:1030px;'
+                 ,plotOutput("idiogramPlot"
+                             ,height = "auto"
+                 )
+            ) #d
+          # ) # wp
+        ) # fR
+      ) #c8
+    ) # fR
+  })
 
   outputOptions(output, "dfchrpanel", suspendWhenHidden = FALSE)
   outputOptions(output, "dfmarkpanel", suspendWhenHidden = FALSE)

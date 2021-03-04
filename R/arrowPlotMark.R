@@ -51,10 +51,7 @@ arrowPlotMark<-function(squareness, xMark, yMark,
                   col= dfMarkColorInternal$markColor[match(     z   , dfMarkColorInternal$markName)],
                   lwd=lwd.chr,
                   border =
-                    # ifelse(dfMarkColorInternal$markColor[match(z,dfMarkColorInternal$markName)]=="white",
-                  # "black",
                   dfMarkColorInternal$markBorderColor[match(z,dfMarkColorInternal$markName)]
-                          # ) # ifelse
                 ), # pol
               x=xMark[[w]],
               y=yMark[[w]]
@@ -65,17 +62,11 @@ arrowPlotMark<-function(squareness, xMark, yMark,
     } # CIRC
     else { # circ true
 
-      #
-      #   x to vertical
-      #
-
         yMarkPer <- markMapPer(yMark,y)
-
         xlistNew <- xMarkMap(xMark,x, arrowheadWidthShrink)
-
         ylistTransMark<-transyListMark(yMarkPer,ylistTransChr)
-
-        circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,    ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
+        circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor
+                                           ,ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
 
         drawPlotMark(circleMapsMarks,dfMarkColorInternal,listOfdfMarkPosArrow,lwd.chr)
 

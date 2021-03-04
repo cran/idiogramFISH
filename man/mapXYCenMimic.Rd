@@ -5,7 +5,7 @@
 \title{mapXYCenMimic
 This is an internal function that creates coords for chr. or arms or marks}
 \usage{
-mapXYCenMimic(start, end, y, x, yfactor, r2, pts, roundedCen = FALSE)
+mapXYCenMimic(start, end, y, x, yfactor, r2, pts, cenFormat = "triangle")
 }
 \arguments{
 \item{start}{1st index}
@@ -20,7 +20,7 @@ mapXYCenMimic(start, end, y, x, yfactor, r2, pts, roundedCen = FALSE)
 
 \item{pts}{points of squareness}
 
-\item{roundedCen}{boolean}
+\item{cenFormat}{boolean}
 }
 \value{
 list

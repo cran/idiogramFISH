@@ -28,8 +28,11 @@ genBankReadIF <- function(filename.gb) {
   # } else {
   #   requireNamespace("tidyr")
   # }
-
-  if( nchar(filename.gb)>300 ){
+  # filename.gb<-dataChr.gb
+  if( nchar(filename.gb) > 300 ){
+    #
+    #   not a filename but txt data
+    #
     # filename.gb<-nostoc_seqs
     readed <- unlist(strsplit(filename.gb,"\n") )
     begSeq <- grep("ORIGIN",readed)
@@ -38,16 +41,17 @@ genBankReadIF <- function(filename.gb) {
     # filename.gb<-"gitNo/nostoc.gb"
     readed<-readLines(filename.gb)
   }
-  assemblyPresence<-grep("Genome-Assembly-Data",readed)
-  if(length(assemblyPresence)>0){
-    assemblyPresence<-TRUE
-  } else {
-    assemblyPresence<-FALSE
-  }
+
+  # if(length(assemblyPresence)>0){
+  #   assemblyPresence<-TRUE
+  # } else {
+  #   assemblyPresence<-FALSE
+  # }
   #fIRST PART
-  delimiter1stPart<-ifelse(assemblyPresence,"##Genome-Assembly-Data-START##","##Genome-Annotation-Data-START##")
-  end1stpart <- grep(delimiter1stPart, readed)-1
-  posSecond<-gregexpr(pattern ='[[:alnum:]]+',readed[1])[[1]][[2]]
+  # delimiter1stPart <- ifelse(assemblyPresence,"##Genome-Assembly-Data-START##","##Genome-Annotation-Data-START##")
+  delimiter1stPart<- "##"
+  end1stpart <- (grep(delimiter1stPart, readed)-1)[1]
+  posSecond <- gregexpr(pattern ='[[:alnum:]]+',readed[1])[[1]][[2]] # column pos
   firstcolumn <-substr(readed[1:end1stpart], 1,posSecond-1)
   firstcolumn<-trimws(firstcolumn)
   secondcolumn <-substr(readed[1:end1stpart],posSecond, nchar(readed) )
@@ -63,10 +67,13 @@ genBankReadIF <- function(filename.gb) {
     arrange(field)
 
   listOfDfs<-list()
+  # View(gbdf)
   listOfDfs$gbdfMain<-gbdf
 
   # SECOND PART
-  if(assemblyPresence){
+  assemblyPresence <- any(grepl("Genome-Assembly-Data",readed) )
+
+  if(assemblyPresence) {
     sectionString<-"##Genome-Assembly-Data"
     begAsData <- grep(paste0(sectionString,"-START##"), readed)+1
     endAsData <- grep(paste0(sectionString,"-END##"), readed)-1
@@ -94,6 +101,9 @@ genBankReadIF <- function(filename.gb) {
   }
   # THIRD PART
   ##Genome-Annotation-Data-START##
+  annotationPresence <- any(grepl("Genome-Annotation-Data",readed) )
+
+  if(annotationPresence) {
   mypattern<-'::'
   sectionString<-"##Genome-Annotation-Data"
   begAsData3 <- grep(paste0(sectionString,"-START##"), readed)+1
@@ -105,6 +115,7 @@ genBankReadIF <- function(filename.gb) {
   firstcolumn3 <-trimws(firstcolumn3)
   secondcolumn3 <-substr(readed[interval],posSecond3, nchar(readed[interval]) )
   secondcolumn3 <-trimws(secondcolumn3)
+
   gbdf3 <- data.frame(field=firstcolumn3,value=secondcolumn3, stringsAsFactors = F)
 
   gbdf3$field[gbdf3$field!=""]<-make.unique(gbdf3$field[gbdf3$field!=""])
@@ -117,16 +128,23 @@ genBankReadIF <- function(filename.gb) {
     arrange(field)
 
   listOfDfs$gbdfAnnoMeta<-gbdf3
+  }
 
   # FEATURES             Location/Qualifiers
   # "CONTIG      join(CP009939.1:1..52166)"
 
   # FORTH PART
   ##Genome-Annotation-Data-START##
+
+  locationPresence <- any(grepl("Location/Qualifiers",readed) )
+
+  if(locationPresence) {
+
   string4<-"Location/Qualifiers"
   begAsData4 <- grep(string4, readed)+1
   endstring4<-"CONTIG|ORIGIN"
   endAsData4 <- grep(endstring4, readed)-1
+
   #
   #   limit readed lines
   # if(!missing(maxNumber)){
@@ -222,7 +240,7 @@ genBankReadIF <- function(filename.gb) {
     dfCDS$isJoin <- joinBool
 
     listOfDfs[[feature]] <- dfCDS
-    #}
   } # big for
+  } # locationP
   return(listOfDfs)
 } # fun

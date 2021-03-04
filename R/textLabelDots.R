@@ -20,11 +20,8 @@
 #'
 
 textLabelDots<-function(xMarkCr,yMarkCr,listOfdfChromSize,listOfdfMarkPosCr,specialChrSpacing,
-                    chrSpacing,markLabelSize,pattern, bannedMarkName, xBoundariesQuar){
-# lapply(1:length(xMark), function(s)
-
-    # lapply(1:length(xMarkCr), function(s)
-    for (s in 1:length(xMarkCr) ){
+                    chrSpacing,markLabelSize,pattern, bannedMarkName, xBoundariesQuar) {
+    for (s in 1:length(xMarkCr) ) {
       corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfMarkPosCr)[[s]] )
       if(attr(listOfdfChromSize[[corr_index]],"ytitle")=="cM"){
         chrSpacing2<-specialChrSpacing
@@ -47,8 +44,8 @@ textLabelDots<-function(xMarkCr,yMarkCr,listOfdfChromSize,listOfdfMarkPosCr,spec
         z=sub(pattern,"",listOfdfMarkPosCr[[s]]$markName[m])
         # t
         ) #m
-      # )# l
+
           } # if
-        } # for m
-    } # for )# l
+        }
+    }
 }

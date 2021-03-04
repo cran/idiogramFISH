@@ -9,11 +9,11 @@
 #' @param yfactor y x factor
 #' @param r2 r2ius
 #' @param pts points of squareness
-#' @param roundedCen boolean
+#' @param cenFormat boolean
 #'
 #' @return list
 
-mapXYCenMimic <- function(start,end,y,x,yfactor,r2,pts,roundedCen=FALSE){
+mapXYCenMimic <- function(start,end,y,x,yfactor,r2,pts,cenFormat="triangle"){
 
   x2_1<-list()
   x2_2<-list()
@@ -47,7 +47,7 @@ mapXYCenMimic <- function(start,end,y,x,yfactor,r2,pts,roundedCen=FALSE){
       xy_3 <- cbind( x2_2 + r2 * sin(ptsl[[3]]), maxY + r2 * cos(ptsl[[3]]))
       xy_4 <- cbind( x2_1 + r2 * sin(ptsl[[4]]), maxY + r2 * cos(ptsl[[4]]))
 
-    if (roundedCen==FALSE){
+    if (cenFormat=="triangle"){
 
       roundedX[[counter]]<-c(rev(xy_3[,1]),rev(xy_2[,1]), xy_4[,1],xy_1[,1])
       roundedY[[counter]]<-c(rev(xy_3[,2]),rev(xy_2[,2]), xy_4[,2],xy_1[,2])
@@ -98,7 +98,7 @@ mapXYCenMimic <- function(start,end,y,x,yfactor,r2,pts,roundedCen=FALSE){
 
 
 mapXYCenMimicInside <- function(start,end,y,x,yfactor,r2,pts
-                                ,roundedCen=FALSE
+                                ,cenFormat="triangle"
                                 ) {
 
   x2_1<-list()
@@ -134,7 +134,7 @@ mapXYCenMimicInside <- function(start,end,y,x,yfactor,r2,pts
     xy_3 <- cbind( x2_2 + r2 * sin(ptsl[[3]]), maxY + r2 * cos(ptsl[[3]]) )
     xy_4 <- cbind( x2_1 + r2 * sin(ptsl[[4]]), maxY + r2 * cos(ptsl[[4]]) )
 
-    if (roundedCen==FALSE) {
+    if (cenFormat=="triangle") {
 
       roundedX[[counter]] <- c(rev(xy_3[,1]) # up right
                                ,maxX
