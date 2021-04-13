@@ -4,11 +4,13 @@
 \alias{genBankReadIF}
 \title{FUNCTION genBankReadIF}
 \usage{
-genBankReadIF(filename.gb)
+genBankReadIF(filename.gb, forbiddenFields = "translation")
 }
 \arguments{
 \item{filename.gb}{name of file to read, downloaded from genBank, or,
 object from \code{rentrez::entrez_fetch( db="nuccore",} \code{ id="theID",} \code{ rettype="gbwithparts",} \code{ retmode = "text" )}}
+
+\item{forbiddenFields}{names of field of feature (CDS, gene) to ignore, separated by |. Defaults to \code{"translation"}}
 }
 \value{
 list

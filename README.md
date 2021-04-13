@@ -51,8 +51,7 @@ In addition, the shiny app `runBoard()` uses shiny ([Chang *et al.*,
 2021](#ref-R-shiny)), shinydashboard ([Chang and Borges Ribeiro,
 2018](#ref-R-shinydashboard)), rhandsontable ([Owen,
 2018](#ref-R-rhandsontable)), gtools ([Warnes *et al.*,
-2020](#ref-R-gtools)), rclipboard ([Bihorel, 2021](#ref-R-rclipboard))
-and bib2df ([Ottolinger, 2019](#ref-R-bib2df)).
+2020](#ref-R-gtools)), rclipboard ([Bihorel, 2021](#ref-R-rclipboard)).
 
 <!-- badger -->
 
@@ -165,7 +164,7 @@ To cite idiogramFISH in publications, please use:
 
 Roa F, Telles MPC (2021) idiogramFISH: Shiny app. Idiograms with Marks
 and Karyotype Indices, Universidade Federal de Goiás. Brazil. R-package.
-version 2.0.2 <https://ferroao.gitlab.io/manualidiogramfish/>.
+version 2.0.3 <https://ferroao.gitlab.io/manualidiogramfish/>.
 doi:<!-- breaklink -->10.5281/zenodo.3579417
 
 To write citation to file:
@@ -572,9 +571,6 @@ chrSize
 <th style="text-align:right;">
 Mbp
 </th>
-<th style="text-align:left;">
-OTU
-</th>
 </tr>
 </thead>
 <tbody>
@@ -588,9 +584,6 @@ OTU
 <td style="text-align:right;">
 300
 </td>
-<td style="text-align:left;">
-Species holo
-</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -601,9 +594,6 @@ Species holo
 </td>
 <td style="text-align:right;">
 400
-</td>
-<td style="text-align:left;">
-Species holo
 </td>
 </tr>
 <tr>
@@ -616,9 +606,6 @@ Species holo
 <td style="text-align:right;">
 200
 </td>
-<td style="text-align:left;">
-Species holo
-</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -629,9 +616,6 @@ Species holo
 </td>
 <td style="text-align:right;">
 500
-</td>
-<td style="text-align:left;">
-Species holo
 </td>
 </tr>
 </tbody>
@@ -718,9 +702,6 @@ markPos
 <th style="text-align:right;">
 markSize
 </th>
-<th style="text-align:left;">
-OTU
-</th>
 </tr>
 </thead>
 <tbody>
@@ -737,9 +718,6 @@ OTU
 <td style="text-align:right;">
 0.5
 </td>
-<td style="text-align:left;">
-Species holo
-</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -753,9 +731,6 @@ DAPI
 </td>
 <td style="text-align:right;">
 0.5
-</td>
-<td style="text-align:left;">
-Species holo
 </td>
 </tr>
 <tr>
@@ -771,9 +746,6 @@ Species holo
 <td style="text-align:right;">
 0.5
 </td>
-<td style="text-align:left;">
-Species holo
-</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -787,9 +759,6 @@ DAPI
 </td>
 <td style="text-align:right;">
 0.5
-</td>
-<td style="text-align:left;">
-Species holo
 </td>
 </tr>
 <tr>
@@ -805,9 +774,6 @@ CMA
 <td style="text-align:right;">
 0.5
 </td>
-<td style="text-align:left;">
-Species holo
-</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -821,9 +787,6 @@ Species holo
 </td>
 <td style="text-align:right;">
 0.5
-</td>
-<td style="text-align:left;">
-Species holo
 </td>
 </tr>
 </tbody>
@@ -1088,13 +1051,6 @@ shiny*. R package version 0.7.1.
 Chang W, Cheng J, Allaire J, Sievert C, Schloerke B, Xie Y, Allen J,
 McPherson J, Dipert A, Borges B. 2021. *Shiny: Web application framework
 for r*. R package version 1.6.0. <https://shiny.rstudio.com/>
-
-</div>
-
-<div id="ref-R-bib2df" class="csl-entry">
-
-Ottolinger P. 2019. *bib2df: Parse a BibTeX file to a data frame*. R
-package version 1.1.1. <https://github.com/ropensci/bib2df>
 
 </div>
 

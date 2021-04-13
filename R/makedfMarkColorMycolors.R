@@ -60,6 +60,7 @@ makedfMarkColorMycolors<- function(markNames, mycolors, colorstoremove=NULL, def
   tryCatch(dfMarkColorNew[which(dfMarkColorNew$markName %in%
                          grep("inProtein",dfMarkColorNew$markName,value=TRUE) ),]$style<-"inProtein"
            ,error=function(e){""} )
+  dfMarkColorNew$markNameNP<-NULL
   return(dfMarkColorNew)
 }
 

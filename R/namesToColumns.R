@@ -51,9 +51,12 @@
 #' @return data.frame
 
 namesToColumns <- function(marksDf, dfChrSize, markType=c("downArrow","upArrow","cMLeft","cM"),
-                           amountofSpaces=13,colNumber=2,protruding=0.5,
-                           protrudingInt=0.5,circularPlot=TRUE,rotation=0.5,
-                           defaultStyleMark = "square",orderChr="size",
+                           amountofSpaces=13,colNumber=2
+                           ,protruding=0.2
+                           ,protrudingInt=0.5
+                           ,circularPlot=TRUE
+                           ,rotation=0.5
+                           ,defaultStyleMark = "square",orderChr="size",
                            halfModDown=NA,halfModUp=NA, rotatMod=0
                            ) {
 

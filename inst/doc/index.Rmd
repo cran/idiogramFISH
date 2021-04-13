@@ -231,7 +231,7 @@ The goal of idiogramFISH is to plot idiograms of karyotypes, plasmids and circul
 
 IdiogramFISH was written in R [@R-base] and also uses crayon [@R-crayon], tidyr [@R-tidyr], plyr [@plyr2011] and dplyr packages [@R-dplyr]. Documentation was written with R-packages roxygen2 [@R-roxygen2], usethis [@R-usethis], bookdown [@bookdown2016], knitr [@Xie2015], pkgdown [@R-pkgdown], Rmarkdown [@rmarkdown2018], rvcheck [@R-rvcheck], badger [@R-badger], kableExtra [@R-kableExtra], rmdformats [@R-rmdformats] and RCurl [@R-RCurl]. For some vignette figures, packages rentrez [@rentrez2017], phytools [@phytools2012], ggtree [@ggtree2018], ggplot2 [@ggplot22016] and ggpubr [@R-ggpubr] were used. 
 
-In addition, the shiny app `runBoard()` uses shiny [@R-shiny], shinydashboard [@R-shinydashboard], rhandsontable [@R-rhandsontable], gtools [@R-gtools], rclipboard [@R-rclipboard] and bib2df [@R-bib2df].
+In addition, the shiny app `runBoard()` uses shiny [@R-shiny], shinydashboard [@R-shinydashboard], rhandsontable [@R-rhandsontable], gtools [@R-gtools], rclipboard [@R-rclipboard].
 
 <div class="goright95">
 <a href="#header">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
@@ -285,7 +285,7 @@ Windows users: To avoid installation of packages in OneDrive
 .libPaths()
 ```
 
-or something in the line of [this](https://bit.ly/2YLNo4u)
+or something in the line of [this](https://answers.microsoft.com/en-us/windows/forum/all/removing-onedrive-from-default-filefolder-location/7d3c0dd0-3af5-414a-adf4-364dc28f3148?auth=1)
 
 
 ### Devel. version {-}
@@ -578,7 +578,7 @@ Add chromosome morphology according to [Guerra](https://ferroao.gitlab.io/guerra
 ```{r , echo=TRUE, results="hide", message=FALSE}
 library(idiogramFISH)
 
-data(dfOfChrSize) # chromsome data
+data(dfOfChrSize) # chromosome data
 data(dfMarkColor) # mark general data
 data(dfOfMarks2)  # mark position data (inc. cen.)
 

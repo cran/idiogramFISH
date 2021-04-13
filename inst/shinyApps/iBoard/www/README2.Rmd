@@ -110,17 +110,22 @@ cat("<a href='https://ko-fi.com/X7X71PZZG' target='_blank'><img height='30' styl
 
 The left side menu of the shiny app consists of three pages with several tabs:
 
-* data.frame inputs
+* Examples (presets)
     + Load example
+
+* Nucleotides (new)
+    + Search
+    
+* data.frame
     + Chr. data data.frame
     + Mark Pos. data d.f.
     + Marks' Style
 
-* Param. & idiogram
+* Parameters & Plot
     + Parameters
     + Log
     + code
-    
+
 * About
 
 The goal of idiogramFISH is to plot idiograms of karyotypes, plasmids and circ. chr. having a set of data.frames for chromosome data
@@ -133,7 +138,7 @@ The goal of idiogramFISH is to plot idiograms of karyotypes, plasmids and circ. 
 
 IdiogramFISH was written in R [@R-base] and also uses crayon [@R-crayon], tidyr [@R-tidyr], plyr [@plyr2011] and dplyr packages [@R-dplyr]. Documentation was written with R-packages roxygen2 [@R-roxygen2], usethis [@R-usethis], bookdown [@bookdown2016], knitr [@Xie2015], pkgdown [@R-pkgdown], Rmarkdown [@rmarkdown2018], rvcheck [@R-rvcheck], badger [@R-badger], kableExtra [@R-kableExtra], rmdformats [@R-rmdformats] and RCurl [@R-RCurl]. For some vignette figures, packages rentrez [@rentrez2017], phytools [@phytools2012], ggtree [@ggtree2018], ggplot2 [@ggplot22016] and ggpubr [@R-ggpubr] were used.
 
-In addition, the shiny app `runBoard()` uses shiny [@R-shiny], shinydashboard [@R-shinydashboard], rhandsontable [@R-rhandsontable], gtools [@R-gtools], rclipboard [@R-rclipboard] and bib2df [@R-bib2df].
+In addition, the shiny app `runBoard()` uses shiny [@R-shiny], shinydashboard [@R-shinydashboard], rhandsontable [@R-rhandsontable], gtools [@R-gtools], rclipboard [@R-rclipboard].
 
 <!-- badger -->
 

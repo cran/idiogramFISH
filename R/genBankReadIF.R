@@ -7,7 +7,7 @@
 #'
 #' @param filename.gb name of file to read, downloaded from genBank, or,
 #' object from \code{rentrez::entrez_fetch( db="nuccore",} \code{ id="theID",} \code{ rettype="gbwithparts",} \code{ retmode = "text" )}
-#'
+#' @param forbiddenFields names of field of feature (CDS, gene) to ignore, separated by |. Defaults to \code{"translation"}
 #' @keywords genBank
 #' @export
 #' @rdname genBankReadIF
@@ -16,39 +16,22 @@
 #' @importFrom dplyr %>% group_by summarise mutate arrange
 #' @return list
 #'
-genBankReadIF <- function(filename.gb) {
+genBankReadIF <- function(filename.gb,forbiddenFields="translation") {
 
   value <- field <- NULL
 
-  # requireNamespace("dplyr")
-  #
-  # if(requireNamespace("tidyr")==FALSE){
-  #   message(crayon::red("You need to install tidyr"))
-  #   return(NULL)
-  # } else {
-  #   requireNamespace("tidyr")
-  # }
-  # filename.gb<-dataChr.gb
   if( nchar(filename.gb) > 300 ){
     #
     #   not a filename but txt data
     #
-    # filename.gb<-nostoc_seqs
     readed <- unlist(strsplit(filename.gb,"\n") )
-    begSeq <- grep("ORIGIN",readed)
+    begSeq <- grep("CONTIG|ORIGIN",readed)
+    begSeq <- ifelse(length(begSeq),begSeq,length(readed))
     readed <- readed[1:(begSeq)]
   } else {
-    # filename.gb<-"gitNo/nostoc.gb"
     readed<-readLines(filename.gb)
   }
 
-  # if(length(assemblyPresence)>0){
-  #   assemblyPresence<-TRUE
-  # } else {
-  #   assemblyPresence<-FALSE
-  # }
-  #fIRST PART
-  # delimiter1stPart <- ifelse(assemblyPresence,"##Genome-Assembly-Data-START##","##Genome-Annotation-Data-START##")
   delimiter1stPart<- "##"
   end1stpart <- (grep(delimiter1stPart, readed)-1)[1]
   posSecond <- gregexpr(pattern ='[[:alnum:]]+',readed[1])[[1]][[2]] # column pos
@@ -60,14 +43,13 @@ genBankReadIF <- function(filename.gb) {
   gbdf$field[gbdf$field!=""]<-make.unique(gbdf$field[gbdf$field!=""])
   gbdf$field[gbdf$field==""]<-NA
   gbdf<-gbdf %>%
-    fill(field) %>%
+    tidyr::fill(field) %>%
     group_by(field) %>%
-    summarise(value = paste(value, collapse = "; ")) %>%
-    mutate(field = factor(field, levels=unique(gbdf$field) ) ) %>%
-    arrange(field)
+    dplyr::summarise(value = paste(value, collapse = "; ")) %>%
+    dplyr::mutate(field = factor(field, levels=unique(gbdf$field) ) ) %>%
+    dplyr::arrange(field)
 
   listOfDfs<-list()
-  # View(gbdf)
   listOfDfs$gbdfMain<-gbdf
 
   # SECOND PART
@@ -86,15 +68,14 @@ genBankReadIF <- function(filename.gb) {
     secondcolumn2 <-substr(readed[interval],posSecond2, nchar(readed[(begAsData+1):endAsData]) )
     secondcolumn2 <-trimws(secondcolumn2)
     gbdf<-data.frame(field=firstcolumn2,value=secondcolumn2, stringsAsFactors = F)
-    # gbdf<-data.frame(field=firstcolumn,value=secondcolumn, stringsAsFactors = F)
     gbdf$field[gbdf$field!=""]<-make.unique(gbdf$field[gbdf$field!=""])
     gbdf$field[gbdf$field==""]<-NA
     gbdf<-gbdf %>%
-      fill(field) %>%
-      group_by(field) %>%
-      summarise(value = paste(value, collapse = "; ")) %>%
-      mutate(field = factor(field, levels=unique(gbdf$field) ) ) %>%
-      arrange(field)
+      tidyr::fill(field) %>%
+      dplyr::group_by(field) %>%
+      dplyr::summarise(value = paste(value, collapse = "; ")) %>%
+      dplyr::mutate(field = factor(field, levels=unique(gbdf$field) ) ) %>%
+      dplyr::arrange(field)
 
     # gbdf2<-collapseRows(gbdf2)
     listOfDfs$gbdfAssemblyMeta<-gbdf
@@ -121,20 +102,14 @@ genBankReadIF <- function(filename.gb) {
   gbdf3$field[gbdf3$field!=""]<-make.unique(gbdf3$field[gbdf3$field!=""])
   gbdf3$field[gbdf3$field==""]<-NA
   gbdf3<-gbdf3 %>%
-    fill(field) %>%
-    group_by(field) %>%
-    summarise(value = paste(value, collapse = "; ")) %>%
-    mutate(field = factor(field, levels=unique(gbdf3$field) ) ) %>%
-    arrange(field)
+    tidyr::fill(field) %>%
+    dplyr::group_by(field) %>%
+    dplyr::summarise(value = paste(value, collapse = "; ")) %>%
+    dplyr::mutate(field = factor(field, levels=unique(gbdf3$field) ) ) %>%
+    dplyr::arrange(field)
 
   listOfDfs$gbdfAnnoMeta<-gbdf3
   }
-
-  # FEATURES             Location/Qualifiers
-  # "CONTIG      join(CP009939.1:1..52166)"
-
-  # FORTH PART
-  ##Genome-Annotation-Data-START##
 
   locationPresence <- any(grepl("Location/Qualifiers",readed) )
 
@@ -142,14 +117,10 @@ genBankReadIF <- function(filename.gb) {
 
   string4<-"Location/Qualifiers"
   begAsData4 <- grep(string4, readed)+1
-  endstring4<-"CONTIG|ORIGIN"
-  endAsData4 <- grep(endstring4, readed)-1
+  endstring4 <- "^[[:alnum:]].*" #"CONTIG|ORIGIN"
+  endAsData4 <- begAsData4 -1 + grep(endstring4, readed[begAsData4:length(readed)] )[1] - 1
+  endAsData4 <- ifelse(length(endAsData4),endAsData4,length(readed))
 
-  #
-  #   limit readed lines
-  # if(!missing(maxNumber)){
-  #   endAsData4 <- min(maxNumber,endAsData4)
-  # }
   mypattern<-"[[:alnum:]]+"
   posSecond4 <- gregexpr(pattern = mypattern,readed[begAsData4] ) [[1]][[2]]
   firstcolumn4 <-substr(readed[(begAsData4):endAsData4], 1,posSecond4-1)
@@ -158,32 +129,32 @@ genBankReadIF <- function(filename.gb) {
   secondcolumn4 <-substr(readed[interval],posSecond4, nchar(readed[interval]) )
   secondcolumn4 <-trimws(secondcolumn4)
 
+  secondcolumn4 <- gsub("/pseudo$","/pseudo=TRUE",secondcolumn4)
+
   gbdf4 <- data.frame(field=firstcolumn4,value=secondcolumn4, stringsAsFactors = F)
   gbdf4$field[gbdf4$field!=""]<-make.unique(gbdf4$field[gbdf4$field!=""])
   gbdf4$field[gbdf4$field==""]<-NA
   gbdf4<-gbdf4 %>%
-    fill(field) %>%
-    group_by(field) %>%
-    summarise(value = paste(value, collapse = "; ")) %>%
-    mutate(field = factor(field, levels=unique(gbdf4$field) ) ) %>%
-    arrange(field)
-
-  # gbdf4<-gbdf4 %>%
-  #   fill(field)  %>%
-  #   group_by(field) %>%
-  #   summarise(value = paste(value, collapse = "; "))
+    tidyr::fill(field) %>%
+    dplyr::group_by(field) %>%
+    dplyr::summarise(value = paste(value, collapse = "; ")) %>%
+    dplyr::mutate(field = factor(field, levels=unique(gbdf4$field) ) ) %>%
+    dplyr::arrange(field)
 
   ###########################
-  features<-unique(firstcolumn4)[unique(firstcolumn4)!=""]
+
+  features <- unique(firstcolumn4)[unique(firstcolumn4)!=""]
+  features <- features[which(!features %in% c("//","WGS_SCAFLD","WGS") ) ]
 
   for (feature in features) {
-    # if(readCDS) {
-
+    {
     gbdf4CDS<-gbdf4[which(gbdf4$field %in% grep(feature, gbdf4$field, value=TRUE) ),]
 
     # createfields
-    mypattern<-"/[[:alnum:]_]+="
+    mypattern<-"/[[:alnum:]_]+=|/pseudo"
+
     fieldNamesCDS<-regmatches(gbdf4CDS$value, gregexpr(mypattern, gbdf4CDS$value))
+
     fieldNamesCDS<-lapply(fieldNamesCDS, function(x) gsub("/|=","",x) )
 
     fieldNamesCDS <- lapply(fieldNamesCDS, function(x) make.unique(x, sep = '_' ) )
@@ -221,19 +192,26 @@ genBankReadIF <- function(filename.gb) {
     firstField<-gsub("<","",firstField)
 
     beginSeq<- sub("\\..*","", firstField,perl=T)
-    # as.numeric(beginSeq)
     endSeq<- sub("[[:digit:]]+\\.+>?([[:digit:]]+)","\\1", firstField,perl=T)
     endSeq<- sub("\\,.*","\\1", endSeq,perl=T)
     endSeq<- gsub("\\)","",   endSeq,perl=T)
-    # as.numeric(endSeq)
-
+    }
     dflistCDS<-list()
-    for (i in 1:length(fieldNamesCDS)){
-      dflistCDS[[i]]<-as.data.frame(t(as.data.frame(fieldValuesCDS[[i]]) ), stringsAsFactors = F)
-      colnames(dflistCDS[[i]])<-fieldNamesCDS[[i]]
+    for (i in 1:length(fieldNamesCDS)) {
+          toremove <- grep(forbiddenFields , fieldNamesCDS[[i]])
+          if(length(toremove)){
+          # fieldNamesCDS[[i]]  <- fieldNamesCDS[[i]][-toremove]
+          # fieldValuesCDS[[i]] <- fieldValuesCDS[[i]][-toremove]
+          fieldValuesCDS[[i]][toremove]<-TRUE
+          }
+        dflistCDS[[i]] <- as.data.frame(t(as.data.frame(fieldValuesCDS[[i]]) ), stringsAsFactors = F)
+        colnames(dflistCDS[[i]]) <- fieldNamesCDS[[i]]
     }
 
     dfCDS <- dplyr::bind_rows(dflistCDS)
+    row.names(dfCDS)<-1:nrow(dfCDS)
+    # dfCDS$translation
+    # View(dfCDS)
     dfCDS$begin<-beginSeq
     dfCDS$end<-endSeq
     dfCDS$isComplement<-compleBool

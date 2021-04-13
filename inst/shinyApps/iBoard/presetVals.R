@@ -1,14 +1,10 @@
-tablist<-c("example", "dfChrTab", "dfMarkTab", "dfMSTab"
-            )
 
-tablist2<-c("paramTab", "log","funString"
-)
-
-menulist<-c("DFsMenu","parameterPlotMenu"
-            ,"abouttab")
 #
 #   objects to load
 #
+
+emptydata.frame<-data.frame()
+
 {
   chrDataVec <- c("dfOfChrSize",
                   "dfChrSizeHolo",
@@ -19,6 +15,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                   ,"parentalAndHybChrSize"
                   ,"parentalAndHybHoloChrSize"
                   ,"traspadf"
+
+                  ,"emptydata.frame"
+                  ,"emptydata.frame"
   )
 
   markDataVec <- c("dfOfMarks2",
@@ -29,35 +28,210 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                    ,"dfMarkPosHolo"
                    ,"dfAlloParentMarks"
                    ,"dfAlloParentMarksHolo"
-                   ,"traspaMarks")
+                   ,"traspaMarks"
+
+                   ,"emptydata.frame"
+                   ,"emptydata.frame"
+  )
 
   MStyleDataVec <- c("dfMarkColor",
                      "dfMarkColor",
                      "dfMarkColor",
                      "dfMarkColor"
-                     ,"no"
-                     ,"no"
-                     ,"no"
-                     ,"dfMarkColor5S25S")
 
-  widFactorVec <- c("80",
-                    "80",
-                    "70",
-                    "80",
-                    "80"
-                    ,"80"
-                    ,"55"
-                    ,"80")
+                     ,"emptydata.frame"
+                     ,"emptydata.frame"
+                     ,"emptydata.frame"
+                     ,"dfMarkColor5S25S"
 
-  heiFactorVec <- c("0.5",
-                    "0.5",
-                    "2.5",
-                    "1",
-                    "0.5"
-                    ,"1"
-                    ,"1"
-                    ,"1"
+                     ,"emptydata.frame"
+                     ,"emptydata.frame"
+  )
 
+  termDefault <- ""
+  termVec <- c(termDefault,
+                termDefault,
+                termDefault,
+                termDefault,
+
+                termDefault
+                ,termDefault
+                ,termDefault
+                ,termDefault
+
+                ,"Bacillus cereus strain 03BB87 plasmid pBCN, complete sequence"
+               ,"'Nostoc azollae' 0708, complete"
+  )
+
+  widFactorVec <- c(80,
+                    80,
+                    70,
+                    80,
+
+                    80
+                    ,80
+                    ,55
+                    ,80
+
+                    ,100
+                    ,250)
+
+  heiFactorVec <- c(0.5,
+                    0.5,
+                    2.5,
+                    1,
+
+                    0.5
+                    ,1
+                    ,1
+                    ,1
+
+                    ,1
+                    ,1
+
+  )
+
+  pngorsvgDefault <- "svg"
+  pngorsvgVec <- c(rep(pngorsvgDefault,8)
+                   ,"svg"
+                   ,"png"
+  )
+
+  pngorsvgDownDefault <- "svg"
+  pngorsvgDownVec <- c(rep(pngorsvgDownDefault,8)
+                   ,"svg"
+                   ,"svg"
+  )
+
+  markNDefault<- 25
+  markNVec<-c(
+    rep(markNDefault,9)
+    ,2
+  )
+
+  nDefault<- 50
+  nVec<-c(
+    rep(nDefault,9)
+    ,150
+  )
+
+# zoom
+  hwModifierDefault<-1
+  hwModifierVec<-c(
+                   rep(hwModifierDefault,9)
+                   ,0.6
+                   )
+
+  # chrId
+  chrIdDefault <- "original"
+  chrIdVec <- c(chrIdDefault,
+                    chrIdDefault,
+                    chrIdDefault,
+                    chrIdDefault,
+
+                    chrIdDefault
+                    ,chrIdDefault
+                    ,chrIdDefault
+                    ,chrIdDefault
+
+                    ,""
+                ,""
+  )
+
+  # markLabelSize "`markLabelSize`: (`1`) Determines the size of text of the legend."
+
+  markLabelSizeDefault <-1
+  markLabelSizeVec <- c(markLabelSizeDefault,
+                markLabelSizeDefault,
+                markLabelSizeDefault,
+                markLabelSizeDefault,
+
+                markLabelSizeDefault
+                ,markLabelSizeDefault
+                ,markLabelSizeDefault
+                ,markLabelSizeDefault
+
+                ,0.7
+                ,.25
+  )
+
+  patternDefault <-""
+  patternVec <- c(patternDefault,
+                        patternDefault,
+                        patternDefault,
+                        patternDefault,
+
+                        patternDefault
+                        ,patternDefault
+                        ,patternDefault
+                        ,patternDefault
+
+                        ,"NT98_"
+                  ,"[[:alnum:]]+_"
+  )
+
+
+
+  cMBeginCenterDefault <-FALSE
+  cMBeginCenterVec <- c(cMBeginCenterDefault,
+                  cMBeginCenterDefault,
+                  cMBeginCenterDefault,
+                  cMBeginCenterDefault,
+
+                  cMBeginCenterDefault
+                  ,cMBeginCenterDefault
+                  ,cMBeginCenterDefault
+                  ,cMBeginCenterDefault
+
+                  ,TRUE
+                  ,TRUE
+  )
+
+  labelSpacingDefault <-0.7
+  labelSpacingVec <- c(labelSpacingDefault,
+                        labelSpacingDefault,
+                        labelSpacingDefault,
+                        labelSpacingDefault,
+
+                        labelSpacingDefault
+                        ,labelSpacingDefault
+                        ,labelSpacingDefault
+                        ,labelSpacingDefault
+
+                        ,1.7
+                       ,1
+  )
+
+  labelOutwardsDefault <-FALSE
+  labelOutwardsVec <- c(labelOutwardsDefault,
+                       labelOutwardsDefault,
+                       labelOutwardsDefault,
+                       labelOutwardsDefault,
+
+                       labelOutwardsDefault
+                       ,labelOutwardsDefault
+                       ,labelOutwardsDefault
+                       ,labelOutwardsDefault
+
+                       ,TRUE
+                       ,TRUE
+
+  )
+
+
+  OTUTextSizeDefault <-1
+  OTUTextSizeVec <- c(OTUTextSizeDefault,
+                        OTUTextSizeDefault,
+                        OTUTextSizeDefault,
+                        OTUTextSizeDefault,
+
+                        OTUTextSizeDefault
+                        ,OTUTextSizeDefault
+                        ,OTUTextSizeDefault
+                        ,OTUTextSizeDefault
+
+                        ,0.8
+                      ,3
   )
 
   karHeightDefault <- 2
@@ -65,9 +239,13 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                     karHeightDefault,
                     2.5,
                     karHeightDefault,
+
                     karHeightDefault
                     ,karHeightDefault
                     ,3
+                    ,karHeightDefault
+
+                    ,karHeightDefault
                     ,karHeightDefault
   )
 
@@ -81,12 +259,13 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                     ,xModifierDefault
                     ,xModifierDefault
                     ,xModifierDefault
+
+                    ,xModifierDefault
+                    ,xModifierDefault
   )
 
-
-
-  indexIdTextSizeDefault <- 1
-  indexIdTextSizeVec <- c(indexIdTextSizeDefault,
+indexIdTextSizeDefault <- 1
+indexIdTextSizeVec <- c(indexIdTextSizeDefault,
                     indexIdTextSizeDefault,
                     indexIdTextSizeDefault,
                     indexIdTextSizeDefault,
@@ -95,7 +274,10 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                     ,indexIdTextSizeDefault
                     ,indexIdTextSizeDefault
                     ,indexIdTextSizeDefault
-  )
+
+                    ,indexIdTextSizeDefault
+                    ,indexIdTextSizeDefault
+)
 
 
   karHeiSpaceDefault <- 2.5
@@ -103,11 +285,14 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                       karHeiSpaceDefault,
                       6,
                       4,
+
                       karHeiSpaceDefault
                       ,5
                       ,5
                       ,karHeiSpaceDefault
 
+                      ,karHeiSpaceDefault
+                      ,karHeiSpaceDefault
   )
 
   cenFormatDefault <- "rounded"
@@ -120,6 +305,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                       ,cenFormatDefault
                       ,cenFormatDefault
                       ,cenFormatDefault
+
+                    ,cenFormatDefault
+                    ,cenFormatDefault
   )
 
   cenFactorDefault <- 1
@@ -130,6 +318,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
 
                     cenFactorDefault
                     ,cenFactorDefault
+                    ,cenFactorDefault
+                    ,cenFactorDefault
+
                     ,cenFactorDefault
                     ,cenFactorDefault
   )
@@ -145,6 +336,8 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                    ,amoSeparDefault
                    ,amoSeparDefault
 
+                   ,amoSeparDefault
+                   ,amoSeparDefault
   )
 
   karSeparDefault <- TRUE
@@ -152,8 +345,12 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                    karSeparDefault,
                    karSeparDefault,
                    karSeparDefault,
+
                    karSeparDefault
                    ,FALSE
+                   ,karSeparDefault
+                   ,karSeparDefault
+
                    ,karSeparDefault
                    ,karSeparDefault
   )
@@ -167,6 +364,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                     ,TRUE
                     ,OTUasNoteDefault
                     ,OTUasNoteDefault
+
+                    ,OTUasNoteDefault
+                    ,OTUasNoteDefault
   )
 
   legendDefault <- "aside"
@@ -174,10 +374,14 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                  legendDefault,
                  legendDefault,
                  legendDefault,
+
                  legendDefault
                  ,"none"
                  ,"none"
                  ,legendDefault
+
+                 ,"inline"
+                 ,"inline"
   )
 
 
@@ -190,6 +394,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                    ,chrWidthDefault
                    ,chrWidthDefault
                    ,1
+
+                   ,chrWidthDefault
+                   ,4
   )
 
   squarenessDefault <- 4
@@ -201,8 +408,11 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                      ,squarenessDefault
                      ,squarenessDefault
                      ,5
+
+                     ,21
+                     ,21
   )
-  # not exclusive of cP
+
   useOneDotDefault <- FALSE
   useOneDotVec <- c(useOneDotDefault,
                     useOneDotDefault,
@@ -210,6 +420,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                     useOneDotDefault,
                     useOneDotDefault
                     ,useOneDotDefault
+                    ,useOneDotDefault
+                    ,useOneDotDefault
+
                     ,useOneDotDefault
                     ,useOneDotDefault
   )
@@ -224,6 +437,101 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                     ,pMarkFacDefault
                     ,pMarkFacDefault
                     ,pMarkFacDefault
+
+                   ,pMarkFacDefault
+                   ,pMarkFacDefault
+  )
+
+  markTypeDefault <- c("downArrow","upArrow","cM","cMLeft")
+  markTypeList <- list(markTypeDefault,
+                     markTypeDefault,
+                     markTypeDefault,
+                     markTypeDefault,
+
+                     markTypeDefault
+                     ,markTypeDefault
+                     ,markTypeDefault
+                     ,markTypeDefault
+
+                   ,"downArrow"
+                   ,c("downArrow","upArrow")
+  )
+
+  fetchSelectDefault <- 1
+  fetchSelectVec <- c(fetchSelectDefault,
+                   fetchSelectDefault,
+                   fetchSelectDefault,
+                   fetchSelectDefault,
+
+                   fetchSelectDefault
+                   ,fetchSelectDefault
+                   ,fetchSelectDefault
+                   ,fetchSelectDefault
+
+                   ,fetchSelectDefault
+                   ,fetchSelectDefault
+  )
+
+
+  amountofSpacesDefault <- 13
+  amountofSpacesVec <- c(amountofSpacesDefault,
+                   amountofSpacesDefault,
+                   amountofSpacesDefault,
+                   amountofSpacesDefault,
+
+                   amountofSpacesDefault
+                   ,amountofSpacesDefault
+                   ,amountofSpacesDefault
+                   ,amountofSpacesDefault
+
+                   ,10
+                   ,13
+                   )
+
+  colNumberDefault <- 2
+  colNumberVec <- c(colNumberDefault,
+                         colNumberDefault,
+                         colNumberDefault,
+                         colNumberDefault,
+
+                         colNumberDefault
+                         ,colNumberDefault
+                         ,colNumberDefault
+                         ,colNumberDefault
+
+                    ,colNumberDefault
+                    ,4
+  )
+
+  protrudingIntDefault <- 0.5
+  protrudingIntVec <- c(protrudingIntDefault,
+                     protrudingIntDefault,
+                     protrudingIntDefault,
+                     protrudingIntDefault,
+
+                     protrudingIntDefault
+                     ,protrudingIntDefault
+                     ,protrudingIntDefault
+                     ,protrudingIntDefault
+
+                     ,1.3
+                     ,protrudingIntDefault
+  )
+
+
+  protrudingDefault <- 0.2
+  protrudingVec <- c(protrudingDefault,
+                   protrudingDefault,
+                   protrudingDefault,
+                   protrudingDefault,
+
+                   protrudingDefault
+                   ,protrudingDefault
+                   ,protrudingDefault
+                   ,protrudingDefault
+
+                   ,0.5
+                   ,protrudingDefault
   )
 
   chrLabelSpacingDefault <- 0.5
@@ -231,10 +539,14 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                           chrLabelSpacingDefault,
                           chrLabelSpacingDefault,
                           chrLabelSpacingDefault,
+
                           chrLabelSpacingDefault
                           ,chrLabelSpacingDefault
                           ,chrLabelSpacingDefault
                           ,1
+
+                          ,chrLabelSpacingDefault
+                          ,chrLabelSpacingDefault
   )
 
   rotationDefault <- 0.5
@@ -247,6 +559,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                    ,rotationDefault
                    ,rotationDefault
                    ,0.1
+
+                   ,0
+                   ,0
   )
 
   shrinkFactorDefault <- 0.9
@@ -259,6 +574,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                        ,shrinkFactorDefault
                        ,shrinkFactorDefault
                        ,.95
+
+                       ,1
+                       ,1
   )
 
   radiusDefault <- 0.5
@@ -271,6 +589,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                  ,radiusDefault
                  ,radiusDefault
                  ,5
+
+                 ,2.5
+                 ,8
   )
 
   circleCenterDefault <- 1
@@ -282,6 +603,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                        ,circleCenterDefault
                        ,circleCenterDefault
                        ,3
+
+                       ,circleCenterDefault
+                       ,circleCenterDefault
   )
 
   OTUsrtDefault <- 0
@@ -293,6 +617,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                  ,OTUsrtDefault
                  ,OTUsrtDefault
                  ,0
+
+                 ,OTUsrtDefault
+                 ,OTUsrtDefault
   )
 
   OTUplacingDefault <- "first"
@@ -305,6 +632,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                      ,OTUplacingDefault
                      ,OTUplacingDefault
                      ,"simple"
+
+                     ,"simple"
+                     ,"simple"
   )
 
   OTUjustifDefault <- 0
@@ -312,10 +642,14 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                     OTUjustifDefault,
                     OTUjustifDefault,
                     OTUjustifDefault,
+
                     OTUjustifDefault
                     ,OTUjustifDefault
                     ,OTUjustifDefault
-                    ,0
+                    ,OTUjustifDefault
+
+                    ,0.5
+                    ,0.5
   )
 
   OTULabelSpacerxDefault <- 0
@@ -328,6 +662,10 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                           ,OTULabelSpacerxDefault
                           ,OTULabelSpacerxDefault
                           ,-6
+
+                          ,OTULabelSpacerxDefault
+                          ,OTULabelSpacerxDefault
+
   )
 
 
@@ -340,6 +678,10 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                           ,OTUlegendHeightDefault
                           ,OTUlegendHeightDefault
                           ,1.5
+
+                          ,OTUlegendHeightDefault
+                          ,OTUlegendHeightDefault
+
   )
 
   orderChrDefault<-"size"
@@ -352,6 +694,10 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                    ,orderChrDefault
                    ,orderChrDefault
                    ,"name"
+
+                   ,orderChrDefault
+                   ,orderChrDefault
+
   )
 
   chrSpacingDefault <- 0.5
@@ -364,8 +710,10 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                      ,chrSpacingDefault
                      ,chrSpacingDefault
                      ,chrSpacingDefault
+
+                     ,chrSpacingDefault
+                     ,chrSpacingDefault
   )
-  # names(chrSpacingVec)[which(names(chrSpacingVec)=="chrSpacingDefault" )]<- chrSpacingDefault
 
   morphoDefault <- "both"
   morphoVec <- c("Guerra",
@@ -377,19 +725,23 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                  ,morphoDefault
                  ,morphoDefault
 
+                 ,morphoDefault
+                 ,morphoDefault
   )
-  # names(morphoVec)[which(names(morphoVec)=="morphoDefault" )]<- morphoDefault
 
   chrColorDefault <- "gray"
   chrColorVec <- c(chrColorDefault
                    ,chrColorDefault
                    ,chrColorDefault
                    ,chrColorDefault
+
                    ,chrColorDefault
                    ,chrColorDefault
                    ,chrColorDefault
                    ,chrColorDefault
 
+                   ,chrColorDefault
+                   ,chrColorDefault
   )
 
   cenColorDefault <- ""
@@ -402,6 +754,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                    ,cenColorDefault
                    ,NA
                    ,"black"
+
+                   ,cenColorDefault
+                   ,cenColorDefault
   )
 
 
@@ -410,13 +765,19 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                    chrIndexDefault,
                    "AR",
                    chrIndexDefault,
+
                    chrIndexDefault
                    ,chrIndexDefault
                    ,chrIndexDefault
                    ,chrIndexDefault
 
+                   ,chrIndexDefault
+                   ,chrIndexDefault
+
   )
-  # names(chrIndexVec)[which(names(chrIndexVec)=="chrIndexDefault" )]<- chrIndexDefault
+
+  karIndexDefault<-TRUE
+  karIndexVec <- rep(karIndexDefault,10)
 
   chrSizeDefault <- FALSE
 
@@ -427,10 +788,11 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                    chrSizeDefault,
                    chrSizeDefault
                    ,chrSizeDefault
-                   ,chrSizeDefault #8
+                   ,chrSizeDefault
 
+                   ,chrSizeDefault
+                   ,chrSizeDefault
   )
-  # names(chrSizeVec)[which(names(chrSizeVec)=="chrSizeDefault" )]<- chrSizeDefault
 
   chromatidsDefault <- TRUE
   chromatidsVec <- c( chromatidsDefault,
@@ -442,6 +804,8 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                       ,chromatidsDefault
                       ,chromatidsDefault
 
+                      ,chromatidsDefault
+                      ,chromatidsDefault
   )
 
   circularPlotDefault <- FALSE
@@ -452,6 +816,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                         circularPlotDefault
                         ,circularPlotDefault
                         ,circularPlotDefault
+                        ,TRUE
+
+                        ,TRUE
                         ,TRUE
   )
 
@@ -466,8 +833,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                       ,chrSizeMbpDefault
                       ,chrSizeMbpDefault
 
+                      ,chrSizeMbpDefault
+                      ,chrSizeMbpDefault
   )
-  # names(chrSizeMbpVec)[which(names(chrSizeMbpVec)=="chrSizeMbpDefault" )]<- chrSizeMbpDefault
 
   distTextChrDefault <- 1
   distTextChrVec <- c( 1.2,
@@ -479,8 +847,10 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                        ,distTextChrDefault
                        ,0.8
                        ,distTextChrDefault
+
+                       ,distTextChrDefault
+                       ,distTextChrDefault
   )
-  # names(distTextChrVec)[which(names(distTextChrVec)=="distTextChrDefault" )]<- distTextChrDefault
 
   rulerDefault <- TRUE
   rulerVec <- c( rulerDefault,
@@ -490,6 +860,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                  FALSE,
                  FALSE
                  ,FALSE
+                 ,   rulerDefault
+
+                 ,   rulerDefault
                  ,   rulerDefault
   )
 
@@ -502,20 +875,25 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                     ,rulerPosDefault
                     ,rulerPosDefault
                     ,rulerPosDefault
+
+                    ,rulerPosDefault
+                    ,rulerPosDefault
   )
-  # names(rulerPosVec)[which(names(rulerPosVec)=="rulerPosDefault" )]<- rulerPosDefault
 
   ruler.tckDefault <- -0.02
   ruler.tckVec <- c(-0.01,
                     -0.02,
                     -0.005,
                     -0.005,
+
                     ruler.tckDefault
                     ,ruler.tckDefault
                     ,ruler.tckDefault
                     ,ruler.tckDefault
+
+                    ,ruler.tckDefault
+                    ,ruler.tckDefault
   )
-  # names(ruler.tckVec)[which(names(ruler.tckVec)=="ruler.tckDefault" )] <- ruler.tckDefault
 
   rulerNumberSizeDefault <- 1
   rulerNumberSizeVec <- c(0.8,
@@ -526,8 +904,10 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                           ,rulerNumberSizeDefault
                           ,rulerNumberSizeDefault
                           ,rulerNumberSizeDefault
+
+                          ,rulerNumberSizeDefault
+                          ,rulerNumberSizeDefault
   )
-  # names(rulerNumberSizeVec)[which(names(rulerNumberSizeVec)=="rulerNumberSizeDefault" )] <- rulerNumberSizeDefault
 
   xPosRulerTitleDefault <- 1
   xPosRulerTitleVec <- c(3,
@@ -539,19 +919,23 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                          ,xPosRulerTitleDefault
                          ,xPosRulerTitleDefault
 
+                         ,xPosRulerTitleDefault
+                         ,xPosRulerTitleDefault
   )
-  # names(xPosRulerTitleVec)[which(names(xPosRulerTitleVec)=="xPosRulerTitleDefault" )] <- xPosRulerTitleDefault
 
   legendWidthDefault <- 1.7
   legendWidthVec <- c(1,
                       1.2,
                       legendWidthDefault,
                       1,
+
                       legendWidthDefault
                       ,legendWidthDefault
                       ,legendWidthDefault
                       ,legendWidthDefault
 
+                      ,legendWidthDefault
+                      ,legendWidthDefault
   )
 
   legendHeightDefault <- as.numeric(NA)
@@ -563,20 +947,24 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                        ,legendHeightDefault
                        ,legendHeightDefault
                        ,2.5
-  )
 
-  # names(legendWidthVec)[which(names(legendWidthVec)=="legendWidthDefault" )] <- legendWidthDefault
+                       ,legendHeightDefault
+                       ,legendHeightDefault
+  )
 
   fixCenBorderDefault <- FALSE
   fixCenBorderVec <- c(TRUE,
                        fixCenBorderDefault,
                        TRUE,
                        fixCenBorderDefault,
+
                        fixCenBorderDefault
                        ,fixCenBorderDefault
                        ,fixCenBorderDefault
                        ,fixCenBorderDefault
 
+                       ,fixCenBorderDefault
+                       ,fixCenBorderDefault
   )
 
   chrBorderColorDefault <- as.character(NA)
@@ -587,6 +975,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
 
                          chrBorderColorDefault
                          ,chrBorderColorDefault
+                         ,chrBorderColorDefault
+                         ,chrBorderColorDefault
+
                          ,chrBorderColorDefault
                          ,chrBorderColorDefault
   )
@@ -601,6 +992,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                   ,lwd.chrDefault
                   ,lwd.chrDefault
                   ,lwd.chrDefault
+
+                  ,lwd.chrDefault
+                  ,0.1
   )
 
   xlimLeftModDefault <- 1
@@ -613,8 +1007,10 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                       ,xlimLeftModDefault
                       ,xlimLeftModDefault
                       ,0
+
+                      ,2
+                      ,5
   )
-  # names(xlimLeftModVec)[which(names(xlimLeftModVec)=="xlimLeftModDefault" )] <- xlimLeftModDefault
 
   xlimRightModDefault <- 2
   xlimRightModVec <- c(xlimRightModDefault,
@@ -625,6 +1021,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                        3
                        ,4
                        ,0
+                       ,5
+
+                       ,xlimRightModDefault
                        ,5
   )
 
@@ -637,6 +1036,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                      ,1
                      ,ylimBotModDefault
                      ,ylimBotModDefault
+
+                     ,0
+                     ,5
   )
 
   ylimTopModDefault <- 0.2
@@ -644,35 +1046,59 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                      0,
                      -0.4,
                      ylimTopModDefault,
+
                      ylimTopModDefault
                      ,ylimTopModDefault
                      ,ylimTopModDefault
                      ,ylimTopModDefault
+
+                     ,0
+                     ,5
   )
-  # names(ylimTopModVec)[which(names(ylimTopModVec)=="ylimTopModDefault" )] <- ylimTopModDefault
 
   mycolorsDefault <- ""
-  mycolorsVec<- c(""
-                  ,""
-                  ,""
-                  ,""
+  mycolorsVec<- c(mycolorsDefault
+                  ,mycolorsDefault
+                  ,mycolorsDefault
+                  ,mycolorsDefault
 
                   ,"red,dodgerblue,fdsjkfds,chartreuse3,darkgoldenrod1"
-                  ,""
                   ,mycolorsDefault
                   ,mycolorsDefault
+                  ,mycolorsDefault
+
+                  ,mycolorsDefault
+                  ,mycolorsDefault
+)
+
+  mycolors2Default <- ""
+  mycolors2Vec<- c(mycolors2Default
+                  ,mycolors2Default
+                  ,mycolors2Default
+                  ,mycolors2Default
+
+                  ,mycolors2Default
+                  ,mycolors2Default
+                  ,mycolors2Default
+                  ,mycolors2Default
+
+                  ,"black,forestgreen,cornflowerblue"
+                  ,"black,forestgreen,cornflowerblue"
   )
 
   chrNamesToSwapDefault <- ""
-  chrNamesToSwapVec<- c(""
-                        ,""
-                        ,""
-                        ,""
+  chrNamesToSwapVec<- c(chrNamesToSwapDefault
+                        ,chrNamesToSwapDefault
+                        ,chrNamesToSwapDefault
+                        ,chrNamesToSwapDefault
 
-                        ,""
-                        ,""
+                        ,chrNamesToSwapDefault
+                        ,chrNamesToSwapDefault
                         ,chrNamesToSwapDefault
                         ,"3,6,7,9,12" #8
+
+                        ,chrNamesToSwapDefault
+                        ,chrNamesToSwapDefault
   )
 
   addOTUNameDefault <- TRUE
@@ -683,6 +1109,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
 
                      ,addOTUNameDefault
                      ,FALSE
+                     ,addOTUNameDefault
+                     ,addOTUNameDefault
+
                      ,addOTUNameDefault
                      ,addOTUNameDefault
   )
@@ -697,6 +1126,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                   ,OTUfontDefault
                   ,OTUfontDefault
                   ,3
+
+                  ,OTUfontDefault
+                  ,OTUfontDefault
   )
 
   moveKarHorDefault<- ""
@@ -706,6 +1138,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                     ,moveKarHorDefault
                     ,moveKarHorDefault
                     ,"Allopolyploid"
+                    ,moveKarHorDefault
+                    ,moveKarHorDefault
+
                     ,moveKarHorDefault
                     ,moveKarHorDefault
   )
@@ -719,6 +1154,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                   ,7
                   ,mkhValueDefault
                   ,mkhValueDefault
+
+                  ,mkhValueDefault
+                  ,mkhValueDefault
   )
 
   anchorDefault<- FALSE
@@ -728,6 +1166,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                 ,anchorDefault
                 ,anchorDefault
                 ,TRUE
+                ,anchorDefault
+                ,anchorDefault
+
                 ,anchorDefault
                 ,anchorDefault
   )
@@ -741,6 +1182,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                       ,4
                       ,moveAnchorVDefault
                       ,moveAnchorVDefault
+
+                      ,moveAnchorVDefault
+                      ,moveAnchorVDefault
   )
 
   moveAnchorHDefault<- 0
@@ -750,6 +1194,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                      ,moveAnchorHDefault
                      ,moveAnchorHDefault
                      ,-1.5
+                     ,moveAnchorHDefault
+                     ,moveAnchorHDefault
+
                      ,moveAnchorHDefault
                      ,moveAnchorHDefault
   )
@@ -763,6 +1210,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
                        ,1.3
                        ,notesTextSizeDefault
                        ,notesTextSizeDefault
+
+                       ,notesTextSizeDefault
+                       ,notesTextSizeDefault
   )
 
   notesPosXDefault <- 0.5
@@ -773,6 +1223,9 @@ menulist<-c("DFsMenu","parameterPlotMenu"
 
                    ,notesPosXDefault
                    ,1.5
+                   ,notesPosXDefault
+                   ,notesPosXDefault
+
                    ,notesPosXDefault
                    ,notesPosXDefault
   )

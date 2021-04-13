@@ -17,12 +17,6 @@ vignette: >
 
 ```{r, echo=F, warning=FALSE, error=FALSE, comment=NA}
 if(Sys.info()['sysname']=="Darwin") {
-      # system("rm index.Rmd")
-      # system("rm DphylogenyVig.Rmd")
-      # system("rm EhumanVig.Rmd")         
-      # system("rm AplotIdiogramsVig.Rmd")
-      # system("rm BcircularVig.Rmd")
-    
       system('echo "---" > index.Rmd')
       system('echo "title: \'idiogramFISH\'" >> index.Rmd')
       system('echo "author: \'Fernando Roa\'" >> index.Rmd')
@@ -36,30 +30,24 @@ if(Sys.info()['sysname']=="Darwin") {
       system('echo "---" >> index.Rmd')
       system('echo ""    >> index.Rmd')
       system('echo "visit https://ferroao.gitlab.io/idiogramfishhelppages" >> index.Rmd')
-      
 }
-if(length( rmarkdown::pandoc_version()<2 )>0) { # solaris workaround
+if(length( rmarkdown::pandoc_version()<2 )>0) { 
   
-if(rmarkdown::pandoc_version()<2) {
-  
-  message(crayon::red("\nMissing pandoc version > 2. Vignette may fail because it uses lua filter for multiple bibliographies
-                      \nMore info:
-                      \nhttps://stat.ethz.ch/pipermail/r-package-devel/2019q2/004127.html
-                      \nhttps://stat.ethz.ch/pipermail/r-package-devel/2020q1/004814.html
-                      \nLua filters are supported by rmarkdown
-                      \nhttps://cran.r-project.org/web/packages/rmarkdown/vignettes/lua-filters.html
-                      \nLua filters are an old characteristic of pandoc
-                      \nhttps://pandoc.org/lua-filters.html
-                      \nInstall pandoc >2 or try with package installr (if in Windows):
-                      \nhttps://github.com/jgm/pandoc/releases")
-          )# me
-  if(Sys.info()['sysname']=="Windows"){
-    message("pandoc > 2 not available, see online vignettes")
-    # system("powershell -Command \"$pwd.Path\" ")
-    # shell("powershell -Command \"(gc index.Rmd) -replace 'pandoc_args', '#pandoc_args' | Out-File -encoding ASCII index.Rmd ")
-    # shell("powershell -Command \"(gc DphylogenyVig.Rmd) -replace 'pandoc_args', '#pandoc_args' | Out-File -encoding ASCII DphylogenyVig.Rmd ")
+  if(rmarkdown::pandoc_version()<2) {
     
-    # remove vignettes with lua filter
+    message(crayon::red("\nMissing pandoc version > 2. Vignette may fail because it uses lua filter for multiple bibliographies
+                        \nMore info:
+                        \nhttps://stat.ethz.ch/pipermail/r-package-devel/2019q2/004127.html
+                        \nhttps://stat.ethz.ch/pipermail/r-package-devel/2020q1/004814.html
+                        \nhttps://cran.r-project.org/web/packages/rmarkdown/vignettes/lua-filters.html
+                        \nhttps://rmarkdown.rstudio.com/docs/reference/pandoc_args.html
+                        \nhttps://pandoc.org/lua-filters.html
+                        \nhttps://github.com/jgm/pandoc/releases")
+            )
+  }
+}
+if(Sys.info()['sysname']=="Windows") {
+    message("pandoc > 2 not available, see online vignettes")
     shell("del index.Rmd")
     
     #
@@ -78,11 +66,9 @@ if(rmarkdown::pandoc_version()<2) {
       shell('@echo   %\\VignetteEncoding{UTF-8} >> index.Rmd')
       shell('@echo --- >> index.Rmd')
       shell('@echo(     >> index.Rmd')
-      shell('@echo pandoc ^> 2 not available, visit https://ferroao.gitlab.io/idiogramfishhelppages >> index.Rmd')
+      shell('@echo visit https://ferroao.gitlab.io/idiogramfishhelppages >> index.Rmd')
    
-    } # if windows
-  } # pandoc < 2
-} # len
+} # if windows
 ```
   
 [Local/CRAN idiogramFISH vignette](index.html)

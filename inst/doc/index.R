@@ -322,7 +322,7 @@ cat(paste0("<img src=",shiny_path,">") )
 ## ---- echo=TRUE, results="hide", message=FALSE--------------------------------
 library(idiogramFISH)
 
-data(dfOfChrSize) # chromsome data
+data(dfOfChrSize) # chromosome data
 data(dfMarkColor) # mark general data
 data(dfOfMarks2)  # mark position data (inc. cen.)
 

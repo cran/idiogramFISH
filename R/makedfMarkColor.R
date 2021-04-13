@@ -47,6 +47,11 @@ makedfMarkColor<- function(dfMarkColor,markNames,colorstoremove=NA
   dfMarkColorNew$markColor<-dfMarkColor$markColor[
     match(toupper(dfMarkColorNew$markNameNP),toupper(dfMarkColor$markNameNP) )]
 
+  if("protruding" %in% colnames(dfMarkColor)){
+  dfMarkColorNew$protruding <- dfMarkColor$protruding[
+    match(toupper(dfMarkColorNew$markNameNP),toupper(dfMarkColor$markNameNP) )]
+  }
+
   areNA<-which(is.na(dfMarkColorNew$markColor) )
 
   if(length(areNA)){
@@ -79,7 +84,7 @@ makedfMarkColor<- function(dfMarkColor,markNames,colorstoremove=NA
            ,error= function(e){""} )
 
   dfMarkColorNew$style[which(is.na(dfMarkColorNew$style))] <- defaultStyleMark
-
+  dfMarkColorNew$markNameNP<-NULL
   return(dfMarkColorNew)
 }
 

@@ -188,6 +188,7 @@
 #' @param yPosRulerTitle, numeric, affects vertical position of ruler title. Defaults to \code{0}
 #' @param rulerTitleSize, numeric font size of units of ruler. See also \code{xPosRulerTitle}
 #' @param n, numeric vertices number for round corners
+#' @param markN, numeric vertices number for round corners of marks
 #' @param notes, data.frame, (to the right), with columns \code{OTU} and \code{note} for adding notes to each OTU, they appear to the right of chromosomes
 #' @param leftNotes, data.frame, (to the left), with columns \code{OTU} and \code{note} for adding notes to each OTU, they appear to the left of chromosomes
 #' @param leftNotesUp, data.frame, (to the left), similar to \code{leftNotes}, but intended for placement over chr.
@@ -284,6 +285,7 @@ plotIdiograms <- function(dfChrSize, # karyotype
   moveAnchorH=0,
   mkhValue=.5,
   n=50,
+  markN=25,
   notes,
   leftNotes,
   leftNotesUp,
@@ -484,6 +486,10 @@ plotIdiograms <- function(dfChrSize, # karyotype
     defaultFontFamily2<-defaultFontFamily
   } else {
     defaultFontFamily2<-"sans"
+  }
+
+  if(circularPlot){
+    n<-n*2
   }
 
   if(dotsAsOval & circularPlot) {
@@ -1818,6 +1824,10 @@ if(cenFormat=="inProtein" & exists("dfCenMarksInternal") ) {
   #   check compatibility of columns dfMarkColor
   #
 
+  if(chrColor==""){
+    chrColor<-"gray"
+  }
+
   if(!missing(cenColor)) {
     #
     if(length(is.na(cenColor)) ) {
@@ -1858,7 +1868,6 @@ if(cenFormat=="inProtein" & exists("dfCenMarksInternal") ) {
   }
 
   conMNames <- mget(ls(pattern = "^allMarkNames" ) ) # to merge with InProtein see above
-#  conMNames1861<<-conMNames
 
   if(length(conMNames) ) {
     consolMarkNames <- suppressWarnings(unlist(conMNames) )
@@ -1929,7 +1938,6 @@ if(cenFormat=="inProtein" & exists("dfCenMarksInternal") ) {
 
         if ( length(setdiff(consolMarkNames,unique(dfMarkColorInternal$markName) ) )>0 ) { # nrow not 0
           message(crayon::black("\nColors provided in to dfMarkColor are not enough, internal colors will be used.\n") )
-#          dfMarkColorInternal1928<<-dfMarkColorInternal
           dfMarkColorInternal <- makedfMarkColor(dfMarkColorInternal,consolMarkNames, c(chrColor,cenColor2) )
         } else { # nrow not 0
           message(crayon::black("\nCheck OK\n") )
@@ -1945,7 +1953,6 @@ if(cenFormat=="inProtein" & exists("dfCenMarksInternal") ) {
 
     if(exists("consolMarkNames")  ) {
 
-#      consolMarkNames1944<<-consolMarkNames
         dfMarkColorInternal <- makedfMarkColor(idiogramFISH::dfMarkColor
                                              ,consolMarkNames
                                              ,c(chrColor,cenColor2)
@@ -1987,6 +1994,7 @@ if(cenFormat=="inProtein" & exists("dfCenMarksInternal") ) {
                                                          ,defaultStyleMark
                                                          )
         }
+
     }
   } # elif mycolors2
 
@@ -2007,24 +2015,6 @@ if(cenFormat=="inProtein" & exists("dfCenMarksInternal") ) {
 
     bToRemove <- c(bToRemove,"inProteinCentromere")
 
-    #
-    # dfMarkPosInternal3 cen style marks. mycolors2 did that job already
-    #
-
- # if(exists("dfMarkPosInternal3") & exists("dfMarkColorInternal") & !exists("mycolors2") ) {
-
-    #
-    #   # some will not be found
-    #   dfMarkPosInternal3$markColor <- dfMarkColorInternal$markColor[match(dfMarkPosInternal3$markNameOld
-    #                                                                       ,dfMarkColorInternal$markName)]
-    #
-    #   dfMarkColorInternalInProtCenMark <-data.frame(markName=dfMarkPosInternal3$markName
-    #                                               ,markColor=dfMarkPosInternal3$markColor
-    #                                               ,style="inProtein")
-    #
-    #   dfMarkColorInternalInProtCenMark <- unique(dfMarkColorInternalInProtCenMark)
-    #
-    # }
 
 } # cenFormat Protein
 
@@ -2046,6 +2036,8 @@ if(cenFormat=="inProtein" & exists("dfCenMarksInternal") ) {
   #
 
   if(exists("dfMarkColorInternal")) {
+
+
       conMNames <- mget(ls(pattern = "^allMarkNames" ) ) # mergewith inProtein
 
       if(length(conMNames) ) {
@@ -2081,7 +2073,6 @@ if(cenFormat=="inProtein" & exists("dfCenMarksInternal") ) {
 
         #   last makedfMarkColor
         #
-#        dfMarkColorInternal2080<<-dfMarkColorInternal
         dfMarkColorInternal <- makedfMarkColor(dfMarkColorInternal,consolMarkNamesCen, c(chrColor,cenColor2)
                           )
 
@@ -2121,11 +2112,11 @@ if(cenFormat=="inProtein" & exists("dfCenMarksInternal") ) {
   #   inline labels of arrows
   #
 
-  if (exists("dfMarkColorInternal") & legend=="inline"){
-    dfMarkColorInternalCopy<-dfMarkColorInternal
+  if (exists("dfMarkColorInternal") & legend=="inline") {
+    dfMarkColorInternalCopy <- dfMarkColorInternal
     dfMarkColorInternalArrowsLabels<-dfMarkColorInternalCopy[which(dfMarkColorInternalCopy$style %in% c("downArrow","upArrow") ),]
     remove(dfMarkColorInternalCopy)
-    if(nrow(dfMarkColorInternalArrowsLabels)>0){
+    if(nrow(dfMarkColorInternalArrowsLabels)>0) {
       tryCatch(dfMarkColorInternalArrowsLabels[which(dfMarkColorInternalArrowsLabels$style %in% "downArrow"),]$style<-"cMLeft",error = function(e) {""})
       tryCatch(dfMarkColorInternalArrowsLabels[which(dfMarkColorInternalArrowsLabels$style %in% "upArrow"),]$style<-"cM",error = function(e) {""})
       #
@@ -2135,6 +2126,7 @@ if(cenFormat=="inProtein" & exists("dfCenMarksInternal") ) {
       #
       #   last dfMarkColorInternal
       #
+
       # dfMarkColorInternal <- dplyr::bind_rows(dfMarkColorInternal,dfMarkColorInternalArrowsLabels)
 
       dfMarkColorInternal<- suppressWarnings(bind_rows((lapply(
@@ -2287,7 +2279,6 @@ if(cenFormat=="inProtein" & exists("dfCenMarksInternal") ) {
               parlistOfdfMarkPosHolocen[[i]],speListOfdfMarkPosHolocenArrowsLabels[[i]])
           }
         } # inline
-
         tryCatch(parlistOfdfMarkPosHolocen[[i]]$protruding <- dfMarkColorInternal$protruding[match(parlistOfdfMarkPosHolocen[[i]]$markName,
                                                                                                 dfMarkColorInternal$markName)]
                  ,error = function(e) {""}
@@ -3415,7 +3406,8 @@ for (s in 1:length(y) ) {
 
           xlistNewChr<-xHortoVer(x)
 
-          circleMaps <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,ylistTransChrSimple,xlistNewChr,n,0,
+          circleMaps <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,ylistTransChrSimple
+                                       ,xlistNewChr,n,0,
                                        chrWidth,rotation=rotation)
 
           if(callPlot){
@@ -5601,7 +5593,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                           chrWidth, #use for calc r2
                           specialChrWidth,
                           yfactor,
-                          n,
+                          markN,
                           lwd.marks2,#lwd.chr,
                           listOfdfChromSize,
                           circularPlot,
@@ -5614,7 +5606,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
 
           } else if (chromatids & circularPlot==FALSE) {
 
-            chrtSqMark(squareness,yMarkSq,xMarkSq,xModifierMono,r2,dfMarkColorInternal,lwd.marks2,listOfdfMarkPosSq,n)
+            chrtSqMark(squareness,yMarkSq,xMarkSq,xModifierMono,r2,dfMarkColorInternal,lwd.marks2,listOfdfMarkPosSq,markN)
 
           } # chromatids
 
@@ -5726,7 +5718,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                           chrWidth, #use for calc r2
                           specialChrWidth,
                           yfactor,
-                          n,
+                          markN,
                           lwd.marks2,#lwd.chr,
                           listOfdfChromSize,
                           circularPlot,
@@ -5739,7 +5731,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
 
           } else if (chromatids & holocenNotAsChromatids==FALSE & circularPlot==FALSE) {
 
-            chrtSqMark(squareness,yMarkSq,xMarkSq,xModifierHolo,r2,dfMarkColorInternal,lwd.marks2,listOfdfMarkPosSq,n)
+            chrtSqMark(squareness,yMarkSq,xMarkSq,xModifierHolo,r2,dfMarkColorInternal,lwd.marks2,listOfdfMarkPosSq,markN)
 
           } # chromatids
 
@@ -6574,7 +6566,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                                    chrWidth, #use for calc r2
                                    specialChrWidth,
                                    yfactor,
-                                   n,
+                                   markN,
                                    lwd.mimicCen2,
                                    listOfdfChromSize,
                                    circularPlot,
@@ -6595,7 +6587,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                                    chrWidth, #use for calc r2
                                    specialChrWidth,
                                    yfactor,
-                                   n,
+                                   markN,
                                    lwd.mimicCen2,
                                    listOfdfChromSize,
                                    circularPlot,
@@ -6788,11 +6780,8 @@ if(exists("listOfdfChromSizeMonocen") ) {
             xMarkExProt[[sm]]<-xMark1
             attr(xMarkExProt[[sm]], "spname")<-names(listOfdfMarkPosExProt)[[sm]]
 
-            # if(chromatids & ProteinsToSide & ProteinsBothChrt & circularPlot==FALSE) {
             xMarkExProt_2nd[[sm]]<-xMark1_2nd
             attr(xMarkExProt_2nd[[sm]], "spname")<-names(listOfdfMarkPosExProt)[[sm]]
-
-            # }
 
           } # end for
 
@@ -6806,7 +6795,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                         dfMarkColorInternal,
                         listOfdfMarkPosExProt,
                         chrWidth, #use for calc r2
-                        n,
+                        markN,
                         lwd.marks2,#lwd.chr,
                         circularPlot,
                         y,
@@ -6823,7 +6812,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                         dfMarkColorInternal,
                         listOfdfMarkPosExProt,
                         chrWidth, #use for calc r2
-                        n,
+                        markN,
                         lwd.marks2,#lwd.chr,
                         circularPlot,
                         y,
@@ -6993,7 +6982,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                         dfMarkColorInternal,
                         listOfdfMarkPosExProt,
                         chrWidth, #use for calc r2
-                        n,
+                        markN,
                         lwd.marks2,#lwd.chr,
                         circularPlot,
                         y,
@@ -7009,7 +6998,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                         dfMarkColorInternal,
                         listOfdfMarkPosExProt,
                         chrWidth, #use for calc r2
-                        n,
+                        markN,
                         lwd.marks2,#lwd.chr,
                         circularPlot,
                         y,
@@ -7198,7 +7187,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                         dfMarkColorInternal,
                         listOfdfMarkPosInProt,
                         chrWidth, #use for calc r2
-                        n,
+                        markN,
                         lwd.marks2,#lwd.chr,
                         circularPlot,
                         y,
@@ -7215,7 +7204,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                         dfMarkColorInternal,
                         listOfdfMarkPosInProt,
                         chrWidth, #use for calc r2
-                        n,
+                        markN,
                         lwd.marks2,#lwd.chr,
                         circularPlot,
                         y,
@@ -7383,7 +7372,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                         dfMarkColorInternal,
                         listOfdfMarkPosInProt,
                         chrWidth, #use for calc r2
-                        n,
+                        markN,
                         lwd.marks2,#lwd.chr,
                         circularPlot,
                         y,
@@ -7399,7 +7388,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                         dfMarkColorInternal,
                         listOfdfMarkPosInProt,
                         chrWidth, #use for calc r2
-                        n,
+                        markN,
                         lwd.marks2,#lwd.chr,
                         circularPlot,
                         y,
@@ -7560,7 +7549,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                       dfMarkColorInternal,
                       listOfdfMarkPosUpAr,
                       chrWidth, #use for calc r2
-                      n,
+                      markN,
                       lwd.marks2,#lwd.chr,
                       circularPlot,
                       y,
@@ -7577,7 +7566,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                         dfMarkColorInternal,
                         listOfdfMarkPosUpAr,
                         chrWidth, #use for calc r2
-                        n,
+                        markN,
                         lwd.marks2,#lwd.chr,
                         circularPlot,
                         y,
@@ -7718,7 +7707,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                       dfMarkColorInternal,
                       listOfdfMarkPosUpAr,
                       chrWidth, #use for calc r2
-                      n,
+                      markN,
                       lwd.marks2,#lwd.chr,
                       circularPlot,
                       y,
@@ -7734,7 +7723,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                         dfMarkColorInternal,
                         listOfdfMarkPosUpAr,
                         chrWidth, #use for calc r2
-                        n,
+                        markN,
                         lwd.marks2,#lwd.chr,
                         circularPlot,
                         y,
@@ -7898,7 +7887,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                       dfMarkColorInternal,
                       listOfdfMarkPosDwAr,
                       chrWidth, #use for calc r2
-                      n,
+                      markN,
                       lwd.marks2,#lwd.chr,
                       circularPlot,
                       y,
@@ -7914,7 +7903,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                         dfMarkColorInternal,
                         listOfdfMarkPosDwAr,
                         chrWidth, #use for calc r2
-                        n,
+                        markN,
                         lwd.marks2,#lwd.chr,
                         circularPlot,
                         y,
@@ -8049,7 +8038,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                       dfMarkColorInternal,
                       listOfdfMarkPosDwAr,
                       chrWidth, #use for calc r2
-                      n,
+                      markN,
                       lwd.marks2,#lwd.chr,
                       circularPlot,
                       y,
@@ -8065,7 +8054,7 @@ if(exists("listOfdfChromSizeMonocen") ) {
                         dfMarkColorInternal,
                         listOfdfMarkPosDwAr,
                         chrWidth, #use for calc r2
-                        n,
+                        markN,
                         lwd.marks2,#lwd.chr,
                         circularPlot,
                         y,
@@ -8168,7 +8157,7 @@ if (exists("parlistOfdfMarkPosMonocen") & exists("dfMarkColorInternal") ){
       #####################
       # cMPlotMark(xMarkcM, yMarkcM, dfMarkColorInternal,listOfdfMarkPoscM, lwd.cM2,circularPlot)
       cMPlotMark(bannedMarkName3,xMarkcM, yMarkcM,y, x, dfMarkColorInternal,listOfdfMarkPoscM, lwd.cM2,circularPlot,
-        radius,circleCenter,circleCenterY,separFactor,markLabelSize,pattern,n,labelSpacing,chrWidth,
+        radius,circleCenter,circleCenterY,separFactor,markLabelSize,pattern,markN,labelSpacing,chrWidth,
         ylistTransChrSimple,rotation=rotation,labelOutwards)
 
     } #     if(length(listOfdfMarkPoscM)>0){
@@ -8270,7 +8259,7 @@ if (exists("parlistOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
 
       # cMPlotMark(xMarkcM, yMarkcM,    dfMarkColorInternal,listOfdfMarkPoscM, lwd.cM2,circularPlot)
       cMPlotMark(bannedMarkName3,xMarkcM, yMarkcM, y, x, dfMarkColorInternal,listOfdfMarkPoscM, lwd.cM2,circularPlot,
-                 radius,circleCenter,circleCenterY,separFactor,markLabelSize,pattern,n,labelSpacing,chrWidth,
+                 radius,circleCenter,circleCenterY,separFactor,markLabelSize,pattern,markN,labelSpacing,chrWidth,
                  ylistTransChrSimple,rotation=rotation,labelOutwards)
 
     } #     if(length(listOfdfMarkPoscM)>0){
@@ -8371,7 +8360,7 @@ if (exists("parlistOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
         #####################
 
         cMLeftPlotMark(bannedMarkName3,xMarkcMLeft, yMarkcMLeft,y, x, dfMarkColorInternal,listOfdfMarkPoscMLeft, lwd.cM2,circularPlot,
-                   radius,circleCenter,circleCenterY,separFactor,markLabelSize,pattern,n,labelSpacing,chrWidth,
+                   radius,circleCenter,circleCenterY,separFactor,markLabelSize,pattern,markN,labelSpacing,chrWidth,
                    ylistTransChrSimple,rotation=rotation,labelOutwards)
 
       } #     if(length(listOfdfMarkPoscMLeft)>0){
@@ -8470,7 +8459,7 @@ if (exists("parlistOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
 
         # cMLeftPlotMark(xMarkcMLeft, yMarkcMLeft,    dfMarkColorInternal,listOfdfMarkPoscMLeft, lwd.cMLeft2,circularPlot)
         cMLeftPlotMark(bannedMarkName3,xMarkcMLeft, yMarkcMLeft, y, x, dfMarkColorInternal,listOfdfMarkPoscMLeft, lwd.cM2,circularPlot,
-                   radius,circleCenter,circleCenterY,separFactor,markLabelSize,pattern,n,labelSpacing,chrWidth,
+                   radius,circleCenter,circleCenterY,separFactor,markLabelSize,pattern,markN,labelSpacing,chrWidth,
                    ylistTransChrSimple,rotation=rotation,labelOutwards)
 
       } #     if(length(listOfdfMarkPoscMLeft)>0){
@@ -8592,7 +8581,7 @@ if (exists("parlistOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
     #####################
 
     # plotDotMarks(xMarkCr,yMarkCr,rad,colCr,n,xfactor,colBorderCr)
-      plotDotMarks(bannedMarkName3,xMarkCr,yMarkCr, rad, radX, colCr,n,xfactor,colBorderCr,circularPlot, y,x,radius,circleCenter,circleCenterY,separFactor,
+      plotDotMarks(bannedMarkName3,xMarkCr,yMarkCr, rad, radX, colCr,markN,xfactor,colBorderCr,circularPlot, y,x,radius,circleCenter,circleCenterY,separFactor,
                    chrWidth,listOfdfMarkPosCr,markLabelSize,pattern,labelSpacing,useOneDot,legend,ylistTransChrSimple,rotation=rotation,
                    labelOutwards,dotsAsOval)
 
@@ -8704,7 +8693,7 @@ if (exists("parlistOfdfMarkPosHolocen") & exists("dfMarkColorInternal") ) {
     #   add to plot MarkCrs DOTS holocen
     #####################
 
-    plotDotMarks(bannedMarkName3,xMarkCr,yMarkCr, rad, radX, colCr,n,xfactor,colBorderCr,circularPlot, y,x,radius,circleCenter,circleCenterY,separFactor,
+    plotDotMarks(bannedMarkName3,xMarkCr,yMarkCr, rad, radX, colCr,markN,xfactor,colBorderCr,circularPlot, y,x,radius,circleCenter,circleCenterY,separFactor,
     chrWidth,listOfdfMarkPosCr,markLabelSize,pattern,labelSpacing,useOneDot,legend,ylistTransChrSimple, rotation=rotation,
     labelOutwards,dotsAsOval)
 

@@ -15,30 +15,33 @@ runBoard <- function() {
     stop("Could not find inst folder with shiny app.", call. = FALSE)
   }
 
-  neededPkg<-c('bib2df', 'rmarkdown'
-               , "svglite"
-             ,'shiny','shinydashboard'
-             ,'rhandsontable','gtools'
-             ,'knitr','rclipboard')
+  neededPkg<-c(#'bib2df'
+               'rmarkdown'
+               ,"svglite"
+               ,'shiny','shinydashboard'
+               ,'rhandsontable','gtools'
+               ,'knitr','rclipboard'
+               )
 
   missPkg<-character(0)
 
   for (pkg in neededPkg) {
     if (system.file(package = pkg) == '') {
-      missPkg <- c(missPkg,pkg) # readline("What is the value of x?")
+      missPkg <- c(missPkg,pkg)
     }
   }
   if (length(missPkg)){
     message(paste("you need to install", paste(missPkg,collapse=", ") ))
-    answer <- readline("Do you want to proceed installing now (Yes or No) ?")
+    answer <- readline("Do you want to proceed installing now (Yes or No) ? ")
   }
   if (exists("answer") ) {
-    if (answer %in% c("y","Y","Yes","yes")) {
+    if (answer %in% c("y","Y","Ye","ye","Yes","yes")) {
     lapply(neededPkg, function(pkg) {
       if (system.file(package = pkg) == '') {
         install.packages(pkg)
       }
-      })
+      }
+      )
     } else {
       return(print("bye"))
     }
@@ -54,5 +57,3 @@ runBoard <- function() {
       ) # m
     }
   }
-
-

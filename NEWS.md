@@ -1,6 +1,18 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 2.0.3
+
+12-04-2021
+
+-   Downloading with `rentrez` package and plotting of chromosomes in
+    shiny app
+-   Improvements in `genBankReadIF` function
+
+param:
+
+-   `markN` numeric, vertices number for round corners of marks
+
 # idiogramFISH 2.0.2
 
 02-03-2021
