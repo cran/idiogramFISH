@@ -549,12 +549,14 @@ circLabelMark<-function(bannedMarkName,circleMaps,listOfdfMarkPos,markLabelSize,
         delta_x = centerX - circleCenter
         delta_y = centerY - circleCenterY
         theta_radians = atan2(delta_y, delta_x)
+
         srt<-(theta_radians*180)/pi
-        if(srt>90 & srt<=180){
+
+        if(c(srt>90 & srt<=180) | c(srt < -90 & srt >= -180) ) {
           srt<-srt+180
-        } else if (srt < -90 & srt >= -180) {
-          srt<-srt+180
-          }
+        }
+        srt<-round(srt)
+        # srt<-floor(srt/2)*2
       } else {
         srt<-0
       }

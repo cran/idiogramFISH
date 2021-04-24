@@ -43,7 +43,7 @@ makedfMarkColorMycolors<- function(markNames, mycolors, colorstoremove=NULL, def
   lenmandf<-length(vecNP)
 
   if(length(mycolors)<lenmandf){
-    message(crayon::red(paste("Not enough colors in mycolor parameter, will be recycled") ) )
+    message(crayon::blue(paste("Not enough colors in mycolor parameter, will be recycled") ) )
     repF<-ceiling(lenmandf/length(mycolors) )
     mycolors<-rep(mycolors,repF)
   }

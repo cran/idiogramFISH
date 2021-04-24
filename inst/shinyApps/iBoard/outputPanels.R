@@ -399,14 +399,13 @@ output$circParamOTU = renderUI({
 
 output$imageWidth<- renderUI({
   px<-session$clientData$output_idiogramPlot_width*(as.numeric(input$widFactor)/100)
-  HTML(paste(paste("Width:",px,"px"),paste(px/80,"in"), sep ="<br/>" ) )
+  HTML(paste(paste(px,"px"),paste(px/80,"in"), sep ="<br/>" ) )
 })
 
 output$imageHeight<- renderUI({
   px <-session$clientData$output_idiogramPlot_width*(as.numeric(input$heiFactor)*(as.numeric(input$widFactor)/100)
   )
-  HTML(paste(paste("Heigth:"
-                   ,px,"px"),paste(px/80,"in"), sep ="<br/>" ) )
+  HTML(paste(paste(px,"px"),paste(px/80,"in"), sep ="<br/>" ) )
 })
 
 output$strpanel = renderUI({ # was treechar2
@@ -498,10 +497,10 @@ output$searchPanel = renderUI({
             ,br()
             ,uiOutput("fetchSelectUI")
             ,uiOutput("statsDF")
-            ,uiOutput("markColumnUI")
     )
     ,column(3
             ,br()
+            ,uiOutput("markColumnUI")
             ,uiOutput("loadUI")
     )
   ) #fR
@@ -512,71 +511,87 @@ output$parameterPanel = renderUI({
   fluidRow(
     column(width=2
            ,br()
-           ,wellPanel(style="padding: 0px 5px 0px 5px"
-                      ,splitLayout(
-                        span(h4("Squareness"),helpText("squared when > 20") )
-                        ,div(#style="margin-top: -5px; margin-bottom:-5px;"
-                          title='`squareness`: (`4`) Squared or rounded vertices when marks of the "square" style (defined in data.frame passed to `dfMarkColor`). Affects chromosomes also. Smaller numbers = more rounded
-'
-                          ,numericInput("squareness"
-                                        ,""
-                                        # ,HTML(paste("Vertices", "squareness", sep = "<br/>") )
-                                        , squarenessDefault
-                                        , min = 1, max = 21, step=0.5)
-                        )
-                      )
-                      ,helpText(tags$strong("resolution:")," > = more vertices")
-                      ,splitLayout(
-                        div(#style="margin-top: -5px;margin-bottom:-5px;"
-                          title="`markN`: numeric vertices number for round corners of marks"
-                          ,numericInput("markN",
-                                        HTML(paste("marks'", sep = "<br/>") )
-                                        ,markNDefault
-                                        , min = 1, max = 200, step=1)
-                        )
-                        ,div(#style="margin-top: -5px;margin-bottom:-5px;"
-                          title="`n`: numeric vertices number for round corners of chr."
-                          ,numericInput("n",
-                                        HTML(paste("chr.", sep = "<br/>") )
-                                        ,nDefault
-                                        , min = 25, max = 400, step=1)
-                        )
-                      ) # sL
-
-           ) # wP
-
-           ,wellPanel(style="margin-top:-15px;" #style="padding: 0px 5px 0px 5px"
+           # sq notes
+           ,wellPanel(style = "padding: 0px 15px 0px 5px"
+                      #style = "padding: 10px 5px 0px 5px;margin-bottom: 20px" # trbl
                       ,fluidRow(
                         column(6
-                               ,h4("Notes")
+                               ,h4("Legend")
+                               ,div(
+                                 title='`legend`: (`"aside"`) If you wanto to plot the names of marks near each chromosome use `legend = "inline"`, to the right of karyotypes use `legend = "aside"`, otherwise use `legend = ""` for no legend. See `markLabelSpacer`'
+                                 ,radioButtons("legend","Pos.",c("aside","inline","none"),selected = legendDefault )
+                               )
+                               ,div(style = "margin-top:-12px;margin-bottom:-7px"
+                                    ,title="`markLabelSize`: (`1`) Determines the size of text of the legend."
+                                    ,numericInput("markLabelSize"
+                                                  , "font size"
+                                                  , markLabelSizeDefault
+                                                  , min = 0.1, max = 5, step=0.05)
+                               )
+                        )
+                        ,column(6
+                                ,div(style = "margin-top:5px"
+                                     ,title='`legendWidth`: (`1.7`) numeric, factor to modify the width of the square and dots of legend. For `legend="aside"`.'
+                                     ,numericInput("legendWidth", "width", legendWidthDefault, min = 0.25, max = 5, step=0.05)
+                                )
+                                ,div(style = "margin-top:-12px"
+                                     ,title='`legendHeight`: (`NA`) numeric, factor to modify the height of the square and dots of legend. For `legend="aside"`.'
+                                     ,numericInput("legendHeight", "height"
+                                                   , legendHeightDefault
+                                                   , min = 0.25, max = 5, step=0.05)
+                                )
+                                ,div(style = "margin-top:-12px;margin-bottom:-7px"
+                                     ,title= '`pattern`: (`""`) REGEX pattern to eliminate from the marks name when plotting. See human karyotype chapter for example.'
+                                     ,textInput("pattern"
+                                                , "remove Regex"
+                                                , patternDefault
+                                     )
+                                )
+
+                        )
+                      ) # fR
+           ) #wP
+
+
+           ,wellPanel(style = "margin-top:-15px;padding: 0px 15px 0px 5px"
+                      ,h4("Marks")
+                      ,fluidRow(
+                        column(6
+                               ,div(style= "margin-top:0px;margin-bottom:-5px"
+                                    ,title="`protruding` numeric, when style of mark is `cM`, fraction of chrWidth to stretch marker. Defaults to `0.2`"
+                                    ,numericInput("protruding"
+                                                  ,HTML(paste("protruding of"
+                                                              ,"cM and arrows", sep = "<br/>") )
+                                                  ,protrudingDefault,min=0.05,max=2.5,step=0.05)
+                               ) # div
+                               ,div(#style= "margin-top:-7px;margin-bottom:-5px"
+                                 title='`useOneDot`: boolean, use one dot instead of two in style of marks dots. Defaults to `FALSE`'
+                                 ,checkboxInput("useOneDot",
+                                                "one dot only",
+                                                useOneDotDefault
+                                 )
+                               ) # div
 
                         ),column(6
-                                 ,div(style= "margin-top: -5px; margin-bottom:0px"
-                                      ,title="`OTUasNote`: (`FALSE`) See also `notes`. If `TRUE` OTU name is written to the right, as `notes`."
-                                      ,checkboxInput("OTUasNote",
-                                                     HTML(paste("OTU as note", "(right)", sep = "<br/>") )
-                                                     ,OTUasNoteDefault)
+                                 ,div(style= "margin-top:0px;margin-bottom:-5px"
+                                      ,title="`pMarkFac` numeric, fraction of chr. size for `exProtein` style marks. Defaults to `0.25`"
+                                      ,numericInput("pMarkFac"
+                                                    ,HTML(paste("exProtein"
+                                                                ,"mark size", sep = "<br/>") )
+                                                    ,pMarkFacDefault,min=0.05,max=1,step=0.05)
+                                 )
+                                 ,div(#style= "margin-bottom:15px"
+                                   title= '`cMBeginCenter`: boolean, start position of `cM` and `cMLeft` marks. If `TRUE`, starts in the center (width) of chr. . Defaults to `FALSE`'
+                                   ,checkboxInput("cMBeginCenter"
+                                                  ,HTML(paste("cM mark"
+                                                              ,"start centered", sep = "<br/>") )
+                                                  ,cMBeginCenterDefault)
                                  )
 
-                        )
-                      )
-                      ,splitLayout(
-                        div(#style= "margin-top: 15px;margin-bottom:-10px"
-                          title="`notesTextSize`: (`0.4`) numeric, font size of notes, see `notes`"
-                          ,numericInput("notesTextSize"
-                                        ,HTML(paste("font", "size", sep = "<br/>") )
-                                        ,notesTextSizeDefault, min = 0.1, max = 10, step=0.1)
-                        )
-                        ,div(#style= "margin-top:-10px;margin-bottom:-5px"
-                          title="`notesPosX`: (`0.5`) numeric, moves right notes in the x axis"
-                          ,numericInput("notesPosX"
-                                        ,HTML(paste("right notes", "horiz. pos.", sep = "<br/>") )
-                                        ,notesPosXDefault, min = -20, max = 20, step=0.1
-                          )
-                        )
-                      )
+                        ) # c
+                      ) # fR
+           ) #wP
 
-           ) # wP
            ,wellPanel(style="margin-top:-15px;"
                       ,fluidRow(
                         column(6
@@ -639,40 +654,95 @@ output$parameterPanel = renderUI({
               #
               #   col 1
               #
+              # KARYOTYPES
+
+              #
+              #  col2
+              #
               ,column(2
-                      ,wellPanel(style = "padding: 0px 5px 0px 5px"
+                      ,wellPanel(style="padding: 0px 5px 0px 5px"
+                                 ,h4("Chromosomes")
                                  ,fluidRow(
                                    column(6
-                                          ,h4("Karyotypes")
-                                          ,div(style="margin-top:-10px;"
-                                               ,title='`karHeight`: (`2`) Vertical size of karyotypes considering only chromosomes. for ex `karHeight = 1`
-'
-                                               ,numericInput("karHeight"
-                                                             , HTML(paste("Height") )
-                                                             ,karHeightDefault, min = 0.5, max = 50, step=0.5)
-                                          )
-                                          ,
-                                          div(style="margin-top:-12px;margin-bottom:-10px"
-                                              ,title='`karHeiSpace`: (`2.5`) Vertical size of karyotypes including spacer. for ex `karHeiSpace = 1.2`. Use with `karSepar=FALSE`
-'
-                                              ,numericInput("karHeiSpace"
-                                                            , HTML(paste("Height with","space", sep = "<br/>") )
-                                                            , karHeiSpaceDefault, min = 2, max = 150, step=0.5)
+                                          ,div(title='`orderChr`: (`size`) character, when `"size"`, sorts chromosomes by total length from the largest to the smallest. `"original"`: preserves d.f. order. `"name"`: sorts alphabetically; `"group"`: sorts by group name; `"chrNameUp"`: sorts according to column `chrNameUp`. See `chrNameUp`'
+                                               ,radioButtons(
+                                                 "orderChr",
+                                                 "order by:"
+                                                 ,c("size"="size","as in d.f."="original", "alphab."="name"
+                                                    ,"group"="group"
+                                                    ,"col. chrNameUp"="chrNameUp")
+                                                 ,selected = orderChrDefault )
                                           )
                                    )
-                                   ,column(6,
-                                           div(title='`karSepar`: (`TRUE`) If `TRUE` reduces the space among karyotypes. `FALSE` = equally sized karyotypes or `TRUE` = equally spaced karyotypes. Incompatible with `addMissingOTUAfter`'
-                                               ,checkboxInput("karSepar"
-                                                              ,HTML(paste("equally spaced","kar.", sep = "<br/>") )
-                                                              ,karSeparDefault)
+                                   ,column(6
+                                           ,div(#style="margin-top: -7px;"
+                                                title='`chrId`: (`"original"`) If you want to rename chromosomes from 1 to n use `chrId = "simple"`. For original names use `chrId = "original"`. For no names use  `chrId = ""`'
+                                                ,radioButtons("chrId"
+                                                              ,HTML(paste("Chr. names") )
+                                                              ,choices=c("original"="original","simple"="simple","none"="none")
+                                                              ,chrIdDefault
+                                                )
                                            )
-                                           ,div(style= "margin-bottom:-10px"
-                                                ,title='`amoSepar`: (`9`) For `karSepar = TRUE`, if zero, no space among karyotypes. Amount of separation.  if overlap, increase this and `karHeiSpace`'
+                                   )
+                                 ) # fR
+                                 ,splitLayout(
+                                   div(#style="margin-top: -15px;"
+                                     title='`chrWidth`: (`0.5`) Determines the width of chromosomes
+'
+                                     ,numericInput("chrWidth",HTML(paste("","Width",sep="</br>") )
+                                                   , chrWidthDefault, min = 0.1, max = 5, step=0.05)
+                                   )
+                                   ,div(#style = "margin-bottom:-10px"
+                                     title='`chrSpacing`: (`0.5`) Determines the horizontal spacing among chromosomes
+'
+                                     ,numericInput("chrSpacing", HTML(paste("horiz.","spacing", sep="</br>") )
+                                                   , chrSpacingDefault, min = 0.1, max = 5, step=0.1)
+                                   )
+                                   , div(#style = "margin-bottom:-10px"
+                                     title='`lwd.chr`: (`0.5`) width of border lines for chr. and marks when related param. absent.'
+                                     ,numericInput("lwd.chr"
+                                                   ,HTML(paste("border","width", sep="</br>") )
+                                                   ,lwd.chrDefault,min=0,max=4,step=0.25)
+                                   )
+                                 ) #sL
+                      ) # wP
+
+              ) # c3
+              ,column(2
+
+                      ,wellPanel(style = "padding: 0px 5px 0px 5px"
+                                 ,splitLayout(cellWidths = c("40%","5%","55%")
+                                              ,h4("Karyotypes")
+                                              ,br()
+                                              ,div(title='`karSepar`: (`TRUE`) If `TRUE` reduces the space among karyotypes. `FALSE` = equally sized karyotypes or `TRUE` = equally spaced karyotypes. Incompatible with `addMissingOTUAfter`'
+                                                   ,checkboxInput("karSepar"
+                                                                  ,HTML(paste("equally spaced","kar.", sep = "<br/>") )
+                                                                  ,karSeparDefault)
+                                              )
+                                 )
+                                 ,splitLayout(style="margin-bottom:-10px;"
+                                              ,cellWidths = c("29%","2%","34%","2%","29%")
+                                              ,div(#style="margin-top:-10px;"
+                                                title='`karHeight`: (`2`) Vertical size of karyotypes considering only chromosomes. for ex `karHeight = 1`'
+                                                ,numericInput("karHeight"
+                                                              , HTML(paste("","Height", sep="</br>") )
+                                                              ,karHeightDefault, min = 0.5, max = 50, step=0.5)
+                                              )
+                                              ,br()
+                                              ,div(#style="margin-top:-12px;margin-bottom:-10px"
+                                                title='`karHeiSpace`: (`2.5`) Vertical size of karyotypes including spacer. for ex `karHeiSpace = 1.2`. Use with `karSepar=FALSE`
+'
+                                                ,numericInput("karHeiSpace"
+                                                              , HTML(paste("Height with","space", sep = "<br/>") )
+                                                              , karHeiSpaceDefault, min = 2, max = 150, step=0.5)
+                                              )
+                                              ,br()
+                                              ,div(#style= "margin-bottom:-10px"
+                                                title='`amoSepar`: (`9`) For `karSepar = TRUE`, if zero, no space among karyotypes. Amount of separation.  if overlap, increase this and `karHeiSpace`'
                                                 ,numericInput("amoSepar"
                                                               ,HTML(paste("Vert.","separ.", sep = "<br/>") )
                                                               , amoSeparDefault, min = 0, max = 15, step=0.5)
-                                           )
-                                   )
+                                              )
                                  )
                       ) #Wp
 
@@ -714,60 +784,17 @@ output$parameterPanel = renderUI({
                       ) # fR
               ) # c3
               #
-              #  col2
-              #
-              ,column(2
-                      ,wellPanel(style="padding: 0px 5px 0px 5px"
-                                 ,fluidRow(
-                                   column(6
-                                          ,h4("Chromosomes")
-                                          ,div(title='`orderChr`: (`size`) character, when `"size"`, sorts chromosomes by total length from the largest to the smallest. `"original"`: preserves d.f. order. `"name"`: sorts alphabetically; `"group"`: sorts by group name; `"chrNameUp"`: sorts according to column `chrNameUp`. See `chrNameUp`'
-                                               ,radioButtons(
-                                                 "orderChr",
-                                                 "order by:"
-                                                 ,c("size"="size","as in d.f."="original", "alphab."="name"
-                                                    ,"group"="group"
-                                                    ,"col. chrNameUp"="chrNameUp")
-                                                 ,selected = orderChrDefault )
-                                          )
-                                   )
-                                   ,column(6
-                                           ,div(#style="margin-top: -15px;"
-                                             title='`chrWidth`: (`0.5`) Determines the width of chromosomes
-'
-                                             ,numericInput("chrWidth", "Width", chrWidthDefault, min = 0.1, max = 5, step=0.05)
-                                           )
-                                           ,div(style="margin-top: -7px;"
-                                                ,title='`chrId`: (`"original"`) If you want to rename chromosomes from 1 to n use `chrId = "simple"`. For original names use `chrId = "original"`. For no names use  `chrId = ""`'
-                                                ,radioButtons("chrId"
-                                                              ,HTML(paste("Chr. names") )
-                                                              ,choices=c("original"="original","simple"="simple","none"="")
-                                                              ,chrIdDefault
-                                                )
-                                           )
-                                   )
-                                 ) # fR
-                                 ,splitLayout(
-                                   div(#style="margin-top: -7px;margin-bottom:-5px"
-                                     title='`chrSpacing`: (`0.5`) Determines the horizontal spacing among chromosomes
-'
-                                     ,numericInput("chrSpacing", "horiz. spacing", chrSpacingDefault, min = 0.1, max = 5, step=0.1)
-                                   )
-                                   , div(#style="margin-top: -7px;margin-bottom:-5px"
-                                     title='`lwd.chr`: (`0.5`) width of border lines for chr. and marks when related param. absent.'
-                                     ,numericInput("lwd.chr","border width",lwd.chrDefault,min=0,max=4,step=0.25)
-                                   )
-                                 ) #sL
-                      ) # wP
-              ) # c3
-              #
               # col 3
               #
               ,column(2
                       ,wellPanel(style = "padding: 0px 5px 0px 5px"
+                                 ,div(style="margin-bottom:-10px;"
+                                 ,h4("Ruler")
+                                 )
                                  ,fluidRow(
-                                   column(6,
-                                          h4("Ruler")
+
+                                   column(6
+
                                           ,div(
                                             title='`rulerPos`: (`-0.5`) Absolute position of ruler, corresponds to "pos" argument of the function `axis` of R plots'
                                             ,numericInput("rulerPos", "modify pos.", rulerPosDefault, min = -5, max = 5, step=0.1) ,
@@ -777,62 +804,68 @@ output$parameterPanel = renderUI({
 '
                                                ,numericInput("ruler.tck", "modify ticks", ruler.tckDefault, min = -5, max = 5, step=0.005)
                                           )
-                                   ) #c
-                                   ,
-                                   column(6
-                                          ,div(title='`ruler`: (`TRUE`) When `TRUE` displays ruler to the left of karyotype, when `FALSE` shows no ruler
-'
-                                               ,checkboxInput("ruler",
-                                                              "Show ruler",rulerDefault)
-                                          )
-                                          ,div(style = "margin-top:-12px",
-                                               title="`rulerNumberSize`: (`1`) Size of number's font in ruler
-"
-                                               ,numericInput("rulerNumberSize"
-                                                             , "font size", rulerNumberSizeDefault, min = .1, max = 5, step=0.1) ,
-                                          )
                                           ,div(style = "margin-top:-15px;margin-bottom:-10px",
                                                title="`xPosRulerTitle`: (`2.6`) Modifies the horizontal position of the title of rulers (Mb, etc). Moves to left from 1st chr. in `chrSpacing` times"
                                                ,numericInput("xPosRulerTitle"
                                                              , "pos. of title", xPosRulerTitleDefault, min = -5, max = 5, step=0.1)
                                           )
+                                   ) #c
+                                   ,
+                                   column(6
+                                          ,div(style = "margin-top:10px;margin-bottom:10px",
+                                          title='`ruler`: (`TRUE`) When `TRUE` displays ruler to the left of karyotype, when `FALSE` shows no ruler
+'
+                                               ,checkboxInput("ruler",
+                                                              "Show ruler",rulerDefault)
+                                          )
+                                          ,h4(tags$strong("font size") )
+                                          ,div(style = "margin-top:-15px;margin-bottom:-10px",
+                                               title="`rulerNumberSize`: (`1`) Size of number's font in ruler
+"
+                                               ,numericInput("rulerNumberSize"
+                                                             , "Numbers", rulerNumberSizeDefault, min = .1, max = 5, step=0.1) ,
+                                          )
+                                          ,div(style = "margin-top:-15px;margin-bottom:-10px",
+                                               title="`rulerTitleSize`: numeric font size of units of ruler."
+                                               ,numericInput("rulerTitleSize"
+                                                             , "Title", rulerTitleSizeDefault, min = .1, max = 5, step=0.1) ,
+                                          )
                                    ) # c6
                                  ) # fR
                       ) #wp
 
-                      ,wellPanel(style="margin-top:-15px;padding: 0px 5px 0px 5px"
+                      ,wellPanel(style="margin-top:-15px;padding: 0px 15px 0px 5px"
                                  ,h4("Margins"),
-                                 fluidRow(
-                                   column(6,
-                                          div(style = "margin-top:-10px",
+                                 # fluidRow(
+                                   # column(6,
+                                 splitLayout(style="margin-bottom:-10px;"
+                                               ,cellWidths = c("25%","25%","25%","25%")
+                                          ,div(#style = "margin-right:0px;margin-bottom:-10px;padding: 0px 0px 0px 5px",
                                               title='`ylimBotMod`:	(`0.2`) modify `ylim` bottom component of plot adding more space
 '
                                               ,numericInput("ylimBotMod", "bottom",
                                                             ylimBotModDefault, min = -5, max = 5, step=0.5)
                                           )
-                                          ,div(style = "margin-top:-15px",
+                                          ,div(#style = "margin-right:0px;margin-bottom:-10px;padding: 0px 0px 0px 5px",
                                                title='`ylimTopMod`: (`0.2`) modify `ylim` top component of plot adding more space.
 '
                                                ,numericInput("ylimTopMod", "top"
                                                              , ylimTopModDefault, min = -5, max = 5, step=0.2)
                                           )
-                                   ) #sL
-
-                                   , column(6,
-                                            div(style = "margin-top:-10px",
+                                            ,div(#style = "margin-bottom:-10px;",
                                                 title='`xlimLeftMod`: (`1`) modifies `xlim` left (first) component of the plot as in any "R-plot"
 '
                                                 ,numericInput("xlimLeftMod", "left",
                                                               xlimLeftModDefault, min = -5, max = 5, step=0.5)
                                             )
-                                            ,div(style = "margin-top:-15px",
+                                            ,div(#style = "margin-bottom:-10px;",
                                                  title='`xlimRightMod`:	(`2`) `xlim` (right) modification by adding space to the right of idiograms
 '
                                                  ,numericInput("xlimRightMod", "right",
                                                                xlimRightModDefault, min = -5, max = 5, step=0.5)
                                             )
-                                   ) #
-                                 ) # fR
+                                   ) # sL
+                                 # ) # fR
                       ) #wp
               ) # c3
 
@@ -841,32 +874,26 @@ output$parameterPanel = renderUI({
               #
               ,column(2
                       ,wellPanel(style="padding: 0px 5px 0px 5px"
-                                 ,h4("Plot"),
-                                 fluidRow(
-                                   column(6
-                                          ,div(style="margin-bottom:-10px"
-                                               ,numericInput("widFactor", "width %",
+                                 ,
+                                 splitLayout(style="margin-bottom:-10px;"
+                                             ,cellWidths = c("20%","39%","41%")
+                                          ,div(#style="margin-left:0px"
+                                          h4("Plot")
+                                          )
+                                          ,div(#style="margin-bottom:-10px"
+                                               numericInput("widFactor", "width %",
                                                              80, min = 5, max = 1000, step=5)
                                           )
-                                          ,          uiOutput("imageWidth")
-                                   )
-                                   ,column(6
-                                           ,div(style="margin-bottom:-10px"
-                                                ,numericInput("heiFactor", "height ratio",
-                                                              0.5, min = 0.05, max = 20, step=0.05)
-                                           )
-                                           ,          uiOutput("imageHeight")
-                                   )
-                                 ) #fR
-                                 ,div(style = "margin-bottom:-10px"
-                                      ,splitLayout(cellWidths = c("20%","5%","50%","5%","20%")
-                                                   ,actionButton("left", label = "<")
-                                                   ,br()
-                                                   ,sliderInput("hwModifier","Zoom (X)",0,10,1,step = 0.1, ticks = FALSE)
-                                                   ,br()
-                                                   ,actionButton("right", label = ">")
-                                      )
+                                          ,div(#style="margin-bottom:-10px"
+                                            numericInput("heiFactor", "height ratio",
+                                                         0.5, min = 0.05, max = 20, step=0.05)
+                                          )
                                  )
+                                 ,splitLayout(cellWidths = c("20%","39%","41%")
+                                              ,br()
+                                          ,uiOutput("imageWidth")
+                                          ,uiOutput("imageHeight")
+                                  )
                                  ,h5(strong("Format") )
                                  ,splitLayout(
                                    radioButtons("pngorsvg","Display",c("svg","png"),selected = "svg",inline = T )
@@ -876,89 +903,99 @@ output$parameterPanel = renderUI({
                                       ,downloadButton('pngorsvgDownButton', 'Download plot')
                                  )
                       ) # wP
+                      ,wellPanel(style="margin-top:-15px;padding: 5px 5px 5px 5px"
+                        # ,br()
+                        ,div(style = "margin-bottom:-10px"
+                             ,splitLayout(cellWidths = c("30%","20%","30%","20%")
+                                          ,h5(tags$strong("Zoom (X)") )
+                                          ,actionButton("left", label = "<")
+                                          # ,br()
+                                          ,sliderInput("hwModifier","",0,10,1,step = 0.1, ticks = FALSE)
+                                          # ,br()
+                                          ,actionButton("right", label = ">")
+                             )
+                        )
+                      )
 
               ) #c3
               #
               #   col 5
               #
               ,column(2
-                      ,wellPanel(style = "padding: 0px 5px 0px 5px"
-                                 #style = "padding: 10px 5px 0px 5px;margin-bottom: 20px" # trbl
-                                 ,fluidRow(
-                                   column(6
-                                          ,h4("Legend")
-                                          ,div(
-                                            title='`legend`: (`"aside"`) If you wanto to plot the names of marks near each chromosome use `legend = "inline"`, to the right of karyotypes use `legend = "aside"`, otherwise use `legend = ""` for no legend. See `markLabelSpacer`'
-                                            ,radioButtons("legend","Pos.",c("aside","inline","none"),selected = legendDefault )
-                                          )
-                                          ,div(style = "margin-top:-12px;margin-bottom:-7px"
-                                               ,title="`markLabelSize`: (`1`) Determines the size of text of the legend."
-                                               ,numericInput("markLabelSize"
-                                                             , "font size"
-                                                             , markLabelSizeDefault
-                                                             , min = 0.1, max = 5, step=0.05)
+                      #legend marks
+                      ,wellPanel(style="padding: 0px 20px 0px 5px;"
+                                 ,splitLayout(
+                                   span(h4("Squareness"),helpText("> 20 = squared") )
+                                   ,div(#style="margin-top: -5px; margin-bottom:-5px;"
+                                     title='`squareness`: (`4`) Squared or rounded vertices when marks of the "square" style (defined in data.frame passed to `dfMarkColor`). Affects chromosomes also. Smaller numbers = more rounded
+'
+                                     ,numericInput("squareness"
+                                                   ,""
+                                                   # ,HTML(paste("Vertices", "squareness", sep = "<br/>") )
+                                                   , squarenessDefault
+                                                   , min = 1, max = 21, step=0.5)
+                                   )
+                                 )
+                                 ,splitLayout(style="margin-bottom:-10px;"
+                                              ,cellWidths = c("50%","25%","25%")
+                                   ,helpText(tags$strong("resolution:"),HTML("</br>"),"> = more vertices")
+                                   ,div(#style="margin-top: -5px;margin-bottom:-5px;"
+                                     title="`markN`: numeric vertices number for round corners of marks"
+                                     ,numericInput("markN",
+                                                   HTML(paste("marks'", sep = "<br/>") )
+                                                   ,markNDefault
+                                                   , min = 1, max = 200, step=1)
+                                   )
+                                   ,div(#style="margin-top: -5px;margin-bottom:-5px;"
+                                     title="`n`: numeric vertices number for round corners of chr."
+                                     ,numericInput("n",
+                                                   HTML(paste("chr.", sep = "<br/>") )
+                                                   ,nDefault
+                                                   , min = 25, max = 400, step=1)
+                                   )
+                                 ) # sL
+
+                      ) # wP
+
+                      ,wellPanel(style="margin-top:-15px;padding: 0px 20px 0px 5px;" #style="padding: 0px 5px 0px 5px"
+,splitLayout(cellWidths = c("28%","72%")
+                                          ,h4("Notes")
+                                          ,div(#style= "margin-top: -5px; margin-bottom:0px"
+                                                 title="`OTUasNote`: (`FALSE`) See also `notes`. If `TRUE` OTU name is written to the right, as `notes`."
+                                                 ,checkboxInput("OTUasNote",
+                                                                HTML(paste("OTU as note (right)", sep = "<br/>") )
+                                                                ,OTUasNoteDefault)
                                           )
                                    )
-                                   ,column(6
-                                           ,div(style = "margin-top:5px"
-                                                ,title='`legendWidth`: (`1.7`) numeric, factor to modify the width of the square and dots of legend. For `legend="aside"`.'
-                                                ,numericInput("legendWidth", "width", legendWidthDefault, min = 0.25, max = 5, step=0.05)
-                                           )
-                                           ,div(style = "margin-top:-12px"
-                                                ,title='`legendHeight`: (`NA`) numeric, factor to modify the height of the square and dots of legend. For `legend="aside"`.'
-                                                ,numericInput("legendHeight", "height"
-                                                              , legendHeightDefault
-                                                              , min = 0.25, max = 5, step=0.05)
-                                           )
-                                           ,div(style = "margin-top:-12px;margin-bottom:-7px"
-                                                ,title= '`pattern`: (`""`) REGEX pattern to eliminate from the marks name when plotting. See human karyotype chapter for example.'
-                                                ,textInput("pattern"
-                                                           , "remove Regex"
-                                                           , patternDefault
-                                                )
-                                           )
-
-                                   )
-                                 ) # fR
-                      ) #wP
-
-
-                      ,wellPanel(style = "margin-top:-15px;padding: 0px 5px 0px 5px"
                                  ,fluidRow(
-                                   column(6
-                                          ,h4("Marks")
-                                          ,div(#style= "margin-top:-7px;margin-bottom:-5px"
-                                            title='`useOneDot`: boolean, use one dot instead of two in style of marks dots. Defaults to `FALSE`'
-                                            ,checkboxInput("useOneDot",
-                                                           "one dot only",
-                                                           useOneDotDefault
-                                            )
-                                          ) # div
-                                          ,div(style= "margin-top:0px;margin-bottom:-15px"
-                                               ,title="`protruding` numeric, when style of mark is `cM`, fraction of chrWidth to stretch marker. Defaults to `0.2`"
-                                               ,numericInput("protruding"
-                                                             ,HTML(paste("protruding of"
-                                                                         ,"cM and arrows", sep = "<br/>") )
-                                                             ,protrudingDefault,min=0.05,max=2.5,step=0.05)
-                                          ) # div
+                                   column(6,
+                                   div(style= "margin-bottom:-10px"
+                                     ,title="`notesTextSize`: (`0.4`) numeric, font size of notes, see `notes`"
+                                     ,numericInput("notesTextSize"
+                                                   ,HTML(paste("font", "size", sep = "<br/>") )
+                                                   ,notesTextSizeDefault, min = 0.1, max = 10, step=0.1)
+                                   )
                                    ),column(6
-                                            ,div(#style= "margin-bottom:-5px"
-                                              title= '`cMBeginCenter`: boolean, start position of `cM` and `cMLeft` marks. If `TRUE`, starts in the center (width) of chr. . Defaults to `FALSE`'
-                                              ,checkboxInput("cMBeginCenter"
-                                                             ,HTML(paste("cM mark"
-                                                                         ,"start centered", sep = "<br/>") )
-                                                             ,cMBeginCenterDefault)
-                                            )
-                                            ,div(style= "margin-top:-15px;margin-bottom:-8px"
-                                                 ,title="`pMarkFac` numeric, fraction of chr. size for `exProtein` style marks. Defaults to `0.25`"
-                                                 ,numericInput("pMarkFac"
-                                                               ,HTML(paste("exProtein"
-                                                                           ,"mark size", sep = "<br/>") )
-                                                               ,pMarkFacDefault,min=0.05,max=1,step=0.05)
-                                            )
-                                   ) # c
-                                 ) # fR
-                      ) #wP
+                                   ,div(style= "margin-bottom:-10px"
+                                     ,title="`notesPosX`: (`0.5`) numeric, moves right notes in the x axis"
+                                     ,numericInput("notesPosX"
+                                                   ,HTML(paste("right notes", "horiz. pos.", sep = "<br/>") )
+                                                   ,notesPosXDefault, min = -20, max = 20, step=0.1
+                                     )
+                                   )
+                                 )
+                                 ) # fr
+                      ) # wP
+,wellPanel(style="margin-top:-15px;padding: 5px 5px 5px 5px"
+
+           # ,div(#style = "margin-bottom:20px"
+           ,splitLayout(cellWidths = c("25%","50%","25%")
+                        ,actionButton("fontDecrease", label = "<")
+                        ,h4("Fonts' size")
+                        ,actionButton("fontIncrease", label = ">")
+           )
+)
+
 
               )
 
@@ -969,7 +1006,7 @@ output$parameterPanel = renderUI({
             ,fluidRow(
               column(10,
                      wellPanel(
-                       style = "overflow-y:auto;text-align:center;" # margin-top:-12px;
+                       style = "margin-top:-15px;overflow-y:auto;text-align:center;" # margin-top:-12px;
 
                        # ,actionButton("goButton", "Go!", class = "btn-success")
 
@@ -990,9 +1027,9 @@ output$parameterPanel = renderUI({
 output$lastCol<- renderUI({
   column(width=2
          # ,br()
-         ,wellPanel(#style = "padding: 0px 5px 0px 5px"
+         ,wellPanel(style = "margin-top:-15px;padding: 0px 15px 0px 5px"
            # ,wellPanel(style="margin-top:-15px;"
-           h4("Indices & Info.")
+           ,h4("Indices & Info.")
            ,splitLayout(
              div(title='`morpho`: (`"both"`) character, if `"both"` (default) prints the Guerra (1986) and Levan (1964) classif. of cen. position.  , use also `"Guerra"` or `"Levan"` or `""` for none. See `?armRatioCI` also (function).
 '
@@ -1055,8 +1092,8 @@ output$lastCol<- renderUI({
            )
          ) #WP
 
-         ,wellPanel(
-           splitLayout(
+         ,wellPanel(style = "margin-top:-15px;padding: 0px 20px 0px 5px"
+           ,splitLayout(
              h4("Anchor")
              ,  div(title='`anchor`: boolean, when TRUE, plots a parent progeny structure in karyotypes in `moveKarHor`
 '
@@ -1119,8 +1156,8 @@ output$chrColorUI<- renderUI({
 
 output$marksUIcolor <- renderUI({
 
-  div(style= "margin-bottom:-5px"
-      ,title="`mycolors`: optional, character vector with colors' names, which are associated automatically with marks according to their order in the data.frame of position of marks. See this ordering with `unique(dfMarkPos$markName)`. Argument example: `mycolors = c(\"red\",\"chartreuse3\",\"dodgerblue\")`. Not mandatory for plotting marks, package has default colors.
+  div(#style= "margin-bottom:-5px"
+      title="`mycolors`: optional, character vector with colors' names, which are associated automatically with marks according to their order in the data.frame of position of marks. See this ordering with `unique(dfMarkPos$markName)`. Argument example: `mycolors = c(\"red\",\"chartreuse3\",\"dodgerblue\")`. Not mandatory for plotting marks, package has default colors.
           "
       ,textInput('mycolors'
                  ,HTML(paste("Marks"

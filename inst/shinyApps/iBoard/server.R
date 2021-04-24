@@ -17,6 +17,8 @@ menulist<-c( "examplesMenu"
 
 server <- function(input, output, session) {
 
+  print(paste0("Running in: ",isolate(session$clientData$url_hostname),":",isolate(session$clientData$url_port)) )
+
   #
   # values
 

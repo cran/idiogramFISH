@@ -66,11 +66,14 @@ install.packages("idiogramFISH")
 Windows users: To avoid installation of packages in OneDrive
 
 ``` r
-.libPaths("D:R/lib") # or any folder
-.libPaths()
+.libPaths("D:R/lib") # for example
+.libPaths()          # set or read libraries
 ```
 
-Or something in the line of
+To do that permanently: Search (magnifier) “environment variables” and
+set R\_LIBS\_USER to `D:\R\lib` (example)
+
+Other option: something in the line of
 [this](https://answers.microsoft.com/en-us/windows/forum/all/removing-onedrive-from-default-filefolder-location/7d3c0dd0-3af5-414a-adf4-364dc28f3148?auth=1)
 
 #### Devel. version of idiogramFISH
@@ -164,8 +167,8 @@ To cite idiogramFISH in publications, please use:
 
 Roa F, Telles MPC (2021) idiogramFISH: Shiny app. Idiograms with Marks
 and Karyotype Indices, Universidade Federal de Goiás. Brazil. R-package.
-version 2.0.3 <https://ferroao.gitlab.io/manualidiogramfish/>.
-doi:<!-- breaklink -->10.5281/zenodo.3579417
+version 2.0.4 <https://ferroao.gitlab.io/manualidiogramfish/>. doi:<!--
+  breaklink -->10.5281/zenodo.3579417
 
 To write citation to file:
 
@@ -181,6 +184,9 @@ sink()
 [Mariana PC Telles](http://lattes.cnpq.br/4648436798023532)
 
 # Shiny App
+
+Attention windows users, might require the last R version to plot
+correctly.
 
 ``` r
 library(idiogramFISH)

@@ -115,6 +115,32 @@ emptydata.frame<-data.frame()
     ,150
   )
 
+  useGeneNamesDefault <- TRUE
+  useGeneNamesVec<-rep(useGeneNamesDefault,10)
+
+  useRCNamesDefault <- TRUE
+  useRCNamesVec<-rep(useRCNamesDefault,10)
+
+  makeUniqueDefault <- TRUE
+  makeUniqueVec<-rep(makeUniqueDefault,10)
+
+  colorFeatureDefault <- FALSE
+  colorFeatureVec<-rep(colorFeatureDefault,10)
+
+  nucMarkStyleDefault<-"Arrows"
+  nucMarkStyleVec<-rep(nucMarkStyleDefault,10)
+
+  mirrorDefault <- FALSE
+  mirrorVec<-rep(mirrorDefault,10)
+
+  pseudoDefault<-"all"
+  pseudoVec<-rep(pseudoDefault,10)
+
+  addSTARTPosDefault<-TRUE
+  addSTARTPosVec<-rep(addSTARTPosDefault,10)
+
+
+
 # zoom
   hwModifierDefault<-1
   hwModifierVec<-c(
@@ -134,8 +160,8 @@ emptydata.frame<-data.frame()
                     ,chrIdDefault
                     ,chrIdDefault
 
-                    ,""
-                ,""
+                    ,"none"
+                ,"none"
   )
 
   # markLabelSize "`markLabelSize`: (`1`) Determines the size of text of the legend."
@@ -500,7 +526,7 @@ indexIdTextSizeVec <- c(indexIdTextSizeDefault,
                          ,colNumberDefault
 
                     ,colNumberDefault
-                    ,4
+                    ,6
   )
 
   protrudingIntDefault <- 0.5
@@ -895,6 +921,9 @@ indexIdTextSizeVec <- c(indexIdTextSizeDefault,
                     ,ruler.tckDefault
   )
 
+  rulerTitleSizeDefault<-1
+  rulerTitleSizeVec <- rep(rulerTitleSizeDefault,10)
+
   rulerNumberSizeDefault <- 1
   rulerNumberSizeVec <- c(0.8,
                           rulerNumberSizeDefault,
@@ -914,7 +943,8 @@ indexIdTextSizeVec <- c(indexIdTextSizeDefault,
                          3,
                          3.5,
                          2.8,
-                         xPosRulerTitleDefault
+
+                         3
                          ,xPosRulerTitleDefault
                          ,xPosRulerTitleDefault
                          ,xPosRulerTitleDefault

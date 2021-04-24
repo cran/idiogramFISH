@@ -70,7 +70,7 @@ makedfMarkColor<- function(dfMarkColor,markNames,colorstoremove=NA
   lenman <- length(dfMarkColorNew$markColor[which(is.na(dfMarkColorNew$markColor))])
 
   if(length(manualcolors) < lenman){
-    message(crayon::red(paste("Not enough colors, will be recycled - you can pass more colors with mycolors parameter") ) )
+    message(crayon::blue(paste("Not enough colors, will be recycled - you can pass more colors with mycolors parameter") ) )
     repF<-ceiling(lenman/length(manualcolors) )
     manualcolors<-rep(manualcolors,repF)
   }

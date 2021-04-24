@@ -53,8 +53,7 @@ observeEvent(
   }
 )
 
-observeEvent(values[["number"]]
-             # input$nucPresetButton  |    input$exampleButton
+observeEvent(list(values[["number"]],input$nucPresetButton,input$exampleButton)
              ,
              {
                if(values[["number"]] > 0) {
@@ -118,6 +117,8 @@ observeEvent(values[["number"]]
                  updateNumericInput(session, "rulerPos",  value = as.numeric((rulerPosVec[as.numeric(values[["number"]])] ) ) )
                  updateNumericInput(session, "ruler.tck",  value = as.numeric((ruler.tckVec[as.numeric(values[["number"]])] ) ) )
                  updateNumericInput(session, "rulerNumberSize",  value = as.numeric((rulerNumberSizeVec[as.numeric(values[["number"]])] ) ) )
+                 updateNumericInput(session, "rulerTitleSize",   value = rulerTitleSizeVec[as.numeric(values[["number"]])] )
+
                  updateNumericInput(session, "xPosRulerTitle",  value = as.numeric((xPosRulerTitleVec[as.numeric(values[["number"]])] ) ) )
 
                  updateRadioButtons(session, "legend",  selected = legendVec[as.numeric(values[["number"]])] )
@@ -178,7 +179,21 @@ observeEvent(values[["number"]]
                  updateTextInput(         session, "mycolors2",     value  = mycolors2Vec[as.numeric(values[["number"]])])
                  updateTextInput(         session, "term",          value  = termVec[as.numeric(values[["number"]])] )
 
-                 # if(as.numeric(values[["number"]] ) >8){
-                 # }
+                 updateCheckboxInput(session, "useGeneNames", value= useGeneNamesVec[as.numeric(values[["number"]])] )
+
+                 updateCheckboxInput(session, "useRCNames", value= useRCNamesVec[as.numeric(values[["number"]])] )
+
+                 updateCheckboxInput(session, "makeUnique", value= makeUniqueVec[as.numeric(values[["number"]])] )
+
+                 updateCheckboxInput(session, "colorFeature", value= colorFeatureVec[as.numeric(values[["number"]])] )
+
+                 updateRadioButtons(session, "nucMarkStyle",  selected = nucMarkStyleVec[as.numeric(values[["number"]])] )
+
+                 updateRadioButtons(session, "pseudo",  selected = pseudoVec[as.numeric(values[["number"]])] )
+
+                 updateCheckboxInput(session, "mirror", value= mirrorVec[as.numeric(values[["number"]])] )
+
+                 updateCheckboxInput(session, "addSTARTPos", value= addSTARTPosVec[as.numeric(values[["number"]])] )
+
                }
              }, ignoreInit = F )

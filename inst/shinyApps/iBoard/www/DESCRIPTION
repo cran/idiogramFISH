@@ -1,7 +1,7 @@
 Package: idiogramFISH
 Title: Shiny App. Idiograms with Marks and Karyotype Indices 
-Version: 2.0.3
-Date: 2021-04-12
+Version: 2.0.4
+Date: 2021-04-23
 Authors@R: c(person("Fernando", "Roa", email = "froao@unal.edu.co", role = c("aut", "cre") ), 
              person(given="Mariana PC Telles", email = "", role = c("ctb")) 
              )

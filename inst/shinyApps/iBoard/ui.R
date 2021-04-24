@@ -6,17 +6,51 @@ library(gtools)
 library(knitr)
 library(rclipboard)
 
-rmarkdown::render("www/README2.Rmd")#, output_dir = "www")
+if(rmarkdown::pandoc_available()) {
+  rmarkdown::render("www/README2.Rmd")
+}
+ui <- tagList(
+  tags$style("html,body{background-color: white;}
+                .container{
+                    width: 100%;
+                    margin: 0 auto;
+                    padding: 0;
+                }
+               @media screen and (min-width: 700px){
+                .container{
+                    min-width: 1850px;
+                    max-width: 1920px;
+                }
+               }
+             .form-control {
+  padding-top: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+  padding-left: 12px;
+}
 
-ui <- dashboardPage( title="idiogramFISH"
-                ,dashboardHeader(title = p("idiogramFISH shiny app") )
-                ,dashboardSidebar(
-                  uiOutput("mysidebar")
-                )
-                ,dashboardBody(
-                   tags$head(
-                     tags$link(rel = "stylesheet", type = "text/css", href = "mystyle.css" )
-                   ) # head
-                   ,uiOutput("myTabs")
-                ) # dashboardbody
+             "),
+  tags$div(class="container",
+           dashboardPage( title="idiogramFISH"
+                          ,dashboardHeader(title = p("idiogramFISH shiny app") )
+                          ,dashboardSidebar(
+                            uiOutput("mysidebar")
+                          )
+                          ,dashboardBody(
+                            tags$head(
+                              tags$style("#markdown{height:100vh !important;}")
+                              ,tags$link(rel = "stylesheet", type = "text/css", href = "mystyle.css" )
+                              ,tags$style(
+                                "
+body{
+    height: auto;
+    margin: auto;
+    overflow-x: auto;
+}"
+                              )
+                            ) # head
+                            ,uiOutput("myTabs")
+                          ) # dashboardbody
+           )
+  )
 )

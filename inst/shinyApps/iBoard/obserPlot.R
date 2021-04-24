@@ -110,6 +110,7 @@ filenameR <- eventReactive({
   input$rulerPos              # pos
   input$ruler.tck          # size a
   input$rulerNumberSize        # fon
+  input$rulerTitleSize
   input$xPosRulerTitle             #
   input$legendWidth            # w
   input$legendHeight
@@ -140,10 +141,27 @@ observeEvent(input$right, {
   updateSliderInput(session, "hwModifier", value = isolate(input$hwModifier) + 0.5)
 })
 
+observeEvent(input$fontDecrease, {
+  updateNumericInput(session, "rulerNumberSize", value = isolate(input$rulerNumberSize) - 0.5)
+  updateNumericInput(session, "notesTextSize", value = isolate(input$notesTextSize) - 0.5)
+  updateNumericInput(session, "OTUTextSize", value = isolate(input$OTUTextSize) - 0.5)
+  updateNumericInput(session, "rulerTitleSize", value = isolate(input$rulerTitleSize) - 0.5)
+  updateNumericInput(session, "markLabelSize", value = isolate(input$markLabelSize) - 0.5)
+  updateNumericInput(session, "indexIdTextSize", value = isolate(input$indexIdTextSize) - 0.5)
+})
+observeEvent(input$fontIncrease, {
+  updateNumericInput(session, "rulerNumberSize", value = isolate(input$rulerNumberSize) +0.5)
+  updateNumericInput(session, "notesTextSize", value = isolate(input$notesTextSize) + 0.5)
+  updateNumericInput(session, "OTUTextSize", value = isolate(input$OTUTextSize) + 0.5)
+  updateNumericInput(session, "rulerTitleSize", value = isolate(input$rulerTitleSize) + 0.5)
+  updateNumericInput(session, "markLabelSize", value = isolate(input$markLabelSize) + 0.5)
+  updateNumericInput(session, "indexIdTextSize", value = isolate(input$indexIdTextSize) + 0.5)
+})
+
 
 add0<-"{"
 
-add2b<-"library(idiogramFISH)"
+addLibraryIdio<-"library(idiogramFISH)"
 
 # curr_date <- eventReactive(list(input$btn, input$tabset), {
 #   format(Sys.time(), "%c")
@@ -153,10 +171,11 @@ observeEvent(input$pngorsvgDown,
              {
                if(input$pngorsvgDown=="svg"){
                  values[["imageType"]]<-'image/svg+xml'
+
                } else {
                  values[["imageType"]]<-'image/png'
                }
-             })
+})
 
 
 observe({
@@ -271,7 +290,9 @@ observe({
                         ruler           = input$ruler,
                         rulerPos        = input$rulerPos,              # position of ruler
                         ruler.tck       = input$ruler.tck,          # size and orientation of ruler ticks
-                        rulerNumberSize = input$rulerNumberSize        # font size of rulers
+                        rulerNumberSize = input$rulerNumberSize,        # font size of rulers
+
+                        rulerTitleSize  = input$rulerTitleSize
                         ,xPosRulerTitle = input$xPosRulerTitle             # pos of ruler title
 
                         ,legendWidth   = input$legendWidth            # width of legend items
@@ -360,22 +381,23 @@ observe({
     seq<-character()
   }
 
-  add1<-"#install.packages('svglite')"
-  add1<- ifelse(values[["pngorsvg"]]=="svg",add1,"")
+  addLibrarySvg<-"#install.packages('svglite')"
+  addLibrarySvg<- ifelse(values[["pngorsvg"]]=="svg",addLibrarySvg,"")
 
-  add2<-"library(svglite)"
-  add2<- ifelse(values[["pngorsvg"]]=="svg",add2,"")
+  addLibrarySvg2<-"library(svglite)"
+  addLibrarySvg2<- ifelse(values[["pngorsvg"]]=="svg",addLibrarySvg2,"")
 
-  add3a <- paste0('svg("dfOfChrSize.svg",width='
+  addSvgDev <- paste0('svg("dfOfChrSize.svg",width='
                   ,values[["mysvgwidth"]]
                   ,", height="
                   ,values[["mysvgheight"]],')'
   )
-  add3b <- paste0('png("dfOfChrSize.png",width='
+  addPngDev <- paste0('png("dfOfChrSize.png",width='
                   ,values[["mysvgwidth"]]*80
                   ,", height="
                   ,values[["mysvgheight"]]*80,')')
-  add3<- ifelse(values[["pngorsvg"]]=="svg",add3a,add3b)
+
+  addDev<- ifelse(values[["pngorsvg"]]=="svg",addSvgDev,addPngDev)
 
   chrRds   <-paste0("chrData    <- readRDS('",input$chrfilename2,".rds')\n")
 
@@ -396,17 +418,16 @@ observe({
   block<-ifelse(input$asFile,"","#")
 
   strFun <- paste0(add0,"\n"
-                   ,add1,"\n"
+                   ,addLibrarySvg,"\n"
                    ,block
-                   ,add2,"\n"
-                   ,add2b,"\n"
+                   ,addLibrarySvg2,"\n"
+                   ,addLibraryIdio,"\n"
                    ,block
-                   ,ifelse(length(values[["mysvgwidth"]]),add3,"")
-                   # ,add3
-                   ,"\n"
                    ,rdsAdd
                    ,mrdsAdd
                    ,msrdsAdd
+                   ,ifelse(length(values[["mysvgwidth"]]),addDev,"")
+                   ,"\n"
                    ,ifelse(length(seq),paste0("plotIdiograms(",seq,")"),"")
                    ,"\n"
                    ,block

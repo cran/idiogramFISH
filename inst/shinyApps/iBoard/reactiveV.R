@@ -12,6 +12,7 @@ values <- reactiveValues(number=0
                          , pngorsvg="svg"
                          , plot=TRUE
                          , stop=FALSE
+                         , rentrezPkg=TRUE
 )
 
 #
@@ -29,3 +30,7 @@ CurrentM <- reactiveValues(
 scriptR <- reactive({
   df <- values[["strFun"]]
 })
+
+if (suppressWarnings(system.file(package = "rentrez") == '') ){
+  values[["rentrezPkg"]] <- FALSE
+}

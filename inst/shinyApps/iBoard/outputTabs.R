@@ -93,9 +93,9 @@ output$myTabs<-renderUI({
              ,fluidRow(
                column(width=2),
                column(width=8
-                      ,tags$head(tags$style(HTML('
-
-                   ')))
+                   #    ,tags$head(tags$style(HTML('
+                   #
+                   # ')))
                       ,uiOutput("markdown")
                ) # column
              ) #fluidrow close
@@ -108,5 +108,9 @@ output$myTabs<-renderUI({
 #
 
 output$markdown <- renderUI({
-  htmltools::tags$iframe(src = "README2.html", width = '100%',  height = 1000,  style = "border:none;")
+  if(rmarkdown::pandoc_available() ){
+    htmltools::tags$iframe(src = "README2.html", width = '100%',  height = "100%",  style = "border:none;")
+  } else {
+    HTML("Sorry, no pandoc, try in Rstudio, or installing pandoc")
+  }
 })

@@ -46,14 +46,37 @@ runBoard <- function() {
       return(print("bye"))
     }
   }
+
+  missRentrez<-character(0)
+  if (system.file(package = "rentrez") == '') {
+    missRentrez<-"rentrez"
+  }
+
+  if (length(missRentrez)) {
+    message(paste("you need to install", paste(missRentrez, collapse=", "),"for the Nucleotides page to work" ))
+    answer2 <- readline("Do you want to proceed installing now (Yes or No) ? ")
+  }
+  if (exists("answer2") ) {
+    if (answer2 %in% c("y","Y","Ye","ye","Yes","yes")) {
+        if (system.file(package = "rentrez") == '') {
+          install.packages("rentrez")
+        }
+    }
+  }
+
     if (requireNamespace("shiny", quietly = TRUE) &
         requireNamespace("shinydashboard", quietly = TRUE ) ) {
-      shiny::runApp(appDir, display.mode = "normal")
-    } else {
+      ev<-tryCatch(shiny::runApp(appDir, display.mode = "normal", launch.browser = TRUE), error=function(e){"error"})
+      if(is.character(ev)){
+        if(ev=="error"){
+          shiny::runApp(appDir, display.mode = "normal")
+        }
+      }
+      } else {
       message(crayon::red(paste("Please install:",paste(neededPkg, collapse = ", ") ) ))
       message(crayon::red("\nUse \ninstall.packages(\"shiny\") and/or \ninstall.packages(\"shinyshinydashboard\")
                           \netc, to meet dependencies"
                           )
       ) # m
     }
-  }
+}

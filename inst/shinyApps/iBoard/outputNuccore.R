@@ -63,9 +63,10 @@ output$statsDF <- renderUI({
   wellPanel(
     h5(tags$strong("data.frame summary") )
     ,tagList(
-      tags$span(paste(nrow(values[["geneChrDF"]]),"rows in chr. d.f.") )
-      ,br()
-      ,tags$span(paste(nrow(values[["geneMarkDFOrig"]]),"rows in mark d.f.") )
+      # tags$span(paste(nrow(values[["geneChrDF"]]),"rows in chr. d.f.") )
+      # ,br()
+      # ,
+      tags$span(paste(nrow(values[["geneMarkDFOrig"]]),"rows in marks' d.f.") )
     )
   )
 })
@@ -102,6 +103,11 @@ output$titleSelectUI <- renderUI({
       return("Press 2. Search")
     } else {
 
+      validate(
+        need(try({
+          values[["rentrezPkg"]]==TRUE
+        }),"rentrez package missing")
+      )
 
       validate(
         need(try({
@@ -190,7 +196,7 @@ output$loadUI <- renderUI({
   wellPanel(
     h4(strong("Data.frames for plotting") )
     ,h5(strong("Chr. marks and marks' style "))
-    ,actionButton("loadDFbutton",tags$strong("6. Load to data.frame page, go to plot (wait)" ) )
+    ,actionButton("loadDFbutton",tags$strong("6. Load to data.frame page (and wait for plot)" ) )
   )
 })
 
@@ -244,29 +250,38 @@ output$markColumnUI <- renderUI({
 
     fluidRow(
       column(6
-             ,h4(tags$strong("styling") )
-             ,checkboxInput("addSTARTPos","add START",TRUE)
-             ,radioButtons("nucMarkStyle","mark style"
+             ,h4(tags$strong("Marks") )
+             ,checkboxInput("addSTARTPos","add START",addSTARTPosDefault)
+             ,div(
+               title="recommended because marks with same name have same style and color"
+               ,checkboxInput("makeUnique","unique mark names",makeUniqueDefault)
+             )
+
+
+             ,radioButtons("nucMarkStyle","Style"
                            ,c("Arrows (upArrow/downArrow)"="Arrows"
                               # ,"Square (square/squareLeft)"="Square"
                               ,"cM (cm/cMLeft)"="cM")
-                           ,"Arrows")
+                           ,nucMarkStyleDefault)
              ,h5(strong("Change orientation") )
-             ,checkboxInput("mirror","As complement",FALSE)
+             ,checkboxInput("mirror","As complement",mirrorDefault)
              ,h5(strong("Pseudogenes") )
              ,radioButtons("pseudo","Show:",c("only pseudo."="onlyPseudo"
                                               ,"only not-pseudo."="removePseudo"
                                               ,"all"="all")
-                           ,selected = "all"
+                           ,selected = pseudoDefault
              )
-             ,div(style= "margin-bottom:-5px"
-                  ,title="`mycolors`: optional, character vector with colors' names, which are associated automatically with marks according to their order in the data.frame of position of marks. See this ordering with `unique(dfMarkPos$markName)`. Argument example: `mycolors = c(\"red\",\"chartreuse3\",\"dodgerblue\")`. Not mandatory for plotting marks, package has default colors.
-          "
-                  ,textInput('mycolors2'
-                             ,HTML(paste("Marks' colors"
-                                         ,tags$p("comma separated", style = "font-size: 80%;")
-                             ) )
-                             , mycolors2Default)
+             ,div(
+              title="replace locus tag"
+             ,h5(strong("Replace names with: (when available)" ) )
+             )
+             ,div(
+               title="use gene name instead of locus tag"
+               ,checkboxInput("useGeneNames","gene",useGeneNamesDefault)
+             )
+             ,div(
+               title="use regulatory class instead of locus tag"
+               ,checkboxInput("useRCNames","regulatory class",useRCNamesDefault)
              )
       )
       ,column(6
@@ -306,6 +321,18 @@ output$markColumnUI <- renderUI({
                                        ,c("downArrow","upArrow","cM","cMLeft")
                                        ,selected = markTypeDefault
                    )
+              )
+              ,div(style= "margin-bottom:-5px"
+                   ,title="`mycolors`: optional, character vector with colors' names, which are associated automatically with marks according to their order in the data.frame of position of marks. See this ordering with `unique(dfMarkPos$markName)`. Argument example: `mycolors = c(\"red\",\"chartreuse3\",\"dodgerblue\")`. Not mandatory for plotting marks, package has default colors.
+          "
+                   ,textInput('mycolors2'
+                              ,HTML(paste("Marks' colors"
+                                          ,tags$p("comma separated", style = "font-size: 80%;")
+                              ) )
+                              , mycolors2Default)
+              )
+              ,div(title="when selected colors will differentiate features not marks"
+                   ,checkboxInput("colorFeature","color for features",colorFeatureDefault)
               )
       )
     )
@@ -375,7 +402,7 @@ output$fetchSelectUI <- renderUI({
       ), "IMPORTANT! Press 3. ")
     )
     wellPanel(
-      h4("Elements gotten with",tags$code("rentrez::entrez_fetch") )
+      h4(tags$strong("Features"),"gotten with",tags$code("rentrez::entrez_fetch") )
       ,tags$div(align = 'left',
                class = 'multicol'
       ,checkboxGroupInput("fetchSelect"

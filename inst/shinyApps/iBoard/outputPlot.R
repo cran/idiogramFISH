@@ -143,7 +143,8 @@ output$idiogramPlot <- renderImage( {
       ruler          = input$ruler,
       rulerPos       = input$rulerPos,              # position of ruler
       ruler.tck      = input$ruler.tck,          # size and orientation of ruler ticks
-      rulerNumberSize= input$rulerNumberSize        # font size of rulers
+      rulerNumberSize= input$rulerNumberSize,        # font size of rulers
+      rulerTitleSize = input$rulerTitleSize
       ,xPosRulerTitle= input$xPosRulerTitle             # pos of ruler title
 
       ,legendWidth     = input$legendWidth            # width of legend items
@@ -217,12 +218,47 @@ output$pngorsvgDownButton <- downloadHandler(
   },
   content = function(file) {
 
+      if(input$pngorsvgDown=="svg" & values[["number"]]==10) {
+
+        if(Sys.info()['sysname']=="Linux"){
+          message1<-"Linux might NOT be able to display .svg with more than 200,000 polygons"
+          message2<-"Search for a workaround to increase this number for your system"
+        } else if(Sys.info()['sysname']=="Windows" ){
+          message1<-""
+          message2<-""
+        } else {
+          message1<-"Problems known in linux for opening large .svg"
+          message2<-"You may have to search for a workaround for your system"
+        }
+
+        showModal(modalDialog(
+          title = "Plotting to file, please wait."
+          ,tagList("You selected to download a large chr. in .svg format"
+                   , br()
+                   , message1
+                   , br()
+                   , message2
+                   , br()
+                   ,"this pop-up will close after completion. Press ESC to wait in shiny app"
+          )
+          ,easyClose = TRUE,
+          footer = list(
+            modalButton("Wait in shiny app")
+          )
+        )
+        )
+        # Sys.sleep(5)
+        # removeModal()
+      } else {
+
     showModal(modalDialog(
       title = "Plotting to file, please wait"
       ,"this pop-up will close after completion. Press ESC to wait in shiny app"
       ,easyClose = TRUE
       ,footer = modalButton("Wait in shiny app")
     ) )
+
+      }
 
     if(input$pngorsvgDown=="svg") {
       svg(file, width=values[["mysvgwidth"]], height=values[["mysvgheight"]] )
@@ -306,7 +342,9 @@ output$pngorsvgDownButton <- downloadHandler(
       ruler          = input$ruler,
       rulerPos       = input$rulerPos,              # position of ruler
       ruler.tck      = input$ruler.tck,          # size and orientation of ruler ticks
-      rulerNumberSize= input$rulerNumberSize        # font size of rulers
+      rulerNumberSize= input$rulerNumberSize,        # font size of rulers
+
+      rulerTitleSize = input$rulerTitleSize
       ,xPosRulerTitle= input$xPosRulerTitle             # pos of ruler title
 
       ,legendWidth     = input$legendWidth            # width of legend items

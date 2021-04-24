@@ -1,6 +1,14 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 2.0.4
+
+23-04-2021
+
+-   Fixed bug of too many fonts (angles) when hundreds of marks for .svg
+    for `labelOutwards=TRUE`
+-   Some improvements for shiny app `runBoard()`
+
 # idiogramFISH 2.0.3
 
 12-04-2021

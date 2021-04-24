@@ -309,6 +309,16 @@ if(file.exists(img1_path)) {
 #    .packages(), 'bookdown', 'knitr', 'rmarkdown',"devtools","pkgdown","crayon","ggtree","ggplot2","ggpubr","phytools","plyr","dplyr","tidyr","rentrez"
 #  ), 'refs/packages2.bib')
 
+## ---- echo=F------------------------------------------------------------------
+chapterFile_plotting<- "../parts/01-first.Rmd"
+if(file.exists(chapterFile_plotting)){
+  childExists_plotting<-TRUE
+  child_docs_plotting <- chapterFile_plotting
+} else {
+  childExists_plotting<-FALSE
+  child_docs_plotting <- ""
+}
+
 ## ---- echo=TRUE, eval=FALSE, message=FALSE------------------------------------
 #  library(idiogramFISH)
 #  runBoard()
@@ -316,10 +326,60 @@ if(file.exists(img1_path)) {
 ## ---- echo=F,  results="asis", eval=T-----------------------------------------
 shiny_path <- "../man/figures/shiny.jpg"
 if(file.exists(shiny_path)) {
-cat(paste0("<img src=",shiny_path,">") )
+  cat(paste0("<img src=",shiny_path,">") )
 }
 
-## ---- echo=TRUE, results="hide", message=FALSE--------------------------------
+## ---- echo=F------------------------------------------------------------------
+chapterFile_plotting<- "../parts/02-minimal.Rmd"
+if(file.exists(chapterFile_plotting)){
+  childExists_plotting<-TRUE
+  child_docs_plotting <- chapterFile_plotting
+} else {
+  childExists_plotting<-FALSE
+  child_docs_plotting <- ""
+}
+
+## ---- echo=TRUE, results="hide", message=FALSE, eval=FALSE--------------------
+#  library(idiogramFISH)
+#  
+#  data(dfOfChrSize) # chromosome data
+#  data(dfMarkColor) # mark general data
+#  data(dfOfMarks2)  # mark position data (inc. cen.)
+#  
+#  # column Mbp not for plotting purposes
+#  dfOfChrSize$Mbp<-(dfOfChrSize$shortArmSize+dfOfChrSize$longArmSize)*100
+#  
+#  svg("dfOfChrSize.svg", width=10, height=6 )
+#  # png("dfOfChrSize.png", width=500, height=400)
+#  plotIdiograms(dfChrSize  =dfOfChrSize,  # data.frame of chr. size
+#                dfMarkColor=dfMarkColor,  # d.f of mark style <- Optional
+#                dfMarkPos=dfOfMarks2,     # df of mark positions (includes cen. marks)
+#  
+#                karHeight=5,              # kar. height
+#                chrWidth = 1.2,           # chr. width
+#                chrSpacing = 1,           # space among chr.
+#  
+#                morpho="Guerra",          # chr. morpho. classif. (Guerra, Levan, both, "" ) ver. >= 1.12 only
+#                chrIndex="CI",            # cen. pos. (CI, AR, both, "" ) ver. >= 1.12 only
+#                chrSize = TRUE,           # add chr. sizes under chr.
+#                chrSizeMbp = TRUE,        # add Mbp sizes under chr. (see above)
+#  
+#                rulerPos= 0,              # position of ruler
+#                ruler.tck=-0.01,          # size and orientation of ruler ticks
+#                rulerNumberSize=.8        # font size of rulers
+#                ,xPosRulerTitle = 3             # pos of ruler title
+#  
+#                ,legendWidth=1            # width of legend items
+#                ,fixCenBorder = TRUE      # use chrColor as border color of cen. or cen. marks
+#                ,distTextChr = 1.2        # chr. text separation
+#  
+#                ,xlimLeftMod = 2          # xlim left param.
+#                ,ylimBotMod = 0           # modify ylim bottom argument
+#                ,ylimTopMod = 0           # modify ylim top argument
+#  )
+#  dev.off() # close svg()
+
+## ---- echo=FALSE, results="hide", message=FALSE, eval=TRUE--------------------
 library(idiogramFISH)
 
 data(dfOfChrSize) # chromosome data
@@ -329,7 +389,7 @@ data(dfOfMarks2)  # mark position data (inc. cen.)
 # column Mbp not for plotting purposes
 dfOfChrSize$Mbp<-(dfOfChrSize$shortArmSize+dfOfChrSize$longArmSize)*100
 
-svg("dfOfChrSize.svg",width=10,height=6 )
+svg("../vignettes/dfOfChrSize.svg", width=10, height=6 )
 # png("dfOfChrSize.png", width=500, height=400)
 plotIdiograms(dfChrSize  =dfOfChrSize,  # data.frame of chr. size
               dfMarkColor=dfMarkColor,  # d.f of mark style <- Optional
@@ -361,7 +421,7 @@ dev.off() # close svg()
 
 ## ---- results="asis", comment=NA, echo=FALSE----------------------------------
 # cat(paste0("![](dfOfChrSize.png)" ) )
-cat(paste0("![](dfOfChrSize.svg)" ) )
+cat(paste0("![](../vignettes/dfOfChrSize.svg)" ) )
 
 ## ---- results="hide"----------------------------------------------------------
 dfOfChrSize
@@ -449,11 +509,62 @@ dfMarkPosHolo$OTU <-"Species holo"
 
 monoholoMarks <- plyr::rbind.fill(dfOfMarks2,dfMarkPosHolo)
 
-## ---- echo=T, results="hide", fig.width=10, fig.height=6, message=FALSE-------
+## ---- echo=TRUE, results="hide", fig.width=10, fig.height=6, message=FALSE, eval=FALSE----
+#  library(idiogramFISH)
+#  
+#  #svg("testing.svg",width=14,height=10 )
+#  png("monoholoCS.png", width=700, height=600)
+#  par(mar=rep(0,4))
+#  plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
+#                dfMarkColor= dfMarkColor,  # df of mark style
+#                dfMarkPos  = monoholoMarks,# df of mark positions, includes cen. marks
+#  
+#                chrSize = TRUE,            # show chr. size under chr.
+#  
+#                squareness = 4,            # vertices squareness
+#                roundedCen = FALSE,        # triangular cen.
+#                addOTUName = TRUE,         # add OTU names
+#                OTUTextSize = .7,          # font size of OTU
+#                distTextChr = .5,          # separ. among chr. and text and among chr. name and indices
+#  
+#                karHeiSpace = 4,           # karyotype height inc. spacing
+#                karIndexPos = .2,          # move karyotype index
+#  
+#                legendHeight= 1,           # height of legend labels
+#                legendWidth = 1,           # width of legend labels
+#                fixCenBorder = TRUE,       # use chrColor as border color of cen. or cen. marks
+#  
+#                rulerPos= 0,               # position of ruler
+#                ruler.tck=-0.02,           # size and orientation of ruler ticks
+#                rulerNumberPos=.9,         # position of numbers of rulers
+#                xPosRulerTitle = 3.5,      # ruler title (units) position
+#  
+#                xlimLeftMod=1,             # modify xlim left argument of plot
+#                xlimRightMod=3,            # modify xlim right argument of plot
+#                ylimBotMod= .2             # modify ylim bottom argument of plot
+#  
+#                ,chromatids=FALSE          # do not show separ. chromatids
+#  
+#                # ,useOneDot=TRUE
+#  
+#                # ,circularPlot = TRUE       # circularPlot
+#                # ,shrinkFactor = .9         # percentage 1 = 100% of circle with chr.
+#                # ,circleCenter = 3          # X coordinate of circleCenter (affects legend pos.)
+#                # ,chrLabelSpacing = .9      # chr. names spacing
+#  
+#                # ,OTUsrt = 0                # angle for OTU name (or number)
+#                # ,OTUplacing = "number"     # Use number and legend instead of name
+#                # ,OTULabelSpacerx = -0.6    # modify position of OTU label, when OTUplacing="number" or "simple"
+#                # ,OTUlegendHeight = 1.5     # space among OTU names when in legend - OTUplacing
+#                # ,separFactor = 0.75        # alter separ. of kar.
+#  )
+#  dev.off() # close png
+
+## ---- echo=FALSE, results="hide", fig.width=10, fig.height=6, message=FALSE, eval=TRUE----
 library(idiogramFISH)
 
 #svg("testing.svg",width=14,height=10 )
-png("monoholoCS.png", width=700, height=600)
+png("../vignettes/monoholoCS.png", width=700, height=600)
 par(mar=rep(0,4))
 plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               dfMarkColor= dfMarkColor,  # df of mark style
@@ -502,7 +613,7 @@ dev.off() # close png
 
 ## ---- results="asis", comment=NA, echo=FALSE----------------------------------
 # cat(paste0("![](dfOfChrSize.png)" ) )
-cat(paste0("![](monoholoCS.png)" ) )
+cat(paste0("![](../vignettes/monoholoCS.png)" ) )
 
 ## ---- echo=FALSE, results="hide", fig.width=10, fig.height=7, message=FALSE----
 library(idiogramFISH)

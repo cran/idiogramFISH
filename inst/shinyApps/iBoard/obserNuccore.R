@@ -1,5 +1,7 @@
 # nucFile updates reactives
 # termButton  updates reactives
+
+
 observeEvent(input$nucFile, {
 
   showModal(modalDialog(
@@ -81,6 +83,11 @@ observeEvent(input$nucFile, {
 ##############################################################################
 
 observeEvent(input$termButton, {
+  validate(
+    need(try({
+      values[["rentrezPkg"]]==TRUE
+    }),"unable, rentrez package missing")
+  )
 
   showModal(modalDialog(
     title = "2. Searching string, please wait"
@@ -120,7 +127,7 @@ observeEvent(input$termButton, {
                                                     ,term = term1
                                                     ,retmax=input$maxNum
                                                     ,use_history = TRUE)
-                             ,error= function(e) {"internet problem"}
+                             ,error= function(e) {"internet or package problem"}
   )
 
   if(entrez_search1[1]!="internet problem") {
@@ -329,14 +336,10 @@ observeEvent(input$makeDFsButton, {
   # add necessary columns
   mylistChrDF$markPos <-pmin(as.numeric(mylistChrDF$begin),as.numeric(mylistChrDF$end) )
   mylistChrDF$markSize<-abs(as.numeric(mylistChrDF$end)-as.numeric(mylistChrDF$begin) )
+
+  #
+  #   MARK NAMES
   mylistChrDF$markName<-mylistChrDF$locus_tag
-
-  # Replace codes with genes, and replace NAs in markNames (locus_tag)
-  tryCatch(mylistChrDF[which(!is.na(mylistChrDF$gene) ),]$markName<-
-             mylistChrDF[which(!is.na(mylistChrDF$gene) ),]$gene, error=function(e){""})
-
-  tryCatch(mylistChrDF[which(!is.na(mylistChrDF$regulatory_class) ),]$markName<-
-             mylistChrDF[which(!is.na(mylistChrDF$regulatory_class) ),]$regulatory_class, error=function(e){""} )
 
   # careful
   # mylistChrDF[which(is.na(mylistChrDF$markName) ),]$markName<-
@@ -347,10 +350,13 @@ observeEvent(input$makeDFsButton, {
 
   mylistChrDF$chrName<- unique(chrDF$chrName)
   # select main columns for data.frame of marks' positions
-  columnList <- c("chrName","markName","markPos","markSize","feature","isJoin","style","pseudo")
+  columnList <- c("chrName","markName","markPos","markSize"
+                  ,"feature","isJoin","style","pseudo","gene"
+                  ,"regulatory_class")
 
   columnMarkList <- intersect(columnList, colnames(mylistChrDF) )
 
+  # remove some columns
   marksDfChr<-mylistChrDF[,columnMarkList]
 
   marksDfChr$OTU <-chrDF$OTU
@@ -365,8 +371,6 @@ observeEvent(input$makeDFsButton, {
   }
 
   values[["geneMarkDF"]] <- values[["geneMarkDFOrig"]] <- marksDfChr
-
-  # values[["mycolors2"]] <- c("black","forestgreen","cornflowerblue")
 
   markStyle   <- makedfMarkColorMycolors(
     unique(marksDfChr$markName)
@@ -411,6 +415,21 @@ observeEvent(input$modifyMarksButton,{
     values[["geneMarkDFOrigCopy"]] <- values[["geneMarkDFOrigCopy"]][which(is.na(values[["geneMarkDFOrigCopy"]]$pseudo) ),]
   }
 
+  # Replace codes with genes, and replace NAs in markNames (locus_tag)
+  if(input$useGeneNames){
+  tryCatch(values[["geneMarkDFOrigCopy"]][which(!is.na(values[["geneMarkDFOrigCopy"]]$gene) ),]$markName<-
+             values[["geneMarkDFOrigCopy"]][which(!is.na(values[["geneMarkDFOrigCopy"]]$gene) ),]$gene, error=function(e){""})
+  }
+
+  if(input$useRCNames){
+  tryCatch(values[["geneMarkDFOrigCopy"]][which(!is.na(values[["geneMarkDFOrigCopy"]]$regulatory_class) ),]$markName<-
+             values[["geneMarkDFOrigCopy"]][which(!is.na(values[["geneMarkDFOrigCopy"]]$regulatory_class) ),]$regulatory_class, error=function(e){""} )
+  }
+  if(input$makeUnique){
+    values[["geneMarkDFOrigCopy"]]$markNameOrig<-values[["geneMarkDFOrigCopy"]]$markName
+    values[["geneMarkDFOrigCopy"]]$markName<-make.uniqueIF(values[["geneMarkDFOrigCopy"]]$markNameOrig)
+  }
+
   marksDfChrCols<-namesToColumns(   values[["geneMarkDFOrigCopy"]]
                                     , values[["geneChrDF"]]
                                     , markType=  input$markType # c("downArrow"),
@@ -451,6 +470,16 @@ observeEvent(input$modifyMarksButton,{
   # arrows
   markStyle$style      <- marksDfChrCols$style[match(markStyle$markName, marksDfChrCols$markName)]
   markStyle$protruding <- marksDfChrCols$protruding[match(markStyle$markName, marksDfChrCols$markName)]
+
+
+  if(input$colorFeature){
+    markStyle$feature <- as.character(marksDfChrCols$feature[match(markStyle$markName, marksDfChrCols$markName)])
+    markStyleFeature   <- makedfMarkColorMycolors(
+      unique(marksDfChrCols$feature)
+      ,if(length( values[["mycolors2"]] )==0 ){""} else { values[["mycolors2"]]}
+    )
+    markStyle$markColor <- markStyleFeature$markColor[match(markStyle$feature, markStyleFeature$markName)]
+  }
 
   if(input$mirror){
 

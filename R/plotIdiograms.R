@@ -82,7 +82,7 @@
 #'   karyotypes will have no distance among them, if overlap,
 #'   increase this and \code{karHeiSpace}
 #' @param chrId character, print name of chromosome, \code{"original"} uses the original
-#'   name in OTU column of dfChrSize, \code{"simple"} (just 1 to ...) or \code{""} (none).
+#'   name in OTU column of dfChrSize, \code{"simple"} (just 1 to ...) or \code{"none"} or \code{""} (none).
 #' @param chrIdPatternRem character, regex pattern to remove from chr. names
 #' @param distTextChr numeric, distance from name of chromosome to chromosome,
 #'   also affects vertical separation of indices. Defaults to \code{1}
@@ -3454,7 +3454,7 @@ for (s in 1:length(y) ) {
           # Plot chr names
           #
 
-          if(chrId!="") {
+          if(chrId!="none" & chrId!="") {
             listXChrCenter <- mapChrCenter(xlistNewChr)
             listYChrCenter <- mapChrCenter(ylistTransChrSimple)
             names(listYChrCenter)<-names(ylistTransChrSimple)
@@ -3878,7 +3878,7 @@ for (s in 1:length(y) ) {
       # Plot chr. names
       #
 
-      if(chrId!=""){
+      if(chrId!="none" & chrId!=""){
         listYChrCenter <- mapChrCenter(ylistTransChr)
         names(listYChrCenter)<-names(ylistTransChr)
 
@@ -4231,11 +4231,9 @@ if(circularPlot==FALSE) {
 
     if("group" %in% colnames(dfChrSizeInternalDivisor) ) {
 
-      # groupSegmentDistance <- ifelse(groupUp, 1, 2)
       groupSegmentDistance <- 1 #ifelse(groupUp, 1, 2)
 
-      # chrIdCount  <- ifelse(groupUp==FALSE & chrId=="",0,1) # warn
-      chrIdCount  <- ifelse(groupUp | chrId=="" ,0, 1 ) # warn
+      chrIdCount  <- ifelse(groupUp | chrId=="none" | chrId=="" ,0, 1 ) # warn
 
     for (s in 1:length(xmnoNA)) {
       if(attr(listOfdfChromSizenoNA[[s]],"ytitle")=="cM"){
@@ -4436,7 +4434,7 @@ if(circularPlot==FALSE) {
 
     if(circularPlot==FALSE){
 
-    chrIdCount  <- ifelse(chrId=="",0,1) # warn
+    chrIdCount  <- ifelse(chrId=="none" | chrId=="",0,1) # warn
 
     chrSizeShow <- ifelse(chrSize==TRUE,1,0)
 
