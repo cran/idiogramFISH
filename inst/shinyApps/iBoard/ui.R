@@ -7,7 +7,9 @@ library(knitr)
 library(rclipboard)
 
 if(rmarkdown::pandoc_available()) {
-  rmarkdown::render("www/README2.Rmd")
+  if(rmarkdown::pandoc_version()>2.11){
+    rmarkdown::render("www/README2.Rmd")
+  }
 }
 ui <- tagList(
   tags$style("html,body{background-color: white;}

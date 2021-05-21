@@ -4,7 +4,10 @@
 \alias{runBoard}
 \title{FUNCTION runBoard}
 \usage{
-runBoard()
+runBoard(installAll = FALSE)
+}
+\arguments{
+\item{installAll}{boolean, when \code{TRUE} dependences are installed without asking. Defaults to \code{FALSE}}
 }
 \value{
 shiny

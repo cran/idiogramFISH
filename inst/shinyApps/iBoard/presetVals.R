@@ -3,6 +3,8 @@
 #   objects to load
 #
 
+sorry<-"Sorry, no pandoc, try in Rstudio, or installing pandoc"
+
 emptydata.frame<-data.frame()
 
 {

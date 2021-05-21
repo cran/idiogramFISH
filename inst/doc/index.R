@@ -310,33 +310,73 @@ if(file.exists(img1_path)) {
 #  ), 'refs/packages2.bib')
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile_plotting<- "../parts/01-first.Rmd"
-if(file.exists(chapterFile_plotting)){
-  childExists_plotting<-TRUE
-  child_docs_plotting <- chapterFile_plotting
+chapterFile_jupyter<- "../parts/01-jupyter.Rmd"
+if(file.exists(chapterFile_jupyter)){
+  childExists_jupyter<-TRUE
+  child_docs_jupyter <- chapterFile_jupyter
 } else {
-  childExists_plotting<-FALSE
-  child_docs_plotting <- ""
+  childExists_jupyter<-FALSE
+  child_docs_jupyter <- ""
+}
+
+## ---- echo=F------------------------------------------------------------------
+chapterFile4<- "../chaptersBLOCK/12-human.Rmd"
+if(file.exists(chapterFile4)){
+  renderLink<-FALSE
+} else {
+  renderLink<-TRUE
+}
+
+## ---- results="asis", eval=renderLink, echo=FALSE-----------------------------
+cat("For Shiny App in the cloud availability, please check this chapter in the online version   \n")
+cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#working-online){target='_blank'}")
+
+## ---- results="asis", eval=!renderLink, echo=FALSE----------------------------
+#  cat("Shiny App cloud app availability:  \n")
+#  cat("None")
+
+## ---- echo=F,  results="asis", eval=T-----------------------------------------
+jupyter_path <- "../man/figures/colab2.jpg"
+jupyter_path<-normalizePath(jupyter_path)
+if(file.exists(jupyter_path)) {
+  cat(paste0("![](",jupyter_path,")" ) ) # works
+}
+
+## ---- echo=F------------------------------------------------------------------
+chapterFile_first<- "../parts/02-first.Rmd"
+if(file.exists(chapterFile_first)){
+  childExists_first<-TRUE
+  child_docs_first <- chapterFile_first
+} else {
+  childExists_first<-FALSE
+  child_docs_first <- ""
 }
 
 ## ---- echo=TRUE, eval=FALSE, message=FALSE------------------------------------
 #  library(idiogramFISH)
 #  runBoard()
 
+## ---- echo=F,  results="asis", eval=F-----------------------------------------
+#  shiny_path <- "../man/figures/shiny.jpg"
+#  if(file.exists(shiny_path)) {
+#    cat(paste0("<img src=",shiny_path,">") )
+#  }
+
 ## ---- echo=F,  results="asis", eval=T-----------------------------------------
 shiny_path <- "../man/figures/shiny.jpg"
+shiny_path<-normalizePath(shiny_path)
 if(file.exists(shiny_path)) {
-  cat(paste0("<img src=",shiny_path,">") )
+  cat(paste0("![](",shiny_path,")" ) ) # works
 }
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile_plotting<- "../parts/02-minimal.Rmd"
-if(file.exists(chapterFile_plotting)){
-  childExists_plotting<-TRUE
-  child_docs_plotting <- chapterFile_plotting
+chapterFile_minimal<- "../parts/03-minimal.Rmd"
+if(file.exists(chapterFile_minimal)){
+  childExists_minimal<-TRUE
+  child_docs_minimal <- chapterFile_minimal
 } else {
-  childExists_plotting<-FALSE
-  child_docs_plotting <- ""
+  childExists_minimal<-FALSE
+  child_docs_minimal <- ""
 }
 
 ## ---- echo=TRUE, results="hide", message=FALSE, eval=FALSE--------------------
@@ -420,14 +460,18 @@ plotIdiograms(dfChrSize  =dfOfChrSize,  # data.frame of chr. size
 dev.off() # close svg()
 
 ## ---- results="asis", comment=NA, echo=FALSE----------------------------------
-# cat(paste0("![](dfOfChrSize.png)" ) )
-cat(paste0("![](../vignettes/dfOfChrSize.svg)" ) )
+dfOfChrSize.svgFile <- "../vignettes/dfOfChrSize.svg"
+
+if(file.exists(dfOfChrSize.svgFile)) {
+      dfOfChrSize.svgFile <- normalizePath(dfOfChrSize.svgFile)
+cat(paste0("![](",dfOfChrSize.svgFile,")" ) )
+}
 
 ## ---- results="hide"----------------------------------------------------------
 dfOfChrSize
 
 ## ---- monocentrics, echo=FALSE, comment=NA------------------------------------
-# chromsome data, if only 1 species, column OTU is optional
+# chromosome data, if only 1 species, column OTU is optional
 kableExtra::kable_styling(knitr::kable(dfOfChrSize) , full_width = F)
 # mark general data
 
@@ -612,8 +656,12 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
 dev.off() # close png
 
 ## ---- results="asis", comment=NA, echo=FALSE----------------------------------
-# cat(paste0("![](dfOfChrSize.png)" ) )
-cat(paste0("![](../vignettes/monoholoCS.png)" ) )
+monoholoCS.pngFile <- "../vignettes/monoholoCS.png"
+
+if(file.exists(monoholoCS.pngFile)) {
+      monoholoCS.pngFile <- normalizePath(monoholoCS.pngFile)
+cat(paste0("![](",monoholoCS.pngFile,")" ) )
+}
 
 ## ---- echo=FALSE, results="hide", fig.width=10, fig.height=7, message=FALSE----
 library(idiogramFISH)
@@ -657,10 +705,11 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               ,OTUlegendHeight = 1.5     # space among OTU names when in legend - OTUplacing
               ,separFactor = 0.75        # alter separ. of kar.
               
-); #dev.off() # close svg()
+)
+#dev.off() # close svg()
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile_plotting<- "../chaptersBLOCK/03-plotting.Rmd"
+chapterFile_plotting<- "../chaptersBLOCK/04-plotting.Rmd"
 if(file.exists(chapterFile_plotting)){
   childExists_plotting<-TRUE
   child_docs_plotting <- chapterFile_plotting
@@ -676,7 +725,7 @@ cat("# Plotting chromosomes")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#plotting-chromosomes)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile_multiple<- "../chaptersBLOCK/04-multiple.Rmd"
+chapterFile_multiple<- "../chaptersBLOCK/05-multiple.Rmd"
 if(file.exists(chapterFile_multiple)){
   childExists_multiple<-TRUE
   child_docs_multiple <- chapterFile_multiple
@@ -692,7 +741,7 @@ cat("# Several OTUs")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#multiple-otus)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile_units<- "../chaptersBLOCK/05-units.Rmd"
+chapterFile_units<- "../chaptersBLOCK/06-units.Rmd"
 if(file.exists(chapterFile_units)){
   childExists_units<-TRUE
   child_docs_units <- chapterFile_units
@@ -708,7 +757,7 @@ cat("# Changing Units")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#changing-units)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile0<- "../chaptersBLOCK/06-gish.Rmd"
+chapterFile0<- "../chaptersBLOCK/07-gish.Rmd"
 if(file.exists(chapterFile0)){
   childExists0<-TRUE
   child_docs0 <- chapterFile0
@@ -724,7 +773,7 @@ cat("# GISH")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#gish)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile1<- "../chaptersBLOCK/07-groups.Rmd"
+chapterFile1<- "../chaptersBLOCK/08-groups.Rmd"
 if(file.exists(chapterFile1)){
   childExists1<-TRUE
   child_docs1 <- chapterFile1
@@ -740,7 +789,7 @@ cat("# Using groups")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#groups)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile2<- "../chaptersBLOCK/08-circular.Rmd"
+chapterFile2<- "../chaptersBLOCK/09-circular.Rmd"
 if(file.exists(chapterFile2)){
   childExists2<-TRUE
   child_docs2 <- chapterFile2
@@ -756,7 +805,7 @@ cat("# Circular plots")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#circular-plots)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile3<- "../chaptersBLOCK/09-phylogeny.Rmd"
+chapterFile3<- "../chaptersBLOCK/10-phylogeny.Rmd"
 if(file.exists(chapterFile3)){
   childExists3<-TRUE
   child_docs3 <- chapterFile3
@@ -772,7 +821,7 @@ cat("# Plotting alongside phylogeny")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#plotting-alongside-phylogeny)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile<- "../chaptersBLOCK/10-citrushelp.Rmd"
+chapterFile<- "../chaptersBLOCK/11-citrushelp.Rmd"
 if(file.exists(chapterFile)){
   childExists<-TRUE
   child_docs <- chapterFile
@@ -788,7 +837,7 @@ cat("# *Citrus*")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#citrus)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile4<- "../chaptersBLOCK/11-human.Rmd"
+chapterFile4<- "../chaptersBLOCK/12-human.Rmd"
 if(file.exists(chapterFile4)){
   childExists4<-TRUE
   child_docs4 <- chapterFile4
@@ -804,7 +853,7 @@ cat("# Human karyotype")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#human-karyotype)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile_param<- "../chaptersBLOCK/12-functions.Rmd"
+chapterFile_param<- "../chaptersBLOCK/13-functions.Rmd"
 if(file.exists(chapterFile_param)){
   childExists_param<-TRUE
   child_docs_param <- chapterFile_param
@@ -820,7 +869,7 @@ cat("# Functions")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#functions)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile_data<- "../chaptersBLOCK/13-datasets.Rmd"
+chapterFile_data<- "../chaptersBLOCK/14-datasets.Rmd"
 if(file.exists(chapterFile_data)){
   childExists_data<-TRUE
   child_docs_data <- chapterFile_data
@@ -836,7 +885,7 @@ cat("# Datasets")
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#datasets)")
 
 ## ---- echo=F------------------------------------------------------------------
-chapterFile_news<- "../chaptersBLOCK/14-news.Rmd"
+chapterFile_news<- "../chaptersBLOCK/15-news.Rmd"
 if(file.exists(chapterFile_news)){
   childExists_news<-TRUE
   child_docs_news <- chapterFile_news

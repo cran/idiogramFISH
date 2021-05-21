@@ -1,6 +1,13 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 2.0.5
+
+19-05-2021
+
+-   New dependence install options for the shiny app `runBoard()`
+-   Better dealing with pandoc versions in shiny app
+
 # idiogramFISH 2.0.4
 
 23-04-2021

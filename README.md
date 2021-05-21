@@ -167,8 +167,8 @@ To cite idiogramFISH in publications, please use:
 
 Roa F, Telles MPC (2021) idiogramFISH: Shiny app. Idiograms with Marks
 and Karyotype Indices, Universidade Federal de Goiás. Brazil. R-package.
-version 2.0.4 <https://ferroao.gitlab.io/manualidiogramfish/>. doi:<!--
-  breaklink -->10.5281/zenodo.3579417
+version 2.0.5 <https://ferroao.gitlab.io/manualidiogramfish/>.
+doi:<!-- breaklink -->10.5281/zenodo.3579417
 
 To write citation to file:
 
@@ -182,6 +182,157 @@ sink()
 
 [Fernando Roa](https://ferroao.gitlab.io/curriculumpu/)  
 [Mariana PC Telles](http://lattes.cnpq.br/4648436798023532)
+
+# Working online
+
+For Shiny App in the cloud availability, please check this chapter in
+the online version
+[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#working-online)
+
+Each chapter has a `jupyter` version. A jupyter notebook seems an
+interactive vignette.
+
+They are hosted in [github](https://github.com/ferroao/IFjupyter)
+
+They can be accessed with `google colab` to work online.
+
+<table>
+<tr>
+<th>
+Colab
+</th>
+<th>
+Github  
+</th>
+<th>
+Raw
+</th>
+</tr>
+<tr>
+<td>
+<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/03-minimal.ipynb" target="_blank">3 Minimal examples</a> 
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/blob/main/03-minimal.ipynb" target="_blank"><kbd>link</kbd></a>
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/03-minimal.ipynb" target="_blank"><kbd>Raw</kbd></a>
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/04-plotting.ipynb" target="_blank">4 Plotting chromosomes</a> 
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/blob/main/04-plotting.ipynb" target="_blank"><kbd>link</kbd></a>
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/04-plotting.ipynb" target="_blank"><kbd>Raw</kbd></a>
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/05-multiple.ipynb" target="_blank">5 Multiple OTUs</a>
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/blob/main/05-multiple.ipynb" target="_blank"><kbd>link</kbd></a>
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/05-multiple.ipynb" target="_blank"><kbd>Raw</kbd></a>
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/06-units.ipynb" target="_blank">6 Changing units</a>
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/blob/main/06-units.ipynb" target="_blank"><kbd>link</kbd></a>
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/06-units.ipynb" target="_blank"><kbd>Raw</kbd></a>
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/07-gish.ipynb" target="_blank">7 GISH</a>
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/blob/main/07-gish.ipynb" target="_blank"><kbd>link</kbd></a>
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/07-gish.ipynb" target="_blank"><kbd>Raw</kbd></a>
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/08-groups.ipynb" target="_blank">8 Groups</a>
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/blob/main/08-groups.ipynb" target="_blank"><kbd>link</kbd></a>
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/08-groups.ipynb" target="_blank"><kbd>Raw</kbd></a>
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/09-circular.ipynb" target="_blank">9 Circular Plots</a>
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/blob/main/09-circular.ipynb" target="_blank"><kbd>link</kbd></a>
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/09-circular.ipynb" target="_blank"><kbd>Raw</kbd></a>
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/10-phylogeny.ipynb" target="_blank">10 Plotting alongside phylogeny</a> 
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/blob/main/10-phylogeny.ipynb" target="_blank"><kbd>link</kbd></a>
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/10-phylogeny.ipynb" target="_blank"><kbd>Raw</kbd></a>
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/11-citrushelp.ipynb" target="_blank">11 Citrus</a>
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/blob/main/11-citrushelp.ipynb" target="_blank"><kbd>link</kbd></a>
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/11-citrushelp.ipynb" target="_blank"><kbd>Raw</kbd></a>
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/12-human.ipynb" target="_blank">12 Human Karyotype</a>
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/blob/main/12-human.ipynb" target="_blank"><kbd>link</kbd></a>
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/12-human.ipynb" target="_blank"><kbd>Raw</kbd></a>
+</td>
+</tr>
+</table>
+
+</br>
+
+Chapers can be accessed locally in your `jupyter-lab` or
+`jupyter notebook`
+
+After installing jupyter, you can install the R kernel with:
+
+``` r
+install.packages("IRkernel")
+IRkernel::installspec()
+```
+
+</br> <img src=man/figures/colab2.jpg>
 
 # Shiny App
 
@@ -577,6 +728,9 @@ chrSize
 <th style="text-align:right;">
 Mbp
 </th>
+<th style="text-align:left;">
+OTU
+</th>
 </tr>
 </thead>
 <tbody>
@@ -590,6 +744,9 @@ Mbp
 <td style="text-align:right;">
 300
 </td>
+<td style="text-align:left;">
+Species holo
+</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -600,6 +757,9 @@ Mbp
 </td>
 <td style="text-align:right;">
 400
+</td>
+<td style="text-align:left;">
+Species holo
 </td>
 </tr>
 <tr>
@@ -612,6 +772,9 @@ Mbp
 <td style="text-align:right;">
 200
 </td>
+<td style="text-align:left;">
+Species holo
+</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -622,6 +785,9 @@ Mbp
 </td>
 <td style="text-align:right;">
 500
+</td>
+<td style="text-align:left;">
+Species holo
 </td>
 </tr>
 </tbody>
@@ -708,6 +874,9 @@ markPos
 <th style="text-align:right;">
 markSize
 </th>
+<th style="text-align:left;">
+OTU
+</th>
 </tr>
 </thead>
 <tbody>
@@ -724,6 +893,9 @@ markSize
 <td style="text-align:right;">
 0.5
 </td>
+<td style="text-align:left;">
+Species holo
+</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -737,6 +909,9 @@ DAPI
 </td>
 <td style="text-align:right;">
 0.5
+</td>
+<td style="text-align:left;">
+Species holo
 </td>
 </tr>
 <tr>
@@ -752,6 +927,9 @@ DAPI
 <td style="text-align:right;">
 0.5
 </td>
+<td style="text-align:left;">
+Species holo
+</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -765,6 +943,9 @@ DAPI
 </td>
 <td style="text-align:right;">
 0.5
+</td>
+<td style="text-align:left;">
+Species holo
 </td>
 </tr>
 <tr>
@@ -780,6 +961,9 @@ CMA
 <td style="text-align:right;">
 0.5
 </td>
+<td style="text-align:left;">
+Species holo
+</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -793,6 +977,9 @@ CMA
 </td>
 <td style="text-align:right;">
 0.5
+</td>
+<td style="text-align:left;">
+Species holo
 </td>
 </tr>
 </tbody>
@@ -885,9 +1072,9 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
 ); # dev.off() # close svg()
 ```
 
-<img src="man/figures/README-unnamed-chunk-18-1.png" width="70%" />
-
 <img src="man/figures/README-unnamed-chunk-19-1.png" width="70%" />
+
+<img src="man/figures/README-unnamed-chunk-20-1.png" width="70%" />
 
 ## References
 

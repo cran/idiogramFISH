@@ -13,6 +13,9 @@ values <- reactiveValues(number=0
                          , plot=TRUE
                          , stop=FALSE
                          , rentrezPkg=TRUE
+                         , renInstall=FALSE
+                         , errorMessage="Search failed, change string or check internet"
+                         , renMiss="unable, rentrez package missing"
 )
 
 #

@@ -108,9 +108,13 @@ output$myTabs<-renderUI({
 #
 
 output$markdown <- renderUI({
-  if(rmarkdown::pandoc_available() ){
-    htmltools::tags$iframe(src = "README2.html", width = '100%',  height = "100%",  style = "border:none;")
+  if(rmarkdown::pandoc_available() ) {
+    if(rmarkdown::pandoc_version()>2.11){
+      htmltools::tags$iframe(src = "README2.html", width = '100%',  height = "100%",  style = "border:none;")
+    } else {
+      HTML(sorry)
+    }
   } else {
-    HTML("Sorry, no pandoc, try in Rstudio, or installing pandoc")
+    HTML(sorry)
   }
 })

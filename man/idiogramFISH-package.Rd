@@ -14,7 +14,7 @@ Plot idiograms of karyotypes, plasmids, circular chr. having a set of data.frame
 Useful links:
 \itemize{
   \item \url{https://ferroao.gitlab.io/manualidiogramfish/}
-  \item \url{https://ferroao.gitlab.io/idiogramFISH}
+  \item \url{https://ferroao.gitlab.io/idiogramfishhelppages}
   \item Report bugs at \url{https://gitlab.com/ferroao/idiogramFISH/-/issues}
 }
 

@@ -83,10 +83,77 @@ observeEvent(input$nucFile, {
 ##############################################################################
 
 observeEvent(input$termButton, {
+
+  if(values[["rentrezPkg"]] == FALSE ) {
+    showModal(modalDialog(
+      title = "For this to work, rentrez needs to be installed"
+      ,tagList("Do you want to install rentrez?"
+      )
+      ,easyClose = FALSE,
+      footer = list(
+        actionButton("installRen", "Yes, install"),
+        actionButton("dontInst", "No, I will not search")
+      )
+      )
+    )
+  } else {
+    values[["renInstall"]] <- FALSE
+    values[["errorMessage"]] <- "Search failed, change string or check internet"
+  }
+})
+
+observeEvent(input$installRen, {
+  if (system.file(package = "rentrez") == '') {
+    tryCatch(detach("package:rentrez", unload=TRUE), error=function(e){""})
+    if(!"rentrez" %in% (.packages())){
+      message("installing rentrez")
+      tryCatch(utils::install.packages("rentrez"),error=function(w){
+        message("failure installing rentrez")
+        return("failure")
+        })
+    } else {
+      message("rentrez loaded, aborting")
+    }
+  }
+
+  if (system.file(package = "rentrez") == '') {
+    values[["rentrezPkg"]] <- FALSE
+    values[["renInstall"]] <- FALSE
+    values[["renMiss"]] <- "check Internet"
+    values[["errorMessage"]] <- "check internet"
+  } else {
+    values[["rentrezPkg"]] <- TRUE
+    values[["renInstall"]] <- TRUE
+    values[["errorMessage"]] <- "Try again, press 2."
+  }
+  removeModal()
+  # values[["decision"]] <- ". You did something not recommended, Now crashing?"
+})
+
+observeEvent(input$dontInst, {
+  if (system.file(package = "rentrez") == '') {
+    values[["rentrezPkg"]] <- FALSE
+    values[["renMiss"]] <- "unable, rentrez package missing"
+  } else {
+    values[["rentrezPkg"]] <- TRUE
+  }
+  removeModal()
+  # values[["decision"]] <- ""
+})
+
+
+observeEvent(input$termButton, {
+
+  validate(
+    need(try({
+      values[["renInstall"]]==FALSE
+    }),"Try again, Press 2.")
+  )
+
   validate(
     need(try({
       values[["rentrezPkg"]]==TRUE
-    }),"unable, rentrez package missing")
+    }),values[["renMiss"]])
   )
 
   showModal(modalDialog(
@@ -130,7 +197,8 @@ observeEvent(input$termButton, {
                              ,error= function(e) {"internet or package problem"}
   )
 
-  if(entrez_search1[1]!="internet problem") {
+
+  if(entrez_search1[1]!="internet or package problem") {
     if( length(entrez_search1$ids)==0 ){
       values[["searchStatus"]] <-FALSE
     } else {

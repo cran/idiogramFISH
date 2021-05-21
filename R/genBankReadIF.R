@@ -11,7 +11,6 @@
 #' @keywords genBank
 #' @export
 #' @rdname genBankReadIF
-#' @export
 #' @importFrom tidyr fill
 #' @importFrom dplyr %>% group_by summarise mutate arrange
 #' @return list

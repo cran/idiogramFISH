@@ -106,13 +106,13 @@ output$titleSelectUI <- renderUI({
       validate(
         need(try({
           values[["rentrezPkg"]]==TRUE
-        }),"rentrez package missing")
+        }),values[["renMiss"]] )
       )
 
       validate(
         need(try({
           values[["searchStatus"]]
-        }),"Search failed, change string or check internet")
+        }),values[["errorMessage"]] )
       )
 
       validate(
@@ -139,7 +139,7 @@ output$titleSelectUI <- renderUI({
                          ,uiOutput("saveEntrezUI")
                        )
       )
-    }
+    } # termB not 0
 })
 
 output$saveEntrezUI <- renderUI({
