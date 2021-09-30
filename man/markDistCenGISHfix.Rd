@@ -10,7 +10,8 @@ markDistCenGISHfix(
   dfChrSizeInternal,
   columnArmSize,
   markDistType,
-  listOfdfChromSize
+  listOfdfChromSize,
+  addR2 = TRUE
 )
 }
 \arguments{

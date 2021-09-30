@@ -5,12 +5,14 @@
 \alias{asymmetryA2}
 \title{FUNCTIONS asymmetry and asymmetryA2.}
 \usage{
-asymmetry(dfChrSize)
+asymmetry(dfChrSize, asDf = FALSE)
 
 asymmetryA2(dfChrSize)
 }
 \arguments{
 \item{dfChrSize}{name of data.frame}
+
+\item{asDf}{boolean, return d.f. instead of list}
 }
 \value{
 list
@@ -28,7 +30,7 @@ column \code{OTU}.
 
 It returns a list with the A and A2 indices
 
-\deqn{A = \frac{\sum_{i=1}^{n} \frac{longArm_{i} - shortArm_{i}}{CL_{i}} 
+\deqn{A = \frac{\sum_{i=1}^{n} \frac{longArm_{i} - shortArm_{i}}{CL_{i}}
 }{n} }{%
      A = Sum (longArm - shortArm / CL) / n }
 

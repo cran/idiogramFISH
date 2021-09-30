@@ -10,25 +10,69 @@
 runBoard <- function(installAll=FALSE) {
 
   appDir <- system.file("shinyApps", "iBoard", package = "idiogramFISH")
+
   if (appDir == "") {
     stop("Could not find inst folder with shiny app.", call. = FALSE)
   }
 
+  oldshiny <- "https://cran.r-project.org/src/contrib/Archive/shiny/shiny_1.6.0.tar.gz"
+
+  missRentrez <-  missShiny <- missRecPkg <- missPkg <- character(0)
+
+  if (system.file(package = "shiny") == '') {
+    if(packageVersion("shiny")>1.6){
+      missShiny<-"shiny"
+    }
+  }
+
+  if (length(missShiny) & installAll==FALSE) {
+    message(paste("you need to install shiny 1.6 from", paste(oldshiny, collapse=", ") ))
+    answer1 <- readline("Do you want to proceed installing now (Yes or No) ? ")
+
+    if (exists("answer1") ) {
+      if (tolower(answer1) %in% c("y","ye","yes","yap","yess") ) {
+
+        utils::install.packages(oldshiny, repos = NULL, type ='source')
+
+      } else {
+        return(print("bye"))
+      }
+    }
+
+  } else if(length(missShiny) & installAll) {
+    utils::install.packages(oldshiny, repos = NULL, type ='source')
+  }
+
+
   neededPkg<-c(#'bib2df'
-               'rmarkdown'
-               ,"svglite"
-               ,'shiny','shinydashboard'
-               ,'rhandsontable','gtools'
-               ,'knitr','rclipboard'
+               # ,'shiny'
+               'shinydashboard'
+               ,'rhandsontable'
+               ,'gtools'
+               ,'knitr'
+               ,'rclipboard'
+               ,'clipr'
                )
 
-  missPkg <- character(0)
+  recomPkg <- c("RCurl",
+                "rvcheck",
+                "badger",
+                "svglite",
+                'rmarkdown'
+  )
+
 
   for (pkg in neededPkg) {
     if (system.file(package = pkg) == '') {
       missPkg <- c(missPkg,pkg)
     }
   }
+  for (pkg in recomPkg) {
+    if (system.file(package = pkg) == '') {
+      missRecPkg <- c(missRecPkg,pkg)
+    }
+  }
+
   if (length(missPkg) & installAll==FALSE) {
     message(paste("you need to install", paste(missPkg,collapse=", ") ))
     answer <- readline("Do you want to proceed installing now (Yes or No) ? ")
@@ -55,13 +99,40 @@ runBoard <- function(installAll=FALSE) {
         tryCatch(utils::install.packages(pkg),error=function(w){
           message(paste("failure installing",pkg) )
         })
-        # install.packages(pkg)
       }
     }
     )
   }
 
-  missRentrez<-character(0)
+  if (length(missRecPkg) & installAll==FALSE) {
+    message(paste("This packages are optional:", paste(missRecPkg,collapse=", ") ))
+    answerRec <- readline("Do you want to proceed installing them (Yes or No) ? ")
+
+    if (exists("answerRec") ) {
+      if (tolower(answerRec) %in% c("y","ye","yes","yap","yess") ) {
+        lapply(recomPkg, function(pkg) {
+          if (system.file(package = pkg) == '') {
+            tryCatch(utils::install.packages(pkg),error=function(w){
+              message(paste("failure installing",pkg) )
+            })
+          }
+        }
+        )
+      } else {
+        print("ok")
+      }
+    }
+
+  } else if (length(missRecPkg) & installAll) {
+    lapply(recomPkg, function(pkg) {
+      if (system.file(package = pkg) == '') {
+        tryCatch(utils::install.packages(pkg),error=function(w){
+          message(paste("failure installing",pkg) )
+        })
+      }
+    }
+    )
+  }
 
   if (system.file(package = "rentrez") == '') {
     missRentrez<-"rentrez"
@@ -69,15 +140,13 @@ runBoard <- function(installAll=FALSE) {
 
   if (length(missRentrez) & installAll==FALSE)  {
     message(paste("you need to install rentrez"
-                  # , paste(missRentrez, collapse=", ")
                   ,"for the Nucleotides page to download data" ))
-    answer2 <- readline("Do you need to install it (Yes or No/nothing) ? ")
+    answer2 <- readline("Do you want to install it (Yes or No/empty) ? ")
 
     if (exists("answer2") ) {
       if (tolower(answer2) %in% c("y","ye","yes","yap","yess")) {
         if (system.file(package = "rentrez") == '') {
           message("installing rentrez")
-          # install.packages("rentrez")
           tryCatch(utils::install.packages("rentrez"),error=function(w){
             message("failure installing rentrez" )
           })
@@ -97,22 +166,24 @@ runBoard <- function(installAll=FALSE) {
 
     if (requireNamespace("shiny", quietly = TRUE) &
         requireNamespace("shinydashboard", quietly = TRUE ) &
-        requireNamespace("rmarkdown", quietly = TRUE ) &
         requireNamespace("rhandsontable", quietly = TRUE ) &
         requireNamespace("gtools", quietly = TRUE ) &
-        requireNamespace("rclipboard", quietly = TRUE )
-        ) {
-      ev <-tryCatch(shiny::runApp(appDir, display.mode = "normal", launch.browser = TRUE), error=function(e){"error"})
-      if(is.character(ev)){
+        requireNamespace("rclipboard", quietly = TRUE ) &
+        requireNamespace("clipr", quietly = TRUE )
+    ) {
+      ev <-tryCatch(shiny::runApp(appDir, display.mode = "normal",launch.browser = TRUE), error=function(e){"error"})
+      if(is.character(ev)) {
         if(ev=="error"){
           shiny::runApp(appDir, display.mode = "normal")
         }
       }
     } else {
-      message(crayon::red(paste("Please install:",paste(neededPkg, collapse = ", ") ) ))
-      message(crayon::red("\nUse \ninstall.packages(\"shiny\") and/or \ninstall.packages(\"shinyshinydashboard\")
-                          \netc, to meet dependencies"
-                          )
-      ) # m
+      message(crayon::red(paste("Please install:",paste(missPkg, collapse = ", ") ) ))
+      # message(crayon::red("\nUse \ninstall.packages(\"shiny\")
+                          # \netc"
+                          # )
+      # ) # m
+      message(crayon::red("\ninstall shiny from",oldshiny)
+      )
     }
 }

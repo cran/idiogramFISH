@@ -4,7 +4,7 @@ output:
   github_document:
     pandoc_args: --lua-filter=refs/multiple-bibliographies.lua
 
-bibliography_normal: [refs/normal.bib]
+bibliography_normal: [refs/normal_noabs.bib]
 bibliography_software: [refs/software.bib]
 bibliography_docs: [refs/docs.bib]
 bibliography_shiny: [refs/shinyApp.bib]
@@ -113,19 +113,24 @@ The left side menu of the shiny app consists of three pages with several tabs:
 * Examples (presets)
     + Load example
 
-* Nucleotides (new)
+* Nucleotides 
     + Search
     
-* data.frame
+* data.frame (input)
     + Chr. data data.frame
     + Mark Pos. data d.f.
     + Marks' Style
+    + Notes
 
 * Parameters & Plot
     + Parameters
     + Log
     + code
-
+    
+* stats (output)
+    + Indices
+    + Marks
+    
 * About
 
 The goal of idiogramFISH is to plot idiograms of karyotypes, plasmids and circ. chr. having a set of data.frames for chromosome data
@@ -157,7 +162,7 @@ In addition, the shiny app `runBoard()` uses shiny [@R-shiny], shinydashboard [@
 ``` {r, echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"}
 if (requireNamespace("RCurl", quietly = TRUE)  ) {
 # version of manual
-# v<-tryCatch(suppressWarnings(rvcheck:::check_github_gitlab("ferroao/idiogramFISH", "gitlab")$latest_version), error=function(e) NA )
+# v <- tryCatch(suppressWarnings(rvcheck:::check_github_gitlab("ferroao/idiogramFISH", "gitlab")$latest_version), error=function(e) NA )
 #cran version
 v<-tryCatch(suppressWarnings(rvcheck::check_cran("idiogramFISH")$latest_version), error=function(e) NA )
 
@@ -170,9 +175,13 @@ link<-tryCatch(suppressWarnings(badger::badge_custom("bookdown", paste(pkg,v), "
     manual_contFile <- "man/figures/cranmanualbookdown.svg"
     writeLines(manual_cont, con = manual_contFile)
     cat(paste0("&nbsp;[![https://ferroao.gitlab.io/manualidiogramfish](",knitr::include_graphics(manual_contFile),")](https://ferroao.gitlab.io/manualidiogramfish/)" ) )
+    } else {
+    cat(paste0("&nbsp;[https://ferroao.gitlab.io/manualidiogramfish](https://ferroao.gitlab.io/manualidiogramfish/){target='_blank'}" ) )
     }
   }
-} # rcurl
+} else {
+    cat(paste0("&nbsp;[https://ferroao.gitlab.io/manualidiogramfish](https://ferroao.gitlab.io/manualidiogramfish/){target='_blank'}" ) )
+} 
 ```
 
 #### Documentation in Pkgdown style
@@ -191,9 +200,15 @@ pkglink<-tryCatch(suppressWarnings(badger::badge_custom("pkgdown", paste(pkg,v),
     pkgdownmanual_contFile <- "man/figures/pkgdownver.svg"
     writeLines(develpkgmanual_cont, con = pkgdownmanual_contFile)
     cat(paste0("&nbsp;[![https://ferroao.gitlab.io/idiogramFISH](",knitr::include_graphics(pkgdownmanual_contFile)," )](https://ferroao.gitlab.io/idiogramFISH)" ) )
+    } else {
+      cat(paste0("&nbsp;[https://ferroao.gitlab.io/idiogramFISH](https://ferroao.gitlab.io/idiogramFISH){target='_blank'}" ) )
     }
   }
-} # rcurl
+} else {
+      cat(paste0("&nbsp;[https://ferroao.gitlab.io/idiogramFISH](https://ferroao.gitlab.io/idiogramFISH){target='_blank'}" ) )
+}
+
+
 ```
 
 
@@ -215,9 +230,15 @@ link<-tryCatch(suppressWarnings(badger::badge_custom("vignettes", paste(pkg,v), 
     vignettemanual_contFile <- "man/figures/develmanualvignette.svg"
     writeLines(develmanual_cont, con = vignettemanual_contFile)
     cat(paste0("&nbsp;[![https://ferroao.gitlab.io/idiogramfishhelppages](",knitr::include_graphics(vignettemanual_contFile),")](https://ferroao.gitlab.io/idiogramfishhelppages)" ) )
+    } else {
+    cat(paste0("&nbsp;[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages){target='_blank'}
+" ) )
     }
   }
-} # rcurl
+} else {
+    cat(paste0("&nbsp;[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages){target='_blank'}
+" ) )
+} 
 ```
 
 Launch vignettes from R for the installed version:

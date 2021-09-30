@@ -13,7 +13,7 @@ output:
     number_sections: true
     pandoc_args: ["--lua-filter=refs/multiple-bibliographies.lua"]
     
-bibliography_normal: [refs/normal.bib]
+bibliography_normal: [refs/normal_noabs.bib]
 bibliography_software: [refs/software.bib]
 bibliography_docs: [refs/docs.bib]
 bibliography_shiny: [refs/shinyApp.bib]
@@ -33,6 +33,8 @@ resource_files:
   - ../man/figures/pkgdownver.svg
   - ../man/figures/shiny.jpg
   - ../man/figures/colab2.jpg
+  - ../man/figures/colab-badge.svg
+  - ../man/figures/GitHub-Mark-120px-plus.png
   
   - ../man/figures/kofi1.svg
   
@@ -42,12 +44,13 @@ resource_files:
   - ../man/figures/logo2.png
   - ../man/figures/realdownloads.svg
   - ../man/figures/NEWS.svg
-  - ../man/figures/ggplot.svg
   
-  - ../man/figures/dfOfChrSize.svg
-  - ../man/figures/nostoc.jpg
-  - ../man/figures/nostocSmall.jpg
   - ../man/figures/circular.png
+  - ../man/figures/dfOfChrSize.svg
+
+  - ../onlinefigures/ggplot.svg
+  - ../onlinefigures/nostoc.jpg
+  - ../onlinefigures/nostocSmall.jpg
   
   - firstplot2.png
   - secondplot2.png
@@ -63,7 +66,7 @@ resource_files:
   - mydfChrSize2.png
   
   - refs/shinyApp.bib
-  - refs/normal.bib
+  - refs/normal_noabs.bib
   - refs/software.bib
   - refs/docs.bib
   - refs/multiple-bibliographies.lua
@@ -192,6 +195,35 @@ if(Sys.info()['sysname']=="Windows") {
 require(idiogramFISH)
 
 knitr::opts_chunk$set(eval = TRUE)
+
+pasteLinks <- function(link){
+cat(paste0("
+</br>
+Jupyter interactive version:
+<br>
+</br>
+<table>
+<tr>
+<td>
+[<img src='../man/figures/colab-badge.svg'>](https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/"
+,note
+,"){target='_blank'}&emsp;
+</td>
+<td>
+&emsp;&emsp;<img src='../man/figures/GitHub-Mark-120px-plus.png' height=25 width=25>&emsp;[Github](https://github.com/ferroao/IFjupyter/blob/main/"
+,note
+,"){target='_blank'}
+</td>
+<td>
+&emsp;&emsp;[Raw](https://github.com/ferroao/IFjupyter/raw/main/"
+,note
+,"){target='_blank'}
+</td>
+</tr>
+</table>
+</br>
+") )
+}
 ```
 
 ``` {r, echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"}
@@ -586,7 +618,6 @@ if(file.exists(chapterFile_first)){
 ```{r, child = child_docs_first, eval=childExists_first}
 ```
 
-
 ```{r, echo=F}
 chapterFile_minimal<- "../parts/03-minimal.Rmd"
 if(file.exists(chapterFile_minimal)){
@@ -600,7 +631,6 @@ if(file.exists(chapterFile_minimal)){
 
 ```{r, child = child_docs_minimal, eval=childExists_minimal}
 ```
-
 
 ```{r, echo=F}
 chapterFile_plotting<- "../chaptersBLOCK/04-plotting.Rmd"
@@ -616,36 +646,19 @@ if(file.exists(chapterFile_plotting)){
 ```{r, child = child_docs_plotting, eval=childExists_plotting}
 ```
 
+
 ```{r, results="asis", eval=!childExists_plotting, echo=FALSE}
 cat("# Plotting chromosomes")
 ```
+
 ```{r, results="asis", eval=!childExists_plotting, echo=FALSE}
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#plotting-chromosomes)")
 ```
-`r if(!childExists_plotting){"
-Jupyter interactive version:
-<br>
-</br>
-<table>
-<tr>
-<th> Colab (online) </th>
-<th> Github&emsp;&emsp;</th>
-<th> Raw</th>
-</tr>
-<tr>
-<td>
-[4 Plotting chromosomes](https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/04-plotting.ipynb){target='_blank'}&emsp;
-</td>
-<td>
-[<kbd>link</kbd>](https://github.com/ferroao/IFjupyter/blob/main/04-plotting.ipynb){target='_blank'}
-</td>
-<td>
-[<kbd>Raw</kbd>](https://github.com/ferroao/IFjupyter/raw/main/04-plotting.ipynb){target='_blank'}
-</td>
-</tr>
-</table>
-</br>
-"}`
+
+```{r , echo=FALSE, results="asis", message=FALSE, eval=!childExists_plotting, comment=NA}
+note<-"04-plotting.ipynb"
+pasteLinks(note)
+``` 
 
 ```{r, echo=F}
 chapterFile_multiple<- "../chaptersBLOCK/05-multiple.Rmd"
@@ -667,30 +680,11 @@ cat("# Several OTUs")
 ```{r, results="asis", eval=!childExists_multiple, echo=FALSE}
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#multiple-otus)")
 ```
-`r if(!childExists_multiple){"
-Jupyter interactive version:
-<br>
-</br>
-<table>
-<tr>
-<th> Colab (online) </th>
-<th> Github&emsp;&emsp;</th>
-<th> Raw</th>
-</tr>
-<tr>
-<td>
-[5 Multiple OTUs](https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/05-multiple.ipynb){target='_blank'}    
-</td>
-<td>
-[<kbd>link</kbd>](https://github.com/ferroao/IFjupyter/blob/main/05-multiple.ipynb){target='_blank'}
-</td>
-<td>
-[<kbd>Raw</kbd>](https://github.com/ferroao/IFjupyter/raw/main/05-multiple.ipynb){target='_blank'}
-</td>
-</tr>
-</table>
-</br>
-"}`
+
+```{r , echo=FALSE, results="asis", message=FALSE, eval=!childExists_multiple, comment=NA}
+note<-"05-multiple.ipynb"
+pasteLinks(note)
+``` 
 
 ```{r, echo=F}
 chapterFile_units<- "../chaptersBLOCK/06-units.Rmd"
@@ -712,30 +706,11 @@ cat("# Changing Units")
 ```{r, results="asis", eval=!childExists_units, echo=FALSE}
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#changing-units)")
 ```
-`r if(!childExists_units){"
-Jupyter interactive version:
-<br>
-</br>
-<table>
-<tr>
-<th> Colab (online) </th>
-<th> Github&emsp;&emsp;</th>
-<th> Raw</th>
-</tr>
-<tr>
-<td>
-[6 Changing units](https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/06-units.ipynb){target='_blank'}  
-</td>
-<td>
-[<kbd>link</kbd>](https://github.com/ferroao/IFjupyter/blob/main/06-units.ipynb){target='_blank'}
-</td>
-<td>
-[<kbd>Raw</kbd>](https://github.com/ferroao/IFjupyter/raw/main/06-units.ipynb){target='_blank'}
-</td>
-</tr>
-</table>
-</br>
-"}`
+
+```{r , echo=FALSE, results="asis", message=FALSE, eval=!childExists_units, comment=NA}
+note<-"06-units.ipynb"
+pasteLinks(note)
+``` 
 
 ```{r, echo=F}
 chapterFile0<- "../chaptersBLOCK/07-gish.Rmd"
@@ -757,30 +732,11 @@ cat("# GISH")
 ```{r, results="asis", eval=!childExists0, echo=FALSE}
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#gish)")
 ```
-`r if(!childExists0){"
-Jupyter interactive version:
-<br>
-</br>
-<table>
-<tr>
-<th> Colab (online) </th>
-<th> Github&emsp;&emsp;</th>
-<th> Raw</th>
-</tr>
-<tr>
-<td>
-[7 GISH](https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/07-gish.ipynb){target='_blank'}  
-</td>
-<td>
-[<kbd>link</kbd>](https://github.com/ferroao/IFjupyter/blob/main/07-gish.ipynb){target='_blank'}
-</td>
-<td>
-[<kbd>Raw</kbd>](https://github.com/ferroao/IFjupyter/raw/main/07-gish.ipynb){target='_blank'}
-</td>
-</tr>
-</table>
-</br>
-"}`
+
+```{r , echo=FALSE, results="asis", message=FALSE, eval=!childExists0, comment=NA}
+note<-"07-gish.ipynb"
+pasteLinks(note)
+``` 
 
 ```{r, echo=F}
 chapterFile1<- "../chaptersBLOCK/08-groups.Rmd"
@@ -802,30 +758,11 @@ cat("# Using groups")
 ```{r, results="asis", eval=!childExists1, echo=FALSE}
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#groups)")
 ```
-`r if(!childExists1){"
-Jupyter interactive version:
-<br>
-</br>
-<table>
-<tr>
-<th> Colab (online) </th>
-<th> Github&emsp;&emsp;</th>
-<th> Raw</th>
-</tr>
-<tr>
-<td>
-[8 Groups](https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/08-groups.ipynb){target='_blank'}  
-</td>
-<td>
-[<kbd>link</kbd>](https://github.com/ferroao/IFjupyter/blob/main/08-groups.ipynb){target='_blank'}
-</td>
 
-<td>
-[<kbd>Raw</kbd>](https://github.com/ferroao/IFjupyter/raw/main/08-groups.ipynb){target='_blank'}
-</td>
-</tr>
-</table></br>
-"}`
+```{r , echo=FALSE, results="asis", message=FALSE, eval=!childExists1, comment=NA}
+note<-"08-groups.ipynb"
+pasteLinks(note)
+``` 
 
 ```{r, echo=F}
 chapterFile2<- "../chaptersBLOCK/09-circular.Rmd"
@@ -844,32 +781,15 @@ if(file.exists(chapterFile2)){
 ```{r, results="asis", eval=!childExists2, echo=FALSE}
 cat("# Circular plots")
 ```
+
 ```{r, results="asis", eval=!childExists2, echo=FALSE}
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#circular-plots)")
 ```
-`r if(!childExists2){"
-Jupyter interactive version:
-<br>
-</br>
-<table>
-<tr>
-<th> Colab (online) </th>
-<th> Github&emsp;&emsp;</th>
-<th> Raw</th>
-</tr>
-<tr>
-<td>
-[9 Circular Plots](https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/09-circular.ipynb){target='_blank'}  
-</td>
-<td>
-[<kbd>link</kbd>](https://github.com/ferroao/IFjupyter/blob/main/09-circular.ipynb){target='_blank'}
-</td>
-<td>
-[<kbd>Raw</kbd>](https://github.com/ferroao/IFjupyter/raw/main/09-circular.ipynb){target='_blank'}
-</td>
-</tr>
-</table></br>
-"}`
+
+```{r , echo=FALSE, results="asis", message=FALSE, eval=!childExists2, comment=NA}
+note<-"09-circular.ipynb"
+pasteLinks(note)
+``` 
 
 ```{r, echo=F}
 chapterFile3<- "../chaptersBLOCK/10-phylogeny.Rmd"
@@ -891,29 +811,11 @@ cat("# Plotting alongside phylogeny")
 ```{r, results="asis", eval=!childExists3, echo=FALSE}
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#plotting-alongside-phylogeny)")
 ```
-`r if(!childExists3){"
-Jupyter interactive version:
-<br>
-</br>
-<table>
-<tr>
-<th> Colab (online) </th>
-<th> Github&emsp;&emsp;</th>
-<th> Raw</th>
-</tr>
-<tr>
-<td>
-[10 Plotting alongside phylogeny](https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/10-phylogeny.ipynb){target='_blank'}&emsp;
-</td>
-<td>
-[<kbd>link</kbd>](https://github.com/ferroao/IFjupyter/blob/main/10-phylogeny.ipynb){target='_blank'}
-</td>
-<td>
-[<kbd>Raw</kbd>](https://github.com/ferroao/IFjupyter/raw/main/10-phylogeny.ipynb){target='_blank'}
-</td>
-</tr>
-</table></br>
-"}`
+
+```{r , echo=FALSE, results="asis", message=FALSE, eval=!childExists3, comment=NA}
+note<-"10-phylogeny.ipynb"
+pasteLinks(note)
+``` 
 
 ```{r, echo=F}
 chapterFile<- "../chaptersBLOCK/11-citrushelp.Rmd"
@@ -935,29 +837,11 @@ cat("# *Citrus*")
 ```{r, results="asis", eval=!childExists, echo=FALSE}
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#citrus)")
 ```
-`r if(!childExists){"
-Jupyter interactive version:
-<br>
-</br>
-<table>
-<tr>
-<th> Colab (online) </th>
-<th> Github&emsp;&emsp;</th>
-<th> Raw</th>
-</tr>
-<tr>
-<td>
-[11 Citrus](https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/11-citrushelp.ipynb){target='_blank'}  
-</td>
-<td>
-[<kbd>link</kbd>](https://github.com/ferroao/IFjupyter/blob/main/11-citrushelp.ipynb){target='_blank'}
-</td>
-<td>
-[<kbd>Raw</kbd>](https://github.com/ferroao/IFjupyter/raw/main/11-citrushelp.ipynb){target='_blank'}
-</td>
-</tr>
-</table></br>
-"}`
+
+```{r , echo=FALSE, results="asis", message=FALSE, eval=!childExists, comment=NA}
+note<-"11-citrushelp.ipynb"
+pasteLinks(note)
+``` 
 
 ```{r, echo=F}
 chapterFile4<- "../chaptersBLOCK/12-human.Rmd"
@@ -979,30 +863,11 @@ cat("# Human karyotype")
 ```{r, results="asis", eval=!childExists4, echo=FALSE}
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#human-karyotype)")
 ```
-`r if(!childExists4){"
-Jupyter interactive version:
-<br>
-</br>
-<table>
-<tr>
-<th> Colab (online) </th>
-<th> Github&emsp;&emsp;</th>
-<th> Raw</th>
-</tr>
-<tr>
-<td>
-[12 Human Karyotype](https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/12-human.ipynb){target='_blank'}  
-</td>
-<td>
-[<kbd>link</kbd>](https://github.com/ferroao/IFjupyter/blob/main/12-human.ipynb){target='_blank'}
-</td>
-<td>
-[<kbd>Raw</kbd>](https://github.com/ferroao/IFjupyter/raw/main/12-human.ipynb){target='_blank'}
-</td>
-</tr>
-</table>
-</br>
-"}`
+
+```{r , echo=FALSE, results="asis", message=FALSE, eval=!childExists4, comment=NA}
+note<-"12-human.ipynb"
+pasteLinks(note)
+``` 
 
 ```{r, echo=F}
 chapterFile_param<- "../chaptersBLOCK/13-functions.Rmd"

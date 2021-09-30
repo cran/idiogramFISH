@@ -17,7 +17,9 @@ rulerPlot(
   moveKarHor2,
   mkhValue,
   useMinorTicks,
-  miniTickFactor
+  miniTickFactor,
+  verticalPlot,
+  moveAllKarValueHor
 )
 }
 \arguments{

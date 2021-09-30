@@ -42,7 +42,7 @@ for (i in 1:length(listOfdfChromSizenoNA) ) {
 if(rightN==FALSE) {
 
   font1   <- ifelse(OTUasNote, OTUfont, ifelse(downNote, leftNoteFont,leftNoteFontUp))
-  family1 <- ifelse(OTUasNote, ifelse( !is.na(OTUfamily),  OTUfamily, defaultFontFamily2),defaultFontFamily2) # justif
+  family1 <- ifelse(OTUasNote, ifelse( OTUfamily != "",  OTUfamily, defaultFontFamily2),defaultFontFamily2) # justif
 
   if(as.numeric(attr(listOfdfChromSizenoNA[[i]],"groupPresence") ) > 0 ) {
       ifelse(groupName,groupCount<-2,groupCount<-1)
@@ -74,7 +74,7 @@ if(rightN==FALSE) {
 } else { # RIGHT NOTE TRUE
 
   font1   <- ifelse(OTUasNote, OTUfont, noteFont)
-  family1 <- ifelse(OTUasNote, ifelse( !is.na(OTUfamily),  OTUfamily, defaultFontFamily2),defaultFontFamily2) # justif
+  family1 <- ifelse(OTUasNote, ifelse( OTUfamily != "",  OTUfamily, defaultFontFamily2),defaultFontFamily2) # justif
 
   mySign <- 1
 

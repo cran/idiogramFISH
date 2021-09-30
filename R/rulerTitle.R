@@ -19,9 +19,12 @@
 #' @importFrom graphics text
 
 # rulerTitle<-function(ycoord,listOfdfChromSizeCenType,MbUnit,specialyTitle,yTitle,xPosRulerTitle,rulerTitleSize){
-rulerTitle<-function(xmnoNA,ymnoNA,chrSpacing,yPosRulerTitle,listOfdfChromSizeCenType,MbUnit,specialyTitle,yTitle,xPosRulerTitle,rulerTitleSize){
+rulerTitle<-function(xmnoNA,ymnoNA,chrSpacing,yPosRulerTitle,listOfdfChromSizeCenType
+                     ,MbUnit,specialyTitle,yTitle,xPosRulerTitle,rulerTitleSize,verticalPlot){
 
-  for (s in 1:length(listOfdfChromSizeCenType)) {
+  amount<-if(verticalPlot){length(listOfdfChromSizeCenType)} else {1}
+
+  for (s in 1:amount ) {
     if( attr(listOfdfChromSizeCenType[[s]], "ytitle" )=="Mb" ){
       unit<-MbUnit
     } else if ( attr(listOfdfChromSizeCenType[[s]], "ytitle" )=="cM" ) {

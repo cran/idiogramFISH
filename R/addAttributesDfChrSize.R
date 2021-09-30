@@ -19,8 +19,8 @@ for (i in 1:length(listOfdfChromSize)) {
   listOfdfChromSize[[i]]<-  listOfdfChromSize[[i]][, !apply(is.na(listOfdfChromSize[[i]]), 2, all)]
 
   # Does the data.frame have short and long info?
-  message(crayon::black("\nChecking columns from dfChrSize\n"
-  ) ) # mess
+  message("\nChecking columns from dfChrSize\n"
+  ) # mess
 
   #################################################################################################
   #
@@ -29,11 +29,11 @@ for (i in 1:length(listOfdfChromSize)) {
 
   if(length( setdiff(c("chrName", "shortArmSize","longArmSize"),
                      colnames(listOfdfChromSize[[i]]) ) )==0 ) {
-    message(crayon::black("\nChecking mandatory columns from dfChrSize for chr. with cen.: \nchrName, shortArmSize,longArmSize,\n (column OTU  is necessary if more than one species)\n"
-    ) ) # mess
+    message("\nChecking mandatory columns from dfChrSize for chr. with cen.: \nchrName, shortArmSize,longArmSize,\n (column OTU  is necessary if more than one species)\n"
+     ) # mess
     message(crayon::green(paste("\nOTU ",names(listOfdfChromSize)[[i]],"has all columns with info to have monocen. If not, you have to clean your data"))
     )# message
-    attr(listOfdfChromSize[[i]],'cenType') <- "monocen"
+    attr(listOfdfChromSize[[i]], 'cenType') <- "monocen"
     attr(listOfdfChromSize[[i]], 'indexStatus') <- "missing"
 
     #
@@ -89,8 +89,8 @@ for (i in 1:length(listOfdfChromSize)) {
 
   else if(length( setdiff(c("chrName", "chrSize"),
                           colnames(listOfdfChromSize[[i]]) ) )==0 ){
-    message(crayon::black("\nChecking mandatory columns from dfChrSize for chr. without cen.: \nchrName, chrSize,\n (column OTU  is necessary if more than one species)\n"
-    ) ) # mess
+    message("\nChecking mandatory columns from dfChrSize for chr. without cen.: \nchrName, chrSize,\n (column OTU  is necessary if more than one species)\n"
+     ) # mess
     message(crayon::green(paste(c("\nOTU ",names(listOfdfChromSize)[[i]]," has all columns with info to have holocen. If not, you have to clean your data")))
     ) # message
     attr(listOfdfChromSize[[i]], 'cenType') <- "holocen"
@@ -149,8 +149,8 @@ for (i in 1:length(listOfdfChromSize)) {
 
   else if(length( setdiff(c("chrName", "shortArmSize","longArmSize"),
                           colnames(listOfdfChromSize[[i]]) ) )>0 ){
-    message(crayon::black("\nChecking mandatory columns from dfChrSize for chr. with cen.: \nchrName, shortArmSize,longArmSize,\n (column OTU  is necessary if more than one species)\n"
-    ) ) # mess
+    message("\nChecking mandatory columns from dfChrSize for chr. with cen.: \nchrName, shortArmSize,longArmSize,\n (column OTU  is necessary if more than one species)\n"
+    ) # mess
     message(crayon::green(paste(c("\nOTU ",names(listOfdfChromSize)[[i]]," does not have all columns with info to make a monocen.: ",
                                   paste0(c(setdiff(c("chrName", "shortArmSize","longArmSize"),
                                                    colnames(listOfdfChromSize[[i]])
@@ -167,8 +167,8 @@ for (i in 1:length(listOfdfChromSize)) {
   #
   else if (length( setdiff(c("chrName", "chrSize"),
                            colnames(listOfdfChromSize[[i]]) ) )>0 ){
-    message(crayon::black("\nChecking mandatory columns from dfChrSize for chr. without cen.: \nchrName, chrSize,\n (column OTU  is necessary if more than one species)\n"
-    ) ) # mess
+    message("\nChecking mandatory columns from dfChrSize for chr. without cen.: \nchrName, chrSize,\n (column OTU  is necessary if more than one species)\n"
+    ) # mess
     message(crayon::green(paste(c("\nOTU",names(listOfdfChromSize)[[i]],"does not have all columns with info to make a holocen:",
                                   paste0(c(setdiff(c("chrName", "chrSize"),
                                                    colnames(listOfdfChromSize[[i]])
@@ -226,7 +226,7 @@ addAttributesDfChrSizeSimple<-function(listOfdfChromSize,centromereSize=NA,thres
     listOfdfChromSize[[i]]<-  listOfdfChromSize[[i]][, !apply(is.na(listOfdfChromSize[[i]]), 2, all)]
 
     # Does the data.frame have short and long info?
-    message(crayon::black("\nChecking columns from dfChrSize\n" ) ) # mess
+    message("\nChecking columns from dfChrSize\n" )  # mess
 
     #################################################################################################
     #
@@ -235,8 +235,8 @@ addAttributesDfChrSizeSimple<-function(listOfdfChromSize,centromereSize=NA,thres
 
     if(length( setdiff(c("chrName", "shortArmSize","longArmSize"),
                        colnames(listOfdfChromSize[[i]]) ) )==0 ) {
-      message(crayon::black("\nChecking mandatory columns from dfChrSize for chr. with cen.: \nchrName, shortArmSize,longArmSize,\n (column OTU  is necessary if more than one species)\n"
-      ) ) # mess
+      message("\nChecking mandatory columns from dfChrSize for chr. with cen.: \nchrName, shortArmSize,longArmSize,\n (column OTU  is necessary if more than one species)\n"
+      ) # mess
       message(crayon::green(paste("\nOTU ",names(listOfdfChromSize)[[i]],"has all columns with info to have monocen. If not, you have to clean your data"))
       )# message
       attr(listOfdfChromSize[[i]],'cenType') <- "monocen"
@@ -274,8 +274,8 @@ addAttributesDfChrSizeSimple<-function(listOfdfChromSize,centromereSize=NA,thres
 
     else if(length( setdiff(c("chrName", "chrSize"),
                             colnames(listOfdfChromSize[[i]]) ) )==0 ){
-      message(crayon::black("\nChecking mandatory columns from dfChrSize for chr. without cen.: \nchrName, chrSize,\n (column OTU  is necessary if more than one species)\n"
-      ) ) # mess
+      message("\nChecking mandatory columns from dfChrSize for chr. without cen.: \nchrName, chrSize,\n (column OTU  is necessary if more than one species)\n"
+      ) # mess
       message(crayon::green(paste(c("\nOTU ",names(listOfdfChromSize)[[i]]," has all columns with info to have holocen. If not, you have to clean your data")))
       ) # message
       attr(listOfdfChromSize[[i]], 'cenType') <- "holocen"
@@ -313,8 +313,8 @@ addAttributesDfChrSizeSimple<-function(listOfdfChromSize,centromereSize=NA,thres
 
     else if(length( setdiff(c("chrName", "shortArmSize","longArmSize"),
                             colnames(listOfdfChromSize[[i]]) ) )>0 ){
-      message(crayon::black("\nChecking mandatory columns from dfChrSize for chr. with cen.: \nchrName, shortArmSize,longArmSize,\n (column OTU  is necessary if more than one species)\n"
-      ) ) # mess
+      message("\nChecking mandatory columns from dfChrSize for chr. with cen.: \nchrName, shortArmSize,longArmSize,\n (column OTU  is necessary if more than one species)\n"
+      ) # mess
       message(crayon::green(paste(c("\nOTU ",names(listOfdfChromSize)[[i]]," does not have all columns with info to make a monocen.: ",
                                     paste0(c(setdiff(c("chrName", "shortArmSize","longArmSize"),
                                                      colnames(listOfdfChromSize[[i]])
@@ -331,8 +331,8 @@ addAttributesDfChrSizeSimple<-function(listOfdfChromSize,centromereSize=NA,thres
     #
     else if (length( setdiff(c("chrName", "chrSize"),
                              colnames(listOfdfChromSize[[i]]) ) )>0 ){
-      message(crayon::black("\nChecking mandatory columns from dfChrSize for chr. without cen.: \nchrName, chrSize,\n (column OTU  is necessary if more than one species)\n"
-      ) ) # mess
+      message("\nChecking mandatory columns from dfChrSize for chr. without cen.: \nchrName, chrSize,\n (column OTU  is necessary if more than one species)\n"
+      ) # mess
       message(crayon::green(paste(c("\nOTU",names(listOfdfChromSize)[[i]],"does not have all columns with info to make a holocen:",
                                     paste0(c(setdiff(c("chrName", "chrSize"),
                                                      colnames(listOfdfChromSize[[i]])

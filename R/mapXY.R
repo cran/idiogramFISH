@@ -382,24 +382,34 @@ mapXYchromatidSARo <- function(start,end,y,x,r2,xModifier,pts){
     xy_3 <- cbind( (maxX-r2) + r2 * sin(ptsl[[3]]), (minY+r2) + r2 * cos(ptsl[[3]]))
     xy_4 <- cbind( (minX+r2) + r2 * sin(ptsl[[4]]), (minY+r2) + r2 * cos(ptsl[[4]]))
 
-    # xy_5 <- cbind( (halfXModPlus +r2) + r2 * sin(ptsl[[4]]), (minY+r2) + r2 * cos(ptsl[[4]]))
-    # xy_6 <- cbind( (halfXModMinus-r2) + r2 * sin(ptsl[[3]]), (minY+r2) + r2 * cos(ptsl[[3]]))
     xy_7 <- cbind( (halfXModMinus-r2) + r2 * sin(ptsl[[2]]), (maxY-r2) + r2 * cos(ptsl[[2]]))
     xy_8 <- cbind( (halfXModPlus +r2) + r2 * sin(ptsl[[1]]), (maxY-r2) + r2 * cos(ptsl[[1]]))
 
-    # xy_9  <- cbind( (halfXModPlus - xModifier) + xModifier * sin(ptsl[[2]]), (maxY-(xModifier*2)) + xModifier * cos(ptsl[[2]]))
-    # xy_10 <- cbind( (halfXModMinus+ xModifier) + xModifier * sin(ptsl[[1]]), (maxY-(xModifier*2)) + xModifier * cos(ptsl[[1]]))
     xy_11 <- cbind( (halfXModMinus+ xModifier) + xModifier * sin(ptsl[[4]]), (minY+(xModifier*2)) + xModifier * cos(ptsl[[4]]))
     xy_12 <- cbind( (halfXModPlus - xModifier) + xModifier * sin(ptsl[[3]]), (minY+(xModifier*2)) + xModifier * cos(ptsl[[3]]))
 
-    RoundedSAChrtx[[counter]] <-  c(rep(maxX,2),xy_3[,1] , topBotline_x[2:1],xy_4[,1],rep(minX,2),xy_1[,1],topBotline_x2[4:3] # 3 4 1
+    RoundedSAChrtx[[counter]] <-  c(rep(maxX,2)
+                                    ,xy_3[,1]
+                                    ,topBotline_x[2:1]
+                                    ,xy_4[,1]
+                                    ,rep(minX,2)
+                                    ,xy_1[,1],topBotline_x2[4:3] # 3 4 1
                                ,xy_7[,1], halfXModMinus,halfXModMinus # 7
-                               ,rev(xy_11[,1]),rev(xy_12[,1]) # 11 12
-                               , rep(halfXModPlus,2)
-                               ,xy_8[,1], topBotline_x2[2:1],xy_2[,1] # 8 2
+                               ,rev(xy_11[,1])
+                               ,rev(xy_12[,1]) # 11 12
+                               ,rep(halfXModPlus,2)
+                               ,xy_8[,1]
+                               ,topBotline_x2[1:2]
+                               ,xy_2[,1] # 8 2
     )
 
-    RoundedSAChrty[[counter]] <-  c(yMod[1:2],  xy_3[,2] , bottomline_y,     xy_4[,2],yMod[2:1],xy_1[,2],rep(maxY,2)  # 3 4 1
+    RoundedSAChrty[[counter]] <-  c(yMod[1:2]
+                                    ,  xy_3[,2]
+                                    , bottomline_y
+                                    , xy_4[,2]
+                                    ,yMod[2:1]
+                                    ,xy_1[,2]
+                                    ,rep(maxY,2)  # 3 4 1
                               ,xy_7[,2], yMod[1], minY+(xModifier*2) # 7
                               ,rev(xy_11[,2]),rev(xy_12[,2]) # 11 12
                               ,c(minY+(xModifier*2),yMod[1])
@@ -462,23 +472,30 @@ mapXYchromatidLARo <- function(start,end,y,x,r2,xModifier,pts){
 
     xy_5 <- cbind( (halfXModPlus +r2) + r2 * sin(ptsl[[4]]), (minY+r2) + r2 * cos(ptsl[[4]]))
     xy_6 <- cbind( (halfXModMinus-r2) + r2 * sin(ptsl[[3]]), (minY+r2) + r2 * cos(ptsl[[3]]))
-    # xy_7 <- cbind( (halfXModMinus-r2) + r2 * sin(ptsl[[2]]), (maxY-r2) + r2 * cos(ptsl[[2]]))
-    # xy_8 <- cbind( (halfXModPlus +r2) + r2 * sin(ptsl[[1]]), (maxY-r2) + r2 * cos(ptsl[[1]]))
 
     xy_9  <- cbind( (halfXModPlus - xModifier) + xModifier * sin(ptsl[[2]]), (maxY-(xModifier*2)) + xModifier * cos(ptsl[[2]]))
     xy_10 <- cbind( (halfXModMinus+ xModifier) + xModifier * sin(ptsl[[1]]), (maxY-(xModifier*2)) + xModifier * cos(ptsl[[1]]))
-    # xy_11 <- cbind( (halfXModMinus+ xModifier) + xModifier * sin(ptsl[[4]]), (minY+(xModifier*2)) + xModifier * cos(ptsl[[4]]))
-    # xy_12 <- cbind( (halfXModPlus - xModifier) + xModifier * sin(ptsl[[3]]), (minY+(xModifier*2)) + xModifier * cos(ptsl[[3]]))
 
-    RoundedLAChrtx[[counter]] <- c(rep(maxX,2),xy_3[,1] , topBotline_x2[1:2],xy_5[,1],halfXModPlus, # 2 5
-                                                           rev(xy_9[,1]),rev(xy_10[,1]) # 9 10
-                                                           ,halfXModMinus,         halfXModMinus
-                                                           ,xy_6[,1], topBotline_x2[3:4],xy_4[,1],rep(minX,2),xy_1[,1],topBotline_x,xy_2[,1] # 6 4 1 2
+    RoundedLAChrtx[[counter]] <- c(rep(maxX,2)
+                                   ,xy_3[,1]
+                                   ,topBotline_x2[2:1]
+                                   ,xy_5[,1]
+                                   ,halfXModPlus # 2 5
+                                   ,rev(xy_9[,1]),rev(xy_10[,1]) # 9 10
+                                   ,halfXModMinus
+                                   ,halfXModMinus
+                                   ,xy_6[,1], topBotline_x2[3:4],xy_4[,1],rep(minX,2)
+                                   ,xy_1[,1],topBotline_x,xy_2[,1] # 6 4 1 2
     )
 
-    RoundedLAChrty[[counter]] <-  c(yMod[1:2],  xy_3[,2] , bottomline_y[1:2],xy_5[,2],maxY-(xModifier*2), # 3 5
-                                    rev(xy_9[,2]),rev(xy_10[,2]) # 9 10
-                                    ,maxY-(xModifier*2),          yMod[2]
+    RoundedLAChrty[[counter]] <-  c(yMod[1:2]
+                                    ,xy_3[,2]
+                                    ,bottomline_y[1:2]
+                                    ,xy_5[,2]
+                                    ,maxY-(xModifier*2) # 3 5
+                                    ,rev(xy_9[,2]),rev(xy_10[,2]) # 9 10
+                                    ,maxY-(xModifier*2)
+                                    ,yMod[2]
                                     ,xy_6[,2], rep(minY,2),       xy_4[,2], yMod[2:1], xy_1[,2],rep(maxY,2)  ,xy_2[,2] # 6 4 1 2
     )
     # 7 8 11 12

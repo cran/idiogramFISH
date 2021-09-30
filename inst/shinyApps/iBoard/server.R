@@ -2,18 +2,43 @@ options(shiny.maxRequestSize=30*1024^2)
 
 tablist0<-c("exampleTab")
 
-tablist4<-c("searchTab")
-
-tablist <-c("dfChrTab", "dfMarkTab", "dfMSTab")
+tablist <-c("dfChrTab", "dfMarkTab", "dfMSTab", "notesTab")
 
 tablist2<-c("paramTab", "logTab","codeTab")
+
+tablist4<-c("searchTab")
+
+tablist5 <- c("indicesTab","marksTab")
 
 menulist<-c( "examplesMenu"
              ,"nuccoreMenu"
              ,"DFsMenu"
              ,"parameterPlotMenu"
+             ,"indicesMenu"
              ,"aboutMenu"
              )
+
+add_row <- function(chapter_note,chapter_name) {
+  tags$tr(
+    tags$td(
+      tags$a(href=paste0("https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/",chapter_note)
+             ,HTML(paste0(chapter_name,"&emsp;&emsp;" ) )
+             ,target='_blank')
+    )
+    ,tags$td(
+      tags$a(href=paste0("https://github.com/ferroao/IFjupyter/blob/main/",chapter_note)
+             ,tags$kbd("link")
+             ,target='_blank'
+      )
+    )
+    ,tags$td(
+      tags$a(href=paste0("https://github.com/ferroao/IFjupyter/raw/main/",chapter_note)
+             ,tags$kbd("Raw")
+             ,target='_blank'
+      )
+    ) #td
+  ) # tr
+}
 
 server <- function(input, output, session) {
 
@@ -29,37 +54,40 @@ server <- function(input, output, session) {
   #
   # outputs
 
-  source(file.path("outputMenu.R"),         local = TRUE, chdir = TRUE)
+  source(file.path("output/outputMenu.R"),         local = TRUE, chdir = TRUE)
 
-  source(file.path("outputTabsetpanels.R"), local = TRUE, chdir = TRUE)
+  source(file.path("output/outputTabsetpanels.R"), local = TRUE, chdir = TRUE)
 
-  source(file.path("outputTabs.R"),         local = TRUE, chdir = TRUE)
+  source(file.path("output/outputTabs.R"),         local = TRUE, chdir = TRUE)
 
-  source(file.path("outputPanels.R"),       local = TRUE, chdir = TRUE)
+  source(file.path("output/outputPanels.R"),       local = TRUE, chdir = TRUE)
 
-  source(file.path("outputNuccore.R"),      local = TRUE, chdir = TRUE)
+  source(file.path("output/outputNuccore.R"),      local = TRUE, chdir = TRUE)
 
-  source(file.path("outputDataframes.R"),   local = TRUE, chdir = TRUE)
+  source(file.path("output/outputDataframes.R"),   local = TRUE, chdir = TRUE)
 
-  source(file.path("outputPlot.R"),         local = TRUE, chdir = TRUE)
+  source(file.path("output/outputPlot.R"),         local = TRUE, chdir = TRUE)
 
-  source(file.path("outputLogCode.R"),      local = TRUE, chdir = TRUE)
+  source(file.path("output/outputLogCode.R"),      local = TRUE, chdir = TRUE)
 
   #
   # observers
-  source(file.path("obserPosButtons.R"),    local = TRUE, chdir = TRUE)
+  source(file.path("obser/obserPosButtons.R"),    local = TRUE, chdir = TRUE)
 
-  source(file.path("obserPresets.R"),       local = TRUE, chdir = TRUE)
+  source(file.path("obser/obserPresets.R"),       local = TRUE, chdir = TRUE)
 
-  source(file.path("obserNuccore.R"),       local = TRUE, chdir = TRUE)
+  source(file.path("obser/obserNuccore.R"),       local = TRUE, chdir = TRUE)
 
-  source(file.path("obserDataframes.R"),    local = TRUE, chdir = TRUE)
+  source(file.path("obser/obserDataframes.R"),    local = TRUE, chdir = TRUE)
 
-  source(file.path("obserSwap.R"),          local = TRUE, chdir = TRUE)
+  source(file.path("obser/obserSwap.R"),          local = TRUE, chdir = TRUE)
 
-  source(file.path("obserColumnMod.R"),     local = TRUE, chdir = TRUE)
+  source(file.path("obser/obserColumnMod.R"),     local = TRUE, chdir = TRUE)
 
-  source(file.path("obserPlot.R"),          local = TRUE, chdir = TRUE)
+  source(file.path("obser/obserPlot.R"),          local = TRUE, chdir = TRUE)
+
+  source(file.path("obser/obserIndices.R"),          local = TRUE, chdir = TRUE)
+
 
   outputOptions(output, "tabsetpanel1UI", suspendWhenHidden = FALSE)
   outputOptions(output, "tabsetpanel2UI", suspendWhenHidden = FALSE)
@@ -75,6 +103,9 @@ server <- function(input, output, session) {
 
   outputOptions(output, "dfMStylepanel",  suspendWhenHidden = FALSE)
   outputOptions(output, "outMStyle",      suspendWhenHidden = FALSE)
+
+  outputOptions(output, "dfnotespanel",   suspendWhenHidden = FALSE)
+  outputOptions(output, "outNotes",       suspendWhenHidden = FALSE)
 
   outputOptions(output, "parameterPanel", suspendWhenHidden = FALSE)
   outputOptions(output, "logpanel",       suspendWhenHidden = FALSE)

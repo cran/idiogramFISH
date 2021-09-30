@@ -1178,3 +1178,9 @@ psum <- function(...,na.rm=FALSE) {
   rowSums(do.call(cbind,list(...)),na.rm=na.rm)
 }
 
+`%W>%` <- function(lhs,rhs){
+  w <- options()$warn
+  on.exit(options(warn=w))
+  options(warn=-1)
+  eval.parent(substitute(lhs %>% rhs))
+} # https://stackoverflow.com/questions/47475923/custom-pipe-to-silence-warnings

@@ -4,12 +4,16 @@
 \alias{perMark}
 \title{FUNCTION perMark}
 \usage{
-perMark(dfMarkPos, listOfdfChromSize)
+perMark(dfMarkPos, listOfdfChromSize, result = "list", bToRemove = "")
 }
 \arguments{
-\item{dfMarkPos}{data.frame of marks' position}
+\item{dfMarkPos}{data.frame, of marks' position}
 
-\item{listOfdfChromSize}{list data.frames of chr. sizes. Require col. \code{chrSize} for all. Use \code{armRatioCI}}
+\item{listOfdfChromSize}{list of data.frames or data.frame of chr. sizes.}
+
+\item{result}{character, type of return, \code{"data.frame"} or \code{"list"}}
+
+\item{bToRemove}{character vector, bands to ignore}
 }
 \value{
 list
@@ -18,17 +22,10 @@ list
 calculates fraction (\%) of chromosome for each mark
 }
 \examples{
-# Beginning with two data.frames with column OTU
-dfOfChrSize$OTU<-1
-dfOfMarks2$OTU<-1
-
-# add column chrSize if missing
-dfOfChrSizeWithChrSize <- armRatioCI(dfOfChrSize)
-
-#data.frame of chr. size to list
-listOfdfChr<-idiogramFISH:::dfToListColumn(dfOfChrSizeWithChrSize)
-
-perMark(dfOfMarks2,listOfdfChr)
+load(system.file("shinyApps", "iBoard/www/rda/monoholoCS.rda", package = "idiogramFISH") )
+load(system.file("shinyApps", "iBoard/www/rda/monoholoMarks.rda", package = "idiogramFISH") )
+monoholoMarks2 <- fillMarkInfo(monoholoMarks,monoholoCS)
+perMark(monoholoMarks2,monoholoCS, result="data.frame")
 
 }
 \keyword{chromosome}

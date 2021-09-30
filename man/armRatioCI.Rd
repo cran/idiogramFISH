@@ -5,12 +5,14 @@
 \alias{swapChrRegionDfSizeAndMarks}
 \title{FUNCTIONS armRatioCI and swapChrRegionDfSizeAndMarks.}
 \usage{
-armRatioCI(dfChrSize)
+armRatioCI(dfChrSize, rnumeric = FALSE)
 
 swapChrRegionDfSizeAndMarks(dfChrSize, dfMarkPos, chrNamesToSwap)
 }
 \arguments{
 \item{dfChrSize}{name of data.frame with columns: shortArmSize, longArmSize}
+
+\item{rnumeric}{boolean, returns only numeric AR, CI}
 
 \item{dfMarkPos}{name of data.frame of marks}
 
@@ -22,9 +24,8 @@ data.frame (armRatioCI)
 list of data.frames (swapChrRegionDfSizeAndMarks)
 }
 \description{
-armRatioCI: reads a data.frame and produces AR (radius), CI,
-Guerra and Levan
-classifications.
+armRatioCI: reads a data.frame and produces AR (arm ratio), CI
+(centromeric index) , Guerra and Levan classifications.
 
 swapChrRegionDfSizeAndMarks: reads data.frames to swap arms
 }

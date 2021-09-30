@@ -1,3 +1,4 @@
+# options(shiny.error = NA)
 library(shiny)
 library(shinydashboard)
 library(idiogramFISH)
@@ -5,13 +6,20 @@ library(rhandsontable)
 library(gtools)
 library(knitr)
 library(rclipboard)
+library(clipr)
 
-if(rmarkdown::pandoc_available()) {
-  if(rmarkdown::pandoc_version()>2.11){
-    rmarkdown::render("www/README2.Rmd")
+devel <- FALSE
+
+if(system.file(package = "rmarkdown") != '') {
+  if(rmarkdown::pandoc_available()) {
+    if(rmarkdown::pandoc_version()>2.11 & devel==F) {
+      rmarkdown::render("www/README2.Rmd")
+    }
   }
 }
+
 ui <- tagList(
+  tags$style(type='text/css', '#ARCImessageOut {white-space: pre-wrap; word-break: keep-all;}'),
   tags$style("html,body{background-color: white;}
                 .container{
                     width: 100%;
@@ -30,8 +38,7 @@ ui <- tagList(
   padding-bottom: 0px;
   padding-left: 12px;
 }
-
-             "),
+"),
   tags$div(class="container",
            dashboardPage( title="idiogramFISH"
                           ,dashboardHeader(title = p("idiogramFISH shiny app") )

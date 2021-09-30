@@ -17,19 +17,23 @@
 #' @importFrom graphics axis rug
 #'
 
-rulerPlot<-function(ycoord,listOfdfChromSize,listOfdfChromSizeCenType,fromZerotoMax,rulerNumberSize,rulerPos,ruler.tck,lwd.chr,
-                    moveKarHor2,mkhValue,useMinorTicks,miniTickFactor){
+rulerPlot <- function(ycoord,listOfdfChromSize,listOfdfChromSizeCenType,fromZerotoMax,rulerNumberSize,rulerPos,ruler.tck,lwd.chr,
+                    moveKarHor2,mkhValue,useMinorTicks,miniTickFactor,verticalPlot,moveAllKarValueHor){
 
-  for (i in 1:length(ycoord) ) {
+  amount<-if(verticalPlot){length(ycoord)} else {1}
+
+  rulerNumberSize <- if(rulerNumberSize<=0){0.1} else {rulerNumberSize}
+
+  for (i in 1:amount ) {
 
     corr_index<-which(names(listOfdfChromSize) %in% names(listOfdfChromSizeCenType)[[i]] )
 
     divisor2 <- as.numeric(attr(listOfdfChromSize[[corr_index]],"divisor"))
 
     if(names(listOfdfChromSize)[corr_index] %in% moveKarHor2 ) {
-      rulerPos2 <- rulerPos+mkhValue
+      rulerPos2 <- rulerPos+mkhValue+moveAllKarValueHor
     } else {
-      rulerPos2 <- rulerPos
+      rulerPos2 <- rulerPos+moveAllKarValueHor
     }
 
     if ( attr(listOfdfChromSizeCenType[[i]], "ytitle" )=="cM" ) {

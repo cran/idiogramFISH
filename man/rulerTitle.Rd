@@ -15,7 +15,8 @@ rulerTitle(
   specialyTitle,
   yTitle,
   xPosRulerTitle,
-  rulerTitleSize
+  rulerTitleSize,
+  verticalPlot
 )
 }
 \arguments{

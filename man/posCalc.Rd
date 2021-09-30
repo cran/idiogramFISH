@@ -2,7 +2,9 @@
 % Please edit documentation in R/posCalc.R
 \name{posCalc}
 \alias{posCalc}
-\title{FUNCTION posCalc}
+\alias{fillMarkInfo}
+\alias{fillMarkInfo2}
+\title{FUNCTION posCalc and fillMarkInfo}
 \usage{
 posCalc(
   dfMarkPos,
@@ -10,13 +12,18 @@ posCalc(
   bToRemove = "",
   markDistType = "beg",
   origin = "b",
+  showBandList = FALSE,
   result = "tibble"
 )
+
+fillMarkInfo2(dfMarkPos, dfChrSize)
+
+fillMarkInfo(dfMarkPos, dfChrSize, markDistType = "beg", origin = "b")
 }
 \arguments{
 \item{dfMarkPos}{data.frame of marks' position}
 
-\item{listOfdfChromSize}{list data.frames of chr. sizes. Require col. \code{chrSize} for all. Use \code{armRatioCI}}
+\item{listOfdfChromSize}{list (for \code{posCalc}) or data.frames of chr. sizes.}
 
 \item{bToRemove, }{character, bands to remove from calc. of pos.}
 
@@ -24,62 +31,29 @@ posCalc(
 or \code{markPos}  is to the center of the mark, if \code{"beg"} = the distance you provided is to the
 beginning of the mark (Default)}
 
-\item{origin, }{For non-monocentric chr. (for holocentrics only) Use \code{"b"} (default) if distance to mark in (\code{"markPos"} column in \code{"dfMarkPos"}) data.frame measured from bottom of chromosome, use \code{"t"} for distance to mark from top of chr.}
+\item{origin, }{character, For non-monocentric chr. (for holocentrics only) Use \code{"b"} (default) if distance to mark in (\code{"markPos"} column in \code{"dfMarkPos"}) data.frame measured from bottom of chromosome, use \code{"t"} for distance to mark from top of chr.}
 
-\item{result}{character, use \code{"tibble"} to get results in tibble, other string results in a \code{list}}
+\item{showBandList, }{boolean, show row of all bands in tibble, see \code{"result"}}
+
+\item{result}{character, use \code{"tibble"} to get results in tibble, \code{"data.frame"}, or other string results in a \code{list}}
+
+\item{dfChrSize}{data.frame of chr. sizes}
 }
 \value{
 list, tibble
+
+data.frame of marks
+
+data.frame of marks
 }
 \description{
 calculates position of marks in fraction of (\%) chromosome units (0-1)
 }
 \examples{
-# Monocentrics - Beginning with two data.frames with column OTU
-require(idiogramFISH)
-
-dfOfChrSize$OTU<-1
-dfOfMarks2$OTU<-1
-
-# check missing data
-
-dfOfMarks2[which(is.na(dfOfMarks2$markSize) & dfOfMarks2$chrRegion \%in\% c("p","q") ),]
-# markSize and markDistCen missing
-
-# add markDistCen
-dfOfMarks2$markDistCen <- ifelse( is.na(dfOfMarks2$markDistCen) &
-dfOfMarks2$chrRegion \%in\% c("p","q"),
-0,
-dfOfMarks2$markDistCen)
-
-# add markSize
-XshortSize <- dfOfChrSize[which(dfOfChrSize$chrName=="X"),]$shortArmSize
-dfOfMarks2[which(dfOfMarks2$chrName=="X" & dfOfMarks2$chrRegion=="p")  ,]$markSize<-XshortSize
-
-# add column chrSize if missing
-dfOfChrSizeWithChrSize <- armRatioCI(dfOfChrSize)
-
-# data.frame of chr. size to list
-listOfdfChr <- idiogramFISH:::dfToListColumn(dfOfChrSizeWithChrSize)
-
-ti<-posCalc(dfOfMarks2,listOfdfChr)
-as.list(ti[[1]][,1])
-posCalc(dfOfMarks2,listOfdfChr, result="list")
-
-# holocentrics example
-
-dfChrSizeHolo$OTU<-2
-dfMarkPosHolo$OTU<-2
-
-# data.frame of chr. size to list
-listOfdfChrHolo <- idiogramFISH:::dfToListColumn(dfChrSizeHolo)
-
-ti2<-posCalc(dfMarkPosHolo,listOfdfChrHolo)
-ti2
-
-posCalc(dfMarkPosHolo,listOfdfChrHolo, result="list")
-
-as.list(ti2[[1]][,1] )
+load(system.file("shinyApps", "iBoard/www/rda/monoholoCS.rda", package = "idiogramFISH") )
+load(system.file("shinyApps", "iBoard/www/rda/monoholoMarks.rda", package = "idiogramFISH") )
+monoholoMarks2 <- fillMarkInfo(monoholoMarks,monoholoCS)
+posCalc(monoholoMarks2,monoholoCS, result="data.frame")
 
 }
 \keyword{chromosome}

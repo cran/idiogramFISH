@@ -167,8 +167,9 @@ To cite idiogramFISH in publications, please use:
 
 Roa F, Telles MPC (2021) idiogramFISH: Shiny app. Idiograms with Marks
 and Karyotype Indices, Universidade Federal de Goiás. Brazil. R-package.
-version 2.0.5 <https://ferroao.gitlab.io/manualidiogramfish/>.
-doi:<!-- breaklink -->10.5281/zenodo.3579417
+version 2.0.6 <https://ferroao.gitlab.io/manualidiogramfish/>.
+doi:<!-- breaklink
+  -->10.5281/zenodo.3579417
 
 To write citation to file:
 
@@ -199,13 +200,13 @@ They can be accessed with `google colab` to work online.
 <table>
 <tr>
 <th>
-Colab
+<img src="man/figures/colab-badge.svg">
 </th>
 <th>
-Github  
+<img src="man/figures/GitHub-Mark-120px-plus.png" height=25 width=25> Github  
 </th>
 <th>
-Raw
+<img src="man/figures/GitHub-Mark-120px-plus.png" height=25 width=25> Raw
 </th>
 </tr>
 <tr>
@@ -216,7 +217,7 @@ Raw
 <a href="https://github.com/ferroao/IFjupyter/blob/main/03-minimal.ipynb" target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/03-minimal.ipynb" target="_blank"><kbd>Raw</kbd></a>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/03-minimal.ipynb" target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
@@ -227,7 +228,7 @@ Raw
 <a href="https://github.com/ferroao/IFjupyter/blob/main/04-plotting.ipynb" target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/04-plotting.ipynb" target="_blank"><kbd>Raw</kbd></a>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/04-plotting.ipynb" target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
@@ -238,7 +239,7 @@ Raw
 <a href="https://github.com/ferroao/IFjupyter/blob/main/05-multiple.ipynb" target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/05-multiple.ipynb" target="_blank"><kbd>Raw</kbd></a>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/05-multiple.ipynb" target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
@@ -249,7 +250,7 @@ Raw
 <a href="https://github.com/ferroao/IFjupyter/blob/main/06-units.ipynb" target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/06-units.ipynb" target="_blank"><kbd>Raw</kbd></a>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/06-units.ipynb" target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
@@ -260,7 +261,7 @@ Raw
 <a href="https://github.com/ferroao/IFjupyter/blob/main/07-gish.ipynb" target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/07-gish.ipynb" target="_blank"><kbd>Raw</kbd></a>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/07-gish.ipynb" target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
@@ -271,7 +272,7 @@ Raw
 <a href="https://github.com/ferroao/IFjupyter/blob/main/08-groups.ipynb" target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/08-groups.ipynb" target="_blank"><kbd>Raw</kbd></a>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/08-groups.ipynb" target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
@@ -282,7 +283,7 @@ Raw
 <a href="https://github.com/ferroao/IFjupyter/blob/main/09-circular.ipynb" target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/09-circular.ipynb" target="_blank"><kbd>Raw</kbd></a>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/09-circular.ipynb" target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
@@ -293,7 +294,7 @@ Raw
 <a href="https://github.com/ferroao/IFjupyter/blob/main/10-phylogeny.ipynb" target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/10-phylogeny.ipynb" target="_blank"><kbd>Raw</kbd></a>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/10-phylogeny.ipynb" target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
@@ -304,7 +305,7 @@ Raw
 <a href="https://github.com/ferroao/IFjupyter/blob/main/11-citrushelp.ipynb" target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/11-citrushelp.ipynb" target="_blank"><kbd>Raw</kbd></a>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/11-citrushelp.ipynb" target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
@@ -315,7 +316,7 @@ Raw
 <a href="https://github.com/ferroao/IFjupyter/blob/main/12-human.ipynb" target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/12-human.ipynb" target="_blank"><kbd>Raw</kbd></a>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/12-human.ipynb" target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 </table>
@@ -343,6 +344,10 @@ correctly.
 library(idiogramFISH)
 runBoard()
 ```
+
+For Shiny App in the cloud availability, please check this chapter in
+the online version
+[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#shiny-app)
 
 <img src=man/figures/shiny.jpg>
 

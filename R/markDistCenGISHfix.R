@@ -12,7 +12,7 @@
 
 markDistCenGISHfix<-function(dfArmGISHInternalMonocen,dfChrSizeInternal
                              ,columnArmSize,markDistType
-                             ,listOfdfChromSize){
+                             ,listOfdfChromSize,addR2=TRUE){
 
   dfArmGISHInternalMonocen$r2<-as.numeric(NA)
   dfArmGISHInternalMonocen$markSizeProtein<-as.numeric(NA)
@@ -20,15 +20,17 @@ markDistCenGISHfix<-function(dfArmGISHInternalMonocen,dfChrSizeInternal
 
   for(i in 1:length(dfArmGISHInternalMonocen$OTU)){
   corr_index <- which(names(listOfdfChromSize) %in% dfArmGISHInternalMonocen$OTU[i] )
+  if(addR2){
   dfArmGISHInternalMonocen$r2[i] <- as.numeric(attr(listOfdfChromSize[[corr_index]],"r2"))
+  }
   }
 
     dfArmGISHInternalMonocen$markSize <- dfChrSizeInternal[match(interaction(dfArmGISHInternalMonocen[c("OTU","chrName")] ),
                                                              interaction(dfChrSizeInternal[c("OTU","chrName") ] )
     ),][,columnArmSize]
-
+    if(addR2){
     dfArmGISHInternalMonocen$markSizeProtein<-dfArmGISHInternalMonocen$markSize-(dfArmGISHInternalMonocen$r2*2)
-
+    }
     dfArmGISHInternalMonocen$markDistCen <- 0
 
 
@@ -41,7 +43,8 @@ markDistCenGISHfix<-function(dfArmGISHInternalMonocen,dfChrSizeInternal
 
     } # if cen
 
+    if(addR2){
     dfArmGISHInternalMonocen$markDistCenProtein <- dfArmGISHInternalMonocen$markDistCen + dfArmGISHInternalMonocen$r2
-
+    }
     return(dfArmGISHInternalMonocen)
 }

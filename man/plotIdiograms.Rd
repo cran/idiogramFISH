@@ -3,193 +3,56 @@
 \name{plotIdiograms}
 \alias{plotIdiograms}
 \title{FUNCTION to plot idiograms of karyotypes with and without centromere}
-\usage{
-plotIdiograms(
-  dfChrSize,
-  defaultFontFamily,
-  revOTUs = FALSE,
-  karHeight = 2,
-  karHeiSpace = 2.5,
-  karSepar = TRUE,
-  amoSepar = 10,
-  addMissingOTUAfter = NA,
-  addMissingOTUBefore = NA,
-  missOTUspacings = 0,
-  moveKarHor,
-  moveAllKarValueHor,
-  moveAllKarValueY,
-  karAnchorLeft,
-  karAnchorRight,
-  anchor,
-  anchorLineLty = 1,
-  anchorText = "",
-  anchorTextMParental,
-  anchorTextMoveX = 0.5,
-  anchorTextMoveY = 1,
-  anchorTextMoveParenX = 0,
-  anchorTextMoveParenY = 0,
-  anchorVsizeF = 0.5,
-  pchAnchor = 23,
-  moveAnchorV = 0,
-  moveAnchorH = 0,
-  mkhValue = 0.5,
-  n = 50,
-  markN = 25,
-  notes,
-  leftNotes,
-  leftNotesUp,
-  notesTextSize = 0.4,
-  notesLeft,
-  notesPosX = 0.5,
-  notesPosY = 0,
-  leftNotesPosX = 0.5,
-  leftNotesPosY = 0,
-  leftNotesUpPosY = 0,
-  leftNoteFont = 1,
-  leftNoteFontUp = 1,
-  noteFont = 1,
-  parseTypes = TRUE,
-  parseStr2lang = FALSE,
-  propWidth = FALSE,
-  MbThreshold = 10000,
-  threshold = 35,
-  MbUnit = "Mb",
-  yTitle = "µm",
-  specialyTitle = "cM",
-  specialOTUNames = "",
-  addOTUName = TRUE,
-  OTUTextSize = 1,
-  OTUfont,
-  OTUfamily,
-  OTUasNote = FALSE,
-  OTUasLeftNote = FALSE,
-  orderChr = "size",
-  chrId = "original",
-  classMbName = "Pm.",
-  classcMName = "L.G.",
-  classChrName = "Chr.",
-  classChrNameUp = "Type",
-  classGroupName = "",
-  chrNameUp = FALSE,
-  chrIdPatternRem,
-  indexIdTextSize = 1,
-  distTextChr = 1,
-  groupUp = FALSE,
-  groupName = TRUE,
-  groupSepar = 0.5,
-  chromatids = TRUE,
-  arrowsBothChrt = TRUE,
-  holocenNotAsChromatids = FALSE,
-  excHoloFrArrToSide = FALSE,
-  xModifier = 12,
-  xModMonoHoloRate,
-  chrWidth = 0.5,
-  chrSpacing = 0.5,
-  specialChrWidth = 0.3,
-  specialChrSpacing = 0.7,
-  chrColor = "gray",
-  chrBorderColor,
-  centromereSize = NA,
-  cenColor,
-  fixCenBorder = NULL,
-  gishCenBorder,
-  hideCenLines = 1.75,
-  roundedCen,
-  cenFormat = "rounded",
-  cenFactor = 1,
-  squareness = 4,
-  lwd.chr = 0.5,
-  lwd.cM,
-  lwd.marks,
-  dfMarkPos,
-  dfCenMarks,
-  defaultStyleMark = "square",
-  markDistType = "beg",
-  protruding = 0.2,
-  startPos = 0,
-  pMarkFac = 0.25,
-  origin = "b",
-  efZero = 1e-05,
-  cMBeginCenter = FALSE,
-  arrowhead = 0.3,
-  shrinkArrow = 0.3333,
-  arrowheadWidthShrink = 0.1,
-  arrowsToSide = TRUE,
-  useOneDot = FALSE,
-  dotsAsOval = FALSE,
-  dfMarkColor,
-  mycolors,
-  borderOfWhiteMarks = TRUE,
-  colorBorderMark,
-  lwd.mimicCen,
-  defCenStyleCol,
-  pattern = "",
-  legend = "aside",
-  remSimiMarkLeg = TRUE,
-  bannedMarkName,
-  bMarkNameAside = FALSE,
-  forbiddenMark,
-  legendWidth = 1.7,
-  legendHeight = NA,
-  markLabelSize = 1,
-  markLabelSpacer = 1,
-  legendYcoord = 0,
-  markNewLine = NA,
-  mylheight = 0.7,
-  chrSize = FALSE,
-  nsmall = 1,
-  chrSizeMbp = FALSE,
-  markPer = "",
-  showMarkPos = FALSE,
-  bToRemove = "",
-  perAsFraction = FALSE,
-  chrIndex = "both",
-  morpho = "both",
-  nameChrIndexPos = 2,
-  karIndex = TRUE,
-  karIndexPos = 0.5,
-  ruler = TRUE,
-  useMinorTicks = FALSE,
-  miniTickFactor = 10,
-  rulerPos = 0,
-  ruler.tck = -0.02,
-  rulerNumberPos = 0.5,
-  rulerNumberSize = 1,
-  rulerInterval,
-  rulerIntervalcM,
-  rulerIntervalMb,
-  ceilingFactor = 0,
-  xPosRulerTitle = 2.6,
-  yPosRulerTitle = 0,
-  rulerTitleSize = 1,
-  xlimLeftMod = 1,
-  xlimRightMod = 2,
-  ylimBotMod = 0.2,
-  ylimTopMod = 0.2,
-  callPlot = TRUE,
-  asp = 1,
-  circularPlot = FALSE,
-  verticalPlot = TRUE,
-  karSpaceHor = 0,
-  shrinkFactor = 0.9,
-  separFactor = 1.5,
-  labelSpacing = 0.7,
-  labelOutwards = FALSE,
-  chrLabelSpacing = 0.5,
-  radius = 0.5,
-  rotation = 0.5,
-  circleCenter = 1,
-  circleCenterY = 1,
-  OTUlabelSpacing = 0.3,
-  OTUsrt = 0,
-  OTUplacing = "first",
-  OTULabelSpacerx = 0,
-  OTULabelSpacery = 0,
-  OTUcentered = TRUE,
-  OTUjustif = 0,
-  OTUlegendHeight = NA,
-  roundness,
-  ...
+\usage{ plotIdiograms( dfChrSize, defaultFontFamily, revOTUs = FALSE,
+ karHeight = 2, karHeiSpace = 2.5, karSepar = TRUE, amoSepar = 10,
+ addMissingOTUAfter = NA, addMissingOTUBefore = NA, missOTUspacings = 0,
+ moveKarHor = "", moveAllKarValueHor = 0, moveAllKarValueY = 0,
+ karAnchorLeft = "", karAnchorRight = "", anchor = FALSE, anchorLineLty = 1,
+ anchorText = "", anchorTextMParental, anchorTextMoveX = 0.5,
+ anchorTextMoveY = 1, anchorTextMoveParenX = 0, anchorTextMoveParenY = 0,
+ anchorVsizeF = 0.5, pchAnchor = 23, moveAnchorV = 0, moveAnchorH = 0,
+ mkhValue = 0.5, n = 50, markN = 25, notes, leftNotes, leftNotesUp,
+ notesTextSize = 1, leftNotesTextSize = 1, leftNotesUpTextSize = 1, notesLeft,
+ notesPosX = 0.5, notesPosY = 0, leftNotesPosX = 0.5, leftNotesPosY = 0,
+ leftNotesUpPosX = 0.5, leftNotesUpPosY = 0, noteFont = 1, leftNoteFont = 1,
+ leftNoteFontUp = 1, parseTypes = TRUE, parseStr2lang = FALSE,
+ propWidth = FALSE, MbThreshold = 10000, threshold = 35, MbUnit = "Mb",
+ yTitle = "µm", specialyTitle = "cM", specialOTUNames = "", addOTUName = TRUE,
+ OTUTextSize = 1, OTUfont, OTUfamily = "", OTUasNote = FALSE,
+ OTUasLeftNote = FALSE, orderChr = "size", chrId = "original",
+ classMbName = "Pm.", classcMName = "L.G.", classChrName = "Chr.",
+ classChrNameUp = "Type", classGroupName = "", chrNameUp = FALSE,
+ chrIdPatternRem, indexIdTextSize = 1, distTextChr = 1, groupUp = FALSE,
+ groupName = TRUE, groupSepar = 0.5, chromatids = TRUE, arrowsBothChrt = TRUE,
+ holocenNotAsChromatids = FALSE, excHoloFrArrToSide = FALSE, xModifier = 12,
+ xModMonoHoloRate = 1, chrWidth = 0.5, chrSpacing = 0.5, specialChrWidth = 0.3,
+ specialChrSpacing = 0.7, chrColor = "gray", chrBorderColor, centromereSize = 0,
+ autoCenSize = TRUE, cenColor, fixCenBorder = NULL, gishCenBorder = FALSE,
+ hideCenLines = 1.75, roundedCen, cenFormat = "rounded", cenFactor = 1,
+ squareness = 4, lwd.chr = 0.5, lwd.cM, lwd.marks = 99, dfMarkPos, dfCenMarks,
+ defaultStyleMark = "square", markDistType = "beg", protruding = 0.2,
+ startPos = 0, pMarkFac = 0.25, origin = "b", efZero = 1e-05,
+ cMBeginCenter = FALSE, arrowhead = 0.3, shrinkArrow = 0.3333,
+ arrowheadWidthShrink = 0.1, arrowsToSide = TRUE, useOneDot = FALSE,
+ dotsAsOval = FALSE, dfMarkColor, mycolors, borderOfWhiteMarks = TRUE,
+ colorBorderMark = "", lwd.mimicCen, defCenStyleCol, pattern = "",
+ legend = "aside", remSimiMarkLeg = TRUE, bannedMarkName,
+ bMarkNameAside = FALSE, forbiddenMark, legendWidth = 1.7, legendHeight = NA,
+ markLabelSize = 1, markLabelSpacer = 1, legendYcoord = 0, markNewLine = NA,
+ mylheight = 0.7, chrSize = FALSE, nsmall = 1, chrSizeMbp = FALSE, markPer = "",
+ showMarkPos = FALSE, bToRemove = "", perAsFraction = FALSE, chrIndex = "both",
+ morpho = "both", nameChrIndexPos = 2, karIndex = TRUE, karIndexPos = 0.5,
+ ruler = TRUE, useMinorTicks = FALSE, miniTickFactor = 10, rulerPos = 0,
+ ruler.tck = -0.02, rulerNumberPos = 0.5, rulerNumberSize = 1,
+ rulerInterval = 0, rulerIntervalcM = 0, rulerIntervalMb = 0, ceilingFactor = 0,
+ xPosRulerTitle = 2.6, yPosRulerTitle = 0, rulerTitleSize = 1, xlimLeftMod = 1,
+ xlimRightMod = 2, ylimBotMod = 0.2, ylimTopMod = 0.2, callPlot = TRUE, asp = 1,
+ circularPlot = FALSE, verticalPlot = TRUE, karSpaceHor = 0, shrinkFactor = 0.9,
+ separFactor = 1.5, labelSpacing = 0.7, labelOutwards = FALSE,
+ chrLabelSpacing = 0.5, radius = 0.5, rotation = 0.5, circleCenter = 1,
+ circleCenterY = 1, OTUlabelSpacing = 0.3, OTUsrt = 0, OTUplacing = "first",
+ OTULabelSpacerx = 0, OTULabelSpacery = 0, OTUcentered = TRUE, OTUjustif = 0,
+ OTUlegendHeight = NA, roundness, ... 
 )
 }
 \arguments{
@@ -267,6 +130,10 @@ of \code{karAnchorLeft, karAnchorRight} when \code{verticalPlot=FALSE}}
 
 \item{notesTextSize}{numeric, font size of notes, see \code{notes}}
 
+\item{leftNotesTextSize}{numeric, font size of notes, see \code{leftNotes}}
+
+\item{leftNotesUpTextSize}{numeric, font size of notes, see \code{leftNotesUp}}
+
 \item{notesLeft}{deprecated, use a data.frame for \code{leftNotes}}
 
 \item{notesPosX}{numeric, move right notes to the right or left (x axis)}
@@ -277,13 +144,15 @@ of \code{karAnchorLeft, karAnchorRight} when \code{verticalPlot=FALSE}}
 
 \item{leftNotesPosY}{numeric, move left notes (\code{leftNotes}) down or up (y axis)}
 
+\item{leftNotesUpPosX}{numeric, move up left notes to the right or left (x axis)}
+
 \item{leftNotesUpPosY}{numeric, move up left notes (\code{leftNotesUp}) down or up (y axis)}
+
+\item{noteFont, }{numeric  \code{1} for normal,  \code{2} for bold,  \code{3} for italics,  \code{4} for bold-italics. See \code{notes}}
 
 \item{leftNoteFont, }{numeric  \code{1} for normal,  \code{2} for bold,  \code{3} for italics,  \code{4} for bold-italics. See \code{leftNotes}}
 
 \item{leftNoteFontUp, }{numeric  \code{1} for normal,  \code{2} for bold,  \code{3} for italics,  \code{4} for bold-italics. See \code{leftNotesUp}}
-
-\item{noteFont, }{numeric  \code{1} for normal,  \code{2} for bold,  \code{3} for italics,  \code{4} for bold-italics. See \code{notes}}
 
 \item{parseTypes, }{boolean, parse in \code{notes} the \emph{Citrus} chr. types names. Creates subindex pos. for FL. Defaults to \code{TRUE}. Incompatible with \code{parseStr2lang}}
 
@@ -372,7 +241,9 @@ also affects vertical separation of indices. Defaults to \code{1}}
 
 \item{chrBorderColor}{character, color for border of chromosomes, defaults to \code{chrColor}}
 
-\item{centromereSize}{numeric, optional, this establishes the apparent size of cen. in the plot in \eqn{\mu}m. Automatic when \code{NA}. Default: \code{NA}}
+\item{centromereSize}{numeric, optional, this establishes the apparent size of cen. in the plot in \eqn{\mu}m. See \code{autoCenSize=TRUE}. Default: \code{0}. Use with \code{autoCenSize=FALSE}}
+
+\item{autoCenSize}{boolean, when \code{TRUE} ignores \code{centromereSize}}
 
 \item{cenColor}{character, color for centromeres, if GISH use \code{NULL} or \code{NA}. Defaults to \code{chrColor}}
 
@@ -458,7 +329,7 @@ columns: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: 
 \item{legend}{character, \code{""} for no legend; \code{"inline"} prints labels near
 chromosomes; \code{"aside"} prints legend to the right of karyotypes (default). See \code{markLabelSpacer}}
 
-\item{remSimiMarkLeg}{boolean, when \code{legend="aside"}, if you use \code{pattern}, you can have several marks with same name. When \code{TRUE} this remove this pseudoduplicates from legend. Be sure that this pseudoduplicates have the same color, otherwise you should use \code{TRUE} (default).}
+\item{remSimiMarkLeg}{boolean, when \code{legend="aside"}, if you use \code{pattern}, you can have several marks with same name. When \code{TRUE} this remove this pseudoduplicates from legend. Be sure that this pseudoduplicates have the same color, otherwise you should use \code{FALSE}.}
 
 \item{bannedMarkName}{character, character string or vector with mark names to be removed from plot. Not the marks but the labels. Except when \code{bMarkNameAside} is used.}
 
@@ -488,11 +359,11 @@ rightmost chr. to legend. Defaults to \code{1}}
 
 \item{chrSizeMbp}{boolean, when \code{TRUE} adds total Mbp chr. size to each chr. provided, there is a \code{Mbp} column in \code{dfChrSize} data.frame. Defaults to \code{FALSE}. If data in columns \code{shortArmSize}, or col. \code{chrSize} is in millions ("Mbp"). Use \code{chrSize=TRUE} not this one (not column \code{Mbp}, you don't need this).}
 
-\item{markPer}{character, name of mark to calculate \% of mark in chr. and add it to plot. See \code{perAsFraction}}
+\item{markPer}{character vector, name of mark(s) to calculate \% of mark in chr. and add it to plot. See \code{perAsFraction}}
 
 \item{showMarkPos}{boolean, adds position of marks under karyotype (fraction 0-1) when \code{TRUE}. Defaults to \code{FALSE}}
 
-\item{bToRemove, }{character, bands to remove from calc. of pos.}
+\item{bToRemove, }{character vector, bands to remove from calc. of pos., when \code{showMarkPos = TRUE}}
 
 \item{perAsFraction}{boolean, when \code{TRUE} \% is shown as fraction. Defaults to \code{FALSE}. See \code{markPer}}
 
@@ -506,7 +377,7 @@ rightmost chr. to legend. Defaults to \code{1}}
 centromere pos.) and A2 (interchromosomal asymmetry, variation among
 chromosome sizes)}
 
-\item{karIndexPos}{numeric, move karyotype index}
+\item{karIndexPos}{numeric, move karyotype index. Defaults to \code{0.5}}
 
 \item{ruler}{boolean, display ruler to the left of karyotype, when \code{FALSE} no ruler}
 
@@ -524,11 +395,11 @@ argument of \code{axis} R plot}
 
 \item{rulerNumberSize}{numeric, size of number's font in ruler. Defaults to \code{1}}
 
-\item{rulerInterval}{numeric, intervals in ruler. No default, automatic. Introduced in 1.13}
+\item{rulerInterval}{numeric, intervals in ruler. No default, automatic.}
 
 \item{rulerIntervalcM}{numeric, intervals in ruler of OTU in \code{specialOTUNames}. No default. Introduced in 1.13}
 
-\item{rulerIntervalMb}{numeric, intervals in ruler of OTU with data in Mb (>\code{MbThreshold}) and absent from \code{specialOTUNames}. No default. Introduced in 1.13}
+\item{rulerIntervalMb}{numeric, intervals in ruler of OTU with data in Mb (>\code{MbThreshold}) and absent from \code{specialOTUNames}. No default. Usa data in millions}
 
 \item{ceilingFactor}{numeric, affects number of decimals for ceiling. Affects max. value of ruler. Defaults to \code{0}. When \code{threshold} is greater than \code{35} this may have to be negative. Introduced in 1.13}
 

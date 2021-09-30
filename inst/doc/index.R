@@ -60,6 +60,35 @@ require(idiogramFISH)
 
 knitr::opts_chunk$set(eval = TRUE)
 
+pasteLinks <- function(link){
+cat(paste0("
+</br>
+Jupyter interactive version:
+<br>
+</br>
+<table>
+<tr>
+<td>
+[<img src='../man/figures/colab-badge.svg'>](https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/"
+,note
+,"){target='_blank'}&emsp;
+</td>
+<td>
+&emsp;&emsp;<img src='../man/figures/GitHub-Mark-120px-plus.png' height=25 width=25>&emsp;[Github](https://github.com/ferroao/IFjupyter/blob/main/"
+,note
+,"){target='_blank'}
+</td>
+<td>
+&emsp;&emsp;[Raw](https://github.com/ferroao/IFjupyter/raw/main/"
+,note
+,"){target='_blank'}
+</td>
+</tr>
+</table>
+</br>
+") )
+}
+
 ## ---- echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"----
 if (requireNamespace("RCurl", quietly = TRUE)  ) {
 # version of manual
@@ -332,8 +361,8 @@ cat("For Shiny App in the cloud availability, please check this chapter in the o
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#working-online){target='_blank'}")
 
 ## ---- results="asis", eval=!renderLink, echo=FALSE----------------------------
-#  cat("Shiny App cloud app availability:  \n")
-#  cat("None")
+#  cat("Shiny App in the cloud availability:  \n")
+#  cat("[Google cloud](https://idiogramfishshiny-rwjey56xuq-uc.a.run.app){target='_blank'}")
 
 ## ---- echo=F,  results="asis", eval=T-----------------------------------------
 jupyter_path <- "../man/figures/colab2.jpg"
@@ -355,6 +384,22 @@ if(file.exists(chapterFile_first)){
 ## ---- echo=TRUE, eval=FALSE, message=FALSE------------------------------------
 #  library(idiogramFISH)
 #  runBoard()
+
+## ---- echo=F------------------------------------------------------------------
+chapterFile4<- "../chaptersBLOCK/12-human.Rmd"
+if(file.exists(chapterFile4)){
+  renderLink<-FALSE
+} else {
+  renderLink<-TRUE
+}
+
+## ---- results="asis", eval=renderLink, echo=FALSE-----------------------------
+cat("For Shiny App in the cloud availability, please check this chapter in the online version   \n")
+cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#shiny-app){target='_blank'}")
+
+## ---- results="asis", eval=!renderLink, echo=FALSE----------------------------
+#  cat("Shiny App in the cloud availability:  \n")
+#  cat("[Google cloud](https://idiogramfishshiny-rwjey56xuq-uc.a.run.app){target='_blank'}")
 
 ## ---- echo=F,  results="asis", eval=F-----------------------------------------
 #  shiny_path <- "../man/figures/shiny.jpg"
@@ -379,6 +424,10 @@ if(file.exists(chapterFile_minimal)){
   child_docs_minimal <- ""
 }
 
+## ---- echo=FALSE, results="asis", message=FALSE, eval=TRUE, comment=NA--------
+note<-"03-minimal.ipynb"
+pasteLinks(note)
+
 ## ---- echo=TRUE, results="hide", message=FALSE, eval=FALSE--------------------
 #  library(idiogramFISH)
 #  
@@ -393,7 +442,7 @@ if(file.exists(chapterFile_minimal)){
 #  # png("dfOfChrSize.png", width=500, height=400)
 #  plotIdiograms(dfChrSize  =dfOfChrSize,  # data.frame of chr. size
 #                dfMarkColor=dfMarkColor,  # d.f of mark style <- Optional
-#                dfMarkPos=dfOfMarks2,     # df of mark positions (includes cen. marks)
+#                dfMarkPos  =dfOfMarks2,   # d.f of mark positions (includes cen. marks)
 #  
 #                karHeight=5,              # kar. height
 #                chrWidth = 1.2,           # chr. width
@@ -566,7 +615,7 @@ monoholoMarks <- plyr::rbind.fill(dfOfMarks2,dfMarkPosHolo)
 #                chrSize = TRUE,            # show chr. size under chr.
 #  
 #                squareness = 4,            # vertices squareness
-#                roundedCen = FALSE,        # triangular cen.
+#                cenFormat = "triangle",    # triangular cen.
 #                addOTUName = TRUE,         # add OTU names
 #                OTUTextSize = .7,          # font size of OTU
 #                distTextChr = .5,          # separ. among chr. and text and among chr. name and indices
@@ -617,7 +666,7 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               chrSize = TRUE,            # show chr. size under chr.
               
               squareness = 4,            # vertices squareness
-              roundedCen = FALSE,        # triangular cen.
+              cenFormat = "triangle",    # triangular cen.
               addOTUName = TRUE,         # add OTU names
               OTUTextSize = .7,          # font size of OTU
               distTextChr = .5,          # separ. among chr. and text and among chr. name and indices
@@ -673,7 +722,7 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               dfMarkPos  = monoholoMarks,# df of mark positions, includes cen. marks
               
               squareness = 4,            # vertices squareness
-              roundedCen = FALSE,        # triangular cen.
+              cenFormat = "triangle",    # triangular cen.
               addOTUName = TRUE,         # add OTU names
               distTextChr = .5,          # separ. among chr. and text and among chr. name and indices
               
@@ -724,6 +773,10 @@ cat("# Plotting chromosomes")
 ## ---- results="asis", eval=!childExists_plotting, echo=FALSE------------------
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#plotting-chromosomes)")
 
+## ---- echo=FALSE, results="asis", message=FALSE, eval=!childExists_plotting, comment=NA----
+note<-"04-plotting.ipynb"
+pasteLinks(note)
+
 ## ---- echo=F------------------------------------------------------------------
 chapterFile_multiple<- "../chaptersBLOCK/05-multiple.Rmd"
 if(file.exists(chapterFile_multiple)){
@@ -739,6 +792,10 @@ cat("# Several OTUs")
 
 ## ---- results="asis", eval=!childExists_multiple, echo=FALSE------------------
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#multiple-otus)")
+
+## ---- echo=FALSE, results="asis", message=FALSE, eval=!childExists_multiple, comment=NA----
+note<-"05-multiple.ipynb"
+pasteLinks(note)
 
 ## ---- echo=F------------------------------------------------------------------
 chapterFile_units<- "../chaptersBLOCK/06-units.Rmd"
@@ -756,6 +813,10 @@ cat("# Changing Units")
 ## ---- results="asis", eval=!childExists_units, echo=FALSE---------------------
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#changing-units)")
 
+## ---- echo=FALSE, results="asis", message=FALSE, eval=!childExists_units, comment=NA----
+note<-"06-units.ipynb"
+pasteLinks(note)
+
 ## ---- echo=F------------------------------------------------------------------
 chapterFile0<- "../chaptersBLOCK/07-gish.Rmd"
 if(file.exists(chapterFile0)){
@@ -771,6 +832,10 @@ cat("# GISH")
 
 ## ---- results="asis", eval=!childExists0, echo=FALSE--------------------------
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#gish)")
+
+## ---- echo=FALSE, results="asis", message=FALSE, eval=!childExists0, comment=NA----
+note<-"07-gish.ipynb"
+pasteLinks(note)
 
 ## ---- echo=F------------------------------------------------------------------
 chapterFile1<- "../chaptersBLOCK/08-groups.Rmd"
@@ -788,6 +853,10 @@ cat("# Using groups")
 ## ---- results="asis", eval=!childExists1, echo=FALSE--------------------------
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#groups)")
 
+## ---- echo=FALSE, results="asis", message=FALSE, eval=!childExists1, comment=NA----
+note<-"08-groups.ipynb"
+pasteLinks(note)
+
 ## ---- echo=F------------------------------------------------------------------
 chapterFile2<- "../chaptersBLOCK/09-circular.Rmd"
 if(file.exists(chapterFile2)){
@@ -803,6 +872,10 @@ cat("# Circular plots")
 
 ## ---- results="asis", eval=!childExists2, echo=FALSE--------------------------
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#circular-plots)")
+
+## ---- echo=FALSE, results="asis", message=FALSE, eval=!childExists2, comment=NA----
+note<-"09-circular.ipynb"
+pasteLinks(note)
 
 ## ---- echo=F------------------------------------------------------------------
 chapterFile3<- "../chaptersBLOCK/10-phylogeny.Rmd"
@@ -820,6 +893,10 @@ cat("# Plotting alongside phylogeny")
 ## ---- results="asis", eval=!childExists3, echo=FALSE--------------------------
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#plotting-alongside-phylogeny)")
 
+## ---- echo=FALSE, results="asis", message=FALSE, eval=!childExists3, comment=NA----
+note<-"10-phylogeny.ipynb"
+pasteLinks(note)
+
 ## ---- echo=F------------------------------------------------------------------
 chapterFile<- "../chaptersBLOCK/11-citrushelp.Rmd"
 if(file.exists(chapterFile)){
@@ -836,6 +913,10 @@ cat("# *Citrus*")
 ## ---- results="asis", eval=!childExists, echo=FALSE---------------------------
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#citrus)")
 
+## ---- echo=FALSE, results="asis", message=FALSE, eval=!childExists, comment=NA----
+note<-"11-citrushelp.ipynb"
+pasteLinks(note)
+
 ## ---- echo=F------------------------------------------------------------------
 chapterFile4<- "../chaptersBLOCK/12-human.Rmd"
 if(file.exists(chapterFile4)){
@@ -851,6 +932,10 @@ cat("# Human karyotype")
 
 ## ---- results="asis", eval=!childExists4, echo=FALSE--------------------------
 cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#human-karyotype)")
+
+## ---- echo=FALSE, results="asis", message=FALSE, eval=!childExists4, comment=NA----
+note<-"12-human.ipynb"
+pasteLinks(note)
 
 ## ---- echo=F------------------------------------------------------------------
 chapterFile_param<- "../chaptersBLOCK/13-functions.Rmd"

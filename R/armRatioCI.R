@@ -1,13 +1,13 @@
 #' @name armRatioCI
 #' @aliases swapChrRegionDfSizeAndMarks
 #' @title FUNCTIONS armRatioCI and swapChrRegionDfSizeAndMarks.
-#' @description armRatioCI: reads a data.frame and produces AR (radius), CI,
-#' Guerra and Levan
-#' classifications.
+#' @description armRatioCI: reads a data.frame and produces AR (arm ratio), CI
+#' (centromeric index) , Guerra and Levan classifications.
 #' @description swapChrRegionDfSizeAndMarks: reads data.frames to swap arms
 #'
 #' @param dfChrSize name of data.frame with columns: shortArmSize, longArmSize
 #' @param dfMarkPos name of data.frame of marks
+#' @param rnumeric boolean, returns only numeric AR, CI
 #' @param chrNamesToSwap name of chr. names to swap arms
 #'
 #' @keywords data.frame size arm
@@ -25,25 +25,38 @@
 #' @rdname armRatioCI
 #' @export
 #'
-armRatioCI<- function(dfChrSize){
-  # message(crayon::black("\nCalculating chromosome indexes\n") )
+armRatioCI <- function(dfChrSize, rnumeric=FALSE){
+  dfChrSize<-as.data.frame(dfChrSize)
+  # message("\nCalculating chromosome indexes\n")
+  if(!"shortArmSize" %in% colnames(dfChrSize)) {
+    message("\nSorry, shortArmSize column, mandatory\n")
+    return(data.frame())
+  }
+  if(!"longArmSize" %in% colnames(dfChrSize)) {
+    message("\nSorry, longArmSize column, mandatory\n")
+    return(data.frame())
+  }
+
   dfChrSize$smallest<-pmin(dfChrSize$shortArmSize, dfChrSize$longArmSize)
   dfChrSize$largest <-pmax(dfChrSize$shortArmSize, dfChrSize$longArmSize)
-  dfChrSize$chrSize<-dfChrSize$smallest+dfChrSize$largest
+  dfChrSize$chrSize <-dfChrSize$smallest+dfChrSize$largest
+  dfChrSize<-dfChrSize[which(!is.na(dfChrSize$chrSize)),]
 
   if(!identical(dfChrSize$smallest,dfChrSize$shortArmSize) ){
-    dfChrSize$diffSmallShort<-dfChrSize$shortArmSize-dfChrSize$smallest
+    dfChrSize$diffSmallShort <- dfChrSize$shortArmSize-dfChrSize$smallest
     message(crayon::red("\nERROR in short/long arm classif. It will not be fixed\nChr. (cen) indexes will not be calculated") )
     attr(dfChrSize, "indexStatus")<-"failure"
     return(dfChrSize)
   }
 
-  if("OTU" %in% colnames(dfChrSize)){message(crayon::black(paste("\nCalculating chromosome indexes in",unique(dfChrSize$OTU) ))) }
+  if("OTU" %in% colnames(dfChrSize)){message(paste("\nCalculating chromosome indexes in",unique(dfChrSize$OTU) )
+                                             ) }
 
   dfChrSize$AR<-format(round(dfChrSize$largest/dfChrSize$smallest,1),nsmall = 1)
   dfChrSize$CI<-format(round(dfChrSize$smallest*100/(dfChrSize$longArmSize+dfChrSize$shortArmSize),1),nsmall = 1)
   dfChrSize$ARnum<-as.numeric(dfChrSize$AR)
   dfChrSize$CInum<-as.numeric(dfChrSize$CI)
+
   dfChrSize$Guerra<-ifelse(dfChrSize$ARnum<=1.49999999999,"M",
                              ifelse(dfChrSize$ARnum>=1.5 & dfChrSize$ARnum<=2.999999999, "SM",
                                     ifelse(dfChrSize$ARnum>=3, "A","" )
@@ -64,6 +77,13 @@ armRatioCI<- function(dfChrSize){
                             )
                       )
   )
+
+  if(rnumeric){
+    dfChrSize$CI<-dfChrSize$CInum
+    dfChrSize$CInum<-NULL
+    dfChrSize$AR<-dfChrSize$ARnum
+    dfChrSize$ARnum<-NULL
+  }
   attr(dfChrSize, "indexStatus")<-"success"
   return(dfChrSize)
 }

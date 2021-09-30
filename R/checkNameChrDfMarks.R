@@ -22,8 +22,8 @@
 #'
 checkNameChrDfMarks<- function(listOfdfChromSize,listOfdfMarks){
   pars <- as.character(match.call()[-1])
-  message(crayon::black(paste(("\nComparing chromosome names among data.frames:\n") ) )
-     )# message
+  message(paste(("\nComparing chromosome names among data.frames:\n") )
+          )  # message
 
   # result<-logical()
   markNames<-character()
@@ -41,14 +41,14 @@ checkNameChrDfMarks<- function(listOfdfChromSize,listOfdfMarks){
 
       if (length(which(names(listOfdfMarks)==name) )!=0 ) {
 
-        message(crayon::black(paste(c("\nComparing OTU named: ", name,"of main data.frame with correspondent data.frame ",
+        message(paste(c("\nComparing OTU named: ", name,"of main data.frame with correspondent data.frame ",
                                       pars[2],
 
                                       " "),
                                     sep=" ",
                                     collapse = " ")
         )
-        ) #m
+
 
         if (length(setdiff(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$chrName,
                            listOfdfChromSize[[which(names(listOfdfChromSize)==name)]]$chrName
@@ -72,8 +72,7 @@ checkNameChrDfMarks<- function(listOfdfChromSize,listOfdfMarks){
           listOfdfMarks[which(names(listOfdfMarks)==name)]<-NULL
               # result<-c(result,FALSE)
         } else {
-            message(crayon::black(paste("\n No divergence"))
-            )#m
+            message(paste("\n No divergence"))
 
           if(class(listOfdfMarks[[which(names(listOfdfMarks)==name)]])=="data.frame") {
             markNames   <- c(markNames,unique(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$markName) )
@@ -94,7 +93,6 @@ checkNameChrDfMarks<- function(listOfdfChromSize,listOfdfMarks){
 
   resultList<-list(listOfdfChromSize,listOfdfMarks,markNames,markSize)
   return(resultList)
-  message(crayon::black(paste("\nChecks done for ",pars[2]) )
-  )# message
+  message(paste("\nChecks done for ",pars[2]) )
 } # fun
 

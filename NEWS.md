@@ -1,11 +1,47 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 2.0.6
+
+27-09-2021
+
+-   Fixed bug of displaying pos. of bands when `showMarkPos= TRUE`
+-   Added possibility of showing several % (span) of marks, ex.
+    `markPer = c("5S","45S")`
+-   `perMark` and `posCalc` functions accept `data.frames`
+-   Added parameters: `autoCenSize`, `leftNotesUpPosX`
+-   Modified parameters: `centromereSize`, `rulerIntervalMb`
+-   function `asymmetry` better dealing with unexpected cases
+-   function `armRatioCI` better dealing with unexpected cases
+
+Shiny:
+
+-   New menu `stats` to export indices and mark stats
+-   Several parameters added
+-   Several examples added to presets
+
+Bugs:
+
+-   Better dealing with horizontal karyotypes
+
+param:
+
+-   `rulerIntervalMb`: Use data in millions
+-   `leftNotesUpPosX`: numeric, move up left notes to the right or left
+    (x axis)
+-   `autoCenSize` boolean, when `TRUE` ignores `centromereSize`
+-   `centromereSize`: Apparent size of centromeres. Requires
+    `autoCenSize = FALSE`
+-   `showBandList` in `posCalc` function to avoid adding mark names
+
 # idiogramFISH 2.0.5
 
 19-05-2021
 
+Shiny:
+
 -   New dependence install options for the shiny app `runBoard()`
+    function
 -   Better dealing with pandoc versions in shiny app
 
 # idiogramFISH 2.0.4
@@ -14,7 +50,7 @@
 
 -   Fixed bug of too many fonts (angles) when hundreds of marks for .svg
     for `labelOutwards=TRUE`
--   Some improvements for shiny app `runBoard()`
+-   jupyter notebooks for working locally or online in colab
 
 # idiogramFISH 2.0.3
 

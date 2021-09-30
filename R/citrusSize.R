@@ -1,5 +1,5 @@
 #' @name citrusSize
-#' @aliases citrusMarkPos, markOverCMA
+#' @aliases citrusMarkPos markOverCMA
 #' @title FUNCTIONS: citrusSize, citrusMarkPos, markOverCMA
 #' @description Helper function to create data.frames with
 #' chr. size and mark size data for Citrus

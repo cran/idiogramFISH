@@ -1,8 +1,14 @@
 
 values <- reactiveValues(number=0
                          , mylistAllClass="numeric"
+                         , ARCImessage=""
                          , df1=data.frame()
                          , df1Mark=data.frame()
+                         , ARCI=data.frame()
+                         , notes=data.frame()
+                         , leftNotes=data.frame()
+                         , leftNotesUp=data.frame()
+
                          , termButtonVal=0
                          , entrez_titles=NA
                          , entrez_selected=NA
@@ -21,7 +27,7 @@ values <- reactiveValues(number=0
 #
 #   first tab
 
-Current <- reactiveValues(Tab = "dfChrTab", Tab2 = "paramTab", Tab4 = "searchTab")
+Current <- reactiveValues(Tab = "dfChrTab", Tab2 = "paramTab", Tab4 = "searchTab", Tab5 = "indicesTab")
 
 #
 # first submenu, see local
