@@ -7,7 +7,7 @@
 #' chrSizes,
 #' 2. data.frame of marks, 3. mark names 4. max mark size.
 #'
-#' @param listOfdfChromSize list of data.frames, with columns: OTU (optional),
+#' @param listChrSize list of data.frames, with columns: OTU (optional),
 #' chrName, for chr.
 #'   with cen.: shortArmSize, longArmSize, for holoc.: chrSize
 #' @param listOfdfMarks list of data.frames of marks (sites): OTU (opt /
@@ -20,7 +20,7 @@
 #' @return list
 #'
 #'
-checkNameChrDfMarks<- function(listOfdfChromSize,listOfdfMarks){
+checkNameChrDfMarks<- function(listChrSize,listOfdfMarks){
   pars <- as.character(match.call()[-1])
   message(paste(("\nComparing chromosome names among data.frames:\n") )
           )  # message
@@ -29,11 +29,13 @@ checkNameChrDfMarks<- function(listOfdfChromSize,listOfdfMarks){
   markNames<-character()
   markSize <-numeric()
 
-  for (s in 1:length(listOfdfChromSize)) {
+  for (s in 1:length(listChrSize)) {
 
-    name<-names(listOfdfChromSize)[[s]]
+    divisor2  <- as.numeric(attr(listChrSize[[s]],"divisor"))
 
-    if(length(listOfdfChromSize[[s]]$chrName)!=length(unique(listOfdfChromSize[[s]]$chrName) ) ) {
+    name<-names(listChrSize)[[s]]
+
+    if(length(listChrSize[[s]]$chrName)!=length(unique(listChrSize[[s]]$chrName) ) ) {
       message(crayon::yellow(
         paste("\nWARNING Chromosome Names in data.frame",name,"duplicated - Error when d.f. of marks present")
       )) #m
@@ -51,13 +53,13 @@ checkNameChrDfMarks<- function(listOfdfChromSize,listOfdfMarks){
 
 
         if (length(setdiff(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$chrName,
-                           listOfdfChromSize[[which(names(listOfdfChromSize)==name)]]$chrName
+                           listChrSize[[which(names(listChrSize)==name)]]$chrName
                            ) # setdiff
                    )>0) {
 
               message(crayon::red(paste(c("\nERROR Divergences Chromosome Name:",
                                           setdiff(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$chrName,
-                                             listOfdfChromSize[[which(names(listOfdfChromSize)==name)]]$chrName
+                                             listChrSize[[which(names(listChrSize)==name)]]$chrName
                                           ) # setdiff
                   ), sep=" ", collapse = " " )
                 )
@@ -66,7 +68,8 @@ checkNameChrDfMarks<- function(listOfdfChromSize,listOfdfMarks){
           message(crayon::red(paste(c("\nERROR: There are chromosome Name(s) -see above - of OTU ",
                 # pars[2],
                 name
-                 ,"missing in the data.frame of chromosome sizes\n this OTU's marks will be removed"), sep=" ", collapse = " " ) )
+                 ,"missing in the data.frame of chromosome sizes\n this OTU's marks will be removed")
+                , sep=" ", collapse = " " ) )
               )#message
 
           listOfdfMarks[which(names(listOfdfMarks)==name)]<-NULL
@@ -77,9 +80,9 @@ checkNameChrDfMarks<- function(listOfdfChromSize,listOfdfMarks){
           if(class(listOfdfMarks[[which(names(listOfdfMarks)==name)]])=="data.frame") {
             markNames   <- c(markNames,unique(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$markName) )
 
-            if(length(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$markSize)>0){
+            if(length(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$markSizeOrig)>0) {
               markSize <- c(markSize
-                            , tryCatch(max(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$markSize, na.rm=TRUE)
+                            , tryCatch(max(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$markSizeOrig/divisor2, na.rm=TRUE)
                                        ,error=function(e){NA},warning=function(w){NA}
                                        )
               )
@@ -91,7 +94,7 @@ checkNameChrDfMarks<- function(listOfdfChromSize,listOfdfMarks){
     } # if chr. with mark present
   } # for
 
-  resultList<-list(listOfdfChromSize,listOfdfMarks,markNames,markSize)
+  resultList<-list(listChrSize,listOfdfMarks,markNames,markSize)
   return(resultList)
   message(paste("\nChecks done for ",pars[2]) )
 } # fun

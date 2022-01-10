@@ -7,6 +7,7 @@
 \alias{dfMarkPosHolo}
 \alias{dfAlloParentMarksHolo}
 \alias{bigdfOfMarks3Mb}
+\alias{bigdfMarkPosHolo2}
 \title{Mark Positional data - Holocen.}
 \format{
 data.frame with columns:
@@ -24,6 +25,8 @@ An object of class \code{data.frame} with 6 rows and 4 columns.
 An object of class \code{data.frame} with 13 rows and 4 columns.
 
 An object of class \code{data.frame} with 12 rows and 5 columns.
+
+An object of class \code{data.frame} with 18 rows and 6 columns.
 }
 \usage{
 bigdfMarkPosHolo
@@ -33,6 +36,8 @@ dfMarkPosHolo
 dfAlloParentMarksHolo
 
 bigdfOfMarks3Mb
+
+bigdfMarkPosHolo2
 }
 \description{
 When several OTUs, some can be monocen. and others holocen.
@@ -49,6 +54,8 @@ dfMarkPosHolo: Example data for mark position of holocentrics
 dfAlloParentMarksHolo: Example data for mark position of GISH
 
 bigdfOfMarks3Mb: Example data for mark position in Mb
+
+bigdfMarkPosHolo2: Example data for mark position
 }
 \seealso{
 \code{\link{markposDFs}}

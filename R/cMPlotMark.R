@@ -8,7 +8,7 @@
 #' @param xMark x component of polygon
 #' @param yMark y component of polygon
 #' @param y y of chr
-#' @param dfMarkColorInternal colors for marks
+#' @param dfMarkColorInt colors for marks
 #' @param listOfdfMarkPoscM list of df. of mark pos.
 #' @param lwd.cM thick of border line
 #' @param circularPlot boolean
@@ -29,17 +29,18 @@
 #' @importFrom graphics polygon text
 #'
 
-cMPlotMark<-function(bannedMarkName,xMark, yMark,y, x, dfMarkColorInternal,listOfdfMarkPoscM, lwd.cM,circularPlot,
+cMPlotMark<-function(bannedMarkName,xMark, yMark,y, x, dfMarkColorInt,listOfdfMarkPoscM, lwd.cM,circularPlot,
                      radius,circleCenter,circleCenterY,separFactor,markLabelSize,pattern,n,labelSpacing,chrWidth,
                      ylistTransChr,rotation,labelOutwards) {
 
-  if(circularPlot==FALSE) {
+
+if(circularPlot==FALSE) {
 
     lapply(1:length(xMark), function(w) mapply(function(x,y,z)
       graphics::lines(
         x=x,
         y=y,
-        col=dfMarkColorInternal$markColor[match(     z   ,dfMarkColorInternal$markName)],
+        col=dfMarkColorInt$markColor[match(     z   ,dfMarkColorInt$markName)],
         lwd=lwd.cM,
       ), # lines
     x=xMark[[w]],
@@ -47,81 +48,36 @@ cMPlotMark<-function(bannedMarkName,xMark, yMark,y, x, dfMarkColorInternal,listO
     ,z=listOfdfMarkPoscM[[w]]$markName
     ) # mapply
     ) # lapp
-} # CIRC
-  else { # circ true
+
+} else { # else circ true
 
   #
   #   x to vertical
   #
 
-  # xlistNew<-xHortoVer(xMark)
   xlistNew<-xMarkMapLeft(xMark,x) # left
 
   yMarkPer<-markMapPercM(yMark,y)
 
   ylistTransMark<-transyListMark(yMarkPer,ylistTransChr)
 
-  circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
+  circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor
+                                     ,ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
 
 
-  drawPlotMark(circleMapsMarks,dfMarkColorInternal,listOfdfMarkPoscM,lwd.cM)
+  drawPlotMark(circleMapsMarks,dfMarkColorInt,listOfdfMarkPoscM,lwd.cM)
 
-      circleMapsLabels <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,ylistTransMark,xlistNew,n,
+  circleMapsLabels <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor
+                                         ,ylistTransMark,xlistNew,n,
                                          labelSpacing,
                                          chrWidth,
-                                         rotation=rotation)
+                                         rotation=rotation
+                                     ,label=FALSE)
 
-      circLabelMark(bannedMarkName,circleMapsLabels,listOfdfMarkPoscM,markLabelSize,pattern,labelOutwards,
-                    circleCenter,circleCenterY,iscM=FALSE,adj=0.5)
-  }
-} # fun
-
-
-cMLeftPlotMark<-function(bannedMarkName,xMark, yMark,y,x, dfMarkColorInternal,listOfdfMarkPoscM, lwd.cM,circularPlot,
-                     radius,circleCenter,circleCenterY,separFactor,markLabelSize,pattern,n,labelSpacing,chrWidth,
-                     ylistTransChr,rotation,labelOutwards) {
-  if(circularPlot==FALSE) {
-
-    lapply(1:length(xMark), function(w) mapply(function(x,y,z)
-      graphics::lines(
-        x=x,
-        y=y,
-        col=dfMarkColorInternal$markColor[match(     z   ,dfMarkColorInternal$markName)],
-        lwd=lwd.cM,
-      ), # lines
-      x=xMark[[w]],
-      y=yMark[[w]]
-      ,z=listOfdfMarkPoscM[[w]]$markName
-    ) # mapply
-    ) # lapp
-  } # CIRC
-  else { # circ true
-
-    #
-    #   x to vertical
-    #
-
-    # xlistNew<-xHortoVer(xMark)
-    xlistNew<-xMarkMapLeft(xMark,x) # left
-
-    yMarkPer<-markMapPercM(yMark,y)
-
-    ylistTransMark<-transyListMark(yMarkPer,ylistTransChr)
-
-    circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
-
-
-    drawPlotMark(circleMapsMarks,dfMarkColorInternal,listOfdfMarkPoscM,lwd.cM)
-
-    circleMapsLabels <- applyMapCircle(radius,circleCenter,circleCenterY,
-                                       separFactor, # left
-                                       ylistTransMark,xlistNew,n,
-                                       -labelSpacing  , # left
-                                       chrWidth,      # left
-                                       rotation=rotation)
-
-    circLabelMark(bannedMarkName,circleMapsLabels,listOfdfMarkPoscM,markLabelSize,pattern,
-                  labelOutwards,circleCenter,circleCenterY,iscMLeft=FALSE,adj=0.5)
+  circLabelMark(bannedMarkName,circleMapsLabels,listOfdfMarkPoscM,markLabelSize,pattern,labelOutwards,
+                    circleCenter,circleCenterY
+                    ,iscM=FALSE
+                    ,adj=0.5)
   }
 } # fun
 

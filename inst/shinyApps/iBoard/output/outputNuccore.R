@@ -88,6 +88,7 @@ output$chooseFileUI <- renderUI({
 })
 
 output$nucFileUI <- renderUI({
+
   input$modifyMarksButton
   input$nucPresetButton
   fileInput("nucFile", "3a. Choose:",
@@ -98,7 +99,8 @@ output$nucFileUI <- renderUI({
 
 output$titleSelectUI <- renderUI({
 
-  if(length(input$termButton==0))
+  if(length(input$termButton==0) )
+
     if(input$termButton==0) {
       return("Press 2. Search")
     } else {
@@ -232,7 +234,9 @@ output$workflowUI <- renderUI({
 
 output$presetUI <- renderUI({
   wellPanel(
-    radioButtons("nucPreset","9. Circular plots: (nuc.)", inline = FALSE
+    radioButtons("nucPreset"
+                 ,"9. Circular plots: (nuc.)"
+                 , inline = FALSE
     ,choices = c(
       "9.3 plasmid preset"=9
       ,"9.4 bac. chrom. preset"=10

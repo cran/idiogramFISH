@@ -31,7 +31,7 @@ An object of class \code{data.frame} with 395 rows and 5 columns.
 
 An object of class \code{data.frame} with 43 rows and 6 columns.
 
-An object of class \code{data.frame} with 15 rows and 4 columns.
+An object of class \code{data.frame} with 16 rows and 4 columns.
 
 An object of class \code{data.frame} with 18 rows and 7 columns.
 }

@@ -12,7 +12,7 @@ fixChrNameDupDF(list1dfChromSize, mybooleanChrName)
 \item{mybooleanChrName}{test for absence of marks}
 }
 \value{
-Returns a graphics element
+list
 }
 \description{
 It returns a list of data.frames

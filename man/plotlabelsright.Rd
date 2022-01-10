@@ -10,7 +10,7 @@ plotlabelsright(
   y,
   markLabelSpacer,
   chrWidth,
-  dfMarkColorInternal,
+  dfMarkColorInt,
   allMarkMaxSize,
   normalizeToOne,
   markLabelSize,
@@ -32,7 +32,7 @@ plotlabelsright(
 
 \item{chrWidth}{chr widht}
 
-\item{dfMarkColorInternal}{data.frame of mark characteristics}
+\item{dfMarkColorInt}{data.frame of mark characteristics}
 
 \item{allMarkMaxSize}{maximum size of marks}
 

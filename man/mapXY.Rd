@@ -5,7 +5,20 @@
 \title{mapXY
 This is an internal function that creates coords for chr. or arms or marks}
 \usage{
-mapXY(start, end, y, yMod, x, yfactor, r2, pts_1, pts_2, pts_3, pts_4)
+mapXY(
+  start,
+  end,
+  y,
+  yMod,
+  x,
+  yfactor,
+  r2,
+  pts_1,
+  pts_2,
+  pts_3,
+  pts_4,
+  chrt = FALSE
+)
 }
 \arguments{
 \item{start}{1st index}

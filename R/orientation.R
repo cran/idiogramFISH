@@ -42,7 +42,7 @@
 #' @param circleMapsOTUname list, resulting from applyMapCircle
 #' @param colBorderCr character, border color
 #' @param colCr character color of mark
-#' @param dfMarkColorInternal data.frame of mark charact.
+#' @param dfMarkColorInt data.frame of mark charact.
 #' @param diffXRounded numeric, difference of chr. width to rounded corner
 #' @param firstXchrEach list, first element from xlistNewChr
 #' @param firstYchrEach list, first element from xlistNewChr
@@ -143,10 +143,8 @@ yVertoHor<-function(y,monocenNames){
 
 xHortoVer<-function(xlist,shrink=0){
   xlistNew<-list()
-
   for (s in 1:length(xlist)){
     xlistNew[[s]]<-xlist[[s]]
-
     for (i in 1:length(xlist[[s]])){
       minChro <- min(xlistNew[[s]][[i]], na.rm=T)
       maxChro <- max(xlistNew[[s]][[i]], na.rm=T)
@@ -157,6 +155,62 @@ xHortoVer<-function(xlist,shrink=0){
     attr(xlistNew[[s]],"spname") <- attr(xlist[[s]],"spname")
   } # for
   return(xlistNew)
+} # fun
+
+xChrtdMarkMap <- function(xChrtdMark,x, shrink=0) {
+
+  xChrtdMarkList<-list()
+# s<-1
+# xChrtdMark<- chrtdmap$XmarkChrt1
+# x<-x5975
+# m<-1
+for( s in 1:length(xChrtdMark) ){
+
+    xChrtdMarkList[[s]]<-xChrtdMark[[s]]
+
+    currName <-attr(xChrtdMark[[s]],"spname")
+
+    corrIndex<-which(names(x) %in% currName) # x5 x
+
+    for ( m in 1:length(xChrtdMark[[s]] ) ){
+
+        currChrNameB<-attr(xChrtdMark[[s]][[m]],"rowIndex")
+        corrIndexChrNameB<-which(names(x[[corrIndex]]) %in% currChrNameB) # x5 x
+
+      # name <- attr(xChrtdMark[[s]][[m]],"rowIndex")
+
+      minMark  <- min(xChrtdMark[[s]][[m]], na.rm=T)
+      maxChrtdMark <- max(xChrtdMark[[s]][[m]], na.rm=T)
+
+      xChrtdMarkList[[s]][[m]] <- xChrtdMarkList[[s]][[m]] - min(unlist(x[[corrIndex]][currChrNameB])  ) +
+        ( (shrink/2) * (maxChrtdMark-minMark) )
+
+      attr(xChrtdMarkList[[s]][[m]],"rowIndex") <- currChrNameB
+    }
+    attr(xChrtdMarkList[[s]],"spname")<-attr(xChrtdMark[[s]],"spname")
+  } # for
+  return(xChrtdMarkList)
+} # fun
+
+xChrtdMap<-function(xChrtd,x, shrink=0) {
+  xChrtdList<-list()
+
+  for( s in 1:length(xChrtd) ){
+    xChrtdList[[s]]<-xChrtd[[s]]
+
+    for ( m in 1:length(xChrtd[[s]] ) ){
+      # name <- attr(xChrtd[[s]][[m]],"rowIndex")
+
+      minMark  <- min(xChrtd[[s]][[m]], na.rm=T)
+      maxChrtd <- max(xChrtd[[s]][[m]], na.rm=T)
+
+      xChrtdList[[s]][[m]] <- xChrtdList[[s]][[m]] - min(unlist(x[[s]][m])  ) + ( (shrink/2) * (maxChrtd-minMark) )
+
+      attr(xChrtdList[[s]][[m]],"rowIndex")<-m
+    }
+    attr(xChrtdList[[s]],"spname")<-attr(xChrtd[[s]],"spname")
+  } # for
+  return(xChrtdList)
 } # fun
 
 xHortoVerMid<-function(xlist,shrink=0){
@@ -215,15 +269,18 @@ xHortoVerDots<-function(xMarkList,x){
   xlistNew<-list()
 
   for (s in 1:length(xMarkList)){
+
     xlistNew[[s]]<-list()
+
     currName<-attr(xMarkList[[s]],"spname")
     corrIndex<-which(names(x)%in% currName) # x5 x
 # i
     for (i in 1:length(xMarkList[[s]])){
+
       currChrNameB<-attr(xMarkList[[s]][[i]],"rowIndex")
       corrIndexChrNameB<-which(names(x[[corrIndex]]) %in% currChrNameB) # x5 x
 
-      xlistNew[[s]][[i]]<-xMarkList[[s]][[i]]
+      xlistNew[[s]][[i]] <- xMarkList[[s]][[i]]
 
       minXChr<- min(x[[corrIndex]][[corrIndexChrNameB]])
 
@@ -381,8 +438,12 @@ addOTUnames<-function(circleMapsOTUname,OTUTextSize,OTUsrt=0,OTUplacing="first",
 } # fun
 
 
-applyMapCircle<-function(radius,circleCenter,circleCenterY,separFactor,ylistTrans,xlistNew,n=NA,labelSpacing,
-                         chrWidth,unlist=FALSE,cfunction=mapCircle,specialOTUNames=NA,chrWFactor=NA,rotation) {
+applyMapCircle<-function(radius,circleCenter,circleCenterY,separFactor,ylistTrans,xlistNew
+                         ,n=NA
+                         ,labelSpacing,
+                         chrWidth,unlist=FALSE,cfunction=mapCircle
+                         ,specialOTUNames=NA,chrWFactor=NA,rotation
+                         ,label=FALSE) {
   circleMaps<-list()
 
   for (s in 1:length(ylistTrans)) { # for spescies
@@ -397,8 +458,17 @@ applyMapCircle<-function(radius,circleCenter,circleCenterY,separFactor,ylistTran
 
     for (c in 1:length(ylistTrans[[s]] ) ) { # for polygon
       position<- as.numeric(attr(ylistTrans[[s]],"positionnoNA") )
+      mSign  <- 1
+      mSign2 <- 1
 
-
+      if(length(attr(ylistTrans[[s]][[c]],"squareSide") ) ){
+        if(attr(ylistTrans[[s]][[c]],"squareSide") %in% c("cMLeft","left") ){
+           mSign  <- -1
+          if(label){
+           mSign2 <- -1
+          }
+        }
+      }
 
       circleMaps[[s]][[c]]<- cfunction(x=if(unlist){unlist(xlistNew[[s]][[c]]  )} else{  xlistNew[[s]][[c]] },
                                        y=if(unlist){unlist(ylistTrans[[s]][[c]])} else{ylistTrans[[s]][[c]] },
@@ -408,12 +478,14 @@ applyMapCircle<-function(radius,circleCenter,circleCenterY,separFactor,ylistTran
                                        circleCenterY=circleCenterY,
                                        position,
                                        separFactor,
-                                       labelSpacing2,
-                                       chrWidth,
+                                       labelSpacing2*mSign,
+                                       chrWidth*mSign2,
                                        rotation
       ) # mapCircle
-    }
-    attr(circleMaps[[s]],"positionB")<-s
+      attr(circleMaps[[s]][[c]],"squareSide")<- attr(ylistTrans[[s]][[c]],"squareSide")
+
+    } # for c
+    attr(circleMaps[[s]],"positionB")<- s
     names(circleMaps)[s] <- names(ylistTrans[s])
   } # for
   return(circleMaps)
@@ -423,9 +495,10 @@ applyMapCircle<-function(radius,circleCenter,circleCenterY,separFactor,ylistTran
 # a<-8
 # newOrder
 
-intercalate<-function(y,monocenNames){
+intercalate<-function(y,monocenNames,attr=FALSE){
   newOrder<-list()
   for (s in 1:length(y)) {
+    if(attr==FALSE){
       if(names(y[s]) %in% monocenNames) { # mono test
         newOrder[[s]]<-list()
 
@@ -441,12 +514,34 @@ intercalate<-function(y,monocenNames){
           names(newOrder[[s]])[b] <- names(y[[s]][a])
         }
         # names(newOrder[[s]]) <- names(y[[s]])
-
+      } else {
+        newOrder[[s]]<-list()
+        newOrder[[s]]<-y[[s]]
+        names(newOrder[[s]]) <- names(y[[s]])
+      }
     } else {
-      newOrder[[s]]<-list()
-      newOrder[[s]]<-y[[s]]
-      names(newOrder[[s]]) <- names(y[[s]])
+      if(attr(y[[s]], "spname") %in% monocenNames) { # mono test
+        newOrder[[s]]<-list()
+
+        for (a in 1:(length(y[[s]])/2 ) ){
+          b<-a*2-1
+          newOrder[[s]][[b]]<-y[[s]][[a]]
+          names(newOrder[[s]])[b] <- names(y[[s]][a])
+        }
+
+        for (a in ( (length(y[[s]])/2 )+1):length(y[[s]]) ){
+          b<-( a -  (length(y[[s]])/2 )  )*2
+          newOrder[[s]][[b]]<-y[[s]][[a]]
+          names(newOrder[[s]])[b] <- names(y[[s]][a])
+        }
+        # names(newOrder[[s]]) <- names(y[[s]])
+      } else {
+        newOrder[[s]]<-list()
+        newOrder[[s]]<-y[[s]]
+        names(newOrder[[s]]) <- names(y[[s]])
+      }
     }
+
     attr(newOrder[[s]],"positionnoNA")<- attr(y[[s]],"positionnoNA")
   } # for
   newOrder<-Filter(function(x) {length(x) >= 1}, newOrder)
@@ -467,16 +562,16 @@ drawPlot<-function(circleMaps,chrColor,lwd.chr,chrBorderColor2) {
   } # for
 }
 
-drawPlotMark<-function(circleMaps,dfMarkColorInternal,listOfdfMarkPosSq,lwd.chr) {
+drawPlotMark<-function(circleMaps,dfMarkColorInt,listOfdfMarkPosSq,lwd.chr) {
   for (s in 1:length(circleMaps)){
     for (i in 1:length(circleMaps[[s]] ) ) {
       graphics::polygon(x=circleMaps[[s]][[i]]$x,
                         y=circleMaps[[s]][[i]]$y,
-                        col = dfMarkColorInternal$markColor[match(     listOfdfMarkPosSq[[s]]$markName[[i]] ,
-                                 dfMarkColorInternal$markName)],
+                        col = dfMarkColorInt$markColor[match(     listOfdfMarkPosSq[[s]]$markName[[i]] ,
+                                 dfMarkColorInt$markName)],
                         lwd=lwd.chr,
-                        border = dfMarkColorInternal$markBorderColor[match( listOfdfMarkPosSq[[s]]$markName[[i]]
-                                                                             ,dfMarkColorInternal$markName)]
+                        border = dfMarkColorInt$markBorderColor[match( listOfdfMarkPosSq[[s]]$markName[[i]]
+                                                                             ,dfMarkColorInt$markName)]
                         # ) # ifelse
       ) # polygon
     } # for
@@ -491,18 +586,22 @@ drawCenStyle<-function(circleMaps,defCenStyleCol,lwd.chr) {
                         col = defCenStyleCol,
                         lwd=lwd.chr,
                         border = defCenStyleCol
-                        # ) # ifelse
+      ) # polygon
+      graphics::lines(x=circleMaps[[s]][[i]]$x,
+                        y=circleMaps[[s]][[i]]$y,
+                        col = defCenStyleCol,
+                        lwd=lwd.chr,
       ) # polygon
     } # for
   } # for
 } # fun
-# drawPlotMarkLine<-function(circleMaps,dfMarkColorInternal,listOfdfMarkPosSq,lwd.chr) {
+# drawPlotMarkLine<-function(circleMaps,dfMarkColorInt,listOfdfMarkPosSq,lwd.chr) {
 #   for (s in 1:length(circleMaps)){
 #     for (i in 1:length(circleMaps[[s]] ) ) {
 #       graphics::lines(x=circleMaps[[s]][[i]]$x,
 #                       y=circleMaps[[s]][[i]]$y,
-#                       col = dfMarkColorInternal$markColor[match(     listOfdfMarkPosSq[[s]]$markName[[i]]   ,
-#                                                                      dfMarkColorInternal$markName)],
+#                       col = dfMarkColorInt$markColor[match(     listOfdfMarkPosSq[[s]]$markName[[i]]   ,
+#                                                                      dfMarkColorInt$markName)],
 #                       lwd=lwd.chr,
 #       ) # polygon
 #     } # for
@@ -534,7 +633,10 @@ drawCen<-function(circleMaps,cenColor2,cenBorder,lwd.chr) {
   } # for
 } # fun
 
-circLabelMark<-function(bannedMarkName,circleMaps,listOfdfMarkPos,markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY,iscM=FALSE,adj=0.5,iscMLeft=FALSE) {
+circLabelMark<-function(bannedMarkName,circleMaps,listOfdfMarkPos,markLabelSize,pattern
+                        ,labelOutwards,circleCenter,circleCenterY
+                        ,iscM=FALSE,adj=0.5,iscMLeft=FALSE) {
+
   for (s in 1:length(circleMaps)){
 
     for (i in 1:length(circleMaps[[s]] ) ) {
@@ -543,7 +645,6 @@ circLabelMark<-function(bannedMarkName,circleMaps,listOfdfMarkPos,markLabelSize,
 
       centerX<-mean(unlist(circleMaps[[s]][[i]]$x) )
       centerY<-mean(unlist(circleMaps[[s]][[i]]$y) )
-
 
       if (labelOutwards){
         delta_x = centerX - circleCenter
@@ -576,7 +677,7 @@ circLabelMark<-function(bannedMarkName,circleMaps,listOfdfMarkPos,markLabelSize,
                              centerY<-minY,
                              centerY<-maxY )
       }
-      if (iscMLeft){
+      if (iscMLeft) {
 
         minX<-min(unlist(circleMaps[[s]][[i]]$x) )
         maxX<-max(unlist(circleMaps[[s]][[i]]$x) )
@@ -763,7 +864,7 @@ xMarkMapLeft<-function(xMark,x) {
   return(xMarkList)
 } # fun
 
-markMapPer<-function(yMark,y){
+markMapPer<-function(yMark,y,useNA=FALSE){
   yMarkPer<-list()
 
   for( s in 1:length(yMark) ){
@@ -785,23 +886,22 @@ markMapPer<-function(yMark,y){
       fac <-diffPer/diffReal
       fac <-ifelse(is.na(fac),0,fac)
 
+      if(all(is.na(yMark[[s]][[m]])) & useNA) {
+        yMarkPer[[s]][[m]]<-NA
+      } else {
+
       yMarkPer[[s]][[m]] <-  psum( ( ( yMark[[s]][[m]]  -  min(unlist(y[[corrIndex]][name] ) ) ) - distBeg ) * fac
                                    , disBegPer, na.rm=T)
+      }
 
-      attr(yMarkPer[[s]][[m]],"rowIndex")<-name
+      attr(yMarkPer[[s]][[m]],"rowIndex")  <- name
+      attr(yMarkPer[[s]][[m]],"squareSide")<- attr(yMark[[s]][[m]],"squareSide")
     }
     attr(yMarkPer[[s]],"spname")<-attr(yMark[[s]],"spname")
   } # for
   return(yMarkPer)
 } # fun
-#
-# if(!is.null(attr(yMark[[s]][[m]],"squareSide") ) &  !is.null(attr(yMark[[s]][[m]],"arm") ) ) {
-#   if (attr(yMark[[s]][[m]],"squareSide") =="exProtein"  & attr(yMark[[s]][[m]],"arm") =="q" ) {
-#     yMark[[s]][[m]]<- sort(yMark[[s]][[m]],decreasing = F)[c(1,3,4,5,2)]
-#   } else if (attr(yMark[[s]][[m]],"squareSide") =="exProtein"  & attr(yMark[[s]][[m]],"arm") =="p") {
-#     yMark[[s]][[m]]<- sort(yMark[[s]][[m]],decreasing = T)[c(1,3,4,5,2)]
-#   }
-# }
+
 
 markMapPerCen <- function(yMark,y){ # use y
   yMarkPer<-list()
@@ -854,6 +954,8 @@ markMapPercM<-function(yMark,y) {
       fac<-ifelse(is.na(fac),0,fac)
       yMarkPer[[s]][[m]]<- ( ( yMark[[s]][[m]]  -  min(unlist(y[[corrIndex]][name])  ) ) - distBeg ) * fac  + disBegPer
       attr(yMarkPer[[s]][[m]],"rowIndex")<-name
+      attr(yMarkPer[[s]][[m]],"squareSide")<- attr(yMark[[s]][[m]],"squareSide")
+
     }
     attr(yMarkPer[[s]],"spname") <- attr(yMark[[s]],"spname")
   } # for
@@ -935,7 +1037,8 @@ centerMarkMapPer<-function(yMark,y){
 
       yMarkPer[[s]][[m]]<- rep(center,len)
 
-      attr(yMarkPer[[s]][[m]],"rowIndex")<-name
+      attr(yMarkPer[[s]][[m]],"rowIndex")   <- name
+      attr(yMarkPer[[s]][[m]],"squareSide") <- attr(yMark[[s]][[m]],"squareSide")
     }
     attr(yMarkPer[[s]],"spname")<-attr(yMark[[s]],"spname")
   } # for
@@ -965,10 +1068,12 @@ ylistTransMark<-list()
 
         ylistTransMark[[s]][[m]] <- yMarkPer[[s]][[m]] * chrSize
         ylistTransMark[[s]][[m]] <- ylistTransMark[[s]][[m]] + min(unlist(ylistTransChr[[corrIndex]][corrIndexMark] ) )
+        attr(ylistTransMark[[s]][[m]],"squareSide")<- attr(yMarkPer[[s]][[m]],"squareSide")
       }
     }
     attr(ylistTransMark[[s]],"spname")<-attr(yMarkPer[[s]],"spname")
     attr(ylistTransMark[[s]],"positionnoNA")<-attr(ylistTransChr[[corrIndex]],"positionnoNA")
+
 
   } # for
   return(ylistTransMark)
@@ -1111,19 +1216,19 @@ oneDot<-function(xMarkCr){
   return(oneDotXList)
 }
 
-drawCenMarks <- function(circleMaps,dfMarkColorInternal
+drawCenMarks <- function(circleMaps,dfMarkColorInt
                          ,parparlistOfdfMarkPosDataCen,lwd.chr,fixCenBorder2,chrColor) {
   for (s in 1:length(circleMaps)){
     for (m in 1:length(circleMaps[[s]] ) ) {
       graphics::polygon(x=circleMaps[[s]][[m]]$x,
                         y=circleMaps[[s]][[m]]$y,
-                        col = dfMarkColorInternal$markColor[match(parparlistOfdfMarkPosDataCen[[s]]$markName[[m]],
-                                                                  dfMarkColorInternal$markName)] ,
+                        col = dfMarkColorInt$markColor[match(parparlistOfdfMarkPosDataCen[[s]]$markName[[m]],
+                                                                  dfMarkColorInt$markName)] ,
                         lwd=lwd.chr,
                         border = ifelse(fixCenBorder2,
                                         chrColor,
-                                        dfMarkColorInternal$markBorderColor[match(parparlistOfdfMarkPosDataCen[[s]]$markName[[m]],
-                                                                                  dfMarkColorInternal$markName)] # z outside
+                                        dfMarkColorInt$markBorderColor[match(parparlistOfdfMarkPosDataCen[[s]]$markName[[m]],
+                                                                                  dfMarkColorInt$markName)] # z outside
                         ) # ifelse
       ) # polygon
     } # for

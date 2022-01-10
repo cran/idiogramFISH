@@ -22,6 +22,11 @@ values <- reactiveValues(number=0
                          , renInstall=FALSE
                          , errorMessage="Search failed, change string or check internet"
                          , renMiss="unable, rentrez package missing"
+                         , current_len=0
+                         , paramVec = paramVec
+                         , canButton = TRUE
+                         , maxEx = maxEx
+                         , go = TRUE
 )
 
 #
@@ -40,6 +45,19 @@ scriptR <- reactive({
   df <- values[["strFun"]]
 })
 
+presetsR <- reactive({
+  list1 <- values[["presets"]]
+})
+
+current_lenR <- reactive({
+  v <- values[["current_len"]]
+})
+
 if (suppressWarnings(system.file(package = "rentrez") == '') ){
   values[["rentrezPkg"]] <- FALSE
 }
+
+numberRe <- reactive({
+  n <- values[["number"]]
+})
+

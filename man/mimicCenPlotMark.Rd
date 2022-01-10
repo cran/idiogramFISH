@@ -32,7 +32,8 @@ mimicCenPlotMark(
   xMarkRightLine,
   xMarkLeftLine,
   x,
-  cenFormat = "triangle"
+  cenFormat = "triangle",
+  pts
 )
 }
 \arguments{
@@ -76,7 +77,7 @@ mimicCenPlotMark(
 
 \item{labelOutwards}{srt}
 
-\item{dfMarkColorInternal}{colors for marks}
+\item{dfMarkColorInt}{colors for marks}
 
 \item{lwd.chr}{thick of border line}
 }

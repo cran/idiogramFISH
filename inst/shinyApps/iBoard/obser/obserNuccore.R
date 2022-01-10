@@ -172,7 +172,6 @@ observeEvent(input$termButton, {
   values[["entrez_summary1"]]<-NA
   values[["entrez_titles"]]<-NA
   values[["entrez_selected"]]<-NA
-  # values[["names_fetch_list"]] <- NA
   values[["fetch_listAll"]] <- NA
   values[["authors"]] <- ""
 
@@ -597,9 +596,7 @@ observeEvent(input$loadDFbutton,{
   validate(need(try(inherits(values[["markStyleDF"]],"data.frame") ),"still not ready mark style d.f." ))
   values[["df1MStyle"]] <- values[["markStyleDF"]]
   values[["markStyleDF"]] <- NULL
-
   removeModal()
-
 })
 
 

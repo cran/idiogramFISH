@@ -13,7 +13,9 @@ addAttributesDfChrSize(
   cenFactor,
   chrWidth,
   specialChrWidth,
-  squareness
+  squareness,
+  modifyChr = TRUE,
+  mymessage = TRUE
 )
 }
 \value{

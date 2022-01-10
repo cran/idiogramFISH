@@ -10,7 +10,7 @@ cMPlotMark(
   yMark,
   y,
   x,
-  dfMarkColorInternal,
+  dfMarkColorInt,
   listOfdfMarkPoscM,
   lwd.cM,
   circularPlot,
@@ -35,7 +35,7 @@ cMPlotMark(
 
 \item{y}{y of chr}
 
-\item{dfMarkColorInternal}{colors for marks}
+\item{dfMarkColorInt}{colors for marks}
 
 \item{listOfdfMarkPoscM}{list of df. of mark pos.}
 

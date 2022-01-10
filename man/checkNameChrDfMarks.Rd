@@ -4,10 +4,10 @@
 \alias{checkNameChrDfMarks}
 \title{Function to check names of OTUs (species) among data.frames}
 \usage{
-checkNameChrDfMarks(listOfdfChromSize, listOfdfMarks)
+checkNameChrDfMarks(listChrSize, listOfdfMarks)
 }
 \arguments{
-\item{listOfdfChromSize}{list of data.frames, with columns: OTU (optional),
+\item{listChrSize}{list of data.frames, with columns: OTU (optional),
 chrName, for chr.
 with cen.: shortArmSize, longArmSize, for holoc.: chrSize}
 

@@ -93,7 +93,10 @@ server <- function(input, output, session) {
   outputOptions(output, "tabsetpanel2UI", suspendWhenHidden = FALSE)
   outputOptions(output, "tabsetpanel4UI", suspendWhenHidden = FALSE)
 
+  outputOptions(output, "myTabs"        , suspendWhenHidden = FALSE)
+
   outputOptions(output, "presetUI",       suspendWhenHidden = FALSE)
+  outputOptions(output, "examplepanel",   suspendWhenHidden = FALSE)
 
   outputOptions(output, "dfchrpanel",     suspendWhenHidden = FALSE)
   outputOptions(output, "out",            suspendWhenHidden = FALSE)
@@ -115,5 +118,14 @@ server <- function(input, output, session) {
   outputOptions(output, "searchUI",       suspendWhenHidden = FALSE)
   outputOptions(output, "markColumnUI",   suspendWhenHidden = FALSE)
   outputOptions(output, "authorsUI",      suspendWhenHidden = FALSE)
+
+  outputOptions(output, "saveleftNotesUI",      suspendWhenHidden = FALSE)
+  outputOptions(output, "saveleftNotesUpUI",      suspendWhenHidden = FALSE)
+  outputOptions(output, "saveNotesUI",      suspendWhenHidden = FALSE)
+
+  outputOptions(output, "saveChrSizeUI",      suspendWhenHidden = FALSE)
+  outputOptions(output, "saveMarkPosUI",      suspendWhenHidden = FALSE)
+  outputOptions(output, "saveMarkStyleUI",      suspendWhenHidden = FALSE)
+
 
 }

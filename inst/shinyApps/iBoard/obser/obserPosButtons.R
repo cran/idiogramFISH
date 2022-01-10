@@ -281,7 +281,6 @@ observeEvent(
 
 observeEvent(input$loadDFbutton, {
   Sys.sleep(0.1)
-
   CurrentM$menu <- menulist[4] # plot
   updateTabItems(session, "tabs", menulist[4])
   updateTabItems(session, "tabsetpanel2", tablist2[1]) # paramTab
@@ -294,15 +293,24 @@ observeEvent(input$exampleButton, {
   sel <- gsub(".*-", "", sel)
 
   if(as.numeric(sel) %in% 9:10) {
-
-  CurrentM$menu <- menulist[2]
-  updateTabItems(session, "tabs", menulist[2])
-  updateTabItems(session, "tabsetpanel4", tablist4[1])
-
+    CurrentM$menu <- menulist[2]
+    updateTabItems(session, "tabs", menulist[2])
+    updateTabItems(session, "tabsetpanel4", tablist4[1])
   } else {
     CurrentM$menu <- menulist[4]
     updateTabItems(session, "tabs", menulist[4])
     updateTabItems(session, "tabsetpanel2", tablist2[1])
   }
-
 })
+
+observeEvent(input$upPresetButton, {
+    Sys.sleep(0.3)
+    CurrentM$menu <- menulist[4]
+    updateTabItems(session, "tabs", menulist[4])
+    updateTabItems(session, "tabsetpanel2", tablist2[1])
+})
+
+
+
+# input$examIncrease
+# input$examDecrease

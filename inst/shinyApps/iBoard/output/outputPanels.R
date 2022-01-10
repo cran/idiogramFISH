@@ -1,48 +1,32 @@
+output$currentExample <- renderText({
+  paste("Last example loaded:"
+        ,names(exampleVec[grep(paste0("\\<",exampleVec[exampleVec==values[["number"]] ],"\\>"),exampleVec ) ] ) )
+})
 
+output$wPUpPreset <- renderUI({
 
-updateRadioSubgroup <- function(session, inputId, id, inline, selected, ...) {
-  value <- paste0(id, "-", selected)
-  updateRadioButtons(session, inputId, label = NULL, choices = NULL, inline = inline, selected = value)
-}
+    validate(need(try(values[["presetStatus"]]=="Ready"),"" ) )
 
-radioGroupContainer <- function(inputId, ...) {
-  class <- "form-group shiny-input-radiogroup shiny-input-container"
-  div(id = inputId, class = class, ...)
-}
+    if( current_lenR() > iniLen ) {
 
-radioSubgroup <- function(inputId, id, label, choiceNames, choiceValues, inline = TRUE, first=FALSE) {
-  choiceValues <- paste0(id, "-", choiceValues)
-  choices <- setNames(choiceValues, choiceNames)
-  if(first==FALSE){
-    rb <- radioButtons(inputId, label, choices, selected = character(0), inline = inline)
-  } else {
-    rb <- radioButtons(inputId, label, choices, selected = choices[1], inline = inline)
+      cn<-paste("Custom Preset",1:(current_lenR()-iniLen) )
+      cv<-(iniLen+1):current_lenR()
+
+    wellPanel(
+      h4("Custom Presets")
+      ,helpText("this will overwrite any data you have entered in other tabs")
+      ,radioButtons("upPreset"
+                    , label = ""
+                    ,choices = setNames(cv,cn)
+      )
+      ,actionButton("upPresetButton",
+                     tags$span(tags$strong("Load Presets"))
+                    ,class = "btn-success"
+                    # ,icon =
+                    )
+    )
   }
-  rb$children
-}
-
-exampleId <- reactive({
-  req(input$exampleId)
-  parts <- unlist(strsplit(input$exampleId, "-"))
-  list(id = parts[1], value = as.numeric(parts[2]) )
 })
-
-
-observeEvent(input$nucPreset,{
-
-  sel <- input$nucPreset
-  updateRadioSubgroup(session, "exampleId", "circular", selected = sel, inline = TRUE)
-})
-
-observeEvent(input$exampleId,{
-sel <- input$exampleId
-updateRadioButtons(session, "nucPreset"
-
-                   , selected = gsub(".*-", "", sel), inline = TRUE
-)
-})
-
-
 
 output$examplepanel <- renderUI({
   fluidRow(
@@ -56,7 +40,7 @@ output$examplepanel <- renderUI({
                                  fluidRow(
                                    column(12,
                                           radioSubgroup("exampleId"
-                                                        , "minimal_examples"
+                                                        # ,id="minimal_examples"
                                                         , label = "3. Minimal Examples:"
                                                         , choiceNames = c("3.1 monocentric k.",
                                                                       "3.2 holocentric k.",
@@ -67,7 +51,8 @@ output$examplepanel <- renderUI({
                                                         )
                                    )
                                    ,column(12,
-                                           radioSubgroup("exampleId", "plotting_chr"
+                                           radioSubgroup("exampleId"
+                                                         # , "plotting_chr"
                                                          , label = "4. Plotting chr.:"
                                                          , choiceNames = c("4.2 monocen."
                                                                            ,"4.3 holocen."
@@ -78,7 +63,8 @@ output$examplepanel <- renderUI({
                                            )
                                    )
                                    ,column(12,
-                                          radioSubgroup("exampleId", "multiple_otus"
+                                          radioSubgroup("exampleId"
+                                                        # , "multiple_otus"
                                                         , label = "5. Multiple OTUs:"
                                                         , choiceNames = c("5.1 multiple mono. k.",
                                                         "5.2 multiple holo. k.")
@@ -86,7 +72,8 @@ output$examplepanel <- renderUI({
                                                         )
                                           )
                                    ,column(12,
-                                           radioSubgroup("exampleId", "changing_units"
+                                           radioSubgroup("exampleId"
+                                                         # , "changing_units"
                                                          , label = "6. Changing Units:"
                                                          , choiceNames = c("6.1 Using bases instead of micrometers"
                                                                            ,"6.2 Using threshold to fix scale"
@@ -98,7 +85,8 @@ output$examplepanel <- renderUI({
                                    )
 
                                    ,column(12,
-                                           radioSubgroup("exampleId", "gish"
+                                           radioSubgroup("exampleId"
+                                                         # , "gish"
                                                          , label = "7. GISH:"
                                                          , choiceNames = c("7.1 GISH"
                                                          ,"7.2 GISH holoc."
@@ -109,7 +97,8 @@ output$examplepanel <- renderUI({
                                                          )
                                    )
                                    ,column(12,
-                                           radioSubgroup("exampleId", "gish"
+                                           radioSubgroup("exampleId"
+                                                         # , "gish"
                                                          , label = "8. Groups:"
                                                          , choiceNames = c("8.1 monoc."
                                                                            ,"8.2 holoc."
@@ -119,7 +108,8 @@ output$examplepanel <- renderUI({
                                    )
                                    ,column(12
 
-                                           ,radioSubgroup("exampleId", "circular"
+                                           ,radioSubgroup("exampleId"
+                                                          # , "circular"
                                                          , label = "9. Circular plots:"
                                                          , choiceNames = c("9.1 Plot 1",
                                                                            "9.2 Plot 2"
@@ -131,11 +121,12 @@ output$examplepanel <- renderUI({
 
 
                                            )
-                                           ,helpText("go to Nucleotides tab for more circular plots")
+                                           ,helpText("9.3 & 9.4 redirect to Nucleotides")
                                    )
                                    ,column(12
 
-                                           ,radioSubgroup("exampleId", "phylog"
+                                           ,radioSubgroup("exampleId"
+                                                          # , "phylog"
                                                           , label = "10. For phylog:"
                                                           , choiceNames = c("10.2 Mono"
                                                                             ,"10.3 Holo"
@@ -148,7 +139,17 @@ output$examplepanel <- renderUI({
                                            )
                                            ,helpText("See vignettes for the phylogeny")
                                    )
+                                   ,column(12
+                                           ,radioSubgroup("exampleId"
+                                                          , label = tagList(tags$span("11.")
+                                                          ,tags$i("Citrus") )
+                                                          , choiceNames = c("11.1 C. maxima"
+                                                                            ,"11.2 C. reticulata"
+                                                                            ,"11.7 C. limon origin")
 
+                                                          , choiceValues = c(28,29,30)
+                                           )
+                                   )
                                  )
              )
 
@@ -159,8 +160,21 @@ output$examplepanel <- renderUI({
              ,helpText("Click button to start")
            )
     )
-    ,column(width=1)
-    ,column(width=4,
+    ,column(width=2
+            ,br()
+            ,wellPanel(
+              h4("Upload Preset")
+              ,helpText("Presets can be downloaded in the 'Parameters' page")
+              ,fileInput("upFilePreset"
+                         , "Choose .rds File",
+                         accept = c(
+                           ".rds")
+                         ,buttonLabel=list(icon("folder") )
+              )
+            )
+            ,uiOutput("wPUpPreset")
+            )
+    ,column(width=3,
            br()
            ,wellPanel(
              h4("Jupyter notebooks")
@@ -185,7 +199,7 @@ output$examplepanel <- renderUI({
            )
            ,wellPanel(
              h4("Help")
-             ,helpText("Links to online vignettes and manual in the",tags$strong("About tab") )
+             ,helpText("Links to online vignettes and manual in the",tags$strong("About"), "page" )
            )
     )
   )
@@ -352,23 +366,16 @@ output$dfchrpanel <- renderUI({
   fluidRow(
     column(width=2
            ,br()
-           ,wellPanel(
-             h4("Save data")
-             ,helpText("optional")
-             ,textInput("chrfilename",
-                        "File name",
-                        value = "chrData"
-                        ,width = "50%")
-             ,uiOutput("buttontable")
-           )
+           ,uiOutput("saveChrSize1UI")
            ,wellPanel(
              h4("Upload data")
              ,helpText("optional")
-             ,fileInput("file1", "Choose CSV File",
+             ,fileInput("file1", "Choose csv/rds File",
                         accept = c(
                           "text/csv",
                           "text/comma-separated-values,text/plain",
-                          ".csv")
+                          ".csv"
+                          ,".rds")
              )
            )
     )
@@ -381,7 +388,7 @@ output$dfchrpanel <- renderUI({
               )
             )
 
-            ,wellPanel(
+            ,wellPanel(#style="margin-top:-15px;padding: 5px 5px 5px 5px"
               h4("Columns")
               ,helpText("Use unique names")
               ,textInput("col",
@@ -399,10 +406,7 @@ output$dfchrpanel <- renderUI({
               )
 
             )
-
     )
-
-
     ,column(8
             ,br()
 
@@ -418,7 +422,8 @@ output$dfchrpanel <- renderUI({
               column(width=6
                      ,wellPanel(
                        h2("Chr. data data.frame")
-                       ,helpText(paste(values[["df1Name"]], values[["df1Origin"]] ) )
+                       ,helpText(paste(values[["df1Name"]]
+                                       , values[["df1Origin"]] ) )
                      )
               )
             )
@@ -431,33 +436,21 @@ output$dfchrpanel <- renderUI({
   )
 })
 
-
-
-
-
 output$dfmarkpanel <- renderUI({
   fluidRow(
     column(width=2
            ,br()
-           ,wellPanel(
-             h4("Save data")
-             ,helpText("optional")
-             ,textInput("markfilename",
-                        "File name",
-                        value = "markData"
-                        ,width = "50%")
-
-
-             ,uiOutput("buttontableMark")
-           )
+           ,uiOutput("saveMarkPos1UI")
            ,wellPanel(
              h4("Upload data")
              ,helpText("optional")
-             ,fileInput("file1Mark", "Choose CSV File",
-                        accept = c(
+             ,fileInput("file1Mark"
+                        ,"Choose csv/rds File"
+                        ,accept = c(
                           "text/csv",
                           "text/comma-separated-values,text/plain",
-                          ".csv")
+                          ".csv"
+                          ,".rds")
              )
            )
     )
@@ -513,25 +506,16 @@ output$dfMStylepanel <- renderUI({
   fluidRow(
     column(width=2
            ,br()
-           ,wellPanel(
-             h4("Save data")
-             ,helpText("optional")
-             ,textInput("MStylefilename",
-                        "File name",
-                        value = "MStyleData"
-                        ,width = "50%")
-
-
-             ,uiOutput("buttontableMStyle")
-           )
+           ,uiOutput("saveMarkStyle1UI")
            ,wellPanel(
              h4("Upload data")
              ,helpText("optional")
-             ,fileInput("file1MStyle", "Choose CSV File",
+             ,fileInput("file1MStyle"
+                        ,"Choose csv/rds File",
                         accept = c(
                           "text/csv",
                           "text/comma-separated-values,text/plain",
-                          ".csv")
+                          ".csv",".rds")
              )
            )
     )
@@ -581,25 +565,17 @@ output$dfnotespanel <- renderUI({
   fluidRow(
     column(width=2
            ,br()
-           ,wellPanel(
-             h4("Save data")
-             ,helpText("optional")
-             ,textInput("notesfilename",
-                        "File name",
-                        value = "notes"
-                        ,width = "50%")
-
-
-             ,uiOutput("buttontablenotes")
-           )
+           ,uiOutput("saveNotes1UI")
            ,wellPanel(
              h4("Upload data")
              ,helpText("optional")
-             ,fileInput("file1Notes", "Choose CSV File",
+             ,fileInput("file1Notes"
+                        ,"Choose csv/rds File",
+
                         accept = c(
                           "text/csv",
                           "text/comma-separated-values,text/plain",
-                          ".csv")
+                          ".csv",".rds")
              )
            )
     )
@@ -611,14 +587,16 @@ output$dfnotespanel <- renderUI({
                         , p("Right-click inside the table to delete/insert rows.")
               )
             )
-            ,wellPanel(
-              h4("Columns")
+            ,wellPanel(style="margin-top:-15px;padding: 5px 5px 5px 5px"
+              ,h4("Columns")
               ,helpText("Use unique names")
-              ,textInput("colNotes",
+              ,splitLayout(
+              textInput("colNotes",
                          "Col. name",
                          value = "newCol"
-                         ,width = "50%")
+                         ,width = "95%")
               ,radioButtons("colTypeNotes","Col. data type",c("character","numeric") )
+              )
               ,actionButton("addColumnNotes",
                             "Add")
               ,actionButton("removeColumnNotes",
@@ -631,7 +609,7 @@ output$dfnotespanel <- renderUI({
             ,fluidRow(
               column(width=6
                      ,wellPanel(
-                       h2("notes data.frame")
+                       h2("4. notes data.frame")
                        ,helpText(paste(values[["notesName"]], values[["notesOrigin"]] ) )
                        ,helpText("text to be shown to the right of the karyotype")
                      )
@@ -650,25 +628,17 @@ output$dfnotespanel <- renderUI({
   ,fluidRow(
     column(width=2
            ,br()
-           ,wellPanel(
-             h4("Save data")
-             ,helpText("optional")
-             ,textInput("leftNotesfilename",
-                        "File name",
-                        value = "leftNotes"
-                        ,width = "50%")
+           ,uiOutput("saveleftNotes1UI")
 
-
-             ,uiOutput("buttontableleftNotes")
-           )
            ,wellPanel(
              h4("Upload data")
              ,helpText("optional")
-             ,fileInput("file1leftNotes", "Choose CSV File",
+             ,fileInput("file1leftNotes"
+                        ,"Choose csv/rds File",
                         accept = c(
                           "text/csv",
                           "text/comma-separated-values,text/plain",
-                          ".csv")
+                          ".csv",".rds")
              )
            )
     )
@@ -680,14 +650,16 @@ output$dfnotespanel <- renderUI({
                         , p("Right-click inside the table to delete/insert rows.")
               )
             )
-            ,wellPanel(
-              h4("Columns")
+            ,wellPanel(style="margin-top:-15px;padding: 5px 5px 5px 5px"
+              ,h4("Columns")
               ,helpText("Use unique names")
-              ,textInput("colleftNotes",
+              ,splitLayout(
+              textInput("colleftNotes",
                          "Col. name",
                          value = "newCol"
-                         ,width = "50%")
+                         ,width = "95%")
               ,radioButtons("colTypeleftNotes","Col. data type",c("character","numeric") )
+              )
               ,actionButton("addColumnleftNotes",
                             "Add")
               ,actionButton("removeColumnleftNotes",
@@ -700,9 +672,9 @@ output$dfnotespanel <- renderUI({
             ,fluidRow(
               column(width=6
                      ,wellPanel(
-                       h2("leftNotes data.frame")
+                       h2("5. leftNotes data.frame")
                        ,helpText(paste(values[["leftNotesName"]], values[["leftNotesOrigin"]] ) )
-                       ,helpText("text to be shown to the right of the karyotype")
+                       ,helpText("text to be shown to the left of the karyotype")
                      )
               )
             )
@@ -713,30 +685,19 @@ output$dfnotespanel <- renderUI({
             )
     )
   )
-
-
   ,fluidRow(
     column(width=2
            ,br()
-           ,wellPanel(
-             h4("Save data")
-             ,helpText("optional")
-             ,textInput("leftNotesUpfilename",
-                        "File name",
-                        value = "leftNotesUp"
-                        ,width = "50%")
-
-
-             ,uiOutput("buttontableleftNotesUp")
-           )
+           ,uiOutput("saveleftNotesUp1UI")
            ,wellPanel(
              h4("Upload data")
              ,helpText("optional")
-             ,fileInput("file1leftNotesUp", "Choose CSV File",
+             ,fileInput("file1leftNotesUp"
+                        ,"Choose csv/rds File",
                         accept = c(
                           "text/csv",
                           "text/comma-separated-values,text/plain",
-                          ".csv")
+                          ".csv",".rds")
              )
            )
     )
@@ -748,14 +709,16 @@ output$dfnotespanel <- renderUI({
                         , p("Right-click inside the table to delete/insert rows.")
               )
             )
-            ,wellPanel(
-              h4("Columns")
+            ,wellPanel(style="margin-top:-15px;padding: 5px 5px 5px 5px"
+              ,h4("Columns")
               ,helpText("Use unique names")
-              ,textInput("colleftNotesUp",
+              ,splitLayout(
+              textInput("colleftNotesUp",
                          "Col. name",
                          value = "newCol"
-                         ,width = "50%")
+                         ,width = "95%")
               ,radioButtons("colTypeleftNotesUp","Col. data type",c("character","numeric") )
+              )
               ,actionButton("addColumnleftNotesUp",
                             "Add")
               ,actionButton("removeColumnleftNotesUp",
@@ -768,9 +731,9 @@ output$dfnotespanel <- renderUI({
             ,fluidRow(
               column(width=6
                      ,wellPanel(
-                       h2("leftNotesUp data.frame")
+                       h2("6. leftNotesUp data.frame")
                        ,helpText(paste(values[["leftNotesUpName"]], values[["leftNotesUpOrigin"]] ) )
-                       ,helpText("text to be shown to the right of the karyotype")
+                       ,helpText("text to be shown to the up-left of the karyotype")
                      )
               )
             )
@@ -924,41 +887,94 @@ output$imageHeight<- renderUI({
 output$strpanel = renderUI({
   fluidRow(
     column(width=6
+           ,br()
+           ,wellPanel(#style = "padding: 0px 5px 0px 5px"
+             splitLayout(cellWidths = c("33%","66%")
+
+               ,div(style = 'max-width:100px;'
+                   ,uiOutput("buttonPresets")
+               )
+               ,helpText(presetUseText)
+             )
+           )
            ,wellPanel(
              rclipboardSetup()
              ,splitLayout(
                uiOutput("clip")
-               ,div(style = 'max-width:100px;'
+               ,checkboxInput("keepDesc","keep description",TRUE)
+
+               ,checkboxInput("asFile","plot to file (keeps size)",TRUE)
+             )
+             ,splitLayout(
+               div(style = 'max-width:100px;'
                     ,uiOutput("buttonScript")
+
                )
-               ,checkboxInput("asFile","to file (keeps size)",TRUE)
+
                ,checkboxInput("keepDefault","keep default values",FALSE)
                ,radioButtons("saveType","download format",c("csv","rds"),"csv",inline = T)
              )
              ,tags$style(type='text/css', '#code {background-color: #FFFFFF; color: black;}')
              ,verbatimTextOutput("code")
-
            )
     ),
     column(width=2
-           ,wellPanel(
-             h4("Save chr. data")
-             ,helpText("")
-             ,textInput("chrfilename2",
-                        "File name",
-                        value = "chrData"
-                        ,width = "50%")
-             ,uiOutput("buttontable2")
-           )
+           ,br()
+           ,uiOutput("saveChrSizeUI")
            ,uiOutput("saveMarkPosUI")
            ,uiOutput("saveMarkStyleUI")
            )
   ,column(2
+          ,br()
            ,uiOutput("saveNotesUI")
            ,uiOutput("saveleftNotesUI")
            ,uiOutput("saveleftNotesUpUI")
     )
   )
+})
+
+output$saveChrSize1UI <- renderUI({
+  if(!invalid( values[["df1"]] ) ){
+wellPanel(
+  h4("Save data")
+  ,helpText("optional")
+  ,textInput("chrfilename",
+             "File name",
+             value = "chrData"
+             ,width = "50%")
+  ,uiOutput("buttontable")
+)
+}
+})
+
+output$saveChrSizeUI <- renderUI({
+  if(!invalid( values[["df1"]] ) ){
+  wellPanel(
+    h4("Save chr. data")
+    ,helpText("")
+    ,textInput("chrfilename2",
+               "File name",
+               value = "chrData"
+               ,width = "50%")
+    ,uiOutput("buttontable2")
+  )
+  }
+})
+
+output$saveMarkPos1UI <- renderUI({
+  if(!invalid( values[["df1Mark"]] ) ){
+  wellPanel(
+  h4("Save data")
+  ,helpText("optional")
+  ,textInput("markfilename",
+             "File name",
+             value = "markData"
+             ,width = "50%")
+
+
+  ,uiOutput("buttontableMark")
+)
+}
 })
 
 output$saveMarkPosUI <- renderUI({
@@ -971,6 +987,22 @@ output$saveMarkPosUI <- renderUI({
              value = "markData"
              ,width = "50%")
   ,uiOutput("buttontableMark2")
+)
+  }
+})
+
+output$saveMarkStyle1UI<- renderUI({
+  if(!invalid( values[["df1MStyle"]]  ) ){
+wellPanel(
+  h4("Save data")
+  ,helpText("optional")
+  ,textInput("MStylefilename",
+             "File name",
+             value = "MStyleData"
+             ,width = "50%")
+
+
+  ,uiOutput("buttontableMStyle")
 )
   }
 })
@@ -989,6 +1021,24 @@ output$saveMarkStyleUI<- renderUI({
   }
 })
 
+output$saveNotes1UI<- renderUI({
+  if(!invalid( values[["notes"]]  ) ){
+    wellPanel(style="margin-bottom:0px;padding: 5px 5px 5px 5px"
+              ,splitLayout(
+                tagList(
+  h4("Save data")
+  ,helpText("optional")
+                )
+  ,textInput("notesfilename",
+             "File name",
+             value = "notes"
+             ,width = "90%")
+              )
+  ,uiOutput("buttontablenotes")
+  )
+  }
+})
+
 output$saveNotesUI<- renderUI({
   if(!invalid( values[["notes"]]  ) ){
 wellPanel(
@@ -1003,6 +1053,25 @@ wellPanel(
   }
 })
 
+
+output$saveleftNotes1UI<-renderUI({
+  if(!invalid( values[["leftNotes"]]  ) ){
+    wellPanel(style="margin-bottom:0px;padding: 5px 5px 5px 5px"
+              ,splitLayout(
+                tagList(
+                  h4("Save data")
+                  ,helpText("optional")
+                )
+      ,textInput("leftNotesfilename",
+                 "File name",
+                 value = "leftNotes"
+                 ,width = "90%")
+)
+      ,uiOutput("buttontableleftNotes")
+    )
+  }
+})
+
 output$saveleftNotesUI<-renderUI({
   if(!invalid( values[["leftNotes"]]  ) ){
     wellPanel(
@@ -1014,10 +1083,30 @@ output$saveleftNotesUI<-renderUI({
              ,width = "50%")
   ,uiOutput("buttontableleftNotes2")
 )
-  }
-  })
+}
+})
 
-output$saveleftNotesUpUI<- renderUI({
+output$saveleftNotesUp1UI<- renderUI({
+  if(!invalid( values[["leftNotesUp"]]  ) ){
+    wellPanel(style="margin-bottom:0px;padding: 5px 5px 5px 5px"
+              ,splitLayout(
+                tagList(
+                  h4("Save data")
+                  ,helpText("optional")
+                )
+      ,textInput("leftNotesUpfilename",
+                 "File name",
+                 value = "leftNotesUp"
+                 ,width = "90%")
+              )
+
+
+      ,uiOutput("buttontableleftNotesUp")
+    )
+  }
+})
+
+    output$saveleftNotesUpUI<- renderUI({
   if(!invalid( values[["leftNotesUp"]]  ) ){
 wellPanel(
   h4("Save leftNotesUp data.frame")
@@ -1045,7 +1134,7 @@ output$searchPanel = renderUI({
     ,column(width=3
             ,br()
             ,wellPanel(
-              checkboxInput("fileInsteadNcbi","Upload file instead of search",value=FALSE)
+              checkboxInput("fileInsteadNcbi","Upload file instead of searching (3a)",value=FALSE)
             )
             ,uiOutput("searchUI")
             ,uiOutput("chooseFileUI")
@@ -1089,12 +1178,12 @@ output$parameterPanel = renderUI({
                                                    , paramValues$remSimiMarkLegDefault
                                     )
                                )
-
                         )
                         ,column(4
                                 ,div(
                                      title=legendWidthDesc
-                                     ,numericInput("legendWidth", "width"
+                                     ,numericInput("legendWidth"
+                                                   , "width"
                                                    , paramValues$legendWidthDefault, min = 0.25, max = 5, step=0.05)
                                 )
                                 ,div(
@@ -1112,17 +1201,54 @@ output$parameterPanel = renderUI({
                                                    , paramValues$legendHeightDefault
                                                    , min = 0.25, max = 5, step=0.05)
                                 )
-
                                 ,div(
-                                  title=bannedMarkNameDesc
-                                  ,textInput("bannedMarkName",
-                                             HTML(paste("remove"
-                                                        ,"this labels", sep = "<br/>")
-                                             )
-                                             ,paramValues$bannedMarkNameDefault
+                                  title= markNewLineDesc
+                                  ,textInput("markNewLine"
+                                             , "split sq. marks"
+                                             , paramValues$markNewLineDefault
                                   )
-                               )
-                           )
+                                )
+
+                        ) # c
+                      ) #fR
+                      ,splitLayout(cellWidths = c("30%","2%","30%","2%","30%")
+                        ,div(
+                          title=forbiddenMarkDesc
+                          ,textInput("forbiddenMark",
+                                     HTML(paste("remove",
+                                                "completely"
+                                                , sep = "<br/>")
+                                     )
+                                     ,paramValues$forbiddenMarkDefault
+                          )
+                        )
+                        ,br()
+                        ,div(
+                          title=bannedMarkNameDesc
+                          ,textInput("bannedMarkName",
+                                     HTML(paste("ban"
+                                                ,"this labels", sep = "<br/>")
+                                     )
+                                     ,paramValues$bannedMarkNameDefault
+                          )
+                        )
+                        ,br()
+                        ,div(
+                          title=bMarkNameAsideDesc
+                          ,checkboxInput("bMarkNameAside"
+                                         ,tagList(
+                                           div(style="height:15px;",
+                                               tags$span("banned", style = "font-size: 80%;")
+                                           ),
+                                           div(style="height:15px;",
+                                               tags$span("marks", style = "font-size: 80%;")
+                                           ),
+                                           div(style="height:15px;",
+                                               tags$span("to side", style = "font-size: 80%;")
+                                           )
+                                         )
+                                         ,paramValues$bMarkNameAsideDefault)
+                        )
                       )
                       ,splitLayout(
                         cellWidths = c("30%","2%","30%","2%","30%")
@@ -1174,7 +1300,7 @@ output$parameterPanel = renderUI({
                                            , paramValues$legendYcoordDefault
                                            , min = 0.0, max = 30, step=0.2)
                         )
-                      )
+                      ) # sL
            )
            ,wellPanel(style="margin-top:-15px;padding: 0px 20px 0px 5px;"
                       ,splitLayout(cellWidths = c("28%","72%")
@@ -1203,9 +1329,6 @@ output$parameterPanel = renderUI({
 
                       ,splitLayout(
                         cellWidths = c("15%","21%","21%","21%","21%")
-
-
-
 
                         ,tagList(tags$span(tags$strong("right") )
                                  ,br()
@@ -1387,13 +1510,6 @@ output$parameterPanel = renderUI({
                                                 ,selected = paramValues$originDefault
                                   )
                                 )
-
-                                ,div(title=hideCenLinesDesc
-                                     ,numericInput("hideCenLines"
-                                                   ,"hide factor"
-                                                   ,paramValues$hideCenLinesDefault
-                                     )
-                                )
                         )
                       )
                       ,div(style="text-align:center;"
@@ -1493,38 +1609,41 @@ output$parameterPanel = renderUI({
            )
 
            ,wellPanel(style="margin-top:-15px;"
-                      ,fluidRow(
-                        column(6
-                               ,h4("OTU")
-                               ,div(style="margin-top:-10px;"
+                      ,splitLayout(cellWidths = c("66%","33%")
+                        ,div(
+                        splitLayout(cellWidths = c("35%","60%")
+                      ,h4("OTU")
+                      ,div(style="overflow-x:hidden;"
+                          ,title=addOTUNameDesc
+                          , checkboxInput("addOTUName"
+                                          ,HTML(paste("Show name"
+                                                      , sep = "<br/>") )
+                                          ,paramValues$addOTUNameDefault)
+                      )
+                      )
+                      ,splitLayout(cellWidths = c("45%","45%")
+                         ,div(style="margin-top:20px;overflow-x:hidden;"
                                     ,title=OTUfamilyDesc
                                     , textInput("OTUfamily"
                                                     ,HTML(paste("Font family"
                                                                 , sep = "<br/>") )
                                                     ,paramValues$OTUfamilyDefault)
-                               )
-                               ,div(style="margin-top:-10px;"
-                                    ,title=addOTUNameDesc
-                                    , checkboxInput("addOTUName"
-                                                    ,HTML(paste("Show name"
-                                                                , sep = "<br/>") )
-                                                    ,paramValues$addOTUNameDefault)
-                               )
-                               ,div(title=OTUTextSizeDesc
+                          )
+                        ,div(style="margin-top:20px;"
+                        ,title=OTUTextSizeDesc
                                     , numericInput("OTUTextSize"
                                                    ,HTML(paste("text size"
                                                                , sep = "<br/>") )
                                                    , paramValues$OTUTextSizeDefault, min = 0.1, max = 5, step=0.1)
-                               )
                         )
-                        ,column(6
-                                ,div(title=OTUfontDesc
+                      ) # sL
+                      )
+                        ,div(title=OTUfontDesc
                                      ,radioButtons("OTUfont","font type",
                                                    c("normal"="1","bold"="2","italics"="3","bold italics"="4"),
                                                    selected=paramValues$OTUfontDefault)
-                                )
-                        )
-                      )
+                            )
+                       )
            )
            ,wellPanel(style= "margin-top: -10px"
                       ,splitLayout(
@@ -1546,7 +1665,7 @@ output$parameterPanel = renderUI({
               ,column(2
                       ,wellPanel(style="padding: 0px 5px 0px 5px"
                                    ,h4("Chromosomes")
-                                 ,fluidRow(
+                                 ,fluidRow(style="margin-bottom:-15px;",
                                    column(3
                                           ,div(style="margin-bottom:-15px",
                                                tags$span(tags$strong("order") )
@@ -1554,7 +1673,7 @@ output$parameterPanel = renderUI({
                                           )
                                    )
                                    ,column(9
-                                   ,div(style="margin-top:-20px",
+                                   ,div(style="margin-top:-20px;margin-bottom:-15px;",
                                                title=orderChrDesc
                                                ,radioButtons(
                                                  "orderChr",""
@@ -1570,18 +1689,12 @@ output$parameterPanel = renderUI({
                                           )
                                    )
                                  )
-                                 ,fluidRow(
-                                 column(3
-                                 ,div(style="margin-bottom:-15px",
-                                      tags$span(tags$strong("Chr.") )
-                                      ,tags$span(tags$strong("names:") )
+                                 ,div(style="margin-bottom:-15px;margin-top:-18px;",
+                                      tags$span(tags$strong("Chr. names:") )
                                  )
-                                 )
-                                 ,column(9
-                                   ,div(style="margin-top: -17px;",
+                                ,div(style="margin-top: -10px;",
                                                title=chrIdDesc
                                                ,radioButtons("chrId"
-
                                                               ,""
                                                               ,choices=c("original"="original","simple"="simple"
                                                                          ,"none"="none"
@@ -1589,11 +1702,38 @@ output$parameterPanel = renderUI({
                                                               ,paramValues$chrIdDefault
                                                               ,inline = T
                                                 )
-                                           )
+                                  )
+
+                                 ,splitLayout(cellWidths = c("40%","29%","29%")
+                                   ,div(
+                                     title=chrIdPatternRemDesc
+                                     ,textInput("chrIdPatternRem"
+                                                ,HTML(paste(
+                                                  tags$span("remove pattern", style = "font-size: 80%;")
+                                                  , sep="<br/>")
+                                                )
+                                                ,paramValues$chrIdPatternRemDefault
+                                     )
                                    )
+                                  ,div(
+                                     title=classChrNameDesc
+                                     ,textInput("classChrName"
+                                                ,HTML(paste(
+                                                  tags$span("label")
+                                                  , sep="<br/>")
+                                                )
+                                                ,paramValues$classChrNameDefault
+                                     )
+                                   )
+                                  ,div(title=hideCenLinesDesc
+                                       ,numericInput("hideCenLines"
+                                                     ,tags$span("hide factor", style = "font-size: 80%;")
+                                                     ,paramValues$hideCenLinesDefault
+                                       )
+                                  )
                                  )
-                                 ,splitLayout(
-                                   div(
+                                 ,splitLayout(cellWidths = c("24%","24%","24%","24%")
+                                   ,div(
                                      title=chrWidthDesc
                                      ,numericInput("chrWidth",HTML(paste("","Width",sep="</br>") )
                                                    , paramValues$chrWidthDefault, min = 0.1, max = 5, step=0.05)
@@ -1602,6 +1742,13 @@ output$parameterPanel = renderUI({
                                      title=chrSpacingDesc
                                      ,numericInput("chrSpacing", HTML(paste("horiz.","spacing", sep="</br>") )
                                                    , paramValues$chrSpacingDefault, min = 0.1, max = 5, step=0.1)
+                                   )
+
+                                   ,div(
+                                     title=groupSeparDesc
+                                     ,numericInput("groupSepar", HTML(paste("group","spacing", sep="</br>") )
+                                                   , paramValues$groupSeparDefault, min = 0.1, max = 5, step=0.1
+                                                   )
                                    )
                                    , div(
                                      title=lwd.chrDesc
@@ -1614,9 +1761,12 @@ output$parameterPanel = renderUI({
               )
               ,column(2
                       ,wellPanel(style = "padding: 0px 5px 0px 5px"
-                                 ,splitLayout(cellWidths = c("40%","30%","30%")
-                                              ,h4("Karyotypes")
-                                              ,div(title=karSeparDesc
+
+                                 ,splitLayout(cellWidths = c("75%","24%")
+                                              ,div(style = "padding: 0px 0px 0px 0px; overflow-x: hidden;",
+                                              h4("Karyotypes")
+                                              ,splitLayout(
+                                              div(title=karSeparDesc
                                                    ,checkboxInput("karSepar"
                                                                   ,HTML(paste(
                                                                     tags$span("equally", style = "font-size: 80%;")
@@ -1633,7 +1783,21 @@ output$parameterPanel = renderUI({
                                                                   )
                                                                   ,paramValues$verticalPlotDefault)
                                               )
-                                 )
+                                              )
+                                              )
+                                              ,div(
+                                                title=classGroupNameDesc
+                                                ,textInput("classGroupName"
+                                                           ,HTML(paste(
+                                                             tags$span("group", style = "font-size: 70%;")
+                                                             ,tags$span("label", style = "font-size: 70%;")
+                                                             , sep="<br/>")
+                                                           )
+                                                           ,paramValues$classGroupNameDefault
+                                                )
+                                              )
+                                  )
+
 
                                  ,splitLayout(style="margin-bottom:-12px;"
                                               ,cellWidths = c("23%","1%","23%","1%","23%","1%","23%")
@@ -1689,7 +1853,7 @@ output$parameterPanel = renderUI({
                                                                   tags$span("separ.")
                                                               )
                                                             )
-                                                              , paramValues$amoSeparDefault, min = 0, max = 15, step=0.5)
+                                                            ,paramValues$amoSeparDefault, min = 0, max = 15, step=0.5)
                                               )
                                               ,br()
                                               ,div(
@@ -1714,92 +1878,132 @@ output$parameterPanel = renderUI({
 
                       )
                                ,wellPanel(style="margin-top:-15px;padding: 0px 5px 0px 5px"
-                                          ,fluidRow(
-                                            column(7
-                                             ,h4("Chromatids")
+                                          ,splitLayout(
+                                            cellWidths = c("50%","24%","24%")
+                                            ,div(
+                                             h4("Chromatids")
                                              ,splitLayout(
-                                              cellWidths = c("50%","50%")
-                                          ,div(
-                                            title=chromatidsDesc
-                                               ,checkboxInput("chromatids"
+                                              cellWidths = c("48%","48%")
+                                              ,div(
+                                              title=chromatidsDesc
+                                              ,checkboxInput("chromatids"
+                                                             ,tagList(
+                                                               div(style="height:15px;",
+                                                                   tags$span("Show",style = "font-size: 80%;")
+                                                               ),
+                                                               div(style="height:15px;",
+                                                                   tags$span("separ.",style = "font-size: 80%;")
+                                                               )
+                                                             )
+                                                             ,paramValues$chromatidsDefault)
+                                              )
+                                              ,div(
+                                              title=holocenNotAsChromatidsDesc
+                                              ,checkboxInput("holocenNotAsChromatids"
+                                                             ,tagList(
+                                                               div(style="height:15px;",
+                                                                   tags$span("hol.",style = "font-size: 80%;")
+                                                               ),
+                                                               div(style="height:15px;",
+                                                                   tags$span("forbid.",style = "font-size: 80%;")
+                                                               )
+                                                             )
+                                                             ,paramValues$holocenNotAsChromatidsDefault
+                                              )
+                                            ) # div
+                                            ) # sL
+                                            ) # div
+                                            ,div(style = "padding: 0px 0px 0px 0px; overflow-x: hidden;",
+                                              title=xModifierDesc
+                                              ,numericInput("xModifier"
+                                                            ,tags$span("Separation",style = "font-size: 80%;")
+                                                            ,paramValues$xModifierDefault
+                                                            ,min = 2, max = 25, step=0.5)
+                                            )
+                                            ,div(
+                                              title=xModMonoHoloRateDesc
+                                              ,numericInput("xModMonoHoloRate"
+                                                            ,tags$span("hol. sep.",style = "font-size: 80%;")
+                                                            ,paramValues$xModMonoHoloRateDefault
+                                                            ,min = 1, max = 25, step=1)
+                                            )
+                                        ) # sL
+                               )
+                      ,wellPanel(style="margin-top:-15px; padding: 5px 5px 5px 5px;"
+                                 ,div(class="innerI"
+                                 ,splitLayout(cellWidths = c("30%","42%","30%")
+                                              ,actionButton("examDecrease", label=character(0),icon = icon("arrow-circle-left"), class="btn-success")
+                                              ,h4("Example")
+                                              ,actionButton("examIncrease", label=character(0),icon = icon("arrow-circle-right"), class="btn-success")
+                                 )
+                                 )
+                      )
+              )
+              ,column(2
+                      ,wellPanel(style = "padding: 0px 5px 0px 5px"
+                                 ,splitLayout(style="margin-bottom:-10px;"
+                                             ,cellWidths = c("24%","24%","24%","24%")
+                                             ,div(style="overflow-x: hidden;",
+                                               h4("Ruler")
+                                             )
+                                             ,div(style="overflow-x: hidden;",
+                                               title=rulerDesc
+                                               ,checkboxInput("ruler"
                                                               ,tagList(
                                                                 div(style="height:15px;",
                                                                     tags$span("Show",style = "font-size: 80%;")
                                                                 ),
                                                                 div(style="height:15px;",
-                                                                    tags$span("separ.",style = "font-size: 80%;")
+                                                                    tags$span("ruler",style = "font-size: 80%;")
                                                                 )
                                                               )
-                                                              ,paramValues$chromatidsDefault)
-                                          )
-                                          ,div(
-                                               title=holocenNotAsChromatidsDesc
-                                               ,checkboxInput("holocenNotAsChromatids"
+                                                              ,paramValues$rulerDefault
+                                                              )
+                                             )
+                                             ,div(style="overflow-x: hidden;",
+                                               title=useMinorTicksDesc
+                                               ,checkboxInput("useMinorTicks"
                                                               ,tagList(
                                                                 div(style="height:15px;",
-                                                                    tags$span("hol.",style = "font-size: 80%;")
+                                                                    tags$span("minor",style = "font-size: 80%;")
                                                                 ),
                                                                 div(style="height:15px;",
-                                                                    tags$span("forbid.",style = "font-size: 80%;")
+                                                                    tags$span("ticks",style = "font-size: 80%;")
                                                                 )
                                                               )
-                                                              ,paramValues$holocenNotAsChromatidsDefault
-                                               )
-                                          )
-                                          )
-                                          )
-                                          ,column(5
-                                          ,div(
-                                               title=xModifierDesc
-                                               ,numericInput("xModifier"
-                                                             ,tags$span("Separation",style = "font-size: 80%;")
-                                                             ,paramValues$xModifierDefault
-                                                             ,min = 2, max = 25, step=0.5)
-                                          )
-                                          ,div(
-                                            title=xModMonoHoloRateDesc
-                                            ,numericInput("xModMonoHoloRate"
-                                                          ,tags$span("hol. sep. prop.",style = "font-size: 80%;")
-                                                          ,paramValues$xModMonoHoloRateDefault
-                                                          ,min = 1, max = 25, step=1)
-                                          )
-
-                                      )
-                                          )
-                               )
-
-              )
-
-
-
-              ,column(2
-                      ,wellPanel(style = "padding: 0px 5px 0px 5px"
-                                 ,splitLayout(style="margin-bottom:-10px;"
-                                             ,cellWidths = c("50%","50%")
-                                             ,div(
-                                               h4("Ruler")
+                                                              ,paramValues$useMinorTicksDefault)
                                              )
-                                             ,div(
-                                               title=rulerDesc
-                                               ,checkboxInput("ruler",
-                                                              "Show ruler"
-                                                              ,paramValues$rulerDefault)
-                                             )
+                                              ,div(style="overflow-x:hidden;overflow-y:hidden;margin-bottom:0;margin-top:5px;",
+                                                title=miniTickFactorDesc
+                                                ,numericInput("miniTickFactor"
+                                                              ,tagList(
+                                                                div(style="height:10px;",
+                                                                    tags$span("minitick",style = "font-size: 70%;")
+                                                                ),
+                                                                div(style="height:10px;",
+                                                                    tags$span("prop.",style = "font-size: 70%;")
+                                                                )
+                                                              )
+                                                              , paramValues$miniTickFactorDefault, min = 2, max = 20, step=1
+                                                )
+                                              )
                                  )
-
-
-                                 ,splitLayout(style="margin-bottom:-10px;"
-                                              ,cellWidths = c("40%","60%")
-                                              ,br()
-                                              ,h4(tags$strong("position") )
+                                 ,splitLayout(style="margin-bottom:0px;margin-top:0px;"
+                                              ,cellWidths = c("45%","35%","15%")
+                                              ,span()
+                                              ,div(#style="height:15px;",
+                                              span(tags$strong("position",style = "font-size: 90%;") )
+                                              ,span()
+                                              )
                                  )
-                                 ,splitLayout(style="margin-bottom:-10px;"
+                                 ,splitLayout(style="margin-bottom:-15px;"
                                               ,cellWidths = c("22%","3%","23%","23%","23%")
                                               ,div(
                                                 title=ceilingFactorDesc
                                                 ,numericInput("ceilingFactor"
-                                                              , "approx."
-                                                              , paramValues$ceilingFactorDefault, min = -2, max = 5, step=1) ,
+                                                              , tags$span(tags$strong("approx."), style = "font-size: 80%;")
+                                                              , paramValues$ceilingFactorDefault, min = -2, max = 5, step=1
+                                                              )
                                               )
                                               ,br()
                                           ,div(
@@ -1811,7 +2015,7 @@ output$parameterPanel = renderUI({
                                           ,div(
                                                title=xPosRulerTitleDesc
                                                ,numericInput("xPosRulerTitle"
-                                                          , "title"
+                                                          , tags$span("title", style = "font-size: 80%;")
                                                           , paramValues$xPosRulerTitleDefault
                                                           , min = -5, max = 5, step=0.1)
                                           )
@@ -1826,7 +2030,7 @@ output$parameterPanel = renderUI({
                                  ,splitLayout(style="margin-bottom:-10px;"
                                               ,cellWidths = c("45%","50%")
                                               ,br()
-                                              ,h4(tags$strong("Interval") )
+                                              ,h4(tags$strong("interval") )
                                  )
                                  ,splitLayout(
                                    cellWidths = c("22%","3%","23%","23%","23%")
@@ -1863,8 +2067,8 @@ output$parameterPanel = renderUI({
                                  )
                                  )
 
-                                 ,splitLayout(style="margin-bottom:-10px;"
-                                              ,cellWidths = c("54%","44%")
+                                 ,splitLayout(style="margin-bottom:-15px;margin-top:-12px;",
+                                              cellWidths = c("60%","35%")
                                               ,br()
                                  ,h4(tags$strong("font size") )
                                  )
@@ -1872,19 +2076,18 @@ output$parameterPanel = renderUI({
                                               ,cellWidths = c("26%","24%","4%","21%","21%")
                                           ,div(
                                             title=ruler.tckDesc
-                                            ,numericInput("ruler.tck", "ticks"
+                                            ,numericInput("ruler.tck"
+                                                          ,tags$span("ticks", style = "font-size: 80%;")
+                                                          # , "ticks"
                                                           , paramValues$ruler.tckDefault, min = -5, max = 5, step=0.005)
                                           )
                                           ,div(
                                             title=thresholdDesc
                                             ,numericInput("threshold"
-
                                                           ,tags$span("thresh.", style = "font-size: 80%;")
                                                           , paramValues$thresholdDefault, min = 5, max = 95, step=1)
                                           )
-
                                           ,br()
-
                                           ,div(
                                                title=rulerNumberSizeDesc
                                                ,numericInput("rulerNumberSize"
@@ -1899,41 +2102,63 @@ output$parameterPanel = renderUI({
                                           )
                                    )
                       )
+
               )
               ,column(2
-                      ,wellPanel(style="padding: 0px 5px 0px 5px"
-                                  ,splitLayout(
-                                    cellWidths = c("50%","25%","24%")
-                                    ,h4("Centromere")
-                                    ,h5("Size")
-                                    ,div(
-                                      title=autoCenSizeDesc
-                                      ,checkboxInput("autoCenSize", "auto"
-                                                     , paramValues$autoCenSizeDefault
-                                      )
-                                    )
-                                  )
-                                  ,splitLayout(
-                                    cellWidths = c("50%","25%","24%")
-                                    ,div(style = "margin-top:-25px"
+                      ,wellPanel(style="padding: 0px 0px 0px 5px;",
+                                 splitLayout(
+                                    cellWidths = c("45%","53%")
+                                    ,div(style="overflow-x:hidden;",
+                                    h4("Centromere")
+                                    ,div(style = "margin-top:-20px"
                                          ,title=cenFormatDesc
                                          ,radioButtons("cenFormat","",c("rounded","triangle","inProtein")
                                                        ,selected=paramValues$cenFormatDefault)
                                     )
+                                    )
+                                    ,div(style="overflow-x:hidden;overflow-y:hidden;",
+                                    div(
+                                      title=autoCenSizeDesc
+                                      ,checkboxInput("autoCenSize"
+                                                     ,tagList(
+                                                       div(#style="height:15px;",
+                                                           tags$span("auto. size")
+                                                       )
+                                                     )
+                                                     , paramValues$autoCenSizeDefault
+                                      )
+                                    )
+                                    ,div(style = "margin-top:-5px",
+                                         title=collapseCenDesc
+                                         ,checkboxInput("collapseCen"
+                                                        ,tagList(
+                                                          div(
+                                                            tags$span("continuous ruler"
+                                                                      , style = "font-size: 70%;"
+                                                            )
+                                                          )
+                                                        )
+                                                        , paramValues$collapseCenDefault
+                                         )
+                                    )
+                                  ,splitLayout(style="margin-bottom:-10px;",
+                                    cellWidths = c("50%","48%")
                                     ,div(
                                       title=cenFactorDesc
                                       ,numericInput("cenFactor"
-                                                    ,tags$span("modify",style = "font-size: 80%;")
+                                                    ,tags$span("modify",style = "font-size: 70%;")
                                                     , paramValues$cenFactorDefault, min = 0, max = 10, step=0.25)
                                     )
                                     ,div(
                                       title=centromereSizeDesc
                                       ,numericInput("centromereSize"
-                                                    , tags$span("absolute",style = "font-size: 80%;")
+                                                    , tags$span("absolute",style = "font-size: 70%;")
                                                     , paramValues$centromereSizeDefault
                                                     , min = 0, max = 100000000, step=1)
                                     )
                                   )
+                                    ) # d
+                      )
                       )
                       ,wellPanel(style="margin-top:-15px;padding: 0px 20px 0px 5px;"
                                  ,splitLayout(
@@ -1967,14 +2192,15 @@ output$parameterPanel = renderUI({
                                  )
                       )
 
-                      ,wellPanel(style="margin-top:-15px;padding: 5px 5px 5px 5px"
-
-
-           ,splitLayout(cellWidths = c("25%","50%","25%")
-                        ,actionButton("fontDecrease", label = "<")
-                        ,h4("Fonts' size")
-                        ,actionButton("fontIncrease", label = ">")
-           )
+                      ,wellPanel(style="margin-top:-15px; padding: 5px 5px 5px 5px;"
+                                   ,div(class="innerI"
+                                  ,splitLayout(
+                                    cellWidths = c("30%","42%","30%")
+                                   ,actionButton("fontDecrease", label=character(0),icon = icon("arrow-alt-circle-down") )
+                                   ,h4("Fonts' size")
+                                   ,actionButton("fontIncrease", label=character(0),icon = icon("arrow-alt-circle-up"))
+                                 )
+                                )
      )
 )
 
@@ -1998,41 +2224,35 @@ output$parameterPanel = renderUI({
                                 )
                    )
                    ,splitLayout(cellWidths = c("25%","37%","38%")
-
-
-
-
-
-
                                 ,br()
                                 ,uiOutput("imageWidth")
                                 ,uiOutput("imageHeight")
                    )
-                   ,h5(strong("Format") )
-                   ,splitLayout(
+                   ,div(style="text-align:center"
+                    ,h5(strong("Format:") )
+                   )
+                   ,splitLayout(style = "margin-top:-7px;",
                      radioButtons("pngorsvg","Display",c("svg","png"),selected = "svg",inline = T )
                      ,radioButtons("pngorsvgDown","Download",c("svg","png"),inline = T )
                    )
                    ,div(style = "margin-top:-7px;margin-bottom:7px"
-                        ,downloadButton('pngorsvgDownButton', 'Download plot')
+                        ,downloadButton('pngorsvgDownButton'
+                                        , tags$strong('Download plot')
+                                        , class = "btn-info"
+                                        )
                    )
+
+        ) # wP
+        ,wellPanel(style="margin-top:-15px; padding: 2px 5px 0px 5px",
+          helpText(presetUseText)
+
+          ,div(style = 'margin-top:-4px;margin-bottom:5px;',
+               uiOutput("buttonPresets2")
+          )
+
         )
-        ,wellPanel(style="margin-top:-15px;padding: 5px 5px 5px 5px"
-
-                   ,div(style = "margin-bottom:-10px"
-                        ,splitLayout(cellWidths = c("30%","20%","30%","20%")
-                                     ,h5(tags$strong("Zoom (X)") )
-                                     ,actionButton("left", label = "<")
-
-                                     ,sliderInput("hwModifier","",0,10,1, step = 0.1, ticks = FALSE)
-
-                                     ,actionButton("right", label = ">")
-                        )
-                   )
-        )
-
+) #c
 )
-            )
             ,fluidRow(
               column(10,
                      wellPanel(
@@ -2056,6 +2276,19 @@ output$parameterPanel = renderUI({
 
 output$lastCol<- renderUI({
   column(width=2
+         ,wellPanel(style="margin-top:-15px;padding: 5px 5px 5px 5px"
+
+                    ,div(style = "margin-bottom:-10px"
+                         ,splitLayout(cellWidths = c("30%","20%","30%","20%")
+                                      ,h5(tags$strong("Zoom (X)") )
+                                      ,actionButton("left", label=character(0),icon = icon("search-minus"))
+
+                                      ,sliderInput("hwModifier","",0,10,1, step = 0.1, ticks = FALSE)
+
+                                      ,actionButton("right", label=character(0),icon = icon("search-plus"))
+                         )
+                    )
+         )
 
          ,wellPanel(style="margin-top:-15px;padding: 0px 15px 0px 5px",
            h4("Margins"),
@@ -2120,6 +2353,20 @@ output$lastCol<- renderUI({
                                              , sep = "<br/>") )
                                  , paramValues$distTextChrDefault, min = 0.2, max = 5, step=0.1)
              )
+             ,div(style="overflow-x:hidden",
+                  title=karIndexDesc
+                  ,checkboxInput("karIndex"
+                                 ,tagList(
+                                   div(style="height:15px;",
+                                       tags$span("Add kar.", style = "font-size: 70%;")
+                                   ),
+                                   div(style="height:15px;",
+                                       tags$span("ind. A/A2", style = "font-size: 70%;")
+                                   )
+                                 )
+                                 ,paramValues$karIndexDefault
+                  )
+             ) # d
            )
            ,splitLayout(
              div(title=morphoDesc
@@ -2127,7 +2374,7 @@ output$lastCol<- renderUI({
                                ,c("Guerra (1986)"="Guerra"
                                   ,"Levan (1974)"="Levan"
                                   ,"both"="both"
-                                  ,"none"="")
+                                  ,"none"="none")
                                ,selected = paramValues$morphoDefault
                  )
              ),
@@ -2136,7 +2383,7 @@ output$lastCol<- renderUI({
                                ,c("Chr. Index"="CI"
                                   ,"Arm Ratio"="AR"
                                   ,"both"="both"
-                                  ,"none"="")
+                                  ,"none"="none")
                                ,selected = paramValues$chrIndexDefault )
              )
            )
@@ -2145,58 +2392,116 @@ output$lastCol<- renderUI({
                         ,br()
                         ,h4(tags$strong("Show") )
            )
-           ,fluidRow(
-           column(6
-             ,div(
+           ,splitLayout(
+             div(
                   title=chrSizeDesc
-                  ,checkboxInput("chrSize",
-                                 HTML(paste("Chrom.", "size", sep = "<br/>") )
-                                 ,paramValues$chrSizeDefault)
-             )
-             ,div(title=karIndexDesc
-                 ,checkboxInput("karIndex",
-                                HTML(paste("Add kar.","ind. A/A2",sep="<br/>"
-                                )
-                                )
-                                ,paramValues$karIndexDefault
-                 )
-             )
-           )
-           ,column(6
-              ,div(
-                  title=chrSizeMbpDesc
-                  ,checkboxInput("chrSizeMbp"
+                  ,checkboxInput("chrSize"
                                  ,tagList(
                                    div(style="height:15px;",
-                                       tags$span("Chr.")
+                                       tags$span("Chrom.", style = "font-size: 70%;")
                                    ),
                                    div(style="height:15px;",
-                                       tags$span("size")
-                                   )
-                                   ,div(style="height:15px;",
-                                        tags$span("in Mbp")
-                                   )
-                                   ,div(style="height:15px;",
-                                        tags$p("(column", style = "font-size: 80%;")
-                                   )
-                                   ,div(style="height:15px;",
-                                        tags$p("required)", style = "font-size: 80%;")
+                                       tags$span("size", style = "font-size: 70%;")
                                    )
                                  )
-                                 ,paramValues$chrSizeMbpDefault)
+                                 ,paramValues$chrSizeDefault)
              )
-           )
-           )
-           ,splitLayout(
+             ,div(style="overflow-x:hidden;",
+               title=chrNameUpDesc
+               ,checkboxInput("chrNameUp"
+                              ,tagList(
+                                div(style="height:15px;",
+                                    tags$span("Chrom.", style = "font-size: 70%;")
+                                ),
+                                div(style="height:15px;",
+                                    tags$span("name up", style = "font-size: 70%;")
+                                )
+                                ,div(style="height:15px;",
+                                     tags$p("(column", style = "font-size: 80%;")
+                                )
+                                ,div(style="height:15px;",
+                                     tags$p("required)", style = "font-size: 80%;")
+                                )
+                              )
+                              ,paramValues$chrNameUpDefault)
+             )
+             ,div(
+               title=chrSizeMbpDesc
+               ,checkboxInput("chrSizeMbp"
+                              ,tagList(
+                                div(style="height:15px;",
+                                    tags$span("Chr.")
+                                ),
+                                div(style="height:15px;",
+                                    tags$span("size")
+                                )
+                                ,div(style="height:15px;",
+                                     tags$span("in Mbp")
+                                )
+                                ,div(style="height:15px;",
+                                     tags$p("(column", style = "font-size: 80%;")
+                                )
+                                ,div(style="height:15px;",
+                                     tags$p("required)", style = "font-size: 80%;")
+                                )
+                              )
+                              ,paramValues$chrSizeMbpDefault)
+             )
 
-           div(title=karIndexPosDesc
-                ,numericInput("karIndexPos",tags$strong("Kar. index pos.")
+           ) # sL
+           ,splitLayout(
+             cellWidths = c("24%","24%","24%","24%")
+             ,div(
+               title=classChrNameUpDesc
+               ,textInput("classChrNameUp"
+                          ,tagList(
+                            div(style="height:15px;",
+                                tags$span("up", style = "font-size: 70%;")
+                            ),
+                            div(style="height:15px;",
+                                tags$span("label", style = "font-size: 70%;")
+                            )
+                          )
+                          ,paramValues$classChrNameUpDefault
+               )
+             )
+             ,div(style="overflow-x:hidden",
+               title=nsmallDesc
+                ,numericInput("nsmall"
+                              ,tagList(
+                                div(style="height:15px;",
+                                    tags$span("approx.", style = "font-size: 70%;")
+                                ),
+                                div(style="height:15px;",
+                                    tags$span("values", style = "font-size: 70%;")
+                                )
+                              )
+                              ,paramValues$nsmallDefault
+                )
+             )
+           ,div(title=karIndexPosDesc
+                ,numericInput("karIndexPos"
+                              ,tagList(
+                                div(style="height:15px;",
+                                    tags$span("kar.", style = "font-size: 70%;")
+                                ),
+                                div(style="height:15px;",
+                                    tags$span("ind. pos.", style = "font-size: 70%;")
+                                )
+                              )
                                ,paramValues$karIndexPosDefault
                 )
            )
            ,div(title=nameChrIndexPosDesc
                 ,numericInput("nameChrIndexPos"
-                              ,tags$strong("Chr. index pos.")
+                              ,tagList(
+                                div(style="height:15px;",
+                                    tags$span("chr.", style = "font-size: 70%;")
+                                ),
+                                div(style="height:15px;",
+                                    tags$span("ind. pos.", style = "font-size: 70%;")
+                                )
+                              )
                               ,paramValues$nameChrIndexPosDefault
                 )
            )
@@ -2209,19 +2514,19 @@ output$lastCol<- renderUI({
                               ,paramValues$perAsFractionDefault)
              )
              ,div(
-                 title=markPerDesc
-                 ,textInput("markPer",
-                        HTML(paste("% of this","marks:", sep = "<br/>") )
-                        ,paramValues$markPerDefault)
-                    )
-
-           )
-           ,splitLayout(
-             div(
                title=showMarkPosDesc
                ,checkboxInput("showMarkPos",
                               HTML(paste("mark's", "pos.", sep = "<br/>") )
                               ,paramValues$showMarkPosDefault)
+             )
+
+           )
+           ,splitLayout(
+             div(
+               title=markPerDesc
+               ,textInput("markPer",
+                          HTML(paste("% of this","marks:", sep = "<br/>") )
+                          ,paramValues$markPerDefault)
              )
               ,div(
                       title=bToRemoveDesc
@@ -2234,28 +2539,52 @@ output$lastCol<- renderUI({
 
          )
          ,wellPanel(style = "margin-top:-15px;padding: 0px 20px 0px 5px"
-           ,splitLayout(
-             h4("Anchor")
-             ,  div(title=anchorDesc
-                    ,checkboxInput("anchor", "Show anchor", paramValues$anchorDefault)
+           ,splitLayout(cellWidths = c("30%","34%")
+             ,h4("Anchor")
+             ,div(title=anchorDesc
+                    ,checkboxInput("anchor"
+                                   ,HTML(paste("Show","anchor", sep="<br/>"
+                                   ) )
+                                   , paramValues$anchorDefault)
              )
            )
            ,splitLayout(
-             div(title=moveKarHorDesc
-                 ,textInput("moveKarHor",
-                            "kar. to move",
-                            value  = paramValues$moveKarHorDefault
-                            ,width = "100%")
+             div(title=anchorVsizeFDesc
+                  ,numericInput("anchorVsizeF"
+                                ,HTML(paste("Mod.","anchor-y", sep="<br/>"
+                                ) )
+                                , paramValues$anchorVsizeFDefault
+                                , min = .2, max = 3, step=0.2)
+             )
+             ,div(title=anchorHsizeFDesc
+                 ,numericInput("anchorHsizeF"
+                               ,HTML(paste("Mod.","anchor-x", sep="<br/>"
+                               ) )
+                               , paramValues$anchorHsizeFDefault
+                               , min = .2, max = 3, step=0.2)
              )
              ,div(title=mkhValueDesc
-                  ,numericInput("mkhValue", "move kar.", paramValues$mkhValueDefault, min = -10, max = 10, step=0.25)
+                  ,numericInput("mkhValue"
+                                ,HTML(paste("move","kar.", sep="<br/>"
+                                ) )
+                                , paramValues$mkhValueDefault, min = -10, max = 10, step=0.25)
              )
            )
-           ,div(title=karAnchorLeftDesc
-                             ,textInput("karAnchorLeft",
-                                        "kar. to anchor",
-                                        value  = paramValues$karAnchorLeftDefault
+           ,splitLayout(
+           div(title=karAnchorLeftDesc
+                             ,textInput("karAnchorLeft"
+                                        ,HTML(paste("kar.","to anchor", sep="<br/>"
+                                        ) )
+                                        ,value  = paramValues$karAnchorLeftDefault
                                         ,width = "100%")
+           )
+           ,div(title=moveKarHorDesc
+                              ,textInput("moveKarHor"
+                                         ,HTML(paste("kar.","to move", sep="<br/>"
+                                         ) )
+                                         ,value  = paramValues$moveKarHorDefault
+                                         ,width = "100%")
+           )
            )
            ,splitLayout(
              div(title=moveAnchorVDesc
@@ -2316,7 +2645,7 @@ output$chrColorUI<- renderUI({
 
 output$marksUIcolor <- renderUI({
 
-  div(
+  div(style="padding:0px 2px 2px 2px; margin-top:-15px;",
       title=mycolorsDesc
       ,textInput('mycolors'
                  ,HTML(paste("Marks"
@@ -2332,6 +2661,10 @@ output$colColor<- renderUI({
          ,wellPanel(style = "background: #F7DCDA; padding: 0px 5px 0px 5px"
                     ,uiOutput("chrColorUI")
                     ,uiOutput("marksUIcolor")
+         )
+         ,wellPanel(style="margin-top:-15px;padding: 8px 5px 9px 5px",
+                    textOutput(outputId = "currentExample"
+                    )
          )
   )
 })

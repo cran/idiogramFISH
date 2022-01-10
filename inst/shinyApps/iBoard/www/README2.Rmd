@@ -112,6 +112,7 @@ The left side menu of the shiny app consists of three pages with several tabs:
 
 * Examples (presets)
     + Load example
+    + Upload presets
 
 * Nucleotides 
     + Search
@@ -123,9 +124,9 @@ The left side menu of the shiny app consists of three pages with several tabs:
     + Notes
 
 * Parameters & Plot
-    + Parameters
+    + Parameters (plot and download preset)
     + Log
-    + code
+    + code (download data.frames and code)
     
 * stats (output)
     + Indices
@@ -133,17 +134,13 @@ The left side menu of the shiny app consists of three pages with several tabs:
     
 * About
 
-The goal of idiogramFISH is to plot idiograms of karyotypes, plasmids and circ. chr. having a set of data.frames for chromosome data
-    and optionally marks' data (`plotIdiograms` function) [@Roa2021]. Idiograms can also be plotted in 
-    concentric circles. Separated chromatids can be visible when not in a circular plot.<br>
-    <br>Six styles of marks are available: square (squareLeft), dots, cM (cMLeft), cenStyle, upArrow (downArrow), exProtein (inProtein); its legend (label) can be drawn inline 
-    or to the right of karyotypes. Three styles of centromere are available: rounded, triangular and internal (inProtein). It is possible to calculate
-    also chromosome and karyotype indexes [@Watanabe1999;@Zarco1986new] and classify chromosome morphology in the categories of
-    Levan [-@Levan1964], and [Guerra](https://ferroao.gitlab.io/guerra1986/Guerra1986.pdf) [-@Guerra1986d].
+The goal of idiogramFISH functions or shiny-app is to plot karyotypes, plasmids and circular chr. having a set of data.frames for chromosome data and optionally marks' data [@Roa2021]. Karyotypes can also be plotted in concentric circles.<br>
+    <br>It is possible to calculate also chromosome and karyotype indexes [@Watanabe1999;@Zarco1986new] and classify chromosome morphology in the categories of Levan [-@Levan1964], and [Guerra](https://ferroao.gitlab.io/guerra1986/Guerra1986.pdf) [-@Guerra1986d].<br>
+    <br>Six styles of marks are available: square (squareLeft), dots, cM (cMLeft), cenStyle, upArrow (downArrow), exProtein (inProtein) (column `style` in `dfMarkColor` data.frame); its legend (label) (parameter `legend`) can be drawn inline or to the right of karyotypes. Three styles of centromere are available: rounded, triangle and inProtein (`cenFormat` parameter). Chromosome regions (column `chrRegion` in `dfMarkPos` data.frame) for monocentrics are `p`, `q`, `cen`, `pcen`, `qcen`. The last three cannot accommodate most mark styles, but can be colored. The region `w` can be used both in monocentrics and holocentrics.
 
 IdiogramFISH was written in R [@R-base] and also uses crayon [@R-crayon], tidyr [@R-tidyr], plyr [@plyr2011] and dplyr packages [@R-dplyr]. Documentation was written with R-packages roxygen2 [@R-roxygen2], usethis [@R-usethis], bookdown [@bookdown2016], knitr [@Xie2015], pkgdown [@R-pkgdown], Rmarkdown [@rmarkdown2018], rvcheck [@R-rvcheck], badger [@R-badger], kableExtra [@R-kableExtra], rmdformats [@R-rmdformats] and RCurl [@R-RCurl]. For some vignette figures, packages rentrez [@rentrez2017], phytools [@phytools2012], ggtree [@ggtree2018], ggplot2 [@ggplot22016] and ggpubr [@R-ggpubr] were used.
 
-In addition, the shiny app `runBoard()` uses shiny [@R-shiny], shinydashboard [@R-shinydashboard], rhandsontable [@R-rhandsontable], gtools [@R-gtools], rclipboard [@R-rclipboard].
+In addition, the shiny app `runBoard()` uses shiny [@R-shiny], shinydashboard [@R-shinydashboard], rhandsontable [@R-rhandsontable], gtools [@R-gtools] and rclipboard [@R-rclipboard].
 
 <!-- badger -->
 

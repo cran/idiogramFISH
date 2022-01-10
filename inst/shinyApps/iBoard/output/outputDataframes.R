@@ -95,6 +95,17 @@ output$buttontable2 <-  renderUI({
   }
 })
 
+output$buttonList <-  renderUI({
+  validate(
+    need(try(values[["dfList"]]), "")
+  )
+  if(input$saveType=="csv"){
+    downloadButton('downloadCsv2', 'Download table as .csv')
+  } else {
+    downloadButton('downloadRds2', 'Download table as .rds')
+  }
+})
+
 #
 #   download notes
 #
@@ -226,6 +237,8 @@ output$downloadCsvperMark <- downloadHandler(
     write.csv(values[["perMark"]], file, na="", # wdf
               row.names = FALSE, quote = TRUE)
   }
+  ,  contentType = "text/csv"
+
 )
 
 #
@@ -241,6 +254,8 @@ output$downloadCsvposCalc <- downloadHandler(
     write.csv(values[["posCalc"]], file, na="", # wdf
               row.names = FALSE, quote = TRUE)
   }
+  ,  contentType = "text/csv"
+
 )
 
 #
@@ -256,6 +271,8 @@ output$downloadCsvARCI <- downloadHandler(
     write.csv(values[["ARCI"]], file, na="", # wdf
               row.names = FALSE, quote = TRUE)
   }
+  ,  contentType = "text/csv"
+
 )
 
 #
@@ -271,6 +288,8 @@ output$downloadCsvAA2 <- downloadHandler(
     write.csv(values[["AA2"]], file, na="", # wdf
               row.names = FALSE, quote = TRUE)
   }
+  ,  contentType = "text/csv"
+
 )
 
 
@@ -287,6 +306,8 @@ output$downloadCsv <- downloadHandler(
     write.csv(values[["df1"]], file, na="", # wdf
               row.names = FALSE, quote = TRUE)
   }
+  ,  contentType = "text/csv"
+
 )
 
 output$downloadCsv2 <- downloadHandler(
@@ -297,6 +318,7 @@ output$downloadCsv2 <- downloadHandler(
     write.csv(values[["df1"]], file, na="", # wdf
               row.names = FALSE, quote = TRUE)
   }
+  ,  contentType = "text/csv"
 )
 
 output$downloadRds2 <- downloadHandler(
@@ -307,6 +329,7 @@ output$downloadRds2 <- downloadHandler(
     saveRDS(values[["df1"]], file,
     )
   }
+  ,  contentType = "rds"
 )
 
 #
@@ -322,6 +345,8 @@ output$downloadCsvMark <- downloadHandler(
     write.csv(values[["df1Mark"]], file, na="",
               row.names = FALSE, quote = TRUE)
   }
+  ,  contentType = "text/csv"
+
 )
 
 output$downloadCsvMark2 <- downloadHandler(
@@ -332,6 +357,8 @@ output$downloadCsvMark2 <- downloadHandler(
     write.csv(values[["df1Mark"]], file, na="",
               row.names = FALSE, quote = TRUE)
   }
+  ,  contentType = "text/csv"
+
 )
 
 output$downloadRdsMark2 <- downloadHandler(
@@ -342,6 +369,8 @@ output$downloadRdsMark2 <- downloadHandler(
     saveRDS(values[["df1Mark"]], file,
     )
   }
+  ,  contentType = "rds"
+
 )
 
 
@@ -358,6 +387,8 @@ output$downloadCsvMStyle <- downloadHandler(
     write.csv(values[["df1MStyle"]], file, na="",
               row.names = FALSE, quote = TRUE)
   }
+  ,  contentType = "text/csv"
+
 )
 
 output$downloadCsvMStyle2 <- downloadHandler(
@@ -368,6 +399,8 @@ output$downloadCsvMStyle2 <- downloadHandler(
     write.csv(values[["df1MStyle"]], file, na="",
               row.names = FALSE, quote = TRUE)
   }
+  ,  contentType = "text/csv"
+
 )
 
 output$downloadRdsMStyle2 <- downloadHandler(
@@ -378,6 +411,8 @@ output$downloadRdsMStyle2 <- downloadHandler(
     saveRDS(values[["df1MStyle"]], file,
     )
   }
+  ,  contentType = "rds"
+
 )
 
 #
@@ -392,6 +427,8 @@ output$downloadCsvNotes <- downloadHandler(
     write.csv(values[["notes"]], file, na="",
               row.names = FALSE, quote = TRUE)
   }
+  ,  contentType = "text/csv"
+
 )
 
 output$downloadCsvNotes2 <- downloadHandler(
@@ -402,6 +439,8 @@ output$downloadCsvNotes2 <- downloadHandler(
     write.csv(values[["notes"]], file, na="",
               row.names = FALSE, quote = TRUE)
   }
+  ,  contentType = "text/csv"
+
 )
 
 output$downloadRdsNotes2 <- downloadHandler(
@@ -412,6 +451,8 @@ output$downloadRdsNotes2 <- downloadHandler(
     saveRDS(values[["notes"]], file,
     )
   }
+  ,  contentType = "rds"
+
 )
 
 #
@@ -426,6 +467,8 @@ output$downloadCsvleftNotes <- downloadHandler(
     write.csv(values[["leftNotes"]], file, na="",
               row.names = FALSE, quote = TRUE)
   }
+  ,  contentType = "text/csv"
+
 )
 
 output$downloadCsvleftNotes2 <- downloadHandler(
@@ -436,6 +479,8 @@ output$downloadCsvleftNotes2 <- downloadHandler(
     write.csv(values[["leftNotes"]], file, na="",
               row.names = FALSE, quote = TRUE)
   }
+  ,  contentType = "text/csv"
+
 )
 
 output$downloadRdsleftNotes2 <- downloadHandler(
@@ -446,6 +491,8 @@ output$downloadRdsleftNotes2 <- downloadHandler(
     saveRDS(values[["leftNotes"]], file,
     )
   }
+  ,  contentType = "rds"
+
 )
 
 #
@@ -460,6 +507,8 @@ output$downloadCsvleftNotesUp <- downloadHandler(
     write.csv(values[["leftNotesUp"]], file, na="",
               row.names = FALSE, quote = TRUE)
   }
+  ,  contentType = "text/csv"
+
 )
 
 output$downloadCsvleftNotesUp2 <- downloadHandler(
@@ -470,6 +519,8 @@ output$downloadCsvleftNotesUp2 <- downloadHandler(
     write.csv(values[["leftNotesUp"]], file, na="",
               row.names = FALSE, quote = TRUE)
   }
+  ,  contentType = "text/csv"
+
 )
 
 output$downloadRdsleftNotesUp2 <- downloadHandler(
@@ -480,6 +531,8 @@ output$downloadRdsleftNotesUp2 <- downloadHandler(
     saveRDS(values[["leftNotesUp"]], file,
     )
   }
+  ,  contentType = "rds"
+
 )
 
 #

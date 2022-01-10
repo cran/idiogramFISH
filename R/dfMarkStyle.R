@@ -34,3 +34,6 @@ NULL
 #' @description dfMarkColor5S25S: mark characteristics used in circular plot vignette
 #' @rdname dfMarkStyle
 "dfMarkColor5S25S"
+#' @description dfMarkColorIn: mark characteristics
+#' @rdname dfMarkStyle
+"dfMarkColorIn"

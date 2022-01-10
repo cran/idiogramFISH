@@ -36,7 +36,7 @@ ui <- tagList(
   padding-top: 0px;
   padding-right: 0px;
   padding-bottom: 0px;
-  padding-left: 12px;
+  padding-left: 5px;
 }
 "),
   tags$div(class="container",
@@ -47,7 +47,9 @@ ui <- tagList(
                           )
                           ,dashboardBody(
                             tags$head(
-                              tags$style("#markdown{height:100vh !important;}")
+                              tags$style(HTML(".fa{font-size: 12px;}") )
+                              ,tags$style(HTML(".innerI .fa {font-size: 18px;}") )
+                              ,tags$style("#markdown{height:100vh !important;}")
                               ,tags$link(rel = "stylesheet", type = "text/css", href = "mystyle.css" )
                               ,tags$style(
                                 "

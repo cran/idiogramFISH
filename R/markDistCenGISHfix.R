@@ -28,6 +28,8 @@ markDistCenGISHfix<-function(dfArmGISHInternalMonocen,dfChrSizeInternal
     dfArmGISHInternalMonocen$markSize <- dfChrSizeInternal[match(interaction(dfArmGISHInternalMonocen[c("OTU","chrName")] ),
                                                              interaction(dfChrSizeInternal[c("OTU","chrName") ] )
     ),][,columnArmSize]
+    dfArmGISHInternalMonocen$markSizeOrig<-NA
+
     if(addR2){
     dfArmGISHInternalMonocen$markSizeProtein<-dfArmGISHInternalMonocen$markSize-(dfArmGISHInternalMonocen$r2*2)
     }

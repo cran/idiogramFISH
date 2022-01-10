@@ -1,13 +1,17 @@
 output$idiogramPlot <- renderImage( {
 
   validate(need(try(values[["stop"]]==FALSE),"not ready" ) )
-  validate(need(try(values[["df1"]]),"Start in Example or Nucleotide pages (left)" ))
+  validate(need(try(values[["df1"]]),"Start with Examples, data.frames or Nucleotide pages" ) )
+  validate(need(try(values[["go"]]==TRUE),"not ready" ) )
+  validate(need(try(values[["df1"]]),helpString ) )
+
   validate(need(try(inherits(values[["df1"]],"data.frame") )
                 ,helpString)
   )
   validate(need(try(nrow(values[["df1"]])>0 )
                 ,helpString)
   )
+
   Sys.sleep(0.2)
 
   showModal(modalDialog(
@@ -23,31 +27,36 @@ output$idiogramPlot <- renderImage( {
     )
   ))
 
-  info <- getCurrentOutputInfo()
-  width  <- as.numeric(isolate(info$width()) )  * (as.numeric(input$widFactor)/100  )
-  height <- as.numeric(isolate(info$width() ) ) *
+  info   <- getCurrentOutputInfo()
+  width  <- as.numeric(isolate(info$width()) ) * (as.numeric(input$widFactor)/100  )
+  height <- as.numeric(isolate(info$width()) ) *
     (as.numeric(input$heiFactor)*(as.numeric(input$widFactor)/100) )
 
   mysvgwidth  <- width/80
   mysvgheight <- height/80
 
-  values[["mysvgwidth"]]  <- mysvgwidth
-  values[["mysvgheight"]] <- mysvgheight
   values[["width"]]       <- width
   values[["height"]]      <- height
+  values[["mysvgwidth"]]       <- mysvgwidth
+  values[["mysvgheight"]]      <- mysvgheight
+
 
   if(values[["pngorsvg"]]=="svg"){
     outfileSvg <- tempfile(fileext='.svg')
 
     values[["imageType"]]<-'image/svg+xml'
-    svg(outfileSvg, width=mysvgwidth, height=mysvgheight )
+
+    svg(outfileSvg
+        , width=mysvgwidth
+        ,height=mysvgheight
+        )
   } else {
     outfilePng <- tempfile(fileext='.png')
-
     values[["imageType"]]<-'image/png'
     png(outfilePng, width=width, height=height )
   }
 
+  tryCatch(
   capture.output (
     plotIdiograms(
 
@@ -96,6 +105,10 @@ output$idiogramPlot <- renderImage( {
 
       origin      = input$origin,
       OTUfamily   = input$OTUfamily,
+
+      classChrName     = input$classChrName,
+      classChrNameUp   = input$classChrNameUp,
+      chrIdPatternRem  = input$chrIdPatternRem,
       xModMonoHoloRate = input$xModMonoHoloRate,
 
       yTitle          = input$yTitle,
@@ -115,6 +128,7 @@ output$idiogramPlot <- renderImage( {
       chrId      = input$chrId,
       chrWidth   = input$chrWidth,
       chrSpacing = input$chrSpacing,
+      groupSepar = input$groupSepar,
 
       squareness   = input$squareness,
       markDistType = input$markDistType
@@ -150,12 +164,16 @@ output$idiogramPlot <- renderImage( {
       karIndex      = input$karIndex,
       karIndexPos   = input$karIndexPos,
 
-      chrSize       = input$chrSize,
-      showMarkPos   = input$showMarkPos,
+      chrSize        = input$chrSize,
+      miniTickFactor = input$miniTickFactor,
+      nsmall         = input$nsmall,
+      showMarkPos    = input$showMarkPos,
 
       indexIdTextSize= input$indexIdTextSize,
-      chrSizeMbp    = input$chrSizeMbp,
-      chromatids    = input$chromatids,
+      chrSizeMbp     = input$chrSizeMbp,
+      chrNameUp      = input$chrNameUp,
+      useMinorTicks  = input$useMinorTicks,
+      chromatids     = input$chromatids,
       holocenNotAsChromatids = input$holocenNotAsChromatids,
 
       xModifier     = input$xModifier,
@@ -168,6 +186,8 @@ output$idiogramPlot <- renderImage( {
       anchor     = input$anchor,
       moveAnchorV = input$moveAnchorV,
       moveAnchorH = input$moveAnchorH,
+      anchorVsizeF= input$anchorVsizeF,
+      anchorHsizeF= input$anchorHsizeF,
 
       parseStr2lang      = input$parseStr2lang,
       moveAllKarValueHor = input$moveAllKarValueHor,
@@ -191,6 +211,8 @@ output$idiogramPlot <- renderImage( {
       ceilingFactor   = input$ceilingFactor,
 
       ruler.tck      = input$ruler.tck,
+      collapseCen    = input$collapseCen,
+
       rulerNumberSize= input$rulerNumberSize,
       rulerNumberPos = input$rulerNumberPos,
       rulerTitleSize = input$rulerTitleSize,
@@ -199,12 +221,16 @@ output$idiogramPlot <- renderImage( {
       ,legendWidth     = input$legendWidth
       ,legendHeight    = input$legendHeight
       ,pattern         = input$pattern
+      ,forbiddenMark   = input$forbiddenMark
+      ,markNewLine     = input$markNewLine
+      ,classGroupName  = input$classGroupName
       ,remSimiMarkLeg  = input$remSimiMarkLeg
       ,markLabelSize   = input$markLabelSize
       ,markLabelSpacer = input$markLabelSpacer
       ,legendYcoord    = input$legendYcoord
 
       ,fixCenBorder    = input$fixCenBorder
+      ,bMarkNameAside  = input$bMarkNameAside
       ,chrBorderColor  = input$chrBorderColor
       ,lwd.chr         = input$lwd.chr
       ,lwd.cM          = input$lwd.cM
@@ -221,11 +247,12 @@ output$idiogramPlot <- renderImage( {
     ,    file = (outfile <- file(
       filenameR(),"w")),type="message"
   )
+  ,error=function(e){helpString}
+  )
 
   close(outfile)
+
   dev.off()
-
-
 
   removeModal()
 
@@ -249,7 +276,6 @@ output$idiogramPlot <- renderImage( {
 } , deleteFile = TRUE
 )
 
-
 output$buttonScript <-  renderUI({
   validate(
     need(try(scriptR()), "")
@@ -257,9 +283,154 @@ output$buttonScript <-  renderUI({
   downloadButton('downloadR', 'Download R-script')
 })
 
+output$buttonPresets <-  renderUI({
+  validate(
+    need(try(!is.null(presetsR() )), "valid plot needed")
+  )
+  downloadButton('downloadPresets', 'Download Presets',class ="btn-success"
+                 )
+})
+
+output$buttonPresets2 <-  renderUI({
+  validate(
+    need(try(!is.null(presetsR() )), "valid plot needed")
+  )
+  downloadButton('downloadPresets2', 'Download Presets',class ="btn-success"
+  )
+})
+
+output$downloadPresets <- downloadHandler(
+  filename = function() {
+    "preset.rds"
+  },
+  content = function(file) {
+    saveRDS(presetsR(), file,
+    )
+
+    pre <- presetsR()
+
+    values[["upPresetName"]] <- "added"
+
+    values[["upPresetOrigin"]] <- "file was loaded"
+
+    current_len<-length(values[["paramVec"]][[1]])
+
+    for (i in 1:length(values[["paramVec"]]) ) {
+      if (length(values[["paramVec"]][[i]])>current_len){
+        current_len<-length(values[["paramVec"]][[i]])
+      }
+    }
+
+    for (i in 1:length(pre) ) {
+      name_pa <- sub("(.*)","\\1Vec",attr(pre[i],"name" ) )
+      if(length(pre[[i]]) > 1 ) {
+        if(inherits(pre[[i]],"data.frame")){
+          values[["paramVec"]][[name_pa]][(current_len+1)] <- list(pre[[i]])
+        } else {
+          values[["paramVec"]][[name_pa]][(current_len+1)] <- paste(pre[[i]], collapse=",")
+        }
+
+      } else {
+        values[["paramVec"]][[name_pa]][(current_len+1)] <- pre[[i]]
+      }
+    }
+
+    for (i in 1:length(values[["paramVec"]]) ) {
+      if (length(values[["paramVec"]][[i]])>current_len){
+        current_len<-length(values[["paramVec"]][[i]])
+      }
+    }
+
+    values[["maxEx"]]<-values[["current_len"]] <- current_len
+
+    for (i in 1:length(values[["paramVec"]]) ) {
+      par_name <- attr(values[["paramVec"]][i],"name" )
+      name_def <- sub("(.*)Vec","\\1Default",par_name )
+      # complete missing
+      if(length(values[["paramVec"]][[i]])<current_len ) {
+
+        if(length(paramValues[[name_def]]) > 1 ){
+          #
+          # marktype is longer than 1
+          #
+          values[["paramVec"]][[par_name]][(current_len)] <- list(paramValues[[name_def]])
+        } else {
+          values[["paramVec"]][[par_name]][(current_len)] <- paramValues[[name_def]]
+        }
+      }
+    }
+    values[["presetStatus"]] <- "Ready"
+
+  }
+  ,  contentType = "rds"
+)
+
+output$downloadPresets2 <- downloadHandler(
+  filename = function() {
+    "preset.rds"
+  },
+  content = function(file) {
+    saveRDS(presetsR(), file,
+    )
+
+    pre <- presetsR()
+
+    values[["upPresetName"]] <- "added"
+
+    values[["upPresetOrigin"]] <- "file was loaded"
+
+    current_len<-length(values[["paramVec"]][[1]])
+
+    for (i in 1:length(values[["paramVec"]]) ) {
+      if (length(values[["paramVec"]][[i]])>current_len){
+        current_len<-length(values[["paramVec"]][[i]])
+      }
+    }
+
+    for (i in 1:length(pre) ) {
+      name_pa <- sub("(.*)","\\1Vec",attr(pre[i],"name" ) )
+      if(length(pre[[i]]) > 1 ) {
+        if(inherits(pre[[i]],"data.frame")){
+          values[["paramVec"]][[name_pa]][(current_len+1)] <- list(pre[[i]])
+        } else {
+          values[["paramVec"]][[name_pa]][(current_len+1)] <- paste(pre[[i]], collapse=",")
+        }
+
+      } else {
+        values[["paramVec"]][[name_pa]][(current_len+1)] <- pre[[i]]
+      }
+    }
+
+    for (i in 1:length(values[["paramVec"]]) ) {
+      if (length(values[["paramVec"]][[i]])>current_len){
+        current_len<-length(values[["paramVec"]][[i]])
+      }
+    }
+
+    values[["maxEx"]]<-values[["current_len"]] <- current_len
+
+    for (i in 1:length(values[["paramVec"]]) ) {
+      par_name <- attr(values[["paramVec"]][i],"name" )
+      name_def <- sub("(.*)Vec","\\1Default",par_name )
+      # complete missing
+      if(length(values[["paramVec"]][[i]])<current_len ) {
+
+        if(length(paramValues[[name_def]]) > 1 ){
+          #
+          # marktype is longer than 1
+          #
+          values[["paramVec"]][[par_name]][(current_len)] <- list(paramValues[[name_def]])
+        } else {
+          values[["paramVec"]][[par_name]][(current_len)] <- paramValues[[name_def]]
+        }
+      }
+    }
+    values[["presetStatus"]] <- "Ready"
+  }
+  ,  contentType = "rds"
+)
 
 output$downloadR <- downloadHandler(
-
   filename = "script.R",
   content = function(file) {
     writeLines(scriptR(), file
@@ -321,10 +492,6 @@ output$pngorsvgDownButton <- downloadHandler(
       png(file, width=values[["width"]], height=values[["height"]] )
     }
 
-
-
-
-
     plotIdiograms(
       dfChrSize  = values[["df1"]],
       dfMarkColor= values[["df1MStyle"]],
@@ -371,6 +538,9 @@ output$pngorsvgDownButton <- downloadHandler(
 
       origin    = input$origin,
       OTUfamily = input$OTUfamily,
+      classChrName     = input$classChrName,
+      classChrNameUp   = input$classChrNameUp,
+      chrIdPatternRem  = input$chrIdPatternRem,
       xModMonoHoloRate = input$xModMonoHoloRate,
 
       yTitle          = input$yTitle,
@@ -390,6 +560,7 @@ output$pngorsvgDownButton <- downloadHandler(
       chrId      = input$chrId,
       chrWidth   = input$chrWidth,
       chrSpacing = input$chrSpacing,
+      groupSepar = input$groupSepar,
 
       squareness   = input$squareness,
       markDistType = input$markDistType
@@ -404,7 +575,7 @@ output$pngorsvgDownButton <- downloadHandler(
       ,cMBeginCenter  = input$cMBeginCenter
 
       ,protruding = input$protruding
-      ,arrowhead = input$arrowhead
+      ,arrowhead  = input$arrowhead
 
       ,chrLabelSpacing = input$chrLabelSpacing
       ,labelSpacing    = input$labelSpacing
@@ -425,11 +596,15 @@ output$pngorsvgDownButton <- downloadHandler(
       karIndex        = input$karIndex,
       karIndexPos     = input$karIndexPos,
 
-      chrSize       = input$chrSize,
-      showMarkPos   = input$showMarkPos,
+      chrSize        = input$chrSize,
+      miniTickFactor = input$miniTickFactor,
+      nsmall         = input$nsmall,
+      showMarkPos    = input$showMarkPos,
       indexIdTextSize= input$indexIdTextSize,
-      chrSizeMbp    = input$chrSizeMbp,
-      chromatids    = input$chromatids,
+      chrSizeMbp     = input$chrSizeMbp,
+      chrNameUp      = input$chrNameUp,
+      useMinorTicks  = input$useMinorTicks,
+      chromatids     = input$chromatids,
 
       holocenNotAsChromatids = input$holocenNotAsChromatids,
 
@@ -443,6 +618,8 @@ output$pngorsvgDownButton <- downloadHandler(
       anchor     = input$anchor,
       moveAnchorV = input$moveAnchorV,
       moveAnchorH = input$moveAnchorH,
+      anchorVsizeF= input$anchorVsizeF,
+      anchorHsizeF= input$anchorHsizeF,
 
       parseStr2lang      = input$parseStr2lang,
       moveAllKarValueHor = input$moveAllKarValueHor,
@@ -466,6 +643,8 @@ output$pngorsvgDownButton <- downloadHandler(
       ceilingFactor   = input$ceilingFactor,
 
       ruler.tck      = input$ruler.tck,
+      collapseCen    = input$collapseCen,
+
       rulerNumberSize= input$rulerNumberSize,
       rulerNumberPos = input$rulerNumberPos,
 
@@ -476,12 +655,16 @@ output$pngorsvgDownButton <- downloadHandler(
       ,legendWidth     = input$legendWidth
       ,legendHeight    = input$legendHeight
       ,pattern         = input$pattern
+      ,forbiddenMark   = input$forbiddenMark
+      ,markNewLine     = input$markNewLine
+      ,classGroupName  = input$classGroupName
       ,remSimiMarkLeg  = input$remSimiMarkLeg
       ,markLabelSize   = input$markLabelSize
       ,markLabelSpacer = input$markLabelSpacer
       ,legendYcoord    = input$legendYcoord
 
       ,fixCenBorder    = input$fixCenBorder
+      ,bMarkNameAside  = input$bMarkNameAside
       ,chrBorderColor  = input$chrBorderColor
       ,lwd.chr         = input$lwd.chr
       ,lwd.cM          = input$lwd.cM

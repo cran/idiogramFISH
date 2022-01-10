@@ -40,8 +40,7 @@ plotDotMarks <- function(bannedMarkName,xMarkCr,yMarkCr, rad, radX, colCr,n,xfac
                          labelOutwards,dotsAsOval){
 
 
-
-  if(circularPlot==FALSE){
+  if(circularPlot==FALSE) {
 
 
     if(useOneDot){
@@ -102,7 +101,6 @@ plotDotMarks <- function(bannedMarkName,xMarkCr,yMarkCr, rad, radX, colCr,n,xfac
     # horizontal coordinates x to x as if all chr. in a vertical column
     #
 
-    # xlistNewCr<-xHortoVerDots(xMarkCr)
     if(useOneDot){
       xMarkCr<-oneDot(xMarkCr)
       yMarkCr<-oneDot(yMarkCr)
@@ -115,15 +113,14 @@ plotDotMarks <- function(bannedMarkName,xMarkCr,yMarkCr, rad, radX, colCr,n,xfac
     #
     # transform position of mark to percentage of chr.
     #
+
     yMarkPerCr<-markMapPerDots(yMarkCr,y)
 
     #
     #   radius size as percentage of chr.
     #
 
-
     radPerCr<-radDotsPer(rad,y)
-    # radPerCrX<-radDotsPer(radX,y)
 
     #
     # chr positions
@@ -135,27 +132,24 @@ plotDotMarks <- function(bannedMarkName,xMarkCr,yMarkCr, rad, radX, colCr,n,xfac
 
     ylistTransMarkCr<-transyListMarkDots(yMarkPerCr,ylistTransChr)
 
-
     radTransCr <- transRadDots(radPerCr,yMarkPerCr,ylistTransChr)
-    # radTransCrX <- transRadDots(radPerCrX,yMarkPerCr,ylistTransChr)
-
-
 
     circleMapsMarksCr<- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,ylistTransMarkCr,
                                        xlistNewCr,2,0,chrWidth,unlist=TRUE, mapCircle,rotation=rotation)
 
-    radiusMap<-applyMapCircle(radius,circleCenter,circleCenterY,separFactor,radTransCr,xlistNewCr,2,    0,            chrWidth,
+    radiusMap<-applyMapCircle(radius,circleCenter,circleCenterY,separFactor,radTransCr,xlistNewCr,2
+                              , 0,chrWidth,
                               unlist=TRUE, mapRadius,rotation=rotation)
-    # radiusMapX<-applyMapCircle(radius,circleCenter,circleCenterY,separFactor,radTransCrX,xlistNewCr,2,    0,            chrWidth,
-                              # unlist=TRUE, mapRadius,rotation=rotation)
 
     circPlotDots(circleMapsMarksCr,   xfactor,radiusMap,   colCr=colCr,colBorderCr=colBorderCr, n)
 
 if(legend=="inline"){
+
     circleMapsLabelsCr <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor,ylistTransMarkCr,xlistNewCr,n,labelSpacing,chrWidth,
                                          unlist=TRUE,mapCircle,rotation=rotation )
 
-    circLabelMark(bannedMarkName,circleMapsLabelsCr,listOfdfMarkPosCr,markLabelSize,pattern,labelOutwards,circleCenter,circleCenterY)
+    circLabelMark(bannedMarkName,circleMapsLabelsCr,listOfdfMarkPosCr,markLabelSize,pattern
+                  ,labelOutwards,circleCenter,circleCenterY)
 }
 
   } # circ

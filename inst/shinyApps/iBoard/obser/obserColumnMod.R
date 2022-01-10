@@ -30,20 +30,22 @@ observeEvent(input$addColumn,{
         final[,input$col] <- as.numeric(NA)
       }
     } else {
-      final <- data.frame(chrName="chrName"
-                          ,shortArmSize="shortArmSize"
-                          ,longArmSize="longArmSize"
-                          ,chrSize="chrSize"
-                          ,OTU="1"
+      final <- data.frame(OTU="1"
+                          ,chrName="chrName"
+                          ,shortArmSize=1
+                          ,longArmSize=1
+                          ,chrSize=as.numeric(NA)
+
       )
     }
   } else {
 
-    final <- data.frame(chrName="chrName"
-                        ,shortArmSize="shortArmSize"
-                        ,longArmSize="longArmSize"
-                        ,chrSize="chrSize"
-                        ,OTU=1
+    final <- data.frame(OTU="1"
+                        ,chrName="chrName"
+                        ,shortArmSize=1
+                        ,longArmSize=1
+                        ,chrSize=as.numeric(NA)
+
     )
 
   }
@@ -244,27 +246,30 @@ observeEvent(input$addColumnMark,{
       }
     } else { # if no rows
 
-      final <- data.frame(chrName="chrName"
+      final <- data.frame(OTU="1"
+                          ,chrName="chrName"
                           ,markName="markName"
-                          ,chrRegion="chrRegion"
-                          ,markPos="pos."
-                          ,markSize="markSize")
+                          ,chrRegion="p"
+                          ,markPos=0.2
+                          ,markSize=0.2)
 
       if("OTU" %in% colnames( values[["df1"]] )) {
-        final$OTU <-as.character(NA)
+        final$OTU <- values[["df1"]]$OTU[1]# as.character(NA)
       }
     }
 
   } else {
 
-    final <- data.frame(chrName="chrName"
+    final <- data.frame(OTU="1"
+                        ,chrName="chrName"
                         ,markName="markName"
-                        ,chrRegion="chrRegion"
-                        ,markPos="pos."
-                        ,markSize="markSize")
+                        ,chrRegion="p"
+                        ,markPos=0.2
+                        ,markSize=0.2
+                        )
 
     if("OTU" %in% colnames( values[["df1"]] )) {
-      final$OTU <-as.character(NA)
+      final$OTU <- values[["df1"]]$OTU[1] #final$OTU <-as.character(NA)
     }
   }
   values[["df1Mark"]] <- final
@@ -293,10 +298,10 @@ observeEvent(input$addColumnMStyle,{
         final[,input$colMStyle] <- as.numeric(NA)
       }
     } else {
-      final <- data.frame(markName="markName",markColor="colorName",style="dots")
+      final <- data.frame(markName="markName",markColor="green",style="dots")
     }
   } else {
-    final <- data.frame(markName="markName",markColor="colorName",style="dots")
+    final <- data.frame(markName="markName",markColor="green",style="dots")
   }
   values[["df1MStyle"]] <- final
 })

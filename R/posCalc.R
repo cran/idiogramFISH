@@ -38,7 +38,7 @@ posCalc <- function(dfMarkPos, listOfdfChromSize
 if(!inherits(listOfdfChromSize, "list") ) {
     # listOfdfChromSize <- armRatioCI(listOfdfChromSize)
     listOfdfChromSize <- dfToListColumn(listOfdfChromSize)
-    # listOfdfChromSize <- idiogramFISH:::dfToListColumn(listOfdfChromSize)
+    # listOfdfChromSize <- dfToListColumn(listOfdfChromSize)
     if(!"OTU" %in% colnames(dfMarkPos)){
       message(crayon::blue("listOfdfChromSize not a list & dfMarkPos without OTU column, dfMarkPos OTU will be 1"))
       dfMarkPos$OTU<-1
@@ -47,7 +47,7 @@ if(!inherits(listOfdfChromSize, "list") ) {
 
 for( s in 1:length(listOfdfChromSize) ) {
 # s<-1
-    # dfChromSize <- idiogramFISH:::fixChrNameDupDF(listOfdfChromSize[s], TRUE)
+    # dfChromSize <- fixChrNameDupDF(listOfdfChromSize[s], TRUE)
     dfChromSize <- fixChrNameDupDF(listOfdfChromSize[s], TRUE)
     listOfdfChromSize[[s]]<-dfChromSize[[1]]
 
@@ -393,7 +393,7 @@ fillMarkInfo <- function(dfMarkPos,dfChrSize
 
     # important has OTU column
     parlistOfdfMarkPosDataCen <- dfToListColumn(dfCenMarksInternal)
-    # parlistOfdfMarkPosDataCen <- idiogramFISH:::dfToListColumn(dfCenMarksInternal)
+    # parlistOfdfMarkPosDataCen <- dfToListColumn(dfCenMarksInternal)
     # remove(parlistOfdfMarkPosDataCen) # diverges from pI
 
   } # df of marks

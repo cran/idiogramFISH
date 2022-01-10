@@ -8,7 +8,7 @@ This is an internal function that plot labels of cM marks}
 textLabel(
   xMark,
   yMark,
-  listOfdfChromSize,
+  listChrSizeText1,
   listOfdfMarkPos,
   specialChrSpacing,
   chrSpacing,
@@ -26,8 +26,6 @@ textLabel(
 
 \item{yMark}{y coords}
 
-\item{listOfdfChromSize}{radius}
-
 \item{listOfdfMarkPos}{color}
 
 \item{specialChrSpacing}{vertices number}
@@ -39,6 +37,8 @@ textLabel(
 \item{pattern}{pattern to remove from mark name}
 
 \item{isCentromeric}{use TRUE for cen. marks}
+
+\item{listChrSizeText}{radius}
 }
 \value{
 plotted text

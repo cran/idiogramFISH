@@ -1,14 +1,39 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 2.0.8
+
+27-12-2021
+
+-   Accepts .csv files to notes parameters
+-   `circularPlot=TRUE` now compatible with `chromatids=TRUE` showing
+    chromatids in circ. plots
+-   centromere is now subtracted from arm, so ruler is continuous in
+    monocen. (`collapseCen`).
+-   new `chrRegion` possible (column in data.frame `dfMarkPos`): `pcen`
+    `qcen`. It’s behavior is similar to `cen`
+
+param:
+
+-   `dfCenMarks`: deprecated
+-   `collapseCen`: boolean, avoid spacing in ruler between short arm and
+    long arm.
+-   `anchorHsizeF`: numeric, factor to modify horizontal size of anchor
+    `1` (default).
+
+Shiny:
+
+-   Change in default values for new data.frames
+-   Fixed parsing of `yTitle` in code tab
+-   Download and upload custom presets
+
 # idiogramFISH 2.0.6
 
 27-09-2021
 
--   Fixed bug of displaying pos. of bands when `showMarkPos= TRUE`
 -   Added possibility of showing several % (span) of marks, ex.
     `markPer = c("5S","45S")`
--   `perMark` and `posCalc` functions accept `data.frames`
+-   `perMark` and `posCalc` functions produce `data.frames`
 -   Added parameters: `autoCenSize`, `leftNotesUpPosX`
 -   Modified parameters: `centromereSize`, `rulerIntervalMb`
 -   function `asymmetry` better dealing with unexpected cases
@@ -16,13 +41,14 @@
 
 Shiny:
 
--   New menu `stats` to export indices and mark stats
+-   New menu `stats` to export indices and marks’ stats
 -   Several parameters added
 -   Several examples added to presets
 
 Bugs:
 
 -   Better dealing with horizontal karyotypes
+-   Fixed bug of displaying pos. of bands when `showMarkPos= TRUE`
 
 param:
 

@@ -8,7 +8,7 @@
 #' @param squareness squareness of vertices <
 #' @param xMark x component of polygon
 #' @param yMark yMark component of polygon
-#' @param dfMarkColorInternal colors for marks
+#' @param dfMarkColorInt colors for marks
 #' @param listOfdfMarkPosArrow list of df. of mark pos.
 #' @param chrWidth numeric, width of chr.
 #' @param n numeric, to define vertices of rounded portions
@@ -29,7 +29,7 @@
 #'
 
 arrowPlotMark<-function(squareness, xMark, yMark,
-                        dfMarkColorInternal,listOfdfMarkPosArrow,
+                        dfMarkColorInt,listOfdfMarkPosArrow,
                         chrWidth,
                         n,
                         lwd.chr,
@@ -40,27 +40,40 @@ arrowPlotMark<-function(squareness, xMark, yMark,
                         separFactor,
                         labelSpacing,
                         circleCenter,circleCenterY,radius,
-                        ylistTransChr,rotation,arrowheadWidthShrink) {
+                        ylistTransChr,rotation,arrowheadWidthShrink
+                        ) {
 
     if(circularPlot==FALSE) {
 
-            lapply(1:length(xMark), function(w) mapply(function(x,y,z)
+      for (w in 1:length(xMark)){
+
+        for (n in 1:length(xMark[[w]] ) ){
+
+          # pqcen<-attr(yMark[[w]][[n]],"arm")
+          # markT<-attr(yMark[[w]][[n]],"squareSide")
+          #
+          # if(pqcen == "pcen" & markT == "inProtein"){
+          #   m1 <- mean(yMark[[w]][[n]][2:3])
+          #   yMark[[w]][[n]][3:4]<-m1
+          # } else if (pqcen == "qcen" & markT == "inProtein") {
+          #   m1 <- mean(yMark[[w]][[n]][2:3])
+          #   yMark[[w]][[n]][c(1,2,5)]<-m1
+          # }
+          x =xMark[[w]][[n]]
+          y =yMark[[w]][[n]]
+          z =listOfdfMarkPosArrow[[w]]$markName[[n]]
+
                 graphics::polygon(
                   x=x,
                   y=y,
-                  col= dfMarkColorInternal$markColor[match(     z   , dfMarkColorInternal$markName)],
+                  col= dfMarkColorInt$markColor[match( z, dfMarkColorInt$markName)],
                   lwd=lwd.chr,
                   border =
-                  dfMarkColorInternal$markBorderColor[match(z,dfMarkColorInternal$markName)]
-                ), # pol
-              x=xMark[[w]],
-              y=yMark[[w]]
-              ,z=listOfdfMarkPosArrow[[w]]$markName
-
-        ) # mapply
-    ) # lapp
-    } # CIRC
-    else { # circ true
+                  dfMarkColorInt$markBorderColor[match(z, dfMarkColorInt$markName)]
+                ) # pol
+        }
+      }
+    } else { # circ true
 
         yMarkPer <- markMapPer(yMark,y)
         xlistNew <- xMarkMap(xMark,x, arrowheadWidthShrink)
@@ -68,7 +81,7 @@ arrowPlotMark<-function(squareness, xMark, yMark,
         circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor
                                            ,ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
 
-        drawPlotMark(circleMapsMarks,dfMarkColorInternal,listOfdfMarkPosArrow,lwd.chr)
+        drawPlotMark(circleMapsMarks,dfMarkColorInt,listOfdfMarkPosArrow,lwd.chr)
 
 } # circular
 } # FUN

@@ -9,7 +9,7 @@ arrowPlotMark(
   squareness,
   xMark,
   yMark,
-  dfMarkColorInternal,
+  dfMarkColorInt,
   listOfdfMarkPosArrow,
   chrWidth,
   n,
@@ -35,7 +35,7 @@ arrowPlotMark(
 
 \item{yMark}{yMark component of polygon}
 
-\item{dfMarkColorInternal}{colors for marks}
+\item{dfMarkColorInt}{colors for marks}
 
 \item{listOfdfMarkPosArrow}{list of df. of mark pos.}
 

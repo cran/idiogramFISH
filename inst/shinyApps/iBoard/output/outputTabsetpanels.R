@@ -13,17 +13,16 @@ output$tabsetpanel0UI<-renderUI({
 
 output$tabsetpanel1UI<-renderUI({
   tabsetPanel(id="tabsetpanel1"
-              ,tabPanel("1. Chr. data data.frame", value="dfChrTab",
+              ,tabPanel("1. Chr. data data.frame",  value="dfChrTab",
                         uiOutput("dfchrpanel") )
-              ,tabPanel("2. Mark Pos. data d.f.",  value="dfMarkTab",
+              ,tabPanel("2. Marks' pos. d.f.",      value="dfMarkTab",
                         uiOutput("dfmarkpanel") )
-              ,tabPanel("3. Mark's Style",         value="dfMSTab",
+              ,tabPanel("3. Marks' style d.f.",     value="dfMSTab",
                         uiOutput("dfMStylepanel") )
-              ,tabPanel("4. Notes data.frame",     value="notesTab",
+              ,tabPanel("4. Notes' data.frames",    value="notesTab",
                         uiOutput("dfnotespanel") )
   ) # tabsetPanel
 })
-
 
 output$tabsetpanel5UI<-renderUI({
   tabsetPanel(id="tabsetpanel5"
@@ -36,7 +35,7 @@ output$tabsetpanel5UI<-renderUI({
 
 output$tabsetpanel2UI<-renderUI({
   tabsetPanel(id="tabsetpanel2",
-              tabPanel("1. Parameters", value="paramTab"
+              tabPanel("1. Parameters & Plot", value="paramTab"
                        # ,style= "min-width:1366px;max-width:1920px;overflow:auto"
                        ,uiOutput("parameterPanel") )
               ,tabPanel("2. Log", value="logTab",

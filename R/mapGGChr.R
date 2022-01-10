@@ -20,6 +20,9 @@
 #'
 mapGGChr <- function(dfChrSize,chrSpacing=0.5,squareness=4, n= 50) {
 
+  pts <- seq(-pi/2, pi*1.5, length.out = n*4)
+  ptsl<- split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
+
   starts_with <- NULL
 
 if(chrSpacing > 0.95){
@@ -88,7 +91,7 @@ mapChrL$chrWidth  <- chrWidth
 
     yfactor <-  max(dfChrSize$chrSize) /  chromosome_ns
 
-    xyCoords <- makeRoundCoordXY(r2, yfactor, x, y, 1, length(y), n )
+    xyCoords <- makeRoundCoordXY(r2, yfactor, x, y, 1, length(y), n, ptsl )
 
     xbind <- as.data.frame(do.call(rbind, xyCoords$roundedX ) )
 
@@ -121,6 +124,9 @@ mapChrL$chrWidth  <- chrWidth
 #'
 
 mapGGChrMark <- function(dfChrSize,dfMarkPos,chrSpacing=0.5, squareness=4, n=50) {
+
+  pts <- seq(-pi/2, pi*1.5, length.out = n*4)
+  ptsl<- split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
 
   starts_with <- NULL
 
@@ -164,8 +170,6 @@ colnames(xMarkSqDF)[5] <- "markName"
 
 xMarkSqDF$id <- seq_along(xMarkSqDF$V1)
 
-# xDatMark <- reshape2::melt(xMarkSqDF, measure.vars = c("V1","V2","V3","V4" ) ) # melt longer cast wider
-# xDatMark <- tidyr::gather(xMarkSqDF, key="variable", value="x", "V1","V2","V3","V4"  )
 xDatMark <- tidyr::pivot_longer(xMarkSqDF, names_to= "variable", values_to="x", cols=starts_with("V")  )
 
 xDatMark$x<-as.numeric(xDatMark$x)
@@ -186,9 +190,10 @@ mapChrL$dataMark <- dataMark
 
     yfactor <-  max(dfChrSize$chrSize) /  chromosome_ns
 
-    xyCoords <- makeRoundCoordXY(r2, yfactor, xMark1, yMark1, 1, length(yMark1), n )
+    xyCoords <- makeRoundCoordXY(r2, yfactor, xMark1, yMark1, 1, length(yMark1), n, ptsl )
 
     xMarkSqDF <- as.data.frame(do.call(rbind, xyCoords$roundedX ) )
+
     xMarkSqDF$markName <- markNames
 
     xMarkSqDF$id <- seq_along(xMarkSqDF$V1)

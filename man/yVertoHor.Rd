@@ -57,7 +57,7 @@ yVertoHor(y, monocenNames)
 
 \item{colCr}{character color of mark}
 
-\item{dfMarkColorInternal}{data.frame of mark charact.}
+\item{dfMarkColorInt}{data.frame of mark charact.}
 
 \item{diffXRounded}{numeric, difference of chr. width to rounded corner}
 

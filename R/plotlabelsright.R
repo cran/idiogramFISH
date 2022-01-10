@@ -10,7 +10,7 @@
 #' @param y The y axis coordinates of chromosomes
 #' @param markLabelSpacer distance from right chr to legend
 #' @param chrWidth chr widht
-#' @param dfMarkColorInternal data.frame of mark characteristics
+#' @param dfMarkColorInt data.frame of mark characteristics
 #' @param allMarkMaxSize maximum size of marks
 #' @param normalizeToOne transformation value of karyotype height
 #' @param markLabelSize font size of legends
@@ -27,8 +27,9 @@
 #' @return Returns a graphics element
 #'
 
-plotlabelsright<-function(maxx,y, markLabelSpacer,chrWidth,dfMarkColorInternal,allMarkMaxSize,normalizeToOne,
-                          markLabelSize,xfactor,legendWidth,legendHeight,n,pattern,legendYcoord,useOneDot,dotsAsOval,circularPlot) {
+plotlabelsright<-function(maxx,y, markLabelSpacer,chrWidth,dfMarkColorInt,allMarkMaxSize,normalizeToOne,
+                          markLabelSize,xfactor,legendWidth,legendHeight,n,pattern
+                          ,legendYcoord,useOneDot,dotsAsOval,circularPlot) {
 
 
   miny<-(min(unlist(y)) )
@@ -37,7 +38,7 @@ plotlabelsright<-function(maxx,y, markLabelSpacer,chrWidth,dfMarkColorInternal,a
 
   labelx<-(maxx+markLabelSpacer)+(c(0, chrWidth, chrWidth,0)+0)
 
-  labelx<-t(replicate(nrow(dfMarkColorInternal),labelx) )
+  labelx<-t(replicate(nrow(dfMarkColorInt),labelx) )
 
   if(is.na(legendHeight)){
     if(exists("allMarkMaxSize")){
@@ -50,7 +51,7 @@ plotlabelsright<-function(maxx,y, markLabelSpacer,chrWidth,dfMarkColorInternal,a
   }
 
   labely<- sapply( c(0,0,legendHeight,legendHeight)
-                   , function(x) x + ( (0:(nrow(dfMarkColorInternal)-1) ) * (legendHeight*2) )
+                   , function(x) x + ( (0:(nrow(dfMarkColorInt)-1) ) * (legendHeight*2) )
                    ) + miny + legendYcoord
 
 
@@ -70,8 +71,8 @@ plotlabelsright<-function(maxx,y, markLabelSpacer,chrWidth,dfMarkColorInternal,a
   # remove dots
   #
 
-  labelytoplot<-labely[which(dfMarkColorInternal$style!="dots"),]
-  labelxtoplot<-labelx[which(dfMarkColorInternal$style!="dots"),]
+  labelytoplot<-labely[which(dfMarkColorInt$style!="dots"),]
+  labelxtoplot<-labelx[which(dfMarkColorInt$style!="dots"),]
 
   #
   #   labelxplot and y to matrix
@@ -89,19 +90,19 @@ plotlabelsright<-function(maxx,y, markLabelSpacer,chrWidth,dfMarkColorInternal,a
   )
   # squares labels
 
-  if(length(dfMarkColorInternal$markName[which(dfMarkColorInternal$style!="dots")] ) > 0 ) {
+  if(length(dfMarkColorInt$markName[which(dfMarkColorInt$style!="dots")] ) > 0 ) {
 
-    marks <- dfMarkColorInternal$markColor[which(dfMarkColorInternal$style!="dots")]
+    marks <- dfMarkColorInt$markColor[which(dfMarkColorInt$style!="dots")]
 
-    borders <-  dfMarkColorInternal$markBorderColor[which(dfMarkColorInternal$style!="dots") ]
+    borders <-  dfMarkColorInt$markBorderColor[which(dfMarkColorInt$style!="dots") ]
 
-  graphics::text(x=t(labelx[which(dfMarkColorInternal$style!="dots"),2]), # was1
+  graphics::text(x=t(labelx[which(dfMarkColorInt$style!="dots"),2]), # was1
                  y=t(
-                   (c(labely[which(dfMarkColorInternal$style!="dots"),1]+
-                        labely[which(dfMarkColorInternal$style!="dots"),3]
+                   (c(labely[which(dfMarkColorInt$style!="dots"),1]+
+                        labely[which(dfMarkColorInt$style!="dots"),3]
                    )/2)-.01
                  ) ,
-                 labels= sub(pattern,"",dfMarkColorInternal$markName[which(dfMarkColorInternal$style!="dots")]),
+                 labels= sub(pattern,"",dfMarkColorInt$markName[which(dfMarkColorInt$style!="dots")]),
                  cex=markLabelSize,
                  col="black",
                  pos=4
@@ -137,12 +138,13 @@ plotlabelsright<-function(maxx,y, markLabelSpacer,chrWidth,dfMarkColorInternal,a
       diffxHalf<-labelxdiff/2
       xcenters<- ( min(labelx) + diffxHalf)
     }
-    listOfxcenters <- rep(list(xcenters), nrow(dfMarkColorInternal[which(dfMarkColorInternal$style=="dots"),] ) )
+    listOfxcenters <- rep(list(xcenters), nrow(dfMarkColorInt[which(dfMarkColorInt$style=="dots"),] ) )
 
-    labelydiffs<-labely[which(dfMarkColorInternal$style=="dots"),3]-labely[which(dfMarkColorInternal$style=="dots"),2]
+    labelydiffs   <- labely[which(dfMarkColorInt$style=="dots"),3]-labely[which(dfMarkColorInt$style=="dots"),2]
+
     labelydiffhalf<-labelydiffs[1]/2
 
-    ycenters<-labely[which(dfMarkColorInternal$style=="dots"),2]+labelydiffhalf
+    ycenters<-labely[which(dfMarkColorInt$style=="dots"),2]+labelydiffhalf
 
     if(useOneDot==FALSE){
       listOfycenters<-lapply(ycenters, function(x) rep(x,2) )
@@ -150,18 +152,19 @@ plotlabelsright<-function(maxx,y, markLabelSpacer,chrWidth,dfMarkColorInternal,a
       listOfycenters<-lapply(ycenters, function(x) rep(x,1) )
     }
 
-    rad<-labelydiffhalf
+    rad  <- labelydiffhalf
     radX <- labelxdiff/2
 
-    if(circularPlot | dotsAsOval==FALSE){
+    if(circularPlot | dotsAsOval==FALSE) {
       radX<-rad
     }
 
     yfactor<-1
 
-    if(length(listOfxcenters)>0){
+    if(length(listOfxcenters)>0) {
       lapply(1:length(listOfxcenters), function(u) {
         mapply(function(x,y,radiusX,radius,z,w) {
+
           pts2=seq(0, 2 * pi, length.out = n)
           xy2 <- cbind(x + (radiusX * sin(pts2)*xfactor) , y + (radius * cos(pts2)*yfactor ) )
           graphics::polygon(xy2[,1],
@@ -172,20 +175,20 @@ plotlabelsright<-function(maxx,y, markLabelSpacer,chrWidth,dfMarkColorInternal,a
         x= listOfxcenters[[u]],
         y= listOfycenters[[u]],
         radiusX= radX,
-        radius= rad,
+        radius = rad,
 
-        z= dfMarkColorInternal$markColor[which(dfMarkColorInternal$style=="dots")][[u]]
-        , w=  dfMarkColorInternal$markBorderColor[which(dfMarkColorInternal$style=="dots")][[u]]
+        z= dfMarkColorInt$markColor[which(dfMarkColorInt$style=="dots")][[u]]
+        , w=  dfMarkColorInt$markBorderColor[which(dfMarkColorInt$style=="dots")][[u]]
         ) # mapply
       } # fun
       ) # lapply
-      graphics::text(x=t(labelx[which(dfMarkColorInternal$style=="dots"),2]),
+      graphics::text(x=t(labelx[which(dfMarkColorInt$style=="dots"),2]),
                      y=t(
-                       c(labely[which(dfMarkColorInternal$style=="dots"),1]+
-                           labely[which(dfMarkColorInternal$style=="dots"),3]
+                       c(labely[which(dfMarkColorInt$style=="dots"),1]+
+                           labely[which(dfMarkColorInt$style=="dots"),3]
                        )/2-.01
                      ) ,
-                     labels=sub(pattern,"",dfMarkColorInternal$markName[which(dfMarkColorInternal$style=="dots")]),
+                     labels=sub(pattern,"",dfMarkColorInt$markName[which(dfMarkColorInt$style=="dots")]),
                      cex=markLabelSize,
                      col="black",
                      pos=4

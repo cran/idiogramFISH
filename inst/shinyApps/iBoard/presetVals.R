@@ -6,9 +6,34 @@ sorry<-"Sorry, no pandoc > 2.11, or no rmarkdown, try in Rstudio, or installing 
 emptydata.frame <- data.frame()
 # setwd("/home/fernando/GoogleDrive/gitlab/idiogramFISH/inst/shinyApps/iBoard")
 paramVec    <- readRDS("www/paramVec.rds")
+
+iniLen      <- length(paramVec$addOTUNameVec)
+
 paramValues <- readRDS("www/paramValues.rds")
 
+exampleVec <- c("3.1"=1, "3.2"=2,"3.3"=11,"3.4"=12,"4.2"=13,"4.3"=14,"4.3b"=5,"4.5"=15
+                ,"5.1"=3,"5.2"=4,"6.1"=16,"6.2"=17,"6.3"=18,"6.4"=19,"7.1"=6,"7.2"=7
+                ,"7.3a"=20,"7.3b"=21,"8.1"=22,"8.2"=23,"9.1"=24,"9.2"=8,"9.3"=9,"9.4"=10
+                ,"10.2"=25,"10.3"=26,"10.4"=27,"11.1"=28, "11.2"=29,"11.7"=30)
 
+maxEx       <-max(exampleVec)
+
+anchorHsizeFDesc     <-'`anchorHsizeF`: numeric, factor to modify horizontal size of anchor`1` (default).'
+classChrNameUpDesc   <-'`classChrNameUp`: character, name of "chromosome" for col. `"chrNameUp"`. Defaults to `"Type"`'
+anchorVsizeFDesc     <-'`anchorVsizeF` numeric, factor to modify vertical size of anchor `0.5` (default). Size itself is equal to `karHeiSpace`'
+forbiddenMarkDesc    <-'`forbiddenMark`: character, character string or vector with mark names to be removed from plot. Not the marks but the labels.'
+nsmallDesc           <-'`nsmall`: numeric, rounding decimals for `chrSize` parameter. Defaults to `1`'
+miniTickFactorDesc   <-'`miniTickFactor`: numeric, number of minor ticks for each labeled tick. See `useMinorTicks`. Defaults to `10`'
+useMinorTicksDesc    <-'`useMinorTicks`: boolean, display minor ticks between labeled ticks in ruler. See `miniTickFactor`. Defaults to `FALSE`. (ticks without label)'
+chrNameUpDesc        <-'`chrNameUp`: boolean, when `TRUE` adds secondary chromosome name from col. `chrNameUp` over chrs.'
+
+collapseCenDesc      <-"`collapseCen`: boolean, avoid spacing in ruler between short arm and long arm."
+chrIdPatternRemDesc  <-'`chrIdPatternRem`: character, regex pattern to remove from chr. names'
+classChrNameDesc     <-'`classChrName`: character, name of "chromosome" when in micrometers (apparently). Defaults to `"Chr."`.'
+groupSeparDesc       <-'`groupSepar`: numeric, factor for affecting chr. spacing `chrSpacing` among groups'
+classGroupNameDesc   <-'`classGroupName`: character, name of groups. Defaults to `""`'
+bMarkNameAsideDesc   <-'`bMarkNameAside`: boolean, when `TRUE` and `legend="inline"`, shows marks in `bannedMarkName` as `legend="aside"` would do.'
+markNewLineDesc      <-'`markNewLine`: character, character to split mark Names into different lines. Applies to `square` marks.'
 dfChrSizeDesc        <-"`dfChrSize`: mandatory data.frame or .csv file name, with columns: `OTU` (optional), `chrName` (mandatory), `shortArmSize`, `longArmSize` for monocen. or `chrSize` for holocen."
 dfMarkPosDesc        <-"`dfMarkPos`: name of the data.frame of positions of marks or .csv file. Includes GISH and centromeric marks (cen). columns: `OTU` (opt), `chrName`, `markName` (name of site), `chrRegion` (for monocen. and opt for whole arm (`w`) in holocen.), `markDistCen` (for monocen.), `markPos` (for holocen.), `markSize`; column `chrRegion`: use `p` for short arm, `q` for long arm, `cen` for centromeric mark and `w` for whole chr. mark; column `markDistCen`: use distance from centromere to mark, not necessary for cen. marks (`cen`), `w`, `p`, `q` (when whole arm). See also param. `markDistType`"
 dfMarkColorDesc      <- '`dfMarkColor`: name of the data.frame or .csv file of marks characteristics. Optional. Specifying colors and style for marks (sites); columns: `markName`, `markColor`, `style`. style accepts: `"square"`,`"squareLeft"`, `"dots"`, `"cM"`, `"cMLeft"`,`"cenStyle"`, `"upArrow"`, `"downArrow"`, `"exProtein"`. (if column `style` missing all (except `5S`) are plotted as in param. `defaultStyleMark`).'
@@ -62,7 +87,7 @@ cMBeginCenterDesc<-'`cMBeginCenter`: boolean, start position of `cM` and `cMLeft
 pMarkFacDesc<-"`pMarkFac` numeric, fraction of chr. size for `exProtein` style marks. Defaults to `0.25`"
 markDistTypeDesc<-'`markDistType`: (`"beg"`) If you measure your marks to the beginning of mark use  `markDistType = "beg"`, if to the center of the mark, use `"cen"`. '
 hideCenLinesDesc<-"`hideCenLines`: numeric, factor to multiply line width (lwd) used for covering cen. border, when `chrColor` is `white` or when `gishCenBorder=TRUE`"
-lwd.marksDesc<-"`lwd.marks`: thickness of most marks. Except `cM` marks and centr. related marks. See `lwd.chr`, `lwd.cM`"
+lwd.marksDesc<-"`lwd.marks`: thickness of most marks. Except `cM` marks and centr. related marks. See `lwd.chr`, `lwd.cM`. Defaults to `lwd.chr` when `99`"
 lwd.mimicCenDesc<-"`lwd.mimicCen`: thickness of lines of `cenStyle` marks; affects only lateral borders. Defaults to `lwd.chr`"
 lwd.cMDesc<-"`lwd.cM`: thickness of cM marks. Defaults to `lwd.chr`"
 addMissingOTUAfterDesc<-'`addMissingOTUAfter`: (`NA`) character vector, Pass to this parameter a vector of OTUs after which empty spaces (ghost karyotypes) must be added. See `missOUTspacings` and the `phylogeny` chapter'
@@ -87,7 +112,7 @@ karHeiSpaceDesc<-'`karHeiSpace`: (`2.5`) Vertical size of karyotypes including s
 amoSeparDesc<-'`amoSepar`: (`9`) For `karSepar = TRUE`, if zero, no space among karyotypes. Amount of separation.  if overlap, increase this and `karHeiSpace`'
 karSpaceHorDesc<-"`karSpaceHor`: numeric, separation among horizontal karyotypes. When `verticalPlot=FALSE`. Defaults to `0`"
 chromatidsDesc<-'`chromatids`: boolean, when `TRUE` shows separated chromatids. Defaults to `TRUE`'
-holocenNotAsChromatidsDesc<-'`holocenNotAsChromatids`:	boolean, when `TRUE` and `chromatids=TRUE` does not plot holocen kar. with chromatids. Defaults to `FALSE`. A value of `TRUE` modifies `excHoloFrArrToSide` to `TRUE` always.'
+holocenNotAsChromatidsDesc<-'`holocenNotAsChromatids`:	boolean, when `TRUE` and `chromatids=TRUE` does not plot holocen kar. with chromatids. Defaults to `FALSE`.'
 xModifierDesc<-'`xModifier`: numeric, for `chromatids=TRUE`, separation among chromatids. Quotient for `chrWidth`. Defaults to `12 = chrWidth/12`'
 rulerDesc<-'`ruler`: (`TRUE`) When `TRUE` displays ruler to the left of karyotype, when `FALSE` shows no ruler'
 ceilingFactorDesc<-"`ceilingFactor`: (`0`) numeric, affects number of decimals for ceiling. Affects max. value of ruler. When `threshold` is greater than `35` this may have to be negative. "
@@ -102,7 +127,7 @@ ruler.tckDesc<-'`ruler.tck`: (`-0.02`) tick size of ruler, corresponds to "tck" 
 thresholdDesc<-"`threshold`: (`35`) This is the max. value allowed for the main two significative digits, otherwise scale will shrink. For example, after 35 μm (Default), apparent size will be 3.5 (not 35) and scale interval will change. See `ceilingFactor`: you may have to use `-1` for it. Introduced in 1.13"
 rulerNumberSizeDesc<-"`rulerNumberSize`: (`1`) Size of number's font in ruler"
 rulerTitleSizeDesc<-"`rulerTitleSize`: numeric font size of units of ruler."
-autoCenSizeDesc<-'`autoCenSize`: boolean, when `TRUE` ignores `centromereSize`'
+autoCenSizeDesc<-'`autoCenSize`: boolean, when `TRUE` ignores `centromereSize`. Affected heavily by `threshold`'
 cenFormatDesc<-'`cenFormat`: boolean, when "triangle", cen. has triangular aspect. When "rounded", it has rounded aspect (Default). "inProtein" for using the mark with style of same name.'
 cenFactorDesc<-'`cenFactor`: numeric, modifies any cen. mark and cen. size. Defaults to `1`'
 centromereSizeDesc<-'`centromereSize`: Apparent size of centromeres. Requires `autoCenSize = FALSE`'
@@ -146,3 +171,5 @@ helpString<-"Start in pages (left): Examples, Nucleotides or data.frames
               \n modify browser zoom with Ctrl [+/-]
               \n If you are in Rstudio Desktop Viewer, click its button 'Open Browser'
               for better memory management"
+
+presetUseText<-"The preset file contains all, use it in the 'Examples' page"

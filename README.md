@@ -12,21 +12,25 @@ idiogramFISH
 <br></br><br></br><a href='https://ko-fi.com/X7X71PZZG' target='_blank'><img height='30' style='border:0px;height:30px;' src='man/figures/kofi1.png' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 <!-- badges: end -->
 
-The goal of idiogramFISH is to plot idiograms of karyotypes, plasmids
-and circ. chr. having a set of data.frames for chromosome data and
-optionally marks’ data (`plotIdiograms` function) ([Roa and PC Telles,
-2021](#ref-Roa2021)). Idiograms can also be plotted in concentric
-circles. Separated chromatids can be visible when not in a circular
-plot.<br> <br>Six styles of marks are available: square (squareLeft),
-dots, cM (cMLeft), cenStyle, upArrow (downArrow), exProtein (inProtein);
-its legend (label) can be drawn inline or to the right of karyotypes.
-Three styles of centromere are available: rounded, triangular and
-internal (inProtein). It is possible to calculate also chromosome and
+The goal of idiogramFISH functions or shiny-app is to plot karyotypes,
+plasmids and circular chr. having a set of data.frames for chromosome
+data and optionally marks’ data ([Roa and PC Telles,
+2021](#ref-Roa2021)). Karyotypes can also be plotted in concentric
+circles.<br> <br>It is possible to calculate also chromosome and
 karyotype indexes ([Romero-Zarco, 1986](#ref-Zarco1986new); [Watanabe
 *et al.*, 1999](#ref-Watanabe1999)) and classify chromosome morphology
 in the categories of Levan ([1964](#ref-Levan1964)), and
 [Guerra](https://ferroao.gitlab.io/guerra1986/Guerra1986.pdf)
-([1986](#ref-Guerra1986d)).
+([1986](#ref-Guerra1986d)).<br> <br>Six styles of marks are available:
+square (squareLeft), dots, cM (cMLeft), cenStyle, upArrow (downArrow),
+exProtein (inProtein) (column `style` in `dfMarkColor` data.frame); its
+legend (label) (parameter `legend`) can be drawn inline or to the right
+of karyotypes. Three styles of centromere are available: rounded,
+triangle and inProtein (`cenFormat` parameter). Chromosome regions
+(column `chrRegion` in `dfMarkPos` data.frame) for monocentrics are `p`,
+`q`, `cen`, `pcen`, `qcen`. The last three cannot accommodate most mark
+styles, but can be colored. The region `w` can be used both in
+monocentrics and holocentrics.
 
 IdiogramFISH was written in R ([R Core Team, 2019](#ref-R-base)) and
 also uses crayon ([Csárdi, 2017](#ref-R-crayon)), tidyr ([Wickham and
@@ -51,7 +55,8 @@ In addition, the shiny app `runBoard()` uses shiny ([Chang *et al.*,
 2021](#ref-R-shiny)), shinydashboard ([Chang and Borges Ribeiro,
 2018](#ref-R-shinydashboard)), rhandsontable ([Owen,
 2018](#ref-R-rhandsontable)), gtools ([Warnes *et al.*,
-2020](#ref-R-gtools)), rclipboard ([Bihorel, 2021](#ref-R-rclipboard)).
+2020](#ref-R-gtools)) and rclipboard ([Bihorel,
+2021](#ref-R-rclipboard)).
 
 <!-- badger -->
 
@@ -71,10 +76,7 @@ Windows users: To avoid installation of packages in OneDrive
 ```
 
 To do that permanently: Search (magnifier) “environment variables” and
-set R\_LIBS\_USER to `D:\R\lib` (example)
-
-Other option: something in the line of
-[this](https://answers.microsoft.com/en-us/windows/forum/all/removing-onedrive-from-default-filefolder-location/7d3c0dd0-3af5-414a-adf4-364dc28f3148?auth=1)
+set R_LIBS_USER to `D:\R\lib` (example)
 
 #### Devel. version of idiogramFISH
 
@@ -86,7 +88,7 @@ Attention windows users, please install
 
 Vignettes (optional) use a lua filter, so you would need
 <a href="https://pandoc.org/installing.html" target="_blank">pandoc</a>
-ver. &gt; 2. and `pandoc-citeproc` or `citeproc`. RStudio comes with
+ver. \> 2. and `pandoc-citeproc` or `citeproc`. RStudio comes with
 pandoc. `rmarkdown::pandoc_version()`
 
 ``` r
@@ -167,9 +169,8 @@ To cite idiogramFISH in publications, please use:
 
 Roa F, Telles MPC (2021) idiogramFISH: Shiny app. Idiograms with Marks
 and Karyotype Indices, Universidade Federal de Goiás. Brazil. R-package.
-version 2.0.6 <https://ferroao.gitlab.io/manualidiogramfish/>.
-doi:<!-- breaklink
-  -->10.5281/zenodo.3579417
+version 2.0.8 <https://ferroao.gitlab.io/manualidiogramfish/>.
+doi:<!-- breaklink -->10.5281/zenodo.3579417
 
 To write citation to file:
 
@@ -733,9 +734,6 @@ chrSize
 <th style="text-align:right;">
 Mbp
 </th>
-<th style="text-align:left;">
-OTU
-</th>
 </tr>
 </thead>
 <tbody>
@@ -749,9 +747,6 @@ OTU
 <td style="text-align:right;">
 300
 </td>
-<td style="text-align:left;">
-Species holo
-</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -762,9 +757,6 @@ Species holo
 </td>
 <td style="text-align:right;">
 400
-</td>
-<td style="text-align:left;">
-Species holo
 </td>
 </tr>
 <tr>
@@ -777,9 +769,6 @@ Species holo
 <td style="text-align:right;">
 200
 </td>
-<td style="text-align:left;">
-Species holo
-</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -790,9 +779,6 @@ Species holo
 </td>
 <td style="text-align:right;">
 500
-</td>
-<td style="text-align:left;">
-Species holo
 </td>
 </tr>
 </tbody>
@@ -879,9 +865,6 @@ markPos
 <th style="text-align:right;">
 markSize
 </th>
-<th style="text-align:left;">
-OTU
-</th>
 </tr>
 </thead>
 <tbody>
@@ -898,9 +881,6 @@ OTU
 <td style="text-align:right;">
 0.5
 </td>
-<td style="text-align:left;">
-Species holo
-</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -914,9 +894,6 @@ DAPI
 </td>
 <td style="text-align:right;">
 0.5
-</td>
-<td style="text-align:left;">
-Species holo
 </td>
 </tr>
 <tr>
@@ -932,9 +909,6 @@ Species holo
 <td style="text-align:right;">
 0.5
 </td>
-<td style="text-align:left;">
-Species holo
-</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -948,9 +922,6 @@ DAPI
 </td>
 <td style="text-align:right;">
 0.5
-</td>
-<td style="text-align:left;">
-Species holo
 </td>
 </tr>
 <tr>
@@ -966,9 +937,6 @@ CMA
 <td style="text-align:right;">
 0.5
 </td>
-<td style="text-align:left;">
-Species holo
-</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -982,9 +950,6 @@ Species holo
 </td>
 <td style="text-align:right;">
 0.5
-</td>
-<td style="text-align:left;">
-Species holo
 </td>
 </tr>
 </tbody>
@@ -1008,21 +973,21 @@ dfOfMarks2$OTU     <-"Species mono"
 dfMarkPosHolo$OTU <-"Species holo"
 
 monoholoMarks <- plyr::rbind.fill(dfOfMarks2,dfMarkPosHolo)
-monoholoMarks[which(monoholoMarks$markName=="5S"),]$markSize<-.5
+monoholoMarks[which(monoholoMarks$markName=="5S"),]$markSize<-.25
 monoholoMarks
    chrName markName chrRegion markSize markDistCen          OTU markPos
-1        1       5S         p      0.5         0.5 Species mono      NA
-2        1      45S         q      1.0         0.5 Species mono      NA
+1        1       5S         p     0.25         0.5 Species mono      NA
+2        1      45S         q     1.00         0.5 Species mono      NA
 3        X      45S         p       NA          NA Species mono      NA
-4        3     DAPI         q      1.0         1.0 Species mono      NA
+4        3     DAPI         q     1.00         1.0 Species mono      NA
 5        1     DAPI       cen       NA          NA Species mono      NA
 6        X      CMA       cen       NA          NA Species mono      NA
-7        3       5S      <NA>      0.5          NA Species holo     1.0
-8        3     DAPI      <NA>      0.5          NA Species holo     1.5
-9        1      45S      <NA>      0.5          NA Species holo     2.0
-10       2     DAPI      <NA>      0.5          NA Species holo     2.0
-11       4      CMA      <NA>      0.5          NA Species holo     2.0
-12       4       5S      <NA>      0.5          NA Species holo     0.5
+7        3       5S      <NA>     0.25          NA Species holo     1.0
+8        3     DAPI      <NA>     0.50          NA Species holo     1.5
+9        1      45S      <NA>     0.50          NA Species holo     2.0
+10       2     DAPI      <NA>     0.50          NA Species holo     2.0
+11       4      CMA      <NA>     0.50          NA Species holo     2.0
+12       4       5S      <NA>     0.25          NA Species holo     0.5
 ```
 
 ``` r
@@ -1037,7 +1002,6 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               chrSize = TRUE,            # show chr. size under chr.
               
               squareness = 4,            # vertices squareness
-              roundedCen = FALSE,        # triangular cen.
               addOTUName = TRUE,         # add OTU names
               OTUTextSize = .7,          # font size of OTU
               distTextChr = 0.7,         # separ. among chr. and text and among chr. name and indices
@@ -1058,11 +1022,13 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
               xlimRightMod=3,            # modify xlim right argument of plot
               ylimBotMod= .2             # modify ylim bottom argument of plot
               
-              ,chromatids=FALSE          # do not show separ. chromatids
+              ,chromatids=TRUE           # do not show separ. chromatids
+              ,autoCenSize=FALSE
+              ,centromereSize = 0.5
               
               # for Circular Plot, add:
               
-              # ,useOneDot=TRUE
+              # ,useOneDot=FALSE           # two dots
               
               # ,circularPlot = TRUE       # circularPlot
               # ,shrinkFactor = .9         # percentage 1 = 100% of circle with chr.
@@ -1097,7 +1063,7 @@ nomenclature of Levan et al.</span> *Brazilian Journal of Genetics*,
 
 Levan A, Fredga K, Sandberg AA. 1964. <span class="nocase">Nomenclature
 for centromeric position on chromosomes</span> *Hereditas*, 52(2):
-201–220. <https://doi.org/10.1111/j.1601-5223.1964.tb01953.x>.
+201–220.
 <https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1601-5223.1964.tb01953.x>
 
 </div>

@@ -15,9 +15,11 @@ runBoard <- function(installAll=FALSE) {
     stop("Could not find inst folder with shiny app.", call. = FALSE)
   }
 
+  missRentrez <-  missShiny <- missRecPkg <- missPkg <- character(0)
+
+  if(F){
   oldshiny <- "https://cran.r-project.org/src/contrib/Archive/shiny/shiny_1.6.0.tar.gz"
 
-  missRentrez <-  missShiny <- missRecPkg <- missPkg <- character(0)
 
   if (system.file(package = "shiny") == '') {
     if(packageVersion("shiny")>1.6){
@@ -42,11 +44,11 @@ runBoard <- function(installAll=FALSE) {
   } else if(length(missShiny) & installAll) {
     utils::install.packages(oldshiny, repos = NULL, type ='source')
   }
+  }
 
-
-  neededPkg<-c(#'bib2df'
-               # ,'shiny'
-               'shinydashboard'
+  neededPkg<-c(
+               'shiny'
+               ,'shinydashboard'
                ,'rhandsontable'
                ,'gtools'
                ,'knitr'
@@ -60,7 +62,6 @@ runBoard <- function(installAll=FALSE) {
                 "svglite",
                 'rmarkdown'
   )
-
 
   for (pkg in neededPkg) {
     if (system.file(package = pkg) == '') {

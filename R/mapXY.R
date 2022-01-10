@@ -18,16 +18,17 @@
 #'
 #' @return list
 
-mapXY <- function(start,end,y,yMod,x,yfactor,r2,pts_1,pts_2,pts_3,pts_4 ){
+mapXY <- function(start,end,y,yMod,x,yfactor,r2,pts_1,pts_2,pts_3,pts_4,chrt=FALSE ){
 
   roundedX<-roundedY<-list()
 
   for (counter in start: end ) {
+
     r2backup<-r2
 
-    current_x<-x[[counter]]
-    current_y<-y[[counter]]
-    yMod_current<-yMod[[counter]]
+    current_x   <- x[[counter]]
+    current_y   <- y[[counter]]
+    yMod_current<- yMod[[counter]]
 
     diffx<-max(current_x) - min(current_x)
     diffy<-max(current_y) - min(current_y)
@@ -48,24 +49,36 @@ mapXY <- function(start,end,y,yMod,x,yfactor,r2,pts_1,pts_2,pts_3,pts_4 ){
     y2_1<-max(current_y)-r2*yfactor
     y2_2<-min(current_y)+r2*yfactor
 
-    xy_1 <- cbind(x2_1 + r2 * sin(pts_1)*1, y2_1 + (r2 * cos(pts_1) *yfactor) )
-    xy_2 <- cbind(x2_2 + r2 * sin(pts_2)*1, y2_1 + (r2 * cos(pts_2) *yfactor) )
+    xy_1 <- cbind(x2_2 + r2 * sin(pts_2), y2_1 + (r2 * cos(pts_2) *yfactor) )
+    xy_2 <- cbind(x2_1 + r2 * sin(pts_1), y2_1 + (r2 * cos(pts_1) *yfactor) )
 
-    xy_3 <- cbind(x2_1 + r2 * sin(pts_3), y2_2 + (r2 * cos(pts_3) *yfactor) ) # new
-    xy_4 <- cbind(x2_2 + r2 * sin(pts_4), y2_2 + (r2 * cos(pts_4) *yfactor) ) # new
+    xy_3 <- cbind(x2_1 + r2 * sin(pts_4), y2_2 + (r2 * cos(pts_4) *yfactor) ) # new
+    xy_4 <- cbind(x2_2 + r2 * sin(pts_3), y2_2 + (r2 * cos(pts_3) *yfactor) ) # new
 
     yMod_current[which(yMod_current==max(yMod_current))]<-yMod_current[which(yMod_current==max(yMod_current))]-r2*yfactor
     yMod_current[which(yMod_current==min(yMod_current))]<-yMod_current[which(yMod_current==min(yMod_current))]+r2*yfactor
 
+    if(chrt==FALSE){
     roundedX[[counter]]<-c(current_x[1:2],xy_4[,1],topBotline_x,xy_3[,1],
-                          current_x[3:4],xy_1[,1],topBotline_x,xy_2[,1])
+                          current_x[3:4],xy_2[,1],topBotline_x,xy_1[,1])
 
     roundedY[[counter]]<-c(yMod_current[1:2],xy_4[,2],bottomline_y,xy_3[,2],
-                          yMod_current[3:4],xy_1[,2],topline_y   ,xy_2[,2])
+                          yMod_current[3:4],xy_2[,2],topline_y   ,xy_1[,2])
+    } else {
+      roundedX[[counter]]<-c(xy_4[,1],xy_3[,1],
+                             xy_2[,1],xy_1[,1]
+                             ,xy_4[,1][1]
+                             )
 
+      roundedY[[counter]]<-c(xy_4[,2],xy_3[,2],
+                             xy_2[,2] ,xy_1[,2]
+                             ,xy_4[,2][1]
+                             )
+    }
 
     attr(roundedY[[counter]],"rowIndex")<-attr(current_y,"rowIndex")
     attr(roundedX[[counter]],"rowIndex")<-attr(current_x,"rowIndex")
+
     attr(roundedY[[counter]],"chrName1")<-attr(current_y,"chrName1")
     attr(roundedX[[counter]],"chrName1")<-attr(current_x,"chrName1")
 
@@ -80,53 +93,88 @@ mapXY <- function(start,end,y,yMod,x,yfactor,r2,pts_1,pts_2,pts_3,pts_4 ){
 
 mapXYCen <- function(start,end,ycoordCentsS,xcoordCentsS,pts_1,pts_2,pts_3,pts_4,mimic=FALSE ){
 
-  xy_1<-xy_2<-list()
-  xy_3<-xy_4<-list() #
-
-  roundedX<-roundedY<-list()
+  roundedX<-roundedY<-xy_1<-xy_2<-xy_3<-xy_4<-list()
 
   for (counter in start: end ) {
 
-    diffx<-max(xcoordCentsS[[counter]]) - min(xcoordCentsS[[counter]])
-    diffy<-max(ycoordCentsS[[counter]]) - min(ycoordCentsS[[counter]])
-
-    halfmaxX <- diffx/2
-    halfmaxY <- diffy/2
+    chrRegion <- attr(ycoordCentsS[[counter]],"chrRegion")
 
     minX<-min(xcoordCentsS[[counter]])
     maxX<-max(xcoordCentsS[[counter]])
     minY<-min(ycoordCentsS[[counter]])
     maxY<-max(ycoordCentsS[[counter]])
+    diffx<-maxX - minX
+    diffy<-maxY - minY
 
-    xy_1[[counter]] <- cbind( min(xcoordCentsS[[counter]])+halfmaxX + halfmaxX * sin(pts_1), min(ycoordCentsS[[counter]]) + halfmaxY * cos(pts_1) )
+    if(is.null(chrRegion)){
+      halfmaxY <- diffy/2
+    } else if(chrRegion %in% c("qcen") ) {
+      halfmaxY <- diffy
+    } else if(chrRegion %in% c("pcen")){
+      halfmaxY <- diffy
+      minY <- minY-diffy
+    } else {
+      halfmaxY <- diffy/2
+    }
 
-    xy_2[[counter]] <- cbind( min(xcoordCentsS[[counter]])+halfmaxX + halfmaxX * sin(pts_2), min(ycoordCentsS[[counter]]) + halfmaxY * cos(pts_2))
+    halfmaxX <- diffx/2
 
-    xy_3[[counter]] <- cbind( min(xcoordCentsS[[counter]])+halfmaxX + halfmaxX * sin(pts_3), max(ycoordCentsS[[counter]]) + halfmaxY * cos(pts_3))
+    xy_1 <- cbind(   minX + halfmaxX + halfmaxX * sin(pts_1)
+                              , minY + halfmaxY * cos(pts_1))
 
-    xy_4[[counter]] <- cbind( min(xcoordCentsS[[counter]])+halfmaxX + halfmaxX * sin(pts_4), max(ycoordCentsS[[counter]]) + halfmaxY * cos(pts_4 ) )
+    xy_2 <- cbind(   minX + halfmaxX + halfmaxX * sin(pts_2)
+                              , minY + halfmaxY * cos(pts_2))
+
+    xy_3 <- cbind(   minX + halfmaxX + halfmaxX * sin(pts_3)
+                              , maxY + halfmaxY * cos(pts_3))
+
+    xy_4 <- cbind(   minX + halfmaxX + halfmaxX * sin(pts_4)
+                              , maxY + halfmaxY * cos(pts_4))
 
     if(mimic==FALSE) {
-    roundedX[[counter]] <-c(minX+halfmaxX, xy_4[[counter]][,1],minX  ,maxX , (xy_3[[counter]][,1]),
-                            minX+halfmaxX,xy_2[[counter]][,1],maxX , minX, xy_1[[counter]][,1])
-    roundedY[[counter]] <-c(minY+halfmaxY, xy_4[[counter]][,2],maxY,  maxY , (xy_3[[counter]][,2]),
-                            minY+halfmaxY,xy_2[[counter]][,2],minY ,minY, xy_1[[counter]][,2])
+    roundedX[[counter]] <-c(xy_4[,1],minX , maxX , xy_3[,1],
+                            minX+halfmaxX, xy_2[,1],maxX , minX , xy_1[,1])
+
+    roundedY[[counter]] <-c(xy_4[,2],maxY , maxY , xy_3[,2],
+                            minY+halfmaxY, xy_2[,2],minY , minY , xy_1[,2])
     } else {
 
-    roundedX[[counter]]<-c(minX,xy_1[[counter]][,1],minX+halfmaxX,(xy_2[[counter]][,1]),
-                           maxX, (xy_3[[counter]][,1] ),minX+halfmaxX,xy_4[[counter]][,1]) # opposite of cen.
+    roundedX[[counter]]<-c(minX,xy_1[,1],minX+halfmaxX,(xy_2[,1]),
+                           maxX, (xy_3[,1] ),minX+halfmaxX,xy_4[,1]) # opposite of cen.
 
-    roundedY[[counter]]<-c(minY,xy_1[[counter]][,2],minY+halfmaxY,(xy_2[[counter]][,2]),
-                           maxY, (xy_3[[counter]][,2] ),minY+halfmaxY,xy_4[[counter]][,2])
+    roundedY[[counter]]<-c(minY,xy_1[,2],minY+halfmaxY,(xy_2[,2]),
+                           maxY, (xy_3[,2] ),minY+halfmaxY,xy_4[,2])
     }
+
+    len   <- length(roundedX[[counter]])
+
+    chrRegion <- attr(ycoordCentsS[[counter]],"chrRegion")
+
+    if(!is.null(chrRegion)){
+      start <- ifelse(chrRegion %in% c("cen","pcen"),1,(floor(len/2)+1) )
+      end   <- ifelse(chrRegion %in% c("cen","qcen"),len,floor(len/2) )
+    } else {
+      start <- 1
+      end <- len
+    }
+
+    roundedX[[counter]]<-roundedX[[counter]][start:end]
+    roundedY[[counter]]<-roundedY[[counter]][start:end]
+
+    attr(roundedY[[counter]],"rowIndex") <- attr(ycoordCentsS[[counter]],"rowIndex")
+    attr(roundedY[[counter]],"chrRegion")<- chrRegion
+
+    attr(roundedX[[counter]],"rowIndex") <- attr(xcoordCentsS[[counter]],"rowIndex")
+    attr(roundedX[[counter]],"chrRegion")<- chrRegion
+
   } # for
 
   roundXroundY<-list()
   roundXroundY$roundedX<-roundedX
   roundXroundY$roundedY<-roundedY
+
   return(roundXroundY)
 }
-
 
 mapXYCenLines <- function(start,end,ycoordCentsS,xcoordCentsS ){
 
@@ -175,9 +223,6 @@ mapXYCenLines <- function(start,end,ycoordCentsS,xcoordCentsS ){
 
 mapxyRoundCenLines <- function(start,end,ycoordCentsS,xcoordCentsS,pts_1,pts_2,pts_3,pts_4,mimic=FALSE ){
 
-  # xy_1<-xy_2<-list()
-  # xy_3<-xy_4<-list() #
-
   roundedX1<-roundedY1<-roundedX2<-roundedY2<-list()
 
   for (counter in start: end ) {
@@ -200,13 +245,6 @@ mapxyRoundCenLines <- function(start,end,ycoordCentsS,xcoordCentsS,pts_1,pts_2,p
     xy_3 <- cbind( min(xcoordCentsS[[counter]])+halfmaxX + halfmaxX * sin(pts_3), max(ycoordCentsS[[counter]]) + halfmaxY * cos(pts_3))
 
     xy_4 <- cbind( min(xcoordCentsS[[counter]])+halfmaxX + halfmaxX * sin(pts_4), max(ycoordCentsS[[counter]]) + halfmaxY * cos(pts_4 ) )
-
-    # if(mimic==FALSE) {
-    #   roundedX[[counter]] <-c(minX+halfmaxX, xy_4[[counter]][,1],minX  ,maxX , (xy_3[[counter]][,1]),
-    #                           minX+halfmaxX,xy_2[[counter]][,1],maxX , minX, xy_1[[counter]][,1])
-    #   roundedY[[counter]] <-c(minY+halfmaxY, xy_4[[counter]][,2],maxY,  maxY , (xy_3[[counter]][,2]),
-    #                           minY+halfmaxY,xy_2[[counter]][,2],minY ,minY, xy_1[[counter]][,2])
-    # } else {
 
       roundedX1[[counter]]<-c(#minX,xy_1[[counter]][,1],minX+halfmaxX,
                               rev(xy_2[,1] )
@@ -328,7 +366,16 @@ mapXYchromatidHolo <- function(start,end,y,x,xModifier=.1 ){
     xCT2[[counter]]<-c(halfXModMinus,halfXModMinus,minX,minX)
     yCT2[[counter]]<-c(maxY,         minY,         minY,maxY)
     # attr(yMarkPer[[s]][[m]],"rowIndex")<-name
-  } # for
+
+    attr(xCT1[[counter]],"arm")        <- attr(xCT2[[counter]],"arm")        <- attr(yCT1[[counter]],"arm")        <- attr(yCT2[[counter]],"arm")        <- attr(y[[counter]],"arm")
+    attr(xCT1[[counter]],"rowIndex")   <- attr(xCT2[[counter]],"rowIndex")   <- attr(yCT1[[counter]],"rowIndex")   <- attr(yCT2[[counter]],"rowIndex")   <- attr(y[[counter]],"rowIndex")
+    attr(xCT1[[counter]],"wholeArm")   <- attr(xCT2[[counter]],"wholeArm")   <- attr(yCT1[[counter]],"wholeArm")   <- attr(yCT2[[counter]],"wholeArm")   <- attr(y[[counter]],"wholeArm")
+    attr(xCT1[[counter]],"whichArm")   <- attr(xCT2[[counter]],"whichArm")   <- attr(yCT1[[counter]],"whichArm")   <- attr(yCT2[[counter]],"whichArm")   <- attr(y[[counter]],"whichArm")
+    attr(xCT1[[counter]],"squareSide") <- attr(xCT2[[counter]],"squareSide") <- attr(yCT1[[counter]],"squareSide") <- attr(yCT2[[counter]],"squareSide") <- attr(y[[counter]],"squareSide")
+
+  } # for counter
+
+
 
   chrtXchrtYHolo<-list()
   chrtXchrtYHolo$xCT1<-xCT1
@@ -360,6 +407,7 @@ mapXYchromatidSARo <- function(start,end,y,x,r2,xModifier,pts){
 
     diffx<-maxX - minX
     diffy<-maxY - minY
+
     ratexy<-diffx/diffy
     ifelse( (diffx/r2) * 2 < ratexy*4 ,  r2 <- diffx/(ratexy*2) ,r2 )
 
@@ -375,7 +423,7 @@ mapXYchromatidSARo <- function(start,end,y,x,r2,xModifier,pts){
     bottomline_y <-rep(minY,2)
 
     # pts<- seq(-pi/2, pi*1.5, length.out = ver*4)
-    ptsl<-split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
+    ptsl <- split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
 
     xy_1 <- cbind( (minX+r2) + r2 * sin(ptsl[[1]]), (maxY-r2) + r2 * cos(ptsl[[1]]))
     xy_2 <- cbind( (maxX-r2) + r2 * sin(ptsl[[2]]), (maxY-r2) + r2 * cos(ptsl[[2]]))
@@ -416,6 +464,8 @@ mapXYchromatidSARo <- function(start,end,y,x,r2,xModifier,pts){
                               ,xy_8[,2], rep(maxY,2),xy_2[,2] # 8 2
                               #5 6 9 10
     )
+
+    RoundedSAChrty[[counter]][which(RoundedSAChrty[[counter]]>maxY)]<-maxY
 
     r2<-r2backup
   } # for
@@ -476,6 +526,7 @@ mapXYchromatidLARo <- function(start,end,y,x,r2,xModifier,pts){
     xy_9  <- cbind( (halfXModPlus - xModifier) + xModifier * sin(ptsl[[2]]), (maxY-(xModifier*2)) + xModifier * cos(ptsl[[2]]))
     xy_10 <- cbind( (halfXModMinus+ xModifier) + xModifier * sin(ptsl[[1]]), (maxY-(xModifier*2)) + xModifier * cos(ptsl[[1]]))
 
+
     RoundedLAChrtx[[counter]] <- c(rep(maxX,2)
                                    ,xy_3[,1]
                                    ,topBotline_x2[2:1]
@@ -498,7 +549,8 @@ mapXYchromatidLARo <- function(start,end,y,x,r2,xModifier,pts){
                                     ,yMod[2]
                                     ,xy_6[,2], rep(minY,2),       xy_4[,2], yMod[2:1], xy_1[,2],rep(maxY,2)  ,xy_2[,2] # 6 4 1 2
     )
-    # 7 8 11 12
+
+    RoundedLAChrty[[counter]][which(RoundedLAChrty[[counter]]<minY)]<-minY
 
     r2<-r2backup
   } # for
@@ -508,8 +560,6 @@ mapXYchromatidLARo <- function(start,end,y,x,r2,xModifier,pts){
   chrtXchrtYLARo$RoundedLAChrty<-RoundedLAChrty
   return(chrtXchrtYLARo)
 }
-
-
 
 mapXYchromatidHoloRo <- function(start,end,y,x,r2, xModifier,pts ){
 
@@ -579,8 +629,6 @@ mapXYchromatidHoloRo <- function(start,end,y,x,r2, xModifier,pts ){
   return(chrtXchrtYHoloRo)
 }
 
-
-
 mapXYmarksRo <- function(start,end,y,x,r2, xModifier,pts ) {
 
   markRightx<-markLeftx<-markRighty<-markLefty<-list()
@@ -601,6 +649,7 @@ mapXYmarksRo <- function(start,end,y,x,r2, xModifier,pts ) {
 
     diffx<-maxX - minX
     diffy<-maxY - minY
+
     ratexy<-diffx/diffy
 
     ifelse( (diffx/r2) * 2 < ratexy*4 ,  r2 <- diffx/(ratexy*2) ,r2 )
@@ -621,11 +670,13 @@ mapXYmarksRo <- function(start,end,y,x,r2, xModifier,pts ) {
 
     xy_1 <- cbind( (minX+r2) + r2 * sin(ptsl[[1]]), (maxY-r2) + r2 * cos(ptsl[[1]]))
     xy_2 <- cbind( (maxX-r2) + r2 * sin(ptsl[[2]]), (maxY-r2) + r2 * cos(ptsl[[2]]))
+
     xy_3 <- cbind( (maxX-r2) + r2 * sin(ptsl[[3]]), (minY+r2) + r2 * cos(ptsl[[3]]))
     xy_4 <- cbind( (minX+r2) + r2 * sin(ptsl[[4]]), (minY+r2) + r2 * cos(ptsl[[4]]))
 
     xy_5 <- cbind( (halfXModPlus +r2) + r2 * sin(ptsl[[4]]), (minY+r2) + r2 * cos(ptsl[[4]]))
     xy_6 <- cbind( (halfXModMinus-r2) + r2 * sin(ptsl[[3]]), (minY+r2) + r2 * cos(ptsl[[3]]))
+
     xy_7 <- cbind( (halfXModMinus-r2) + r2 * sin(ptsl[[2]]), (maxY-r2) + r2 * cos(ptsl[[2]]))
     xy_8 <- cbind( (halfXModPlus +r2) + r2 * sin(ptsl[[1]]), (maxY-r2) + r2 * cos(ptsl[[1]]))
 
@@ -684,7 +735,6 @@ mapXYmarksRo <- function(start,end,y,x,r2, xModifier,pts ) {
 
         bottomline_y <-rep(minY,2)
 
-        # pts<- seq(-pi/2, pi*1.5, length.out = ver*4)
         ptsl<-split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
 
         xy_1 <- cbind( (minX+r2) + r2 * sin(ptsl[[1]]), (maxY-r2) + r2 * cos(ptsl[[1]]))
@@ -692,13 +742,9 @@ mapXYmarksRo <- function(start,end,y,x,r2, xModifier,pts ) {
         xy_3 <- cbind( (maxX-r2) + r2 * sin(ptsl[[3]]), (minY+r2) + r2 * cos(ptsl[[3]]))
         xy_4 <- cbind( (minX+r2) + r2 * sin(ptsl[[4]]), (minY+r2) + r2 * cos(ptsl[[4]]))
 
-        # xy_5 <- cbind( (halfXModPlus +r2) + r2 * sin(ptsl[[4]]), (minY+r2) + r2 * cos(ptsl[[4]]))
-        # xy_6 <- cbind( (halfXModMinus-r2) + r2 * sin(ptsl[[3]]), (minY+r2) + r2 * cos(ptsl[[3]]))
         xy_7 <- cbind( (halfXModMinus-r2) + r2 * sin(ptsl[[2]]), (maxY-r2) + r2 * cos(ptsl[[2]]))
         xy_8 <- cbind( (halfXModPlus +r2) + r2 * sin(ptsl[[1]]), (maxY-r2) + r2 * cos(ptsl[[1]]))
 
-        # xy_9  <- cbind( (halfXModPlus - xModifier) + xModifier * sin(ptsl[[2]]), (maxY-(xModifier*2)) + xModifier * cos(ptsl[[2]]))
-        # xy_10 <- cbind( (halfXModMinus+ xModifier) + xModifier * sin(ptsl[[1]]), (maxY-(xModifier*2)) + xModifier * cos(ptsl[[1]]))
         xy_11 <- cbind( (halfXModMinus+ xModifier) + xModifier * sin(ptsl[[4]]), (minY+(xModifier*2)) + xModifier * cos(ptsl[[4]]))
         xy_12 <- cbind( (halfXModPlus - xModifier) + xModifier * sin(ptsl[[3]]), (minY+(xModifier*2)) + xModifier * cos(ptsl[[3]]))
 
@@ -768,14 +814,9 @@ mapXYmarksRo <- function(start,end,y,x,r2, xModifier,pts ) {
 
         xy_5 <- cbind( (halfXModPlus +r2) + r2 * sin(ptsl[[4]]), (minY+r2) + r2 * cos(ptsl[[4]]))
         xy_6 <- cbind( (halfXModMinus-r2) + r2 * sin(ptsl[[3]]), (minY+r2) + r2 * cos(ptsl[[3]]))
-        # xy_7 <- cbind( (halfXModMinus-r2) + r2 * sin(ptsl[[2]]), (maxY-r2) + r2 * cos(ptsl[[2]]))
-        # xy_8 <- cbind( (halfXModPlus +r2) + r2 * sin(ptsl[[1]]), (maxY-r2) + r2 * cos(ptsl[[1]]))
 
         xy_9  <- cbind( (halfXModPlus - xModifier) + xModifier * sin(ptsl[[2]]), (maxY-(xModifier*2)) + xModifier * cos(ptsl[[2]]))
         xy_10 <- cbind( (halfXModMinus+ xModifier) + xModifier * sin(ptsl[[1]]), (maxY-(xModifier*2)) + xModifier * cos(ptsl[[1]]))
-        # xy_11 <- cbind( (halfXModMinus+ xModifier) + xModifier * sin(ptsl[[4]]), (minY+(xModifier*2)) + xModifier * cos(ptsl[[4]]))
-        # xy_12 <- cbind( (halfXModPlus - xModifier) + xModifier * sin(ptsl[[3]]), (minY+(xModifier*2)) + xModifier * cos(ptsl[[3]]))
-
 
         # this is not only right but both chrtids
 
@@ -800,8 +841,14 @@ mapXYmarksRo <- function(start,end,y,x,r2, xModifier,pts ) {
         r2<-r2backup
 
       }
+
     }
-  } # for
+    attr(markLeftx[[counter]],"arm")        <- attr(markLefty[[counter]],"arm")        <- attr(markRightx[[counter]],"arm")        <- attr(markRighty[[counter]],"arm")        <- attr(y[[counter]],"arm")
+    attr(markLeftx[[counter]],"rowIndex")   <- attr(markLefty[[counter]],"rowIndex")   <- attr(markRightx[[counter]],"rowIndex")   <- attr(markRighty[[counter]],"rowIndex")   <- attr(y[[counter]],"rowIndex")
+    attr(markLeftx[[counter]],"wholeArm")   <- attr(markLefty[[counter]],"wholeArm")   <- attr(markRightx[[counter]],"wholeArm")   <- attr(markRighty[[counter]],"wholeArm")   <- attr(y[[counter]],"wholeArm")
+    attr(markLeftx[[counter]],"whichArm")   <- attr(markLefty[[counter]],"whichArm")   <- attr(markRightx[[counter]],"whichArm")   <- attr(markRighty[[counter]],"whichArm")   <- attr(y[[counter]],"whichArm")
+    attr(markLeftx[[counter]],"squareSide") <- attr(markLefty[[counter]],"squareSide") <- attr(markRightx[[counter]],"squareSide") <- attr(markRighty[[counter]],"squareSide") <- attr(y[[counter]],"squareSide")
+  } # for counter
 
   chrtXchrtYmarkRo<-list()
 
@@ -814,16 +861,13 @@ mapXYmarksRo <- function(start,end,y,x,r2, xModifier,pts ) {
   return(chrtXchrtYmarkRo)
 }
 
-makeRoundCoordXY <- function(r2, yfactor, x, y, start, end, n) {
-
-  pts <- seq(-pi/2, pi*1.5, length.out = n*4)
-  ptsl<- split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
+makeRoundCoordXY <- function(r2, yfactor, x, y, start, end, n, ptsl) {
 
   xyCoords <- mapXY(1 , (length(y) ) ,
                     y, y ,
                     x,
                     yfactor,r2,
-                    ptsl[[1]],ptsl[[2]],ptsl[[4]],ptsl[[3]]
+                    ptsl[[1]],ptsl[[2]],ptsl[[3]],ptsl[[4]]
   )
   return(xyCoords)
 }
