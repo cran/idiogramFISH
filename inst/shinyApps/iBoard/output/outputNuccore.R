@@ -22,8 +22,6 @@ output$searchUI <- renderUI({
                      ,textInput("term",
                                 "",
                                 value=""
-                                # value = "Bacillus cereus strain 03BB87 plasmid pBCN, complete sequence"
-                                # value = "'Nostoc azollae' 0708, complete"
                                 ,width = "100%" )
                      ,uiOutput("termButtonUI")
                    )
@@ -114,7 +112,7 @@ output$titleSelectUI <- renderUI({
       validate(
         need(try({
           values[["searchStatus"]]
-        }),values[["errorMessage"]] )
+        }), values[["errorMessage"]] )
       )
 
       validate(

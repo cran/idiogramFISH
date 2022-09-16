@@ -15,7 +15,7 @@
 #'
 fixChrNameDupDF<-function(list1dfChromSize, mybooleanChrName){
   dfChromSize<-list1dfChromSize[[1]]
-  if(class(dfChromSize)=="data.frame") {
+  if(inherits(dfChromSize, "data.frame")) {
     OTUname<-names(list1dfChromSize)
     if(mybooleanChrName){
       if(length(dfChromSize$chrName)!=length(unique(dfChromSize$chrName) )){

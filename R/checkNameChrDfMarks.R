@@ -77,7 +77,7 @@ checkNameChrDfMarks<- function(listChrSize,listOfdfMarks){
         } else {
             message(paste("\n No divergence"))
 
-          if(class(listOfdfMarks[[which(names(listOfdfMarks)==name)]])=="data.frame") {
+          if(inherits(listOfdfMarks[[which(names(listOfdfMarks)==name)]], "data.frame")) {
             markNames   <- c(markNames,unique(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$markName) )
 
             if(length(listOfdfMarks[[which(names(listOfdfMarks)==name)]]$markSizeOrig)>0) {

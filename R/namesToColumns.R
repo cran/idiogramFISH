@@ -118,7 +118,7 @@ if(! "chrName" %in% colnames(marksDf) ) {
         if("group" %in% colnames(listOfdfChromSize[[s]])) {
           message(crayon::blue("group column present - remove column if not using") )
 
-          if(class(listOfdfChromSize[[s]])=="data.frame") {
+          if(inherits(listOfdfChromSize[[s]], "data.frame")) {
             listOfdfChromSize[[s]]<-listOfdfChromSize[[s]][grouporderlist[[s]], ]
             listOfdfChromSize[[s]]$neworder<-1:nrow(listOfdfChromSize[[s]])
           } #fi

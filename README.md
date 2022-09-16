@@ -35,7 +35,7 @@ monocentrics and holocentrics.
 IdiogramFISH was written in R ([R Core Team, 2019](#ref-R-base)) and
 also uses crayon ([Csárdi, 2017](#ref-R-crayon)), tidyr ([Wickham and
 Henry, 2020](#ref-R-tidyr)), plyr ([Wickham, 2011](#ref-plyr2011)) and
-dplyr packages ([Wickham *et al.*, 2019a](#ref-R-dplyr)). Documentation
+dplyr packages ([Wickham *et al.*, 2019](#ref-R-dplyr)). Documentation
 was written with R-packages roxygen2 ([Wickham *et al.*,
 2018](#ref-R-roxygen2)), usethis ([Wickham and Bryan,
 2019](#ref-R-usethis)), bookdown ([Xie, 2016](#ref-bookdown2016)), knitr
@@ -78,57 +78,6 @@ Windows users: To avoid installation of packages in OneDrive
 To do that permanently: Search (magnifier) “environment variables” and
 set R_LIBS_USER to `D:\R\lib` (example)
 
-#### Devel. version of idiogramFISH
-
-##### From gitlab with devtools ([Wickham *et al.*, 2019b](#ref-R-devtools))
-
-Attention windows users, please install
-[Rtools](https://cran.r-project.org/bin/windows/Rtools/) and
-[git](https://git-scm.com/download/win) (compilation tools).
-
-Vignettes (optional) use a lua filter, so you would need
-<a href="https://pandoc.org/installing.html" target="_blank">pandoc</a>
-ver. \> 2. and `pandoc-citeproc` or `citeproc`. RStudio comes with
-pandoc. `rmarkdown::pandoc_version()`
-
-``` r
-# This installs package devtools, necessary for installing the dev version
-install.packages("devtools")
-
-url <- "https://gitlab.com/ferroao/idiogramFISH"
-
-# Packages for vignettes: (optional)
-list.of.packages <- c(
-    "knitr",
-    "kableExtra",
-    "rmdformats",
-    "rmarkdown",
-    "RCurl",
-    "rvcheck",
-    "badger",
-    "rentrez"
-    )
-new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages)
-
-# Linux with vignettes and Windows
-devtools::install_git(url = url,build_vignettes = TRUE, force=TRUE)
-
-# Mac with vignettes
-devtools::install_git(url = url, build_opts=c("--no-resave-data","--no-manual") )
-```
-
-##### Installing in system terminal
-
-``` r
-# clone repository:
-git clone "https://gitlab.com/ferroao/idiogramFISH"
-
-R CMD build idiogramFISH
-# install
-R CMD INSTALL idiogramFISH_*.tar.gz
-```
-
 #### Releases
 
 [News](https://gitlab.com/ferroao/idiogramFISH/blob/master/NEWS.md)
@@ -149,7 +98,7 @@ history](https://ferroao.gitlab.io/idiogramfishhelppages/downloads.png)
 
  [![https://ferroao.gitlab.io/idiogramFISH](man/figures/pkgdownver.svg)](https://ferroao.gitlab.io/idiogramFISH)
 
-#### Vignettes:
+#### Vignettes
 
 Online:
 
@@ -167,10 +116,10 @@ browseVignettes("idiogramFISH")
 
 To cite idiogramFISH in publications, please use:
 
-Roa F, Telles MPC (2021) idiogramFISH: Shiny app. Idiograms with Marks
+Roa F, Telles MPC (2022) idiogramFISH: Shiny app. Idiograms with Marks
 and Karyotype Indices, Universidade Federal de Goiás. Brazil. R-package.
-version 2.0.8 <https://ferroao.gitlab.io/manualidiogramfish/>.
-doi:<!-- breaklink -->10.5281/zenodo.3579417
+version 2.0.9 <https://ferroao.gitlab.io/manualidiogramfish/>. doi:<!--
+  breaklink -->10.5281/zenodo.3579417
 
 To write citation to file:
 
@@ -212,112 +161,163 @@ They can be accessed with `google colab` to work online.
 </tr>
 <tr>
 <td>
-<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/03-minimal.ipynb" target="_blank">3 Minimal examples</a> 
+<a
+href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/03-minimal.ipynb"
+target="_blank">3 Minimal examples</a> 
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/blob/main/03-minimal.ipynb" target="_blank"><kbd>link</kbd></a>
+<a
+href="https://github.com/ferroao/IFjupyter/blob/main/03-minimal.ipynb"
+target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/03-minimal.ipynb" target="_blank"><kbd> Raw</kbd></a>
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/04-plotting.ipynb" target="_blank">4 Plotting chromosomes</a> 
-</td>
-<td>
-<a href="https://github.com/ferroao/IFjupyter/blob/main/04-plotting.ipynb" target="_blank"><kbd>link</kbd></a>
-</td>
-<td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/04-plotting.ipynb" target="_blank"><kbd> Raw</kbd></a>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/03-minimal.ipynb"
+target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
 <td>
-<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/05-multiple.ipynb" target="_blank">5 Multiple OTUs</a>
+<a
+href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/04-plotting.ipynb"
+target="_blank">4 Plotting chromosomes</a> 
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/blob/main/05-multiple.ipynb" target="_blank"><kbd>link</kbd></a>
+<a
+href="https://github.com/ferroao/IFjupyter/blob/main/04-plotting.ipynb"
+target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/05-multiple.ipynb" target="_blank"><kbd> Raw</kbd></a>
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/06-units.ipynb" target="_blank">6 Changing units</a>
-</td>
-<td>
-<a href="https://github.com/ferroao/IFjupyter/blob/main/06-units.ipynb" target="_blank"><kbd>link</kbd></a>
-</td>
-<td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/06-units.ipynb" target="_blank"><kbd> Raw</kbd></a>
+<a
+href="https://github.com/ferroao/IFjupyter/raw/main/04-plotting.ipynb"
+target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
 <td>
-<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/07-gish.ipynb" target="_blank">7 GISH</a>
+<a
+href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/05-multiple.ipynb"
+target="_blank">5 Multiple OTUs</a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/blob/main/07-gish.ipynb" target="_blank"><kbd>link</kbd></a>
+<a
+href="https://github.com/ferroao/IFjupyter/blob/main/05-multiple.ipynb"
+target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/07-gish.ipynb" target="_blank"><kbd> Raw</kbd></a>
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/08-groups.ipynb" target="_blank">8 Groups</a>
-</td>
-<td>
-<a href="https://github.com/ferroao/IFjupyter/blob/main/08-groups.ipynb" target="_blank"><kbd>link</kbd></a>
-</td>
-<td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/08-groups.ipynb" target="_blank"><kbd> Raw</kbd></a>
+<a
+href="https://github.com/ferroao/IFjupyter/raw/main/05-multiple.ipynb"
+target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
 <td>
-<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/09-circular.ipynb" target="_blank">9 Circular Plots</a>
+<a
+href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/06-units.ipynb"
+target="_blank">6 Changing units</a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/blob/main/09-circular.ipynb" target="_blank"><kbd>link</kbd></a>
+<a href="https://github.com/ferroao/IFjupyter/blob/main/06-units.ipynb"
+target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/09-circular.ipynb" target="_blank"><kbd> Raw</kbd></a>
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/10-phylogeny.ipynb" target="_blank">10 Plotting alongside phylogeny</a> 
-</td>
-<td>
-<a href="https://github.com/ferroao/IFjupyter/blob/main/10-phylogeny.ipynb" target="_blank"><kbd>link</kbd></a>
-</td>
-<td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/10-phylogeny.ipynb" target="_blank"><kbd> Raw</kbd></a>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/06-units.ipynb"
+target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
 <td>
-<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/11-citrushelp.ipynb" target="_blank">11 Citrus</a>
+<a
+href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/07-gish.ipynb"
+target="_blank">7 GISH</a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/blob/main/11-citrushelp.ipynb" target="_blank"><kbd>link</kbd></a>
+<a href="https://github.com/ferroao/IFjupyter/blob/main/07-gish.ipynb"
+target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/11-citrushelp.ipynb" target="_blank"><kbd> Raw</kbd></a>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/07-gish.ipynb"
+target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
 <td>
-<a href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/12-human.ipynb" target="_blank">12 Human Karyotype</a>
+<a
+href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/08-groups.ipynb"
+target="_blank">8 Groups</a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/blob/main/12-human.ipynb" target="_blank"><kbd>link</kbd></a>
+<a href="https://github.com/ferroao/IFjupyter/blob/main/08-groups.ipynb"
+target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/12-human.ipynb" target="_blank"><kbd> Raw</kbd></a>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/08-groups.ipynb"
+target="_blank"><kbd> Raw</kbd></a>
+</td>
+</tr>
+<tr>
+<td>
+<a
+href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/09-circular.ipynb"
+target="_blank">9 Circular Plots</a>
+</td>
+<td>
+<a
+href="https://github.com/ferroao/IFjupyter/blob/main/09-circular.ipynb"
+target="_blank"><kbd>link</kbd></a>
+</td>
+<td>
+<a
+href="https://github.com/ferroao/IFjupyter/raw/main/09-circular.ipynb"
+target="_blank"><kbd> Raw</kbd></a>
+</td>
+</tr>
+<tr>
+<td>
+<a
+href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/10-phylogeny.ipynb"
+target="_blank">10 Plotting alongside phylogeny</a> 
+</td>
+<td>
+<a
+href="https://github.com/ferroao/IFjupyter/blob/main/10-phylogeny.ipynb"
+target="_blank"><kbd>link</kbd></a>
+</td>
+<td>
+<a
+href="https://github.com/ferroao/IFjupyter/raw/main/10-phylogeny.ipynb"
+target="_blank"><kbd> Raw</kbd></a>
+</td>
+</tr>
+<tr>
+<td>
+<a
+href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/11-citrushelp.ipynb"
+target="_blank">11 Citrus</a>
+</td>
+<td>
+<a
+href="https://github.com/ferroao/IFjupyter/blob/main/11-citrushelp.ipynb"
+target="_blank"><kbd>link</kbd></a>
+</td>
+<td>
+<a
+href="https://github.com/ferroao/IFjupyter/raw/main/11-citrushelp.ipynb"
+target="_blank"><kbd> Raw</kbd></a>
+</td>
+</tr>
+<tr>
+<td>
+<a
+href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/12-human.ipynb"
+target="_blank">12 Human Karyotype</a>
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/blob/main/12-human.ipynb"
+target="_blank"><kbd>link</kbd></a>
+</td>
+<td>
+<a href="https://github.com/ferroao/IFjupyter/raw/main/12-human.ipynb"
+target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 </table>
@@ -362,6 +362,7 @@ or with `svg()`, `png()`, etc. Add chromosome morphology according to
 ([1986](#ref-Guerra1986d)) or ([Levan *et al.*, 1964](#ref-Levan1964))
 
 ``` r
+
 library(idiogramFISH)
 
 data(dfOfChrSize) # chromsome data
@@ -412,277 +413,35 @@ plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
 
     dfOfChrSize
 
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-chrName
-</th>
-<th style="text-align:right;">
-shortArmSize
-</th>
-<th style="text-align:right;">
-longArmSize
-</th>
-<th style="text-align:right;">
-Mbp
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-700
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-900
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-3
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-500
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-X
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-300
-</td>
-</tr>
-</tbody>
-</table>
+| chrName | shortArmSize | longArmSize | Mbp |
+|:--------|-------------:|------------:|----:|
+| 1       |            3 |           4 | 700 |
+| 2       |            4 |           5 | 900 |
+| 3       |            2 |           3 | 500 |
+| X       |            1 |           2 | 300 |
 
     dfMarkColor
 
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-markName
-</th>
-<th style="text-align:left;">
-markColor
-</th>
-<th style="text-align:left;">
-style
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-5S
-</td>
-<td style="text-align:left;">
-red
-</td>
-<td style="text-align:left;">
-dots
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-45S
-</td>
-<td style="text-align:left;">
-chartreuse3
-</td>
-<td style="text-align:left;">
-square
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-DAPI
-</td>
-<td style="text-align:left;">
-blue
-</td>
-<td style="text-align:left;">
-square
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CMA
-</td>
-<td style="text-align:left;">
-darkgoldenrod1
-</td>
-<td style="text-align:left;">
-square
-</td>
-</tr>
-</tbody>
-</table>
+| markName | markColor      | style  |
+|:---------|:---------------|:-------|
+| 5S       | red            | dots   |
+| 45S      | chartreuse3    | square |
+| DAPI     | blue           | square |
+| CMA      | darkgoldenrod1 | square |
 
 `p, q` and `w` marks can have empty columns `markDistCen` and `markSize`
 since v. 1.9.1 to plot whole arms (`p`, `q`) and whole chr. `w`.
 
     dfOfMarks2
 
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-chrName
-</th>
-<th style="text-align:left;">
-markName
-</th>
-<th style="text-align:left;">
-chrRegion
-</th>
-<th style="text-align:right;">
-markSize
-</th>
-<th style="text-align:right;">
-markDistCen
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:left;">
-5S
-</td>
-<td style="text-align:left;">
-p
-</td>
-<td style="text-align:right;">
-0.8
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:left;">
-45S
-</td>
-<td style="text-align:left;">
-q
-</td>
-<td style="text-align:right;">
-1.0
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-X
-</td>
-<td style="text-align:left;">
-45S
-</td>
-<td style="text-align:left;">
-p
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-3
-</td>
-<td style="text-align:left;">
-DAPI
-</td>
-<td style="text-align:left;">
-q
-</td>
-<td style="text-align:right;">
-1.0
-</td>
-<td style="text-align:right;">
-1.0
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:left;">
-DAPI
-</td>
-<td style="text-align:left;">
-cen
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-X
-</td>
-<td style="text-align:left;">
-CMA
-</td>
-<td style="text-align:left;">
-cen
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-</tr>
-</tbody>
-</table>
+| chrName | markName | chrRegion | markSize | markDistCen |
+|:--------|:---------|:----------|---------:|------------:|
+| 1       | 5S       | p         |      0.8 |         0.5 |
+| 1       | 45S      | q         |      1.0 |         0.5 |
+| X       | 45S      | p         |       NA |          NA |
+| 3       | DAPI     | q         |      1.0 |         1.0 |
+| 1       | DAPI     | cen       |       NA |          NA |
+| X       | CMA      | cen       |       NA |          NA |
 
 #### 2 How to plot a karyotype of holocentrics:
 
@@ -722,238 +481,32 @@ plotIdiograms(dfChrSize  =dfChrSizeHolo, # data.frame of chr. size
 
     dfChrSizeHolo
 
-<table>
-<thead>
-<tr>
-<th style="text-align:right;">
-chrName
-</th>
-<th style="text-align:right;">
-chrSize
-</th>
-<th style="text-align:right;">
-Mbp
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-300
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-400
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-200
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-500
-</td>
-</tr>
-</tbody>
-</table>
+| chrName | chrSize | Mbp | OTU          |
+|--------:|--------:|----:|:-------------|
+|       1 |       3 | 300 | Species holo |
+|       2 |       4 | 400 | Species holo |
+|       3 |       2 | 200 | Species holo |
+|       4 |       5 | 500 | Species holo |
 
     dfMarkColor
 
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-markName
-</th>
-<th style="text-align:left;">
-markColor
-</th>
-<th style="text-align:left;">
-style
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-5S
-</td>
-<td style="text-align:left;">
-red
-</td>
-<td style="text-align:left;">
-dots
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-45S
-</td>
-<td style="text-align:left;">
-chartreuse3
-</td>
-<td style="text-align:left;">
-square
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-DAPI
-</td>
-<td style="text-align:left;">
-blue
-</td>
-<td style="text-align:left;">
-square
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CMA
-</td>
-<td style="text-align:left;">
-darkgoldenrod1
-</td>
-<td style="text-align:left;">
-square
-</td>
-</tr>
-</tbody>
-</table>
+| markName | markColor      | style  |
+|:---------|:---------------|:-------|
+| 5S       | red            | dots   |
+| 45S      | chartreuse3    | square |
+| DAPI     | blue           | square |
+| CMA      | darkgoldenrod1 | square |
 
     dfMarkPosHolo
 
-<table>
-<thead>
-<tr>
-<th style="text-align:right;">
-chrName
-</th>
-<th style="text-align:left;">
-markName
-</th>
-<th style="text-align:right;">
-markPos
-</th>
-<th style="text-align:right;">
-markSize
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:left;">
-5S
-</td>
-<td style="text-align:right;">
-1.0
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:left;">
-DAPI
-</td>
-<td style="text-align:right;">
-1.5
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-45S
-</td>
-<td style="text-align:right;">
-2.0
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-DAPI
-</td>
-<td style="text-align:right;">
-2.0
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:left;">
-CMA
-</td>
-<td style="text-align:right;">
-2.0
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:left;">
-5S
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-</tr>
-</tbody>
-</table>
+| chrName | markName | markPos | markSize | OTU          |
+|--------:|:---------|--------:|---------:|:-------------|
+|       3 | 5S       |     1.0 |      0.5 | Species holo |
+|       3 | DAPI     |     1.5 |      0.5 | Species holo |
+|       1 | 45S      |     2.0 |      0.5 | Species holo |
+|       2 | DAPI     |     2.0 |      0.5 | Species holo |
+|       4 | CMA      |     2.0 |      0.5 | Species holo |
+|       4 | 5S       |     0.5 |      0.5 | Species holo |
 
 #### 3. Plotting both mono. and holo.
 
@@ -1043,13 +596,13 @@ plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
 ); # dev.off() # close svg()
 ```
 
-<img src="man/figures/README-unnamed-chunk-19-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-17-1.png" width="70%" />
 
-<img src="man/figures/README-unnamed-chunk-20-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-18-1.png" width="70%" />
 
 ## References
 
-<div id="refs_normal">
+<div id="refs_normal" class="references csl-bib-body" entry-spacing="1">
 
 <div id="ref-Guerra1986d" class="csl-entry">
 
@@ -1063,8 +616,7 @@ nomenclature of Levan et al.</span> *Brazilian Journal of Genetics*,
 
 Levan A, Fredga K, Sandberg AA. 1964. <span class="nocase">Nomenclature
 for centromeric position on chromosomes</span> *Hereditas*, 52(2):
-201–220.
-<https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1601-5223.1964.tb01953.x>
+201–220. <https://doi.org/10.1111/j.1601-5223.1964.tb01953.x>
 
 </div>
 
@@ -1072,7 +624,7 @@ for centromeric position on chromosomes</span> *Hereditas*, 52(2):
 
 Romero-Zarco C. 1986. <span class="nocase">A new method for estimating
 karyotype asymmetry</span> *Taxon*, 35(3): 526–530.
-<https://onlinelibrary.wiley.com/doi/abs/10.2307/1221906>
+<https://doi.org/10.2307/1221906>
 
 </div>
 
@@ -1091,7 +643,8 @@ changes in karyotype and habit using phylogenetic information</span>
 
 ## R-packages
 
-<div id="refs_software">
+<div id="refs_software" class="references csl-bib-body"
+entry-spacing="1">
 
 <div id="ref-R-crayon" class="csl-entry">
 
@@ -1119,8 +672,7 @@ computing* R Foundation for Statistical Computing, Vienna, Austria.
 
 Revell LJ. 2012. Phytools: An r package for phylogenetic comparative
 biology (and other things). *Methods in Ecology and Evolution*, 3:
-217–223.
-<https://besjournals.onlinelibrary.wiley.com/doi/10.1111/j.2041-210X.2011.00169.x>
+217–223. <https://doi.org/10.1111/j.2041-210X.2011.00169.x>
 
 </div>
 
@@ -1151,7 +703,7 @@ Springer-Verlag New York. <https://ggplot2.tidyverse.org>
 
 <div id="ref-R-dplyr" class="csl-entry">
 
-Wickham H, François R, Henry L, Müller K. 2019a. *Dplyr: A grammar of
+Wickham H, François R, Henry L, Müller K. 2019. *Dplyr: A grammar of
 data manipulation*. R package version 0.8.3.
 <https://CRAN.R-project.org/package=dplyr>
 
@@ -1161,14 +713,6 @@ data manipulation*. R package version 0.8.3.
 
 Wickham H, Henry L. 2020. *Tidyr: Tidy messy data*. R package version
 1.0.2. <https://CRAN.R-project.org/package=tidyr>
-
-</div>
-
-<div id="ref-R-devtools" class="csl-entry">
-
-Wickham H, Hester J, Chang W. 2019b. *Devtools: Tools to make developing
-r packages easier*. R package version 2.2.1.
-<https://CRAN.R-project.org/package=devtools>
 
 </div>
 
@@ -1193,7 +737,7 @@ Biology and Evolution*, 35: 3041–3043.
 
 ## Shiny App
 
-<div id="refs_shiny">
+<div id="refs_shiny" class="references csl-bib-body" entry-spacing="1">
 
 <div id="ref-R-rclipboard" class="csl-entry">
 
@@ -1236,7 +780,7 @@ tools*. R package version 3.8.2. <https://github.com/r-gregmisc/gtools>
 
 ## Documentation
 
-<div id="refs_docs">
+<div id="refs_docs" class="references csl-bib-body" entry-spacing="1">
 
 <div id="ref-R-rmdformats" class="csl-entry">
 

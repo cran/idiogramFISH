@@ -1,7 +1,7 @@
 Package: idiogramFISH
 Title: Shiny App. Idiograms with Marks and Karyotype Indices
-Version: 2.0.8
-Date: 2021-12-28
+Version: 2.0.9
+Date: 2022-09-14
 Authors@R: c(person("Fernando", "Roa", email = "froao@unal.edu.co", role = c("aut", "cre") ), 
              person(given="Mariana PC Telles", email = "", role = c("ctb")) 
              )
@@ -14,18 +14,18 @@ LazyData: true
 Suggests: rentrez, ggplot2, ggpubr, ggtree, phytools, treeio,
         rmdformats, knitr, kableExtra, rvcheck, badger, rmarkdown,
         RCurl, shiny, shinydashboard, rhandsontable, gtools,
-        rclipboard, clipr
+        rclipboard, clipr, shinyjs
 VignetteBuilder: rmdformats, knitr, kableExtra, rmarkdown, RCurl,
         rvcheck, badger, rentrez
 SystemRequirements: pandoc (>= 2.0)
 URL: https://ferroao.gitlab.io/manualidiogramfish/,
         https://ferroao.gitlab.io/idiogramfishhelppages
 BugReports: https://gitlab.com/ferroao/idiogramFISH/-/issues
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 NeedsCompilation: no
-Packaged: 2022-01-10 19:39:44 UTC; fernando
+Packaged: 2022-09-16 14:13:17 UTC; fernando
 Author: Fernando Roa [aut, cre],
   Mariana PC Telles [ctb]
 Maintainer: Fernando Roa <froao@unal.edu.co>
 Repository: CRAN
-Date/Publication: 2022-01-10 23:42:42 UTC
+Date/Publication: 2022-09-16 14:46:09 UTC

@@ -17,35 +17,6 @@ runBoard <- function(installAll=FALSE) {
 
   missRentrez <-  missShiny <- missRecPkg <- missPkg <- character(0)
 
-  if(F){
-  oldshiny <- "https://cran.r-project.org/src/contrib/Archive/shiny/shiny_1.6.0.tar.gz"
-
-
-  if (system.file(package = "shiny") == '') {
-    if(packageVersion("shiny")>1.6){
-      missShiny<-"shiny"
-    }
-  }
-
-  if (length(missShiny) & installAll==FALSE) {
-    message(paste("you need to install shiny 1.6 from", paste(oldshiny, collapse=", ") ))
-    answer1 <- readline("Do you want to proceed installing now (Yes or No) ? ")
-
-    if (exists("answer1") ) {
-      if (tolower(answer1) %in% c("y","ye","yes","yap","yess") ) {
-
-        utils::install.packages(oldshiny, repos = NULL, type ='source')
-
-      } else {
-        return(print("bye"))
-      }
-    }
-
-  } else if(length(missShiny) & installAll) {
-    utils::install.packages(oldshiny, repos = NULL, type ='source')
-  }
-  }
-
   neededPkg<-c(
                'shiny'
                ,'shinydashboard'
@@ -54,6 +25,7 @@ runBoard <- function(installAll=FALSE) {
                ,'knitr'
                ,'rclipboard'
                ,'clipr'
+               ,"shinyjs"
                )
 
   recomPkg <- c("RCurl",
@@ -170,7 +142,8 @@ runBoard <- function(installAll=FALSE) {
         requireNamespace("rhandsontable", quietly = TRUE ) &
         requireNamespace("gtools", quietly = TRUE ) &
         requireNamespace("rclipboard", quietly = TRUE ) &
-        requireNamespace("clipr", quietly = TRUE )
+        requireNamespace("clipr", quietly = TRUE ) &
+        requireNamespace("shinyjs", quietly = TRUE )
     ) {
       ev <-tryCatch(shiny::runApp(appDir, display.mode = "normal",launch.browser = TRUE), error=function(e){"error"})
       if(is.character(ev)) {
@@ -179,12 +152,6 @@ runBoard <- function(installAll=FALSE) {
         }
       }
     } else {
-      message(crayon::red(paste("Please install:",paste(missPkg, collapse = ", ") ) ))
-      # message(crayon::red("\nUse \ninstall.packages(\"shiny\")
-                          # \netc"
-                          # )
-      # ) # m
-      message(crayon::red("\ninstall shiny from",oldshiny)
-      )
+      message(crayon::red(paste("Please install:",paste(missPkg, collapse = ", "))))
     }
 }

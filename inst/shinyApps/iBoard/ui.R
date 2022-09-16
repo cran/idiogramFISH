@@ -7,12 +7,18 @@ library(gtools)
 library(knitr)
 library(rclipboard)
 library(clipr)
+library(shinyjs)
 
 devel <- FALSE
+sep <- ":"
+if(Sys.info()['sysname']=="Windows") {
+  sep <- ";"
+}
 
 if(system.file(package = "rmarkdown") != '') {
   if(rmarkdown::pandoc_available()) {
-    if(rmarkdown::pandoc_version()>2.11 & devel==F) {
+    if(rmarkdown::pandoc_version() > 2.11 & devel == F) {
+      Sys.setenv(PATH=paste0(Sys.getenv("PATH"),sep, sub(".pandoc$","",rmarkdown::pandoc_exec())))
       rmarkdown::render("www/README2.Rmd")
     }
   }
@@ -46,6 +52,7 @@ ui <- tagList(
                             uiOutput("mysidebar")
                           )
                           ,dashboardBody(
+                            useShinyjs(),
                             tags$head(
                               tags$style(HTML(".fa{font-size: 12px;}") )
                               ,tags$style(HTML(".innerI .fa {font-size: 18px;}") )

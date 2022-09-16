@@ -8,7 +8,6 @@
 addAttributesDfChrSize <- function(listOfdfChromSize,threshold,specialOTUNames
                                  ,centromereSize,MbThreshold,cenFactor
                                  ,chrWidth,specialChrWidth,squareness
-                                 # ,cenFormat
                                  ,modifyChr=TRUE
                                  ,mymessage=TRUE) {
 
@@ -228,7 +227,7 @@ return(listOfdfChromSize)
 ##############
 addChrSizeColumn<-function(listOfdfChromSize){
   for ( i in 1:length(listOfdfChromSize)) {
-    if(class(listOfdfChromSize[[i]])=="data.frame") {
+    if(inherits(listOfdfChromSize[[i]], "data.frame")) {
       if(attr(listOfdfChromSize[[i]], "cenType")=="monocen"){
         listOfdfChromSize[[i]]<-makeNumCols(listOfdfChromSize[[i]])
         listOfdfChromSize[[i]]$chrSize<-listOfdfChromSize[[i]]$shortArmSize+listOfdfChromSize[[i]]$longArmSize
@@ -241,7 +240,7 @@ addChrSizeColumn<-function(listOfdfChromSize){
 ################### ordering function
 addNeworderColumn<-function(listOfdfChromSize,orderlist){
   for (s in 1:length(listOfdfChromSize)){
-    if(class(listOfdfChromSize[[s]])=="data.frame") {
+    if(inherits(listOfdfChromSize[[s]], "data.frame")) {
       listOfdfChromSize[[s]]<-listOfdfChromSize[[s]][orderlist[[s]], ] # important THIS orders
       listOfdfChromSize[[s]]$neworder<-1:nrow(listOfdfChromSize[[s]])
     }

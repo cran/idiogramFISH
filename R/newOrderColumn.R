@@ -1,5 +1,5 @@
 #' newOrderColumn
-#' This is an internal function that adds neworder column to 
+#' This is an internal function that adds neworder column to
 #' listOfdfChromSizeCenType
 #'
 #' It returns rulers (axis)
@@ -26,7 +26,7 @@ newOrderColumn<-function(listOfdfChromSize,listOfdfChromSizeCenType){
 
 addNeworderColumn<-function(listOfdfChromSize,orderlist){
   for (s in 1:length(listOfdfChromSize)){
-    if(class(listOfdfChromSize[[s]])=="data.frame") {
+    if(inherits(listOfdfChromSize[[s]], "data.frame")) {
       listOfdfChromSize[[s]]<-listOfdfChromSize[[s]][orderlist[[s]], ] # important THIS orders
       listOfdfChromSize[[s]]$neworder<-1:nrow(listOfdfChromSize[[s]])
     }

@@ -12,7 +12,7 @@ output:
     toc_depth: 2
     number_sections: true
     pandoc_args: ["--lua-filter=refs/multiple-bibliographies.lua"]
-    
+
 bibliography_normal: [refs/normal_noabs.bib]
 bibliography_software: [refs/software.bib]
 bibliography_docs: [refs/docs.bib]
@@ -324,75 +324,6 @@ Windows users: To avoid installation of packages in OneDrive
 To do that permanently: Search (magnifier) "environment variables" and set R_LIBS_USER to 
 `D:\R\lib` (example)
 
-### Devel. version {-}
-
-``` {r, echo=F, message=FALSE, warning=FALSE, include=TRUE, fig.show = "hold", fig.align = "default", results="asis"}
-if (requireNamespace("RCurl", quietly = TRUE)  ) {
-  # v<-tryCatch(suppressWarnings(rvcheck:::check_github_gitlab("ferroao/idiogramFISH", "gitlab")$latest_version), error=function(e) NA )
-  v<-sub("Version: ","",readLines("../DESCRIPTION")[3])
-  link<-tryCatch(suppressWarnings(badger::badge_custom("devel version", v, "cornflowerblue","?logo=gitlab") ), error=function(e) NA )
-  if(!is.na(link)){
-  svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
-  gitbadge_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svglink) ), error=function(e) NA )
-    if (!is.na(gitbadge_cont)){
-    # gitbadge_contFile <- tempfile(fileext = ".svg")
-    gitbadge_contFile <- "../man/figures/gitbadge.svg"
-    writeLines(gitbadge_cont, con = gitbadge_contFile)
-    gitbadge_contFile <- normalizePath(gitbadge_contFile)
-    cat(paste0("[![gitlab repo](",knitr::include_graphics(gitbadge_contFile),")](https://gitlab.com/ferroao/idiogramFISH){target='_blank'}") )
-    }
-  }
-}
-```
-
-Install Gitlab dev. ver. with devtools [@R-devtools]:
-
-Attention windows users, please install [Rtools](https://cran.r-project.org/bin/windows/Rtools/){target="_blank"} and [git](https://git-scm.com/download/win) (compilation tools).
-
-Vignettes (optional) use a lua filter, so you would need [pandoc](https://pandoc.org/installing.html){target="_blank"} ver. > 2. and `pandoc-citeproc` or `citeproc`. RStudio comes with pandoc. `rmarkdown::pandoc_version()` 
-
-<div class="fold s">
-``` {r, eval=FALSE}
-# This installs package devtools, necessary for installing the dev version
-install.packages("devtools")
-
-url <- "https://gitlab.com/ferroao/idiogramFISH"
-
-# Packages for vignettes: (optional)
-list.of.packages <- c(
-    "knitr",
-    "kableExtra",
-    "rmdformats",
-    "rmarkdown",
-    "RCurl",
-    "rvcheck",
-    "badger",
-    "rentrez"
-    )
-new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages)
-
-# Linux with vignettes and Windows
-devtools::install_git(url = url,build_vignettes = TRUE, force=TRUE)
-
-# Mac with vignettes
-devtools::install_git(url = url, build_opts=c("--no-resave-data","--no-manual") )
-```
-</div>
-
-#### Installing in system terminal {-}
-
-<div class="fold s">
-``` {r, eval=FALSE}
-# clone repository:
-git clone "https://gitlab.com/ferroao/idiogramFISH"
-
-R CMD build idiogramFISH
-# install
-R CMD INSTALL idiogramFISH_*.tar.gz
-```
-</div>
-
 <div class="goright95">
 <a href="#header">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
 </div>
@@ -506,7 +437,7 @@ pkglink<-tryCatch(suppressWarnings(badger::badge_custom("pkgdown", paste(pkg,v),
 ```
 
 
-### Vignettes: {-}
+### Vignettes {-}
 
 Online:
 

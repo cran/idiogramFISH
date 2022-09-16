@@ -2254,7 +2254,7 @@ if(cenFormat=="inProtein" & exists("dfCenMarksInt") ) {
     spelMaPosMonoArrLabs<-list()
 
     for (i in 1:length(pLiMaPosMonocen)){
-      if(class(pLiMaPosMonocen[[i]])=="data.frame" ) {
+      if(inherits(pLiMaPosMonocen[[i]], "data.frame")) {
 
         #
         #   data.frame of marks gains style
@@ -2334,7 +2334,7 @@ if(cenFormat=="inProtein" & exists("dfCenMarksInt") ) {
   if(exists("pLiMaPosHolocen") & exists("dfMarkColorInt")  ) {
     spelMaPosHoloArrLabs<-list()
     for (i in 1:length(pLiMaPosHolocen)) {
-      if(class(pLiMaPosHolocen[[i]])=="data.frame" ) {
+      if(inherits(pLiMaPosHolocen[[i]], "data.frame")) {
 
         pLiMaPosHolocen[[i]]$style<-dfMarkColorInt$style[match(pLiMaPosHolocen[[i]]$markName, dfMarkColorInt$markName)]
 
@@ -2536,7 +2536,7 @@ if(cenFormat=="inProtein" & exists("dfCenMarksInt") ) {
       if(orderChr=="group") {
 
         for (s in 1:length(listChrSize)){
-          if(class(listChrSize[[s]])=="data.frame") {
+          if(inherits(listChrSize[[s]], "data.frame")) {
             if(!anyNA(grouporderlist[[s]] ) ) {
               listChrSize[[s]]<-listChrSize[[s]][grouporderlist[[s]], ]
               listChrSize[[s]]$neworder<-1:nrow(listChrSize[[s]])
@@ -2567,7 +2567,7 @@ if(cenFormat=="inProtein" & exists("dfCenMarksInt") ) {
     if(orderChr=="chrNameUp") {
 
       for (s in 1:length(listChrSize)){
-        if(class(listChrSize[[s]])=="data.frame") {
+        if(inherits(listChrSize[[s]], "data.frame")) {
           if( !anyNA(chrNameUpOrderlist[[s]] ) ){
             listChrSize[[s]]<-listChrSize[[s]][chrNameUpOrderlist[[s]], ]
             listChrSize[[s]]$neworder<-1:nrow(listChrSize[[s]])
@@ -2681,7 +2681,7 @@ if(is.numeric(moveAllKarValueY)) {
 
 for (s in 1:num_species) {
 
-      if(class(listChrSize[[s]])=="data.frame") {
+      if(inherits(listChrSize[[s]], "data.frame")) {
 
         #######################################################################################################
 
@@ -3116,7 +3116,7 @@ if (exists("dfMarkPosInt") & showMarkPos ) {
 
 {
   for(i in 1:length(listChrSizenoNA)){
-    if(class(listChrSizenoNA[[i]])=="data.frame" ){
+    if(inherits(listChrSizenoNA[[i]], "data.frame")) {
       if(attr(listChrSizenoNA[[i]],"cenType")=="monocen"){
         attr(listChrSizenoNA[[i]],"positionnoNA") <- i
       }
@@ -3125,7 +3125,7 @@ if (exists("dfMarkPosInt") & showMarkPos ) {
 
   # holocenVector2<-integer()
   for(i in 1:length(listChrSizenoNA)){
-    if(class(listChrSizenoNA[[i]])=="data.frame" ){
+    if(inherits(listChrSizenoNA[[i]], "data.frame")) {
       if(attr(listChrSizenoNA[[i]],"cenType")=="holocen"){
         # holocenVector2<-c(holocenVector2,i)
         attr(listChrSizenoNA[[i]],"positionnoNA") <- i
@@ -3142,7 +3142,7 @@ for (s in 1:length(listChrSizenoNA) ) {
 {
   monocenVector2<-integer()
   for(i in 1:length(listChrSize)){
-    if(class(listChrSize[[i]])=="data.frame" ){
+    if(inherits(listChrSize[[i]], "data.frame")) {
       if(attr(listChrSize[[i]],"cenType")=="monocen"){
         monocenVector2<-c(monocenVector2,i)
         attr(listChrSize[[i]],"position") <- i
@@ -3159,7 +3159,7 @@ for (s in 1:length(listChrSizenoNA) ) {
 
   holocenVector2<-integer()
   for(i in 1:length(listChrSize)){
-    if(class(listChrSize[[i]])=="data.frame" ){
+    if(inherits(listChrSize[[i]], "data.frame")) {
       if(attr(listChrSize[[i]],"cenType")=="holocen"){
         holocenVector2<-c(holocenVector2,i)
         attr(listChrSize[[i]],"position") <- i
@@ -3239,7 +3239,7 @@ if(squareness > 20) {  ########## squareness > 20 #################
 
       for (s in 1:length(y) ) {
 
-        if(class(listChrSizenoNA[[s]])=="data.frame") {
+        if(inherits(listChrSizenoNA[[s]], "data.frame")) {
           ########################################################
 
           if(attr(listChrSizenoNA[[s]], "cenType")=="monocen" ) {   ############# monocen ###########
@@ -3652,7 +3652,7 @@ if(squareness > 20) {  ########## squareness > 20 #################
 
 for (s in 1:length(yMod) ) {
 
-  if(class(listChrSizenoNA[[s]])=="data.frame") {
+  if(inherits(listChrSizenoNA[[s]], "data.frame")) {
 
     if(attr(listChrSizenoNA[[s]], "cenType")=="monocen" ) {   ############ monocen ###########
 

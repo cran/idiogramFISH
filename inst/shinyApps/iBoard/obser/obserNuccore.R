@@ -151,17 +151,42 @@ observeEvent(input$termButton, {
   )
 
   validate(
-    need(try({
+    need(
+      try({
       values[["rentrezPkg"]]==TRUE
-    }),values[["renMiss"]])
+      }), values[["renMiss"]]
+    )
   )
 
-  showModal(modalDialog(
-    title = "2. Searching string, please wait"
-    ,"this pop-up will close after completion, Press ESC to wait in shiny app"
-    ,easyClose = TRUE
-    ,footer = modalButton("Wait in shiny app")
-  )
+  showModal(
+    modalDialog(
+      title = list(
+        div("2. Searching string, please wait",
+            style = "text-align: center", id = "title0_id"
+        ),
+        hidden(
+          div("Sorry, entrez API seems to be down; Fatal Error",
+              style = "text-align: center", id = "title0_id_down"
+          )
+        )
+      )
+      , div("this pop-up will close after completion. Press ESC to wait in shiny app",
+            style = "text-align: center", id = "subtitle0_id")
+      ,easyClose = TRUE
+      ,footer = modalButton(
+        list(
+          div("Wait in shiny app",
+              style = "text-align: center", id = "wait0_id"
+          ),
+          hidden(
+            div("Close",
+                class = "title_down",
+                style = "text-align: center", id = "wait0_id_down"
+            )
+          )
+        )
+      )
+    )
   )
 
   values[["termButtonVal"]] <- 0
@@ -193,20 +218,23 @@ observeEvent(input$termButton, {
                                                     ,term = term1
                                                     ,retmax=input$maxNum
                                                     ,use_history = TRUE)
-                             ,error= function(e) {"internet or package problem"}
+                             , error= function(e) {"internet or package problem"}
   )
 
-
-  if(entrez_search1[1]!="internet or package problem") {
+  if(entrez_search1[1] != "internet or package problem") {
     if( length(entrez_search1$ids)==0 ){
-      values[["searchStatus"]] <-FALSE
+      values[["searchStatus"]] <- FALSE
     } else {
-      values[["searchStatus"]] <-TRUE
+      values[["searchStatus"]] <- TRUE
     }
   } else {
     message("internet problem")
     entrez_search1  <- list(ids=list())
-    removeModal()
+    show("title0_id_down")
+    show("wait0_id_down")
+    hide("subtitle0_id")
+    hide("title0_id")
+    hide("wait0_id")
     return()
   }
 
@@ -220,19 +248,36 @@ observeEvent(input$termButton, {
 
   lenIds<-length(idsvector)
 
-  if(lenIds>20){
+  if(lenIds>20) {
     chunkNumber<-lenIds/20
-    idsList<-split(idsvector, sort(rep_len(1:ceiling(chunkNumber), lenIds)))
+    idsList <- split(idsvector, sort(rep_len(1:ceiling(chunkNumber), lenIds)))
     entrez_summary1<-c()
     i=1
-    while(i<=length(idsList)) {
+    while(i <= length(idsList)) {
       Sys.sleep(0.1)
-      b<-rentrez::entrez_summary(db="nuccore", id=idsList[[i]])
-      entrez_summary1<-c(entrez_summary1,b)
-      i=i+1
+      b <- tryCatch(rentrez::entrez_summary(db="nuccore", id = idsList[[i]]),
+                    error = function(e){ data.frame(a="API might be down")})
+      if(!inherits(b,"data.frame")){
+        entrez_summary1 <- c(entrez_summary1,b)
+        i = i + 1
+      } else {
+        show("title0_id_down")
+        show("wait0_id_down")
+        hide("subtitle0_id")
+        hide("title0_id")
+        hide("wait0_id")
+      }
     }
   } else {
-    entrez_summary1<-rentrez::entrez_summary(db="nuccore", id=idsvector)
+    entrez_summary1 <- tryCatch(rentrez::entrez_summary(db="nuccore", id=idsvector),
+                                error = function(e){ data.frame(a="API might be down")})
+    if(inherits(entrez_summary1,"data.frame")) {
+      show("title0_id_down")
+      show("wait0_id_down")
+      hide("subtitle0_id")
+      hide("title0_id")
+      hide("wait0_id")
+    }
   }
 
   validate(
@@ -275,13 +320,34 @@ maxNumReac<-eventReactive(input$termButton,{
 
 observeEvent(input$button3Download,{
 
-  values[["entrez_selected"]]<-isolate(input$titleSelect)
-
-  showModal(modalDialog(
-    title = "3b. Downloading data, please wait"
-    ,"this pop-up will close after completion. Press ESC to wait in shiny app"
+  values[["entrez_selected"]] <- isolate(input$titleSelect)
+  showModal(
+    modalDialog(
+      title = list(
+        div("3b. Downloading data, please wait",
+            style = "text-align: center", id = "title_id"
+        ),
+        hidden(
+          div("Sorry, entrez API seems to be down; Fatal Error",
+              style = "text-align: center", id = "title_id_down"
+          )
+        )
+        )
+    , div("this pop-up will close after completion. Press ESC to wait in shiny app",
+          style = "text-align: center", id = "subtitle_id")
     ,easyClose = TRUE
-    ,footer = modalButton("Wait in shiny app")
+    ,footer = modalButton(
+      list(
+        div("Wait in shiny app",
+            style = "text-align: center", id = "wait_id"
+        ),
+        hidden(
+          div("Close",
+              style = "text-align: center", id = "wait_id_down"
+          )
+        )
+      )
+    )
   )
   )
 
@@ -310,22 +376,35 @@ observeEvent(input$button3Download,{
   mylist    <- list()
 
   values[["entrezFile"]]<-""
-  values[["rentrezFetch"]]<-rentrezFetch <- as.numeric(0)
+  values[["rentrezFetch"]] <- rentrezFetch <- as.numeric(0)
 
   idSearch <- values[["entrez_search1"]]$ids[as.numeric(values[["entrez_selected"]])]
 
   validate(
     need(
       try({
-        rentrezFetch <- rentrez::entrez_fetch(db="nuccore",
+        rentrezFetch <- tryCatch(rentrez::entrez_fetch(db="nuccore",
                                               id= idSearch,
                                               rettype="gbwithparts",
                                               retmode = "text"
-        )
+        ), error = function(e) {data.frame(a="API down")})
+
+        if(inherits(rentrezFetch, "data.frame")) {
+           show("title_id_down")
+           show("wait_id_down")
+           hide("subtitle_id")
+           hide("title_id")
+           hide("wait_id")
+        }
+
         class(rentrezFetch)=="character"
+
       })
       , "downloading")
   )
+
+
+
   values[["entrezFile"]]   <- paste0(idSearch,".gb")
   values[["rentrezFetch"]] <- rentrezFetch
 

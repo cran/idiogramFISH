@@ -147,58 +147,6 @@ doibadge_cont      <- tryCatch(suppressWarnings(RCurl::getURLContent(doibadge)  
 
 } # rcurl
 
-## ---- echo=F, message=FALSE, warning=FALSE, include=TRUE, fig.show = "hold", fig.align = "default", results="asis"----
-if (requireNamespace("RCurl", quietly = TRUE)  ) {
-  # v<-tryCatch(suppressWarnings(rvcheck:::check_github_gitlab("ferroao/idiogramFISH", "gitlab")$latest_version), error=function(e) NA )
-  v<-sub("Version: ","",readLines("../DESCRIPTION")[3])
-  link<-tryCatch(suppressWarnings(badger::badge_custom("devel version", v, "cornflowerblue","?logo=gitlab") ), error=function(e) NA )
-  if(!is.na(link)){
-  svglink<-gsub("\\[|\\]|!|\\(|\\)","", link)
-  gitbadge_cont <- tryCatch(suppressWarnings(RCurl::getURLContent(svglink) ), error=function(e) NA )
-    if (!is.na(gitbadge_cont)){
-    # gitbadge_contFile <- tempfile(fileext = ".svg")
-    gitbadge_contFile <- "../man/figures/gitbadge.svg"
-    writeLines(gitbadge_cont, con = gitbadge_contFile)
-    gitbadge_contFile <- normalizePath(gitbadge_contFile)
-    cat(paste0("[![gitlab repo](",knitr::include_graphics(gitbadge_contFile),")](https://gitlab.com/ferroao/idiogramFISH){target='_blank'}") )
-    }
-  }
-}
-
-## ---- eval=FALSE--------------------------------------------------------------
-#  # This installs package devtools, necessary for installing the dev version
-#  install.packages("devtools")
-#  
-#  url <- "https://gitlab.com/ferroao/idiogramFISH"
-#  
-#  # Packages for vignettes: (optional)
-#  list.of.packages <- c(
-#      "knitr",
-#      "kableExtra",
-#      "rmdformats",
-#      "rmarkdown",
-#      "RCurl",
-#      "rvcheck",
-#      "badger",
-#      "rentrez"
-#      )
-#  new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-#  if(length(new.packages)) install.packages(new.packages)
-#  
-#  # Linux with vignettes and Windows
-#  devtools::install_git(url = url,build_vignettes = TRUE, force=TRUE)
-#  
-#  # Mac with vignettes
-#  devtools::install_git(url = url, build_opts=c("--no-resave-data","--no-manual") )
-
-## ---- eval=FALSE--------------------------------------------------------------
-#  # clone repository:
-#  git clone "https://gitlab.com/ferroao/idiogramFISH"
-#  
-#  R CMD build idiogramFISH
-#  # install
-#  R CMD INSTALL idiogramFISH_*.tar.gz
-
 ## ---- echo=F, message=FALSE, fig.show = "hold", fig.align = "default", results="asis"----
 if (requireNamespace("RCurl", quietly = TRUE)  ) {
 #cran version
@@ -381,10 +329,6 @@ if(file.exists(chapterFile_first)){
   child_docs_first <- ""
 }
 
-## ---- echo=TRUE, eval=FALSE, message=FALSE------------------------------------
-#  library(idiogramFISH)
-#  runBoard()
-
 ## ---- echo=F------------------------------------------------------------------
 chapterFile4<- "../chaptersBLOCK/12-human.Rmd"
 if(file.exists(chapterFile4)){
@@ -401,7 +345,7 @@ cat("[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io
 #  cat("Shiny App in the cloud availability:  \n")
 #  cat("[Google cloud](https://idiogramfishshiny-rwjey56xuq-uc.a.run.app){target='_blank'}")
 
-## ---- echo=F,  results="asis", eval=F-----------------------------------------
+## ---- echo=F,  results="asis", eval=F, out.width='100%'-----------------------
 #  shiny_path <- "../man/figures/shiny.jpg"
 #  if(file.exists(shiny_path)) {
 #    cat(paste0("<img src=",shiny_path,">") )
