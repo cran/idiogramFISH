@@ -1,7 +1,7 @@
 Package: idiogramFISH
 Title: Shiny App. Idiograms with Marks and Karyotype Indices 
-Version: 2.0.9
-Date: 2022-09-14
+Version: 2.0.10
+Date: 2023-04-05
 Authors@R: c(person("Fernando", "Roa", email = "froao@unal.edu.co", role = c("aut", "cre") ), 
              person(given="Mariana PC Telles", email = "", role = c("ctb")) 
              )
@@ -12,7 +12,8 @@ Imports:
     crayon,
     plyr,
     dplyr,
-    tidyr
+    tidyr,
+    scales
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true

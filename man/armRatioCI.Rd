@@ -33,7 +33,7 @@ swapChrRegionDfSizeAndMarks: reads data.frames to swap arms
 armRatioCI(dfOfChrSize)
 armRatioCI(bigdfOfChrSize)
 
-swapChrRegionDfSizeAndMarks(dfOfChrSize,dfOfMarks,"1")
+swapChrRegionDfSizeAndMarks(dfOfChrSize, dfOfMarks, "1")
 }
 \references{
 LEVAN A, FREDGA K, SANDBERG AA (1964) NOMENCLATURE FOR

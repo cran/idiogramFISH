@@ -32,7 +32,8 @@ plotDotMarks(
   ylistTransChr,
   rotation,
   labelOutwards,
-  dotsAsOval
+  dotsAsOval,
+  alpha_val = 1
 )
 }
 \arguments{

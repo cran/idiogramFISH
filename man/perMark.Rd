@@ -22,10 +22,10 @@ list
 calculates fraction (\%) of chromosome for each mark
 }
 \examples{
-load(system.file("shinyApps", "iBoard/www/rda/monoholoCS.rda", package = "idiogramFISH") )
-load(system.file("shinyApps", "iBoard/www/rda/monoholoMarks.rda", package = "idiogramFISH") )
-monoholoMarks2 <- fillMarkInfo(monoholoMarks,monoholoCS)
-perMark(monoholoMarks2,monoholoCS, result="data.frame")
+load(system.file("shinyApps", "iBoard/www/rda/monoholoCS.rda", package = "idiogramFISH"))
+load(system.file("shinyApps", "iBoard/www/rda/monoholoMarks.rda", package = "idiogramFISH"))
+monoholoMarks2 <- fillMarkInfo(monoholoMarks, monoholoCS)
+perMark(monoholoMarks2, monoholoCS, result = "data.frame")
 
 }
 \keyword{chromosome}

@@ -20,7 +20,7 @@ character vector
 make.uniqueIF: produces unique strings from duplicated
 }
 \examples{
-make.uniqueIF(c(1,1,2,2))
+make.uniqueIF(c(1, 1, 2, 2))
 
 }
 \keyword{duplicates}

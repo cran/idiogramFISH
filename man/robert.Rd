@@ -37,7 +37,7 @@ and another with the marks' positions for the derivative chr.
 \examples{
 data(humChr)
 data(humMarkPos)
-chrt13q14q<-robert(humChr,humMarkPos,13,14,"q","q")
+chrt13q14q <- robert(humChr, humMarkPos, 13, 14, "q", "q")
 
 }
 \references{

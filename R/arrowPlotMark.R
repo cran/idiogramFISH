@@ -26,62 +26,49 @@
 #'
 #' @return plot
 #' @importFrom graphics polygon text
+#' @importFrom scales alpha
 #'
+arrowPlotMark <- function(squareness, xMark, yMark, # nolint: object_usage_linter
+                          dfMarkColorInt, listOfdfMarkPosArrow,
+                          chrWidth,
+                          n,
+                          lwd.chr,
+                          circularPlot,
+                          y,
+                          x,
+                          markLabelSize,
+                          separFactor,
+                          labelSpacing,
+                          circleCenter, circleCenterY, radius,
+                          ylistTransChr, rotation, arrowheadWidthShrink, alpha_val) {
+  if (circularPlot == FALSE) {
+    for (w in seq_along(xMark)) {
+      for (n in seq_along(xMark[[w]])) {
 
-arrowPlotMark<-function(squareness, xMark, yMark,
-                        dfMarkColorInt,listOfdfMarkPosArrow,
-                        chrWidth,
-                        n,
-                        lwd.chr,
-                        circularPlot,
-                        y,
-                        x,
-                        markLabelSize,
-                        separFactor,
-                        labelSpacing,
-                        circleCenter,circleCenterY,radius,
-                        ylistTransChr,rotation,arrowheadWidthShrink
-                        ) {
+        x <- xMark[[w]][[n]]
+        y <- yMark[[w]][[n]]
+        z <- listOfdfMarkPosArrow[[w]]$markName[[n]]
 
-    if(circularPlot==FALSE) {
-
-      for (w in 1:length(xMark)){
-
-        for (n in 1:length(xMark[[w]] ) ){
-
-          # pqcen<-attr(yMark[[w]][[n]],"arm")
-          # markT<-attr(yMark[[w]][[n]],"squareSide")
-          #
-          # if(pqcen == "pcen" & markT == "inProtein"){
-          #   m1 <- mean(yMark[[w]][[n]][2:3])
-          #   yMark[[w]][[n]][3:4]<-m1
-          # } else if (pqcen == "qcen" & markT == "inProtein") {
-          #   m1 <- mean(yMark[[w]][[n]][2:3])
-          #   yMark[[w]][[n]][c(1,2,5)]<-m1
-          # }
-          x =xMark[[w]][[n]]
-          y =yMark[[w]][[n]]
-          z =listOfdfMarkPosArrow[[w]]$markName[[n]]
-
-                graphics::polygon(
-                  x=x,
-                  y=y,
-                  col= dfMarkColorInt$markColor[match( z, dfMarkColorInt$markName)],
-                  lwd=lwd.chr,
-                  border =
-                  dfMarkColorInt$markBorderColor[match(z, dfMarkColorInt$markName)]
-                ) # pol
-        }
+        graphics::polygon(
+          x = x,
+          y = y,
+          col = alpha(dfMarkColorInt$markColor[match(z, dfMarkColorInt$markName)], alpha_val), #nolint: object_usage_linter
+          lwd = lwd.chr,
+          border =
+            dfMarkColorInt$markBorderColor[match(z, dfMarkColorInt$markName)]
+        )
       }
-    } else { # circ true
+    }
+  } else { # circ true
 
-        yMarkPer <- markMapPer(yMark,y)
-        xlistNew <- xMarkMap(xMark,x, arrowheadWidthShrink)
-        ylistTransMark<-transyListMark(yMarkPer,ylistTransChr)
-        circleMapsMarks  <- applyMapCircle(radius,circleCenter,circleCenterY,separFactor
-                                           ,ylistTransMark,xlistNew,n,0,chrWidth,rotation=rotation)
+    yMarkPer <- markMapPer(yMark, y)
+    xlistNew <- xMarkMap(xMark, x, arrowheadWidthShrink)
+    ylistTransMark <- transyListMark(yMarkPer, ylistTransChr)
+    circleMapsMarks <- applyMapCircle(radius, circleCenter, circleCenterY, separFactor,
+      ylistTransMark, xlistNew, n, 0, chrWidth,
+      rotation = rotation
+    )
 
-        drawPlotMark(circleMapsMarks,dfMarkColorInt,listOfdfMarkPosArrow,lwd.chr)
-
-} # circular
-} # FUN
+    drawPlotMark(circleMapsMarks, dfMarkColorInt, listOfdfMarkPosArrow, lwd.chr, alpha_val)
+  }
+}

@@ -8,8 +8,7 @@
 #' @keywords internal
 #' @return numeric
 
-customCeiling <- function(x, customDecimals=1) {
-  x2<-x*10^customDecimals
-  ceiling(x2)/10^customDecimals
+customCeiling <- function(x, customDecimals = 1) {
+  x2 <- x * 10^customDecimals
+  ceiling(x2) / 10^customDecimals
 }
-

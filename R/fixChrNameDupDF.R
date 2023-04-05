@@ -13,21 +13,23 @@
 #' @return list
 #'
 #'
-fixChrNameDupDF<-function(list1dfChromSize, mybooleanChrName){
-  dfChromSize<-list1dfChromSize[[1]]
-  if(inherits(dfChromSize, "data.frame")) {
-    OTUname<-names(list1dfChromSize)
-    if(mybooleanChrName){
-      if(length(dfChromSize$chrName)!=length(unique(dfChromSize$chrName) )){
+fixChrNameDupDF <- function(list1dfChromSize, mybooleanChrName) {
+  dfChromSize <- list1dfChromSize[[1]]
+  if (inherits(dfChromSize, "data.frame")) {
+    OTUname <- names(list1dfChromSize)
+    if (mybooleanChrName) {
+      if (length(dfChromSize$chrName) != length(unique(dfChromSize$chrName))) {
         message(crayon::yellow(
-          paste0("\nWarning: Chromosome names duplicated in data.frame ",names(list1dfChromSize),
-                 ", will be renamed\n this correction is available when no marks to be plotted, otherwise, is fatal")
-        ) ) #m
-        string<-dfChromSize$chrName
+          paste0(
+            "\nWarning: Chromosome names duplicated in data.frame ", names(list1dfChromSize),
+            ", will be renamed\n this correction is available when no marks to be plotted, otherwise, is fatal"
+          )
+        ))
+        string <- dfChromSize$chrName
         dfChromSize$chrName <- make.uniqueIF(string)
-      } # if
-      list1dfChromSize<-list(dfChromSize)
-      names(list1dfChromSize)<-OTUname
+      }
+      list1dfChromSize <- list(dfChromSize)
+      names(list1dfChromSize) <- OTUname
       return(list1dfChromSize)
     } else {
       return(list1dfChromSize)
@@ -35,4 +37,4 @@ fixChrNameDupDF<-function(list1dfChromSize, mybooleanChrName){
   } else {
     return(list1dfChromSize)
   }
-} # fun
+}

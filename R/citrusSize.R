@@ -39,34 +39,38 @@
 #'
 #' @keywords size arm
 #' @examples
-#' citrusSizeDF <- citrusSize(B=1,D=11,F=4,FL0=2,OTU="C. jambhiri")
+#' citrusSizeDF <- citrusSize(B = 1, D = 11, F = 4, FL0 = 2, OTU = "C. jambhiri")
 #' suppressMessages(
-#' plotIdiograms(citrusSizeDF,
-#'               indexIdTextSize=.4,# font size
-#'               rulerNumberSize=.4,# font size
-#'               rulerTitleSize=.4, # font size
-#'               rulerPos =-.5,     # ruler pos.
-#'               xPosRulerTitle =1.5,     # ruler title pos.
-#'               orderChr="original"# order of chr. as in d.f.
-#'               )
-#'               )
-#' citrusSizeDF2 <- citrusSize(B=2,D=10,F=4,FL0=1,
-#' FL=1,         # equivalent to FL+
-#' OTU="C. limettioides")
+#'   plotIdiograms(citrusSizeDF,
+#'     indexIdTextSize = .4, # font size
+#'     rulerNumberSize = .4, # font size
+#'     rulerTitleSize = .4, # font size
+#'     rulerPos = -.5, # ruler pos.
+#'     xPosRulerTitle = 1.5, # ruler title pos.
+#'     orderChr = "original" # order of chr. as in d.f.
+#'   )
+#' )
+#' citrusSizeDF2 <- citrusSize(
+#'   B = 2, D = 10, F = 4, FL0 = 1,
+#'   FL = 1, # equivalent to FL+
+#'   OTU = "C. limettioides"
+#' )
 #'
 #'
-#'suppressMessages(
-#'  plotIdiograms(citrusSizeDF2,     # FL^NA error corrected in 1.15.4
-#'                indexIdTextSize=.4,# font size
-#'                rulerNumberSize=.4,# font size
-#'                rulerTitleSize=.4, # font size
-#'                rulerPos =-.5,     # ruler pos.
-#'                xPosRulerTitle =1.5,     # ruler title pos.
-#'                orderChr="original"# order of chr. as in d.f.
-#'  )
-#')
+#' suppressMessages(
+#'   plotIdiograms(citrusSizeDF2, # FL^NA error corrected in 1.15.4
+#'     indexIdTextSize = .4, # font size
+#'     rulerNumberSize = .4, # font size
+#'     rulerTitleSize = .4, # font size
+#'     rulerPos = -.5, # ruler pos.
+#'     xPosRulerTitle = 1.5, # ruler title pos.
+#'     orderChr = "original" # order of chr. as in d.f.
+#'   )
+#' )
 #'
-#' @references Carvalho, R., Soares Filho, W. S., Brasileiro-Vidal, A. C., & Guerra, M. (2005). The relationships among lemons, limes and citron: A chromosomal comparison. Cytogenetic and Genome Research, 109(1–3), 276–282. https://doi.org/10.1159/000082410
+#' @references Carvalho, R., Soares Filho, W. S., Brasileiro-Vidal, A. C., & Guerra, M. (2005).
+#' The relationships among lemons, limes and citron: A chromosomal comparison.
+#' Cytogenetic and Genome Research, 109(1–3), 276–282. https://doi.org/10.1159/000082410
 #'
 #' @return data.frame
 #' @rdname citrusSize
@@ -75,36 +79,34 @@
 #' @importFrom dplyr bind_rows
 #'
 
-citrusSize <- function(A=0,B=0,C=0,D=0,E=0,F=0,FL=0,FL0=0,G=0,
-                       shortArm=1.2,longArm=1.7,
-                       shortArmFL=1.3, longArmFL=1.8,
-                       OTU="OTU 1") {
+citrusSize <- function(A = 0, B = 0, C = 0, D = 0, E = 0, F = 0, FL = 0, FL0 = 0, G = 0,
+                       shortArm = 1.2, longArm = 1.7,
+                       shortArmFL = 1.3, longArmFL = 1.8,
+                       OTU = "OTU 1") {
+  nonFLsum <- sum(A, B, C, D, E, F, G) # nolint
+  FLsum <- sum(FL, FL0)
 
-nonFLsum<- sum(A,B,C,D,E,F,G)
-FLsum   <- sum(FL,FL0)
+  if (nonFLsum > 0) {
+    chrNames <- c(rep("A", A), rep("B", B), rep("C", C), rep("D", D), rep("E", E), rep("F", F), rep("G", G)) # nolint
+    chrNames <- make.uniqueIF(chrNames)
+    chrSizeCitrusNonFL <- data.frame(chrName = chrNames, shortArmSize = shortArm, longArmSize = longArm)
+    chrSizeCitrusNonFL$OTU <- OTU
+  }
+  if (FLsum > 0) {
+    chrNamesFL <- c(rep("FL+", FL), rep("FL0", FL0))
+    chrNamesFL <- make.uniqueIF(chrNamesFL)
+    chrSizeCitrusFL <- data.frame(chrName = chrNamesFL, shortArmSize = shortArmFL, longArmSize = longArmFL)
+    chrSizeCitrusFL$OTU <- OTU
+  }
 
-if(nonFLsum>0){
-  chrNames <- c(rep("A",A),rep("B",B),rep("C",C),rep("D",D),rep("E",E),rep("F",F),rep("G",G) )
-  chrNames <- make.uniqueIF(chrNames)
-chrSizeCitrusNonFL<- data.frame(chrName=chrNames,shortArmSize=shortArm,longArmSize=longArm)
-chrSizeCitrusNonFL$OTU<-OTU
-# chrSizeCitrusNonFL <- chrSizeCitrusNonFL[order(chrSizeCitrusNonFL$chrName),]
-}
-if(FLsum>0){
-  chrNamesFL <- c(rep("FL+",FL),rep("FL0",FL0))
-  chrNamesFL <- make.uniqueIF(chrNamesFL)
-chrSizeCitrusFL   <- data.frame(chrName=chrNamesFL,shortArmSize=shortArmFL,longArmSize=longArmFL)
-chrSizeCitrusFL$OTU<-OTU
-}
+  chrSizeCitrus <- dplyr::bind_rows(
+    rev(as.list(environment()))[which(names(rev(as.list(environment()))) %in%
+      grep("chrSizeCitrus", names(rev(as.list(environment()))),
+        value = TRUE
+      ))]
+  )
 
-chrSizeCitrus <- dplyr::bind_rows(
-  rev(as.list(environment() ))[which(names(rev(as.list(environment()) ) ) %in%
-                                  grep("chrSizeCitrus",names(rev(as.list(environment() ) ) )
-                                       , value=TRUE)
-                                )]
-)
-
-return(chrSizeCitrus)
+  return(chrSizeCitrus)
 } # fun
 
 #'
@@ -113,222 +115,223 @@ return(chrSizeCitrus)
 #' @examples
 #' citrusMarkPosDF <- citrusMarkPos(citrusSizeDF)
 #' suppressMessages(
-#' plotIdiograms(dfChrSize= citrusSizeDF,      # chr. size data.frame
-#'               dfMarkPos= citrusMarkPosDF,# mark position data.frame (inc. cen.)
-#'               ruler=FALSE,               # remove
-#'               chrIndex=FALSE,            # remove
-#'               morpho=FALSE,              # remove
-#'               karIndex=FALSE,            # remove
-#'               indexIdTextSize=.4,        # font size
-#'               xlimRightMod=4,            # xlim mod.
-#'               orderChr="original",       # order chr. as in d.f.
-#'               chrColor="blue",           # chr. color
-#'               legendHeight=3             # legend item height
-#'               )
-#'               )
+#'   plotIdiograms(
+#'     dfChrSize = citrusSizeDF, # chr. size data.frame
+#'     dfMarkPos = citrusMarkPosDF, # mark position data.frame (inc. cen.)
+#'     ruler = FALSE, # remove
+#'     chrIndex = FALSE, # remove
+#'     morpho = FALSE, # remove
+#'     karIndex = FALSE, # remove
+#'     indexIdTextSize = .4, # font size
+#'     xlimRightMod = 4, # xlim mod.
+#'     orderChr = "original", # order chr. as in d.f.
+#'     chrColor = "blue", # chr. color
+#'     legendHeight = 3 # legend item height
+#'   )
+#' )
 #' @export
 #'
-citrusMarkPos<-function(chrSizeDf,mSizePter=.25,mSizeQter=.35,mSizePprox=.35,mOther=.25,markName="CMA"){
+citrusMarkPos <- function(chrSizeDf, mSizePter = .25, mSizeQter = .35, mSizePprox = .35, mOther = .25, markName = "CMA") {
   # making A marks
-  getMarkPosA<-chrSizeDf[which(chrSizeDf$chrName %in% grep("A",chrSizeDf$chrName, value=T )),]
+  getMarkPosA <- chrSizeDf[which(chrSizeDf$chrName %in% grep("A", chrSizeDf$chrName, value = TRUE)), ]
 
-  numberOfA<-nrow(getMarkPosA)
+  numberOfA <- nrow(getMarkPosA)
 
-  if(numberOfA>0){
-  markPosAThree<-do.call("rbind", replicate(3, getMarkPosA, simplify = FALSE))
-  markPosAThree$markDistCen <- c(getMarkPosA$shortArmSize-mSizePter,
-                                 rep(0,numberOfA),
-                                 getMarkPosA$longArmSize-mSizeQter )
-  markPosAThree<-markPosAThree[order(markPosAThree$chrName),]
+  if (numberOfA > 0) {
+    markPosAThree <- do.call("rbind", replicate(3, getMarkPosA, simplify = FALSE))
+    markPosAThree$markDistCen <- c(
+      getMarkPosA$shortArmSize - mSizePter,
+      rep(0, numberOfA),
+      getMarkPosA$longArmSize - mSizeQter
+    )
+    markPosAThree <- markPosAThree[order(markPosAThree$chrName), ]
 
-  markPosAThree$chrRegion <- rep(c("p","p","q"),numberOfA)
-  markPosAThree$markSize <- rep(c(mSizePter,mSizePprox,mSizeQter),numberOfA)
+    markPosAThree$chrRegion <- rep(c("p", "p", "q"), numberOfA)
+    markPosAThree$markSize <- rep(c(mSizePter, mSizePprox, mSizeQter), numberOfA)
   }
 
-  getMarkPosB<-chrSizeDf[which(chrSizeDf$chrName %in% grep("B",chrSizeDf$chrName, value=T )),]
+  getMarkPosB <- chrSizeDf[which(chrSizeDf$chrName %in% grep("B", chrSizeDf$chrName, value = TRUE)), ]
 
-  numberOfB<-nrow(getMarkPosB)
-  if(numberOfB>0){
-    markPosBtwo<-do.call("rbind", replicate(2, getMarkPosB, simplify = FALSE))
+  numberOfB <- nrow(getMarkPosB)
+  if (numberOfB > 0) {
+    markPosBtwo <- do.call("rbind", replicate(2, getMarkPosB, simplify = FALSE))
 
-    markPosBtwo$markDistCen <- c(rep(0,numberOfB),getMarkPosB$longArmSize-mSizeQter )
-    markPosBtwo<-markPosBtwo[order(markPosBtwo$chrName),]
+    markPosBtwo$markDistCen <- c(rep(0, numberOfB), getMarkPosB$longArmSize - mSizeQter)
+    markPosBtwo <- markPosBtwo[order(markPosBtwo$chrName), ]
 
-    markPosBtwo$chrRegion <- rep(c("p","q"),numberOfB)
-    markPosBtwo$markSize <- rep(c(mSizePprox,mSizeQter),numberOfB)
+    markPosBtwo$chrRegion <- rep(c("p", "q"), numberOfB)
+    markPosBtwo$markSize <- rep(c(mSizePprox, mSizeQter), numberOfB)
     # markPosBtwo$markDistCen <- rep(c(0,getMarkPosB$longArmSize-mSizeQter ),numberOfB)
-
   }
 
-  getMarkPosC<-chrSizeDf[which(chrSizeDf$chrName %in% grep("C",chrSizeDf$chrName, value=T )),]
+  getMarkPosC <- chrSizeDf[which(chrSizeDf$chrName %in% grep("C", chrSizeDf$chrName, value = TRUE)), ]
 
-  numberOfC<-nrow(getMarkPosC)
+  numberOfC <- nrow(getMarkPosC)
 
-  if(numberOfC>0){
-    markPosCtwo<-do.call("rbind", replicate(2, getMarkPosC, simplify = FALSE))
+  if (numberOfC > 0) {
+    markPosCtwo <- do.call("rbind", replicate(2, getMarkPosC, simplify = FALSE))
 
-    markPosCtwo$markDistCen <- c(getMarkPosC$shortArmSize-mSizePter,
-                                 getMarkPosC$longArmSize-mSizeQter )
+    markPosCtwo$markDistCen <- c(
+      getMarkPosC$shortArmSize - mSizePter,
+      getMarkPosC$longArmSize - mSizeQter
+    )
 
-    markPosCtwo<-markPosCtwo[order(markPosCtwo$chrName),]
+    markPosCtwo <- markPosCtwo[order(markPosCtwo$chrName), ]
 
-    markPosCtwo$chrRegion <- rep(c("p","q"),numberOfC)
-    markPosCtwo$markSize <- rep(c(mSizePter,mSizeQter),numberOfC)
-
+    markPosCtwo$chrRegion <- rep(c("p", "q"), numberOfC)
+    markPosCtwo$markSize <- rep(c(mSizePter, mSizeQter), numberOfC)
   }
-  getMarkPosD<-chrSizeDf[which(chrSizeDf$chrName %in% grep("D",chrSizeDf$chrName, value=T )),]
+  getMarkPosD <- chrSizeDf[which(chrSizeDf$chrName %in% grep("D", chrSizeDf$chrName, value = TRUE)), ]
 
-  numberOfD<-nrow(getMarkPosD)
+  numberOfD <- nrow(getMarkPosD)
 
-  if(numberOfD>0){
-    markPosDtwo<-do.call("rbind", replicate(1, getMarkPosD, simplify = FALSE))
-    markPosDtwo$markDistCen <- getMarkPosD$longArmSize-mSizeQter
-    markPosDtwo[order(markPosDtwo$chrName),]
+  if (numberOfD > 0) {
+    markPosDtwo <- do.call("rbind", replicate(1, getMarkPosD, simplify = FALSE))
+    markPosDtwo$markDistCen <- getMarkPosD$longArmSize - mSizeQter
+    markPosDtwo[order(markPosDtwo$chrName), ]
 
-    markPosDtwo$chrRegion <- rep(c("q"),numberOfD)
-    markPosDtwo$markSize <- rep(c(mSizeQter),numberOfD)
+    markPosDtwo$chrRegion <- rep(c("q"), numberOfD)
+    markPosDtwo$markSize <- rep(c(mSizeQter), numberOfD)
     # markPosDtwo$markDistCen <- rep(c(getMarkPosD$longArmSize-mSizeQter ),numberOfD)
   }
 
-  getMarkPosE<-chrSizeDf[which(chrSizeDf$chrName %in% grep("E",chrSizeDf$chrName, value=T )),]
+  getMarkPosE <- chrSizeDf[which(chrSizeDf$chrName %in% grep("E", chrSizeDf$chrName, value = TRUE)), ]
 
-  numberOfE<-nrow(getMarkPosE)
+  numberOfE <- nrow(getMarkPosE)
 
-  if(numberOfE>0){
-    markPosEtwo<-do.call("rbind", replicate(1, getMarkPosE, simplify = FALSE))
-    markPosEtwo$markDistCen <- getMarkPosE$longArmSize-2*mOther
-    markPosEtwo<-markPosEtwo[order(markPosEtwo$chrName),]
+  if (numberOfE > 0) {
+    markPosEtwo <- do.call("rbind", replicate(1, getMarkPosE, simplify = FALSE))
+    markPosEtwo$markDistCen <- getMarkPosE$longArmSize - 2 * mOther
+    markPosEtwo <- markPosEtwo[order(markPosEtwo$chrName), ]
 
-    markPosEtwo$chrRegion <- rep(c("q"),numberOfE)
-    markPosEtwo$markSize <- rep(c(mOther),numberOfE)
+    markPosEtwo$chrRegion <- rep(c("q"), numberOfE)
+    markPosEtwo$markSize <- rep(c(mOther), numberOfE)
   }
 
-  getMarkPosF<-chrSizeDf[which(chrSizeDf$chrName %in% grep("^F\\+",chrSizeDf$chrName, value=T )),]
+  getMarkPosF <- chrSizeDf[which(chrSizeDf$chrName %in% grep("^F\\+", chrSizeDf$chrName, value = TRUE)), ]
 
   numberOfF <- nrow(getMarkPosF)
 
-  if(numberOfF>0) {
+  if (numberOfF > 0) {
     markPosFtwo <- do.call("rbind", replicate(1, getMarkPosF, simplify = FALSE))
-    markPosFtwo$markDistCen <- getMarkPosF$longArmSize-mOther
-    markPosFtwo <- markPosFtwo[order(markPosFtwo$chrName),]
+    markPosFtwo$markDistCen <- getMarkPosF$longArmSize - mOther
+    markPosFtwo <- markPosFtwo[order(markPosFtwo$chrName), ]
 
-    markPosFtwo$chrRegion <- rep(c("q"),numberOfF)
-    markPosFtwo$markSize <- rep(c(mOther),numberOfF)
+    markPosFtwo$chrRegion <- rep(c("q"), numberOfF)
+    markPosFtwo$markSize <- rep(c(mOther), numberOfF)
   }
 
-  getMarkPosFL<-chrSizeDf[which(chrSizeDf$chrName %in% grep("^FL\\+",chrSizeDf$chrName, value=T )),]
+  getMarkPosFL <- chrSizeDf[which(chrSizeDf$chrName %in% grep("^FL\\+", chrSizeDf$chrName, value = TRUE)), ]
 
   numberOfFL <- nrow(getMarkPosFL)
 
-  if(numberOfFL>0) {
-    markPosFLtwo<-do.call("rbind", replicate(1, getMarkPosFL, simplify = FALSE))
-    markPosFLtwo$markDistCen <- getMarkPosFL$longArmSize-mOther
-    markPosFLtwo <- markPosFLtwo[order(markPosFLtwo$chrName),]
+  if (numberOfFL > 0) {
+    markPosFLtwo <- do.call("rbind", replicate(1, getMarkPosFL, simplify = FALSE))
+    markPosFLtwo$markDistCen <- getMarkPosFL$longArmSize - mOther
+    markPosFLtwo <- markPosFLtwo[order(markPosFLtwo$chrName), ]
 
-    markPosFLtwo$chrRegion <- rep(c("q"),numberOfFL)
-    markPosFLtwo$markSize <- rep(c(mOther),numberOfFL)
+    markPosFLtwo$chrRegion <- rep(c("q"), numberOfFL)
+    markPosFLtwo$markSize <- rep(c(mOther), numberOfFL)
   }
 
-  getMarkPosG<-chrSizeDf[which(chrSizeDf$chrName %in% grep("G",chrSizeDf$chrName, value=T )),]
+  getMarkPosG <- chrSizeDf[which(chrSizeDf$chrName %in% grep("G", chrSizeDf$chrName, value = TRUE)), ]
 
-  numberOfG<-nrow(getMarkPosG)
+  numberOfG <- nrow(getMarkPosG)
 
-  if(numberOfG>0){
-    markPosGtwo<-do.call("rbind", replicate(2, getMarkPosG, simplify = FALSE))
-    markPosGtwo$markDistCen <- c(getMarkPosG$longArmSize-mOther,
-                                 getMarkPosG$longArmSize-3*mOther )
-    markPosGtwo<-markPosGtwo[order(markPosGtwo$chrName),]
+  if (numberOfG > 0) {
+    markPosGtwo <- do.call("rbind", replicate(2, getMarkPosG, simplify = FALSE))
+    markPosGtwo$markDistCen <- c(
+      getMarkPosG$longArmSize - mOther,
+      getMarkPosG$longArmSize - 3 * mOther
+    )
+    markPosGtwo <- markPosGtwo[order(markPosGtwo$chrName), ]
 
-    markPosGtwo$chrRegion <- rep(c("q","q"),numberOfG)
-    markPosGtwo$markSize <- rep(c(mOther,mOther),numberOfG)
-    # markPosGtwo$markDistCen <- rep(c(getMarkPosG$longArmSize-mOther,getMarkPosG$longArmSize-3*mOther ),numberOfG)
-
+    markPosGtwo$chrRegion <- rep(c("q", "q"), numberOfG)
+    markPosGtwo$markSize <- rep(c(mOther, mOther), numberOfG)
   }
-  # print(grep("markPos.+",names(as.list(environment()) ), value=T))
-  marksDF<-dplyr::bind_rows(
-    as.list(environment() )[which(names(as.list(environment()) ) %in% grep("markPos.+",names(as.list(environment()) ), value=T))]
+  marksDF <- dplyr::bind_rows(
+    as.list(environment())[which(names(as.list(environment())) %in% grep("markPos.+", names(as.list(environment())), value = TRUE))]
   )
-  marksDF<-marksDF[order(marksDF$chrName),]
-  row.names(marksDF)<-1:nrow(marksDF)
-  marksDF$markName<-markName
-  marksDF <- marksDF[,c("chrName","chrRegion","markName","markDistCen","markSize")]
-  tryCatch(marksDF$OTU<-unique(chrSizeDf$OTU), error=function(e){"no OTU name"})
+  marksDF <- marksDF[order(marksDF$chrName), ]
+  row.names(marksDF) <- seq_len(nrow(marksDF))
+  marksDF$markName <- markName
+  marksDF <- marksDF[, c("chrName", "chrRegion", "markName", "markDistCen", "markSize")]
+  tryCatch(marksDF$OTU <- unique(chrSizeDf$OTU), error = function(e) {
+    "no OTU name"
+  })
   return(marksDF)
 }
 #'
 #' @rdname citrusSize
 #' @return data.frame
 #' @examples
-#' citrusMarkPosDF45S<-markOverCMA(citrusMarkPosDF, chrType="B", chrRegion="p", markName="45S")
+#' citrusMarkPosDF45S <- markOverCMA(citrusMarkPosDF, chrType = "B", chrRegion = "p", markName = "45S")
 #' suppressMessages(
-#' plotIdiograms(dfChrSize= citrusSizeDF, # chr. size data.frame
-#'               dfMarkPos= citrusMarkPosDF45S,# mark position data.frame (inc. cen.)
-#'               ruler=FALSE,             # remove ruler
-#'               chrIndex=FALSE,          # remove index
-#'               morpho=FALSE,            # remove morphol.
-#'               karIndex=FALSE,          # remove
-#'               indexIdTextSize=.4,      # font size chr.
-#'               xlimRightMod=4,          # modify xlim
-#'               orderChr="original",     # as in d.f.
-#'               chrColor="blue",
-#'               legendHeight=5,          # height of legend item
-#'               colorBorderMark="black", # mark border color
-#'               OTUfont=3                # italics
-#'               )
-#'               )
+#'   plotIdiograms(
+#'     dfChrSize = citrusSizeDF, # chr. size data.frame
+#'     dfMarkPos = citrusMarkPosDF45S, # mark position data.frame (inc. cen.)
+#'     ruler = FALSE, # remove ruler
+#'     chrIndex = FALSE, # remove index
+#'     morpho = FALSE, # remove morphol.
+#'     karIndex = FALSE, # remove
+#'     indexIdTextSize = .4, # font size chr.
+#'     xlimRightMod = 4, # modify xlim
+#'     orderChr = "original", # as in d.f.
+#'     chrColor = "blue",
+#'     legendHeight = 5, # height of legend item
+#'     colorBorderMark = "black", # mark border color
+#'     OTUfont = 3 # italics
+#'   )
+#' )
 #' @export
 #'
-markOverCMA <- function(citrusMarkPosDF,chrType="B", chrName, chrRegion="p", markName="45S",shrinkMark=TRUE){
-
-if(!missing(chrName)){
-  listSmallDF <- list()
-  for(i in 1:length(chrName) ) {
-
-    if(grepl("A", chrName[i] ) ) {
-      minMDC <- min(citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% grep(paste0("^",chrName[i],"$"), citrusMarkPosDF$chrName, value=TRUE) &
-                                  citrusMarkPosDF$chrRegion %in% chrRegion),]$markDistCen)
-      listSmallDF[[i]]<-citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% grep(paste0("^",chrName[i],"$"), citrusMarkPosDF$chrName, value=TRUE) &
-                                   citrusMarkPosDF$chrRegion %in% chrRegion &
-                                     citrusMarkPosDF$markDistCen %in% minMDC ),]
-    } else {
-      listSmallDF[[i]]<-citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% grep(paste0("^",chrName[i],"$"), citrusMarkPosDF$chrName, value=TRUE) &
-                                       citrusMarkPosDF$chrRegion %in% chrRegion),]
+markOverCMA <- function(citrusMarkPosDF, chrType = "B", chrName, chrRegion = "p", markName = "45S", shrinkMark = TRUE) {
+  if (!missing(chrName)) {
+    listSmallDF <- list()
+    for (i in seq_along(chrName)) {
+      if (grepl("A", chrName[i])) {
+        minMDC <- min(citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% grep(paste0("^", chrName[i], "$"),
+          citrusMarkPosDF$chrName, value = TRUE) &
+          citrusMarkPosDF$chrRegion %in% chrRegion), ]$markDistCen)
+        listSmallDF[[i]] <- citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% grep(paste0("^", chrName[i], "$"),
+          citrusMarkPosDF$chrName, value = TRUE) &
+          citrusMarkPosDF$chrRegion %in% chrRegion &
+          citrusMarkPosDF$markDistCen %in% minMDC), ]
+      } else {
+        listSmallDF[[i]] <- citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% grep(paste0("^", chrName[i], "$"),
+          citrusMarkPosDF$chrName, value = TRUE) &
+          citrusMarkPosDF$chrRegion %in% chrRegion), ]
+      }
     }
-  }
-  smallDF<-dplyr::bind_rows(listSmallDF)
-
-} else {
-  if(chrType=="A") {
-    Anames <- grep(chrType, citrusMarkPosDF$chrName, value=TRUE)
-    minMDC<-numeric()
-    for (i in 1:length(Anames)){
-      minMDC[i] <- min(citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% Anames[i] &
-                                        citrusMarkPosDF$chrRegion %in% chrRegion),]$markDistCen)
-    }
-    smallDF<-citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% grep(chrType, citrusMarkPosDF$chrName, value=TRUE) &
-                                     citrusMarkPosDF$chrRegion %in% chrRegion &
-                                     citrusMarkPosDF$markDistCen %in% minMDC ),]
+    smallDF <- dplyr::bind_rows(listSmallDF)
   } else {
-    smallDF<-citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% grep(chrType, citrusMarkPosDF$chrName, value=TRUE) &
-                                     citrusMarkPosDF$chrRegion %in% chrRegion),]
+    if (chrType == "A") {
+      Anames <- grep(chrType, citrusMarkPosDF$chrName, value = TRUE)
+      minMDC <- numeric()
+      for (i in seq_along(Anames)) {
+        minMDC[i] <- min(citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% Anames[i] &
+          citrusMarkPosDF$chrRegion %in% chrRegion), ]$markDistCen)
+      }
+      smallDF <- citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% grep(chrType, citrusMarkPosDF$chrName, value = TRUE) &
+        citrusMarkPosDF$chrRegion %in% chrRegion &
+        citrusMarkPosDF$markDistCen %in% minMDC), ]
+    } else {
+      smallDF <- citrusMarkPosDF[which(citrusMarkPosDF$chrName %in% grep(chrType, citrusMarkPosDF$chrName, value = TRUE) &
+        citrusMarkPosDF$chrRegion %in% chrRegion), ]
+    }
   }
-}
-  if(nrow(smallDF)==0) {
+  if (nrow(smallDF) == 0) {
     message("no bands found")
     return(citrusMarkPosDF)
   } else {
+    smallDF$markName <- markName
 
-
-smallDF$markName<-markName
-
-if(shrinkMark){
-  mS<-smallDF$markSize
-  smallDF$markSize<-mS/2
-  smallDF$markDistCen<-smallDF$markDistCen+mS/4
+    if (shrinkMark) {
+      mS <- smallDF$markSize
+      smallDF$markSize <- mS / 2
+      smallDF$markDistCen <- smallDF$markDistCen + mS / 4
+    }
+    citrusMarkPosDFMark <- dplyr::bind_rows(citrusMarkPosDF, smallDF)
+    return(citrusMarkPosDFMark)
+  }
 }
-citrusMarkPosDFMark<-dplyr::bind_rows(citrusMarkPosDF, smallDF)
-return(citrusMarkPosDFMark)
-}
-}
-
-

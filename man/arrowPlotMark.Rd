@@ -25,7 +25,8 @@ arrowPlotMark(
   radius,
   ylistTransChr,
   rotation,
-  arrowheadWidthShrink
+  arrowheadWidthShrink,
+  alpha_val
 )
 }
 \arguments{

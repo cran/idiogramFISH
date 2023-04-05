@@ -94,68 +94,74 @@ this conversion is automatic. So, in plot you will
 never see FL0_1, FL0_2, for example.
 }
 \examples{
-citrusSizeDF <- citrusSize(B=1,D=11,F=4,FL0=2,OTU="C. jambhiri")
+citrusSizeDF <- citrusSize(B = 1, D = 11, F = 4, FL0 = 2, OTU = "C. jambhiri")
 suppressMessages(
 plotIdiograms(citrusSizeDF,
-indexIdTextSize=.4,# font size
-rulerNumberSize=.4,# font size
-rulerTitleSize=.4, # font size
-rulerPos =-.5,     # ruler pos.
-xPosRulerTitle =1.5,     # ruler title pos.
-orderChr="original"# order of chr. as in d.f.
+indexIdTextSize = .4, # font size
+rulerNumberSize = .4, # font size
+rulerTitleSize = .4, # font size
+rulerPos = -.5, # ruler pos.
+xPosRulerTitle = 1.5, # ruler title pos.
+orderChr = "original" # order of chr. as in d.f.
 )
 )
-citrusSizeDF2 <- citrusSize(B=2,D=10,F=4,FL0=1,
-FL=1,         # equivalent to FL+
-OTU="C. limettioides")
+citrusSizeDF2 <- citrusSize(
+B = 2, D = 10, F = 4, FL0 = 1,
+FL = 1, # equivalent to FL+
+OTU = "C. limettioides"
+)
 
 
 suppressMessages(
-plotIdiograms(citrusSizeDF2,     # FL^NA error corrected in 1.15.4
-indexIdTextSize=.4,# font size
-rulerNumberSize=.4,# font size
-rulerTitleSize=.4, # font size
-rulerPos =-.5,     # ruler pos.
-xPosRulerTitle =1.5,     # ruler title pos.
-orderChr="original"# order of chr. as in d.f.
+plotIdiograms(citrusSizeDF2, # FL^NA error corrected in 1.15.4
+indexIdTextSize = .4, # font size
+rulerNumberSize = .4, # font size
+rulerTitleSize = .4, # font size
+rulerPos = -.5, # ruler pos.
+xPosRulerTitle = 1.5, # ruler title pos.
+orderChr = "original" # order of chr. as in d.f.
 )
 )
 
 citrusMarkPosDF <- citrusMarkPos(citrusSizeDF)
 suppressMessages(
-plotIdiograms(dfChrSize= citrusSizeDF,      # chr. size data.frame
-dfMarkPos= citrusMarkPosDF,# mark position data.frame (inc. cen.)
-ruler=FALSE,               # remove
-chrIndex=FALSE,            # remove
-morpho=FALSE,              # remove
-karIndex=FALSE,            # remove
-indexIdTextSize=.4,        # font size
-xlimRightMod=4,            # xlim mod.
-orderChr="original",       # order chr. as in d.f.
-chrColor="blue",           # chr. color
-legendHeight=3             # legend item height
+plotIdiograms(
+dfChrSize = citrusSizeDF, # chr. size data.frame
+dfMarkPos = citrusMarkPosDF, # mark position data.frame (inc. cen.)
+ruler = FALSE, # remove
+chrIndex = FALSE, # remove
+morpho = FALSE, # remove
+karIndex = FALSE, # remove
+indexIdTextSize = .4, # font size
+xlimRightMod = 4, # xlim mod.
+orderChr = "original", # order chr. as in d.f.
+chrColor = "blue", # chr. color
+legendHeight = 3 # legend item height
 )
 )
-citrusMarkPosDF45S<-markOverCMA(citrusMarkPosDF, chrType="B", chrRegion="p", markName="45S")
+citrusMarkPosDF45S <- markOverCMA(citrusMarkPosDF, chrType = "B", chrRegion = "p", markName = "45S")
 suppressMessages(
-plotIdiograms(dfChrSize= citrusSizeDF, # chr. size data.frame
-dfMarkPos= citrusMarkPosDF45S,# mark position data.frame (inc. cen.)
-ruler=FALSE,             # remove ruler
-chrIndex=FALSE,          # remove index
-morpho=FALSE,            # remove morphol.
-karIndex=FALSE,          # remove
-indexIdTextSize=.4,      # font size chr.
-xlimRightMod=4,          # modify xlim
-orderChr="original",     # as in d.f.
-chrColor="blue",
-legendHeight=5,          # height of legend item
-colorBorderMark="black", # mark border color
-OTUfont=3                # italics
+plotIdiograms(
+dfChrSize = citrusSizeDF, # chr. size data.frame
+dfMarkPos = citrusMarkPosDF45S, # mark position data.frame (inc. cen.)
+ruler = FALSE, # remove ruler
+chrIndex = FALSE, # remove index
+morpho = FALSE, # remove morphol.
+karIndex = FALSE, # remove
+indexIdTextSize = .4, # font size chr.
+xlimRightMod = 4, # modify xlim
+orderChr = "original", # as in d.f.
+chrColor = "blue",
+legendHeight = 5, # height of legend item
+colorBorderMark = "black", # mark border color
+OTUfont = 3 # italics
 )
 )
 }
 \references{
-Carvalho, R., Soares Filho, W. S., Brasileiro-Vidal, A. C., & Guerra, M. (2005). The relationships among lemons, limes and citron: A chromosomal comparison. Cytogenetic and Genome Research, 109(1–3), 276–282. https://doi.org/10.1159/000082410
+Carvalho, R., Soares Filho, W. S., Brasileiro-Vidal, A. C., & Guerra, M. (2005).
+The relationships among lemons, limes and citron: A chromosomal comparison.
+Cytogenetic and Genome Research, 109(1–3), 276–282. https://doi.org/10.1159/000082410
 }
 \keyword{arm}
 \keyword{size}

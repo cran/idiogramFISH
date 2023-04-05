@@ -44,9 +44,9 @@ observeEvent(
 
 #
 observeEvent(
-  {input[["jumpToPrevMenu0"]]
-  }
-  ,
+  {
+    input[["jumpToPrevMenu0"]]
+  },
   {
     tab_id_position <- match(CurrentM$menu, menulist) - 1
     if (tab_id_position == 0) tab_id_position <- length(menulist)
@@ -59,9 +59,9 @@ observeEvent(
 )
 
 observeEvent(
-  {input[["jumpToPrevMenu"]]
-  }
-  ,
+  {
+    input[["jumpToPrevMenu"]]
+  },
   {
     tab_id_position <- match(CurrentM$menu, menulist) - 1
     if (tab_id_position == 0) tab_id_position <- length(menulist)
@@ -75,8 +75,7 @@ observeEvent(
 observeEvent(
   {
     input[["jumpToPrevMenu2"]]
-  }
-  ,
+  },
   {
     tab_id_position <- match(CurrentM$menu, menulist) - 1
     if (tab_id_position == 0) tab_id_position <- length(menulist)
@@ -88,24 +87,9 @@ observeEvent(
   }
 )
 observeEvent(
-  {input[["jumpToPrevMenu3"]]
-  }
-  ,
   {
-    tab_id_position <- match(CurrentM$menu, menulist) - 1
-    if (tab_id_position == 0) tab_id_position <- length(menulist)
-    CurrentM$menu <- menulist[tab_id_position]
-    updateTabItems(session, "tabs", menulist[tab_id_position])
-    updateTabItems(session, "tabsetpanel2", tablist2[1]) # avoids log error
-    updateTabItems(session, "tabsetpanel5", tablist5[1])
-
-  }
-)
-
-observeEvent(
-  {input[["jumpToPrevMenu4"]]
-  }
-  ,
+    input[["jumpToPrevMenu3"]]
+  },
   {
     tab_id_position <- match(CurrentM$menu, menulist) - 1
     if (tab_id_position == 0) tab_id_position <- length(menulist)
@@ -118,9 +102,24 @@ observeEvent(
 )
 
 observeEvent(
-  {input[["jumpToPrevMenu5"]]
+  {
+    input[["jumpToPrevMenu4"]]
+  },
+  {
+    tab_id_position <- match(CurrentM$menu, menulist) - 1
+    if (tab_id_position == 0) tab_id_position <- length(menulist)
+    CurrentM$menu <- menulist[tab_id_position]
+    updateTabItems(session, "tabs", menulist[tab_id_position])
+    updateTabItems(session, "tabsetpanel2", tablist2[1]) # avoids log error
+    updateTabItems(session, "tabsetpanel5", tablist5[1])
+
   }
-  ,
+)
+
+observeEvent(
+  {
+    input[["jumpToPrevMenu5"]]
+  },
   {
     tab_id_position <- match(CurrentM$menu, menulist) - 1
     if (tab_id_position == 0) tab_id_position <- length(menulist)
@@ -292,7 +291,7 @@ observeEvent(input$exampleButton, {
   sel <- input$exampleId
   sel <- gsub(".*-", "", sel)
 
-  if(as.numeric(sel) %in% 9:10) {
+  if (as.numeric(sel) %in% 9:10) {
     CurrentM$menu <- menulist[2]
     updateTabItems(session, "tabs", menulist[2])
     updateTabItems(session, "tabsetpanel4", tablist4[1])
@@ -304,10 +303,10 @@ observeEvent(input$exampleButton, {
 })
 
 observeEvent(input$upPresetButton, {
-    Sys.sleep(0.3)
-    CurrentM$menu <- menulist[4]
-    updateTabItems(session, "tabs", menulist[4])
-    updateTabItems(session, "tabsetpanel2", tablist2[1])
+  Sys.sleep(0.3)
+  CurrentM$menu <- menulist[4]
+  updateTabItems(session, "tabs", menulist[4])
+  updateTabItems(session, "tabsetpanel2", tablist2[1])
 })
 
 

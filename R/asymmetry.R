@@ -32,7 +32,7 @@
 #' @export
 #' @examples
 #' asymmetry(dfOfChrSize)
-#' myAlist<-asymmetry(bigdfOfChrSize)
+#' myAlist <- asymmetry(bigdfOfChrSize)
 #' as.data.frame(myAlist)
 #' @seealso \code{\link{chrbasicdatamono}}
 #'
@@ -50,66 +50,71 @@
 #' @export
 #' @return list
 
-asymmetry<- function(dfChrSize, asDf=FALSE){
+asymmetry <- function(dfChrSize, asDf = FALSE) {
   message("Calculating karyotype indexes A and A2\n")
 
-  dfChrSize<-as.data.frame(dfChrSize)
+  dfChrSize <- as.data.frame(dfChrSize)
 
-if("OTU" %in% colnames(dfChrSize)){
-    listOfdfChromSize<-base::split(dfChrSize, factor(dfChrSize[,"OTU"],levels = unique(dfChrSize[,"OTU"])  ) )
+  if ("OTU" %in% colnames(dfChrSize)) {
+    listOfdfChromSize <- base::split(dfChrSize, factor(dfChrSize[, "OTU"], levels = unique(dfChrSize[, "OTU"])))
     names(listOfdfChromSize) <- unique(dfChrSize$OTU)
-} else {
-    listOfdfChromSize<-list(dfChrSize)
+  } else {
+    listOfdfChromSize <- list(dfChrSize)
     names(listOfdfChromSize) <- 1
-}
+  }
 
-  for (s in 1: length(listOfdfChromSize)) {
+  for (s in seq_along(listOfdfChromSize)) {
 
-    # listOfdfChromSize[[s]] <- listOfdfChromSize[[s]][ , apply(listOfdfChromSize[[s]], 2, function(x) !any(is.na(x)))]
     listOfdfChromSize[[s]][sapply(listOfdfChromSize[[s]], function(x) any(is.na(x)))] <- NULL
 
-    if(all(c("shortArmSize","longArmSize") %in% colnames(listOfdfChromSize[[s]]) ) ) {
+    if (all(c("shortArmSize", "longArmSize") %in% colnames(listOfdfChromSize[[s]]))) {
+      listOfdfChromSize[[s]]$smallest <- pmin(listOfdfChromSize[[s]]$shortArmSize, listOfdfChromSize[[s]]$longArmSize)
+      listOfdfChromSize[[s]]$largest <- pmax(listOfdfChromSize[[s]]$shortArmSize, listOfdfChromSize[[s]]$longArmSize)
+      listOfdfChromSize[[s]]$Aeach <- mapply(function(X, Y) (X - Y) / (X + Y),
+        X = listOfdfChromSize[[s]]$largest,
+        Y = listOfdfChromSize[[s]]$smallest
+      )
 
-    listOfdfChromSize[[s]]$smallest<- pmin(listOfdfChromSize[[s]]$shortArmSize,listOfdfChromSize[[s]]$longArmSize)
-    listOfdfChromSize[[s]]$largest <- pmax(listOfdfChromSize[[s]]$shortArmSize,listOfdfChromSize[[s]]$longArmSize)
-    # listOfdfChromSize[[s]]$chrSize  <- listOfdfChromSize[[s]]$shortArmSize+listOfdfChromSize[[s]]$longArmSize
-    listOfdfChromSize[[s]]$Aeach   <- mapply(function(X,Y) (X-Y)/(X+Y), X=listOfdfChromSize[[s]]$largest
-                                             , Y=listOfdfChromSize[[s]]$smallest)
-
-      # if(!identical(listOfdfChromSize[[s]]$smallest,listOfdfChromSize[[s]]$shortArmSize) ){
-          # message(crayon::red("\nERROR in short/long arm classif. It will not be fixed\nWill not calculate A kar. ind.")
-          # ) # m
-          # if("OTU" %in% colnames(listOfdfChromSize[[s]]) ){message(crayon::red(paste("in OTU",unique(listOfdfChromSize[[s]]$OTU) )) ) }
-          # return(NULL)
-      # } # fi
     } else {
-      message(crayon::red("Requires columns shortArmSize and longArmSize for A") )
+      message(crayon::red("Requires columns shortArmSize and longArmSize for A"))
     }
   } # for
 
-  asymmetry<-list()
-  asymmetry$A <- format(round(sapply(listOfdfChromSize, function(x)
-    tryCatch(mean(x$Aeach), error=function(e){NA}, warning=function(w){NA}  ) ),2),nsmall=2)
+  asymmetry <- list()
+  asymmetry$A <- format(round(sapply(listOfdfChromSize, function(x) {
+    tryCatch(mean(x$Aeach), error = function(e) {
+      NA
+    }, warning = function(w) {
+      NA
+    })
+  }), 2), nsmall = 2)
 
-  for (s in 1: length(listOfdfChromSize)) {
-    # listOfdfChromSize[[s]] <- listOfdfChromSize[[s]][ , apply(listOfdfChromSize[[s]], 2, function(x) !any(is.na(x)))]
+  for (s in seq_along(listOfdfChromSize)) {
     listOfdfChromSize[[s]][sapply(listOfdfChromSize[[s]], function(x) any(is.na(x)))] <- NULL
-    if(!"chrSize" %in% colnames(listOfdfChromSize[[s]] ) & "shortArmSize" %in% colnames(listOfdfChromSize[[s]])  ) {
+    if (!"chrSize" %in% colnames(listOfdfChromSize[[s]]) && "shortArmSize" %in% colnames(listOfdfChromSize[[s]])) {
       listOfdfChromSize[[s]]$chrSize <- listOfdfChromSize[[s]]$shortArmSize + listOfdfChromSize[[s]]$longArmSize
     }
   }
 
-  stDevForSps <- sapply(listOfdfChromSize, function(x) tryCatch(stats::sd(x$chrSize),error=function(e){NA} ) )
-  meanForSps  <- sapply(listOfdfChromSize, function(x) tryCatch(mean(x$chrSize),error=function(e){NA} ) )
+  stDevForSps <- sapply(listOfdfChromSize, function(x) {
+    tryCatch(stats::sd(x$chrSize), error = function(e) {
+      NA
+    })
+  })
+  meanForSps <- sapply(listOfdfChromSize, function(x) {
+    tryCatch(mean(x$chrSize), error = function(e) {
+      NA
+    })
+  })
 
-  asymmetry$A2 <- format(round(stDevForSps / meanForSps,2),nsmall=2 )
+  asymmetry$A2 <- format(round(stDevForSps / meanForSps, 2), nsmall = 2)
 
-  if(asDf){
+  if (asDf) {
     asymmetry <- as.data.frame(asymmetry)
-    if(nrow(asymmetry)>0){
-      asymmetry[sapply(asymmetry, function(x) all(x=="NA"))] <- NULL
-      asymmetry<-cbind(OTU=row.names(asymmetry),asymmetry)
-      row.names(asymmetry)<-1:nrow(asymmetry)
+    if (nrow(asymmetry) > 0) {
+      asymmetry[sapply(asymmetry, function(x) all(x == "NA"))] <- NULL
+      asymmetry <- cbind(OTU = row.names(asymmetry), asymmetry)
+      row.names(asymmetry) <- seq_len(nrow(asymmetry))
     }
   }
   return(asymmetry)
@@ -124,33 +129,37 @@ if("OTU" %in% colnames(dfChrSize)){
 #' @seealso \code{\link{chrbasicdataHolo}}
 #' @export
 #'
-asymmetryA2<- function(dfChrSize){
+asymmetryA2 <- function(dfChrSize) {
   message("Calculating karyotype index A2\n")
-  dfChrSize<-as.data.frame(dfChrSize)
+  dfChrSize <- as.data.frame(dfChrSize)
 
-  if("OTU" %in% colnames(dfChrSize)){
-    listOfdfChromSize<-base::split(dfChrSize, factor(dfChrSize[,"OTU"],levels = unique(dfChrSize[,"OTU"])  ) )
+  if ("OTU" %in% colnames(dfChrSize)) {
+    listOfdfChromSize <- base::split(dfChrSize, factor(dfChrSize[, "OTU"], levels = unique(dfChrSize[, "OTU"])))
     names(listOfdfChromSize) <- unique(dfChrSize$OTU)
   } else {
-    listOfdfChromSize<-list(dfChrSize)
-    names(listOfdfChromSize)<-1
+    listOfdfChromSize <- list(dfChrSize)
+    names(listOfdfChromSize) <- 1
   }
 
-  for (s in 1: length(listOfdfChromSize)) {
-    listOfdfChromSize[[s]] <- listOfdfChromSize[[s]][ , apply(listOfdfChromSize[[s]], 2, function(x) !any(is.na(x)))]
-    if(!"chrSize" %in% colnames(listOfdfChromSize[[s]] ) & "shortArmSize" %in% colnames(listOfdfChromSize[[s]])  ) {
+  for (s in seq_along(listOfdfChromSize)) {
+    listOfdfChromSize[[s]] <- listOfdfChromSize[[s]][, apply(listOfdfChromSize[[s]], 2, function(x) !any(is.na(x)))]
+    if (!"chrSize" %in% colnames(listOfdfChromSize[[s]]) && "shortArmSize" %in% colnames(listOfdfChromSize[[s]])) {
       listOfdfChromSize[[s]]$chrSize <- listOfdfChromSize[[s]]$shortArmSize + listOfdfChromSize[[s]]$longArmSize
     }
   }
 
-  stDevForSps <- sapply(listOfdfChromSize, function(x) tryCatch(stats::sd(x$chrSize),error=function(e){NA} ) )
-  meanForSps  <- sapply(listOfdfChromSize, function(x) tryCatch(mean(x$chrSize),error=function(e){NA} ) )
+  stDevForSps <- sapply(listOfdfChromSize, function(x) {
+    tryCatch(stats::sd(x$chrSize), error = function(e) {
+      NA
+    })
+  })
+  meanForSps <- sapply(listOfdfChromSize, function(x) {
+    tryCatch(mean(x$chrSize), error = function(e) {
+      NA
+    })
+  })
 
-  asymmetry<-list()
-  asymmetry$A2 <- format(round(stDevForSps / meanForSps,2),nsmall=2 )
+  asymmetry <- list()
+  asymmetry$A2 <- format(round(stDevForSps / meanForSps, 2), nsmall = 2)
   return(asymmetry)
 }
-
-
-
-

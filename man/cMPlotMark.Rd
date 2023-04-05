@@ -25,7 +25,8 @@ cMPlotMark(
   chrWidth,
   ylistTransChr,
   rotation,
-  labelOutwards
+  labelOutwards,
+  alpha_val
 )
 }
 \arguments{
@@ -66,6 +67,8 @@ cMPlotMark(
 \item{rotation}{rotation}
 
 \item{labelOutwards}{srt}
+
+\item{alpha_val}{numeric}
 }
 \value{
 plot

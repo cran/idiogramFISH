@@ -12,20 +12,23 @@
 #'
 #' @return list
 
-removeNAFromList<-function(noNA,areNA){
-  noNA[areNA]<-NA
-  noNA<-noNA[!is.na(noNA)]
+removeNAFromList <- function(noNA, areNA) {
+  noNA[areNA] <- NA
+  noNA <- noNA[!is.na(noNA)]
   return(noNA)
 }
 
-filter_colors<- function(mycolors){
-  mycolors <- mycolors[mycolors!=""]
+filter_colors <- function(mycolors) {
+  mycolors <- mycolors[mycolors != ""]
   mycolors <- tryCatch(mycolors[sapply(mycolors, function(X) {
     tryCatch(is.matrix(col2rgb(X)),
-             error = function(e) {
-               message(crayon::red(paste("Color",X,"invalid, removed")
-               ) ); return(FALSE)
-             })
-  } )], error=function(e) {character(0) } )
+      error = function(e) {
+        message(crayon::red(paste("Color", X, "invalid, removed")))
+        return(FALSE)
+      }
+    )
+  })], error = function(e) {
+    character(0)
+  })
   return(mycolors)
 }

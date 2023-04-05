@@ -9,11 +9,13 @@
 #'
 #' @return character vector
 
-makeVectorNames<-function(namedList,attr,selector){
-  Vector<-integer()
-  for(i in 1:length(namedList)){
-    if(attr(namedList[[i]],attr)==selector){Vector<-c(Vector,i)}
+makeVectorNames <- function(namedList, attr, selector) {
+  Vector <- integer()
+  for (i in seq_along(namedList)) {
+    if (attr(namedList[[i]], attr) == selector) {
+      Vector <- c(Vector, i)
+    }
   }
-  nameVector<-names(namedList)[Vector]
+  nameVector <- names(namedList)[Vector]
   return(nameVector)
 }

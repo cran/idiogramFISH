@@ -32,5 +32,3 @@ NULL
 #' three species, OTU
 #' @rdname chrbasicdataHolo
 "bigdfOfChrSize3Mb"
-
-

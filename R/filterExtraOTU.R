@@ -10,27 +10,32 @@
 #'
 #' @return data.frame
 
-filterExtraOTU<-function(listOfdfChromSize,listOfdfMarkPosCenType){
-
-  if(length(setdiff(names(listOfdfMarkPosCenType ),
-                    names(listOfdfChromSize) ) )>0){
-    diff <- setdiff(names(listOfdfMarkPosCenType ),
-                    names(listOfdfChromSize) )
+filterExtraOTU <- function(listOfdfChromSize, listOfdfMarkPosCenType) {
+  if (length(setdiff(
+    names(listOfdfMarkPosCenType),
+    names(listOfdfChromSize)
+  )) > 0) {
+    diff <- setdiff(
+      names(listOfdfMarkPosCenType),
+      names(listOfdfChromSize)
+    )
     message(
       crayon::red(
-        paste(c("\nWarning:",
-                diff,
-                "OTU(s) of dfMarkPos data.frame NOT in Chr. size (main) data.frame, they will not be plotted"),
-              sep=" ", collapse = " "
-        ) # pas
-      ) ) #message
+        paste(c(
+          "\nWarning:",
+          diff,
+          "OTU(s) of dfMarkPos data.frame NOT in Chr. size (main) data.frame, they will not be plotted"
+        ),
+        sep = " ", collapse = " "
+        )
+      )
+    )
 
     #
     #   delete names in diff
     #
 
-    listOfdfMarkPosCenType<-listOfdfMarkPosCenType[which(names(listOfdfMarkPosCenType) %in% diff ) ]
-
+    listOfdfMarkPosCenType <- listOfdfMarkPosCenType[which(names(listOfdfMarkPosCenType) %in% diff)]
   }
   return(listOfdfMarkPosCenType)
 }

@@ -9,7 +9,8 @@ idiogramFISH
 
 ![<https://cran.r-project.org/web/packages/idiogramFISH/>](man/figures/cranversion.svg) [![downloads](man/figures/realdownloads.svg)](https://ferroao.gitlab.io/idiogramfishhelppages/downloads.png) [![10.5281/zenodo.3579417](man/figures/doibadge.svg)](https://doi.org/10.5281/zenodo.3579417)
  ![gitlab.com/ferroao/idiogramFISH](man/figures/gitbadge.svg)
-<br></br><br></br><a href='https://ko-fi.com/X7X71PZZG' target='_blank'><img height='30' style='border:0px;height:30px;' src='man/figures/kofi1.png' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+<br></br><br></br><a href='https://ko-fi.com/X7X71PZZG' target='_blank'><img height='30' style='border:0px;height:30px;' 
+  src='man/figures/kofi1.png' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 <!-- badges: end -->
 
 The goal of idiogramFISH functions or shiny-app is to plot karyotypes,
@@ -59,6 +60,26 @@ In addition, the shiny app `runBoard()` uses shiny ([Chang *et al.*,
 2021](#ref-R-rclipboard)).
 
 <!-- badger -->
+
+## Run the Shiny app with docker
+
+- No need to install R
+- Install docker on your system
+- Make sure you can run a docker example image, i.e. ubuntu, in the
+  console (system terminal)
+
+<!-- -->
+
+    docker pull fercyto/idiogramfish
+
+    # Run the image
+    docker run -d -p 8080:8080 fercyto/idiogramfish
+
+In your internet browser go to localhost:8080
+
+    # Stop the container
+    docker ps
+    docker stop {container id}
 
 ## Installation
 
@@ -116,10 +137,11 @@ browseVignettes("idiogramFISH")
 
 To cite idiogramFISH in publications, please use:
 
-Roa F, Telles MPC (2022) idiogramFISH: Shiny app. Idiograms with Marks
+Roa F, Telles MPC (2023) idiogramFISH: Shiny app. Idiograms with Marks
 and Karyotype Indices, Universidade Federal de Goiás. Brazil. R-package.
-version 2.0.9 <https://ferroao.gitlab.io/manualidiogramfish/>. doi:<!--
-  breaklink -->10.5281/zenodo.3579417
+version 2.0.10.0001 <https://ferroao.gitlab.io/manualidiogramfish/>.
+doi:<!-- breaklink
+  -->10.5281/zenodo.3579417
 
 To write citation to file:
 
@@ -136,14 +158,10 @@ sink()
 
 # Working online
 
-For Shiny App in the cloud availability, please check this chapter in
-the online version
-[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#working-online)
-
 Each chapter has a `jupyter` version. A jupyter notebook seems an
 interactive vignette.
 
-They are hosted in [github](https://github.com/ferroao/IFjupyter)
+They are hosted in [github](https://github.com/fernandoroa/IFjupyter)
 
 They can be accessed with `google colab` to work online.
 
@@ -162,161 +180,170 @@ They can be accessed with `google colab` to work online.
 <tr>
 <td>
 <a
-href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/03-minimal.ipynb"
+href="https://colab.research.google.com/github/fernandoroa/IFjupyter/blob/main/03-minimal.ipynb"
 target="_blank">3 Minimal examples</a> 
 </td>
 <td>
 <a
-href="https://github.com/ferroao/IFjupyter/blob/main/03-minimal.ipynb"
+href="https://github.com/fernandoroa/IFjupyter/blob/main/03-minimal.ipynb"
 target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/03-minimal.ipynb"
+<a
+href="https://github.com/fernandoroa/IFjupyter/raw/main/03-minimal.ipynb"
 target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
 <td>
 <a
-href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/04-plotting.ipynb"
+href="https://colab.research.google.com/github/fernandoroa/IFjupyter/blob/main/04-plotting.ipynb"
 target="_blank">4 Plotting chromosomes</a> 
 </td>
 <td>
 <a
-href="https://github.com/ferroao/IFjupyter/blob/main/04-plotting.ipynb"
+href="https://github.com/fernandoroa/IFjupyter/blob/main/04-plotting.ipynb"
 target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
 <a
-href="https://github.com/ferroao/IFjupyter/raw/main/04-plotting.ipynb"
+href="https://github.com/fernandoroa/IFjupyter/raw/main/04-plotting.ipynb"
 target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
 <td>
 <a
-href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/05-multiple.ipynb"
+href="https://colab.research.google.com/github/fernandoroa/IFjupyter/blob/main/05-multiple.ipynb"
 target="_blank">5 Multiple OTUs</a>
 </td>
 <td>
 <a
-href="https://github.com/ferroao/IFjupyter/blob/main/05-multiple.ipynb"
+href="https://github.com/fernandoroa/IFjupyter/blob/main/05-multiple.ipynb"
 target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
 <a
-href="https://github.com/ferroao/IFjupyter/raw/main/05-multiple.ipynb"
+href="https://github.com/fernandoroa/IFjupyter/raw/main/05-multiple.ipynb"
 target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
 <td>
 <a
-href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/06-units.ipynb"
+href="https://colab.research.google.com/github/fernandoroa/IFjupyter/blob/main/06-units.ipynb"
 target="_blank">6 Changing units</a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/blob/main/06-units.ipynb"
+<a
+href="https://github.com/fernandoroa/IFjupyter/blob/main/06-units.ipynb"
 target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/06-units.ipynb"
+<a
+href="https://github.com/fernandoroa/IFjupyter/raw/main/06-units.ipynb"
 target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
 <td>
 <a
-href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/07-gish.ipynb"
+href="https://colab.research.google.com/github/fernandoroa/IFjupyter/blob/main/07-gish.ipynb"
 target="_blank">7 GISH</a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/blob/main/07-gish.ipynb"
+<a
+href="https://github.com/fernandoroa/IFjupyter/blob/main/07-gish.ipynb"
 target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/07-gish.ipynb"
+<a
+href="https://github.com/fernandoroa/IFjupyter/raw/main/07-gish.ipynb"
 target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
 <td>
 <a
-href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/08-groups.ipynb"
+href="https://colab.research.google.com/github/fernandoroa/IFjupyter/blob/main/08-groups.ipynb"
 target="_blank">8 Groups</a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/blob/main/08-groups.ipynb"
+<a
+href="https://github.com/fernandoroa/IFjupyter/blob/main/08-groups.ipynb"
 target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/08-groups.ipynb"
+<a
+href="https://github.com/fernandoroa/IFjupyter/raw/main/08-groups.ipynb"
 target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
 <td>
 <a
-href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/09-circular.ipynb"
+href="https://colab.research.google.com/github/fernandoroa/IFjupyter/blob/main/09-circular.ipynb"
 target="_blank">9 Circular Plots</a>
 </td>
 <td>
 <a
-href="https://github.com/ferroao/IFjupyter/blob/main/09-circular.ipynb"
+href="https://github.com/fernandoroa/IFjupyter/blob/main/09-circular.ipynb"
 target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
 <a
-href="https://github.com/ferroao/IFjupyter/raw/main/09-circular.ipynb"
+href="https://github.com/fernandoroa/IFjupyter/raw/main/09-circular.ipynb"
 target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
 <td>
 <a
-href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/10-phylogeny.ipynb"
+href="https://colab.research.google.com/github/fernandoroa/IFjupyter/blob/main/10-phylogeny.ipynb"
 target="_blank">10 Plotting alongside phylogeny</a> 
 </td>
 <td>
 <a
-href="https://github.com/ferroao/IFjupyter/blob/main/10-phylogeny.ipynb"
+href="https://github.com/fernandoroa/IFjupyter/blob/main/10-phylogeny.ipynb"
 target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
 <a
-href="https://github.com/ferroao/IFjupyter/raw/main/10-phylogeny.ipynb"
+href="https://github.com/fernandoroa/IFjupyter/raw/main/10-phylogeny.ipynb"
 target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
 <td>
 <a
-href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/11-citrushelp.ipynb"
+href="https://colab.research.google.com/github/fernandoroa/IFjupyter/blob/main/11-citrushelp.ipynb"
 target="_blank">11 Citrus</a>
 </td>
 <td>
 <a
-href="https://github.com/ferroao/IFjupyter/blob/main/11-citrushelp.ipynb"
+href="https://github.com/fernandoroa/IFjupyter/blob/main/11-citrushelp.ipynb"
 target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
 <a
-href="https://github.com/ferroao/IFjupyter/raw/main/11-citrushelp.ipynb"
+href="https://github.com/fernandoroa/IFjupyter/raw/main/11-citrushelp.ipynb"
 target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
 <tr>
 <td>
 <a
-href="https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/12-human.ipynb"
+href="https://colab.research.google.com/github/fernandoroa/IFjupyter/blob/main/12-human.ipynb"
 target="_blank">12 Human Karyotype</a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/blob/main/12-human.ipynb"
+<a
+href="https://github.com/fernandoroa/IFjupyter/blob/main/12-human.ipynb"
 target="_blank"><kbd>link</kbd></a>
 </td>
 <td>
-<a href="https://github.com/ferroao/IFjupyter/raw/main/12-human.ipynb"
+<a
+href="https://github.com/fernandoroa/IFjupyter/raw/main/12-human.ipynb"
 target="_blank"><kbd> Raw</kbd></a>
 </td>
 </tr>
@@ -324,7 +351,7 @@ target="_blank"><kbd> Raw</kbd></a>
 
 </br>
 
-Chapers can be accessed locally in your `jupyter-lab` or
+Chapters can be accessed locally in your `jupyter-lab` or
 `jupyter notebook`
 
 After installing jupyter, you can install the R kernel with:
@@ -346,9 +373,9 @@ library(idiogramFISH)
 runBoard()
 ```
 
-For Shiny App in the cloud availability, please check this chapter in
-the online version
-[https://ferroao.gitlab.io/idiogramfishhelppages](https://ferroao.gitlab.io/idiogramfishhelppages/#shiny-app)
+Shiny App in the cloud availability:  
+<a href="https://ferapps.shinyapps.io/iboard/"
+target="_blank">shinyapps.io</a>
 
 <img src=man/figures/shiny.jpg>
 
@@ -369,79 +396,325 @@ data(dfOfChrSize) # chromsome data
 data(dfMarkColor) # mark general data
 data(dfOfMarks2)  # mark position data (inc. cen.)
 
-dfOfMarks2[which(dfOfMarks2$markName=="5S"),]$markSize<-0.8 # modif. of mark size
+dfOfMarks2[which(dfOfMarks2$markName == "5S"), ]$markSize <- 0.8 # modif. of mark size
 
 # column Mbp not for plotting purposes
-dfOfChrSize$Mbp<-(dfOfChrSize$shortArmSize+dfOfChrSize$longArmSize)*100
+dfOfChrSize$Mbp <- (dfOfChrSize$shortArmSize + dfOfChrSize$longArmSize) * 100
 
 opar <- par(no.readonly = TRUE)      # make a copy of current settings if you want to restore them later
-#par(opar) # recover par
+# par(opar) # recover par
 
-par(mar=rep(0,4))
+par(mar = rep(0, 4))
 
-plotIdiograms(dfChrSize=dfOfChrSize,    # data.frame of chr. size
-              dfMarkColor=dfMarkColor,  # d.f of mark style <- Optional
-              dfMarkPos=dfOfMarks2,     # df of mark positions (includes cen. marks)
-              
-              karHeight=5,              # kar. height
-              chrWidth = 1.2,           # chr. width
-              chrSpacing = 1,           # space among chr.
-              
-              morpho="Guerra",          # chr. morpho. classif. (Guerra, Levan, both, "" ) ver. >= 1.12 only
-              chrIndex="CI",            # cen. pos. (CI, AR, both, "" ) ver. >= 1.12 only
-              chrSize = TRUE,           # add chr. sizes under chr.
-              chrSizeMbp = TRUE,        # add Mbp sizes under chr. (see above)
-              
-              rulerPos= 0,              # position of ruler
-              ruler.tck=-0.01,          # size and orientation of ruler ticks
-              rulerNumberSize=.8        # font size of rulers
-              ,xPosRulerTitle = 3             # ruler units (title) pos.
-              
-              ,legendWidth=1            # width of legend items
-              ,fixCenBorder = TRUE      # use chrColor as border color of cen. or cen. marks
-              ,distTextChr = 1.2        # chr. text separation
-              
-              ,xlimLeftMod = 2          # xlim left param.
-              ,ylimBotMod = 0           # modify ylim bottom argument
-              ,ylimTopMod = 0           # modify ylim top argument
-); # dev.off() # close svg()
+plotIdiograms(dfChrSize = dfOfChrSize,    # data.frame of chr. size
+  dfMarkColor = dfMarkColor,  # d.f of mark style <- Optional
+  dfMarkPos = dfOfMarks2,     # df of mark positions (includes cen. marks)
+
+  karHeight = 5,            # kar. height
+  chrWidth = 1.2,           # chr. width
+  chrSpacing = 1,           # space among chr.
+
+  morpho = "Guerra",        # chr. morpho. classif. (Guerra, Levan, both, "" ) ver. >= 1.12 only
+  chrIndex = "CI",          # cen. pos. (CI, AR, both, "" ) ver. >= 1.12 only
+  chrSize = TRUE,           # add chr. sizes under chr.
+  chrSizeMbp = TRUE,        # add Mbp sizes under chr. (see above)
+
+  rulerPos = 0,              # position of ruler
+  ruler.tck = -0.01,         # size and orientation of ruler ticks
+  rulerNumberSize = .8       # font size of rulers
+  , xPosRulerTitle = 3       # ruler units (title) pos.
+
+  , legendWidth = 1          # width of legend items
+  , fixCenBorder = TRUE      # use chrColor as border color of cen. or cen. marks
+  , distTextChr = 1.2        # chr. text separation
+
+  , xlimLeftMod = 2          # xlim left param.
+  , ylimBotMod = 0           # modify ylim bottom argument
+  , ylimTopMod = 0           # modify ylim top argument
+)
 ```
 
 <img src="man/figures/README-example-1.png" width="70%" />
+
+``` r
+# dev.off() # close svg()
+```
 
 #### Let’s explore the data.frames for monocentrics:
 
     dfOfChrSize
 
-| chrName | shortArmSize | longArmSize | Mbp |
-|:--------|-------------:|------------:|----:|
-| 1       |            3 |           4 | 700 |
-| 2       |            4 |           5 | 900 |
-| 3       |            2 |           3 | 500 |
-| X       |            1 |           2 | 300 |
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+chrName
+</th>
+<th style="text-align:right;">
+shortArmSize
+</th>
+<th style="text-align:right;">
+longArmSize
+</th>
+<th style="text-align:right;">
+Mbp
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+700
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+900
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+300
+</td>
+</tr>
+</tbody>
+</table>
 
     dfMarkColor
 
-| markName | markColor      | style  |
-|:---------|:---------------|:-------|
-| 5S       | red            | dots   |
-| 45S      | chartreuse3    | square |
-| DAPI     | blue           | square |
-| CMA      | darkgoldenrod1 | square |
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+markName
+</th>
+<th style="text-align:left;">
+markColor
+</th>
+<th style="text-align:left;">
+style
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+5S
+</td>
+<td style="text-align:left;">
+red
+</td>
+<td style="text-align:left;">
+dots
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+45S
+</td>
+<td style="text-align:left;">
+chartreuse3
+</td>
+<td style="text-align:left;">
+square
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DAPI
+</td>
+<td style="text-align:left;">
+blue
+</td>
+<td style="text-align:left;">
+square
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CMA
+</td>
+<td style="text-align:left;">
+darkgoldenrod1
+</td>
+<td style="text-align:left;">
+square
+</td>
+</tr>
+</tbody>
+</table>
 
 `p, q` and `w` marks can have empty columns `markDistCen` and `markSize`
 since v. 1.9.1 to plot whole arms (`p`, `q`) and whole chr. `w`.
 
     dfOfMarks2
 
-| chrName | markName | chrRegion | markSize | markDistCen |
-|:--------|:---------|:----------|---------:|------------:|
-| 1       | 5S       | p         |      0.8 |         0.5 |
-| 1       | 45S      | q         |      1.0 |         0.5 |
-| X       | 45S      | p         |       NA |          NA |
-| 3       | DAPI     | q         |      1.0 |         1.0 |
-| 1       | DAPI     | cen       |       NA |          NA |
-| X       | CMA      | cen       |       NA |          NA |
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+chrName
+</th>
+<th style="text-align:left;">
+markName
+</th>
+<th style="text-align:left;">
+chrRegion
+</th>
+<th style="text-align:right;">
+markSize
+</th>
+<th style="text-align:right;">
+markDistCen
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+5S
+</td>
+<td style="text-align:left;">
+p
+</td>
+<td style="text-align:right;">
+0.8
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+45S
+</td>
+<td style="text-align:left;">
+q
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+45S
+</td>
+<td style="text-align:left;">
+p
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+DAPI
+</td>
+<td style="text-align:left;">
+q
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+DAPI
+</td>
+<td style="text-align:left;">
+cen
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+CMA
+</td>
+<td style="text-align:left;">
+cen
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+</tbody>
+</table>
 
 #### 2 How to plot a karyotype of holocentrics:
 
@@ -449,64 +722,310 @@ since v. 1.9.1 to plot whole arms (`p`, `q`) and whole chr. `w`.
 library(idiogramFISH)
 
 # column Mbp not for plotting purposes
-dfChrSizeHolo$Mbp<-dfChrSizeHolo$chrSize*100
+dfChrSizeHolo$Mbp <- dfChrSizeHolo$chrSize * 100
 
 # svg("testing.svg",width=14,height=8 )
-par(mar = c(0, 0, 0, 0), omi=rep(0,4) )
+par(mar = c(0, 0, 0, 0), omi = rep(0, 4))
 
-plotIdiograms(dfChrSize  =dfChrSizeHolo, # data.frame of chr. size
-              dfMarkColor=dfMarkColor,   # df of mark style
-              dfMarkPos  =dfMarkPosHolo, # df of mark positions
-              
-              addOTUName=FALSE,        # do not add OTU names
-              distTextChr = 1,         # chr. name distance to chr.
-              chrSize = TRUE,          # show chr. size under chr.
-              chrSizeMbp = TRUE,       # show chr. size in Mbp under chr. requires Mbp column
-              
-              rulerPos=-.4,            # position of ruler
-              rulerNumberPos=.9,       # position of numbers of rulers
-              xPosRulerTitle= 4.5            # ruler units (title) horizon. pos. 
-              
-              ,xlimLeftMod=2           # modify xlim left argument of plot
-              ,ylimBotMod=.2           # modify ylim bottom argument of plot
-              ,legendHeight=.5         # height of legend labels
-              ,legendWidth = 1.2       # width of legend labels
-              ,xModifier = 20        # separ. among chromatids
-); # dev.off() # close svg()
+plotIdiograms(dfChrSize  = dfChrSizeHolo, # data.frame of chr. size
+  dfMarkColor = dfMarkColor,   # df of mark style
+  dfMarkPos  = dfMarkPosHolo,  # df of mark positions
+
+  addOTUName = FALSE,      # do not add OTU names
+  distTextChr = 1,         # chr. name distance to chr.
+  chrSize = TRUE,          # show chr. size under chr.
+  chrSizeMbp = TRUE,       # show chr. size in Mbp under chr. requires Mbp column
+
+  rulerPos = -.4,            # position of ruler
+  rulerNumberPos = .9,       # position of numbers of rulers
+  xPosRulerTitle = 4.5       # ruler units (title) horizon. pos.
+
+  , xlimLeftMod = 2           # modify xlim left argument of plot
+  , ylimBotMod = .2           # modify ylim bottom argument of plot
+  , legendHeight = .5         # height of legend labels
+  , legendWidth = 1.2         # width of legend labels
+  , xModifier = 20            # separ. among chromatids
+)
 ```
 
 <img src="man/figures/README-example2-1.png" width="70%" />
+
+``` r
+# dev.off() # close svg()
+```
 
 #### Let’s explore the data.frames for holocentrics:
 
     dfChrSizeHolo
 
-| chrName | chrSize | Mbp | OTU          |
-|--------:|--------:|----:|:-------------|
-|       1 |       3 | 300 | Species holo |
-|       2 |       4 | 400 | Species holo |
-|       3 |       2 | 200 | Species holo |
-|       4 |       5 | 500 | Species holo |
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+chrName
+</th>
+<th style="text-align:right;">
+chrSize
+</th>
+<th style="text-align:right;">
+Mbp
+</th>
+<th style="text-align:left;">
+OTU
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+300
+</td>
+<td style="text-align:left;">
+Species holo
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+400
+</td>
+<td style="text-align:left;">
+Species holo
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+200
+</td>
+<td style="text-align:left;">
+Species holo
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+500
+</td>
+<td style="text-align:left;">
+Species holo
+</td>
+</tr>
+</tbody>
+</table>
 
     dfMarkColor
 
-| markName | markColor      | style  |
-|:---------|:---------------|:-------|
-| 5S       | red            | dots   |
-| 45S      | chartreuse3    | square |
-| DAPI     | blue           | square |
-| CMA      | darkgoldenrod1 | square |
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+markName
+</th>
+<th style="text-align:left;">
+markColor
+</th>
+<th style="text-align:left;">
+style
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+5S
+</td>
+<td style="text-align:left;">
+red
+</td>
+<td style="text-align:left;">
+dots
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+45S
+</td>
+<td style="text-align:left;">
+chartreuse3
+</td>
+<td style="text-align:left;">
+square
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DAPI
+</td>
+<td style="text-align:left;">
+blue
+</td>
+<td style="text-align:left;">
+square
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CMA
+</td>
+<td style="text-align:left;">
+darkgoldenrod1
+</td>
+<td style="text-align:left;">
+square
+</td>
+</tr>
+</tbody>
+</table>
 
     dfMarkPosHolo
 
-| chrName | markName | markPos | markSize | OTU          |
-|--------:|:---------|--------:|---------:|:-------------|
-|       3 | 5S       |     1.0 |      0.5 | Species holo |
-|       3 | DAPI     |     1.5 |      0.5 | Species holo |
-|       1 | 45S      |     2.0 |      0.5 | Species holo |
-|       2 | DAPI     |     2.0 |      0.5 | Species holo |
-|       4 | CMA      |     2.0 |      0.5 | Species holo |
-|       4 | 5S       |     0.5 |      0.5 | Species holo |
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+chrName
+</th>
+<th style="text-align:left;">
+markName
+</th>
+<th style="text-align:right;">
+markPos
+</th>
+<th style="text-align:right;">
+markSize
+</th>
+<th style="text-align:left;">
+OTU
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+5S
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:left;">
+Species holo
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+DAPI
+</td>
+<td style="text-align:right;">
+1.5
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:left;">
+Species holo
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+45S
+</td>
+<td style="text-align:right;">
+2.0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:left;">
+Species holo
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+DAPI
+</td>
+<td style="text-align:right;">
+2.0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:left;">
+Species holo
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+CMA
+</td>
+<td style="text-align:right;">
+2.0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:left;">
+Species holo
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+5S
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:left;">
+Species holo
+</td>
+</tr>
+</tbody>
+</table>
 
 #### 3. Plotting both mono. and holo.
 
@@ -519,14 +1038,14 @@ Merge data.frames with plyr ([Wickham, 2011](#ref-plyr2011))
 require(plyr)
 dfOfChrSize$OTU   <- "Species mono"
 dfChrSizeHolo$OTU <- "Species holo"
- 
-monoholoCS <- plyr::rbind.fill(dfOfChrSize,dfChrSizeHolo)
 
-dfOfMarks2$OTU     <-"Species mono"
-dfMarkPosHolo$OTU <-"Species holo"
+monoholoCS <- plyr::rbind.fill(dfOfChrSize, dfChrSizeHolo)
 
-monoholoMarks <- plyr::rbind.fill(dfOfMarks2,dfMarkPosHolo)
-monoholoMarks[which(monoholoMarks$markName=="5S"),]$markSize<-.25
+dfOfMarks2$OTU     <- "Species mono"
+dfMarkPosHolo$OTU <- "Species holo"
+
+monoholoMarks <- plyr::rbind.fill(dfOfMarks2, dfMarkPosHolo)
+monoholoMarks[which(monoholoMarks$markName == "5S"), ]$markSize <- .25
 monoholoMarks
    chrName markName chrRegion markSize markDistCen          OTU markPos
 1        1       5S         p     0.25         0.5 Species mono      NA
@@ -547,58 +1066,62 @@ monoholoMarks
 library(idiogramFISH)
 
 # svg("testing.svg",width=10,height=6 )
-par(mar=rep(0,4))
+par(mar = rep(0, 4))
 plotIdiograms(dfChrSize  = monoholoCS,   # data.frame of chr. size
-              dfMarkColor= dfMarkColor,  # df of mark style
-              dfMarkPos  = monoholoMarks,# df of mark positions, includes cen. marks
-              
-              chrSize = TRUE,            # show chr. size under chr.
-              
-              squareness = 4,            # vertices squareness
-              addOTUName = TRUE,         # add OTU names
-              OTUTextSize = .7,          # font size of OTU
-              distTextChr = 0.7,         # separ. among chr. and text and among chr. name and indices
-              
-              karHeiSpace = 4,           # karyotype height inc. spacing
-              karIndexPos = .2,          # move karyotype index
-              
-              legendHeight= 1,           # height of legend labels
-              legendWidth = 1,           # width of legend labels
-              fixCenBorder = TRUE,       # use chrColor as border color of cen. or cen. marks
-              
-              rulerPos= 0,               # position of ruler
-              ruler.tck=-0.02,           # size and orientation of ruler ticks
-              rulerNumberPos=.9,         # position of numbers of rulers
-              xPosRulerTitle= 4,               # ruler units (title) pos.
-              
-              xlimLeftMod=1,             # modify xlim left argument of plot
-              xlimRightMod=3,            # modify xlim right argument of plot
-              ylimBotMod= .2             # modify ylim bottom argument of plot
-              
-              ,chromatids=TRUE           # do not show separ. chromatids
-              ,autoCenSize=FALSE
-              ,centromereSize = 0.5
-              
-              # for Circular Plot, add:
-              
-              # ,useOneDot=FALSE           # two dots
-              
-              # ,circularPlot = TRUE       # circularPlot
-              # ,shrinkFactor = .9         # percentage 1 = 100% of circle with chr.
-              # ,circleCenter = 3          # X coordinate of circleCenter (affects legend pos.)
-              # ,chrLabelSpacing = .9      # chr. names spacing
-              
-              # ,OTUsrt = 0                # angle for OTU name (or number)
-              # ,OTUplacing = "number"     # Use number and legend instead of name
-              # ,OTULabelSpacerx = -0.6    # modify position of OTU label, when OTUplacing="number" or "simple"
-              # ,OTUlegendHeight = 1.5     # space among OTU names when in legend - OTUplacing
-              # ,separFactor = 0.75        # alter separ. of kar.
-); # dev.off() # close svg()
+  dfMarkColor = dfMarkColor,  # df of mark style
+  dfMarkPos  = monoholoMarks, # df of mark positions, includes cen. marks
+
+  chrSize = TRUE,            # show chr. size under chr.
+
+  squareness = 4,            # vertices squareness
+  addOTUName = TRUE,         # add OTU names
+  OTUTextSize = .7,          # font size of OTU
+  distTextChr = 0.7,         # separ. among chr. and text and among chr. name and indices
+
+  karHeiSpace = 4,           # karyotype height inc. spacing
+  karIndexPos = .2,          # move karyotype index
+
+  legendHeight = 1,          # height of legend labels
+  legendWidth = 1,           # width of legend labels
+  fixCenBorder = TRUE,       # use chrColor as border color of cen. or cen. marks
+
+  rulerPos = 0,              # position of ruler
+  ruler.tck = -0.02,         # size and orientation of ruler ticks
+  rulerNumberPos = .9,       # position of numbers of rulers
+  xPosRulerTitle = 4,        # ruler units (title) pos.
+
+  xlimLeftMod = 1,           # modify xlim left argument of plot
+  xlimRightMod = 3,          # modify xlim right argument of plot
+  ylimBotMod = .2            # modify ylim bottom argument of plot
+
+  , chromatids = TRUE        # do not show separ. chromatids
+  , autoCenSize = FALSE,
+  centromereSize = 0.5
+
+  # for Circular Plot, add:
+
+  # ,useOneDot=FALSE           # two dots
+
+  # ,circularPlot = TRUE       # circularPlot
+  # ,shrinkFactor = .9         # percentage 1 = 100% of circle with chr.
+  # ,circleCenter = 3          # X coordinate of circleCenter (affects legend pos.)
+  # ,chrLabelSpacing = .9      # chr. names spacing
+
+  # ,OTUsrt = 0                # angle for OTU name (or number)
+  # ,OTUplacing = "number"     # Use number and legend instead of name
+  # ,OTULabelSpacerx = -0.6    # modify position of OTU label, when OTUplacing="number" or "simple"
+  # ,OTUlegendHeight = 1.5     # space among OTU names when in legend - OTUplacing
+  # ,separFactor = 0.75        # alter separ. of kar.
+)
 ```
 
-<img src="man/figures/README-unnamed-chunk-17-1.png" width="70%" />
-
 <img src="man/figures/README-unnamed-chunk-18-1.png" width="70%" />
+
+``` r
+# dev.off() # close svg()
+```
+
+<img src="man/figures/README-unnamed-chunk-19-1.png" width="70%" />
 
 ## References
 
@@ -616,7 +1139,8 @@ nomenclature of Levan et al.</span> *Brazilian Journal of Genetics*,
 
 Levan A, Fredga K, Sandberg AA. 1964. <span class="nocase">Nomenclature
 for centromeric position on chromosomes</span> *Hereditas*, 52(2):
-201–220. <https://doi.org/10.1111/j.1601-5223.1964.tb01953.x>
+201–220. <https://doi.org/10.1111/j.1601-5223.1964.tb01953.x>.
+<https://doi.org/10.1111/j.1601-5223.1964.tb01953.x>
 
 </div>
 
@@ -729,7 +1253,7 @@ Yu G, Lam TT-Y, Zhu H, Guan Y. 2018. Two methods for mapping and
 visualizing associated data on phylogeny using ggtree. *Molecular
 Biology and Evolution*, 35: 3041–3043.
 <https://doi.org/10.1093/molbev/msy194>.
-<https://academic.oup.com/mbe/article/35/12/3041/5142656>
+<https://doi.org/10.1093/molbev/msy194>
 
 </div>
 

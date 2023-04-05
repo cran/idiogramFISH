@@ -27,11 +27,14 @@ fillMarkInfo(dfMarkPos, dfChrSize, markDistType = "beg", origin = "b")
 
 \item{bToRemove, }{character, bands to remove from calc. of pos.}
 
-\item{markDistType}{markDistType character, if \code{"cen"} = the distance you provided in data.frame (\code{dfMarkPos}) column \code{markDistCen}
+\item{markDistType}{markDistType character, if \code{"cen"} = the distance you provided in data.frame (\code{dfMarkPos})
+column \code{markDistCen}
 or \code{markPos}  is to the center of the mark, if \code{"beg"} = the distance you provided is to the
 beginning of the mark (Default)}
 
-\item{origin, }{character, For non-monocentric chr. (for holocentrics only) Use \code{"b"} (default) if distance to mark in (\code{"markPos"} column in \code{"dfMarkPos"}) data.frame measured from bottom of chromosome, use \code{"t"} for distance to mark from top of chr.}
+\item{origin, }{character, For non-monocentric chr. (for holocentrics only) Use \code{"b"} (default) if distance to mark
+in (\code{"markPos"} column in \code{"dfMarkPos"}) data.frame measured from bottom of chromosome, use \code{"t"}
+for distance to mark from top of chr.}
 
 \item{showBandList, }{boolean, show row of all bands in tibble, see \code{"result"}}
 
@@ -50,10 +53,10 @@ data.frame of marks
 calculates position of marks in fraction of (\%) chromosome units (0-1)
 }
 \examples{
-load(system.file("shinyApps", "iBoard/www/rda/monoholoCS.rda", package = "idiogramFISH") )
-load(system.file("shinyApps", "iBoard/www/rda/monoholoMarks.rda", package = "idiogramFISH") )
-monoholoMarks2 <- fillMarkInfo(monoholoMarks,monoholoCS)
-posCalc(monoholoMarks2,monoholoCS, result="data.frame")
+load(system.file("shinyApps", "iBoard/www/rda/monoholoCS.rda", package = "idiogramFISH"))
+load(system.file("shinyApps", "iBoard/www/rda/monoholoMarks.rda", package = "idiogramFISH"))
+monoholoMarks2 <- fillMarkInfo(monoholoMarks, monoholoCS)
+posCalc(monoholoMarks2, monoholoCS, result = "data.frame")
 
 }
 \keyword{chromosome}

@@ -18,96 +18,90 @@
 #' @importFrom tidyr pivot_longer
 #' @export
 #'
-mapGGChr <- function(dfChrSize,chrSpacing=0.5,squareness=4, n= 50) {
-
-  pts <- seq(-pi/2, pi*1.5, length.out = n*4)
-  ptsl<- split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
+mapGGChr <- function(dfChrSize, chrSpacing = 0.5, squareness = 4, n = 50) {
+  pts <- seq(-pi / 2, pi * 1.5, length.out = n * 4)
+  ptsl <- split(pts, sort(rep(1:4, each = length(pts) / 4, len = length(pts))))
 
   starts_with <- NULL
 
-if(chrSpacing > 0.95){
-  message(crayon::green("Use < 0.95 in chrSpacing") )
-  chrSpacing <- 0.95
-}
-  # chrSpacing <-.5
-chrWidth   <- 1 - chrSpacing
+  if (chrSpacing > 0.95) {
+    message(crayon::green("Use < 0.95 in chrSpacing"))
+    chrSpacing <- 0.95
+  }
 
-  # if(requireNamespace("tidyr")==FALSE){
-  #   message(crayon::red("You need to install tidyr"))
-  #   return(NULL)
-  # } else {
-  #   requireNamespace("tidyr")
-  # }
+  chrWidth <- 1 - chrSpacing
 
-chromosome_ns  <- nrow(dfChrSize)
-chromRepVector <- rep(1,chromosome_ns)
+  chromosome_ns <- nrow(dfChrSize)
+  chromRepVector <- rep(1, chromosome_ns)
 
-croytop <- list()
+  croytop <- list()
 
-for (i in 1:length(chromRepVector)) {
-  croytop[i] <- list(c(   ( (dfChrSize[,"chrSize"])[i]   ),
-                rep(0,2),
-                ( (dfChrSize[,"chrSize"])[i]  )
-  )
-  )
-}
+  for (i in seq_along(chromRepVector)) {
+    croytop[i] <- list(c(
+      ((dfChrSize[, "chrSize"])[i]),
+      rep(0, 2),
+      ((dfChrSize[, "chrSize"])[i])
+    ))
+  }
 
-xm <- matrix(rep(NA,length(chromRepVector)*4),ncol=4, nrow=length(chromRepVector) )
+  xm <- matrix(rep(NA, length(chromRepVector) * 4), ncol = 4, nrow = length(chromRepVector))
 
-for (i in 1:length(chromRepVector)) {
-  xm[i,] <- c(
-    rep( ( (chrSpacing*i+( i*chrWidth))+chrWidth),2),
-    rep( ( (chrSpacing*i+( i*chrWidth))     ),2)
-  ) - chrWidth/2
-}
+  for (i in seq_along(chromRepVector)) {
+    xm[i, ] <- c(
+      rep(((chrSpacing * i + (i * chrWidth)) + chrWidth), 2),
+      rep(((chrSpacing * i + (i * chrWidth))), 2)
+    ) - chrWidth / 2
+  }
 
-x  <- base::split(xm, row(xm))
+  x <- base::split(xm, row(xm))
 
-ym <- t(sapply ( croytop, function (x) {length (x) ; return (x)}) )
+  ym <- t(sapply(croytop, function(x) {
+    length(x)
+    return(x)
+  }))
 
-y  <- base::split(ym, row(ym))
+  y <- base::split(ym, row(ym))
 
-  xbind <- as.data.frame(do.call(rbind, x ) )
+  xbind <- as.data.frame(do.call(rbind, x))
 
   xbind$Chr <- seq_along(xbind$V1)
-  xDat <- tidyr::pivot_longer(xbind, names_to="variable.x", values_to="x", cols=starts_with("V")  )
+  xDat <- tidyr::pivot_longer(xbind, names_to = "variable.x", values_to = "x", cols = starts_with("V"))
 
-  ybind <- as.data.frame(do.call(rbind, croytop ) )
+  ybind <- as.data.frame(do.call(rbind, croytop))
   ybind$id.y <- seq_along(ybind$V1)
-  yDat <- tidyr::pivot_longer(ybind, names_to="variable.y", values_to="y", cols=starts_with("V")  )
+  yDat <- tidyr::pivot_longer(ybind, names_to = "variable.y", values_to = "y", cols = starts_with("V"))
 
   dataChr <- cbind(xDat, yDat)
-  dataChr <- dataChr[,c("Chr","x","y")]
+  dataChr <- dataChr[, c("Chr", "x", "y")]
 
-mapChrL <- list()
-mapChrL$dataChr<-dataChr
-mapChrL$xm  <- xm
-mapChrL$ym  <- ym
-mapChrL$chrWidth  <- chrWidth
+  mapChrL <- list()
+  mapChrL$dataChr <- dataChr
+  mapChrL$xm <- xm
+  mapChrL$ym <- ym
+  mapChrL$chrWidth <- chrWidth
 
-  if(squareness < 20 ) {
-
+  if (squareness < 20) {
     r2 <- chrWidth / (squareness * 2)
 
-    yfactor <-  max(dfChrSize$chrSize) /  chromosome_ns
+    yfactor <- max(dfChrSize$chrSize) / chromosome_ns
 
-    xyCoords <- makeRoundCoordXY(r2, yfactor, x, y, 1, length(y), n, ptsl )
+    xyCoords <- makeRoundCoordXY(r2, yfactor, x, y, 1, length(y), n, ptsl)
 
-    xbind <- as.data.frame(do.call(rbind, xyCoords$roundedX ) )
+    xbind <- as.data.frame(do.call(rbind, xyCoords$roundedX))
 
     xbind$Chr <- seq_along(xbind$V1)
 
-    ybind <- as.data.frame(do.call(rbind, xyCoords$roundedY ) )
+    ybind <- as.data.frame(do.call(rbind, xyCoords$roundedY))
 
     ybind$id.y <- seq_along(ybind$V1)
 
-    xDat <- tidyr::pivot_longer(xbind, names_to="variable.x", values_to="x", cols = starts_with("V")  )
+    xDat <- tidyr::pivot_longer(xbind, names_to = "variable.x", values_to = "x", cols = starts_with("V"))
 
-    yDat <- tidyr::pivot_longer(ybind, names_to="variable.y", values_to="y", cols = starts_with("V")  )
+    yDat <- tidyr::pivot_longer(ybind, names_to = "variable.y", values_to = "y", cols = starts_with("V"))
 
     dataChr <- cbind(xDat, yDat)
 
-    dataChr <- dataChr[,c("Chr","x","y") ]
+    dataChr <- dataChr[, c("Chr", "x", "y")]
 
     mapChrL$dataChr <- dataChr
     mapChrL$rounded <- TRUE
@@ -123,95 +117,89 @@ mapChrL$chrWidth  <- chrWidth
 #' @export
 #'
 
-mapGGChrMark <- function(dfChrSize,dfMarkPos,chrSpacing=0.5, squareness=4, n=50) {
-
-  pts <- seq(-pi/2, pi*1.5, length.out = n*4)
-  ptsl<- split(pts, sort(rep(1:4, each=length(pts)/4, len=length(pts))) )
+mapGGChrMark <- function(dfChrSize, dfMarkPos, chrSpacing = 0.5, squareness = 4, n = 50) {
+  pts <- seq(-pi / 2, pi * 1.5, length.out = n * 4)
+  ptsl <- split(pts, sort(rep(1:4, each = length(pts) / 4, len = length(pts))))
 
   starts_with <- NULL
 
-  mapChrL <- mapGGChr(dfChrSize, chrSpacing,squareness,n)
+  mapChrL <- mapGGChr(dfChrSize, chrSpacing, squareness, n)
 
-  if(requireNamespace("tidyr")==FALSE){
+  if (requireNamespace("tidyr") == FALSE) {
     message(crayon::red("You need to install tidyr"))
     return(NULL)
   } else {
     requireNamespace("tidyr")
   }
 
-yMark1<-xMark1<-xMark2<-NULL
+  yMark1 <- xMark1 <- xMark2 <- NULL
 
-markNames<-character()
+  markNames <- character()
 
-for (m in 1:nrow(dfMarkPos)) {
+  for (m in seq_len(nrow(dfMarkPos))) {
+    rowIndex <- dfMarkPos[, "chrName"][m]
 
-  rowIndex <- dfMarkPos[,"chrName"][m]
+    markName <- dfMarkPos[, "markName"][m]
 
-  markName <- dfMarkPos[,"markName"][m]
+    chrStart <- mapChrL$ym[rowIndex, 2]
 
-  chrStart <- mapChrL$ym[rowIndex ,2]
+    yinf <- chrStart + dfMarkPos[m, "markPos"]
 
-  yinf <- chrStart + dfMarkPos[m,"markPos"]
+    ysup <- chrStart + sum(dfMarkPos[m, "markPos"], dfMarkPos[m, "markSize"], na.rm = TRUE)
 
-  ysup <- chrStart + sum(dfMarkPos[m,"markPos"],dfMarkPos[m,"markSize"],na.rm=TRUE )
+    yMark1[[m]] <- c(ysup, yinf, yinf, ysup)
 
-  yMark1[[m]] <- c(ysup,yinf,yinf,ysup)
+    xMark1[[m]] <- mapChrL$xm[dfMarkPos[, "chrName"][m], ]
 
-  xMark1[[m]] <- mapChrL$xm[dfMarkPos[,"chrName"][m],]
+    xMark2[[m]] <- c(xMark1[[m]], markName)
 
-  xMark2[[m]] <- c(xMark1[[m]],markName)
+    markNames <- c(markNames, markName)
+  }
 
-  markNames <- c(markNames,markName)
-}
+  xMarkSqDF <- as.data.frame(do.call(rbind, xMark2))
 
-xMarkSqDF <- as.data.frame(do.call(rbind, xMark2 ) )
+  colnames(xMarkSqDF)[5] <- "markName"
 
-colnames(xMarkSqDF)[5] <- "markName"
+  xMarkSqDF$id <- seq_along(xMarkSqDF$V1)
 
-xMarkSqDF$id <- seq_along(xMarkSqDF$V1)
+  xDatMark <- tidyr::pivot_longer(xMarkSqDF, names_to = "variable", values_to = "x", cols = starts_with("V"))
 
-xDatMark <- tidyr::pivot_longer(xMarkSqDF, names_to= "variable", values_to="x", cols=starts_with("V")  )
+  xDatMark$x <- as.numeric(xDatMark$x)
 
-xDatMark$x<-as.numeric(xDatMark$x)
+  yMark1DF <- as.data.frame(do.call(rbind, yMark1))
+  yMark1DF$id.y <- seq_along(yMark1DF$V1)
+  yDatMark <- tidyr::pivot_longer(yMark1DF, names_to = "variable.y", values_to = "y", cols = starts_with("V"))
+  dataMark <- cbind(xDatMark, yDatMark)
+  dataMark <- dataMark[, c("id", "markName", "x", "y")]
 
-yMark1DF <- as.data.frame(do.call(rbind, yMark1 ) )
-yMark1DF$id.y <- seq_along(yMark1DF$V1)
-yDatMark <- tidyr::pivot_longer(yMark1DF, names_to="variable.y", values_to="y", cols=starts_with("V")  )
-dataMark <- cbind(xDatMark,yDatMark)
-dataMark <- dataMark[,c("id","markName","x","y")]
+  mapChrL$dataMark <- dataMark
 
-mapChrL$dataMark <- dataMark
+  if (squareness < 20) {
+    chromosome_ns <- nrow(dfChrSize)
 
-  if(squareness < 20 ) {
+    r2 <- mapChrL$chrWidth / (squareness * 2)
 
-    chromosome_ns  <- nrow(dfChrSize)
+    yfactor <- max(dfChrSize$chrSize) / chromosome_ns
 
-    r2 <- mapChrL$chrWidth  / (squareness * 2)
+    xyCoords <- makeRoundCoordXY(r2, yfactor, xMark1, yMark1, 1, length(yMark1), n, ptsl)
 
-    yfactor <-  max(dfChrSize$chrSize) /  chromosome_ns
-
-    xyCoords <- makeRoundCoordXY(r2, yfactor, xMark1, yMark1, 1, length(yMark1), n, ptsl )
-
-    xMarkSqDF <- as.data.frame(do.call(rbind, xyCoords$roundedX ) )
+    xMarkSqDF <- as.data.frame(do.call(rbind, xyCoords$roundedX))
 
     xMarkSqDF$markName <- markNames
 
     xMarkSqDF$id <- seq_along(xMarkSqDF$V1)
 
-    xDatMark <- tidyr::pivot_longer(xMarkSqDF, names_to= "variable", values_to="x", cols=starts_with("V")  )
+    xDatMark <- tidyr::pivot_longer(xMarkSqDF, names_to = "variable", values_to = "x", cols = starts_with("V"))
 
-    yMark1DF <- as.data.frame(do.call(rbind, xyCoords$roundedY ) )
+    yMark1DF <- as.data.frame(do.call(rbind, xyCoords$roundedY))
 
     yMark1DF$id.y <- seq_along(yMark1DF$V1)
-    yDatMark <- tidyr::pivot_longer(yMark1DF, names_to="variable.y", values_to="y", cols=starts_with("V")  )
-    dataMark <- cbind(xDatMark,yDatMark)
-    dataMark<-dataMark[,c("id","markName","x","y")]
+    yDatMark <- tidyr::pivot_longer(yMark1DF, names_to = "variable.y", values_to = "y", cols = starts_with("V"))
+    dataMark <- cbind(xDatMark, yDatMark)
+    dataMark <- dataMark[, c("id", "markName", "x", "y")]
     mapChrL$dataMark <- dataMark
     return(mapChrL)
   } else {
     return(mapChrL)
   }
 }
-
-# names(mapChrL)
-

@@ -1,5 +1,5 @@
 
-output$myTabs<-renderUI({
+output$myTabs <- renderUI({
   tabItems(
 
     #
@@ -7,15 +7,15 @@ output$myTabs<-renderUI({
     #
 
     tabItem(tabName = "examplesMenu",
-            fluidRow(
-              actionButton('jumpToPrevMenu0',strong('Previous page'),  icon("arrow-up") , style="padding:10px 5px 10px 5px"
-              ),
-              actionButton('jumpToNextMenu0',strong('Next page'),  icon("arrow-down") , style="padding:10px 5px 10px 5px"
-              )
-            )
-            ,fluidRow(
-              uiOutput("tabsetpanel0UI")
-            ) #Row
+      fluidRow(
+        actionButton("jumpToPrevMenu0", strong("Previous page"),  icon("arrow-up"), style = "padding:10px 5px 10px 5px"
+        ),
+        actionButton("jumpToNextMenu0", strong("Next page"),  icon("arrow-down"), style = "padding:10px 5px 10px 5px"
+        )
+      ),
+      fluidRow(
+        uiOutput("tabsetpanel0UI")
+      ) # Row
     ) # ,  tabitem
 
 
@@ -23,21 +23,20 @@ output$myTabs<-renderUI({
     #   data.frames
     #
 
-    ,tabItem(tabName = "DFsMenu",
-             fluidRow(
-               actionButton('jumpToPrevMenu',strong('Previous page'),  icon("arrow-up") , style="padding:10px 5px 10px 5px"
-               ),
-               actionButton('jumpToNextMenu',strong('Next page'),  icon("arrow-down") , style="padding:10px 5px 10px 5px"
-               )
-               ,
-               actionButton('jumpToNext',strong('Next tab'),  icon("arrow-right") , style="padding:10px 5px 10px 5px"
-                             ,class="centerAlign")
-               ,actionButton('jumpToPrev',strong('Previous tab'),  icon("arrow-left") , style="padding:10px 5px 10px 5px"
-                             ,class="centerAlign")
-             )
-             ,fluidRow(
-               uiOutput("tabsetpanel1UI")
-             ) #Row
+    , tabItem(tabName = "DFsMenu",
+      fluidRow(
+        actionButton("jumpToPrevMenu", strong("Previous page"),  icon("arrow-up"), style = "padding:10px 5px 10px 5px"
+        ),
+        actionButton("jumpToNextMenu", strong("Next page"),  icon("arrow-down"), style = "padding:10px 5px 10px 5px"
+        ),
+        actionButton("jumpToNext", strong("Next tab"),  icon("arrow-right"), style = "padding:10px 5px 10px 5px",
+          class = "centerAlign"),
+        actionButton("jumpToPrev", strong("Previous tab"),  icon("arrow-left"), style = "padding:10px 5px 10px 5px",
+          class = "centerAlign")
+      ),
+      fluidRow(
+        uiOutput("tabsetpanel1UI")
+      ) # Row
     ) # ,  tabitem
 
     #
@@ -45,83 +44,78 @@ output$myTabs<-renderUI({
     #
 
     ,      tabItem(tabName = "parameterPlotMenu",
-                   fluidRow(
+      fluidRow(
 
-                     # ,
-                     actionButton('jumpToPrevMenu2',strong('Previous page'),  icon("arrow-up") , style="padding:10px 5px 10px 5px"
-                     ),
-                     actionButton('jumpToNextMenu2',strong('Next page'),  icon("arrow-down") , style="padding:10px 5px 10px 5px"
-                     )
-
-                     ,actionButton('jumpToNext2',strong('Next tab'),  icon("arrow-right") , style="padding:10px 5px 10px 5px"
-                                   ,class="centerAlign")
-                     ,actionButton('jumpToPrev2',strong('Previous tab'),  icon("arrow-left") , style="padding:10px 5px 10px 5px"
-                                   ,class="centerAlign")
-                   ),
-                   fluidRow(
-                     uiOutput("tabsetpanel2UI")
-                   )#fluidrow
-    )#tabitem
+        # ,
+        actionButton("jumpToPrevMenu2", strong("Previous page"),  icon("arrow-up"), style = "padding:10px 5px 10px 5px"
+        ),
+        actionButton("jumpToNextMenu2", strong("Next page"),  icon("arrow-down"), style = "padding:10px 5px 10px 5px"
+        ),
+        actionButton("jumpToNext2", strong("Next tab"),  icon("arrow-right"), style = "padding:10px 5px 10px 5px",
+          class = "centerAlign"),
+        actionButton("jumpToPrev2", strong("Previous tab"),  icon("arrow-left"), style = "padding:10px 5px 10px 5px",
+          class = "centerAlign")
+      ),
+      fluidRow(
+        uiOutput("tabsetpanel2UI")
+      ) # fluidrow
+    ) # tabitem
 
     # tab nuccore
-    ,tabItem(tabName = "nuccoreMenu",
-                   fluidRow(
-                     actionButton('jumpToPrevMenu4',strong('Previous page'),  icon("arrow-up") , style="padding:10px 5px 10px 5px"
-                     ),
-                     actionButton('jumpToNextMenu4',strong('Next page'),  icon("arrow-down") , style="padding:10px 5px 10px 5px"
-                     )
+    , tabItem(tabName = "nuccoreMenu",
+      fluidRow(
+        actionButton("jumpToPrevMenu4", strong("Previous page"),  icon("arrow-up"), style = "padding:10px 5px 10px 5px"
+        ),
+        actionButton("jumpToNextMenu4", strong("Next page"),  icon("arrow-down"), style = "padding:10px 5px 10px 5px"
+        )
 
-                     # ,actionButton('jumpToNext4',strong('Next tab'),  icon("arrow-right") , style="padding:10px 5px 10px 5px"
-                     #               ,class="centerAlign")
-                     # ,actionButton('jumpToPrev4',strong('Previous tab'),  icon("arrow-left") , style="padding:10px 5px 10px 5px"
-                     #               ,class="centerAlign")
-                   ),
-                   fluidRow(
-                     uiOutput("tabsetpanel4UI")
-                   ) #fluidrow
-    ) #tabitem
+        # ,actionButton('jumpToNext4',strong('Next tab'),  icon("arrow-right") , style="padding:10px 5px 10px 5px"
+        #               ,class="centerAlign")
+        # ,actionButton('jumpToPrev4',strong('Previous tab'),  icon("arrow-left") , style="padding:10px 5px 10px 5px"
+        #               ,class="centerAlign")
+      ),
+      fluidRow(
+        uiOutput("tabsetpanel4UI")
+      ) # fluidrow
+    ) # tabitem
 
     #
     #   data.frames
     #
 
-    ,tabItem(tabName = "indicesMenu",
-             fluidRow(
-               actionButton('jumpToPrevMenu5',strong('Previous page'),  icon("arrow-up") , style="padding:10px 5px 10px 5px"
-               ),
-               actionButton('jumpToNextMenu5',strong('Next page'),  icon("arrow-down") , style="padding:10px 5px 10px 5px"
-               )
-               ,
-               actionButton('jumpToNext5',strong('Next tab'),  icon("arrow-right") , style="padding:10px 5px 10px 5px"
-                            ,class="centerAlign")
-               ,actionButton('jumpToPrev5',strong('Previous tab'),  icon("arrow-left") , style="padding:10px 5px 10px 5px"
-                             ,class="centerAlign")
-             )
-             ,fluidRow(
-               uiOutput("tabsetpanel5UI")
-             ) #Row
+    , tabItem(tabName = "indicesMenu",
+      fluidRow(
+        actionButton("jumpToPrevMenu5", strong("Previous page"),  icon("arrow-up"), style = "padding:10px 5px 10px 5px"
+        ),
+        actionButton("jumpToNextMenu5", strong("Next page"),  icon("arrow-down"), style = "padding:10px 5px 10px 5px"
+        ),
+        actionButton("jumpToNext5", strong("Next tab"),  icon("arrow-right"), style = "padding:10px 5px 10px 5px",
+          class = "centerAlign"),
+        actionButton("jumpToPrev5", strong("Previous tab"),  icon("arrow-left"), style = "padding:10px 5px 10px 5px",
+          class = "centerAlign")
+      ),
+      fluidRow(
+        uiOutput("tabsetpanel5UI")
+      ) # Row
     ) # ,  tabitem
 
 
-    ,tabItem(tabName = "aboutMenu",
+    , tabItem(tabName = "aboutMenu",
 
-             fluidRow(
-               actionButton('jumpToPrevMenu3',strong('Previous page'),  icon("arrow-up") , style="padding:10px 5px 10px 5px"
-               ),
-               actionButton('jumpToNextMenu3',strong('Next page'),  icon("arrow-down") , style="padding:10px 5px 10px 5px"
-               )
+      fluidRow(
+        actionButton("jumpToPrevMenu3", strong("Previous page"),  icon("arrow-up"), style = "padding:10px 5px 10px 5px"
+        ),
+        actionButton("jumpToNextMenu3", strong("Next page"),  icon("arrow-down"), style = "padding:10px 5px 10px 5px"
+        )
 
-             )
-             ,fluidRow(
-               column(width=2),
-               column(width=8
-                   #    ,tags$head(tags$style(HTML('
-                   #
-                   # ')))
-                      ,uiOutput("markdown")
-               ) # column
-             ) #fluidrow close
-    )#tabitem
+      ),
+      fluidRow(
+        column(width = 2),
+        column(width = 8
+          , uiOutput("markdown")
+        )
+      )
+    )
   )
 })
 
@@ -130,10 +124,10 @@ output$myTabs<-renderUI({
 #
 
 output$markdown <- renderUI({
-  if(system.file(package = "rmarkdown") != '') {
-    if(rmarkdown::pandoc_available() ) {
-      if(rmarkdown::pandoc_version()>2.11){
-        htmltools::tags$iframe(src = "README2.html", width = '100%',  height = "100%",  style = "border:none;")
+  if (system.file(package = "rmarkdown") != "") {
+    if (rmarkdown::pandoc_available()) {
+      if (rmarkdown::pandoc_version() > 2.11) {
+        htmltools::tags$iframe(src = "README2.html", width = "100%",  height = "100%",  style = "border:none;")
       } else {
         HTML(sorry)
       }

@@ -49,7 +49,7 @@ related to:
 }
 \examples{
 asymmetry(dfOfChrSize)
-myAlist<-asymmetry(bigdfOfChrSize)
+myAlist <- asymmetry(bigdfOfChrSize)
 as.data.frame(myAlist)
 asymmetryA2(dfOfChrSize)
 as.data.frame(asymmetryA2(bigdfOfChrSize))

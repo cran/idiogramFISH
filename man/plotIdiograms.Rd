@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotIdiograms.R
 \name{plotIdiograms}
 \alias{plotIdiograms}
-\title{FUNCTION to plot idiograms of karyotypes with and without centromere}
+\title{Plot idiograms of karyotypes/genomes with and without centromere}
 \usage{ plotIdiograms( dfChrSize, defaultFontFamily, revOTUs = FALSE,
  karHeight = 2, karHeiSpace = 2.5, karSepar = TRUE, amoSepar = 10,
  addMissingOTUAfter = NA, addMissingOTUBefore = NA, missOTUspacings = 0,
@@ -34,9 +34,9 @@
  startPos = 0, pMarkFac = 0.25, origin = "b", efZero = 1e-05,
  cMBeginCenter = FALSE, arrowhead = 0.3, shrinkArrow = 0.3333,
  arrowheadWidthShrink = 0.1, arrowsToSide = TRUE, useOneDot = FALSE,
- dotsAsOval = FALSE, dfMarkColor, mycolors, borderOfWhiteMarks = TRUE,
- colorBorderMark = "", lwd.mimicCen, defCenStyleCol, pattern = "",
- legend = "aside", remSimiMarkLeg = TRUE, bannedMarkName,
+ dotsAsOval = FALSE, dfMarkColor, mycolors, alpha_val = 1,
+ borderOfWhiteMarks = TRUE, colorBorderMark = "", lwd.mimicCen, defCenStyleCol,
+ pattern = "", legend = "aside", remSimiMarkLeg = TRUE, bannedMarkName,
  bMarkNameAside = FALSE, forbiddenMark, legendWidth = 1.7, legendHeight = NA,
  markLabelSize = 1, markLabelSpacer = 1, legendYcoord = 0, markNewLine = NA,
  mylheight = 0.7, chrSize = FALSE, nsmall = 1, chrSizeMbp = FALSE, markPer = "",
@@ -67,7 +67,8 @@ data.frame, use \code{TRUE} to reverse}
 
 \item{karHeight}{numeric, vertical size of karyotypes. See also  \code{karHeiSpace}. Defaults to \code{2}}
 
-\item{karHeiSpace}{numeric, vertical size of karyotypes including spacing. Use with \code{karSepar=FALSE}. Proportional to \code{karHeight}, if overlap, increase. Defautl value \code{2.5}}
+\item{karHeiSpace}{numeric, vertical size of karyotypes including spacing. Use with \code{karSepar=FALSE}. Proportional to
+\code{karHeight}, if overlap, increase. Defautl value \code{2.5}}
 
 \item{karSepar}{boolean, reduce distance among karyotypes \code{FALSE} = equally
 sized karyotypes or \code{TRUE} = equally spaced karyotypes. Incompatible with \code{addMissingOTUAfter}}
@@ -76,11 +77,14 @@ sized karyotypes or \code{TRUE} = equally spaced karyotypes. Incompatible with \
 karyotypes will have no distance among them, if overlap,
 increase this and \code{karHeiSpace}}
 
-\item{addMissingOTUAfter}{character, when you want to add space (ghost OTUs) after one or several OTUs, pass the names of OTUs preceding the desired space in a character vector i.e. \code{c("species one",} \code{} \code{"species five")}}
+\item{addMissingOTUAfter}{character, when you want to add space (ghost OTUs) after one or several OTUs, pass the names of OTUs
+preceding the desired space in a character vector i.e. \code{c("species one",} \code{} \code{"species five")}}
 
-\item{addMissingOTUBefore}{character, when you want to add space (ghost OTUs) before one or several OTUs, pass the names of OTUs after the desired space in a character vector i.e. \code{c("species one",} \code{} \code{"species five")}}
+\item{addMissingOTUBefore}{character, when you want to add space (ghost OTUs) before one or several OTUs, pass the names of OTUs after
+the desired space in a character vector i.e. \code{c("species one",} \code{} \code{"species five")}}
 
-\item{missOTUspacings}{numeric, when you use \code{addMissingOTUAfter} this numeric vector should have the same length and corresponds to the number of free spaces (ghost OTUs) to add after each OTU respectively}
+\item{missOTUspacings}{numeric, when you use \code{addMissingOTUAfter} this numeric vector should have the same length and corresponds
+to the number of free spaces (ghost OTUs) to add after each OTU respectively}
 
 \item{moveKarHor}{character, OTUs' names of karyotypes that should be moved horizontally. See \code{mkhValue}}
 
@@ -92,14 +96,16 @@ increase this and \code{karHeiSpace}}
 
 \item{karAnchorRight}{character, OTUs' add anchor to the right of this OTU names of karyotypes. For \code{verticalPlot=FALSE}}
 
-\item{anchor}{boolean, when \code{TRUE}, plots a parent progeny structure in karyotypes in \code{moveKarHor}. Or a horizontal anchor to the left/right
+\item{anchor}{boolean, when \code{TRUE}, plots a parent progeny structure in karyotypes in \code{moveKarHor}. Or a horizontal anchor
+to the left/right
 of \code{karAnchorLeft, karAnchorRight} when \code{verticalPlot=FALSE}}
 
 \item{anchorLineLty}{numeric, type of line in \code{anchor}, corresponds to \code{lty}. Defaults to \code{1}}
 
 \item{anchorText}{character, text to add to \code{anchor} structure near symbol. See \code{anchor}. Defaults to \code{""}}
 
-\item{anchorTextMParental}{character, designed to fill with a character object the space left of a missing parental in the \code{anchor} structure.}
+\item{anchorTextMParental}{character, designed to fill with a character object the space left of a missing parental in the
+\code{anchor} structure.}
 
 \item{anchorTextMoveX}{numeric, for vertical plots with \code{anchorText} move text in X axis. Defaults to \code{0.5}}
 
@@ -125,11 +131,14 @@ of \code{karAnchorLeft, karAnchorRight} when \code{verticalPlot=FALSE}}
 
 \item{markN, }{numeric vertices number for round corners of marks}
 
-\item{notes, }{data.frame, or csv file name in quotes, (shown to the right of kar.), with columns \code{OTU} and \code{note} for adding notes to each OTU, they appear to the right of chromosomes}
+\item{notes, }{data.frame, or csv file name in quotes, (shown to the right of kar.), with columns \code{OTU} and \code{note} for adding
+notes to each OTU, they appear to the right of chromosomes}
 
-\item{leftNotes, }{data.frame, or csv file name in quotes (shown to the left), with columns \code{OTU} and \code{note} for adding notes to each OTU, they appear to the left of chromosomes}
+\item{leftNotes, }{data.frame, or csv file name in quotes (shown to the left), with columns \code{OTU} and \code{note} for adding notes
+to each OTU, they appear to the left of chromosomes}
 
-\item{leftNotesUp, }{data.frame, or csv file name in quotes, (shown to the left-up), similar to \code{leftNotes}, but intended for placement over chr.}
+\item{leftNotesUp, }{data.frame, or csv file name in quotes, (shown to the left-up), similar to \code{leftNotes}, but intended for
+placement over chr.}
 
 \item{notesTextSize}{numeric, font size of notes, see \code{notes}}
 
@@ -153,32 +162,43 @@ of \code{karAnchorLeft, karAnchorRight} when \code{verticalPlot=FALSE}}
 
 \item{noteFont, }{numeric  \code{1} for normal,  \code{2} for bold,  \code{3} for italics,  \code{4} for bold-italics. See \code{notes}}
 
-\item{leftNoteFont, }{numeric  \code{1} for normal,  \code{2} for bold,  \code{3} for italics,  \code{4} for bold-italics. See \code{leftNotes}}
+\item{leftNoteFont, }{numeric  \code{1} for normal,  \code{2} for bold,  \code{3} for italics,  \code{4} for bold-italics. See
+\code{leftNotes}}
 
-\item{leftNoteFontUp, }{numeric  \code{1} for normal,  \code{2} for bold,  \code{3} for italics,  \code{4} for bold-italics. See \code{leftNotesUp}}
+\item{leftNoteFontUp, }{numeric  \code{1} for normal,  \code{2} for bold,  \code{3} for italics,  \code{4} for bold-italics. See
+\code{leftNotesUp}}
 
-\item{parseTypes, }{boolean, parse in \code{notes} the \emph{Citrus} chr. types names. Creates subindex pos. for FL. Defaults to \code{TRUE}. Incompatible with \code{parseStr2lang}}
+\item{parseTypes, }{boolean, parse in \code{notes} the \emph{Citrus} chr. types names. Creates subindex pos. for FL. Defaults to
+\code{TRUE}. Incompatible with \code{parseStr2lang}}
 
-\item{parseStr2lang, }{bolean, parse string in \code{notes} with function \code{str2lang(paste0("paste(",note,")") )} for ex: \code{"italic('C. sinensis'), ' Author'"}. See \code{notes}, \code{leftNotes},\code{leftNotesUp}.}
+\item{parseStr2lang, }{bolean, parse string in \code{notes} with function \code{str2lang(paste0("paste(",note,")") )} for ex:
+\code{"italic('C. sinensis'), ' Author'"}. See \code{notes}, \code{leftNotes},\code{leftNotesUp}.}
 
 \item{propWidth, }{boolean, defaults to \code{FALSE}. Diminishes chr. width with increasing number of OTUs}
 
-\item{MbThreshold, }{numeric, if greater than this number (defaults to \code{10000}), \code{MbUnit} will apply and \code{specialyTitle} will not.}
+\item{MbThreshold, }{numeric, if greater than this number (defaults to \code{10000}), \code{MbUnit} will apply and \code{specialyTitle}
+will not.}
 
-\item{threshold, }{this is the max. value allowed for the main two significative digits, otherwise scale will shrink. For example, after 35 \eqn{\mu m} (Default), apparent size will be 3.5 and scale interval will change. See also \code{ceilingFactor}, you may have to use \code{-1}. Introduced in 1.13}
+\item{threshold, }{this is the max. value allowed for the main two significative digits, otherwise scale will shrink. For example,
+after 35 \eqn{\mu m} (Default), apparent size will be 3.5 and scale interval will change. See also \code{ceilingFactor}, you may have to
+use \code{-1}. Introduced in 1.13}
 
-\item{MbUnit, }{character, text of units of title when \code{MbThreshold} met and OTU not in \code{specialOTUNames}. See \code{specialyTitle}
+\item{MbUnit, }{character, text of units of title when \code{MbThreshold} met and OTU not in \code{specialOTUNames}. See
+\code{specialyTitle}
 Defaults to \code{"Mb"}, but anything can be used. Introduced in 1.13. See \code{specialyTitle}}
 
 \item{yTitle}{character, units for common title. Defaults to \eqn{\mu m}}
 
-\item{specialyTitle, }{character, title of ruler if OTU is in \code{specialOTUNames}. Will not apply if \code{MbThreshold} met. In that case use \code{MbUnit}}
+\item{specialyTitle, }{character, title of ruler if OTU is in \code{specialOTUNames}. Will not apply if \code{MbThreshold} met. In that
+case use \code{MbUnit}}
 
-\item{specialOTUNames}{character vector, normally title of ruler is micrometer or Mb (big numbers). Use this param. to be able to put a different unit in ruler title. See \code{"specialyTitle"}}
+\item{specialOTUNames}{character vector, normally title of ruler is micrometer or Mb (big numbers). Use this param. to be able to put
+a different unit in ruler title. See \code{"specialyTitle"}}
 
 \item{addOTUName}{boolean, when \code{TRUE} adds OTU (species) name to karyotype}
 
-\item{OTUTextSize}{numeric, font size of OTU name (species). Defaults to \code{1}. When \code{OTUasNote} is \code{TRUE}, use  \code{notesTextSize} instead}
+\item{OTUTextSize}{numeric, font size of OTU name (species). Defaults to \code{1}. When \code{OTUasNote} is \code{TRUE}, use
+\code{notesTextSize} instead}
 
 \item{OTUfont}{numeric, \code{1} for normal,  \code{2} for bold,  \code{3} for italics,  \code{4} for bold-italics}
 
@@ -189,7 +209,8 @@ Defaults to \code{"Mb"}, but anything can be used. Introduced in 1.13. See \code
 \item{OTUasLeftNote}{boolean, when \code{TRUE} adds OTU (species) name to the left-up, see \code{leftNotesUp}}
 
 \item{orderChr}{character, when \code{"size"}, sorts chromosomes by total
-length from the largest to the smallest. \code{"original"}: preserves d.f. order. \code{"name"}: sorts alphabetically; \code{"group"}: sorts by group name; \code{"chrNameUp"}: sorts according to column \code{chrNameUp}. See \code{chrNameUp}}
+length from the largest to the smallest. \code{"original"}: preserves d.f. order. \code{"name"}: sorts alphabetically;
+\code{"group"}: sorts by group name; \code{"chrNameUp"}: sorts according to column \code{chrNameUp}. See \code{chrNameUp}}
 
 \item{chrId}{character, print name of chromosome, \code{"original"} uses the original
 name in OTU column of dfChrSize, \code{"simple"} (just 1 to ...) or \code{"none"}.}
@@ -198,7 +219,8 @@ name in OTU column of dfChrSize, \code{"simple"} (just 1 to ...) or \code{"none"
 
 \item{classcMName}{character, name of "chromosome" when OTU in \code{specialOTUNames}. Defaults to \code{"L.G."}}
 
-\item{classChrName}{character, name of "chromosome" when in micrometers (apparently). Defaults to \code{"Chr."}. See \code{specialOTUnames}, \code{classMbName}, \code{classcMName}}
+\item{classChrName}{character, name of "chromosome" when in micrometers (apparently). Defaults to \code{"Chr."}. See
+\code{specialOTUnames}, \code{classMbName}, \code{classcMName}}
 
 \item{classChrNameUp}{character, name of "chromosome" for col. \code{"chrNameUp"}. Defaults to \code{"Type"}}
 
@@ -222,13 +244,16 @@ also affects vertical separation of indices. Defaults to \code{1}}
 
 \item{chromatids}{boolean, when \code{TRUE} shows separated chromatids. Defaults to \code{TRUE}}
 
-\item{arrowsBothChrt}{boolean, when \code{TRUE} (default) (for \code{chromatids=TRUE}) shows \code{upArrow,} \code{} \code{ downArrow} styles of marks in both chromatids when \code{arrowsToSide=TRUE}.}
+\item{arrowsBothChrt}{boolean, when \code{TRUE} (default) (for \code{chromatids=TRUE}) shows \code{upArrow,} \code{} \code{ downArrow}
+styles of marks in both chromatids when \code{arrowsToSide=TRUE}.}
 
-\item{holocenNotAsChromatids}{boolean, when \code{TRUE} and \code{chromatids=TRUE} does not plot holocen kar. with chromatids. Defaults to \code{FALSE}.}
+\item{holocenNotAsChromatids}{boolean, when \code{TRUE} and \code{chromatids=TRUE} does not plot holocen kar. with chromatids.
+Defaults to \code{FALSE}.}
 
 \item{excHoloFrArrToSide}{boolean, when \code{arrowsToSide=TRUE}, excludes holocen. from this behaviour, plotting a centered arrow only.}
 
-\item{xModifier}{numeric, for \code{chromatids=TRUE}, separation among chromatids. Quotient for \code{chrWidth}. Defaults to \code{12 : chrWidth/12}}
+\item{xModifier}{numeric, for \code{chromatids=TRUE}, separation among chromatids. Quotient for \code{chrWidth}. Defaults to \code{12
+: chrWidth/12}}
 
 \item{xModMonoHoloRate}{numeric, factor to shrink chromatid separ. for holocen. 5 means 5 times smaller (quotient).}
 
@@ -238,64 +263,78 @@ also affects vertical separation of indices. Defaults to \code{1}}
 
 \item{specialChrWidth}{numeric, relative chromosome width. Defaults to \code{0.5} for OTUs in \code{specialOTUNames}}
 
-\item{specialChrSpacing}{numeric, horizontal spacing among chromosomes for OTUs in \code{specialOTUNames}, see also  \code{chrWidth}. Defaults to \code{0.5}}
+\item{specialChrSpacing}{numeric, horizontal spacing among chromosomes for OTUs in \code{specialOTUNames}, see also  \code{chrWidth}.
+Defaults to \code{0.5}}
 
 \item{chrColor}{character, main color for chromosomes. Defaults to \code{"gray"}}
 
 \item{chrBorderColor}{character, color for border of chromosomes, defaults to \code{chrColor}}
 
-\item{centromereSize}{numeric, optional, this establishes the apparent size of cen. in the plot in \eqn{\mu}m. See \code{autoCenSize=TRUE}. Default: \code{0}. Use with \code{autoCenSize=FALSE}}
+\item{centromereSize}{numeric, optional, this establishes the apparent size of cen. in the plot in \eqn{\mu}m. See
+\code{autoCenSize=TRUE}. Default: \code{0}. Use with \code{autoCenSize=FALSE}}
 
 \item{autoCenSize}{boolean, when \code{TRUE} ignores \code{centromereSize}}
 
 \item{cenColor}{character, color for centromeres, if GISH use \code{NULL} or \code{NA}. Defaults to \code{chrColor}}
 
 \item{fixCenBorder}{boolean, when \code{TRUE} uses \code{chrColor} as centromere (and cen. mark) border color. See also \code{cenColor},
-\code{chrColor}, \code{colorBorderMark}, \code{borderOfWhiteMarks}. No default value. When \code{chrColor} is \code{"white"} this turns into \code{"black"}.}
+\code{chrColor}, \code{colorBorderMark}, \code{borderOfWhiteMarks}. No default value. When \code{chrColor} is \code{"white"} this
+turns into \code{"black"}.}
 
-\item{gishCenBorder}{boolean, when \code{TRUE}, cen. mark border color is the same as mark color, ignoring \code{colorBorderMark}. No default.}
+\item{gishCenBorder}{boolean, when \code{TRUE}, cen. mark border color is the same as mark color, ignoring \code{colorBorderMark}. No
+default.}
 
-\item{hideCenLines}{numeric, factor to multiply line width (lwd) used for covering cen. border, when \code{chrColor} is \code{white} or when \code{gishCenBorder=TRUE}}
+\item{hideCenLines}{numeric, factor to multiply line width (lwd) used for covering cen. border, when \code{chrColor} is \code{white}
+or when \code{gishCenBorder=TRUE}}
 
 \item{roundedCen}{deprecated, see cenFormat}
 
-\item{cenFormat}{boolean, when \code{"triangle"}, cen. has triangular aspect. When \code{"rounded"}, it has rounded aspect (Default). \code{"inProtein"} for using the mark with style of same name.}
+\item{cenFormat}{boolean, when \code{"triangle"}, cen. has triangular aspect. When \code{"rounded"}, it has rounded aspect (Default).
+\code{"inProtein"} for using the mark with style of same name.}
 
 \item{cenFactor}{numeric, modifies any cen. mark and cen. size. Defaults to \code{1}}
 
 \item{squareness}{numeric, shape of vertices of chromosomes and square marks,
 higher values more squared. Defaults to \code{4}}
 
-\item{lwd.chr}{thickness of border of chr., some marks and ruler. Thick of \code{cM} marks when \code{lwd.cM} absent and other marks when \code{lwd.marks} absent. Defaults to \code{0.5}}
+\item{lwd.chr}{thickness of border of chr., some marks and ruler. Thick of \code{cM} marks when \code{lwd.cM} absent and other marks
+when \code{lwd.marks} absent. Defaults to \code{0.5}}
 
 \item{lwd.cM}{thickness of cM marks. Defaults to \code{lwd.chr}}
 
-\item{lwd.marks}{thickness of most marks. Except \code{cM} marks and centr. related marks. See \code{lwd.chr}, \code{lwd.cM}. Defaults to \code{lwd.chr} value when \code{99}}
+\item{lwd.marks}{thickness of most marks. Except \code{cM} marks and centr. related marks. See \code{lwd.chr}, \code{lwd.cM}. Defaults
+to \code{lwd.chr} value when \code{99}}
 
 \item{dfMarkPos}{data.frame of marks (sites): columns: \code{OTU} (opt), \code{chrName},
-\code{markName} (name of site), \code{chrRegion} (for monocen. and opt for whole arm (w) in holocen.), \code{markDistCen} (for monocen.),
+\code{markName} (name of site), \code{chrRegion} (for monocen. and opt for whole arm (w) in holocen.), \code{markDistCen} (for
+monocen.),
 \code{markPos} (for holocen.), \code{markSize}; column \code{chrRegion}:
 use \code{p} for short arm, \code{q} for long arm, \code{cen} for centromeric mark and \code{w} for whole chr. mark; column
 \code{markDistCen}: use distance from
 centromere to mark, not necessary for cen. marks (cen), w, p, q (when whole arm). See also param. \code{markDistType}}
 
-\item{defaultStyleMark}{character, default style of mark, only used when \code{style} column of \code{dfMarkColor} data.frame is missing or in absence of this data.frame. Use \code{"square"} (default), \code{"squareLeft"}, \code{"dots"}, \code{"cM"}, \code{"cMLeft"},\code{"cenStyle"}, \code{"upArrow"}, \code{"downArrow"}.}
+\item{defaultStyleMark}{character, default style of mark, only used when \code{style} column of \code{dfMarkColor} data.frame is
+missing or in absence of this data.frame. Use \code{"square"} (default), \code{"squareLeft"}, \code{"dots"}, \code{"cM"},
+\code{"cMLeft"},\code{"cenStyle"}, \code{"upArrow"}, \code{"downArrow"}.}
 
 \item{markDistType}{character, if \code{"cen"} = the distance you provided in data.frame (\code{dfMarkPos}) column \code{markDistCen}
 or \code{markPos}  is to the center of the mark, if \code{"beg"} = the distance you provided is to the
 beginning of the mark (Default)}
 
-\item{protruding}{numeric, when style of mark is \code{"cM"}, fraction of chrWidth to stretch marker. Defaults to \code{0.2}. Introduced in 1.13}
+\item{protruding}{numeric, when style of mark is \code{"cM"}, fraction of chrWidth to stretch marker. Defaults to \code{0.2}.
+Introduced in 1.13}
 
 \item{startPos}{numeric, factor to increase separation of \code{exProtein} marks to chromosome. Defaults to \code{0}}
 
 \item{pMarkFac}{numeric, fraction of chr. size for \code{exProtein} style marks. Defaults to \code{0.25}}
 
-\item{origin, }{For non-monocentric chr. (for holocentrics only) Use \code{"b"} (default) if distance to mark in (\code{"markPos"} column in \code{"dfMarkPos"}) data.frame measured from bottom of chromosome, use \code{"t"} for distance to mark from top of chr.}
+\item{origin, }{For non-monocentric chr. (for holocentrics only) Use \code{"b"} (default) if distance to mark in (\code{"markPos"}
+column in \code{"dfMarkPos"}) data.frame measured from bottom of chromosome, use \code{"t"} for distance to mark from top of chr.}
 
 \item{efZero, }{numeric, numbers below this one will be considered as zero, for comparison purposes. Defaults to \code{1e-5}}
 
-\item{cMBeginCenter, }{boolean, start position of \code{cM} and \code{cMLeft} marks. If \code{TRUE}, starts in the center (width) of chr. . Defaults to \code{FALSE}}
+\item{cMBeginCenter, }{boolean, start position of \code{cM} and \code{cMLeft} marks. If \code{TRUE}, starts in the center (width) of
+chr. . Defaults to \code{FALSE}}
 
 \item{arrowhead}{numeric, proportion of head of arrow (mark styles: \code{upArrow,} \code{} \code{downArrow}). Defaults to \code{0.3}}
 
@@ -303,20 +342,29 @@ beginning of the mark (Default)}
 
 \item{arrowheadWidthShrink}{numeric, proportion, shrinks head of arrow. Defaults to \code{0.1}}
 
-\item{arrowsToSide}{boolean, when \code{FALSE} use a centered arrow, instead of an arrow next to chr. margins (\code{TRUE}, default). See \code{arrowsBothChrt}}
+\item{arrowsToSide}{boolean, when \code{FALSE} use a centered arrow, instead of an arrow next to chr. margins (\code{TRUE}, default).
+See \code{arrowsBothChrt}}
 
-\item{useOneDot}{boolean, use one dot instead of two in style of marks \code{dots}. Defaults to \code{FALSE}. Not useful for \code{chromatids=TRUE}}
+\item{useOneDot}{boolean, use one dot instead of two in style of marks \code{dots}. Defaults to \code{FALSE}. Not useful for
+\code{chromatids=TRUE}}
 
-\item{dotsAsOval}{boolean, use oval instead of two dots in style of marks \code{dots}. Defaults to \code{FALSE}. See \code{useOneDot}. Not useful for \code{chromatids=TRUE} or \code{circularPlot=TRUE}}
+\item{dotsAsOval}{boolean, use oval instead of two dots in style of marks \code{dots}. Defaults to \code{FALSE}. See \code{useOneDot}.
+Not useful for \code{chromatids=TRUE} or \code{circularPlot=TRUE}}
 
 \item{dfMarkColor}{data.frame, optional, specifying colors and style for marks (sites);
-columns: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: \code{square}, \code{squareLeft}, \code{dots}, \code{cM},
+columns: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: \code{square}, \code{squareLeft}, \code{dots},
+\code{cM},
 \code{"cMLeft"}, \code{"cenStyle"}, \code{"upArrow"}, \code{"downArrow"}, \code{"exProtein"}.
 (if column \code{style} missing all (except 5S) are plotted as in param. \code{defaultStyleMark}).}
 
-\item{mycolors}{character vector, optional, i.e. \code{c("blue",} \code{"red",} \code{"green")} for specifying color of marks in order of appearance. if diverges with number of marks will be recycled if \code{dfMarkColor} present, mycolors will be ignored. To know the order of your marks use something like: \code{unique(dfMarkPos$markName)}}
+\item{mycolors}{character vector, optional, i.e. \code{c("blue",} \code{"red",} \code{"green")} for specifying color of marks in order
+of appearance. if diverges with number of marks will be recycled if \code{dfMarkColor} present, mycolors will be ignored. To know the
+order of your marks use something like: \code{unique(dfMarkPos$markName)}}
 
-\item{borderOfWhiteMarks}{boolean, if \code{TRUE} (Default) uses black border for white marks. See \code{dfMarkColor}. Does not apply to marks with style \code{cenStyle}}
+\item{alpha_val}{numeric vector, make marks transparent, accepts values from 0 to 1, @see \code{scales::alpha}}
+
+\item{borderOfWhiteMarks}{boolean, if \code{TRUE} (Default) uses black border for white marks. See \code{dfMarkColor}. Does not apply
+to marks with style \code{cenStyle}}
 
 \item{colorBorderMark}{character, without default, pass a name of a color to use as border of marks. See \code{borderOfWhiteMarks}}
 
@@ -329,11 +377,15 @@ columns: \code{markName}, \code{markColor}, \code{style}. \code{style} accepts: 
 \item{legend}{character, \code{"none"} for no legend; \code{"inline"} prints labels near
 chromosomes; \code{"aside"} prints legend to the right of karyotypes (default). See \code{markLabelSpacer}}
 
-\item{remSimiMarkLeg}{boolean, when \code{legend="aside"}, if you use \code{pattern}, you can have several marks with same name. When \code{TRUE} this remove this pseudoduplicates from legend. Be sure that this pseudoduplicates have the same color, otherwise you should use \code{FALSE}.}
+\item{remSimiMarkLeg}{boolean, when \code{legend="aside"}, if you use \code{pattern}, you can have several marks with same name. When
+\code{TRUE} this remove this pseudoduplicates from legend. Be sure that this pseudoduplicates have the same color, otherwise you should
+use \code{FALSE}.}
 
-\item{bannedMarkName}{character, character string or vector with mark names to be removed from plot. Not the marks but the labels. Except when \code{bMarkNameAside} is used.}
+\item{bannedMarkName}{character, character string or vector with mark names to be removed from plot. Not the marks but the labels.
+Except when \code{bMarkNameAside} is used.}
 
-\item{bMarkNameAside}{boolean, when \code{TRUE} and \code{legend="inline"}, shows marks in \code{bannedMarkName} as \code{legend="aside"}.}
+\item{bMarkNameAside}{boolean, when \code{TRUE} and \code{legend="inline"}, shows marks in \code{bannedMarkName} as
+\code{legend="aside"}.}
 
 \item{forbiddenMark, }{character, character string or vector with mark names to be removed from plot. Not the marks but the labels.}
 
@@ -351,13 +403,17 @@ rightmost chr. to legend. Defaults to \code{1}}
 
 \item{markNewLine, }{character, character to split mark Names into different lines. Applies to \code{square} marks. Defaults to \code{NA}}
 
-\item{mylheight, }{numeric, for \code{markNewLine!=NA}; is equivalent to \code{lheight} of \code{par}: "The line height multiplier. The height of a line of text (used to vertically space multi-line text) is found by multiplying the character height both by the current character expansion and by the line height multiplier." Defaults to \code{0.7}.}
+\item{mylheight, }{numeric, for \code{markNewLine!=NA}; is equivalent to \code{lheight} of \code{par}: "The line height multiplier. The
+height of a line of text (used to vertically space multi-line text) is found by multiplying the character height both by the current
+character expansion and by the line height multiplier." Defaults to \code{0.7}.}
 
 \item{chrSize}{boolean, when \code{TRUE} adds total chr size under each chr. Defaults to \code{FALSE}}
 
 \item{nsmall}{numeric, rounding decimals for \code{chrSize} parameter. Defaults to \code{1}}
 
-\item{chrSizeMbp}{boolean, when \code{TRUE} adds total Mbp chr. size to each chr. provided, there is a \code{Mbp} column in \code{dfChrSize} data.frame. Defaults to \code{FALSE}. If data in columns \code{shortArmSize}, or col. \code{chrSize} is in millions ("Mbp"). Use \code{chrSize=TRUE} not this one (not column \code{Mbp}, you don't need this).}
+\item{chrSizeMbp}{boolean, when \code{TRUE} adds total Mbp chr. size to each chr. provided, there is a \code{Mbp} column in
+\code{dfChrSize} data.frame. Defaults to \code{FALSE}. If data in columns \code{shortArmSize}, or col. \code{chrSize} is in millions
+("Mbp"). Use \code{chrSize=TRUE} not this one (not column \code{Mbp}, you don't need this).}
 
 \item{markPer}{character vector, name of mark(s) to calculate \% of mark in chr. and add it to plot. See \code{perAsFraction}}
 
@@ -367,9 +423,11 @@ rightmost chr. to legend. Defaults to \code{1}}
 
 \item{perAsFraction}{boolean, when \code{TRUE} \% is shown as fraction. Defaults to \code{FALSE}. See \code{markPer}}
 
-\item{chrIndex}{character, add arm ratio with \code{"AR"} and centromeric index with \code{"CI"}, or \code{"both"} (Default), or \code{"none"} for none}
+\item{chrIndex}{character, add arm ratio with \code{"AR"} and centromeric index with \code{"CI"}, or \code{"both"} (Default), or
+\code{"none"} for none}
 
-\item{morpho}{character, when \code{"both"} (default) prints the Guerra and Levan classif of cen. position, use also \code{"Guerra"} or  \code{"Levan"} or \code{"none"} for none. See also \code{?armRatioCI}.}
+\item{morpho}{character, when \code{"both"} (default) prints the Guerra and Levan classif of cen. position, use also \code{"Guerra"}
+or  \code{"Levan"} or \code{"none"} for none. See also \code{?armRatioCI}.}
 
 \item{nameChrIndexPos}{numeric, modify position of name of chr. indices}
 
@@ -381,7 +439,8 @@ chromosome sizes)}
 
 \item{ruler}{boolean, display ruler to the left of karyotype, when \code{FALSE} no ruler}
 
-\item{useMinorTicks}{boolean, display minor ticks between labeled ticks in ruler. See \code{miniTickFactor}. Defaults to \code{FALSE}. (ticks without label)}
+\item{useMinorTicks}{boolean, display minor ticks between labeled ticks in ruler. See \code{miniTickFactor}. Defaults to \code{FALSE}.
+(ticks without label)}
 
 \item{miniTickFactor}{numeric, number of minor ticks for each labeled tick. See \code{useMinorTicks}. Defaults to \code{10}}
 
@@ -401,11 +460,15 @@ argument of \code{axis} R plot}
 
 \item{rulerIntervalcM}{numeric, intervals in ruler of OTU in \code{specialOTUNames}. No default. Introduced in 1.13}
 
-\item{rulerIntervalMb}{numeric, intervals in ruler of OTU with data in Mb (>\code{MbThreshold}) and absent from \code{specialOTUNames}. No default. Usa data in millions}
+\item{rulerIntervalMb}{numeric, intervals in ruler of OTU with data in Mb (>\code{MbThreshold}) and absent from
+\code{specialOTUNames}. No default. Usa data in millions}
 
-\item{ceilingFactor}{numeric, affects number of decimals for ceiling. Affects max. value of ruler. Defaults to \code{0}. When \code{threshold} is greater than \code{35} this may have to be negative. Introduced in 1.13}
+\item{ceilingFactor}{numeric, affects number of decimals for ceiling. Affects max. value of ruler. Defaults to \code{0}. When
+\code{threshold} is greater than \code{35} this may have to be negative. Introduced in 1.13}
 
-\item{xPosRulerTitle, }{numeric, modify position of ruler title. See \code{yTitle,} \code{} \code{ specialyTitle,} \code{} \code{ MbUnit}. Defaults to \code{2.6}. A value of \code{2.6} means \code{2.6} times the value of \code{chrSpacing} to the left, from the first chr.}
+\item{xPosRulerTitle, }{numeric, modify position of ruler title. See \code{yTitle,} \code{} \code{ specialyTitle,} \code{} \code{
+MbUnit}. Defaults to \code{2.6}. A value of \code{2.6} means \code{2.6} times the value of \code{chrSpacing} to the left, from the first
+chr.}
 
 \item{yPosRulerTitle, }{numeric, affects vertical position of ruler title. Defaults to \code{0}}
 
@@ -444,9 +507,11 @@ of idiograms. Defaults to \code{2}}
 
 \item{rotation}{numeric, anti-clockwise rotation, defaults to \code{0.5} which rotates chr. from top to -90 degrees. (-0.5*\eqn{\pi} )}
 
-\item{circleCenter}{numeric, for \code{circularPlot=TRUE}. Coordinate X of center of circles. Affects \code{legend="aside"} position. Defaults to \code{1}}
+\item{circleCenter}{numeric, for \code{circularPlot=TRUE}. Coordinate X of center of circles. Affects \code{legend="aside"} position.
+Defaults to \code{1}}
 
-\item{circleCenterY}{numeric, for \code{circularPlot=TRUE}. Coordinate Y of center of circles. Affects \code{legend="aside"} position. Defaults to \code{1}}
+\item{circleCenterY}{numeric, for \code{circularPlot=TRUE}. Coordinate Y of center of circles. Affects \code{legend="aside"} position.
+Defaults to \code{1}}
 
 \item{OTUlabelSpacing}{numeric, for \code{circularPlot=TRUE}. Spacing for OTU names. Defaults to \code{0.3}}
 
@@ -463,7 +528,8 @@ first chr. \code{"number"} places number near 1st chr. and index and name to the
 \item{OTUcentered}{boolean, for \code{circularPlot=TRUE} and \code{OTUplacing="number" or "simple"}. OTU name in center of circle
 when \code{TRUE}, otherwise, to the right.}
 
-\item{OTUjustif}{numeric, for \code{circularPlot=TRUE} and \code{OTUplacing="number" or "simple"}. Justification of OTU name. \code{0} = left
+\item{OTUjustif}{numeric, for \code{circularPlot=TRUE} and \code{OTUplacing="number" or "simple"}. Justification of OTU name. \code{0}
+= left
 (Default); use \code{0.5} for centered. See \code{?text} -> \code{adj}}
 
 \item{OTUlegendHeight}{numeric, for \code{circularPlot=TRUE} and \code{OTUplacing="number" or "simple"}. Modifies y names separation}
@@ -477,7 +543,8 @@ plot
 }
 \description{
 This function reads a data.frame passed to \code{dfChrSize} with columns: \code{chrName} (mono/holo) and
-\code{shortArmSize} and \code{longArmSize} for monocentrics or a column \code{chrSize} for holocentrics and produces a plot of idiograms. If more
+\code{shortArmSize} and \code{longArmSize} for monocentrics or a column \code{chrSize} for holocentrics and produces a plot of
+idiograms. If more
 than one species, a column named \code{OTU} is needed.
 
 Optionally, it reads another data.frame passed to \code{dfMarkPos} with the position of
@@ -486,9 +553,9 @@ can be used \code{\link{dfMarkColor}} or a character vector passed to \code{myco
 }
 \examples{
 data(dfOfChrSize)
-plotIdiograms(dfOfChrSize, ylimBotMod = .75, rulerPos=-.5)
+plotIdiograms(dfOfChrSize, ylimBotMod = .75, rulerPos = -.5)
 plotIdiograms(dfOfChrSize, circularPlot = TRUE, chrLabelSpacing = 1)
-plotIdiograms(dfChrSizeHolo, rulerPos=-.5)
+plotIdiograms(dfChrSizeHolo, rulerPos = -.5)
 }
 \seealso{
 \code{\link{asymmetry}}

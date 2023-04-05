@@ -39,7 +39,3 @@ NULL
 #' @description bigdfMarkPosHolo2: Example data for mark position
 #' @rdname markdataholo
 "bigdfMarkPosHolo2"
-
-
-
-

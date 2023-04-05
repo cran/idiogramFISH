@@ -18,51 +18,53 @@
 #' @export
 #' @return data.frame
 #'
-makedfMarkColorMycolors<- function(markNames, mycolors, colorstoremove=NULL, defaultStyleMark="square"){
+makedfMarkColorMycolors <- function(markNames, mycolors, colorstoremove = NULL, defaultStyleMark = "square") {
+  dfMarkColor <- idiogramFISH::dfMarkColor
 
-  dfMarkColor<-idiogramFISH::dfMarkColor
+  message(crayon::green(paste("By default 5S are plotted as dots, to change this behavior make your own dfMarkColor data.frame"))) # m
 
-  message(crayon::green(paste("By default 5S are plotted as dots, to change this behavior make your own dfMarkColor data.frame") )
-          ) # m
+  tryCatch(dfMarkColor[which(dfMarkColor$style %in% "square"), ]$style <- defaultStyleMark, error = function(e) "")
 
-  tryCatch(dfMarkColor[which(dfMarkColor$style %in% "square"),]$style<-defaultStyleMark, error=function(e) "")
+  mycolors <- mycolors[!mycolors %in% colorstoremove]
 
-  mycolors<-mycolors[!mycolors %in% colorstoremove]
-
-  mycolors<-mycolors[sapply(mycolors, function(X) {
+  mycolors <- mycolors[sapply(mycolors, function(X) {
     tryCatch(is.matrix(col2rgb(X)),
-             error = function(e) {message(crayon::red(paste("Color",X,"invalid, removed from mycolors") ) ); return(FALSE) })
-  } )]
+      error = function(e) {
+        message(crayon::red(paste("Color", X, "invalid, removed from mycolors")))
+        return(FALSE)
+      }
+    )
+  })]
 
-  dfMarkColorNew<-data.frame(markName=markNames)
+  dfMarkColorNew <- data.frame(markName = markNames)
   dfMarkColorNew$markNameNP <- dfMarkColorNew$markName
-  dfMarkColorNew$markNameNP <- gsub("^inProtein","",dfMarkColorNew$markNameNP)
+  dfMarkColorNew$markNameNP <- gsub("^inProtein", "", dfMarkColorNew$markNameNP)
   dfMarkColorNew$markColor <- NA
 
-  vecNP<-unique(dfMarkColorNew$markNameNP)
-  lenmandf<-length(vecNP)
+  vecNP <- unique(dfMarkColorNew$markNameNP)
+  lenmandf <- length(vecNP)
 
-  if(length(mycolors)<lenmandf){
-    message(crayon::blue(paste("Not enough colors in mycolor parameter, will be recycled") ) )
-    repF<-ceiling(lenmandf/length(mycolors) )
-    mycolors<-rep(mycolors,repF)
+  if (length(mycolors) < lenmandf) {
+    message(crayon::blue(paste("Not enough colors in mycolor parameter, will be recycled")))
+    repF <- ceiling(lenmandf / length(mycolors))
+    mycolors <- rep(mycolors, repF)
   }
 
   mycolors <- mycolors[1:lenmandf]
-  names(mycolors)<- vecNP
+  names(mycolors) <- vecNP
 
-  dfMarkColorNew$markColor <- mycolors[ match( dfMarkColorNew$markNameNP,names(mycolors)  ) ]
+  dfMarkColorNew$markColor <- mycolors[match(dfMarkColorNew$markNameNP, names(mycolors))]
 
-  dfMarkColorNew$style<-dfMarkColor$style[match(toupper(dfMarkColorNew$markNameNP),toupper(dfMarkColor$markName) )]
+  dfMarkColorNew$style <- dfMarkColor$style[match(toupper(dfMarkColorNew$markNameNP), toupper(dfMarkColor$markName))]
 
-  dfMarkColorNew$style[which(is.na(dfMarkColorNew$style))]<-defaultStyleMark
+  dfMarkColorNew$style[which(is.na(dfMarkColorNew$style))] <- defaultStyleMark
 
   tryCatch(dfMarkColorNew[which(dfMarkColorNew$markName %in%
-                         grep("inProtein",dfMarkColorNew$markName,value=TRUE) ),]$style<-"inProtein"
-           ,error=function(e){""} )
-  dfMarkColorNew$markNameNP<-NULL
+    grep("inProtein", dfMarkColorNew$markName, value = TRUE)), ]$style <- "inProtein",
+  error = function(e) {
+    ""
+  }
+  )
+  dfMarkColorNew$markNameNP <- NULL
   return(dfMarkColorNew)
 }
-
-
-

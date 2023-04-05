@@ -8,17 +8,10 @@
 #'
 #' @return list
 
-checkArmHolocenError<-function(listOfdfArmGISHInternal,CenTypeNames){
-
+checkArmHolocenError <- function(listOfdfArmGISHInternal, CenTypeNames) {
   listOfdfArmGISHInternalHolocen <- listOfdfArmGISHInternal[which(names(listOfdfArmGISHInternal) %in% CenTypeNames)]
 
-  # if(length(listOfdfArmGISHInternalHolocen)==0){
-    # remove(listOfdfArmGISHInternalHolocen)
-  # }
-  # else
-    if(length(listOfdfArmGISHInternalHolocen)>0) {
-    # remove(listOfdfArmGISHInternalHolocen)
-    message(crayon::red("\nERROR: Some mark(s) of an holocentric karyotype as being in a chromosome arm REMOVED") )
-    }
-
+  if (length(listOfdfArmGISHInternalHolocen) > 0) {
+    message(crayon::red("\nERROR: Some mark(s) of an holocentric karyotype as being in a chromosome arm REMOVED"))
+  }
 }

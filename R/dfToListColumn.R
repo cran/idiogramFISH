@@ -8,16 +8,14 @@
 #'
 #' @return list
 
-dfToListColumn<-function(dfLookColumn,columnToSplit="OTU"){
-
-  if(columnToSplit %in% colnames(dfLookColumn)){
-    listOfdfLookColumn <- base::split(dfLookColumn, factor(dfLookColumn[,columnToSplit],levels = unique(dfLookColumn[,columnToSplit])  ) )
-    names(listOfdfLookColumn) <- unique(dfLookColumn[,columnToSplit])
+dfToListColumn <- function(dfLookColumn, columnToSplit = "OTU") {
+  if (columnToSplit %in% colnames(dfLookColumn)) {
+    listOfdfLookColumn <- base::split(dfLookColumn, factor(dfLookColumn[, columnToSplit], levels = unique(dfLookColumn[, columnToSplit])))
+    names(listOfdfLookColumn) <- unique(dfLookColumn[, columnToSplit])
   } else {
     listOfdfLookColumn <- list(dfLookColumn)
-    names(listOfdfLookColumn)<-1
+    names(listOfdfLookColumn) <- 1
   }
 
-return(listOfdfLookColumn)
-
+  return(listOfdfLookColumn)
 }

@@ -1,48 +1,48 @@
-options(shiny.maxRequestSize=30*1024^2)
+options(shiny.maxRequestSize = 30 * 1024^2)
 
-tablist0<-c("exampleTab")
+tablist0 <- c("exampleTab")
 
-tablist <-c("dfChrTab", "dfMarkTab", "dfMSTab", "notesTab")
+tablist <- c("dfChrTab", "dfMarkTab", "dfMSTab", "notesTab")
 
-tablist2<-c("paramTab", "logTab","codeTab")
+tablist2 <- c("paramTab", "logTab", "codeTab")
 
-tablist4<-c("searchTab")
+tablist4 <- c("searchTab")
 
-tablist5 <- c("indicesTab","marksTab")
+tablist5 <- c("indicesTab", "marksTab")
 
-menulist<-c( "examplesMenu"
-             ,"nuccoreMenu"
-             ,"DFsMenu"
-             ,"parameterPlotMenu"
-             ,"indicesMenu"
-             ,"aboutMenu"
-             )
+menulist <- c("examplesMenu",
+  "nuccoreMenu",
+  "DFsMenu",
+  "parameterPlotMenu",
+  "indicesMenu",
+  "aboutMenu"
+)
 
-add_row <- function(chapter_note,chapter_name) {
+add_row <- function(chapter_note, chapter_name) {
   tags$tr(
     tags$td(
-      tags$a(href=paste0("https://colab.research.google.com/github/ferroao/IFjupyter/blob/main/",chapter_note)
-             ,HTML(paste0(chapter_name,"&emsp;&emsp;" ) )
-             ,target='_blank')
-    )
-    ,tags$td(
-      tags$a(href=paste0("https://github.com/ferroao/IFjupyter/blob/main/",chapter_note)
-             ,tags$kbd("link")
-             ,target='_blank'
+      tags$a(href = paste0("https://colab.research.google.com/github/fernandoroa/IFjupyter/blob/main/", chapter_note),
+        HTML(paste0(chapter_name, "&emsp;&emsp;")),
+        target = "_blank")
+    ),
+    tags$td(
+      tags$a(href = paste0("https://github.com/fernandoroa/IFjupyter/blob/main/", chapter_note),
+        tags$kbd("link"),
+        target = "_blank"
+      )
+    ),
+    tags$td(
+      tags$a(href = paste0("https://github.com/fernandoroa/IFjupyter/raw/main/", chapter_note),
+        tags$kbd("Raw"),
+        target = "_blank"
       )
     )
-    ,tags$td(
-      tags$a(href=paste0("https://github.com/ferroao/IFjupyter/raw/main/",chapter_note)
-             ,tags$kbd("Raw")
-             ,target='_blank'
-      )
-    ) #td
-  ) # tr
+  )
 }
 
 server <- function(input, output, session) {
 
-  print(paste0("Running in: ",isolate(session$clientData$url_hostname),":",isolate(session$clientData$url_port)) )
+  print(paste0("Running in: ", isolate(session$clientData$url_hostname), ":", isolate(session$clientData$url_port)))
 
   #
   # values
@@ -93,7 +93,7 @@ server <- function(input, output, session) {
   outputOptions(output, "tabsetpanel2UI", suspendWhenHidden = FALSE)
   outputOptions(output, "tabsetpanel4UI", suspendWhenHidden = FALSE)
 
-  outputOptions(output, "myTabs"        , suspendWhenHidden = FALSE)
+  outputOptions(output, "myTabs", suspendWhenHidden = FALSE)
 
   outputOptions(output, "presetUI",       suspendWhenHidden = FALSE)
   outputOptions(output, "examplepanel",   suspendWhenHidden = FALSE)

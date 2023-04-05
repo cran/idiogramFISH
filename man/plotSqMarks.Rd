@@ -36,7 +36,8 @@ plotSqMarks(
   labelOutwards,
   x,
   xModifierMH,
-  pts
+  pts,
+  alpha_val = 1
 )
 }
 \arguments{

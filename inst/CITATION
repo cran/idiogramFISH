@@ -1,18 +1,10 @@
-citHeader("To cite idiogramFISH in publications, please use:")
-
-year <- sub("-.*", "", meta$Date)
-note <- sprintf("R-package. version %s", meta$Version)
-
-citEntry(entry = "manual",
-    key = paste0("Roa",year),
-    title = "{idiogramFISH}: Shiny app. {I}diograms with Marks and Karyotype Indices",
-    author = c(person("Fernando", "Roa"),
-               person("Mariana", c("PC","Telles") ) ),
-    organization = "Universidade Federal de Goiás",
-    address = "UFG, Goiânia",
-    note = note,
-    year = year,
-    url = "https://ferroao.gitlab.io/manualidiogramfish/",
-    DOI = "10.5281/zenodo.3579417",
-    textVersion  = paste0("Roa F, Telles MPC (", year ,") idiogramFISH: Shiny app. Idiograms with Marks and Karyotype Indices, Universidade Federal de Goiás. Brazil. ",note," https://ferroao.gitlab.io/manualidiogramfish/. doi:<!-- breaklink -->10.5281/zenodo.3579417" )
+bibentry(
+  bibtype  = "Manual",
+  textVersion = "Roa F, Telles M. idiogramFISH: Shiny app. Idiograms with Marks and Karyotype Indices. doi: 10.5281/zenodo.3579417",
+  header   = "To cite idiogramFISH in publications, please use:",
+  title    = "idiogramFISH: Shiny app. Idiograms with Marks and Karyotype Indices",
+  author   = "Fernando Roa, Mariana Telles",
+  year     = "2023",
+  url      = "https://ferroao.gitlab.io/manualidiogramfish/",
+  doi      = "10.5281/zenodo.3579417"
 )

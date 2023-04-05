@@ -42,7 +42,8 @@ fill with this one.
 Defaults to \code{"square"}}
 
 \item{orderChr}{character, replaces \code{orderBySize - deprecated} when \code{"size"}, sorts chromosomes by total
-length from the largest to the smallest. \code{"original"}: preserves d.f. order. \code{"name"}: sorts alphabetically; \code{"group"}: sorts by group name}
+length from the largest to the smallest. \code{"original"}: preserves d.f. order. \code{"name"}:
+sorts alphabetically; \code{"group"}: sorts by group name}
 
 \item{halfModDown}{numeric, for circ. plots, when plotting several
 chromosomes in a circular
