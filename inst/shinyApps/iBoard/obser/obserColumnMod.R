@@ -6,7 +6,8 @@ observeEvent(input$removeFactorMark, {
   values[["df1Mark"]] <- tryCatch(idiogramFISH:::makeNumCols(values[["df1Mark"]]),
     error = function(e) {
       data.frame()
-    })
+    }
+  )
 })
 
 observeEvent(input$removeFactorChr, {
@@ -15,7 +16,8 @@ observeEvent(input$removeFactorChr, {
   values[["df1"]] <- tryCatch(idiogramFISH:::makeNumCols(values[["df1"]]),
     error = function(e) {
       data.frame()
-    })
+    }
+  )
 })
 
 
@@ -24,7 +26,6 @@ observeEvent(input$removeFactorChr, {
 #
 
 observeEvent(input$addColumn, {
-
   final <- values[["df1"]]
   if (inherits(final, "data.frame")) {
     if (nrow(final) > 0) {
@@ -34,24 +35,22 @@ observeEvent(input$addColumn, {
         final[, input$col] <- as.numeric(NA)
       }
     } else {
-      final <- data.frame(OTU = "1",
+      final <- data.frame(
+        OTU = "1",
         chrName = "chrName",
         shortArmSize = 1,
         longArmSize = 1,
         chrSize = as.numeric(NA)
-
       )
     }
   } else {
-
-    final <- data.frame(OTU = "1",
+    final <- data.frame(
+      OTU = "1",
       chrName = "chrName",
       shortArmSize = 1,
       longArmSize = 1,
       chrSize = as.numeric(NA)
-
     )
-
   }
   values[["df1"]] <- final
 })
@@ -67,7 +66,6 @@ observeEvent(input$removeColumn, {
 #
 
 observeEvent(input$addColumnNotes, {
-
   final <- values[["notes"]]
 
   if (inherits(final, "data.frame")) {
@@ -83,26 +81,30 @@ observeEvent(input$addColumnNotes, {
           values[["df1"]]$OTU <- as.character(1)
         }
 
-        final <- data.frame(OTU = unique(values[["df1"]]$OTU),
+        final <- data.frame(
+          OTU = unique(values[["df1"]]$OTU),
           note = "note"
         )
       } else {
-        final <- data.frame(OTU = "1",
-          note = "note")
+        final <- data.frame(
+          OTU = "1",
+          note = "note"
+        )
       }
     }
-
   } else {
     if (nrow(values[["df1"]]) > 0) {
       if (!"OTU" %in% colnames(values[["df1"]])) {
         values[["df1"]]$OTU <- as.character(1)
       }
 
-      final <- data.frame(OTU = unique(values[["df1"]]$OTU),
+      final <- data.frame(
+        OTU = unique(values[["df1"]]$OTU),
         note = "note"
       )
     } else {
-      final <- data.frame(OTU = "1",
+      final <- data.frame(
+        OTU = "1",
         note = "note"
       )
     }
@@ -111,7 +113,6 @@ observeEvent(input$addColumnNotes, {
 })
 
 observeEvent(input$removeColumnNotes, {
-
   final <- values[["notes"]]
   final[, input$colNotes] <- NULL
   values[["notes"]] <- final
@@ -124,7 +125,6 @@ observeEvent(input$removeColumnNotes, {
 #
 
 observeEvent(input$addColumnleftNotes, {
-
   final <- values[["leftNotes"]]
 
   if (inherits(final, "data.frame")) {
@@ -140,26 +140,30 @@ observeEvent(input$addColumnleftNotes, {
           values[["df1"]]$OTU <- as.character(1)
         }
 
-        final <- data.frame(OTU = unique(values[["df1"]]$OTU),
+        final <- data.frame(
+          OTU = unique(values[["df1"]]$OTU),
           note = "note"
         )
       } else {
-        final <- data.frame(OTU = "1",
-          note = "note")
+        final <- data.frame(
+          OTU = "1",
+          note = "note"
+        )
       }
     }
-
   } else {
     if (nrow(values[["df1"]]) > 0) {
       if (!"OTU" %in% colnames(values[["df1"]])) {
         values[["df1"]]$OTU <- as.character(1)
       }
 
-      final <- data.frame(OTU = unique(values[["df1"]]$OTU),
+      final <- data.frame(
+        OTU = unique(values[["df1"]]$OTU),
         note = "note"
       )
     } else {
-      final <- data.frame(OTU = "1",
+      final <- data.frame(
+        OTU = "1",
         note = "note"
       )
     }
@@ -168,7 +172,6 @@ observeEvent(input$addColumnleftNotes, {
 })
 
 observeEvent(input$removeColumnleftNotes, {
-
   final <- values[["leftNotes"]]
   final[, input$colleftNotes] <- NULL
   values[["leftNotes"]] <- final
@@ -180,7 +183,6 @@ observeEvent(input$removeColumnleftNotes, {
 #
 
 observeEvent(input$addColumnleftNotesUp, {
-
   final <- values[["leftNotesUp"]]
 
   if (inherits(final, "data.frame")) {
@@ -196,26 +198,30 @@ observeEvent(input$addColumnleftNotesUp, {
           values[["df1"]]$OTU <- as.character(1)
         }
 
-        final <- data.frame(OTU = unique(values[["df1"]]$OTU),
+        final <- data.frame(
+          OTU = unique(values[["df1"]]$OTU),
           note = "note"
         )
       } else {
-        final <- data.frame(OTU = "1",
-          note = "note")
+        final <- data.frame(
+          OTU = "1",
+          note = "note"
+        )
       }
     }
-
   } else {
     if (nrow(values[["df1"]]) > 0) {
       if (!"OTU" %in% colnames(values[["df1"]])) {
         values[["df1"]]$OTU <- as.character(1)
       }
 
-      final <- data.frame(OTU = unique(values[["df1"]]$OTU),
+      final <- data.frame(
+        OTU = unique(values[["df1"]]$OTU),
         note = "note"
       )
     } else {
-      final <- data.frame(OTU = "1",
+      final <- data.frame(
+        OTU = "1",
         note = "note"
       )
     }
@@ -224,7 +230,6 @@ observeEvent(input$addColumnleftNotesUp, {
 })
 
 observeEvent(input$removeColumnleftNotesUp, {
-
   final <- values[["leftNotesUp"]]
   final[, input$colleftNotesUp] <- NULL
   values[["leftNotesUp"]] <- final
@@ -239,7 +244,6 @@ observeEvent(input$removeColumnleftNotesUp, {
 #
 
 observeEvent(input$addColumnMark, {
-
   final <- values[["df1Mark"]]
   if (inherits(final, "data.frame")) {
     if (nrow(final) > 0) {
@@ -250,21 +254,22 @@ observeEvent(input$addColumnMark, {
       }
     } else { # if no rows
 
-      final <- data.frame(OTU = "1",
+      final <- data.frame(
+        OTU = "1",
         chrName = "chrName",
         markName = "markName",
         chrRegion = "p",
         markPos = 0.2,
-        markSize = 0.2)
+        markSize = 0.2
+      )
 
       if ("OTU" %in% colnames(values[["df1"]])) {
         final$OTU <- values[["df1"]]$OTU[1] # as.character(NA)
       }
     }
-
   } else {
-
-    final <- data.frame(OTU = "1",
+    final <- data.frame(
+      OTU = "1",
       chrName = "chrName",
       markName = "markName",
       chrRegion = "p",
@@ -281,7 +286,6 @@ observeEvent(input$addColumnMark, {
 
 
 observeEvent(input$removeColumnMark, {
-
   final <- values[["df1Mark"]]
   final[, input$colMark] <- NULL
   values[["df1Mark"]] <- final
@@ -292,7 +296,6 @@ observeEvent(input$removeColumnMark, {
 #
 
 observeEvent(input$addColumnMStyle, {
-
   final <- values[["df1MStyle"]]
   if (inherits(final, "data.frame")) {
     if (nrow(final) > 0) {
@@ -311,7 +314,6 @@ observeEvent(input$addColumnMStyle, {
 })
 
 observeEvent(input$removeColumnMStyle, {
-
   final <- values[["df1MStyle"]]
   final[, input$colMStyle] <- NULL
   values[["df1MStyle"]] <- final

@@ -1,6 +1,14 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 2.0.11
+
+05-04-2023
+
+Bug:
+
+- Fix genBank processing when only one match
+
 # idiogramFISH 2.0.10
 
 05-04-2023

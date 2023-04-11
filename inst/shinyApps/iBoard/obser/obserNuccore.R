@@ -3,21 +3,19 @@
 
 
 observeEvent(input$nucFile, {
-
   showModal(modalDialog(
     title = "3a. Reading file, please wait",
     "this pop-up will close after completion. Press ESC to wait in shiny app",
     easyClose = TRUE,
     footer = modalButton("Wait in shiny app")
-  )
-  )
+  ))
 
   mylistAll <- 0
   values[["mylistAllClass"]] <- class(mylistAll)
 
   values[["termButtonVal"]] <- 0
-  values[["searchStatus"]]  <- FALSE
-  values[["button3ab"]]  <- NA
+  values[["searchStatus"]] <- FALSE
+  values[["button3ab"]] <- NA
 
   inFile <- input[["nucFile"]]
 
@@ -40,7 +38,7 @@ observeEvent(input$nucFile, {
   #   generate d.f. chr. data
   #
 
-  chrDF    <- data.frame(chrName = 1, chrSize = mylistAll$source$end)
+  chrDF <- data.frame(chrName = 1, chrSize = mylistAll$source$end)
 
   mylistAll$source <- NULL
 
@@ -62,9 +60,9 @@ observeEvent(input$nucFile, {
 
   mylist <- mylistAll[which(names(mylistAll) %in% genic)]
 
-  values[["names_fetch_list"]]    <- names(mylist)
+  values[["names_fetch_list"]] <- names(mylist)
   values[["fetch_list_selected"]] <- grep("CDS", names(mylist), invert = TRUE)
-  values[["fetch_list"]]          <- mylist
+  values[["fetch_list"]] <- mylist
 
   validate(
     need(try(!invalid(values[["names_fetch_list"]])), "downloading 912")
@@ -83,19 +81,16 @@ observeEvent(input$nucFile, {
 ##############################################################################
 
 observeEvent(input$termButton, {
-
   if (values[["rentrezPkg"]] == FALSE) {
     showModal(modalDialog(
       title = "For this to work, rentrez needs to be installed",
-      tagList("Do you want to install rentrez?"
-      ),
+      tagList("Do you want to install rentrez?"),
       easyClose = FALSE,
       footer = list(
         actionButton("installRen", "Yes, install"),
         actionButton("dontInst", "No, I will not search")
       )
-    )
-    )
+    ))
   } else {
     values[["renInstall"]] <- FALSE
     values[["errorMessage"]] <- "Search failed, change string or check internet"
@@ -129,7 +124,6 @@ observeEvent(input$installRen, {
     values[["errorMessage"]] <- "Try again, press 2."
   }
   removeModal()
-  # values[["decision"]] <- ". You did something not recommended, Now crashing?"
 })
 
 observeEvent(input$dontInst, {
@@ -140,12 +134,10 @@ observeEvent(input$dontInst, {
     values[["rentrezPkg"]] <- TRUE
   }
   removeModal()
-  # values[["decision"]] <- ""
 })
 
 
 observeEvent(input$termButton, {
-
   validate(
     need(try({
       values[["renInstall"]] == FALSE
@@ -173,7 +165,8 @@ observeEvent(input$termButton, {
         )
       ),
       div("this pop-up will close after completion. Press ESC to wait in shiny app",
-        style = "text-align: center", id = "subtitle0_id"),
+        style = "text-align: center", id = "subtitle0_id"
+      ),
       easyClose = TRUE,
       footer = modalButton(
         list(
@@ -207,7 +200,7 @@ observeEvent(input$termButton, {
   values[["titles_number"]] <- NA
 
   entrez_summary1 <- list(list(title = numeric(), uid = numeric()))
-  entrez_search1  <- list(ids = list())
+  entrez_search1 <- list(ids = list())
 
   term1 <- input$term
 
@@ -216,24 +209,27 @@ observeEvent(input$termButton, {
   #
 
   req(input$term)
-  entrez_search1 <- tryCatch(rentrez::entrez_search(db = "nuccore",
-    term = term1,
-    retmax = input$maxNum,
-    use_history = TRUE),
-  error = function(e) {
-    "internet or package problem"
-  }
+  entrez_search1 <- tryCatch(rentrez::entrez_search(
+      db = "nuccore",
+      term = term1,
+      retmax = input$maxNum,
+      use_history = TRUE
+    ),
+    error = function(e) {
+      "internet or package problem"
+    }
   )
 
   if (entrez_search1[1] != "internet or package problem") {
     if (length(entrez_search1$ids) == 0) {
       values[["searchStatus"]] <- FALSE
+      removeModal()
     } else {
       values[["searchStatus"]] <- TRUE
     }
   } else {
     message("internet problem")
-    entrez_search1  <- list(ids = list())
+    entrez_search1 <- list(ids = list())
     show("title0_id_down")
     show("wait0_id_down")
     hide("subtitle0_id")
@@ -243,7 +239,7 @@ observeEvent(input$termButton, {
   }
 
   validate(
-    need(try (length(entrez_search1$ids) > 0), "Empty Search")
+    need(try(length(entrez_search1$ids) > 0), "Empty Search")
   )
 
   values[["entrez_search1"]] <- entrez_search1
@@ -262,7 +258,8 @@ observeEvent(input$termButton, {
       b <- tryCatch(rentrez::entrez_summary(db = "nuccore", id = idsList[[i]]),
         error = function(e) {
           data.frame(a = "API might be down")
-        })
+        }
+      )
       if (!inherits(b, "data.frame")) {
         entrez_summary1 <- c(entrez_summary1, b)
         i <- i + 1
@@ -278,7 +275,8 @@ observeEvent(input$termButton, {
     entrez_summary1 <- tryCatch(rentrez::entrez_summary(db = "nuccore", id = idsvector),
       error = function(e) {
         data.frame(a = "API might be down")
-      })
+      }
+    )
     if (inherits(entrez_summary1, "data.frame")) {
       show("title0_id_down")
       show("wait0_id_down")
@@ -287,16 +285,21 @@ observeEvent(input$termButton, {
       hide("wait0_id")
     }
   }
+  if (!"uid" %in% names(entrez_summary1)) {
+    validate(
+      need(try(length(entrez_summary1[[1]]$uid) > 0), "wait for summary")
+    )
+    titles <- character()
 
-  validate(
-    need(try(length(entrez_summary1[[1]]$uid) > 0), "wait for summary")
-  )
-
-  titles <- character()
-
-  for (i in 1:length(entrez_summary1)) {
-    uidTitle <- paste0(i, ". ", entrez_summary1[[i]]$uid, "_", entrez_summary1[[i]]$title)
-    titles <- c(titles, uidTitle)
+    for (i in seq_along(entrez_summary1)) {
+      uidTitle <- paste0(i, ". ", entrez_summary1[[i]]$uid, "_", entrez_summary1[[i]]$title)
+      titles <- c(titles, uidTitle)
+    }
+  } else {
+    validate(
+      need(try(length(entrez_summary1$uid) > 0), "wait for summary")
+    )
+    titles <- paste0(1, ". ", entrez_summary1$uid, "_", entrez_summary1$title)
   }
 
   remove(entrez_summary1)
@@ -305,7 +308,7 @@ observeEvent(input$termButton, {
   values[["entrez_titles"]] <- titles
   values[["titles_number"]] <- length(titles)
 
-  named_entrez_titles <- 1:length(titles)
+  named_entrez_titles <- seq_along(titles)
 
   names(named_entrez_titles) <- titles
 
@@ -327,7 +330,6 @@ maxNumReac <- eventReactive(input$termButton, {
 })
 
 observeEvent(input$button3Download, {
-
   values[["entrez_selected"]] <- isolate(input$titleSelect)
   showModal(
     modalDialog(
@@ -339,10 +341,16 @@ observeEvent(input$button3Download, {
           div("Sorry, entrez API seems to be down; Fatal Error",
             style = "text-align: center", id = "title_id_down"
           )
+        ),
+        hidden(
+          div("Sorry, this doesn't seem a Genome. Unable to proceed!",
+            style = "text-align: center", id = "not_a_genome"
+          )
         )
       ),
       div("this pop-up will close after completion. Press ESC to wait in shiny app",
-        style = "text-align: center", id = "subtitle_id"),
+        style = "text-align: center", id = "subtitle_id"
+      ),
       easyClose = TRUE,
       footer = modalButton(
         list(
@@ -372,8 +380,8 @@ observeEvent(input$button3Download, {
 
   values[["names_fetch_list"]] <- NA
 
-  values[["fetch_listAll"]]    <- NA
-  values[["authors"]]    <- ""
+  values[["fetch_listAll"]] <- NA
+  values[["authors"]] <- ""
   values[["fetch_list"]] <- NA
 
   values[["geneChrDF"]] <- NA
@@ -381,7 +389,7 @@ observeEvent(input$button3Download, {
   mylistAll <- 0
   values[["mylistAllClass"]] <- class(mylistAll)
 
-  mylist    <- list()
+  mylist <- list()
 
   values[["entrezFile"]] <- ""
   values[["rentrezFetch"]] <- rentrezFetch <- as.numeric(0)
@@ -391,14 +399,14 @@ observeEvent(input$button3Download, {
   validate(
     need(
       try({
-        rentrezFetch <- tryCatch(rentrez::entrez_fetch(db = "nuccore",
+        rentrezFetch <- tryCatch(rentrez::entrez_fetch(
+          db = "nuccore",
           id = idSearch,
           rettype = "gbwithparts",
           retmode = "text"
         ), error = function(e) {
           data.frame(a = "API down")
         })
-
         if (inherits(rentrezFetch, "data.frame")) {
           show("title_id_down")
           show("wait_id_down")
@@ -406,21 +414,27 @@ observeEvent(input$button3Download, {
           hide("title_id")
           hide("wait_id")
         }
-
         class(rentrezFetch) == "character"
-
       }),
-      "downloading")
+      "downloading"
+    )
   )
 
-
-
-  values[["entrezFile"]]   <- paste0(idSearch, ".gb")
+  values[["entrezFile"]] <- paste0(idSearch, ".gb")
   values[["rentrezFetch"]] <- rentrezFetch
+
+  mylistAll <- tryCatch(genBankReadIF(rentrezFetch), error = function(e) {
+    "not a valid format"
+  })
 
   validate(
     need(try({
-      mylistAll <- genBankReadIF(rentrezFetch)
+      if (inherits(mylistAll, "character")) {
+        show("not_a_genome")
+        show("wait_id_down")
+        hide("wait_id")
+        hide("subtitle_id")
+      }
       class(mylistAll) == "list"
     }), "reading")
   )
@@ -435,7 +449,7 @@ observeEvent(input$button3Download, {
   #   generate d.f. chr. data
   #
 
-  chrDF    <- data.frame(chrName = 1, chrSize = mylistAll$source$end)
+  chrDF <- data.frame(chrName = 1, chrSize = mylistAll$source$end)
 
   mylistAll$source <- NULL
 
@@ -457,9 +471,9 @@ observeEvent(input$button3Download, {
 
   mylist <- mylistAll[which(names(mylistAll) %in% genic)]
 
-  values[["names_fetch_list"]]    <- names(mylist)
+  values[["names_fetch_list"]] <- names(mylist)
   values[["fetch_list_selected"]] <- grep("CDS", names(mylist), invert = TRUE)
-  values[["fetch_list"]]          <- mylist
+  values[["fetch_list"]] <- mylist
 
   validate(
     need(try(!invalid(values[["names_fetch_list"]])), "downloading 804")
@@ -471,20 +485,18 @@ observeEvent(input$button3Download, {
 })
 
 observeEvent(input$makeDFsButton, {
-
   showModal(modalDialog(
     title = "4. Making data.frames, please wait",
     "this pop-up will close after completion, Press ESC to wait in shiny app",
     easyClose = TRUE,
     footer = modalButton("Wait in shiny app")
-  )
-  )
+  ))
 
   values[["geneMarkDF"]] <- values[["geneMarkDFOrig"]] <- NULL
 
   mylist <- values[["fetch_list"]]
 
-  chrDF  <- values[["geneChrDF"]]
+  chrDF <- values[["geneChrDF"]]
 
   mylist <- mylist[as.numeric(input$fetchSelect)]
 
@@ -506,9 +518,11 @@ observeEvent(input$makeDFsButton, {
 
   mylistChrDF$chrName <- unique(chrDF$chrName)
   # select main columns for data.frame of marks' positions
-  columnList <- c("chrName", "markName", "markPos", "markSize",
+  columnList <- c(
+    "chrName", "markName", "markPos", "markSize",
     "feature", "isJoin", "style", "pseudo", "gene",
-    "regulatory_class")
+    "regulatory_class"
+  )
 
   columnMarkList <- intersect(columnList, colnames(mylistChrDF))
 
@@ -528,7 +542,7 @@ observeEvent(input$makeDFsButton, {
 
   values[["geneMarkDF"]] <- values[["geneMarkDFOrig"]] <- marksDfChr
 
-  markStyle   <- makedfMarkColorMycolors(
+  markStyle <- makedfMarkColorMycolors(
     unique(marksDfChr$markName)
     # , c("black","forestgreen","cornflowerblue")
     , if (length(values[["mycolors2"]]) == 0) {
@@ -539,7 +553,7 @@ observeEvent(input$makeDFsButton, {
   )
 
   # arrows
-  markStyle$style      <- marksDfChr$style[match(markStyle$markName, marksDfChr$markName)]
+  markStyle$style <- marksDfChr$style[match(markStyle$markName, marksDfChr$markName)]
   markStyle$protruding <- marksDfChr$protruding[match(markStyle$markName, marksDfChr$markName)]
 
   values[["markStyleDF"]] <- markStyle
@@ -549,16 +563,14 @@ observeEvent(input$makeDFsButton, {
 
 
 observeEvent(input$modifyMarksButton, {
-
   showModal(modalDialog(
     title = "5. Modifying marks, please wait",
     "this pop-up will close after completion, Press ESC to wait in shiny app",
     easyClose = TRUE,
     footer = modalButton("Wait in shiny app")
-  )
-  )
+  ))
 
-  values[["geneMarkDF"]]  <- NA
+  values[["geneMarkDF"]] <- NA
   values[["markStyleDF"]] <- NA
   values[["geneMarkDFOrigCopy"]] <- NA
   values[["geneMarkDFOrigCopy"]] <- values[["geneMarkDFOrig"]]
@@ -596,7 +608,7 @@ observeEvent(input$modifyMarksButton, {
 
   marksDfChrCols <- namesToColumns(values[["geneMarkDFOrigCopy"]],
     values[["geneChrDF"]],
-    markType =  input$markType # c("downArrow"),
+    markType = input$markType # c("downArrow"),
     , amountofSpaces = input$amountofSpaces # 10
     , colNumber = input$colNumber # 2,
     , protrudingInt = input$protrudingInt # 1.3
@@ -606,11 +618,15 @@ observeEvent(input$modifyMarksButton, {
   )
 
   if (input$addSTARTPos) {
-    marksDfChrCols <- plyr::rbind.fill(marksDfChrCols,
+    marksDfChrCols <- plyr::rbind.fill(
+      marksDfChrCols,
       data.frame(
-        markName = paste0(paste0(rep(" ", input$colNumber * input$amountofSpaces),
-          collapse = ""),
-        "START"),
+        markName = paste0(
+          paste0(rep(" ", input$colNumber * input$amountofSpaces),
+            collapse = ""
+          ),
+          "START"
+        ),
         markPos = 1,
         markSize = NA,
         style = "square",
@@ -626,7 +642,7 @@ observeEvent(input$modifyMarksButton, {
   }
 
   # create mark general data data.frame
-  markStyle   <- makedfMarkColorMycolors(
+  markStyle <- makedfMarkColorMycolors(
     unique(marksDfChrCols$markName),
     if (length(values[["mycolors2"]]) == 0) {
       ""
@@ -636,13 +652,13 @@ observeEvent(input$modifyMarksButton, {
   )
 
   # arrows
-  markStyle$style      <- marksDfChrCols$style[match(markStyle$markName, marksDfChrCols$markName)]
+  markStyle$style <- marksDfChrCols$style[match(markStyle$markName, marksDfChrCols$markName)]
   markStyle$protruding <- marksDfChrCols$protruding[match(markStyle$markName, marksDfChrCols$markName)]
 
 
   if (input$colorFeature) {
     markStyle$feature <- as.character(marksDfChrCols$feature[match(markStyle$markName, marksDfChrCols$markName)])
-    markStyleFeature   <- makedfMarkColorMycolors(
+    markStyleFeature <- makedfMarkColorMycolors(
       unique(marksDfChrCols$feature),
       if (length(values[["mycolors2"]]) == 0) {
         ""
@@ -654,7 +670,6 @@ observeEvent(input$modifyMarksButton, {
   }
 
   if (input$mirror) {
-
     marksDfChrCols$markPos <- as.numeric(values[["geneChrDF"]]$chrSize) - as.numeric(marksDfChrCols$markPos) - as.numeric(marksDfChrCols$markSize)
 
     tryCatch(markStyle$style[which(markStyle$style == "downArrow")] <- "upArrow1", error = function(e) {
@@ -664,10 +679,10 @@ observeEvent(input$modifyMarksButton, {
       ""
     })
 
-    tryCatch(markStyle$style[which(markStyle$style == "upArrow")]  <- "downArrow", error = function(e) {
+    tryCatch(markStyle$style[which(markStyle$style == "upArrow")] <- "downArrow", error = function(e) {
       ""
     })
-    tryCatch(markStyle$style[which(markStyle$style == "cM")]  <- "cMLeft", error = function(e) {
+    tryCatch(markStyle$style[which(markStyle$style == "cM")] <- "cMLeft", error = function(e) {
       ""
     })
 
@@ -679,7 +694,7 @@ observeEvent(input$modifyMarksButton, {
     })
   }
 
-  values[["geneMarkDF"]]  <- marksDfChrCols
+  values[["geneMarkDF"]] <- marksDfChrCols
   values[["markStyleDF"]] <- markStyle
 
   removeModal()
@@ -692,8 +707,7 @@ observeEvent(input$loadDFbutton, {
     "this pop-up will close after completion (See data.frames page), Press ESC to wait in shiny app",
     easyClose = TRUE,
     footer = modalButton("Wait in shiny app")
-  )
-  )
+  ))
 
   values[["df1"]] <- data.frame()
   values[["df1Mark"]] <- data.frame()

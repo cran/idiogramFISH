@@ -18,18 +18,18 @@ observeEvent(input$AA2button, {
 
 observeEvent(input$posCalcbutton, {
   # values[["ARCImessage"]]<-""
-  if (!invalid(values[["df1"]])  &  !invalid(values[["df1Mark"]])) {
+  if (!invalid(values[["df1"]]) & !invalid(values[["df1Mark"]])) {
     dfMark <- fillMarkInfo(values[["df1Mark"]], values[["df1"]], markDistType = input$markDistType, origin = input$origin)
-    res2   <- posCalc(dfMark, values[["df1"]], result = "data.frame", bToRemove = values[["bToRemove"]])
+    res2 <- posCalc(dfMark, values[["df1"]], result = "data.frame", bToRemove = values[["bToRemove"]])
     values[["posCalc"]] <- res2
   }
 })
 
 observeEvent(input$perMarkbutton, {
   # values[["ARCImessage"]]<-""
-  if (!invalid(values[["df1"]])  &  !invalid(values[["df1Mark"]])) {
+  if (!invalid(values[["df1"]]) & !invalid(values[["df1Mark"]])) {
     dfMark <- fillMarkInfo(values[["df1Mark"]], values[["df1"]], markDistType = input$markDistType, origin = input$origin)
-    res2   <- perMark(dfMark, values[["df1"]], result = "data.frame", bToRemove = values[["bToRemove"]])
+    res2 <- perMark(dfMark, values[["df1"]], result = "data.frame", bToRemove = values[["bToRemove"]])
     values[["perMark"]] <- res2
   }
 })

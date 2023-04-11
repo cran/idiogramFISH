@@ -20,7 +20,8 @@ observeEvent(input$pngorsvg,
     if (input$pngorsvg == "svg" & values[["number"]] == 10) {
       showModal(modalDialog(
         title = "WARNING, Rstudio or browser crash risk",
-        tagList("You selected to display a large chr. in .svg format",
+        tagList(
+          "You selected to display a large chr. in .svg format",
           br(),
           "you should leave .png in", tags$strong("Display"), "for thousands of marks",
           br(),
@@ -30,16 +31,17 @@ observeEvent(input$pngorsvg,
         footer = list(
           actionButton("confirmSvg", "Choose .svg (not recommended)"),
           actionButton("confirmPng", "Leave .png as suggested")
+        )
       ))
-      )
       values[["stop"]] <- TRUE
       values[["decision"]] <- ""
     } else {
       values[["pngorsvg"]] <- input$pngorsvg
-      values[["stop"]]     <- FALSE
+      values[["stop"]] <- FALSE
       values[["decision"]] <- ""
     }
-})
+  }
+)
 
 filenameR <- eventReactive(
   {
@@ -226,7 +228,8 @@ filenameR <- eventReactive(
     filename <- tempfile(fileext = ".txt")
     filenamePath <- normalizePath(filename, mustWork = F)
     filenamePath
-})
+  }
+)
 
 observeEvent(input$left, {
   updateNumericInput(session, "hwModifier", value = isolate(input$hwModifier) - 0.2)
@@ -266,57 +269,63 @@ add0 <- "{"
 
 addLibraryIdio <- "library(idiogramFISH)"
 
-observeEvent(input$pngorsvgDown,             {
+observeEvent(input$pngorsvgDown, {
   if (input$pngorsvgDown == "svg") {
     values[["imageType"]] <- "image/svg+xml"
-
   } else {
     values[["imageType"]] <- "image/png"
   }
-}
-)
+})
 
 
 observe({
   values[["mycolors"]] <- tryCatch(unlist(strsplit(input$mycolors, ",")),
     error = function(e) {
       NULL
-    })
+    }
+  )
 
   values[["markPer"]] <- tryCatch(unlist(strsplit(input$markPer, ",")),
     error = function(e) {
       NULL
-    })
+    }
+  )
 
   values[["bToRemove"]] <- tryCatch(unlist(strsplit(input$bToRemove, ",")),
     error = function(e) {
       NULL
-    })
+    }
+  )
 
   values[["bannedMarkName"]] <- tryCatch(unlist(strsplit(input$bannedMarkName, ",")),
     error = function(e) {
       NULL
-    })
+    }
+  )
 
   values[["specialOTUNames"]] <- tryCatch(unlist(strsplit(input$specialOTUNames, ",")),
     error = function(e) {
       NULL
-    })
+    }
+  )
 
   values[["missOTUspacings"]] <- tryCatch(as.numeric(unlist(strsplit(input$missOTUspacings, ","))),
     error = function(e) {
       NULL
-    })
+    }
+  )
 
   values[["addMissingOTUAfter"]] <- tryCatch(unlist(strsplit(input$addMissingOTUAfter, ",")),
     error = function(e) {
       NULL
-    })
+    }
+  )
 
   values[["mycolors2"]] <- tryCatch(unlist(strsplit(input$mycolors2, ",")),
     error = function(e) {
       NULL
-    })
+    }
+  )
 
 
   if (inherits(values[["df1"]], "data.frame") & !invalid(values[["df1"]])) {
@@ -325,8 +334,7 @@ observe({
       shQuote(paste0(isolate(input$chrfilename2), ".csv"))
     )
 
-    chrRds                 <- paste0(input$chrfilename2, "  <- readRDS('", input$chrfilename2, ".rds')\n")
-
+    chrRds <- paste0(input$chrfilename2, "  <- readRDS('", input$chrfilename2, ".rds')\n")
   } else {
     dfChrSizeName <- shQuote("")
     values[["df1"]] <- NULL
@@ -334,17 +342,14 @@ observe({
   }
 
   if (inherits(values[["notes"]], "data.frame") & !invalid(values[["notes"]])) {
-
     notesName <- tryCatch(ifelse(input$saveType == "rds",
       input$notesfilename2,
       shQuote(paste0(isolate(input$notesfilename2), ".csv"))
-
     ), error = function(e) {
       NULL
     })
 
-    notesRds       <- paste0(input$notesfilename2, " <- readRDS('", input$notesfilename2, ".rds')\n")
-
+    notesRds <- paste0(input$notesfilename2, " <- readRDS('", input$notesfilename2, ".rds')\n")
   } else {
     notesName <- shQuote("")
     values[["notes"]] <- NULL
@@ -352,24 +357,20 @@ observe({
   }
 
   if (inherits(values[["leftNotes"]], "data.frame") & !invalid(values[["leftNotes"]])) {
-
     leftNotesName <- tryCatch(ifelse(input$saveType == "rds",
       input$leftNotesfilename2,
       shQuote(paste0(isolate(input$leftNotesfilename2), ".csv"))
     ), error = function(e) {
       NULL
     })
-    leftNotesRds   <- paste0(input$leftNotesfilename2, " <- readRDS('", input$leftNotesfilename2, ".rds')\n")
-
+    leftNotesRds <- paste0(input$leftNotesfilename2, " <- readRDS('", input$leftNotesfilename2, ".rds')\n")
   } else {
     leftNotesName <- shQuote("")
     values[["leftNotes"]] <- NULL
-    leftNotesRds   <- ""
-
+    leftNotesRds <- ""
   }
 
   if (inherits(values[["leftNotesUp"]], "data.frame") & !invalid(values[["leftNotesUp"]])) {
-
     leftNotesUpName <- tryCatch(ifelse(input$saveType == "rds",
       input$leftNotesUpfilename2,
       shQuote(paste0(isolate(input$leftNotesUpfilename2), ".csv"))
@@ -378,7 +379,6 @@ observe({
     })
 
     leftNotesUpRds <- paste0(input$leftNotesUpfilename2, " <- readRDS('", input$leftNotesUpfilename2, ".rds')\n")
-
   } else {
     leftNotesUpName <- shQuote("")
     values[["leftNotesUp"]] <- NULL
@@ -386,82 +386,70 @@ observe({
   }
 
   if (inherits(values[["df1Mark"]], "data.frame") & !invalid(values[["df1Mark"]])) {
-
     dfMarkPosName <- tryCatch(ifelse(input$saveType == "rds",
       input$markfilename2,
       shQuote(paste0(isolate(input$markfilename2), ".csv"))
-
     ), error = function(e) {
       NULL
     })
 
-    markRds  <- paste0(input$markfilename2, " <- readRDS('", input$markfilename2, ".rds')\n")
-
+    markRds <- paste0(input$markfilename2, " <- readRDS('", input$markfilename2, ".rds')\n")
   } else {
     dfMarkPosName <- shQuote("")
     values[["df1Mark"]] <- NULL
-    markRds  <- ""
+    markRds <- ""
   }
 
   if (inherits(values[["df1MStyle"]], "data.frame") & !invalid(values[["df1MStyle"]])) {
-
-    dfMarkColorName <-  tryCatch(ifelse(input$saveType == "rds",
+    dfMarkColorName <- tryCatch(ifelse(input$saveType == "rds",
       input$MStylefilename2,
       shQuote(paste0(isolate(input$MStylefilename2), ".csv"))
     ), error = function(e) {
       NULL
     })
 
-    mstyleRds <-  paste0(input$MStylefilename2, " <- readRDS('", input$MStylefilename2, ".rds')\n")
-
+    mstyleRds <- paste0(input$MStylefilename2, " <- readRDS('", input$MStylefilename2, ".rds')\n")
   } else {
     dfMarkColorName <- shQuote("")
     values[["df1MStyle"]] <- NULL
-    mstyleRds <-  ""
+    mstyleRds <- ""
   }
 
-  mc <- match.call(plotIdiograms,
+  mc <- match.call(
+    plotIdiograms,
     call("plotIdiograms",
-      dfChrSize    = dfChrSizeName,
-      notes       = notesName,
-      leftNotes   = leftNotesName,
+      dfChrSize = dfChrSizeName,
+      notes = notesName,
+      leftNotes = leftNotesName,
       leftNotesUp = leftNotesUpName,
-      dfMarkPos   = dfMarkPosName,
+      dfMarkPos = dfMarkPosName,
       dfMarkColor = dfMarkColorName,
-
-
       colorBorderMark = shQuote(input$colorBorderMark),
-      alpha_val       = input$alpha_val,
-      lwd.marks       = input$lwd.marks,
-      gishCenBorder   = input$gishCenBorder,
-      hideCenLines    = input$hideCenLines,
-
-      leftNoteFontUp  = input$leftNoteFontUp,
-      leftNotesPosX   = input$leftNotesPosX,
-      leftNotesPosY   = input$leftNotesPosY,
+      alpha_val = input$alpha_val,
+      lwd.marks = input$lwd.marks,
+      gishCenBorder = input$gishCenBorder,
+      hideCenLines = input$hideCenLines,
+      leftNoteFontUp = input$leftNoteFontUp,
+      leftNotesPosX = input$leftNotesPosX,
+      leftNotesPosY = input$leftNotesPosY,
       leftNotesUpPosY = input$leftNotesUpPosY,
-
-      leftNotesUpPosX     = input$leftNotesUpPosX,
-      notesPosY           = input$notesPosY,
-      leftNoteFont        = input$leftNoteFont,
-      noteFont            = input$noteFont,
+      leftNotesUpPosX = input$leftNotesUpPosX,
+      notesPosY = input$notesPosY,
+      leftNoteFont = input$leftNoteFont,
+      noteFont = input$noteFont,
       leftNotesUpTextSize = input$leftNotesUpTextSize,
-      leftNotesTextSize   = input$leftNotesTextSize,
-
-      verticalPlot  = input$verticalPlot,
-      karSpaceHor   = input$karSpaceHor,
+      leftNotesTextSize = input$leftNotesTextSize,
+      verticalPlot = input$verticalPlot,
+      karSpaceHor = input$karSpaceHor,
       karAnchorLeft = shQuote(input$karAnchorLeft),
-
-      parseStr2lang      = input$parseStr2lang,
+      parseStr2lang = input$parseStr2lang,
       moveAllKarValueHor = input$moveAllKarValueHor,
-      moveAllKarValueY   = input$moveAllKarValueY,
-
-      karHeight    = input$karHeight,
-      karHeiSpace  = input$karHeiSpace,
+      moveAllKarValueY = input$moveAllKarValueY,
+      karHeight = input$karHeight,
+      karHeiSpace = input$karHeiSpace,
       amoSepar = input$amoSepar,
       karSepar = input$karSepar,
-      legend   = shQuote(input$legend),
-
+      legend = shQuote(input$legend),
       mycolors = if (length(values[["mycolors"]]) == 0) {
         shQuote("")
       } else if (length(values[["mycolors"]]) == 1) {
@@ -497,13 +485,11 @@ observe({
       } else {
         values[["specialOTUNames"]]
       },
-
       missOTUspacings = if (length(values[["missOTUspacings"]]) == 0) {
         ""
       } else {
         values[["missOTUspacings"]]
       },
-
       addMissingOTUAfter = if (length(values[["addMissingOTUAfter"]]) == 0) {
         shQuote("")
       } else if (length(values[["addMissingOTUAfter"]]) == 1) {
@@ -511,134 +497,114 @@ observe({
       } else {
         values[["addMissingOTUAfter"]]
       },
-
-      specialyTitle     = shQuote(input$specialyTitle),
-      specialChrWidth   = input$specialChrWidth,
+      specialyTitle = shQuote(input$specialyTitle),
+      specialChrWidth = input$specialChrWidth,
       specialChrSpacing = input$specialChrSpacing,
-
-      origin    = shQuote(input$origin),
+      origin = shQuote(input$origin),
       OTUfamily = shQuote(input$OTUfamily),
-      classChrName     = shQuote(input$classChrName),
-      classChrNameUp   = shQuote(input$classChrNameUp),
-      chrIdPatternRem  = shQuote(input$chrIdPatternRem),
+      classChrName = shQuote(input$classChrName),
+      classChrNameUp = shQuote(input$classChrNameUp),
+      chrIdPatternRem = shQuote(input$chrIdPatternRem),
       xModMonoHoloRate = input$xModMonoHoloRate,
-
-      yTitle          = shQuote(input$yTitle),
+      yTitle = shQuote(input$yTitle),
       nameChrIndexPos = input$nameChrIndexPos,
-
-      perAsFraction  = input$perAsFraction,
-
+      perAsFraction = input$perAsFraction,
       cenFormat = shQuote(input$cenFormat),
       cenFactor = input$cenFactor,
-
-      autoCenSize    = input$autoCenSize,
+      autoCenSize = input$autoCenSize,
       centromereSize = input$centromereSize,
-
       chrColor = shQuote(input$chrColor),
       cenColor = shQuote(input$cenColor),
-
-      chrId      = shQuote(input$chrId),
-      chrWidth   = input$chrWidth,
+      chrId = shQuote(input$chrId),
+      chrWidth = input$chrWidth,
       chrSpacing = input$chrSpacing,
       groupSepar = input$groupSepar,
-
-      squareness   = input$squareness,
+      squareness = input$squareness,
       markDistType = shQuote(input$markDistType),
       markN = input$markN,
       n = input$n,
-      orderChr   = shQuote(input$orderChr),
-      useOneDot  = input$useOneDot,
-      pMarkFac   = input$pMarkFac,
+      orderChr = shQuote(input$orderChr),
+      useOneDot = input$useOneDot,
+      pMarkFac = input$pMarkFac,
       protruding = input$protruding,
-      arrowhead  = input$arrowhead,
-      cMBeginCenter   = input$cMBeginCenter,
+      arrowhead = input$arrowhead,
+      cMBeginCenter = input$cMBeginCenter,
       chrLabelSpacing = input$chrLabelSpacing,
-      labelSpacing    = input$labelSpacing,
-      rotation        = input$rotation,
-      shrinkFactor    = input$shrinkFactor,
-      separFactor     = input$separFactor,
-      radius          = input$radius,
-      circleCenter    = input$circleCenter,
-      OTUsrt          = input$OTUsrt,
-      OTUjustif       = input$OTUjustif,
+      labelSpacing = input$labelSpacing,
+      rotation = input$rotation,
+      shrinkFactor = input$shrinkFactor,
+      separFactor = input$separFactor,
+      radius = input$radius,
+      circleCenter = input$circleCenter,
+      OTUsrt = input$OTUsrt,
+      OTUjustif = input$OTUjustif,
       OTULabelSpacerx = input$OTULabelSpacerx,
       OTUlegendHeight = input$OTUlegendHeight,
-      OTUplacing      = shQuote(input$OTUplacing),
-      morpho      = shQuote(input$morpho),
-
-      chrIndex     = shQuote(input$chrIndex),
-      karIndex     = input$karIndex,
-      karIndexPos  = input$karIndexPos,
-
-      chrSize        = input$chrSize,
+      OTUplacing = shQuote(input$OTUplacing),
+      morpho = shQuote(input$morpho),
+      chrIndex = shQuote(input$chrIndex),
+      karIndex = input$karIndex,
+      karIndexPos = input$karIndexPos,
+      chrSize = input$chrSize,
       miniTickFactor = input$miniTickFactor,
-      nsmall         = input$nsmall,
-      showMarkPos    = input$showMarkPos,
+      nsmall = input$nsmall,
+      showMarkPos = input$showMarkPos,
       indexIdTextSize = input$indexIdTextSize,
-      chrSizeMbp     = input$chrSizeMbp,
-      useMinorTicks  = input$useMinorTicks,
-      chrNameUp      = input$chrNameUp,
-      chromatids     = input$chromatids,
-
+      chrSizeMbp = input$chrSizeMbp,
+      useMinorTicks = input$useMinorTicks,
+      chrNameUp = input$chrNameUp,
+      chromatids = input$chromatids,
       holocenNotAsChromatids = input$holocenNotAsChromatids,
-      xModifier    = input$xModifier,
-
+      xModifier = input$xModifier,
       circularPlot = input$circularPlot,
-
-      addOTUName  = input$addOTUName,
-      OTUfont     = as.numeric(input$OTUfont),
-      moveKarHor  = shQuote(input$moveKarHor),
-      mkhValue    = input$mkhValue,
-      anchor      = input$anchor,
+      addOTUName = input$addOTUName,
+      OTUfont = as.numeric(input$OTUfont),
+      moveKarHor = shQuote(input$moveKarHor),
+      mkhValue = input$mkhValue,
+      anchor = input$anchor,
       moveAnchorV = input$moveAnchorV,
       moveAnchorH = input$moveAnchorH,
       anchorVsizeF = input$anchorVsizeF,
       anchorHsizeF = input$anchorHsizeF,
-
-      OTUasNote     = input$OTUasNote,
+      OTUasNote = input$OTUasNote,
       labelOutwards = input$labelOutwards,
       notesTextSize = input$notesTextSize,
-      notesPosX     = input$notesPosX,
-
-      ruler           = input$ruler,
-      rulerPos        = input$rulerPos,
-      threshold       = input$threshold,
-      ceilingFactor   = input$ceilingFactor,
-
-      rulerInterval   = input$rulerInterval,
+      notesPosX = input$notesPosX,
+      ruler = input$ruler,
+      rulerPos = input$rulerPos,
+      threshold = input$threshold,
+      ceilingFactor = input$ceilingFactor,
+      rulerInterval = input$rulerInterval,
       rulerIntervalMb = input$rulerIntervalMb,
       rulerIntervalcM = input$rulerIntervalcM,
-
-      ruler.tck       = input$ruler.tck,
-      collapseCen     = input$collapseCen,
+      ruler.tck = input$ruler.tck,
+      collapseCen = input$collapseCen,
       rulerNumberSize = input$rulerNumberSize,
-      rulerNumberPos  = input$rulerNumberPos,
-
-      rulerTitleSize  = input$rulerTitleSize,
+      rulerNumberPos = input$rulerNumberPos,
+      rulerTitleSize = input$rulerTitleSize,
       xPosRulerTitle = input$xPosRulerTitle,
-      legendWidth     = input$legendWidth,
-      legendHeight    = input$legendHeight,
-      pattern         = shQuote(input$pattern),
-      forbiddenMark   = shQuote(input$forbiddenMark),
-      markNewLine     = shQuote(input$markNewLine),
-      classGroupName  = shQuote(input$classGroupName),
-      remSimiMarkLeg  = input$remSimiMarkLeg,
-      markLabelSize   = input$markLabelSize,
+      legendWidth = input$legendWidth,
+      legendHeight = input$legendHeight,
+      pattern = shQuote(input$pattern),
+      forbiddenMark = shQuote(input$forbiddenMark),
+      markNewLine = shQuote(input$markNewLine),
+      classGroupName = shQuote(input$classGroupName),
+      remSimiMarkLeg = input$remSimiMarkLeg,
+      markLabelSize = input$markLabelSize,
       markLabelSpacer = input$markLabelSpacer,
-      legendYcoord    = input$legendYcoord,
-      fixCenBorder    = input$fixCenBorder,
-      bMarkNameAside  = input$bMarkNameAside,
-      chrBorderColor  = shQuote(input$chrBorderColor),
-      lwd.chr         = input$lwd.chr,
-      lwd.mimicCen    = input$lwd.mimicCen,
-      lwd.cM          = input$lwd.cM,
+      legendYcoord = input$legendYcoord,
+      fixCenBorder = input$fixCenBorder,
+      bMarkNameAside = input$bMarkNameAside,
+      chrBorderColor = shQuote(input$chrBorderColor),
+      lwd.chr = input$lwd.chr,
+      lwd.mimicCen = input$lwd.mimicCen,
+      lwd.cM = input$lwd.cM,
       distTextChr = input$distTextChr,
       OTUTextSize = input$OTUTextSize,
-      xlimLeftMod  = input$xlimLeftMod,
+      xlimLeftMod = input$xlimLeftMod,
       xlimRightMod = input$xlimRightMod,
       ylimBotMod = input$ylimBotMod,
       ylimTopMod = input$ylimTopMod
-
     )
   )
 
@@ -646,13 +612,10 @@ observe({
   mclist[1] <- NULL
 
   if (!invalid(!as.logical(input$keepDefault))) {
-
     if (!as.logical(input$keepDefault)) {
-
       param_only <- gsub("Default", "", names(paramValues))
 
       for (i in 1:length(param_only)) {
-
         myl <- unlist(mclist[which(names(mclist) == param_only[i])])
 
         myDef <- paramValues[i]
@@ -709,28 +672,34 @@ observe({
 
   if (!is.null(mclist)) {
     if ("dfChrSize" %in% names(mclist)) {
-      if (inherits(values[["df1"]], "data.frame"))
+      if (inherits(values[["df1"]], "data.frame")) {
         mclist$dfChrSize <- values[["df1"]]
+      }
     }
     if ("dfMarkPos" %in% names(mclist)) {
-      if (inherits(values[["df1Mark"]], "data.frame"))
+      if (inherits(values[["df1Mark"]], "data.frame")) {
         mclist$dfMarkPos <- values[["df1Mark"]]
+      }
     }
     if ("dfMarkColor" %in% names(mclist)) {
-      if (inherits(values[["df1MStyle"]], "data.frame"))
+      if (inherits(values[["df1MStyle"]], "data.frame")) {
         mclist$dfMarkColor <- values[["df1MStyle"]]
+      }
     }
     if ("notes" %in% names(mclist)) {
-      if (inherits(values[["notes"]], "data.frame"))
+      if (inherits(values[["notes"]], "data.frame")) {
         mclist$notes <- values[["notes"]]
+      }
     }
     if ("leftNotes" %in% names(mclist)) {
-      if (inherits(values[["leftNotes"]], "data.frame"))
+      if (inherits(values[["leftNotes"]], "data.frame")) {
         mclist$leftNotes <- values[["leftNotes"]]
+      }
     }
     if ("leftNotesUp" %in% names(mclist)) {
-      if (inherits(values[["leftNotesUp"]], "data.frame"))
+      if (inherits(values[["leftNotesUp"]], "data.frame")) {
         mclist$leftNotesUp <- values[["leftNotesUp"]]
+      }
     }
 
     for (i in 1:length(mclist)) {
@@ -738,7 +707,6 @@ observe({
         mclist[[i]] <- sub("^'(.*)'$", "\\1", mclist[[i]])
       }
     }
-
   }
 
   addLibrarySvg <- "#install.packages('svglite')"
@@ -747,33 +715,37 @@ observe({
   addLibrarySvg2 <- "library(svglite)"
   addLibrarySvg2 <- ifelse(values[["pngorsvg"]] == "svg", addLibrarySvg2, "")
 
-  addSvgDev <- paste0('svg("dfOfChrSize.svg",width=',
+  addSvgDev <- paste0(
+    'svg("dfOfChrSize.svg",width=',
     values[["mysvgwidth"]],
     ", height=",
     values[["mysvgheight"]], ")"
   )
 
-  addPngDev <- paste0('png("dfOfChrSize.png",width=',
+  addPngDev <- paste0(
+    'png("dfOfChrSize.png",width=',
     values[["mysvgwidth"]] * 80,
     ", height=",
-    values[["mysvgheight"]] * 80, ")")
+    values[["mysvgheight"]] * 80, ")"
+  )
 
-  addDev   <- ifelse(values[["pngorsvg"]] == "svg", addSvgDev, addPngDev)
+  addDev <- ifelse(values[["pngorsvg"]] == "svg", addSvgDev, addPngDev)
 
-  mclist$pngorsvg   <- input$pngorsvg
-  mclist$heiFactor  <- input$heiFactor
-  mclist$widFactor  <- input$widFactor
+  mclist$pngorsvg <- input$pngorsvg
+  mclist$heiFactor <- input$heiFactor
+  mclist$widFactor <- input$widFactor
 
-  rdsAdd  <- ifelse(input$saveType == "rds", chrRds, "")
+  rdsAdd <- ifelse(input$saveType == "rds", chrRds, "")
   notesAdd <- ifelse(input$saveType == "rds", notesRds, "")
-  leftNotesAdd  <- ifelse(input$saveType == "rds", leftNotesRds, "")
+  leftNotesAdd <- ifelse(input$saveType == "rds", leftNotesRds, "")
   leftNotesUpAdd <- ifelse(input$saveType == "rds", leftNotesUpRds, "")
   mrdsAdd <- ifelse(input$saveType == "rds", markRds, "")
   msrdsAdd <- ifelse(input$saveType == "rds", mstyleRds, "")
 
-  block  <- ifelse(input$asFile, "", "#")
+  block <- ifelse(input$asFile, "", "#")
 
-  strFun <- paste0(add0, "\n",
+  strFun <- paste0(
+    add0, "\n",
     addLibrarySvg, "\n",
     block,
     addLibrarySvg2, "\n",
@@ -792,7 +764,8 @@ observe({
     "\n",
     block,
     ifelse(length(values[["mysvgwidth"]]), "dev.off()", ""),
-    "\n}")
+    "\n}"
+  )
 
   strFun <- gsub("\n\n\n", "\n", strFun)
   strFun <- gsub("\n\n", "\n", strFun)
@@ -805,10 +778,10 @@ observe({
       to_s1 <- sub("(.*)<-.*", "\\1", s)
       to_s2 <- sub(".*(<-.*)", "\\1", s)
       to_s3 <- sprintf("%-*s%s%*s", 0, "", to_s1, ifelse((25 - nchar(to_s1)) < 1, 1, (25 - nchar(to_s1))), "")
-      spl   <- paste(to_s3, to_s2)
-      spl2  <- c(spl2, spl)
+      spl <- paste(to_s3, to_s2)
+      spl2 <- c(spl2, spl)
     } else {
-      spl2  <- c(spl2, s)
+      spl2 <- c(spl2, s)
     }
   }
 
@@ -816,7 +789,6 @@ observe({
 
   if (length(input$keepDesc) > 0) {
     if (input$keepDesc) {
-
       spl1 <- unlist(strsplit(strFun, "\n"))
       spl2 <- character()
 
@@ -826,8 +798,7 @@ observe({
         desc <- tryCatch(get(paste0(to_s, "Desc")), error = function(e) {
           ""
         })
-        spl2 <- c(spl2, ifelse(desc == "", s, paste0(to_ss, "#", sub(paste0("`", to_s, "`:( \\([[:alnum:].`\u0022-]+\\))?"), "", desc)
-        )))
+        spl2 <- c(spl2, ifelse(desc == "", s, paste0(to_ss, "#", sub(paste0("`", to_s, "`:( \\([[:alnum:].`\u0022-]+\\))?"), "", desc))))
       }
       strFun <- paste(spl2, collapse = "\n")
     }

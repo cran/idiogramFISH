@@ -4,7 +4,7 @@
 #   download posCalc
 #
 
-output$posCalcbuttontable <-  renderUI({
+output$posCalcbuttontable <- renderUI({
   req(nrow(values[["posCalc"]]) > 0) # was df
   downloadButton("downloadCsvposCalc", "Download table as .csv")
 })
@@ -22,7 +22,7 @@ observeEvent(input$clipposCalcbtn, {
 #   download perMark
 #
 
-output$perMarkbuttontable <-  renderUI({
+output$perMarkbuttontable <- renderUI({
   req(nrow(values[["perMark"]]) > 0) # was df
   downloadButton("downloadCsvperMark", "Download table as .csv")
 })
@@ -41,7 +41,7 @@ observeEvent(input$clipperMarkbtn, {
 #   download ARCI
 #
 
-output$ARCIbuttontable <-  renderUI({
+output$ARCIbuttontable <- renderUI({
   req(nrow(values[["ARCI"]]) > 0) # was df
   downloadButton("downloadCsvARCI", "Download table as .csv")
 })
@@ -59,7 +59,7 @@ observeEvent(input$clipARCIbtn, {
 #   download AA2
 #
 
-output$AA2buttontable <-  renderUI({
+output$AA2buttontable <- renderUI({
   req(nrow(values[["AA2"]]) > 0) # was df
   downloadButton("downloadCsvAA2", "Download table as .csv")
 })
@@ -77,14 +77,14 @@ observeEvent(input$clipAA2btn, {
 #   download chr.
 #
 
-output$buttontable <-  renderUI({
+output$buttontable <- renderUI({
   validate(
     need(try(values[["df1"]]), "") # was df
   )
   downloadButton("downloadCsv", "Download table as .csv")
 })
 
-output$buttontable2 <-  renderUI({
+output$buttontable2 <- renderUI({
   validate(
     need(try(values[["df1"]]), "")
   )
@@ -95,7 +95,7 @@ output$buttontable2 <-  renderUI({
   }
 })
 
-output$buttonList <-  renderUI({
+output$buttonList <- renderUI({
   validate(
     need(try(values[["dfList"]]), "")
   )
@@ -110,14 +110,14 @@ output$buttonList <-  renderUI({
 #   download notes
 #
 
-output$buttontablenotes <-  renderUI({
+output$buttontablenotes <- renderUI({
   validate(
     need(try(values[["notes"]]), "") # was df
   )
   downloadButton("downloadCsvNotes", "Download table as .csv")
 })
 
-output$buttontablenotes2 <-  renderUI({
+output$buttontablenotes2 <- renderUI({
   validate(
     need(try(values[["notes"]]), "") # wdf
   )
@@ -132,14 +132,14 @@ output$buttontablenotes2 <-  renderUI({
 #   download leftNotes
 #
 
-output$buttontableleftNotes <-  renderUI({
+output$buttontableleftNotes <- renderUI({
   validate(
     need(try(values[["leftNotes"]]), "") # was df
   )
   downloadButton("downloadCsvleftNotes", "Download table as .csv")
 })
 
-output$buttontableleftNotes2 <-  renderUI({
+output$buttontableleftNotes2 <- renderUI({
   validate(
     need(try(values[["leftNotes"]]), "") # wdf
   )
@@ -154,14 +154,14 @@ output$buttontableleftNotes2 <-  renderUI({
 #   download leftNotesUp
 #
 
-output$buttontableleftNotesUp <-  renderUI({
+output$buttontableleftNotesUp <- renderUI({
   validate(
     need(try(values[["leftNotesUp"]]), "") # was df
   )
   downloadButton("downloadCsvleftNotesUp", "Download table as .csv")
 })
 
-output$buttontableleftNotesUp2 <-  renderUI({
+output$buttontableleftNotesUp2 <- renderUI({
   validate(
     need(try(values[["leftNotesUp"]]), "") # wdf
   )
@@ -176,7 +176,7 @@ output$buttontableleftNotesUp2 <-  renderUI({
 #   download mark
 #
 
-output$buttontableMark <-  renderUI({
+output$buttontableMark <- renderUI({
   validate(
     need(try(values[["df1Mark"]]), "")
   )
@@ -185,7 +185,7 @@ output$buttontableMark <-  renderUI({
   }
 })
 
-output$buttontableMark2 <-  renderUI({
+output$buttontableMark2 <- renderUI({
   validate(
     need(try(values[["df1Mark"]]), "")
   )
@@ -202,7 +202,7 @@ output$buttontableMark2 <-  renderUI({
 #   download mark style
 #
 
-output$buttontableMStyle <-  renderUI({
+output$buttontableMStyle <- renderUI({
   validate(
     need(try(values[["df1MStyle"]]), "")
   )
@@ -211,7 +211,7 @@ output$buttontableMStyle <-  renderUI({
   }
 })
 
-output$buttontableMStyle2 <-  renderUI({
+output$buttontableMStyle2 <- renderUI({
   validate(
     need(try(values[["df1MStyle"]]), "")
   )
@@ -234,11 +234,12 @@ output$downloadCsvperMark <- downloadHandler(
     paste0(input$perMarkfilename, ".csv")
   },
   content = function(file) {
-    write.csv(values[["perMark"]], file, na = "", # wdf
-      row.names = FALSE, quote = TRUE)
+    write.csv(values[["perMark"]], file,
+      na = "", # wdf
+      row.names = FALSE, quote = TRUE
+    )
   },
   contentType = "text/csv"
-
 )
 
 #
@@ -251,11 +252,12 @@ output$downloadCsvposCalc <- downloadHandler(
     paste0(input$posCalcfilename, ".csv")
   },
   content = function(file) {
-    write.csv(values[["posCalc"]], file, na = "", # wdf
-      row.names = FALSE, quote = TRUE)
+    write.csv(values[["posCalc"]], file,
+      na = "", # wdf
+      row.names = FALSE, quote = TRUE
+    )
   },
   contentType = "text/csv"
-
 )
 
 #
@@ -268,11 +270,12 @@ output$downloadCsvARCI <- downloadHandler(
     paste0(input$ARCIfilename, ".csv")
   },
   content = function(file) {
-    write.csv(values[["ARCI"]], file, na = "", # wdf
-      row.names = FALSE, quote = TRUE)
+    write.csv(values[["ARCI"]], file,
+      na = "", # wdf
+      row.names = FALSE, quote = TRUE
+    )
   },
   contentType = "text/csv"
-
 )
 
 #
@@ -285,11 +288,12 @@ output$downloadCsvAA2 <- downloadHandler(
     paste0(input$AA2filename, ".csv")
   },
   content = function(file) {
-    write.csv(values[["AA2"]], file, na = "", # wdf
-      row.names = FALSE, quote = TRUE)
+    write.csv(values[["AA2"]], file,
+      na = "", # wdf
+      row.names = FALSE, quote = TRUE
+    )
   },
   contentType = "text/csv"
-
 )
 
 
@@ -303,11 +307,12 @@ output$downloadCsv <- downloadHandler(
     paste0(input$chrfilename, ".csv")
   },
   content = function(file) {
-    write.csv(values[["df1"]], file, na = "", # wdf
-      row.names = FALSE, quote = TRUE)
+    write.csv(values[["df1"]], file,
+      na = "", # wdf
+      row.names = FALSE, quote = TRUE
+    )
   },
   contentType = "text/csv"
-
 )
 
 output$downloadCsv2 <- downloadHandler(
@@ -315,8 +320,10 @@ output$downloadCsv2 <- downloadHandler(
     paste0(input$chrfilename2, ".csv")
   },
   content = function(file) {
-    write.csv(values[["df1"]], file, na = "", # wdf
-      row.names = FALSE, quote = TRUE)
+    write.csv(values[["df1"]], file,
+      na = "", # wdf
+      row.names = FALSE, quote = TRUE
+    )
   },
   contentType = "text/csv"
 )
@@ -326,8 +333,7 @@ output$downloadRds2 <- downloadHandler(
     paste0(input$chrfilename2, ".rds")
   },
   content = function(file) {
-    saveRDS(values[["df1"]], file,
-    )
+    saveRDS(values[["df1"]], file, )
   },
   contentType = "rds"
 )
@@ -342,11 +348,12 @@ output$downloadCsvMark <- downloadHandler(
     paste0(input$markfilename, ".csv")
   },
   content = function(file) {
-    write.csv(values[["df1Mark"]], file, na = "",
-      row.names = FALSE, quote = TRUE)
+    write.csv(values[["df1Mark"]], file,
+      na = "",
+      row.names = FALSE, quote = TRUE
+    )
   },
   contentType = "text/csv"
-
 )
 
 output$downloadCsvMark2 <- downloadHandler(
@@ -354,11 +361,12 @@ output$downloadCsvMark2 <- downloadHandler(
     paste0(input$markfilename2, ".csv")
   },
   content = function(file) {
-    write.csv(values[["df1Mark"]], file, na = "",
-      row.names = FALSE, quote = TRUE)
+    write.csv(values[["df1Mark"]], file,
+      na = "",
+      row.names = FALSE, quote = TRUE
+    )
   },
   contentType = "text/csv"
-
 )
 
 output$downloadRdsMark2 <- downloadHandler(
@@ -366,11 +374,9 @@ output$downloadRdsMark2 <- downloadHandler(
     paste0(input$markfilename2, ".rds")
   },
   content = function(file) {
-    saveRDS(values[["df1Mark"]], file,
-    )
+    saveRDS(values[["df1Mark"]], file, )
   },
   contentType = "rds"
-
 )
 
 
@@ -384,11 +390,12 @@ output$downloadCsvMStyle <- downloadHandler(
     paste0(input$MStylefilename, ".csv")
   },
   content = function(file) {
-    write.csv(values[["df1MStyle"]], file, na = "",
-      row.names = FALSE, quote = TRUE)
+    write.csv(values[["df1MStyle"]], file,
+      na = "",
+      row.names = FALSE, quote = TRUE
+    )
   },
   contentType = "text/csv"
-
 )
 
 output$downloadCsvMStyle2 <- downloadHandler(
@@ -396,11 +403,12 @@ output$downloadCsvMStyle2 <- downloadHandler(
     paste0(input$MStylefilename2, ".csv")
   },
   content = function(file) {
-    write.csv(values[["df1MStyle"]], file, na = "",
-      row.names = FALSE, quote = TRUE)
+    write.csv(values[["df1MStyle"]], file,
+      na = "",
+      row.names = FALSE, quote = TRUE
+    )
   },
   contentType = "text/csv"
-
 )
 
 output$downloadRdsMStyle2 <- downloadHandler(
@@ -408,11 +416,9 @@ output$downloadRdsMStyle2 <- downloadHandler(
     paste0(input$MStylefilename2, ".rds")
   },
   content = function(file) {
-    saveRDS(values[["df1MStyle"]], file,
-    )
+    saveRDS(values[["df1MStyle"]], file, )
   },
   contentType = "rds"
-
 )
 
 #
@@ -424,11 +430,12 @@ output$downloadCsvNotes <- downloadHandler(
     paste0(input$notesfilename, ".csv")
   },
   content = function(file) {
-    write.csv(values[["notes"]], file, na = "",
-      row.names = FALSE, quote = TRUE)
+    write.csv(values[["notes"]], file,
+      na = "",
+      row.names = FALSE, quote = TRUE
+    )
   },
   contentType = "text/csv"
-
 )
 
 output$downloadCsvNotes2 <- downloadHandler(
@@ -436,11 +443,12 @@ output$downloadCsvNotes2 <- downloadHandler(
     paste0(input$notesfilename2, ".csv")
   },
   content = function(file) {
-    write.csv(values[["notes"]], file, na = "",
-      row.names = FALSE, quote = TRUE)
+    write.csv(values[["notes"]], file,
+      na = "",
+      row.names = FALSE, quote = TRUE
+    )
   },
   contentType = "text/csv"
-
 )
 
 output$downloadRdsNotes2 <- downloadHandler(
@@ -448,11 +456,9 @@ output$downloadRdsNotes2 <- downloadHandler(
     paste0(input$notesfilename2, ".rds")
   },
   content = function(file) {
-    saveRDS(values[["notes"]], file,
-    )
+    saveRDS(values[["notes"]], file, )
   },
   contentType = "rds"
-
 )
 
 #
@@ -464,11 +470,12 @@ output$downloadCsvleftNotes <- downloadHandler(
     paste0(input$leftNotesfilename, ".csv")
   },
   content = function(file) {
-    write.csv(values[["leftNotes"]], file, na = "",
-      row.names = FALSE, quote = TRUE)
+    write.csv(values[["leftNotes"]], file,
+      na = "",
+      row.names = FALSE, quote = TRUE
+    )
   },
   contentType = "text/csv"
-
 )
 
 output$downloadCsvleftNotes2 <- downloadHandler(
@@ -476,11 +483,12 @@ output$downloadCsvleftNotes2 <- downloadHandler(
     paste0(input$leftNotesfilename2, ".csv")
   },
   content = function(file) {
-    write.csv(values[["leftNotes"]], file, na = "",
-      row.names = FALSE, quote = TRUE)
+    write.csv(values[["leftNotes"]], file,
+      na = "",
+      row.names = FALSE, quote = TRUE
+    )
   },
   contentType = "text/csv"
-
 )
 
 output$downloadRdsleftNotes2 <- downloadHandler(
@@ -488,11 +496,9 @@ output$downloadRdsleftNotes2 <- downloadHandler(
     paste0(input$leftNotesfilename2, ".rds")
   },
   content = function(file) {
-    saveRDS(values[["leftNotes"]], file,
-    )
+    saveRDS(values[["leftNotes"]], file, )
   },
   contentType = "rds"
-
 )
 
 #
@@ -504,11 +510,12 @@ output$downloadCsvleftNotesUp <- downloadHandler(
     paste0(input$leftNotesUpfilename, ".csv")
   },
   content = function(file) {
-    write.csv(values[["leftNotesUp"]], file, na = "",
-      row.names = FALSE, quote = TRUE)
+    write.csv(values[["leftNotesUp"]], file,
+      na = "",
+      row.names = FALSE, quote = TRUE
+    )
   },
   contentType = "text/csv"
-
 )
 
 output$downloadCsvleftNotesUp2 <- downloadHandler(
@@ -516,11 +523,12 @@ output$downloadCsvleftNotesUp2 <- downloadHandler(
     paste0(input$leftNotesUpfilename2, ".csv")
   },
   content = function(file) {
-    write.csv(values[["leftNotesUp"]], file, na = "",
-      row.names = FALSE, quote = TRUE)
+    write.csv(values[["leftNotesUp"]], file,
+      na = "",
+      row.names = FALSE, quote = TRUE
+    )
   },
   contentType = "text/csv"
-
 )
 
 output$downloadRdsleftNotesUp2 <- downloadHandler(
@@ -528,11 +536,9 @@ output$downloadRdsleftNotesUp2 <- downloadHandler(
     paste0(input$leftNotesUpfilename2, ".rds")
   },
   content = function(file) {
-    saveRDS(values[["leftNotesUp"]], file,
-    )
+    saveRDS(values[["leftNotesUp"]], file, )
   },
   contentType = "rds"
-
 )
 
 #
@@ -596,7 +602,7 @@ output$outARCIUI <- renderUI({
 output$outAA2 <- renderRHandsontable({
   req(CurrentM$menu == "indicesMenu", Current$Tab5 == "indicesTab")
   req(nrow(values[["AA2"]]) > 0)
-  rhandsontable(values[["AA2"]], readOnly = TRUE)  %>%
+  rhandsontable(values[["AA2"]], readOnly = TRUE) %>%
     hot_cols(columnSorting = TRUE)
 })
 
@@ -673,15 +679,17 @@ output$outMStyle <- renderRHandsontable({
   req(CurrentM$menu == "DFsMenu", Current$Tab == "dfMSTab")
   req(nrow(values[["df1MStyle"]]) > 0)
 
-  validate(need(try(values[["df1MStyle"]]),
+  validate(need(
+    try(values[["df1MStyle"]]),
     "Hint: Colors can be added in Parameters Menu under 'Color' (optional)"
   ))
   if (invalid(values[["df1MStyle"]])) {
     # rhandsontable(values[["df1MStyle"]])
   } else if (nrow(values[["df1MStyle"]]) > 0 & "style" %in% colnames(values[["df1MStyle"]])) {
-
-    Options <- c("dots", "square", "squareLeft", "cM", "cMLeft", "cenStyle", "upArrow", "downArrow",
-      "exProtein", "inProtein")
+    Options <- c(
+      "dots", "square", "squareLeft", "cM", "cMLeft", "cenStyle", "upArrow", "downArrow",
+      "exProtein", "inProtein"
+    )
 
     tmpExampleTable <- rhandsontable(values[["df1MStyle"]],
       rowHeaders = NULL,
@@ -689,21 +697,24 @@ output$outMStyle <- renderRHandsontable({
       selectCallback = TRUE,
       width = 400, height = 400
     ) %>%
-      hot_col("style", allowInvalid = FALSE, type = "dropdown",
-        readOnly = TRUE)
+      hot_col("style",
+        allowInvalid = FALSE, type = "dropdown",
+        readOnly = TRUE
+      )
     if (!is.null(input$outMStyle_select$select$r)) {
       tmpExampleTable <- hot_col(tmpExampleTable,
         col = "style",
         allowInvalid = FALSE,
         type = "dropdown",
-        source = Options) %>%
-        hot_cell(row = input$outMStyle_select$select$r,
+        source = Options
+      ) %>%
+        hot_cell(
+          row = input$outMStyle_select$select$r,
           col = "style",
-          readOnly = FALSE)
+          readOnly = FALSE
+        )
     }
-    tmpExampleTable %>% hot_cols(columnSorting = TRUE
-    )
-
+    tmpExampleTable %>% hot_cols(columnSorting = TRUE)
   } else if (nrow(values[["df1MStyle"]]) > 0) {
     rhandsontable(values[["df1MStyle"]])
   }

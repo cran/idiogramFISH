@@ -5,7 +5,7 @@ account: ferapps
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 8751159
-bundleId: 7053142
+bundleId: 7056688
 url: https://ferapps.shinyapps.io/iboard/
-when: 1680707910.38202
-lastSyncTime: 1680707910.38203
+when: 1680777718.63562
+lastSyncTime: 1680777718.63562

@@ -9,7 +9,7 @@ library(rclipboard)
 library(clipr)
 library(shinyjs)
 
-devel <- TRUE
+devel <- FALSE
 sep <- ":"
 if (Sys.info()["sysname"] == "Windows") {
   sep <- ";"

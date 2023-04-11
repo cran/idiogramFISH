@@ -5,7 +5,7 @@ output$log <- renderText({
   validate(need(try(readLines(rawText), TRUE), message = FALSE))
 
   replacedText <- paste(tryCatch(readLines(rawText),
-    error  = function(e) {
+    error = function(e) {
       "nothing to write"
     },
     warning = function(w) {
@@ -23,7 +23,8 @@ output$code <- renderText({
 
 output$logpanel <- renderUI({
   fluidRow(
-    column(width = 6,
+    column(
+      width = 6,
       wellPanel(
         uiOutput("cliplog"),
         h2("log"),

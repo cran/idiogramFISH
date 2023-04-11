@@ -2,15 +2,18 @@
 # searchUI  wellPanel
 
 output$searchUI <- renderUI({
-  conditionalPanel(condition = "input.fileInsteadNcbi == false",
+  conditionalPanel(
+    condition = "input.fileInsteadNcbi == false",
     wellPanel(
       fluidRow(
-        column(6,
+        column(
+          6,
           h4(tags$strong("String to search")),
           tags$span("with ", tags$code("rentrez::entrez_search")),
           h5("db = 'nuccore'")
         ),
-        column(6,
+        column(
+          6,
           numericInput("maxNum",
             "max. number of results",
             value = 250,
@@ -22,7 +25,8 @@ output$searchUI <- renderUI({
       textInput("term",
         "",
         value = "",
-        width = "100%"),
+        width = "100%"
+      ),
       uiOutput("termButtonUI")
     )
   )
@@ -34,8 +38,7 @@ output$saveEntrezButton <- downloadHandler(
     values[["entrezFile"]]
   },
   content = function(file) {
-    writeLines(values[["rentrezFetch"]], file
-    )
+    writeLines(values[["rentrezFetch"]], file)
   }
 )
 
@@ -51,8 +54,7 @@ output$statsDF <- renderUI({
   validate(
     need(try({
       values[["annotated"]] == TRUE
-    }
-    ), "")
+    }), "")
   )
   validate(
     need(try(inherits(values[["geneMarkDFOrig"]], "data.frame")), "")
@@ -73,38 +75,35 @@ output$statsDF <- renderUI({
 
 
 output$chooseFileUI <- renderUI({
-  conditionalPanel(condition = "input.fileInsteadNcbi == true",
+  conditionalPanel(
+    condition = "input.fileInsteadNcbi == true",
     wellPanel(
       h4(tags$strong("Upload text file")),
       helpText("File downloaded with: rentrez::entrez_fetch(db='nuccore',
                                      id= [ID],
                                      rettype='gbwithparts',
-                                     retmode = 'text')"
-      ),
+                                     retmode = 'text')"),
       uiOutput("nucFileUI")
-
     ) # wP
   )
 })
 
 output$nucFileUI <- renderUI({
-
   input$modifyMarksButton
   input$nucPresetButton
   fileInput("nucFile", "3a. Choose:",
-    accept = c("text/plain",
-      ".gb")
+    accept = c(
+      "text/plain",
+      ".gb"
+    )
   )
 })
 
 output$titleSelectUI <- renderUI({
-
-  if (length(input$termButton == 0))
-
+  if (length(input$termButton == 0)) {
     if (input$termButton == 0) {
       return("Press 2. Search")
     } else {
-
       validate(
         need(try({
           values[["rentrezPkg"]] == TRUE
@@ -121,14 +120,15 @@ output$titleSelectUI <- renderUI({
         need(try({
           !is.na(values[["entrez_titles"]])
           !is.na(values[["entrez_selected"]])
-        }
-        ), "Press Search, and wait")
+        }), "Press Search, and wait")
       )
-      conditionalPanel(condition = "input.fileInsteadNcbi == false",
-
+      conditionalPanel(
+        condition = "input.fileInsteadNcbi == false",
         wellPanel(
-          h4("Results of", tags$code("rentrez::entrez_search"), "and",
-            tags$code("rentrez::entrez_summary")),
+          h4(
+            "Results of", tags$code("rentrez::entrez_search"), "and",
+            tags$code("rentrez::entrez_summary")
+          ),
           span(textOutput("resultNumber"), style = "font-size:15px"),
           selectizeInput("titleSelect",
             "Select match",
@@ -141,7 +141,8 @@ output$titleSelectUI <- renderUI({
           uiOutput("saveEntrezUI")
         )
       )
-    } # termB not 0
+    }
+  } # termB not 0
 })
 
 output$saveEntrezUI <- renderUI({
@@ -150,7 +151,8 @@ output$saveEntrezUI <- renderUI({
       try({
         class(values[["rentrezFetch"]]) == "character"
       }),
-      "Press 3b.")
+      "Press 3b."
+    )
   )
   downloadButton("saveEntrezButton", tags$span(tags$strong("Save sequence (optional)")))
 })
@@ -178,16 +180,17 @@ output$authorsUI <- renderUI({
 
 output$termButtonUI <- renderUI({
   validate(
-    need(try({
-      input$term != ""
-    }),
-    "Fill manually or load preset")
+    need(
+      try({
+        input$term != ""
+      }),
+      "Fill manually or load preset"
+    )
   )
   actionButton("termButton", tags$span(tags$strong("2. Search with"), tags$code("rentrez")))
 })
 
 output$loadUI <- renderUI({
-
   validate(need(try(values[["geneChrDF"]]), "Waiting for data.frames"))
   validate(need(try(inherits(values[["geneChrDF"]], "data.frame")), "still not ready chr. d.f.1"))
   validate(need(try(values[["geneMarkDF"]]), "Waiting for data.frames"))
@@ -203,7 +206,8 @@ output$loadUI <- renderUI({
 })
 
 output$workflowUI <- renderUI({
-  conditionalPanel(condition = "input.showWorkflow == true",
+  conditionalPanel(
+    condition = "input.showWorkflow == true",
     wellPanel(
       h4(strong("Workflow")),
       tags$p("After each button click, a pop-up will indicate you have to wait;
@@ -241,38 +245,48 @@ output$presetUI <- renderUI({
       )
     )
     # c("Plasmid"=9,"Bac. Chromosome"=10) )
-    , actionButton("nucPresetButton", tags$strong("1. Load preset")
-    )
+    , actionButton("nucPresetButton", tags$strong("1. Load preset"))
   )
 })
 
 
 output$markColumnUI <- renderUI({
-
   wellPanel(
-
     fluidRow(
-      column(6,
+      column(
+        6,
         h4(tags$strong("Marks")),
-        checkboxInput("addSTARTPos", "add START",
-          paramValues$addSTARTPosDefault),
+        checkboxInput(
+          "addSTARTPos", "add START",
+          paramValues$addSTARTPosDefault
+        ),
         div(
           title = "recommended because marks with same name have same style and color",
-          checkboxInput("makeUnique", "unique mark names",
-            paramValues$makeUniqueDefault)
+          checkboxInput(
+            "makeUnique", "unique mark names",
+            paramValues$makeUniqueDefault
+          )
         ),
-        radioButtons("nucMarkStyle", "Style",
-          c("Arrows (upArrow/downArrow)" = "Arrows"
+        radioButtons(
+          "nucMarkStyle", "Style",
+          c(
+            "Arrows (upArrow/downArrow)" = "Arrows"
             # ,"Square (square/squareLeft)"="Square"
-            , "cM (cm/cMLeft)" = "cM"),
-          paramValues$nucMarkStyleDefault),
+            , "cM (cm/cMLeft)" = "cM"
+          ),
+          paramValues$nucMarkStyleDefault
+        ),
         h5(strong("Change orientation")),
-        checkboxInput("mirror", "As complement",
-          paramValues$mirrorDefault),
+        checkboxInput(
+          "mirror", "As complement",
+          paramValues$mirrorDefault
+        ),
         h5(strong("Pseudogenes")),
-        radioButtons("pseudo", "Show:", c("only pseudo." = "onlyPseudo",
+        radioButtons("pseudo", "Show:", c(
+          "only pseudo." = "onlyPseudo",
           "only not-pseudo." = "removePseudo",
-          "all" = "all"),
+          "all" = "all"
+        ),
         selected = paramValues$pseudoDefault
         ),
         div(
@@ -288,10 +302,12 @@ output$markColumnUI <- renderUI({
           checkboxInput("useRCNames", "regulatory class", paramValues$useRCNamesDefault)
         )
       ),
-      column(6,
+      column(
+        6,
         h4(strong("Separate mark names in columns")),
         splitLayout(
-          div(title = "colNumber: number of columns",
+          div(
+            title = "colNumber: number of columns",
             numericInput("colNumber",
               HTML(paste("Num. of", "columns", sep = "<br/>")),
               paramValues$colNumberDefault,
@@ -300,7 +316,8 @@ output$markColumnUI <- renderUI({
               step = 1
             )
           ),
-          div(title = "protrudingInt: numeric, spacing of columns in terms of width of chr. percent 1 = 100%. Defaults to 0.5",
+          div(
+            title = "protrudingInt: numeric, spacing of columns in terms of width of chr. percent 1 = 100%. Defaults to 0.5",
             numericInput("protrudingInt",
               HTML(paste("column", "spacing", sep = "<br/>")),
               paramValues$protrudingIntDefault,
@@ -310,7 +327,8 @@ output$markColumnUI <- renderUI({
             )
           ) # div
         ) # sL
-        , div(title = "amountofSpaces, number of spaces for each column",
+        , div(
+          title = "amountofSpaces, number of spaces for each column",
           numericInput("amountofSpaces",
             "spaces:",
             paramValues$amountofSpacesDefault,
@@ -319,40 +337,45 @@ output$markColumnUI <- renderUI({
             step = 1
           )
         ),
-        div(title = 'markType, use c("downArrow","upArrow","cM","cMLeft") or a subset',
+        div(
+          title = 'markType, use c("downArrow","upArrow","cM","cMLeft") or a subset',
           checkboxGroupInput("markType",
             "types of mark to arrange in columns",
             c("downArrow", "upArrow", "cM", "cMLeft"),
             selected = paramValues$markTypeDefault
           )
         ),
-        div(style = "margin-bottom:-5px",
+        div(
+          style = "margin-bottom:-5px",
           title = "`mycolors`: optional, character vector with colors' names, which are associated automatically with marks according to their order in the data.frame of position of marks. See this ordering with `unique(dfMarkPos$markName)`. Argument example: `mycolors = c(\"red\",\"chartreuse3\",\"dodgerblue\")`. Not mandatory for plotting marks, package has default colors.
           ",
-          textInput("mycolors2",
-            HTML(paste("Marks' colors",
+          textInput(
+            "mycolors2",
+            HTML(paste(
+              "Marks' colors",
               tags$p("comma separated", style = "font-size: 80%;")
             )),
-            paramValues$mycolors2Default)
+            paramValues$mycolors2Default
+          )
         ),
-        div(title = "when selected colors will differentiate features not marks",
-          checkboxInput("colorFeature", "color for features",
-            paramValues$colorFeatureDefault)
+        div(
+          title = "when selected colors will differentiate features not marks",
+          checkboxInput(
+            "colorFeature", "color for features",
+            paramValues$colorFeatureDefault
+          )
         )
       )
     ),
     uiOutput("namesColumnButtonUI")
   )
-
 })
 
 output$namesColumnButtonUI <- renderUI({
-
   validate(
     need(try({
       input$makeDFsButton
-    }
-    ), "IMPORTANT! Press (4. Make data.frames)")
+    }), "IMPORTANT! Press (4. Make data.frames)")
   )
 
   validate(need(try(values[["geneChrDF"]]), "Waiting for data.frames"))
@@ -360,7 +383,9 @@ output$namesColumnButtonUI <- renderUI({
   validate(need(try(values[["geneMarkDFOrig"]]), "Waiting for data.frames"))
   validate(need(try(inherits(values[["geneMarkDFOrig"]], "data.frame")), "still not ready mark d.f.2"))
 
-  if (input$makeDFsButton == 0) return("IMPORTANT! Press (4. Make data.frames)")
+  if (input$makeDFsButton == 0) {
+    return("IMPORTANT! Press (4. Make data.frames)")
+  }
   actionButton("modifyMarksButton", tags$strong("5. Modify marks"))
 })
 
@@ -369,8 +394,7 @@ output$fetchSelectButtonUI <- renderUI({
   validate(
     need(try({
       !is.na(values[["button3ab"]])
-    }
-    ), "IMPORTANT! load (3.) and find first")
+    }), "IMPORTANT! load (3.) and find first")
   )
   actionButton("makeDFsButton", tags$strong("4. Make data.frames"))
 })
@@ -380,34 +404,29 @@ output$authors <- renderUI({
 })
 
 output$fetchSelectUI <- renderUI({
-
   if (values[["termButtonVal"]] == 0) {
     return("")
   } else {
-
     validate(
       need(try({
         values[["annotated"]] == TRUE
-      }
-      ), "Sorry, not annotated genome, nothing to do")
+      }), "Sorry, not annotated genome, nothing to do")
     )
     validate(
       need(try({
         values[["searchStatus"]] == TRUE
-      }
-      ), "")
+      }), "")
     )
 
     validate(
       need(try({
         !is.na(values[["button3ab"]])
-
-      }
-      ), "IMPORTANT! Press 3. ")
+      }), "IMPORTANT! Press 3. ")
     )
     wellPanel(
       h4(tags$strong("Features"), "gotten with", tags$code("rentrez::entrez_fetch")),
-      tags$div(align = "left",
+      tags$div(
+        align = "left",
         class = "multicol",
         checkboxGroupInput("fetchSelect",
           "Select type of sequence",
@@ -418,8 +437,6 @@ output$fetchSelectUI <- renderUI({
       ),
       uiOutput("fetchSelectButtonUI")
       # ,actionButton("makeDFsButton",tags$strong("4. Make data.frames") )
-
     ) # wP
   }
-
 })

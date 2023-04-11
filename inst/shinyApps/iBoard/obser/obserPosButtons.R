@@ -54,7 +54,6 @@ observeEvent(
     updateTabItems(session, "tabs", menulist[tab_id_position])
     updateTabItems(session, "tabsetpanel2", tablist2[1]) # avoids log error
     updateTabItems(session, "tabsetpanel5", tablist5[1])
-
   }
 )
 
@@ -69,7 +68,6 @@ observeEvent(
     updateTabItems(session, "tabs", menulist[tab_id_position])
     updateTabItems(session, "tabsetpanel2", tablist2[1]) # avoids log error
     updateTabItems(session, "tabsetpanel5", tablist5[1])
-
   }
 )
 observeEvent(
@@ -83,7 +81,6 @@ observeEvent(
     updateTabItems(session, "tabs", menulist[tab_id_position])
     updateTabItems(session, "tabsetpanel2", tablist2[1]) # avoids log error
     updateTabItems(session, "tabsetpanel5", tablist5[1])
-
   }
 )
 observeEvent(
@@ -97,7 +94,6 @@ observeEvent(
     updateTabItems(session, "tabs", menulist[tab_id_position])
     updateTabItems(session, "tabsetpanel2", tablist2[1]) # avoids log error
     updateTabItems(session, "tabsetpanel5", tablist5[1])
-
   }
 )
 
@@ -112,7 +108,6 @@ observeEvent(
     updateTabItems(session, "tabs", menulist[tab_id_position])
     updateTabItems(session, "tabsetpanel2", tablist2[1]) # avoids log error
     updateTabItems(session, "tabsetpanel5", tablist5[1])
-
   }
 )
 
@@ -127,7 +122,6 @@ observeEvent(
     updateTabItems(session, "tabs", menulist[tab_id_position])
     updateTabItems(session, "tabsetpanel2", tablist2[1]) # avoids log error
     updateTabItems(session, "tabsetpanel5", tablist5[1])
-
   }
 )
 
@@ -144,7 +138,6 @@ observeEvent(
     updateTabItems(session, "tabs", menulist[tab_id_position])
     updateTabItems(session, "tabsetpanel2", tablist2[1]) # avoids log error
     updateTabItems(session, "tabsetpanel5", tablist5[1]) # avoids log error
-
   }
 )
 
@@ -169,7 +162,6 @@ observeEvent(
     updateTabItems(session, "tabs", menulist[tab_id_position])
     updateTabItems(session, "tabsetpanel2", tablist2[1]) # avoids log error
     updateTabItems(session, "tabsetpanel5", tablist5[1])
-
   }
 )
 

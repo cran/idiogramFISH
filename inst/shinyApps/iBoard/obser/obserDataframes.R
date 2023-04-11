@@ -3,10 +3,9 @@
 #
 
 observeEvent(input$loadDFbutton, ignoreInit = T, {
-  values[["df1MStyleName"]]   <- values[["df1MarkName"]]   <- values[["df1Name"]]   <- "Nucleotide tab"
-  values[["df1MStyleOrigin"]] <- values[["df1MarkOrigin"]] <- values[["df1Origin"]]  <- "data.frame was loaded"
-}
-)
+  values[["df1MStyleName"]] <- values[["df1MarkName"]] <- values[["df1Name"]] <- "Nucleotide tab"
+  values[["df1MStyleOrigin"]] <- values[["df1MarkOrigin"]] <- values[["df1Origin"]] <- "data.frame was loaded"
+})
 
 # update all origins
 
@@ -15,11 +14,12 @@ observeEvent(numberRe(),
   {
     validate(need(try(numberRe() > 0), "not ready"))
     Sys.sleep(.1)
-    values[["df1MStyleOrigin"]]   <- values[["df1MarkOrigin"]] <- values[["df1Origin"]] <- "data.frame was loaded"
-    values[["notesOrigin"]]       <- "data.frame was loaded"
-    values[["leftNotesOrigin"]]   <- "data.frame was loaded"
+    values[["df1MStyleOrigin"]] <- values[["df1MarkOrigin"]] <- values[["df1Origin"]] <- "data.frame was loaded"
+    values[["notesOrigin"]] <- "data.frame was loaded"
+    values[["leftNotesOrigin"]] <- "data.frame was loaded"
     values[["leftNotesUpOrigin"]] <- "data.frame was loaded"
-})
+  }
+)
 
 #
 #   update chr. data.frame
@@ -40,14 +40,14 @@ observeEvent(numberRe(),
       }, warning = function(w) {
         ""
       })
-      values[["df1"]]       <- get(df)
-      values[["df1Name"]]   <- ifelse(df == "emptydata.frame", "no", df)
+      values[["df1"]] <- get(df)
+      values[["df1Name"]] <- ifelse(df == "emptydata.frame", "no", df)
     }
     # values[["go"]]<-TRUE
-})
+  }
+)
 
 observeEvent(input$file1, {
-
   inFile <- input[["file1"]]
   if (grepl(".csv", inFile$datapath)) {
     values[["df1"]] <- read.csv(inFile$datapath, header = TRUE, stringsAsFactors = FALSE)
@@ -59,11 +59,9 @@ observeEvent(input$file1, {
 })
 
 observeEvent(input$upFilePreset, {
-
   inFile <- input[["upFilePreset"]]
 
   if (grepl(".rds", inFile$datapath)) {
-
     pre <- readRDS(inFile$datapath)
 
     values[["upPresetName"]] <- inFile$name
@@ -86,7 +84,6 @@ observeEvent(input$upFilePreset, {
         } else {
           values[["paramVec"]][[name_pa]][(current_len + 1)] <- paste(pre[[i]], collapse = ",")
         }
-
       } else {
         values[["paramVec"]][[name_pa]][(current_len + 1)] <- pre[[i]]
       }
@@ -105,7 +102,6 @@ observeEvent(input$upFilePreset, {
       name_def <- sub("(.*)Vec", "\\1Default", par_name)
       # complete missing
       if (length(values[["paramVec"]][[i]]) < current_len) {
-
         if (length(paramValues[[name_def]]) > 1) {
           #
           # marktype is longer than 1
@@ -118,11 +114,9 @@ observeEvent(input$upFilePreset, {
     }
     values[["presetStatus"]] <- "Ready"
     values[["pre"]] <- pre
-
   } else {
     values[["upPresetOrigin"]] <- "file must be .rds"
   }
-
 })
 
 #
@@ -142,10 +136,11 @@ observeEvent(numberRe(),
       }, warning = function(w) {
         ""
       })
-      values[["notes"]]       <- get(df)
-      values[["notesName"]]   <- ifelse(df == "emptydata.frame", "no", df)
+      values[["notes"]] <- get(df)
+      values[["notesName"]] <- ifelse(df == "emptydata.frame", "no", df)
     }
-})
+  }
+)
 
 observeEvent(input$file1Notes, {
   inFile <- input[["file1Notes"]]
@@ -177,10 +172,11 @@ observeEvent(numberRe(),
       }, warning = function(w) {
         ""
       })
-      values[["leftNotes"]]       <- get(df)
-      values[["leftNotesName"]]   <- ifelse(df == "emptydata.frame", "no", df)
+      values[["leftNotes"]] <- get(df)
+      values[["leftNotesName"]] <- ifelse(df == "emptydata.frame", "no", df)
     }
-})
+  }
+)
 
 observeEvent(input$file1leftNotes, {
   inFile <- input[["file1leftNotes"]]
@@ -212,10 +208,11 @@ observeEvent(numberRe(),
       }, warning = function(w) {
         ""
       })
-      values[["leftNotesUp"]]       <- get(df)
-      values[["leftNotesUpName"]]   <- ifelse(df == "emptydata.frame", "no", df)
+      values[["leftNotesUp"]] <- get(df)
+      values[["leftNotesUpName"]] <- ifelse(df == "emptydata.frame", "no", df)
     }
-})
+  }
+)
 
 observeEvent(input$file1leftNotesUp, {
   inFile <- input[["file1leftNotesUp"]]
@@ -252,7 +249,8 @@ observeEvent(numberRe(),
       values[["df1Mark"]] <- get(df)
       values[["df1MarkName"]] <- ifelse(df == "emptydata.frame", "no", df)
     }
-})
+  }
+)
 
 observeEvent(input$file1Mark, {
   inFile <- input[["file1Mark"]]
@@ -286,7 +284,8 @@ observeEvent(numberRe(),
       values[["df1MStyle"]] <- get(df)
       values[["df1MStyleName"]] <- ifelse(df == "emptydata.frame", "no", df)
     }
-})
+  }
+)
 
 observeEvent(input$file1MStyle, {
   inFile <- input[["file1MStyle"]]
@@ -396,30 +395,34 @@ observeEvent(input$outMStyle, {
 #   update filenames among analogous inputs
 #
 
-observeEvent(input$notesfilename,             {
-  updateTextInput(session = session,
+observeEvent(input$notesfilename, {
+  updateTextInput(
+    session = session,
     inputId = "notesfilename2",
     value = isolate(input$notesfilename)
   )
 })
 
-observeEvent(input[["notesfilename2"]],             {
-  updateTextInput(session = session,
+observeEvent(input[["notesfilename2"]], {
+  updateTextInput(
+    session = session,
     inputId = "notesfilename",
     value = isolate(input$notesfilename2)
   )
 })
 
-observeEvent(input$file1Notes,             {
-  updateTextInput(session = session,
+observeEvent(input$file1Notes, {
+  updateTextInput(
+    session = session,
     inputId = "notesfilename",
     value = isolate(values[["notesName"]])
   )
 })
 
 
-observeEvent(input$file1Notes,             {
-  updateTextInput(session = session,
+observeEvent(input$file1Notes, {
+  updateTextInput(
+    session = session,
     inputId = "notesfilename2",
     value = isolate(values[["notesName"]])
   )
@@ -427,29 +430,33 @@ observeEvent(input$file1Notes,             {
 
 #############
 
-observeEvent(input$leftNotesfilename,             {
-  updateTextInput(session = session,
+observeEvent(input$leftNotesfilename, {
+  updateTextInput(
+    session = session,
     inputId = "leftNotesfilename2",
     value = isolate(input$leftNotesfilename)
   )
 })
 
-observeEvent(input[["leftNotesfilename2"]],             {
-  updateTextInput(session = session,
+observeEvent(input[["leftNotesfilename2"]], {
+  updateTextInput(
+    session = session,
     inputId = "leftNotesfilename",
     value = isolate(input$leftNotesfilename2)
   )
 })
 
-observeEvent(input$file1leftNotes,             {
-  updateTextInput(session = session,
+observeEvent(input$file1leftNotes, {
+  updateTextInput(
+    session = session,
     inputId = "leftNotesfilename",
     value = isolate(sub(".csv", "", values[["leftNotesName"]]))
   )
 })
 
-observeEvent(input$file1leftNotes,             {
-  updateTextInput(session = session,
+observeEvent(input$file1leftNotes, {
+  updateTextInput(
+    session = session,
     inputId = "leftNotesfilename2",
     value = isolate(sub(".csv", "", values[["leftNotesName"]]))
   )
@@ -457,58 +464,66 @@ observeEvent(input$file1leftNotes,             {
 
 ###############
 
-observeEvent(input$leftNotesUpfilename,             {
-  updateTextInput(session = session,
+observeEvent(input$leftNotesUpfilename, {
+  updateTextInput(
+    session = session,
     inputId = "leftNotesUpfilename2",
     value = isolate(input$leftNotesUpfilename)
   )
 })
 
-observeEvent(input[["leftNotesUpfilename2"]],             {
-  updateTextInput(session = session,
+observeEvent(input[["leftNotesUpfilename2"]], {
+  updateTextInput(
+    session = session,
     inputId = "leftNotesUpfilename",
     value = isolate(input$leftNotesUpfilename2)
   )
 })
 
-observeEvent(input$file1leftNotesUp,             {
-  updateTextInput(session = session,
+observeEvent(input$file1leftNotesUp, {
+  updateTextInput(
+    session = session,
     inputId = "leftNotesUpfilename",
     value = isolate(sub(".csv", "", values[["leftNotesUpName"]]))
   )
 })
 
-observeEvent(input$file1leftNotesUp,             {
-  updateTextInput(session = session,
+observeEvent(input$file1leftNotesUp, {
+  updateTextInput(
+    session = session,
     inputId = "leftNotesUpfilename2",
     value = isolate(sub(".csv", "", values[["leftNotesUpName"]]))
   )
 })
 
 #############
-observeEvent(input$chrfilename,             {
-  updateTextInput(session = session,
+observeEvent(input$chrfilename, {
+  updateTextInput(
+    session = session,
     inputId = "chrfilename2",
     value = isolate(input$chrfilename)
   )
 })
 
-observeEvent(input[["chrfilename2"]],             {
-  updateTextInput(session = session,
+observeEvent(input[["chrfilename2"]], {
+  updateTextInput(
+    session = session,
     inputId = "chrfilename",
     value = isolate(input$chrfilename2)
   )
 })
 
-observeEvent(input$file1,             {
-  updateTextInput(session = session,
+observeEvent(input$file1, {
+  updateTextInput(
+    session = session,
     inputId = "chrfilename",
     value = isolate(sub(".csv", "", values[["df1Name"]]))
   )
 })
 
-observeEvent(input$file1,             {
-  updateTextInput(session = session,
+observeEvent(input$file1, {
+  updateTextInput(
+    session = session,
     inputId = "chrfilename2",
     value = isolate(sub(".csv", "", values[["df1Name"]]))
   )
@@ -516,30 +531,33 @@ observeEvent(input$file1,             {
 
 ################## 33
 
-observeEvent(input$markfilename,             {
-  updateTextInput(session = session,
+observeEvent(input$markfilename, {
+  updateTextInput(
+    session = session,
     inputId = "markfilename2",
     value = isolate(input$markfilename)
   )
-}
-)
+})
 
-observeEvent(input[["markfilename2"]],             {
-  updateTextInput(session = session,
+observeEvent(input[["markfilename2"]], {
+  updateTextInput(
+    session = session,
     inputId = "markfilename",
     value = isolate(input$markfilename2)
   )
 })
 
-observeEvent(input[["file1Mark"]],             {
-  updateTextInput(session = session,
+observeEvent(input[["file1Mark"]], {
+  updateTextInput(
+    session = session,
     inputId = "markfilename",
     value = isolate(sub(".csv", "", values[["df1MarkName"]]))
   )
 })
 
-observeEvent(input[["file1Mark"]],             {
-  updateTextInput(session = session,
+observeEvent(input[["file1Mark"]], {
+  updateTextInput(
+    session = session,
     inputId = "markfilename2",
     value = isolate(sub(".csv", "", values[["df1MarkName"]]))
   )
@@ -547,30 +565,33 @@ observeEvent(input[["file1Mark"]],             {
 
 ##########
 
-observeEvent(input$MStylefilename,             {
-  updateTextInput(session = session,
+observeEvent(input$MStylefilename, {
+  updateTextInput(
+    session = session,
     inputId = "MStylefilename2",
     value = isolate(input$MStylefilename)
   )
-}
-)
+})
 
-observeEvent(input[["MStylefilename2"]],             {
-  updateTextInput(session = session,
+observeEvent(input[["MStylefilename2"]], {
+  updateTextInput(
+    session = session,
     inputId = "MStylefilename",
     value = isolate(input$MStylefilename2)
   )
 })
 
-observeEvent(input[["file1MStyle"]],             {
-  updateTextInput(session = session,
+observeEvent(input[["file1MStyle"]], {
+  updateTextInput(
+    session = session,
     inputId = "MStylefilename",
     value = isolate(sub(".csv", "", values[["df1MStyle"]]))
   )
 })
 
-observeEvent(input[["file1MStyle"]],             {
-  updateTextInput(session = session,
+observeEvent(input[["file1MStyle"]], {
+  updateTextInput(
+    session = session,
     inputId = "MStylefilename2",
     value = isolate(sub(".csv", "", values[["df1MStyle"]]))
   )

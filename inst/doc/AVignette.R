@@ -3,7 +3,7 @@ if(Sys.info()['sysname']=="Darwin") {
       system('echo "---" > index.Rmd')
       system('echo "title: \'idiogramFISH\'" >> index.Rmd')
       system('echo "author: \'Fernando Roa\'" >> index.Rmd')
-      system('echo "date: \'05 04 2023\'" >> index.Rmd')
+      system('echo "date: \'07 04 2023\'" >> index.Rmd')
       system('echo "output:" >> index.Rmd')
       system('echo "  html_document" >> index.Rmd')
       system('echo "vignette: >" >> index.Rmd')
@@ -40,7 +40,7 @@ if(Sys.info()['sysname']=="Windows") {
       shell('@echo --- > index.Rmd')
       shell('@echo title: "idiogramFISH" >> index.Rmd')
       shell('@echo author: "Fernando Roa" >> index.Rmd')
-      shell('@echo date: "05 04 2023" >> index.Rmd')
+      shell('@echo date: "07 04 2023" >> index.Rmd')
       shell('@echo output: >> index.Rmd')
       shell('@echo   html_document >> index.Rmd')
       shell('@echo vignette: ^> >> index.Rmd')
@@ -50,6 +50,6 @@ if(Sys.info()['sysname']=="Windows") {
       shell('@echo --- >> index.Rmd')
       shell('@echo(     >> index.Rmd')
       shell('@echo visit https://ferroao.gitlab.io/idiogramfishhelppages >> index.Rmd')
-
-}
+   
+} # if windows
 
