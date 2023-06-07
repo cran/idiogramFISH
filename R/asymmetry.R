@@ -45,7 +45,7 @@
 #' Asymmetry. Taxon Vol. 35, No. 3  pp. 526-530
 #' @references Paszko B. 2006. A critical review and a new proposal of
 #' karyotype asymmetry
-#' indices. Plant Syst Evol 258:39–48.
+#' indices. Plant Syst Evol 258:39-48.
 #' @rdname asymmetry
 #' @export
 #' @return list

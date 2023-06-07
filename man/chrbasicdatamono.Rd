@@ -72,7 +72,7 @@ Golczyk H, Hasterok R, Joachimiak AJ (2005) FISH-aimed
 karyotyping and
 characterization of Renner complexes in permanent heterozygote Rhoeo
 spathacea. Genome
-48:145–153.
+48:145-153.
 }
 \seealso{
 \code{\link{plotIdiograms}}

@@ -54,6 +54,6 @@ NULL
 #' karyotyping and
 #' characterization of Renner complexes in permanent heterozygote Rhoeo
 #' spathacea. Genome
-#' 48:145–153.
+#' 48:145-153.
 #' @rdname markposDFs
 "traspaMarks"

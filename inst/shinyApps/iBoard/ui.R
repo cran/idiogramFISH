@@ -17,7 +17,7 @@ if (Sys.info()["sysname"] == "Windows") {
 
 if (system.file(package = "rmarkdown") != "") {
   if (rmarkdown::pandoc_available()) {
-    if (rmarkdown::pandoc_version() > 2.11 & devel == F) {
+    if (rmarkdown::pandoc_version() > 2.11 && devel == FALSE) {
       Sys.setenv(PATH = paste0(Sys.getenv("PATH"), sep, sub(".pandoc$", "", rmarkdown::pandoc_exec())))
       rmarkdown::render("www/README2.Rmd")
     }

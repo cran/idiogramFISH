@@ -51,10 +51,10 @@ resource_files:
   - ../onlinefigures/ggplot.svg
   - ../onlinefigures/nostoc.jpg
   - ../onlinefigures/nostocSmall.jpg
+  - ../onlinefigures/firstplot2.png
+  - ../onlinefigures/secondplot2.png
+  - ../onlinefigures/thirdplot2.png
   
-  - firstplot2.png
-  - secondplot2.png
-  - thirdplot2.png
   - firstplot.png
   - secondplot.png
   - thirdplot.png
@@ -94,6 +94,8 @@ vignette: >
   %\VignetteEncoding{UTF-8}
   
 ---
+
+<!-- onlinefigures manually copied to docs folder -->
 
 <!-- centering rmdformats in mystyle2 -->
 

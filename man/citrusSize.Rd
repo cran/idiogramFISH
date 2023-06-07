@@ -161,7 +161,7 @@ OTUfont = 3 # italics
 \references{
 Carvalho, R., Soares Filho, W. S., Brasileiro-Vidal, A. C., & Guerra, M. (2005).
 The relationships among lemons, limes and citron: A chromosomal comparison.
-Cytogenetic and Genome Research, 109(1–3), 276–282. https://doi.org/10.1159/000082410
+Cytogenetic and Genome Research, 109(1-3), 276-282. https://doi.org/10.1159/000082410
 }
 \keyword{arm}
 \keyword{size}

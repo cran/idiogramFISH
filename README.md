@@ -441,35 +441,277 @@ plotIdiograms(dfChrSize = dfOfChrSize,    # data.frame of chr. size
 
     dfOfChrSize
 
-| chrName | shortArmSize | longArmSize | Mbp |
-|:--------|-------------:|------------:|----:|
-| 1       |            3 |           4 | 700 |
-| 2       |            4 |           5 | 900 |
-| 3       |            2 |           3 | 500 |
-| X       |            1 |           2 | 300 |
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+chrName
+</th>
+<th style="text-align:right;">
+shortArmSize
+</th>
+<th style="text-align:right;">
+longArmSize
+</th>
+<th style="text-align:right;">
+Mbp
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+700
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+900
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+300
+</td>
+</tr>
+</tbody>
+</table>
 
     dfMarkColor
 
-| markName | markColor      | style  |
-|:---------|:---------------|:-------|
-| 5S       | red            | dots   |
-| 45S      | chartreuse3    | square |
-| DAPI     | blue           | square |
-| CMA      | darkgoldenrod1 | square |
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+markName
+</th>
+<th style="text-align:left;">
+markColor
+</th>
+<th style="text-align:left;">
+style
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+5S
+</td>
+<td style="text-align:left;">
+red
+</td>
+<td style="text-align:left;">
+dots
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+45S
+</td>
+<td style="text-align:left;">
+chartreuse3
+</td>
+<td style="text-align:left;">
+square
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DAPI
+</td>
+<td style="text-align:left;">
+blue
+</td>
+<td style="text-align:left;">
+square
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CMA
+</td>
+<td style="text-align:left;">
+darkgoldenrod1
+</td>
+<td style="text-align:left;">
+square
+</td>
+</tr>
+</tbody>
+</table>
 
 `p, q` and `w` marks can have empty columns `markDistCen` and `markSize`
 since v. 1.9.1 to plot whole arms (`p`, `q`) and whole chr. `w`.
 
     dfOfMarks2
 
-| chrName | markName | chrRegion | markSize | markDistCen |
-|:--------|:---------|:----------|---------:|------------:|
-| 1       | 5S       | p         |      0.8 |         0.5 |
-| 1       | 45S      | q         |      1.0 |         0.5 |
-| X       | 45S      | p         |       NA |          NA |
-| 3       | DAPI     | q         |      1.0 |         1.0 |
-| 1       | DAPI     | cen       |       NA |          NA |
-| X       | CMA      | cen       |       NA |          NA |
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+chrName
+</th>
+<th style="text-align:left;">
+markName
+</th>
+<th style="text-align:left;">
+chrRegion
+</th>
+<th style="text-align:right;">
+markSize
+</th>
+<th style="text-align:right;">
+markDistCen
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+5S
+</td>
+<td style="text-align:left;">
+p
+</td>
+<td style="text-align:right;">
+0.8
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+45S
+</td>
+<td style="text-align:left;">
+q
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+45S
+</td>
+<td style="text-align:left;">
+p
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+DAPI
+</td>
+<td style="text-align:left;">
+q
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+DAPI
+</td>
+<td style="text-align:left;">
+cen
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+CMA
+</td>
+<td style="text-align:left;">
+cen
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+</tbody>
+</table>
 
 #### 2 How to plot a karyotype of holocentrics:
 
@@ -513,32 +755,238 @@ plotIdiograms(dfChrSize  = dfChrSizeHolo, # data.frame of chr. size
 
     dfChrSizeHolo
 
-| chrName | chrSize | Mbp |
-|--------:|--------:|----:|
-|       1 |       3 | 300 |
-|       2 |       4 | 400 |
-|       3 |       2 | 200 |
-|       4 |       5 | 500 |
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+chrName
+</th>
+<th style="text-align:right;">
+chrSize
+</th>
+<th style="text-align:right;">
+Mbp
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+300
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+400
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+200
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+500
+</td>
+</tr>
+</tbody>
+</table>
 
     dfMarkColor
 
-| markName | markColor      | style  |
-|:---------|:---------------|:-------|
-| 5S       | red            | dots   |
-| 45S      | chartreuse3    | square |
-| DAPI     | blue           | square |
-| CMA      | darkgoldenrod1 | square |
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+markName
+</th>
+<th style="text-align:left;">
+markColor
+</th>
+<th style="text-align:left;">
+style
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+5S
+</td>
+<td style="text-align:left;">
+red
+</td>
+<td style="text-align:left;">
+dots
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+45S
+</td>
+<td style="text-align:left;">
+chartreuse3
+</td>
+<td style="text-align:left;">
+square
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DAPI
+</td>
+<td style="text-align:left;">
+blue
+</td>
+<td style="text-align:left;">
+square
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CMA
+</td>
+<td style="text-align:left;">
+darkgoldenrod1
+</td>
+<td style="text-align:left;">
+square
+</td>
+</tr>
+</tbody>
+</table>
 
     dfMarkPosHolo
 
-| chrName | markName | markPos | markSize |
-|--------:|:---------|--------:|---------:|
-|       3 | 5S       |     1.0 |      0.5 |
-|       3 | DAPI     |     1.5 |      0.5 |
-|       1 | 45S      |     2.0 |      0.5 |
-|       2 | DAPI     |     2.0 |      0.5 |
-|       4 | CMA      |     2.0 |      0.5 |
-|       4 | 5S       |     0.5 |      0.5 |
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+chrName
+</th>
+<th style="text-align:left;">
+markName
+</th>
+<th style="text-align:right;">
+markPos
+</th>
+<th style="text-align:right;">
+markSize
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+5S
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+DAPI
+</td>
+<td style="text-align:right;">
+1.5
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+45S
+</td>
+<td style="text-align:right;">
+2.0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+DAPI
+</td>
+<td style="text-align:right;">
+2.0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+CMA
+</td>
+<td style="text-align:right;">
+2.0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+5S
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+</tbody>
+</table>
 
 #### 3. Plotting both mono. and holo.
 
@@ -795,7 +1243,7 @@ shiny*. R package version 0.7.1.
 
 Chang W, Cheng J, Allaire J, Sievert C, Schloerke B, Xie Y, Allen J,
 McPherson J, Dipert A, Borges B. 2021. *Shiny: Web application framework
-for r*. R package version 1.6.0. <https://shiny.rstudio.com/>
+for r*. R package version 1.6.0. <https://shiny.posit.co/>
 
 </div>
 

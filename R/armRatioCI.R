@@ -17,7 +17,7 @@
 #'
 #' @seealso \code{\link{chrbasicdatamono}}
 #' @references LEVAN A, FREDGA K, SANDBERG AA (1964) NOMENCLATURE FOR
-#' CENTROMERIC POSITION ON CHROMOSOMES. Hereditas 52:201–220.
+#' CENTROMERIC POSITION ON CHROMOSOMES. Hereditas 52:201-220.
 #' @references Guerra. 1986. Reviewing the chromosome nomenclature of Levan et
 #' al. Braz. Jour. Gen. Vol IX, 4, 741-743
 #'

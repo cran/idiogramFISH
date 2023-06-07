@@ -1,6 +1,14 @@
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
+# idiogramFISH 2.0.12
+
+06-06-2023
+
+Docs:
+
+- Fix link on DESCRIPTION file
+
 # idiogramFISH 2.0.11
 
 05-04-2023
