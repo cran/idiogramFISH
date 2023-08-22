@@ -31,9 +31,9 @@ if(Sys.info()['sysname']=="Darwin") {
       system('echo ""    >> index.Rmd')
       system('echo "visit https://ferroao.gitlab.io/idiogramfishhelppages" >> index.Rmd')
 }
-if(length( rmarkdown::pandoc_version()<2 )>0) { 
+if(length( rmarkdown::pandoc_version() < "2" ) > 0) {
   
-  if(rmarkdown::pandoc_version()<2) {
+  if(rmarkdown::pandoc_version() < "2") {
     
     message(crayon::red("\nMissing pandoc version > 2. Vignette may fail because it uses lua filter for multiple bibliographies
                         \nMore info:

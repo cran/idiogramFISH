@@ -3,8 +3,7 @@
 #' @description This function reads number to round
 #'
 #' @param x number to round
-#' @param level level of ceiling
-#'
+#' @param customDecimals desired decimal positions
 #' @keywords internal
 #' @return numeric
 

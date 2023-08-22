@@ -78,16 +78,6 @@ plotSqMarks(
 \item{rotation}{rotate}
 
 \item{labelOutwards}{srt}
-
-\item{xMark}{x component of polygon}
-
-\item{yMark}{yMark component of polygon}
-
-\item{n}{numeric, to define vertices of rounded portions}
-
-\item{lwd.chr}{thick of border line}
-
-\item{ylistTransChr}{list, transf. coords.}
 }
 \value{
 plot

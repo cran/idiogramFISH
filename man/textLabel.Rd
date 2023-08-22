@@ -37,8 +37,6 @@ textLabel(
 \item{pattern}{pattern to remove from mark name}
 
 \item{isCentromeric}{use TRUE for cen. marks}
-
-\item{listChrSizeText}{radius}
 }
 \value{
 plotted text

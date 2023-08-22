@@ -5,7 +5,6 @@
 #'
 #' @param start 1st index
 #' @param end last index
-#' @param n number of edges in rounded vertices
 #' @param x x coords
 #' @param y y coords
 #' @param yMod y coords modified because of squareness
@@ -17,6 +16,7 @@
 #' @param pts_4 points of squareness
 #'
 #' @return list
+#' @keywords internal
 
 mapXY <- function(start, end, y, yMod, x, yfactor, r2, pts_1, pts_2, pts_3, pts_4, chrt = FALSE) {
   roundedX <- roundedY <- list()
@@ -880,6 +880,8 @@ mapXYmarksRo <- function(start, end, y, x, r2, xModifier, pts) {
   return(chrtXchrtYmarkRo)
 }
 
+#' @keywords internal
+#' @param n number of edges in rounded vertices
 makeRoundCoordXY <- function(r2, yfactor, x, y, start, end, n, ptsl) {
   xyCoords <- mapXY(
     1, (length(y)),

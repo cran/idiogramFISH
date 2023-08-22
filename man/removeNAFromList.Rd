@@ -11,8 +11,6 @@ removeNAFromList(noNA, areNA)
 \item{noNA}{original list}
 
 \item{areNA}{which are NA}
-
-\item{mycolors}{vector of colors}
 }
 \value{
 list

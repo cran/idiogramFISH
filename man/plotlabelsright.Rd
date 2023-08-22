@@ -53,8 +53,6 @@ plotlabelsright(
 \item{legendYcoord}{numeric modify Y position of legend}
 
 \item{useOneDot}{boolean, when \code{TRUE} plots only one dot}
-
-\item{x}{The x axis coordinates of chromosomes}
 }
 \value{
 Returns a graphics element

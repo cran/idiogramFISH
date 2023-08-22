@@ -8,13 +8,11 @@
 #' @param squareness squareness of vertices <
 #' @param xMark x component of polygon
 #' @param yMark yMark component of polygon
-#' @param dfMarkColorInt colors for marks
 #' @param listOfdfMarkPosCenStyle list of df. of mark pos.
 #' @param chrWidth numeric, width of chr.
 #' @param specialChrWidth numeric, width of chr.
 #' @param yfactor yMark distortion based on canvas proportion
 #' @param n numeric, to define vertices of rounded portions
-#' @param lwd.chr thick of border line
 #' @param listOfdfChromSize chr size df list
 #' @param circularPlot boolean TRUE for circ.
 #' @param y list, y coords.
@@ -186,6 +184,9 @@ mimicCenPlotMark <- function(squareness, xMark, yMark,
   }
 }
 
+#' @param dfMarkColorInt colors for marks
+#' @param lwd.chr thick of border line
+#' @keywords internal
 mimicCenPlotMarkInside <- function(pattern, bannedMarkName, squareness, xMarkCenStyleBody, yMarkCenStyleBody, #nolint: object_usage_linter
                                    defCenStyleCol,
                                    dfMarkColorInt,

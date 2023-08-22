@@ -7,7 +7,6 @@
 #'
 #' @param noNA original list
 #' @param areNA which are NA
-#' @param mycolors vector of colors
 #' @importFrom grDevices col2rgb
 #'
 #' @return list
@@ -18,6 +17,8 @@ removeNAFromList <- function(noNA, areNA) {
   return(noNA)
 }
 
+#' @param mycolors vector of colors
+#' @keywords internal
 filter_colors <- function(mycolors) {
   mycolors <- mycolors[mycolors != ""]
   mycolors <- tryCatch(mycolors[sapply(mycolors, function(X) {

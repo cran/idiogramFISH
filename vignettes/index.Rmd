@@ -1,7 +1,7 @@
 ---
 title: "idiogramFISH: Shiny App. Idiograms with Marks and Karyotype Indices"
 author: "Fernando Roa"
-date: "28 12 2021"
+date: "22 08 2023"
 pkgdown:
   as_is: true
 output:
@@ -105,30 +105,74 @@ vignette: >
 
 ```{css, echo=FALSE, eval=T}
 body {
-  counter-reset: counter-rchunks;
+counter-reset: counter-rchunks;
 }
-
-#header {
-  padding-left: 3em;
+:root {
+--pale-blue: #5A7B9C;
+--strong-blue: #003366;
+--blue: #303F9F;
+--light-blue: #a6b5c6;
+--light-gray: #f6f6f6;
 }
-
+#content {
+padding-left: 3em;
+}
 #main {
-  padding-left: 3em;
+padding-left: 3em;
 }
-
 div.sourceCode {
-  counter-increment: counter-rchunks;
-  position: relative;
-  overflow: visible;
+counter-increment: counter-rchunks;
+position: relative;
+overflow: visible;
 }
-
 div.sourceCode::before {
-  content: 'Code [' counter(counter-rchunks) ']: ';
-  display: inline;
-  position: absolute;
-  left: -5em;
-  font-size: 0.7em;    
-  color: rgb(48, 63, 159);
+content: 'Code [' counter(counter-rchunks) ']: ';
+display: inline;
+position: absolute;
+left: -5em;
+font-size: 0.7em; color: var(--blue);
+}
+#postamble {
+background:var(--pale-blue);
+border-top:solid 10px var(--pale-blue);
+}
+#postamble .date {
+color: white;
+}
+.title {
+text-align: center;
+color: var(--strong-blue);
+}
+.subtitle {
+color: var(--strong-blue);
+}
+h1, h2, h3, h4, h5, h6, legend {
+color: var(--pale-blue);
+}
+#main :not(.leaflet-control) > a {
+color: var(--pale-blue);
+background-image: linear-gradient(180deg,var(--pale-blue),var(--pale-blue));
+}
+#sidebar h2 {
+background-color: var(--pale-blue);
+}
+#main .nav-pills > li.active > a,
+#main .nav-pills > li.active > a:hover,
+#main .nav-pills > li.active > a:focus {
+background-color: var(--pale-blue);
+}
+#sidebar #toc, #sidebar {
+background-color: var(--light-gray) !important;
+}
+#sidebar #toc ul li a:hover {
+background-color: var(--light-blue);
+color: white;
+}
+# toc ul.nav li.active ul li.active a {
+background-color: var(--light-blue);
+}
+code {
+color: var(--strong-blue);
 }
 ```
 
@@ -273,7 +317,7 @@ IdiogramFISH was written in R [@R-base] and also uses crayon [@R-crayon], tidyr 
 In addition, the shiny app `runBoard()` uses shiny [@R-shiny], shinydashboard [@R-shinydashboard], rhandsontable [@R-rhandsontable], gtools [@R-gtools] and rclipboard [@R-rclipboard].
 
 <div class="goright95">
-<a href="#header">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
+<a href="#content">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
 </div>
 
 ## Run the Shiny app with docker {-}
@@ -350,7 +394,7 @@ To do that permanently: Search (magnifier) "environment variables" and set R_LIB
 `D:\R\lib` (example)
 
 <div class="goright95">
-<a href="#header">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
+<a href="#content">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
 </div>
 
 ## Releases {-}
@@ -407,7 +451,7 @@ if (requireNamespace("RCurl", quietly = TRUE)) {
 ```
 
 <div class="goright95">
-<a href="#header">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
+<a href="#content">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
 </div>
 
 ## Need help? {-}
@@ -497,7 +541,7 @@ packageVersion("idiogramFISH")
 browseVignettes("idiogramFISH")
 ```
 <div class="goright95">
-<a href="#header">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
+<a href="#content">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
 </div>
 
 ## Citation {-}
@@ -513,7 +557,7 @@ toBibtex(citation("idiogramFISH"))
 sink()
 ```
 <div class="goright95">
-<a href="#header">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
+<a href="#content">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
 </div>
 
 ## Authors {-}
@@ -542,7 +586,7 @@ knitr::write_bib(c(
 ), "refs/packages2.bib")
 ```
 <div class="goright95">
-<a href="#header">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
+<a href="#content">top <i class="fa fa-caret-square-o-up" aria-hidden="true"></i></a>
 </div>
 
 ```{r, echo=F}

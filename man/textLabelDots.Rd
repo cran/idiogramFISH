@@ -32,10 +32,6 @@ textLabelDots(
 \item{pattern}{pattern to remove from mark name}
 
 \item{xBoundariesQuar}{x size}
-
-\item{xMark}{x coords}
-
-\item{yMark}{y coords}
 }
 \value{
 plotted text

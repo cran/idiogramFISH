@@ -5,8 +5,6 @@
 #'
 #' @keywords internal
 #'
-#' @param xMark x coords
-#' @param yMark y coords
 #' @param listOfdfChromSize radius
 #' @param listOfdfMarkPosCr color
 #' @param specialChrSpacing vertices number

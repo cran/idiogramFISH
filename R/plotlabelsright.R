@@ -6,7 +6,6 @@
 #'
 #' @keywords internal
 #'
-#' @param x The x axis coordinates of chromosomes
 #' @param y The y axis coordinates of chromosomes
 #' @param markLabelSpacer distance from right chr to legend
 #' @param chrWidth chr widht
@@ -192,6 +191,6 @@ plotlabelsright <- function(maxx, y, markLabelSpacer, chrWidth, dfMarkColorInt, 
         col = "black",
         pos = 4
       )
-    } # len xcenters
-  } # circ right
+    }
+  }
 }

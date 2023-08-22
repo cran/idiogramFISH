@@ -42,8 +42,6 @@ mapXY(
 \item{pts_3}{points of squareness}
 
 \item{pts_4}{points of squareness}
-
-\item{n}{number of edges in rounded vertices}
 }
 \value{
 list

@@ -9,7 +9,7 @@ customCeiling(x, customDecimals = 1)
 \arguments{
 \item{x}{number to round}
 
-\item{level}{level of ceiling}
+\item{customDecimals}{desired decimal positions}
 }
 \value{
 numeric

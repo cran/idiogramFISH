@@ -76,10 +76,6 @@ mimicCenPlotMark(
 \item{rotation}{rotate}
 
 \item{labelOutwards}{srt}
-
-\item{dfMarkColorInt}{colors for marks}
-
-\item{lwd.chr}{thick of border line}
 }
 \value{
 plot

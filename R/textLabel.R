@@ -7,7 +7,6 @@
 #'
 #' @param xMark x coords
 #' @param yMark y coords
-#' @param listChrSizeText radius
 #' @param listOfdfMarkPos color
 #' @param specialChrSpacing vertices number
 #' @param chrSpacing aspect

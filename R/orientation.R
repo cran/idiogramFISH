@@ -14,83 +14,9 @@
 #'
 #' @keywords internal
 #'
-#' @param ylist y coords
-#' @param ylistNew y
-#' @param x only d.f. of this cen. type
 #' @param y intervals
-#' @param n font
-#' @param r3 modifier of pos.
-#' @param shrinkFactor numeric
-#' @param circleCenterY numeric
-#' @param separFactor factor
-#' @param ylistTrans ylist
-#' @param xlistNew xlist
-#' @param n number
-#' @param circleMaps maps
-#' @param chrColor chr color
-#' @param cenBorder character, cen border color
-#' @param cenColor2 character, cen. color
-#' @param cfunction character, name of function to apply
-#' @param lwd.chr numeric, width of line
-#' @param chrColor character, chr. color
-#' @param chrId character, type of chr. name
-#' @param chrNames list, resulting from applyMapCircle
-#' @param chrWidth character, chr. width
-#' @param circleCenter numeric, modify center of circle of chr.
-#' @param circleMaps list, resulting from applyMapCircle
-#' @param circleMapsMarksCr list, resulting from applyMapCircle
-#' @param circleMapsOTUname list, resulting from applyMapCircle
-#' @param colBorderCr character, border color
-#' @param colCr character color of mark
-#' @param dfMarkColorInt data.frame of mark charact.
-#' @param diffXRounded numeric, difference of chr. width to rounded corner
-#' @param firstXchrEach list, first element from xlistNewChr
-#' @param firstYchrEach list, first element from xlistNewChr
-#' @param fixCenBorder2 boolean, change cen border
-#' @param indexIdTextSize numeric, text size
-#' @param labelSpacing numeric, spacing of labels to chr. or mark.
-#' @param parparlistOfdfMarkPosDataCen list, of d.f.s of marks
-#' @param listOfdfMarkPos list, of d.f.s of marks
-#' @param listOfdfMarkPosSq list, of d.f.s of marks
-#' @param mapCircle function name
-#' @param markDistType character, type of distance to mark
-#' @param markLabelSize numeric, size of mark label
 #' @param monocenNames character, vector with names of OTUs
-#' @param n numeric, number of vertices
-#' @param OTUplacing boolean use number instead of OTU name
-#' @param OTUlabelSpacing numeric, spacing for OTU name
-#' @param OTUsrt numeric, angle for OTU name
-#' @param OTUTextSize numeric, font size of OTU
-#' @param pattern character, regex pattern to remove from mark names
-#' @param position numeric, indexer for karyotype position
-#' @param radius numeric, radius
-#' @param rad list, list of radius for dots marks
-#' @param radiusMap function, map radius in circle
-#' @param radPerCr list, radius percentages
-#' @param separFactor numeric, separation of kar. in circle
-#' @param shrinkFactor numeric, percentage in decimal of whole chr.
-#' @param unlist boolean, for unlisting x or y coordinates
-#' @param xfactor numeric, modify y x aspect
-#' @param xlist list, x coordinates
-#' @param xlistMarkCen list, marks
-#' @param xlistNew list, transformed coordinates
-#' @param xlistNewCen list, transformed coordinates
-#' @param xlistNewChr list, transformed coordinates
-#' @param xMark list, mark coords.
-#' @param xMarkCr list, mark coords.
-#' @param xMarkList list, mark coords.
-#' @param xRounded list, transformed coords.
 #' @param y list, chr coords.
-#' @param ylistNew list, chr coords.
-#' @param ylistNewCen list, chr coords.
-#' @param ylistNewChr list, chr coords.
-#' @param ylistTrans list, trans .chr coords.
-#' @param ylistTransChr list, trans .chr coords.
-#' @param yMark list, mark coords.
-#' @param yMarkCen list, mark coords.
-#' @param yMarkPer list, mark coords in percentage.
-#' @param OTUlegendHeight numeric
-#' @param labelOutwards srt
 #'
 #' @return plot
 #' @importFrom graphics mtext
@@ -140,6 +66,8 @@ yVertoHor <- function(y, monocenNames) { #nolint: cyclocomp_linter
   return(ylistNew)
 }
 
+#' @param xlist list, x coordinates
+#' @keywords internal
 xHortoVer <- function(xlist, shrink = 0) {
   xlistNew <- list()
   for (s in seq_along(xlist)) {
@@ -156,6 +84,8 @@ xHortoVer <- function(xlist, shrink = 0) {
   return(xlistNew)
 } # fun
 
+#' @param x only d.f. of this cen. type
+#' @keywords internal
 xChrtdMarkMap <- function(xChrtdMark, x, shrink = 0) {
   xChrtdMarkList <- list()
 
@@ -223,6 +153,9 @@ xHortoVerMid <- function(xlist, shrink = 0) {
   return(xlistNew)
 }
 
+#' @param diffXRounded numeric, difference of chr. width to rounded corner
+#' @keywords internal
+
 xHortoVerRoundCen <- function(xlist, diffXRounded) {
   xlistNew <- list()
 
@@ -253,6 +186,9 @@ xHortoVerRoundCenExt <- function(xlist, diffXRounded) {
 
   return(xlistNew)
 }
+
+#' @param xMarkList list, mark coords.
+#' @keywords internal
 
 xHortoVerDots <- function(xMarkList, x) {
   xlistNew <- list()
@@ -285,6 +221,15 @@ xHortoVerDots <- function(xMarkList, x) {
   return(xlistNew)
 }
 
+#' @param circleCenter numeric, modify center of circle of chr.
+#' @param chrWidth character, chr. width
+#' @param labelSpacing numeric, spacing of labels to chr. or mark.
+#' @param position numeric, indexer for karyotype position
+#' @param n numeric, number of vertices
+#' @param separFactor numeric, separation of kar. in circle
+#' @param radius numeric, radius
+#' @param circleCenterY numeric
+#' @keywords internal
 mapCircle <- function(x, y, n, radius, circleCenter, circleCenterY, position, separFactor,
                       labelSpacing, chrWidth, rotation) {
   r2 <- radius * position * chrWidth * 2 + position * separFactor + chrWidth * labelSpacing
@@ -319,6 +264,9 @@ mapRadius <- function(x, y, n, radius, circleCenter, circleCenterY, position, se
   return(newrad)
 }
 
+#' @param shrinkFactor numeric, percentage in decimal of whole chr.
+#' @param ylistNew list, chr coords.
+#' @keywords internal
 transYList <- function(ylistNew, shrinkFactor, monocenNames) {
   ylistTrans <- list()
   for (s in seq_along(ylistNew)) {
@@ -353,6 +301,11 @@ transYList <- function(ylistNew, shrinkFactor, monocenNames) {
   return(ylistTrans)
 }
 
+#' @param firstXchrEach list, first element from xlistNewChr
+#' @param OTUlabelSpacing numeric, spacing for OTU name
+#' @param firstYchrEach list, first element from xlistNewChr
+#' @param ylistNewChr list, chr coords.
+#' @keywords internal
 
 mapOTUnames <- function(firstYchrEach, firstXchrEach, ylistNewChr, n, radius, circleCenter, circleCenterY,
                         separFactor, OTUlabelSpacing, chrWidth, rotation) {
@@ -378,6 +331,12 @@ mapOTUnames <- function(firstYchrEach, firstXchrEach, ylistNewChr, n, radius, ci
   return(circleMapsOTUname)
 }
 
+#' @param circleMapsOTUname list, resulting from applyMapCircle
+#' @param OTUsrt numeric, angle for OTU name
+#' @param OTUlegendHeight numeric
+#' @param OTUTextSize numeric, font size of OTU
+#' @param OTUplacing boolean use number instead of OTU name
+#' @keywords internal
 addOTUnames <- function(circleMapsOTUname, OTUTextSize, OTUsrt = 0, OTUplacing = "first", OTUfont2, OTUfamily2,
                         circleCenter, OTULabelSpacerx, circleCenterY, OTULabelSpacery, OTUlegendHeight, radius,
                         chrWidth, normalizeToOne, OTUcentered, OTUjustif, separFactor, labelSpacing) {
@@ -416,6 +375,11 @@ addOTUnames <- function(circleMapsOTUname, OTUTextSize, OTUsrt = 0, OTUplacing =
   }
 }
 
+#' @param cfunction character, name of function to apply
+#' @param ylistTrans list, trans .chr coords.
+#' @param unlist boolean, for unlisting x or y coordinates
+#' @param xlistNew list, transformed coordinates
+#' @keywords internal
 applyMapCircle <- function(radius, circleCenter, circleCenterY, separFactor, ylistTrans, xlistNew,
                            n = NA,
                            labelSpacing,
@@ -532,6 +496,11 @@ intercalate <- function(y, monocenNames, attr = FALSE) {
   return(newOrder)
 }
 
+#' @param circleMaps list, resulting from applyMapCircle
+#' @param lwd.chr numeric, width of line
+#' @param chrColor character, chr. color
+#' @keywords internal
+
 drawPlot <- function(circleMaps, chrColor, lwd.chr, chrBorderColor2) {
   for (s in seq_along(circleMaps)) {
     for (i in seq_along(circleMaps[[s]])) {
@@ -545,6 +514,10 @@ drawPlot <- function(circleMaps, chrColor, lwd.chr, chrBorderColor2) {
     }
   }
 }
+
+#' @param dfMarkColorInt data.frame of mark charact.
+#' @param listOfdfMarkPosSq list, of d.f.s of marks
+#' @keywords internal
 
 drawPlotMark <- function(circleMaps, dfMarkColorInt, listOfdfMarkPosSq, lwd.chr, alpha_val = 1) {
   for (s in seq_along(circleMaps)) {
@@ -600,6 +573,9 @@ drawPlotMarkLine <- function(circleMaps, defCenStyleCol, lwd.chr) {
   }
 }
 
+#' @param cenColor2 character, cen. color
+#' @param cenBorder character, cen border color
+#' @keywords internal
 drawCen <- function(circleMaps, cenColor2, cenBorder, lwd.chr) {
   for (s in seq_along(circleMaps)) {
     for (i in seq_along(circleMaps[[s]])) {
@@ -613,6 +589,12 @@ drawCen <- function(circleMaps, cenColor2, cenBorder, lwd.chr) {
     }
   }
 }
+
+#' @param listOfdfMarkPos list, of d.f.s of marks
+#' @param markLabelSize numeric, size of mark label
+#' @param labelOutwards see srt of text function
+#' @param pattern character, regex pattern to remove from mark names
+#' @keywords internal
 
 circLabelMark <- function(bannedMarkName, circleMaps, listOfdfMarkPos, markLabelSize, pattern,
                           labelOutwards, circleCenter, circleCenterY,
@@ -656,6 +638,12 @@ circLabelMark <- function(bannedMarkName, circleMaps, listOfdfMarkPos, markLabel
   }
 }
 
+#' @param colBorderCr character, border color
+#' @param colCr character color of mark
+#' @param radiusMap function, map radius in circle
+#' @param xfactor numeric, modify y x aspect
+#' @param circleMapsMarksCr list, resulting from applyMapCircle
+#' @keywords internal
 circPlotDots <- function(circleMapsMarksCr, xfactor, radiusMap,
                          colCr, colBorderCr, n, alpha_val = 1) {
   lapply(
@@ -685,7 +673,10 @@ circPlotDots <- function(circleMapsMarksCr, xfactor, radiusMap,
   )
 }
 
-
+#' @param chrNames list, resulting from applyMapCircle
+#' @param indexIdTextSize numeric, text size
+#' @param chrId character, type of chr. name
+#' @keywords internal
 plotChrNames <- function(chrNames, indexIdTextSize, chrId, monocenNames, chrColor) {
   labels <- list()
 
@@ -717,6 +708,9 @@ plotChrNames <- function(chrNames, indexIdTextSize, chrId, monocenNames, chrColo
 #
 #   attr chrNameB to yMark and xMark
 #
+#' @param xMark list, mark coords.
+#' @param yMark list, mark coords.
+#' @keywords internal
 
 addChrNameAttrMark <- function(xMark, yMark, x) {
   markList <- list()
@@ -934,6 +928,9 @@ markMapPerDots <- function(yMark, y) {
   return(yMarkPer)
 }
 
+#' @param rad list, list of radius for dots marks
+#' @keywords internal
+
 radDotsPer <- function(rad, y) {
   radPer <- list()
 
@@ -991,6 +988,9 @@ centerMarkMapPer <- function(yMark, y) {
 #
 #   trans Marks
 #
+#' @param ylistTransChr list, trans .chr coords.
+#' @param yMarkPer list, mark coords in percentage.
+#' @keywords internal
 
 transyListMark <- function(yMarkPer, ylistTransChr) {
   ylistTransMark <- list()
@@ -1042,9 +1042,8 @@ transyListCen <- function(yMarkPer, ylistTransChr) {
   return(ylistTransMark)
 }
 
-
-
-
+#' @param radPerCr list, radius percentages
+#' @keywords internal
 transRadDots <- function(radPerCr, yMarkPerCr, ylistTransChr) {
   radTrans <- list()
   # s<-1
@@ -1122,6 +1121,9 @@ mapChrCenter <- function(ylistTransChr) {
   return(listChrCenter)
 }
 
+#' @param xMarkCr list, mark coords.
+#' @keywords internal
+
 oneDot <- function(xMarkCr) {
   oneDotXList <- list()
   for (s in seq_along(xMarkCr)) {
@@ -1135,6 +1137,10 @@ oneDot <- function(xMarkCr) {
   }
   return(oneDotXList)
 }
+
+#' @param fixCenBorder2 boolean, change cen border
+#' @param parparlistOfdfMarkPosDataCen list, of d.f.s of marks
+#' @keywords internal
 
 drawCenMarks <- function(circleMaps, dfMarkColorInt,
                          parparlistOfdfMarkPosDataCen, lwd.chr, fixCenBorder2, chrColor) {

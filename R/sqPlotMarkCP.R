@@ -6,15 +6,11 @@
 #' @keywords internal
 #'
 #' @param squareness squareness of vertices <
-#' @param xMark x component of polygon
-#' @param yMark yMark component of polygon
 #' @param dfMarkColorInt colors for marks
 #' @param listMarkPosSq list of df. of mark pos.
 #' @param chrWidth numeric, width of chr.
 #' @param specialChrWidth numeric, width of chr.
 #' @param yfactor yMark distortion based on canvas proportion
-#' @param n numeric, to define vertices of rounded portions
-#' @param lwd.chr thick of border line
 #' @param listChrSize chr size df list
 #' @param circularPlot boolean TRUE for circ.
 #' @param y list, y coords.
@@ -26,7 +22,6 @@
 #' @param circleCenterY numeric
 #' @param radius numeric
 #' @param legend character
-#' @param ylistTransChr list, transf. coords.
 #' @param rotation rotate
 #' @param labelOutwards srt
 #'
@@ -211,6 +206,12 @@ plotSqMarks <- function(chromatidsCheck_1,
   }
 }
 
+#' @param xMark x component of polygon
+#' @param yMark yMark component of polygon
+#' @param lwd.chr thick of border line
+#' @param ylistTransChr list, transf. coords.
+#' @param n numeric, to define vertices of rounded portions
+#' @keywords internal
 sqPlotMarkCP <- function(bannedMarkName,
                          xMark, yMark,
                          dfMarkColorInt,
